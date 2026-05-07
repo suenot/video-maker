@@ -41,6 +41,8 @@ pip install pytrends
 
 ```
 video_maker/
+├── .claude/skills/
+│   └── youtube-video-publishing.md  # Agent skill: full publishing workflow
 ├── scripts/
 │   ├── run_pipeline.sh          # Main pipeline runner
 │   ├── pdf_to_images.py         # PDF → PNG slide images
@@ -140,6 +142,20 @@ input/<slug>/
 | `<slug>_metadata.json` | Structured metadata (title, description, tags, timestamps) |
 | `<slug>_metadata.txt` | Human-readable metadata for YouTube Studio |
 | `<slug>_thumbnail.png` | 1280×720 thumbnail image |
+
+## Agent Skill (.claude/skills)
+
+The `.claude/skills/youtube-video-publishing.md` file is a key part of this project. It's an agent skill definition for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) that teaches the AI assistant the complete YouTube video publishing workflow:
+
+- **Title rules** — keyword placement, length limits, no clickbait
+- **Description template** — SEO hook, timestamps, article link, Telegram CTA, tags
+- **Tag pipeline** — how to research and filter thematic YouTube tags
+- **YouTube Education fields** — Category, Type, Level, Problems generation
+- **Slide title extraction rules** — OCR filtering, fragment detection, line merging
+- **Video encoding rules** — codec selection, resolution, framerate rationale
+- **Pipeline integration** — how all scripts connect
+
+When you open this project in Claude Code, the agent automatically picks up the skill and can run the full pipeline, generate metadata, fix encoding issues, etc. — with full context about the project's conventions and quality rules.
 
 ## Related Projects
 
