@@ -1,0 +1,150 @@
+# Video Maker
+
+Автоматизированный пайплайн для генерации YouTube-видео из аудио-нарратива и PDF-презентации. Создаёт MP4-видео с синхронизированными слайдами, SRT-субтитры, метаданные для YouTube и миниатюры.
+
+## Что делает
+
+На вход принимает аудиофайл (нарратив) и PDF со слайдами, на выходе:
+
+1. **Конвертирует PDF в изображения** — каждый слайд становится PNG через `pdftoppm` (Poppler)
+2. **Извлекает текст со слайдов** — OCR через Tesseract
+3. **Транскрибирует аудио** — speech-to-text через OpenAI Whisper с пословными таймкодами
+4. **Генерирует SRT-субтитры** — сегменты Whisper конвертируются в формат SRT для YouTube
+5. **Синхронизирует слайды с аудио** — сопоставляет текст транскрипции с OCR-текстом слайдов для определения момента смены каждого слайда
+6. **Генерирует видео** — собирает слайды + аудио в MP4 через FFmpeg с аппаратным ускорением (HEVC/H.264 через VideoToolbox на macOS)
+7. **Исследует YouTube-теги** — комбинирует YouTube Suggest API, анализ заголовков конкурентов (через yt-dlp) и intent-фразы
+8. **Генерирует метаданные** — заголовок, описание с таймкодами, теги, категория, вопросы (для YouTube Education)
+9. **Генерирует миниатюру** — PNG 1280×720 из первого слайда
+
+## Требования
+
+- Python 3.9+
+- [FFmpeg](https://ffmpeg.org/) с поддержкой VideoToolbox (по умолчанию на macOS)
+- [Poppler](https://poppler.freedesktop.org/) (команда `pdftoppm`) — `brew install poppler`
+- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) — `brew install tesseract`
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) (опционально, для исследования тегов)
+
+### Python-зависимости
+
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install openai-whisper pillow pytesseract
+```
+
+Опционально (для исследования тегов через Google Trends):
+```bash
+pip install pytrends
+```
+
+## Структура проекта
+
+```
+video_maker/
+├── scripts/
+│   ├── run_pipeline.sh          # Основной запуск пайплайна
+│   ├── pdf_to_images.py         # PDF → PNG-изображения слайдов
+│   ├── extract_pdf_text.py      # OCR-извлечение текста из изображений
+│   ├── extract_subtitles.py     # Аудио → JSON-транскрипция Whisper
+│   ├── subtitles_to_srt.py      # JSON Whisper → SRT-субтитры
+│   ├── sync_slides.py           # Построение маппинга слайд-время
+│   ├── generate_video.py        # Слайды + аудио → MP4
+│   ├── research_youtube_tags.py # Исследование YouTube-тегов
+│   ├── generate_metadata.py     # Генерация метаданных YouTube
+│   └── generate_thumbnail.py    # Генерация миниатюры 1280×720
+├── input/                       # Исходные файлы (аудио, PDF-слайды)
+├── output/                      # Финальное видео, метаданные, субтитры, миниатюра
+├── temp/                        # Промежуточные файлы (изображения слайдов, OCR, timeline)
+└── venv/                        # Виртуальное окружение Python
+```
+
+## Использование
+
+### Запуск полного пайплайна
+
+```bash
+bash scripts/run_pipeline.sh en   # Английская версия
+bash scripts/run_pipeline.sh ru   # Русская версия
+```
+
+### Запуск отдельных шагов
+
+Каждый скрипт можно запускать независимо:
+
+```bash
+# 1. Конвертация PDF в изображения
+python scripts/pdf_to_images.py --pdf input/slides.pdf --out-dir temp/slides --dpi 200
+
+# 2. OCR-извлечение текста из слайдов
+python scripts/extract_pdf_text.py --images-dir temp/slides --output temp/slides_text.json --lang rus
+
+# 3. Транскрипция аудио через Whisper
+python scripts/extract_subtitles.py --audio input/audio.m4a --output temp/subtitles.json --model base --language ru
+
+# 4. Конвертация субтитров в SRT
+python scripts/subtitles_to_srt.py --subtitles temp/subtitles.json --output output/video.srt
+
+# 5. Синхронизация слайдов с аудио
+python scripts/sync_slides.py --subtitles temp/subtitles.json --slides-text temp/slides_text.json --output temp/timeline.json
+
+# 6. Генерация видео
+python scripts/generate_video.py --timeline temp/timeline.json --slides-dir temp/slides --audio input/audio.m4a --output output/video.mp4
+
+# 7. Исследование YouTube-тегов
+python scripts/research_youtube_tags.py --seed-keywords "keyword1,keyword2" --lang ru --max-tags 15 --output temp/tags.json
+
+# 8. Генерация метаданных
+python scripts/generate_metadata.py --subtitles temp/subtitles.json --slides-text temp/slides_text.json --timeline temp/timeline.json --output-json output/metadata.json --output-txt output/metadata.txt --lang ru --tags-file temp/tags.json
+
+# 9. Генерация миниатюры
+python scripts/generate_thumbnail.py --slides-dir temp/slides --output output/thumbnail.png
+```
+
+## Кодирование видео
+
+Пайплайн поддерживает три кодека:
+
+| Кодек | Скорость | Размер файла | Примечания |
+|---|---|---|---|
+| `hevc_videotoolbox` | Быстро (GPU) | Минимальный | По умолчанию. Аппаратное HEVC на Apple Silicon |
+| `h264_videotoolbox` | Очень быстро (GPU) | Средний | Аппаратное H.264 на Apple Silicon |
+| `libx264` | Медленно (CPU) | Малый | Лучшее сжатие, но может вызвать OOM на больших слайдах |
+
+По умолчанию: `hevc_videotoolbox`, разрешение 1920×1080, 1 fps (оптимально для статичных слайдов).
+
+## Алгоритм синхронизации слайдов
+
+`sync_slides.py` использует жадный алгоритм прямого сопоставления:
+- Слайды продвигаются только вперёд (монотонно неубывающий индекс)
+- Каждый сегмент транскрипции оценивается относительно текущего слайда и `look_ahead` следующих
+- Переход на новый слайд происходит, когда оценка следующего слайда превышает текущую в `advance_ratio` раз (по умолчанию 1.3×) **и** текущий слайд показывался не менее `min_duration` секунд (по умолчанию 5 с)
+- Оценка использует пересечение слов + биграммное сопоставление между текстом транскрипции и OCR-текстом слайда
+
+## Структура входных файлов
+
+```
+input/<slug>/
+├── audio_en.m4a      # Английский нарратив
+├── audio_ru.m4a      # Русский нарратив (опционально)
+├── slides_en.pdf     # Английские слайды
+├── slides_ru.pdf     # Русские слайды (опционально)
+└── article_ru.md     # Статья с YAML frontmatter (опционально)
+```
+
+## Выходные файлы
+
+| Файл | Описание |
+|---|---|
+| `<slug>.mp4` | Финальное видео (слайды + аудио) |
+| `<slug>.srt` | SRT-субтитры для YouTube |
+| `<slug>_metadata.json` | Структурированные метаданные (заголовок, описание, теги, таймкоды) |
+| `<slug>_metadata.txt` | Человекочитаемые метаданные для YouTube Studio |
+| `<slug>_thumbnail.png` | Миниатюра 1280×720 |
+
+## Связанные проекты
+
+- [video_youtube_prepare](../video_youtube_prepare/) — подготовка метаданных для уже готовых видео
+
+## Лицензия
+
+MIT
