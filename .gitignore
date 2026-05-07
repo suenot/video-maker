@@ -24,5 +24,6 @@ temp/
 *.swp
 *.swo
 
-# AI assistants
-.claude/
+# AI assistants (keep skills, exclude the rest)
+.claude/*
+!.claude/skills/
