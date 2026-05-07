@@ -159,7 +159,7 @@ input/<slug>/
 
 ## Связанные проекты
 
-- [video_youtube_prepare](../video_youtube_prepare/) — подготовка метаданных для уже готовых видео
+- [video-youtube-prepare](https://github.com/suenot/video-youtube-prepare) — подготовка метаданных для уже готовых видео
 
 ## Лицензия
 

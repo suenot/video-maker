@@ -159,7 +159,7 @@ When you open this project in Claude Code, the agent automatically picks up the 
 
 ## Related Projects
 
-- [video_youtube_prepare](../video_youtube_prepare/) — metadata preparation for already-made videos
+- [video-youtube-prepare](https://github.com/suenot/video-youtube-prepare) — metadata preparation for already-made videos
 
 ## License
 
