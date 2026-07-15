@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage: ./run_pipeline.sh ru|en
+# Usage: ./run_pipeline.sh <ru|en> [slug]
+#   slug defaults to plateau-analysis-overfitting.
+#   Override YouTube tag seeds with the SEED_KEYWORDS env var.
 
 LANG="${1:-}"
 if [[ -z "$LANG" ]]; then
-    echo "Usage: $0 <ru|en>"
+    echo "Usage: $0 <ru|en> [slug]"
     exit 1
 fi
 
@@ -13,7 +15,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 VENV_PYTHON="$PROJECT_DIR/venv/bin/python3"
 
-SLUG="plateau-analysis-overfitting"
+SLUG="${2:-plateau-analysis-overfitting}"
 TEMP_DIR="$PROJECT_DIR/temp/${SLUG}_${LANG}"
 OUT_DIR="$PROJECT_DIR/output/$SLUG"
 mkdir -p "$TEMP_DIR" "$OUT_DIR"
@@ -80,7 +82,7 @@ echo "=== Step 5: Generate video ==="
     --output "$OUT_DIR/$OUT_NAME"
 
 echo "=== Step 5.5: Research YouTube tags ==="
-SEED_KEYWORDS="overfitting backtest,optuna trading,backtest overfitting,trading strategy optimization,algorithmic trading"
+SEED_KEYWORDS="${SEED_KEYWORDS:-overfitting backtest,optuna trading,backtest overfitting,trading strategy optimization,algorithmic trading}"
 "$VENV_PYTHON" "$SCRIPT_DIR/research_youtube_tags.py" \
     --seed-keywords "$SEED_KEYWORDS" \
     --lang "$LANG" \
