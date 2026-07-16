@@ -11,9 +11,14 @@ import copy
 import json
 from pathlib import Path
 
+import matplotlib
 import pytest
 
-from selfmade import anim, schema
+matplotlib.use("Agg")
+
+import matplotlib.pyplot as plt  # noqa: E402
+
+from selfmade import anim, palette, schema  # noqa: E402
 
 RESULTS_PATH = Path(
     "/Users/suenot/projects/trading/marketmaker/arxiv_paper_conformal/results/results.json"
@@ -131,6 +136,149 @@ def test_every_ref_changes_the_rendered_frame(scene_id, ref_name, baselines, tmp
     )
 
 
+# --- text must land on the canvas ----------------------------------------------------
+#
+# `test_every_ref_changes_the_rendered_frame` proves a ref reaches the canvas, but not
+# that it reaches the *viewer*: bytes change identically whether a label lands in the
+# middle of the chart or 48px past its right edge. The whole suite was green while
+# 09_normalize's "nominal 90%" label was drawn at x=2.58 against an xlim of (-0.5, 2.5),
+# i.e. absent from every frame. These tests close that hole.
+
+# Scenes that carry data, over which text placement is load-bearing.
+LEGIBILITY_SCENES = ["07_marginal", "08_conditional", "09_normalize", "10_break",
+                     "11_aci", "12_width", "14_recipe", "15_outro"]
+
+# Sampled across the timeline: text fades in at staggered thresholds, so a single
+# frame would miss most of the artists (callouts, notes, panels arrive late).
+LEGIBILITY_TIMES = [0.25, 0.5, 0.75, 1.0]
+
+
+def _render_fig(scene, t):
+    """Render one frame of a scene into a live figure (not saved, not closed)."""
+    values = anim.scene_values(scene, RESULTS)
+    fig, ax = anim._new_fig()
+    anim._RENDERERS[scene["visual"]](ax, scene, values, t)
+    fig.canvas.draw()
+    return fig
+
+
+def _unpainted_ticklabels(fig):
+    """ids of tick labels matplotlib will not paint because their tick is out of view.
+
+    Matplotlib keeps a Text object for every tick the locator proposes, including
+    ones outside the axes' view interval, and never draws them -- verified against
+    the rendered pixels. Counting them as on-screen text would be a false positive.
+    """
+    skip = set()
+    for ax in fig.findobj(matplotlib.axes.Axes):
+        for axis in (ax.xaxis, ax.yaxis):
+            lo, hi = sorted(axis.get_view_interval())
+            for tick in list(axis.get_major_ticks()) + list(axis.get_minor_ticks()):
+                if not (lo - 1e-9) <= tick.get_loc() <= (hi + 1e-9):
+                    skip.update((id(tick.label1), id(tick.label2)))
+    return skip
+
+
+def _visible_texts(fig):
+    """Every Text artist with a non-empty string that is actually painted."""
+    skip = _unpainted_ticklabels(fig)
+    out = []
+    for artist in fig.findobj(matplotlib.text.Text):
+        if not artist.get_visible() or not artist.get_text().strip():
+            continue
+        if artist.get_alpha() is not None and artist.get_alpha() <= 0.01:
+            continue  # faded out entirely; not on screen yet
+        if id(artist) in skip:
+            continue
+        out.append(artist)
+    return out
+
+
+@pytest.mark.parametrize("scene_id", LEGIBILITY_SCENES)
+@pytest.mark.parametrize("t", LEGIBILITY_TIMES)
+def test_no_text_is_drawn_outside_the_figure(scene_id, t):
+    """Every drawn string must lie inside the figure's pixel bbox.
+
+    A label placed past the axes limits is not clipped-but-mostly-readable; it is
+    simply not in the frame. The viewer is then told nothing, and the narration
+    refers to a thing that is not on screen.
+    """
+    fig = _render_fig(SCENES[scene_id], t)
+    try:
+        renderer = fig.canvas.get_renderer()
+        page = fig.bbox
+        offenders = []
+        for artist in _visible_texts(fig):
+            bb = artist.get_window_extent(renderer=renderer)
+            if (bb.x0 < -0.5 or bb.y0 < -0.5
+                    or bb.x1 > page.x1 + 0.5 or bb.y1 > page.y1 + 0.5):
+                offenders.append(
+                    f"{artist.get_text()!r} at pixel bbox "
+                    f"({bb.x0:.0f},{bb.y0:.0f})-({bb.x1:.0f},{bb.y1:.0f}) "
+                    f"escapes the figure (0,0)-({page.x1:.0f},{page.y1:.0f})"
+                )
+        assert not offenders, (
+            f"{scene_id} at t={t}: text drawn outside the frame:\n  "
+            + "\n  ".join(offenders)
+        )
+    finally:
+        plt.close(fig)
+
+
+@pytest.mark.parametrize("scene_id", ["07_marginal", "09_normalize"])
+def test_the_footnote_never_overlaps_the_bars(scene_id):
+    """The note is a caption, not an overlay.
+
+    Placed in axes-fraction coords it landed inside the plot box, striking through
+    the bars it was supposed to caption. It belongs below the plot area entirely.
+    """
+    fig = _render_fig(SCENES[scene_id], 1.0)
+    try:
+        renderer = fig.canvas.get_renderer()
+        ax = fig.axes[0]
+        notes = [a for a in _visible_texts(fig)
+                 if a.get_text().startswith(("measured against", "CQR spread"))]
+        assert notes, f"{scene_id}: expected a footnote to be drawn at t=1.0"
+        bars = [p for p in ax.patches if p.get_window_extent(renderer=renderer).height > 1]
+        assert bars, f"{scene_id}: expected bars to be drawn"
+        for note in notes:
+            nb = note.get_window_extent(renderer=renderer)
+            for bar in bars:
+                bb = bar.get_window_extent(renderer=renderer)
+                assert not nb.overlaps(bb), (
+                    f"{scene_id}: footnote {note.get_text()!r} overlaps a bar"
+                )
+    finally:
+        plt.close(fig)
+
+
+# --- the colour of a bar is a claim --------------------------------------------------
+#
+# _coverage_color's tolerance leaves little slack: 07's `break` (.8775) is MISSED by
+# .0025 and 08's `mid` (.9150) is COVERED by .005. If a rerun of the experiments nudges
+# a value across the line, the frame silently changes what it asserts about a method.
+# Pin the intended colour so that flips a test instead.
+
+EXPECTED_BAR_COLORS = {
+    "07_marginal": {"iid": "COVERED", "ar1": "COVERED", "garch": "COVERED",
+                    "break": "MISSED", "aci_garch": "COVERED"},
+    "08_conditional": {"low": "HIGHLIGHT", "mid": "COVERED", "high": "MISSED"},
+    "09_normalize": {"low": "COVERED", "mid": "COVERED", "high": "COVERED"},
+}
+
+
+@pytest.mark.parametrize(
+    "scene_id,key,expected",
+    [(s, k, v) for s, m in EXPECTED_BAR_COLORS.items() for k, v in m.items()],
+)
+def test_bar_colour_says_what_it_is_meant_to_say(scene_id, key, expected):
+    value = anim.scene_values(SCENES[scene_id], RESULTS)[key]
+    assert anim._coverage_color(value) == getattr(palette, expected), (
+        f"{scene_id}: {key}={value:.4f} now renders as a different colour than "
+        f"{expected} -- the frame's claim about this method changed silently"
+    )
+
+
 # --- the placeholder rule ------------------------------------------------------------
 
 
@@ -165,8 +313,9 @@ def test_script_lines_do_not_hardcode_numbers_that_exist_as_refs():
 
 
 def test_bullets_requires_lines(tmp_path):
+    """A malformed scene is a validation failure, like an unknown visual next to it."""
     scene = {"id": "t", "title": "T", "visual": "bullets", "narration": "x", "data_refs": {}}
-    with pytest.raises(KeyError):
+    with pytest.raises(ValueError, match="bullets"):
         anim.render_scene(scene, RESULTS, duration=0.1, out_dir=tmp_path, fps=1)
 
 

@@ -10,6 +10,7 @@ Text lines are formatted through `line.format(**values)` so a script line can
 carry `{spread_before:.3f}` instead of a typed-in number. One number, one source.
 """
 
+from functools import lru_cache
 from pathlib import Path
 
 import matplotlib
@@ -50,8 +51,6 @@ LABELS = {
     "split_norm_t": "split\nnorm",
     "cqr_t": "CQR",
     "param_width": "parametric\nGaussian",
-    "oracle": "oracle",
-    "aci_fast": "ACI (fast)",
 }
 
 
@@ -86,7 +85,8 @@ def _new_fig():
     for side in ("left", "bottom"):
         ax.spines[side].set_color(palette.MUTED)
     ax.tick_params(colors=palette.MUTED, labelsize=16)
-    fig.subplots_adjust(left=0.09, right=0.97, top=0.84, bottom=0.13)
+    # bottom leaves room under the axes for the footnote _note draws in figure coords.
+    fig.subplots_adjust(left=0.09, right=0.97, top=0.84, bottom=0.15)
     return fig, ax
 
 
@@ -105,13 +105,41 @@ def _title(ax, scene):
     ax.set_title(scene["title"], color=palette.FG, fontsize=40, weight="bold", pad=28)
 
 
-def _note(ax, text, t, appear=0.55, y=0.02):
-    """A footnote that arrives late, once the chart has been read."""
+# Figure-fraction y for footnotes. _new_fig reserves the space below the axes; a note
+# in AXES fraction lands inside the plot box and strikes through the data it captions.
+_NOTE_Y = 0.030
+
+
+def _note(ax, text, t, appear=0.55):
+    """A footnote that arrives late, once the chart has been read.
+
+    Figure coords, below the axes, so it can never cross a bar or a curve.
+    """
     alpha = float(np.clip((t - appear) * 5, 0, 1))
     if alpha <= 0:
         return
-    ax.text(0.5, y, text, transform=ax.transAxes, ha="center", va="bottom",
-            color=palette.MUTED, fontsize=17, alpha=alpha)
+    box = ax.get_position()
+    ax.figure.text((box.x0 + box.x1) / 2, _NOTE_Y, text, ha="center", va="bottom",
+                   color=palette.MUTED, fontsize=17, alpha=alpha)
+
+
+# --- the nominal line ----------------------------------------------------------------
+#
+# The dashed line at 0.90 is the promise every coverage chart is measured against, so it
+# has to say so on screen. Its label needs somewhere to live that is not on top of a bar:
+# a data x of len(bars) - 0.4 put it PAST the categorical xlim (x=2.58 against a limit of
+# 2.5 on a 3-bar axis), i.e. off the canvas entirely, and 08 and 09 shipped a dashed line
+# the viewer was never told the meaning of. Reserve a gutter to the right of the last bar
+# and right-align the label into it in axes fraction: inside the axes for any bar count.
+_NOMINAL_GUTTER = 1.0
+
+
+def _nominal_line(ax, n_bars, label="nominal 90%"):
+    ax.axhline(NOMINAL_LEVEL, color=palette.NOMINAL, linestyle="--", linewidth=2)
+    ax.set_xlim(-0.5, n_bars - 0.5 + _NOMINAL_GUTTER)
+    # x in axes fraction, y in data: the label tracks the line it names.
+    ax.text(0.995, NOMINAL_LEVEL, label, transform=ax.get_yaxis_transform(),
+            ha="right", va="bottom", color=palette.NOMINAL, fontsize=17)
 
 
 # --- title card and bullets ----------------------------------------------------------
@@ -160,9 +188,7 @@ def _coverage_bars(ax, scene, values, t):
 
     ax.bar([_label(k) for k in keys], [h - base for h in heights], bottom=base,
            color=colors, width=0.55)
-    ax.axhline(NOMINAL_LEVEL, color=palette.NOMINAL, linestyle="--", linewidth=2)
-    ax.text(len(keys) - 0.45, NOMINAL_LEVEL + 0.002, "nominal 90%",
-            color=palette.NOMINAL, fontsize=17)
+    _nominal_line(ax, len(keys))
     ax.set_ylim(base, 0.935)
     ax.set_ylabel("marginal coverage", color=palette.FG, fontsize=20)
     _title(ax, scene)
@@ -186,9 +212,7 @@ def _tercile_drift(ax, scene, values, t):
 
     ax.bar([_label(k) for k in order], [h - base for h in heights], bottom=base,
            color=colors, width=0.5)
-    ax.axhline(NOMINAL_LEVEL, color=palette.NOMINAL, linestyle="--", linewidth=2)
-    ax.text(len(order) - 0.42, NOMINAL_LEVEL + 0.002, "nominal 90%",
-            color=palette.NOMINAL, fontsize=17)
+    _nominal_line(ax, len(order))
     ax.set_ylim(base, 0.975)
     ax.set_ylabel("coverage within volatility tercile", color=palette.FG, fontsize=20)
     _title(ax, scene)
@@ -374,17 +398,28 @@ def _break_trajectory(ax, scene, values, t):
 # measured is claimed here, and neither scene has data_refs.
 
 
-def _rq_sizing(ax, scene, values, t):
-    """02: a constant-width interval sizes biggest exactly when volatility spikes."""
-    ax.axis("off")
-    _title(ax, scene)
-
+@lru_cache(maxsize=1)
+def _rq_sizing_series():
+    """The synthetic series behind 02. Seeded, so every frame drew the same numbers;
+    building it once per scene instead of once per frame costs nothing and saves ~1,700
+    regenerations. Read-only: the frames slice it, never write to it."""
     rng = np.random.default_rng(11)
     n = 240
     x = np.arange(n)
     vol = 0.35 + 0.9 * np.exp(-((x - 150) ** 2) / (2 * 26 ** 2)) + 0.06 * rng.standard_normal(n)
     vol = np.clip(vol, 0.12, None)
     truth = np.cumsum(rng.standard_normal(n) * vol) * 0.22
+    for arr in (x, vol, truth):
+        arr.setflags(write=False)
+    return n, x, vol, truth
+
+
+def _rq_sizing(ax, scene, values, t):
+    """02: a constant-width interval sizes biggest exactly when volatility spikes."""
+    ax.axis("off")
+    _title(ax, scene)
+
+    n, x, vol, truth = _rq_sizing_series()
     half = 0.62  # the constant width a raw absolute-residual score buys you
 
     shown = max(2, int(n * _ease(t)))
@@ -431,14 +466,25 @@ def _rq_sizing(ax, scene, values, t):
                      fontsize=18, weight="bold", alpha=alpha,
                      arrowprops=dict(arrowstyle="->", color=palette.MISSED, alpha=alpha))
     _note(ax, "illustration; the measured version of this failure is coming up",
-          t, appear=0.8, y=0.0)
+          t, appear=0.8)
+
+
+@lru_cache(maxsize=1)
+def _rq_scores_series():
+    """The 4000 residuals behind 03, and their absolute values. Seeded and identical on
+    every frame, so they are drawn once. Read-only. The histogram itself still moves --
+    the fold from signed to absolute is the animation."""
+    rng = np.random.default_rng(7)
+    resid = rng.standard_normal(4000)
+    absolute = np.abs(resid)
+    for arr in (resid, absolute):
+        arr.setflags(write=False)
+    return resid, absolute
 
 
 def _rq_scores(ax, scene, values, t):
     """03: absolute residuals become a score distribution; the quantile is one of them."""
-    rng = np.random.default_rng(7)
-    n = 4000
-    resid = rng.standard_normal(n)
+    resid, absolute = _rq_scores_series()
 
     _title(ax, scene)
     ax.set_yticks([])
@@ -446,7 +492,7 @@ def _rq_scores(ax, scene, values, t):
 
     # Phase 1: signed residuals. Phase 2: fold to |residual|. Phase 3: the quantile.
     fold = float(np.clip((t - 0.20) / 0.25, 0, 1))
-    shown = resid * (1 - fold) + np.abs(resid) * fold
+    shown = resid * (1 - fold) + absolute * fold
 
     ax.hist(shown, bins=70, color=palette.HIGHLIGHT, alpha=0.55)
     ax.set_xlim(-4.2, 4.2)
@@ -459,7 +505,7 @@ def _rq_scores(ax, scene, values, t):
 
     sweep = float(np.clip((t - 0.5) / 0.35, 0, 1))
     if sweep > 0:
-        q = float(np.quantile(np.abs(resid), 0.90 * _ease(sweep)))
+        q = float(np.quantile(absolute, 0.90 * _ease(sweep)))
         top = ax.get_ylim()[1]
         ax.axvline(q, color=palette.AMBER, linewidth=3.5, alpha=sweep)
         ax.text(q + 0.12, top * 0.80,
@@ -566,8 +612,14 @@ def _width_scatter(ax, scene, values, t):
         alpha = float(np.clip((t - 0.35) * 4, 0, 1))
         if alpha > 0:
             honest = heights[:len(keys)]
+            # split conformal is amber in 11_aci (its coverage breaks) and green here.
+            # Both are true -- this chart is at matched coverage, so green means "allowed
+            # to compete on width", not "coverage holds" -- but a viewer tracking colour
+            # across two back-to-back scenes reads that as a contradiction unless the
+            # chart says which question it is answering. So it says it.
             bars.text(np.mean(xs[:len(keys)]), 1.188,
-                      f"in the band: {(min(honest) - 1) * 100:.0f}-{(max(honest) - 1) * 100:.0f}% "
+                      "green = in the matched-coverage band, "
+                      f"{(min(honest) - 1) * 100:.0f}-{(max(honest) - 1) * 100:.0f}% "
                       "wider than oracle.\nThat is the premium for a level that means what it says.",
                       ha="center", va="center", color=palette.COVERED, fontsize=17,
                       alpha=alpha)
@@ -598,8 +650,12 @@ def _param_coverage_strip(ax, values, t):
     strip.spines["bottom"].set_alpha(alpha)
     strip.tick_params(colors=palette.MUTED, labelsize=14)
 
-    pad = (hi - cov) * 0.5
-    strip.set_xlim(cov - pad, hi + pad)
+    # The parametric coverage sits below the band today. If a rerun ever puts it above,
+    # (hi - cov) flips sign and the strip's x-axis silently inverts -- the marker would
+    # read as over-covering while sitting on the left. Span whatever is actually there.
+    left, right = min(cov, lo), max(cov, hi)
+    pad = max((right - left) * 0.5, 0.005)
+    strip.set_xlim(left - pad, right + pad)
     strip.set_ylim(0, 1)
     strip.axvspan(lo, hi, color=palette.COVERED, alpha=0.22 * alpha)
     strip.axvline(NOMINAL_LEVEL, color=palette.NOMINAL, linestyle="--", linewidth=1.6,
@@ -638,7 +694,7 @@ def render_scene(scene, results, duration, out_dir, fps=30):
     if visual not in _RENDERERS:
         raise ValueError(f"unknown visual {visual!r}")
     if visual == "bullets" and not scene.get("lines"):
-        raise KeyError(f"scene {scene['id']!r} has visual 'bullets' but no 'lines'")
+        raise ValueError(f"scene {scene['id']!r} has visual 'bullets' but no 'lines'")
 
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
