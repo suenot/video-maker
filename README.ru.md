@@ -2,6 +2,22 @@
 
 Автоматизированный пайплайн для генерации YouTube-видео из аудио-нарратива и PDF-презентации. Создаёт MP4-видео с синхронизированными слайдами, SRT-субтитры, метаданные для YouTube и миниатюры.
 
+## 🏭 Контент-завод
+
+video-maker — **этап 2** автоматического конвейера, который превращает **статью
+в блоге в опубликованное видео на YouTube** — без API-ключей, целиком через
+залогиненные браузерные сессии (Camoufox) и локальные медиа-инструменты.
+
+| # | Этап | Репозиторий | Что делает |
+|---|------|-------------|-----------|
+| 1 | Генерация | [gaia](https://github.com/suenot/gaia) | Управляет NotebookLM / Gemini / Flow из залогиненной сессии → аудио-обзор + слайды |
+| **2** | **Сборка** | **[video-maker](https://github.com/suenot/video-maker)** ⬅ *этот репозиторий* | Аудио + PDF-слайды → синхронизированный MP4 (+ SRT, миниатюра) |
+| 3 | Описание | [video-metadata](https://github.com/suenot/video-metadata) | Видео + статья → title / description / теги / тайм-коды глав для YouTube |
+| 4 | Публикация | [video-publisher](https://github.com/suenot/video-publisher) | Управляет YouTube Studio → заливка с метаданными, выбор канала, видимость |
+
+**Поток:** `статья → gaia → video-maker → video-metadata → video-publisher → YouTube`
+(опубликованное видео затем встраивается обратно в статью блога).
+
 ## Что делает
 
 На вход принимает аудиофайл (нарратив) и PDF со слайдами, на выходе:
@@ -159,7 +175,9 @@ input/<slug>/
 
 ## Связанные проекты
 
-- [video-youtube-prepare](https://github.com/suenot/video-youtube-prepare) — подготовка метаданных для уже готовых видео
+- [gaia](https://github.com/suenot/gaia) — генерирует аудио + слайды, которые потребляет этот пайплайн
+- [video-metadata](https://github.com/suenot/video-metadata) — title/description/теги/тайм-коды для YouTube (до публикации)
+- [video-publisher](https://github.com/suenot/video-publisher) — заливает готовое видео на YouTube
 
 ## Лицензия
 
