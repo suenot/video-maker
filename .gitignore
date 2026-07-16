@@ -34,3 +34,7 @@ temp/*
 # AI assistants (keep skills, exclude the rest)
 .claude/*
 !.claude/skills/
+
+# Self-authored video pipeline
+build/
+selfmade/__pycache__/
