@@ -177,10 +177,12 @@
       "visual": "bullets",
       "lines": [
         "1. Always conformalize. Calibration is cheap.",
+        "   -> raw QR: {raw_qr_iid:.3f} iid, {raw_qr_ar1:.3f} AR(1), {raw_qr_garch:.3f} GARCH,",
+        "      {raw_qr_break_gap:+.3f} vs nominal after a break",
         "2. Normalize the score by a volatility proxy.",
-        "   -> vol spread 0.134 -> 0.040",
+        "   -> vol spread {spread_before:.3f} -> {spread_after:.3f}",
         "3. Add ACI if breaks are a first-order concern.",
-        "   -> gamma=0.05 on normalized score: 1.19x oracle width",
+        "   -> gamma=0.05 on normalized score: {aci_norm_width:.2f}x oracle width",
         "   -> handle unbounded intervals: cap or abstain",
         "Caveats: simulation, one asset, one step ahead,",
         "untuned quantile learners (CQR would likely improve)."
@@ -200,6 +202,11 @@
       "id": "15_outro",
       "title": "Calibrated, not uncalibrated",
       "visual": "title_card",
+      "lines": [
+        "width premium at matched coverage, vs oracle:",
+        "split_norm   {split_norm_gauss:.3f}x Gaussian   {split_norm_t:.3f}x Student t",
+        "cqr          {cqr_gauss:.3f}x Gaussian   {cqr_t:.3f}x Student t"
+      ],
       "narration": "The right mental model is not conformal versus GARCH. It is calibrated versus uncalibrated. Normalize by the best volatility estimate you have, then let the calibration set vote on the quantile. When your volatility model is good, the premium is small. When it is wrong, the calibration step is the thing keeping your stated ninety percent meaning ninety percent. So conformal prediction for returns is neither a guarantee that transfers unscathed, nor a method broken by dependence. It is a calibration layer. Its marginal promise is cheap to keep. Its conditional promise has to be earned with a volatility aware score. And its post break promise needs a feedback loop that is listening. Used that way, a six to nine percent width premium buys you intervals whose stated level survives the regimes where parametric confidence quietly fails. Everything here is reproducible from a released seed. Go break it yourself.",
       "data_refs": {
         "split_norm_gauss": "width_at_matched_coverage.garch/gaussian.split_norm.width_vs_oracle",
