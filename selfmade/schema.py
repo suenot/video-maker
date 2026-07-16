@@ -31,7 +31,7 @@ def resolve_data_ref(ref, results):
     """
     if isinstance(ref, str):
         parts = ref.split(".")
-    elif isinstance(ref, list) and all(isinstance(p, str) for p in ref):
+    elif isinstance(ref, list) and ref and all(isinstance(p, str) for p in ref):
         parts = ref
     else:
         raise TypeError(f"data_ref {ref!r} must be a str or a list[str]")

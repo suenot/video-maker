@@ -103,3 +103,13 @@ def test_validate_data_refs_propagates_key_error():
     script = {"scenes": [{"data_refs": {"x": "a.missing"}}]}
     with pytest.raises(KeyError):
         schema.validate_data_refs(script, results)
+
+
+def test_resolve_data_ref_rejects_empty_list():
+    with pytest.raises(TypeError, match="must be a str or a list"):
+        schema.resolve_data_ref([], {"a": 1})
+
+
+def test_resolve_data_ref_non_empty_list_regression():
+    results = {"x": {"y": 42}}
+    assert schema.resolve_data_ref(["x", "y"], results) == 42
