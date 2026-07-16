@@ -2,6 +2,10 @@
 
 Automated pipeline for generating YouTube videos from audio narration and PDF slide decks. Produces MP4 video with synchronized slides, SRT subtitles, YouTube metadata, and thumbnails.
 
+<p align="center">
+  <img src="assets/video-maker_comic.png" alt="video-maker — build a YouTube video from NotebookLM audio + PDF slides" width="820">
+</p>
+
 ## 🏭 The Content Factory
 
 video-maker is **stage 2** of an automated pipeline that turns a **blog article
