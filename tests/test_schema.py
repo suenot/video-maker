@@ -13,6 +13,28 @@ def test_resolve_data_ref_rejects_missing_path():
         schema.resolve_data_ref("marginal_coverage.nope.split_abs.coverage", {"marginal_coverage": {}})
 
 
+def test_resolve_data_ref_list_form_reaches_dotted_key():
+    results = {"marginal_coverage": {"garch": {"aci_abs_g0.05": {"coverage": 0.873}}}}
+    assert schema.resolve_data_ref(
+        ["marginal_coverage", "garch", "aci_abs_g0.05", "coverage"], results
+    ) == 0.873
+
+
+def test_resolve_data_ref_string_form_still_works():
+    results = {"marginal_coverage": {"garch": {"split_abs": {"coverage": 0.91}}}}
+    assert schema.resolve_data_ref("marginal_coverage.garch.split_abs.coverage", results) == 0.91
+
+
+def test_resolve_data_ref_list_form_rejects_missing_path():
+    with pytest.raises(KeyError):
+        schema.resolve_data_ref(["marginal_coverage", "nope", "coverage"], {"marginal_coverage": {}})
+
+
+def test_resolve_data_ref_rejects_wrong_type():
+    with pytest.raises(TypeError, match="42"):
+        schema.resolve_data_ref(42, {})
+
+
 def test_load_script_accepts_valid(tmp_path):
     p = tmp_path / "s.json"
     p.write_text(json.dumps({
@@ -65,3 +87,19 @@ def test_load_script_accepts_bullets_with_lines(tmp_path):
                     "visual": "bullets", "data_refs": {}, "lines": ["one", "two"]}],
     }))
     assert schema.load_script(p)["scenes"][0]["lines"] == ["one", "two"]
+
+
+def test_validate_data_refs_counts_mixed_string_and_list_refs():
+    results = {"a": {"b": 1}, "c": {"d.e": 2}}
+    script = {"scenes": [
+        {"data_refs": {"x": "a.b"}},
+        {"data_refs": {"y": ["c", "d.e"]}},
+    ]}
+    assert schema.validate_data_refs(script, results) == 2
+
+
+def test_validate_data_refs_propagates_key_error():
+    results = {"a": {}}
+    script = {"scenes": [{"data_refs": {"x": "a.missing"}}]}
+    with pytest.raises(KeyError):
+        schema.validate_data_refs(script, results)

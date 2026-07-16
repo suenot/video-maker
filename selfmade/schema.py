@@ -17,9 +17,27 @@ REQUIRED_SCENE_KEYS = {"id", "title", "narration", "visual", "data_refs"}
 
 
 def resolve_data_ref(ref, results):
-    """Resolve a dotted path into results.json. Raises KeyError if it does not exist."""
+    """Resolve a data ref into results.json.
+
+    ref may be:
+      - a str: a dotted path, split on "." (e.g. "marginal_coverage.garch.split_abs.coverage").
+        Use this form only for keys that do not themselves contain a literal dot.
+      - a list[str]: exact key segments, used verbatim with no splitting
+        (e.g. ["marginal_coverage", "garch", "aci_abs_g0.05", "coverage"]). Required for
+        keys that contain a literal dot, since the string form cannot address them.
+
+    Raises TypeError if ref is not a str or list[str].
+    Raises KeyError if the path does not resolve.
+    """
+    if isinstance(ref, str):
+        parts = ref.split(".")
+    elif isinstance(ref, list) and all(isinstance(p, str) for p in ref):
+        parts = ref
+    else:
+        raise TypeError(f"data_ref {ref!r} must be a str or a list[str]")
+
     node = results
-    for part in ref.split("."):
+    for part in parts:
         if not isinstance(node, dict) or part not in node:
             raise KeyError(f"data_ref {ref!r} does not resolve: missing {part!r}")
         node = node[part]
