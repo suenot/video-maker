@@ -17,6 +17,10 @@ input/*
 output/*
 !output/.gitkeep
 
+# Output from the DaVinci Resolve render path
+output_davinci/
+*.fcpxml
+
 # Temporary files (slides images, OCR text, subtitles JSON, timelines, logs)
 temp/*
 !temp/.gitkeep
