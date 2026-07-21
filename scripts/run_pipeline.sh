@@ -36,6 +36,16 @@ elif [[ "$LANG" == "en" ]]; then
     MODEL="base"
     OUT_NAME="${SLUG}.mp4"
     ARTICLE="$PROJECT_DIR/../notebooklm/${SLUG}.en.md"
+elif [[ "$LANG" == "zh" ]]; then
+    # Simplified Chinese, for the @marketmaker-zh channel. tesseract needs the
+    # chi_sim traineddata; Whisper's own code for Mandarin is "zh".
+    AUDIO="$PROJECT_DIR/input/$SLUG/audio_zh.m4a"
+    PDF="$PROJECT_DIR/input/$SLUG/slides_zh.pdf"
+    OCR_LANG="chi_sim"
+    WHISPER_LANG="zh"
+    MODEL="base"
+    OUT_NAME="${SLUG}_zh.mp4"
+    ARTICLE="$PROJECT_DIR/input/$SLUG/article_zh.md"
 else
     echo "Unknown language: $LANG"
     exit 1
