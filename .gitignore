@@ -25,6 +25,9 @@ output_davinci/
 temp/*
 !temp/.gitkeep
 
+# Ingested third-party videos (research input, never committed or republished)
+ingest/
+
 # IDE / Editor
 .vscode/
 .idea/

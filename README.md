@@ -72,12 +72,14 @@ video_maker/
 │   ├── sync_slides.py           # Build slide-to-time mapping
 │   ├── generate_video.py        # Slides + audio → MP4
 │   ├── make_short.py            # Landscape video + SRT → 1080×1920 Short
+│   ├── ingest_youtube.py        # Third-party YouTube video → NotebookLM source.md
 │   ├── research_youtube_tags.py # YouTube tag research
 │   ├── generate_metadata.py     # Generate YouTube metadata
 │   └── generate_thumbnail.py    # Generate 1280×720 thumbnail
 ├── input/                       # Source files (audio, PDF slides)
 ├── output/                      # Final video, metadata, subtitles, thumbnail
 ├── temp/                        # Intermediate files (slide images, OCR, timeline)
+├── ingest/                      # Downloaded third-party videos (git-ignored)
 └── venv/                        # Python virtual environment
 ```
 
@@ -187,6 +189,60 @@ covering the slide.
 
 **Output.** H.264 High / yuv420p, 30 fps, AAC 192 kb/s, `+faststart`. Segments longer than
 180 s print a warning — that is YouTube's ceiling for Shorts.
+
+## Ingesting a Source Video
+
+Topic ideas come from two monitored channels. When one is worth covering, the
+video is mined for **research input only** — it is never re-uploaded, re-cut or
+translated, and the article and video we ship are written from scratch.
+`scripts/ingest_youtube.py` collapses the download, the transcript and the deck
+extraction into one command and writes a single markdown file to hand to
+NotebookLM.
+
+```bash
+python scripts/ingest_youtube.py 22iy2mDFiF8 --out-dir ingest
+```
+
+Produces `ingest/<video_id>/source.md` — front matter, then the transcript
+interleaved with the slides at their timestamps — plus the slide PNGs in
+`ingest/<video_id>/slides/`.
+
+| Flag | Description |
+|---|---|
+| `video` | Video id or any YouTube URL (positional) |
+| `--out-dir` | Where to put `<video_id>/` (`ingest`) |
+| `--scene-threshold` | ffmpeg scene score that marks a new slide (0.25) |
+| `--dedup-threshold` | Mean pixel difference below which two frames are the same slide (4.0) |
+| `--sample-fps` | Sampling rate used when the deck has no detectable scene cuts (0.5) |
+| `--keep-video` | Keep the source mp4; it is deleted by default |
+| `--whisper-model` | Model for the no-captions fallback (`large-v3-turbo`) |
+| `--ocr-lang` | Tesseract language (`eng`) |
+
+**Transcript.** YouTube's own captions are preferred — free and instant. They
+arrive as scrolling cues where every cue repeats the tail of the previous one
+and paints the new words in with inline `<00:00:01.234><c>` timing tags, so a
+naive dump duplicates every line. The tags are stripped and any line already
+seen in the last few lines is dropped; on the test video 529 cues collapse to
+265 unique lines with no repeats left. The result is regrouped into ~30 s
+paragraphs. Whisper runs only when the video has no captions at all, and then at
+`large-v3-turbo` — `base` mangles product names and numbers.
+
+**Slides.** These channels render static decks, so a scene-change filter should
+recover them. In practice their decks are near-black: ffmpeg's `scene` score is
+an absolute difference, so two completely unrelated dark slides score about
+0.02 and the usual 0.25 threshold returns *one* frame for a ten-minute deck.
+When the filter comes back that empty the script says so and samples at
+`--sample-fps` instead. Either way the candidates are then grouped
+perceptually — each frame compared against the first frame of the open group on
+a 64×36 grayscale copy with the bottom 8% cropped off, so a talking-head corner
+or a creeping progress bar never opens a new slide. One frame per group is kept,
+the middle one, which is past the transition-in and shows the settled slide. The
+test video goes 293 candidate frames → 47 slides.
+
+**Slide text.** Tesseract OCRs each surviving slide and the text lands in
+`source.md` in a fenced block under the image, so NotebookLM reads the deck as
+text. If `tesseract` is not installed the script warns and lists the slides with
+their timestamps for reading by hand rather than pulling in a heavy dependency.
 
 ## Slide Synchronization Algorithm
 
