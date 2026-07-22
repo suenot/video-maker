@@ -71,6 +71,7 @@ video_maker/
 │   ├── subtitles_to_srt.py      # Whisper JSON → SRT subtitles
 │   ├── sync_slides.py           # Build slide-to-time mapping
 │   ├── generate_video.py        # Slides + audio → MP4
+│   ├── make_short.py            # Landscape video + SRT → 1080×1920 Short
 │   ├── research_youtube_tags.py # YouTube tag research
 │   ├── generate_metadata.py     # Generate YouTube metadata
 │   └── generate_thumbnail.py    # Generate 1280×720 thumbnail
@@ -133,6 +134,59 @@ The pipeline supports three codecs:
 | `libx264` | Slow (CPU) | Small | Best compression, but may OOM on large slides |
 
 Default: `hevc_videotoolbox` at 1920×1080 resolution, 1 fps (optimal for static slide content).
+
+## Vertical Shorts
+
+NotebookLM's "Short Video Overview" renders **Latin script only** — fed Russian or
+Chinese sources it returns English on-screen headings and burned-in subtitles that are
+empty tofu squares. So Shorts for `@marketmaker-school-ru` and `@marketmaker-zh` are cut
+locally instead: `scripts/make_short.py` takes an already-finished landscape video plus
+its SRT and produces a 1080×1920 Short with correctly rendered Cyrillic / CJK subtitles.
+
+```bash
+python scripts/make_short.py \
+    --video output/<slug>/<slug>_ru.mp4 \
+    --srt   output/<slug>/<slug>_ru.srt \
+    --start 1:00 --end 1:52 \
+    --lang ru \
+    --title "Почему маркет-мейкер теряет деньги" \
+    --out output/<slug>/<slug>_ru_short.mp4
+```
+
+| Flag | Description |
+|---|---|
+| `--video`, `--srt` | Finished 16:9 mp4 and its SRT |
+| `--start`, `--end` | Segment to cut, `SS.s` or `MM:SS`; `--end` defaults to the end of the source |
+| `--lang` | `ru` \| `zh` \| `en` — selects the font and the line-breaking rules |
+| `--title` | Optional hook line pinned at the top for the whole Short |
+| `--font`, `--font-index` | Override the font file / the face inside a `.ttc` |
+| `--sub-size`, `--title-size` | Type sizes in px (72 / 82) |
+| `--sub-fps` | Frame rate of the subtitle PNG sequence (10) |
+| `--codec` | `libx264` (default) or `h264_videotoolbox` |
+| `--keep-temp` | Keep the rendered subtitle PNGs for inspection |
+
+**Framing.** The source is scaled to 1080 wide and centred vertically; the empty top and
+bottom are filled with a blurred, darkened, zoomed copy of the same frame
+(`split` → `scale`+`crop`+`boxblur` → `overlay`), so there are no black bars.
+
+**Subtitles.** The local FFmpeg is built without libass and freetype, so the `subtitles`,
+`ass` and `drawtext` filters do not exist — `ffmpeg -filters | grep -E "subtitles|drawtext|ass"`
+comes back empty. The subtitle track is therefore rasterised with Pillow into a transparent
+PNG sequence (10 fps; identical layers are hard-linked, so a 50 s Short needs ~25 unique
+PNGs) and composited as a second input with `overlay`.
+
+**Fonts.** Arial Black for `ru`/`en`, Hiragino Sans GB W6 for `zh`. Every character in the
+cues and the title is compared against the font's notdef glyph before anything is rendered;
+if a glyph would come out as a tofu box the script aborts and names the offending
+characters rather than shipping broken text.
+
+**Typography.** White text with a dark stroke over a semi-transparent rounded box, in the
+bottom third. Cyrillic and Latin wrap per word, CJK per character (never breaking before
+closing punctuation). Cues that need more than 3 lines shrink down to 46 px instead of
+covering the slide.
+
+**Output.** H.264 High / yuv420p, 30 fps, AAC 192 kb/s, `+faststart`. Segments longer than
+180 s print a warning — that is YouTube's ceiling for Shorts.
 
 ## Slide Synchronization Algorithm
 
