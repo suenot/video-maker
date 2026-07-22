@@ -36,9 +36,34 @@ elif [[ "$LANG" == "en" ]]; then
     MODEL="base"
     OUT_NAME="${SLUG}.mp4"
     ARTICLE="$PROJECT_DIR/../notebooklm/${SLUG}.en.md"
+elif [[ "$LANG" == "zh" ]]; then
+    # Simplified Chinese, for the @marketmaker-zh channel. tesseract needs the
+    # chi_sim traineddata; Whisper's own code for Mandarin is "zh".
+    AUDIO="$PROJECT_DIR/input/$SLUG/audio_zh.m4a"
+    PDF="$PROJECT_DIR/input/$SLUG/slides_zh.pdf"
+    OCR_LANG="chi_sim"
+    WHISPER_LANG="zh"
+    MODEL="base"
+    OUT_NAME="${SLUG}_zh.mp4"
+    ARTICLE="$PROJECT_DIR/input/$SLUG/article_zh.md"
 else
     echo "Unknown language: $LANG"
     exit 1
+fi
+
+echo "=== Step 0: strip the NotebookLM watermark ==="
+# Cosmetic, so it must never cost us the deck: on any failure keep the original
+# PDF and carry on. Set SKIP_WATERMARK_CLEAN=1 to bypass entirely.
+CLEAN_PDF="$TEMP_DIR/slides_clean.pdf"
+if [[ "${SKIP_WATERMARK_CLEAN:-0}" == "1" ]]; then
+    echo "skipped (SKIP_WATERMARK_CLEAN=1)"
+elif "$VENV_PYTHON" "$SCRIPT_DIR/clean_slides.py" "$PDF" -o "$CLEAN_PDF" \
+        > "$TEMP_DIR/clean_slides.log" 2>&1 && [[ -f "$CLEAN_PDF" ]]; then
+    echo "watermark removed -> $CLEAN_PDF"
+    PDF="$CLEAN_PDF"
+else
+    echo "WARNING: watermark removal failed; using the original deck"
+    tail -3 "$TEMP_DIR/clean_slides.log" 2>/dev/null || true
 fi
 
 echo "=== Step 1: PDF to images ==="

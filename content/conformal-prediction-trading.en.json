@@ -1,0 +1,219 @@
+{
+  "slug": "conformal-prediction-trading",
+  "lang": "en",
+  "voice": "en-US-AndrewNeural",
+  "scenes": [
+    {
+      "id": "01_hook",
+      "title": "You asked for 90%",
+      "visual": "title_card",
+      "narration": "You asked your model for a ninety percent prediction interval. You got a number back. Now here is the question nobody makes you answer. Does that interval actually cover ninety percent of what happens next? Not on average over five years of backtest. Tonight. In the market you are actually in. Conformal prediction is the method people reach for here, because it promises coverage without any distributional assumption. That promise is real, and it is proved. But it is proved under an assumption that returns violate in every way that matters. So somebody has to check. This video is that check. We are going to take conformal prediction apart on data where the truth is known exactly, and find out where the guarantee holds, where it quietly fails, and what it costs to fix.",
+      "data_refs": {}
+    },
+    {
+      "id": "02_why_sizing",
+      "title": "Why sizing needs honest intervals",
+      "visual": "residual_quantile",
+      "narration": "Start with why any of this matters. Every position sizing rule needs an uncertainty estimate underneath it. Kelly needs a win probability and a payoff ratio. Mean variance needs a covariance matrix. Value at risk needs a return distribution. All three take a distributional assumption as input, and markets break those assumptions routinely. Now suppose you size positions inversely to the width of a prediction interval. Wide interval, small position. Narrow interval, larger position. That rule has a nice property. It shrinks your exposure automatically when the model is unsure, without any regime detector bolted on the side. But it inherits everything from the interval. If the interval is too narrow when volatility is high, the sizer takes its largest risk at exactly the wrong moment, and it does so while reporting a stated confidence level that is no longer true. The interval is not a diagnostic here. It is the risk control.",
+      "data_refs": {}
+    },
+    {
+      "id": "03_nonconformity",
+      "title": "The nonconformity score",
+      "visual": "residual_quantile",
+      "narration": "Conformal prediction rests on one almost embarrassingly simple idea. You measure how strange a new observation is compared to the ones you have already seen. That measure is called a nonconformity score. For regression, the default score is the absolute residual. Take the truth, subtract the prediction, drop the sign. That is it. The model that made the prediction does not matter. Linear regression, gradient boosting, a neural network, a coin flip. Any point predictor works, because the score only asks how far off it was. Now here is the pivot. Suppose your past scores and the new score are exchangeable, meaning you could shuffle their order without changing their joint distribution. Then the rank of the new score among all of them is uniform. Every position is equally likely. That is not a statistical result. It is combinatorics. It requires nothing about the distribution of returns at all. And from that single fact of uniform rank, you can build an interval with a coverage guarantee.",
+      "data_refs": {}
+    },
+    {
+      "id": "04_split_conformal",
+      "title": "Split conformal in four steps",
+      "visual": "bullets",
+      "lines": [
+        "1. Split: train set, calibration set",
+        "2. Fit any model on the train set",
+        "3. Score the calibration set: |y - prediction|",
+        "4. Take the ceil((1-alpha)(n+1)) order statistic",
+        "Interval = prediction plus or minus that quantile"
+      ],
+      "narration": "The practical recipe is called split conformal, and it fits on one slide. Step one. Cut your data into a training set and a calibration set. Step two. Fit any model you like on the training set. Step three. Run that fitted model over the calibration set and collect the absolute residuals. Those are your scores. Step four. Sort the scores and take one of them. Not the ninetieth percentile exactly, but a specific order statistic with a finite sample correction built in. Then your interval is the prediction, plus or minus that one number. That is the whole algorithm. Notice what it does not contain. No normality. No stationarity assumption written down anywhere. No asymptotics. The ceiling in step four matters. When your calibration set is small and your target coverage is high, the required order statistic may not exist. The honest answer then is infinity. The interval is the whole real line. It is useless, but it is true. Clamping to the largest residual instead is the quiet way people void their own guarantee.",
+      "data_refs": {}
+    },
+    {
+      "id": "05_why_it_works",
+      "title": "Why it works, and what it promises",
+      "visual": "bullets",
+      "lines": [
+        "Finite-sample, not asymptotic",
+        "Any model, any distribution",
+        "Requires exchangeability",
+        "The promise is MARGINAL coverage",
+        "Marginal = averaged over X and Y"
+      ],
+      "narration": "So what exactly did you buy? Under exchangeability, the probability that the truth lands inside the interval is at least one minus alpha. It is a finite sample statement, not an asymptotic one. It holds for any model and any distribution. And it is not wasteful, because a matching upper bound means you get roughly what you asked for and not much more. If your model is terrible, the guarantee still holds. The intervals just get wide. Coverage is promised. Usefulness is not. But read that promise again, because the important word is the one people skip. The coverage is marginal. It is averaged over the randomness in the features and the outcome together. It says nothing about coverage at any particular value of the features. It says nothing about coverage in the volatile weeks specifically. Your interval can be perfectly honest on average and systematically wrong in every single regime you actually trade. Hold on to that sentence. The rest of this video is about it.",
+      "data_refs": {}
+    },
+    {
+      "id": "06_experiment",
+      "title": "The experiment",
+      "visual": "bullets",
+      "lines": [
+        "Simulated, by design: truth is known",
+        "iid, AR(1), GARCH(1,1), abrupt break",
+        "180 experiments, 14 methods, nominal 90%",
+        "Online: rolling refit, sliding calibration",
+        "One asset, one step ahead"
+      ],
+      "narration": "To check any of this you need to know the truth, and here is the honest part of the design. Everything you are about to see is simulation. Not a market backtest. Simulation, on purpose. Exact conditional truth is the whole point, and on real market data it is unobtainable. You never learn what the true ninety percent band was last Tuesday. You only learn one draw from it. So the study simulates four return processes whose true conditional quantiles are computable exactly at every step. Independent returns, the exchangeable base case where the theorem applies word for word. An autoregressive mean, which is dependence without changing volatility. A GARCH process, which is volatility clustering. And an abrupt regime break, where volatility jumps or the mean shifts overnight. Innovations are Gaussian about half the time and Student t the rest. Then a walk forward protocol. Refit periodically, slide the calibration window, produce a one step ahead interval, compare to truth. Fourteen methods, one hundred and eighty experiments, nominal level ninety percent throughout. Every coverage number in this video is measured against known truth, not proxied by a test statistic.",
+      "data_refs": {}
+    },
+    {
+      "id": "07_marginal",
+      "title": "Marginal coverage holds",
+      "visual": "coverage_bars",
+      "narration": "Start with the good news, because there is real good news. Marginal coverage barely notices dependence. On independent data, split conformal delivers its theorem almost exactly, landing right on the nominal ninety. Fine. That is the base case and it had better work. Now the interesting cells. Under autoregressive dependence, there is no shortfall to explain at all. Coverage lands a hair above nominal. Under GARCH, where consecutive scores are strongly linked through the volatility state, the gap is real but tiny. Coverage lands just half a point under nominal. Look at that bar. For marginal coverage, under stationary dependence, at this sample size, the exchangeability caveat is a rounding error. The standard warning that serial dependence voids the conformal guarantee is, marginally, overstated. Breaks are different in kind. That last bar drops to a bit under eighty eight percent, a gap about five times larger. And that eighty eight is a long run average over fifteen hundred steps. Averages hide things. That one is hiding something specific, and we will dig it up shortly. Adaptive conformal inference, meanwhile, sits at nominal on every process. That is its theorem, and it is confirmed by measurement.",
+      "data_refs": {
+        "iid": "marginal_coverage.iid.split_abs.coverage",
+        "ar1": "marginal_coverage.ar1.split_abs.coverage",
+        "garch": "marginal_coverage.garch.split_abs.coverage",
+        "break": "marginal_coverage.break.split_abs.coverage",
+        "aci_garch": ["marginal_coverage", "garch", "aci_abs_g0.05", "coverage"]
+      }
+    },
+    {
+      "id": "08_conditional",
+      "title": "Conditional coverage breaks",
+      "visual": "tercile_drift",
+      "narration": "Now the bad news, and this is the heart of it. Take the GARCH runs, where marginal coverage looked almost perfect. Sort every step by the true volatility at that step. We can do that, because we simulated it. Split the steps into three buckets. Calm, middle, and volatile. Then ask what fraction of each bucket the interval actually covered. In the calm bucket, it covers about ninety five percent. That is not a gift. That is a wide interval you paid for. In the middle bucket, it lands at ninety one and a half. Close enough. And in the volatile bucket, coverage falls to eighty two percent. You asked for ninety. You are getting eighty two. That is an eight point shortfall, in exactly the regime where a position sizer most needs the number to be true. The spread across the three buckets is thirteen points. And the average of these three is that honest eighty nine and a half we saw a minute ago. The mechanism is not statistical noise. It is structural. The absolute residual score gives you one number, so the interval has essentially constant width. It cannot know what regime it is in. It is far too wide when volatility is low and too narrow when volatility is high. Marginal honesty is hiding conditional dishonesty. This is the failure that matters.",
+      "data_refs": {
+        "low": "conditional_coverage_garch.methods.split_abs.cov_vol_low",
+        "mid": "conditional_coverage_garch.methods.split_abs.cov_vol_mid",
+        "high": "conditional_coverage_garch.methods.split_abs.cov_vol_high.mean",
+        "spread": "conditional_coverage_garch.methods.split_abs.vol_cov_spread.mean"
+      }
+    },
+    {
+      "id": "09_normalize",
+      "title": "Normalize the score",
+      "visual": "tercile_drift",
+      "narration": "The fix is almost annoyingly small. Do not score with the raw residual. Divide it by a volatility estimate first. Not a fancy one. An exponentially weighted moving average of past squared returns, the cheapest thing on the shelf, computed only from data you already had. Now the score asks a better question. Not how big was the error, but how big was the error for the conditions we were in. The interval that comes out is the quantile times today's volatility estimate, so it breathes with the regime instead of sitting at one width forever. Watch the terciles. Calm goes to about eighty nine. Middle, ninety. Volatile, ninety. The thirteen point spread collapses to four points. And there is a footnote worth being honest about. The oracle itself, which knows the true quantiles exactly, shows a measured spread of about two points, purely from sampling noise. So four points is not far off the floor of what this metric can even resolve. Compare that to conformalized quantile regression, which is usually recommended as the heteroskedasticity fix. Here it recovers less than half the spread. Its quantile learners react to volatility features too sluggishly. But go easy on that ranking. The learners here are untuned gradient boosting machines, a hundred trees, depth two. A better tuned quantile learner would likely improve CQR specifically, and nothing else on this chart. So: the cheap EWMA wins here, with that asymmetry noted.",
+      "data_refs": {
+        "low": "conditional_coverage_garch.methods.split_norm.cov_vol_low",
+        "mid": "conditional_coverage_garch.methods.split_norm.cov_vol_mid",
+        "high": "conditional_coverage_garch.methods.split_norm.cov_vol_high.mean",
+        "spread": "conditional_coverage_garch.methods.split_norm.vol_cov_spread.mean",
+        "cqr_spread": "conditional_coverage_garch.methods.cqr.vol_cov_spread.mean",
+        "oracle_spread": "conditional_coverage_garch.methods.oracle.vol_cov_spread.mean"
+      }
+    },
+    {
+      "id": "10_break",
+      "title": "The coverage hole",
+      "visual": "break_trajectory",
+      "narration": "Now for the thing the average was hiding. Line the break experiments up in event time, so step zero is the moment the regime changes. Be precise about what that means, because it is a menu, not one event: by design, a break scales volatility, shifts the mean, or does both, with a volatility multiplier of two or four. Of the sixty breaks actually realized, fifty moved volatility, whether alone or together with a mean shift. The other ten, one in six, shifted only the mean and left volatility untouched. This curve averages over all of it. Then roll coverage forward. Before the break, everything is fine. Coverage sits at nominal. Then the regime changes, and watch what happens to split conformal with the absolute score. It falls off a cliff. Over the first sixty steps after the break, it covers fifty six percent. Your stated ninety percent interval is, for the next couple of months of trading days, a coin flip with extra steps. Now look at the oracle line, because it calibrates this chart. The oracle knows the true conditional quantiles exactly. It should be perfect. It is not: on average across the sixty break experiments, its own rolling coverage bottoms out at eighty. That is not the oracle being wrong. That is what a rolling sixty step window does to a ninety percent level on Bernoulli noise alone, and some of every hole here is that measurement noise, not the method. Which makes the point sharper, not softer. On average, perfect knowledge bottoms out at eighty. Split conformal bottoms out at fifty four. That gap is the method. The mechanism is obvious once you see it. The calibration window still holds pre break residuals: small residuals, a small quantile, a narrow interval. Meanwhile the world it describes no longer exists. The interval only recovers as the old scores age out of the window, healing at the speed of the window turning over and not one step faster. Conformalized quantile regression digs the identical hole: conformalizing a quantile learner does not help when the calibration set itself is stale.",
+      "source_note": "Break-type menu (volatility/mean/both with probabilities 0.4/0.2/0.4, volatility multiplier kappa in {2,4}): paper Simulated-DGP section, ~L340-344. Realized count of 50/60 breaks moving volatility: paper Breaks section, ~L557. Design and realized-count figures only -- not present in results.json (break_analysis holds only methods and aci_gamma_sweep); waived from the data_ref rule per the 13_folklore precedent.",
+      "data_refs": {
+        "rel_time": "break_trajectory.rel_time",
+        "split_abs": "break_trajectory.coverage.split_abs",
+        "oracle": "break_trajectory.coverage.oracle",
+        "split_abs_post": ["break_analysis", "methods", "split_abs", "cov_post_0_60"],
+        "oracle_hole_depth": "break_analysis.methods.oracle.hole_depth.mean",
+        "split_abs_hole_depth": "break_analysis.methods.split_abs.hole_depth.mean"
+      }
+    },
+    {
+      "id": "11_aci",
+      "title": "ACI closes the hole",
+      "visual": "break_trajectory",
+      "narration": "So add a feedback loop. That is adaptive conformal inference. The detail that matters is where you apply the nudge. You do not push the interval width around directly. You tune the working level instead. Each step, if your interval missed, you lower the working level, which raises the required quantile and widens the next interval. If it covered, you nudge the other way and tighten. One parameter, gamma, controls how hard you push. Watch the curves. The repair scales with gamma almost exactly: first sixty step coverage climbs from fifty six percent with no feedback, to seventy at the slowest setting, to eighty seven and a half at the most aggressive. Here is the asymmetry the paper is built on. The width you pay does not track gamma that way. It stays flat, at roughly one point one two to one point one four times oracle across the whole range, against one point zero five for plain split conformal. You are buying nearly all of that repair for free. So what gets more expensive as you push gamma higher? Not price. The fraction of intervals that come out unbounded, which climbs from essentially zero at the slowest setting to about three percent at the fastest, and a live system has to cap or abstain on those. That is the real constraint on large gamma, not width. The small gamma curves also overshoot above nominal for a while after the hole, paying back the loop's debt. The long run average is protected by oscillation, not foresight. Stacking helps most: ACI on top of the normalized score, and the hole essentially disappears.",
+      "data_refs": {
+        "rel_time": "break_trajectory.rel_time",
+        "aci_fast": ["break_trajectory", "coverage", "aci_abs_g0.05"],
+        "split_abs": "break_trajectory.coverage.split_abs",
+        "aci_slow_post": ["break_analysis", "methods", "aci_abs_g0.005", "cov_post_0_60"],
+        "aci_fast_post": ["break_analysis", "methods", "aci_abs_g0.05", "cov_post_0_60"],
+        "aci_fast_width": ["break_analysis", "methods", "aci_abs_g0.05", "mean_width_vs_oracle"],
+        "aci_slow_width": ["break_analysis", "methods", "aci_abs_g0.005", "mean_width_vs_oracle"],
+        "split_abs_width": "break_analysis.methods.split_abs.mean_width_vs_oracle",
+        "aci_slow_frac_unbounded": ["break_analysis", "methods", "aci_abs_g0.005", "frac_unbounded"],
+        "aci_fast_frac_unbounded": ["break_analysis", "methods", "aci_abs_g0.05", "frac_unbounded"]
+      }
+    },
+    {
+      "id": "12_width",
+      "title": "What honesty costs",
+      "visual": "width_scatter",
+      "narration": "Every finance person watching has the same objection queued up. I already have a volatility model. Why not fit the variance, plug in a z score, and go home? It is narrower. Fair question. You cannot compare widths at different coverage levels, because anyone can win on width by cheating on coverage. So take only the methods whose marginal coverage lands inside a narrow band around nominal, and compare widths there, against the oracle. On GARCH, under both Gaussian and Student t innovations, these three honest methods sit six to fifteen percent above the oracle width. The absolute score costs the most of the three, at thirteen to fifteen. The normalized score and conformalized quantile regression are markedly cheaper than it, at six to nine percent. That is the premium for distribution free coverage, measured against a forecaster nobody actually owns. And the parametric Gaussian baseline? It is the narrowest thing in the comparison. Essentially oracle width. It also does not make the coverage band. Its coverage is under eighty eight percent. Its narrowness is not efficiency. It is under coverage wearing efficiency's clothes. Across all eight process and innovation cells, no method inside the coverage band was narrower than the oracle. That is the shape of the trade. Six to nine percent of width, for a stated level that means what it says. Note also that the normalized score is both the conditional fix and the cheaper option at matched coverage, against the absolute score it replaces.",
+      "data_refs": {
+        "band": "width_at_matched_coverage.band",
+        "split_abs": "width_at_matched_coverage.garch/gaussian.split_abs.width_vs_oracle",
+        "split_norm": "width_at_matched_coverage.garch/gaussian.split_norm.width_vs_oracle",
+        "cqr": "width_at_matched_coverage.garch/gaussian.cqr.width_vs_oracle",
+        "split_abs_t": "width_at_matched_coverage.garch/student_t.split_abs.width_vs_oracle",
+        "split_norm_t": "width_at_matched_coverage.garch/student_t.split_norm.width_vs_oracle",
+        "cqr_t": "width_at_matched_coverage.garch/student_t.cqr.width_vs_oracle",
+        "param_width": "width_at_matched_coverage.garch/gaussian.param_gauss.width_vs_oracle",
+        "param_cov": "width_at_matched_coverage.garch/gaussian.param_gauss.coverage"
+      }
+    },
+    {
+      "id": "13_folklore",
+      "title": "Fat tails are not the villain",
+      "visual": "bullets",
+      "lines": [
+        "Folklore: Gaussian under-covers, blame fat tails",
+        "At 90%, the 0.95 quantile is what matters",
+        "Standardized t 0.95 quantile: nu=4: 1.507 | nu=6: 1.587 | nu=10: 1.621",
+        "Gaussian 0.95 quantile: 1.645 -- larger than all three",
+        "So Gaussian OVER-covers at 90%",
+        "Folklore is right only deep in the tail (99%+)"
+      ],
+      "source_note": "Analytic t/Gaussian quantile constants, paper section 6 -- not in results.json; waived from the data_ref rule by controller adjudication.",
+      "narration": "One side finding, because it corrects folklore almost everyone repeats. The story goes: Gaussian intervals under cover financial returns, because returns are fat tailed. At the ninety percent level, that is backwards. A central ninety percent interval is set by the ninety fifth percentile. For a standardized Student t with unit variance, that quantile is smaller than the Gaussian one point six four five, not bigger. Fat tails move mass out of the shoulders to two places. The tails, and the center. At central coverage levels, the center wins. A correctly scaled Gaussian interval over covers under fat tails. The measurements agree. The parametric baseline covers slightly more under Student t innovations than under Gaussian ones. The opposite of what the folklore predicts. So why does the Gaussian baseline under cover? Volatility dynamics. Estimation noise in the filter, lag under GARCH, stale variance after a break. Not the tails. The ordering only flips deep in the tail, around the ninety nine percent level and beyond, and that is where the folklore belongs. Value at risk, not ninety percent intervals. Patching a ninety percent interval for fat tails is treating the wrong disease.",
+      "data_refs": {}
+    },
+    {
+      "id": "14_recipe",
+      "title": "The recipe",
+      "visual": "bullets",
+      "lines": [
+        "1. Always conformalize. Calibration is cheap.",
+        "   -> raw QR: {raw_qr_iid:.3f} iid, {raw_qr_ar1:.3f} AR(1), {raw_qr_garch:.3f} GARCH,",
+        "      {raw_qr_break_gap:+.3f} vs nominal after a break",
+        "2. Normalize the score by a volatility proxy.",
+        "   -> vol spread {spread_before:.3f} -> {spread_after:.3f}",
+        "3. Add ACI if breaks are a first-order concern.",
+        "   -> gamma=0.05 on normalized score: {aci_norm_width:.2f}x oracle width",
+        "   -> handle unbounded intervals: cap or abstain",
+        "Caveats: simulation, one asset, one step ahead,",
+        "untuned quantile learners (CQR would likely improve)."
+      ],
+      "narration": "So what should you actually do? Three steps, in order. One. Always conformalize. The unconformalized quantile band gives up a couple of coverage points on stationary data, and around fifteen after a break. Calibration costs you one data split. Take the trade. Two. Normalize the score by a volatility proxy. Even a fixed decay EWMA. It collapses the conditional spread, as you saw. It repairs most of the break hole. It keeps marginal coverage at nominal on every process tested. And at matched coverage it is narrower than the absolute score it replaces. This is the rare free lunch on the menu. Three. If regime breaks are a first order concern, add adaptive conformal inference on top of the normalized score, and pick gamma by the trade off you just saw. Around one percent already cuts the hole substantially at negligible width cost. Five percent removes it, at the width premium on the slide, plus a small fraction of unbounded intervals your deployment has to handle. Cap them, or abstain. Now the caveats, and they are not decoration. This is simulation. One asset. One step ahead. Nominal ninety percent throughout. The process menu leaves out leverage effects, jumps, long memory, and gradual regime shifts. The quantile learners are fixed and untuned, so the CQR comparisons in particular are the ones most likely to move under a better learner. At deeper tail levels several of these conclusions would quantitatively change. This recipe is what the evidence here supports. It is not a market backtest, and you should not treat it as one.",
+      "data_refs": {
+        "raw_qr_break_gap": "marginal_coverage.break.raw_qr.gap_vs_nominal",
+        "raw_qr_iid": "marginal_coverage.iid.raw_qr.coverage",
+        "raw_qr_ar1": "marginal_coverage.ar1.raw_qr.coverage",
+        "raw_qr_garch": "marginal_coverage.garch.raw_qr.coverage",
+        "spread_before": "conditional_coverage_garch.methods.split_abs.vol_cov_spread.mean",
+        "spread_after": "conditional_coverage_garch.methods.split_norm.vol_cov_spread.mean",
+        "aci_norm_width": ["break_analysis", "methods", "aci_norm_g0.05", "mean_width_vs_oracle"]
+      }
+    },
+    {
+      "id": "15_outro",
+      "title": "Calibrated, not uncalibrated",
+      "visual": "title_card",
+      "lines": [
+        "width premium at matched coverage, vs oracle:",
+        "split_norm   {split_norm_gauss:.3f}x Gaussian   {split_norm_t:.3f}x Student t",
+        "cqr          {cqr_gauss:.3f}x Gaussian   {cqr_t:.3f}x Student t"
+      ],
+      "narration": "The right mental model is not conformal versus GARCH. It is calibrated versus uncalibrated. Normalize by the best volatility estimate you have, then let the calibration set vote on the quantile. When your volatility model is good, the premium is small. When it is wrong, the calibration step is the thing keeping your stated ninety percent meaning ninety percent. So conformal prediction for returns is neither a guarantee that transfers unscathed, nor a method broken by dependence. It is a calibration layer. Its marginal promise is cheap to keep. Its conditional promise has to be earned with a volatility aware score. And its post break promise needs a feedback loop that is listening. Used that way, a six to nine percent width premium buys you intervals whose stated level survives the regimes where parametric confidence quietly fails. Everything here is reproducible from a released seed. Go break it yourself.",
+      "data_refs": {
+        "split_norm_gauss": "width_at_matched_coverage.garch/gaussian.split_norm.width_vs_oracle",
+        "split_norm_t": "width_at_matched_coverage.garch/student_t.split_norm.width_vs_oracle",
+        "cqr_gauss": "width_at_matched_coverage.garch/gaussian.cqr.width_vs_oracle",
+        "cqr_t": "width_at_matched_coverage.garch/student_t.cqr.width_vs_oracle"
+      }
+    }
+  ]
+}

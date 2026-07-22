@@ -25,6 +25,9 @@ output_davinci/
 temp/*
 !temp/.gitkeep
 
+# Ingested third-party videos (research input, never committed or republished)
+ingest/
+
 # IDE / Editor
 .vscode/
 .idea/
@@ -34,3 +37,7 @@ temp/*
 # AI assistants (keep skills, exclude the rest)
 .claude/*
 !.claude/skills/
+
+# Self-authored video pipeline
+build/
+selfmade/__pycache__/
