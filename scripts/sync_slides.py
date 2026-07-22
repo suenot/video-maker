@@ -82,6 +82,27 @@ def build_timeline(subtitles: dict, slides: list, min_duration: float = 5.0,
     return timeline
 
 
+
+def even_timeline(slides, total):
+    """PURE: give every slide an equal share of `total` seconds."""
+    n = len(slides)
+    step = total / n if n else total
+    return [{"slide": i, "start": round(i * step, 3),
+             "end": round(total if i == n - 1 else (i + 1) * step, 3)}
+            for i in range(n)]
+
+
+def timeline_quality(timeline, slides):
+    """PURE: (fraction of slides shown, share held by the longest segment)."""
+    if not timeline:
+        return 0.0, 1.0
+    total = max(seg["end"] for seg in timeline)
+    if total <= 0:
+        return 0.0, 1.0
+    longest = max(seg["end"] - seg["start"] for seg in timeline)
+    return len(timeline) / max(1, len(slides)), longest / total
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--subtitles", required=True)
@@ -93,6 +114,12 @@ def main():
                         help="Score ratio required to advance to next slide")
     parser.add_argument("--look-ahead", type=int, default=3,
                         help="How many upcoming slides to evaluate")
+    parser.add_argument("--min-coverage", type=float, default=0.7,
+                        help="Fraction of slides that must appear before the "
+                             "matched timeline is trusted")
+    parser.add_argument("--max-share", type=float, default=0.35,
+                        help="Longest a single slide may hold the screen, as a "
+                             "fraction of the runtime")
     args = parser.parse_args()
 
     with open(args.subtitles, "r", encoding="utf-8") as f:
@@ -105,6 +132,19 @@ def main():
                                min_duration=args.min_duration,
                                advance_ratio=args.advance_ratio,
                                look_ahead=args.look_ahead)
+
+    # Matching narration to slide text degenerates whenever the deck says more
+    # than the narration does — a Brief audio over a ten-slide deck leaves one
+    # slide parked on screen for most of the run. An even split is not clever,
+    # but a viewer cannot tell it from intent, and a frozen slide they can.
+    coverage, worst = timeline_quality(timeline, slides)
+    if coverage < args.min_coverage or worst > args.max_share:
+        total = max((seg["end"] for seg in timeline), default=0.0)
+        if not total:
+            total = max((c["end"] for c in subs), default=0.0)
+        print(f"sync degenerated (showed {len(timeline)}/{len(slides)} slides, "
+              f"longest held {worst:.0%}); falling back to an even split")
+        timeline = even_timeline(slides, total)
 
     with open(args.output, "w", encoding="utf-8") as f:
         json.dump({"timeline": timeline, "slide_count": len(slides)}, f, ensure_ascii=False, indent=2)
