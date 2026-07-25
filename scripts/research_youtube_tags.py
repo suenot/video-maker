@@ -42,14 +42,20 @@ _DEFAULT_BRAND_TAGS = ['marketmaker', 'marketmaker_cc']
 # the pre-refactor marketmaker behavior when no --channel is supplied.
 TOO_BROAD = set(_DEFAULT_TOO_BROAD)
 BRAND_TAGS = list(_DEFAULT_BRAND_TAGS)
+# Channel-specific high-intent seed phrases. These sit in the top score tier
+# (+5.0), so they MUST match the channel's actual topic — they are loaded from
+# channels/<name>.json (intent_phrases / intent_phrases_ru). Empty by default.
+INTENT_PHRASES: list = []
+INTENT_PHRASES_RU: list = []
 
 
 def load_channel_lists(channel: str) -> bool:
-    """Swap module-level TOO_BROAD / BRAND_TAGS from channels/<channel>.json.
+    """Swap module-level TOO_BROAD / BRAND_TAGS / INTENT_PHRASES from
+    channels/<channel>.json.
 
     Returns True when a config was loaded, False when falling back to defaults.
     """
-    global TOO_BROAD, BRAND_TAGS
+    global TOO_BROAD, BRAND_TAGS, INTENT_PHRASES, INTENT_PHRASES_RU
     path = CHANNELS_DIR / f"{channel}.json"
     if not path.exists():
         return False
@@ -57,10 +63,16 @@ def load_channel_lists(channel: str) -> bool:
         cfg = json.load(f)
     gk = cfg.get("generic_keywords")
     bt = cfg.get("brand_tags")
+    ip = cfg.get("intent_phrases")
+    ip_ru = cfg.get("intent_phrases_ru")
     if isinstance(gk, list):
         TOO_BROAD = {str(w).lower() for w in gk}
     if isinstance(bt, list):
         BRAND_TAGS = [str(t) for t in bt]
+    if isinstance(ip, list):
+        INTENT_PHRASES = [str(p) for p in ip]
+    if isinstance(ip_ru, list):
+        INTENT_PHRASES_RU = [str(p) for p in ip_ru]
     return True
 
 
@@ -187,37 +199,10 @@ def research_tags(seed_keywords: list, article_keywords: list, lang: str = "en",
                 article_phrases.append(combo)
     article_phrases = list(dict.fromkeys(article_phrases))[:20]
 
-    # 4. Seed keyword thematic variations (manual intent-based combos)
-    intent_phrases = [
-        'algorithmic trading strategies',
-        'backtesting strategies',
-        'avoid overfitting backtest',
-        'trading strategy optimization',
-        'parameter stability trading',
-        'robust trading strategy',
-        'optuna backtesting',
-        'optuna trading strategy',
-        'plateau analysis trading',
-        'quantitative trading strategies',
-        'backtest without overfitting',
-        'strategy robustness test',
-        'trading parameter optimization',
-    ]
-    if lang == 'ru':
-        intent_phrases = [
-            'алготрейдинг стратегии',
-            'бэктест стратегии',
-            'переобучение бэктест',
-            'оптимизация торговой стратегии',
-            'стабильность параметров',
-            'робастная стратегия',
-            'optuna трейдинг',
-            'анализ плато',
-            'квантовый трейдинг',
-            'бэктест без переобучения',
-            'тестирование стратегии',
-            'оптимизация параметров трейдинг',
-        ]
+    # 4. Channel-specific intent phrases (loaded from channels/<name>.json).
+    # Top score tier — must be topical for the channel, never a hardcoded
+    # foreign-topic list. Falls back to empty (intent tier skipped) if unset.
+    intent_phrases = INTENT_PHRASES_RU if lang == 'ru' else INTENT_PHRASES
 
     # 5. Score and rank
     all_candidates = list(dict.fromkeys(

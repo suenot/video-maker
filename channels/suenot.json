@@ -3,6 +3,26 @@
   "handle": "@suenot",
   "brand_tags": ["suenot", "suenot_dev", "ai", "developer", "llm"],
   "generic_keywords": ["ai", "llm", "model", "agent", "code", "developer", "research", "open source", "tutorial", "review", "explained", "machine learning", "inference", "training", "transformer", "rust", "python"],
+  "intent_phrases": [
+    "large language models explained", "llm tutorial",
+    "open source ai models", "ai model review",
+    "machine learning explained", "ai research papers",
+    "transformer architecture explained", "ai inference optimization",
+    "llm training explained", "ai developer tools",
+    "frontier ai models", "ai benchmarks explained",
+    "open weights llm", "ai agents explained",
+    "mixture of experts explained", "context window llm"
+  ],
+  "intent_phrases_ru": [
+    "большие языковые модели", "обзор ai моделей",
+    "open source ai модели", "машинное обучение",
+    "ai исследования", "архитектура трансформер",
+    "оптимизация инференса llm", "обучение llm",
+    "инструменты ai разработчика", "frontier ai модели",
+    "ai бенчмарки", "llm с открытыми весами",
+    "ai агенты", "mixture of experts",
+    "контекстное окно llm", "ai туториал"
+  ],
   "article_base_url": "https://suenot.com/{lang}/blog/{slug}",
   "discuss_url": "https://discord.com/invite/2PtuMAg",
   "discuss_label_en": "💬 Discuss:",

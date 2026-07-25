@@ -3,6 +3,23 @@
   "handle": "@marketmaker_cc",
   "brand_tags": ["marketmaker", "marketmaker_cc"],
   "generic_keywords": ["stock", "market", "forex", "crypto", "bitcoin", "money", "profit", "data", "research", "code", "test", "backtest", "overfit", "optuna", "trading", "strategy", "quant", "algorithmic"],
+  "intent_phrases": [
+    "algorithmic trading strategies", "backtesting strategies",
+    "avoid overfitting backtest", "trading strategy optimization",
+    "parameter stability trading", "robust trading strategy",
+    "optuna backtesting", "optuna trading strategy",
+    "plateau analysis trading", "quantitative trading strategies",
+    "backtest without overfitting", "strategy robustness test",
+    "trading parameter optimization"
+  ],
+  "intent_phrases_ru": [
+    "алготрейдинг стратегии", "бэктест стратегии",
+    "переобучение бэктест", "оптимизация торговой стратегии",
+    "стабильность параметров", "робастная стратегия",
+    "optuna трейдинг", "анализ плато",
+    "квантовый трейдинг", "бэктест без переобучения",
+    "тестирование стратегии", "оптимизация параметров трейдинг"
+  ],
   "article_base_url": "https://marketmaker.cc/{lang}/blog/post/{slug}",
   "discuss_url": "https://t.me/marketmaker_cc",
   "discuss_label_en": "💬 Discuss:",
