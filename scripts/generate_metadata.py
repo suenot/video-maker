@@ -5,6 +5,53 @@ import json
 import os
 import re
 from collections import Counter
+from pathlib import Path
+
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = SCRIPT_DIR.parent
+CHANNELS_DIR = PROJECT_DIR / "channels"
+
+# Fallback config used when --channel points at a missing config file.
+# Kept byte-for-byte identical to the pre-refactor marketmaker behavior.
+_DEFAULT_CHANNEL_CONFIG = {
+    "name": "marketmaker",
+    "handle": "@marketmaker_cc",
+    "brand_tags": ["marketmaker", "marketmaker_cc"],
+    "article_base_url": "https://marketmaker.cc/{lang}/blog/post/{slug}",
+    "discuss_url": "https://t.me/marketmaker_cc",
+    "discuss_label_en": "💬 Discuss:",
+    "discuss_label_ru": "💬 Обсудить:",
+    "article_label_en": "📖 Read the full article:",
+    "article_label_ru": "📖 Полная статья:",
+    "subscribe_en": "👍 Subscribe to our Telegram channel https://t.me/marketmaker_cc for more algorithmic trading content.",
+    "subscribe_ru": "👍 Подписывайтесь на телеграм канал https://t.me/marketmaker_cc, чтобы получать больше материалов по алготрейдингу.",
+    "extra_contact_urls": [],
+}
+
+
+def load_channel_config(channel: str) -> dict:
+    """Load channels/<channel>.json, falling back to the marketmaker defaults."""
+    path = CHANNELS_DIR / f"{channel}.json"
+    if path.exists():
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return dict(_DEFAULT_CHANNEL_CONFIG)
+
+
+def derive_article_url(config: dict, lang: str, slug: str) -> str:
+    """Render article_base_url with {lang} and {slug} placeholders."""
+    template = config.get("article_base_url", "")
+    return template.replace("{lang}", lang).replace("{slug}", slug)
+
+
+def derive_slug(slug: str, article_path: str, config: dict) -> str:
+    """Resolve the article slug from explicit arg, article filename, or channel name."""
+    if slug:
+        return slug
+    if article_path:
+        return Path(article_path).stem
+    return config.get("name", "marketmaker")
 
 
 def parse_markdown_frontmatter(path: str) -> dict:
@@ -275,7 +322,8 @@ def build_timestamps(timeline: list, slides_data: dict, interval_sec: int = 0) -
     return stamps
 
 
-def build_description(frontmatter: dict, slides_data: dict, subs: dict, stamps: list, lang: str, tags: list) -> str:
+def build_description(frontmatter: dict, slides_data: dict, subs: dict, stamps: list,
+                      lang: str, tags: list, config: dict, slug: str) -> str:
     lines = []
     if frontmatter.get("description"):
         lines.append(frontmatter["description"])
@@ -307,30 +355,43 @@ def build_description(frontmatter: dict, slides_data: dict, subs: dict, stamps: 
     for s in stamps[:12]:
         lines.append(f"{s['time']} {s['text']}")
 
+    article_url = derive_article_url(config, lang, slug)
+    article_label = config.get("article_label_en") if lang == "en" else config.get("article_label_ru")
     lines.append("")
-    lines.append("📖 Read the full article:" if lang == "en" else "📖 Полная статья:")
-    lines.append("https://marketmaker.cc/en/blog/post/plateau-analysis-overfitting")
+    lines.append(article_label)
+    lines.append(article_url)
 
+    discuss_label = config.get("discuss_label_en") if lang == "en" else config.get("discuss_label_ru")
     lines.append("")
-    lines.append("💬 Discuss:" if lang == "en" else "💬 Обсудить:")
-    lines.append("https://t.me/marketmaker_cc")
+    lines.append(discuss_label)
+    lines.append(config.get("discuss_url", ""))
+
+    extra_contacts = config.get("extra_contact_urls") or []
+    if extra_contacts:
+        links_label = "🔗 Links:" if lang == "en" else "🔗 Ссылки:"
+        lines.append("")
+        lines.append(links_label)
+        for url in extra_contacts:
+            lines.append(url)
 
     lines.append("")
     lines.append("🔗 Tags:")
     lines.append(", ".join(tags))
 
     lines.append("")
-    if lang == "en":
-        lines.append("👍 Subscribe to our Telegram channel https://t.me/marketmaker_cc for more algorithmic trading content.")
-    else:
-        lines.append("👍 Подписывайтесь на телеграм канал https://t.me/marketmaker_cc, чтобы получать больше материалов по алготрейдингу.")
+    subscribe_line = config.get("subscribe_en") if lang == "en" else config.get("subscribe_ru")
+    lines.append(subscribe_line)
     return "\n".join(lines)
 
 
 def generate(subtitles_path: str, slides_text_path: str, article_path: str,
              timeline_path: str, output_json: str, output_txt: str, lang: str,
              tags_file: str = "", category: str = "Education",
-             type_: str = "Concept overview", level: str = "Advanced"):
+             type_: str = "Concept overview", level: str = "Advanced",
+             channel: str = "marketmaker", slug: str = ""):
+    config = load_channel_config(channel)
+    resolved_slug = derive_slug(slug, article_path, config)
+
     frontmatter = parse_markdown_frontmatter(article_path)
 
     with open(subtitles_path, "r", encoding="utf-8") as f:
@@ -375,7 +436,7 @@ def generate(subtitles_path: str, slides_text_path: str, article_path: str,
         title = title[:87] + "..."
 
     stamps = build_timestamps(timeline, slides_data)
-    description = build_description(frontmatter, slides_data, subs, stamps, lang, tags)
+    description = build_description(frontmatter, slides_data, subs, stamps, lang, tags, config, resolved_slug)
     problems = build_problems(stamps, lang=lang, video_title=title)
 
     metadata = {
@@ -418,10 +479,15 @@ def main():
     parser.add_argument("--category", default="Education", help="YouTube category")
     parser.add_argument("--type", default="Concept overview", help="YouTube Education type")
     parser.add_argument("--level", default="Advanced", help="YouTube Education level")
+    parser.add_argument("--channel", default="marketmaker",
+                        help="Channel config name (loads channels/<channel>.json)")
+    parser.add_argument("--slug", default="",
+                        help="Article slug; falls back to article filename stem, then channel name")
     args = parser.parse_args()
     generate(args.subtitles, args.slides_text, args.article,
              args.timeline, args.output_json, args.output_txt, args.lang,
-             tags_file=args.tags_file, category=args.category, type_=args.type, level=args.level)
+             tags_file=args.tags_file, category=args.category, type_=args.type, level=args.level,
+             channel=args.channel, slug=args.slug)
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ set -euo pipefail
 # Usage: ./run_pipeline.sh <ru|en> [slug]
 #   slug defaults to plateau-analysis-overfitting.
 #   Override YouTube tag seeds with the SEED_KEYWORDS env var.
+#   Override branding with the CHANNEL env var (marketmaker | suenot | ...).
 
 LANG="${1:-}"
 if [[ -z "$LANG" ]]; then
@@ -14,6 +15,8 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 VENV_PYTHON="$PROJECT_DIR/venv/bin/python3"
+
+CHANNEL="${CHANNEL:-marketmaker}"
 
 SLUG="${2:-plateau-analysis-overfitting}"
 TEMP_DIR="$PROJECT_DIR/temp/${SLUG}_${LANG}"
@@ -107,11 +110,28 @@ echo "=== Step 5: Generate video ==="
     --output "$OUT_DIR/$OUT_NAME"
 
 echo "=== Step 5.5: Research YouTube tags ==="
-SEED_KEYWORDS="${SEED_KEYWORDS:-overfitting backtest,optuna trading,backtest overfitting,trading strategy optimization,algorithmic trading}"
+# SEED_KEYWORDS fallback: read seed_keywords_default from channels/$CHANNEL.json
+# via python; for marketmaker that yields the same trading seeds as before.
+# Hard trading default is kept as the ultimate fallback if the config is missing
+# AND we're on marketmaker (preserves pre-refactor behavior exactly).
+if [[ -z "${SEED_KEYWORDS:-}" ]]; then
+    CHANNEL_CFG="$PROJECT_DIR/channels/$CHANNEL.json"
+    if [[ -f "$CHANNEL_CFG" ]]; then
+        SEED_KEYWORDS="$("$VENV_PYTHON" -c "import json,sys; print(json.load(open(sys.argv[1])).get('seed_keywords_default',''))" "$CHANNEL_CFG")"
+    fi
+    if [[ -z "${SEED_KEYWORDS:-}" && "$CHANNEL" == "marketmaker" ]]; then
+        SEED_KEYWORDS="overfitting backtest,optuna trading,backtest overfitting,trading strategy optimization,algorithmic trading"
+    fi
+fi
+if [[ -z "${SEED_KEYWORDS:-}" ]]; then
+    echo "ERROR: no SEED_KEYWORDS and no seed_keywords_default in channels/$CHANNEL.json" >&2
+    exit 1
+fi
 "$VENV_PYTHON" "$SCRIPT_DIR/research_youtube_tags.py" \
     --seed-keywords "$SEED_KEYWORDS" \
     --lang "$LANG" \
     --max-tags 15 \
+    --channel "$CHANNEL" \
     --output "$TEMP_DIR/tags_research.json"
 
 echo "=== Step 6: Generate metadata ==="
@@ -126,6 +146,8 @@ META_ARGS=(
     --category "Education"
     --type "Concept overview"
     --level "Advanced"
+    --channel "$CHANNEL"
+    --slug "$SLUG"
 )
 if [[ -n "${ARTICLE:-}" ]]; then
     META_ARGS+=(--article "$ARTICLE")

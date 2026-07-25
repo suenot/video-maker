@@ -9,11 +9,16 @@ import sys
 import time
 import urllib.request
 from collections import Counter
+from pathlib import Path
 
 try:
     from pytrends.request import TrendReq
 except Exception:
     TrendReq = None
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = SCRIPT_DIR.parent
+CHANNELS_DIR = PROJECT_DIR / "channels"
 
 # NEVER use these as tags — too broad, off-topic, or other people's brands
 BAD_PATTERNS = re.compile(
@@ -24,14 +29,39 @@ BAD_PATTERNS = re.compile(
     re.IGNORECASE
 )
 
-# Single words that are too broad to be useful tags
-TOO_BROAD = {
+# Default broad-word filter (marketmaker). Channel configs override this via
+# `generic_keywords`; load_channel_lists() swaps the module-level sets/lists.
+_DEFAULT_TOO_BROAD = {
     'trading', 'analysis', 'optimization', 'strategy', 'finance', 'investing',
     'stock', 'market', 'forex', 'crypto', 'bitcoin', 'money', 'profit',
     'data', 'research', 'code', 'test', 'backtest', 'overfit', 'optuna',
 }
+_DEFAULT_BRAND_TAGS = ['marketmaker', 'marketmaker_cc']
 
-BRAND_TAGS = ['marketmaker', 'marketmaker_cc']
+# Mutable module-level values; referenced by the helpers below. Defaults keep
+# the pre-refactor marketmaker behavior when no --channel is supplied.
+TOO_BROAD = set(_DEFAULT_TOO_BROAD)
+BRAND_TAGS = list(_DEFAULT_BRAND_TAGS)
+
+
+def load_channel_lists(channel: str) -> bool:
+    """Swap module-level TOO_BROAD / BRAND_TAGS from channels/<channel>.json.
+
+    Returns True when a config was loaded, False when falling back to defaults.
+    """
+    global TOO_BROAD, BRAND_TAGS
+    path = CHANNELS_DIR / f"{channel}.json"
+    if not path.exists():
+        return False
+    with open(path, "r", encoding="utf-8") as f:
+        cfg = json.load(f)
+    gk = cfg.get("generic_keywords")
+    bt = cfg.get("brand_tags")
+    if isinstance(gk, list):
+        TOO_BROAD = {str(w).lower() for w in gk}
+    if isinstance(bt, list):
+        BRAND_TAGS = [str(t) for t in bt]
+    return True
 
 
 def get_youtube_suggestions(query: str) -> list:
@@ -228,7 +258,20 @@ def main():
     parser.add_argument("--lang", default="en")
     parser.add_argument("--max-tags", type=int, default=15)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--channel", default="marketmaker",
+                        help="Channel config name (loads channels/<channel>.json)")
     args = parser.parse_args()
+
+    # Swap the module-level TOO_BROAD / BRAND_TAGS from the channel config.
+    # Falls back to marketmaker defaults when the config is missing.
+    if args.channel and args.channel != "marketmaker":
+        loaded = load_channel_lists(args.channel)
+        if not loaded:
+            print(f"WARN: channels/{args.channel}.json not found; "
+                  f"falling back to marketmaker defaults", file=sys.stderr)
+    else:
+        # Even for marketmaker, prefer the config if it exists (keeps SSOT).
+        load_channel_lists("marketmaker")
 
     seeds = [k.strip() for k in args.seed_keywords.split(",") if k.strip()]
     article_kw = [k.strip().lower() for k in args.article_keywords.split(",") if k.strip()]

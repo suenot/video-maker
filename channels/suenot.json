@@ -1,0 +1,16 @@
+{
+  "name": "suenot",
+  "handle": "@suenot",
+  "brand_tags": ["suenot", "suenot_dev", "ai", "developer", "llm"],
+  "generic_keywords": ["ai", "llm", "model", "agent", "code", "developer", "research", "open source", "tutorial", "review", "explained", "machine learning", "inference", "training", "transformer", "rust", "python"],
+  "article_base_url": "https://suenot.com/{lang}/blog/{slug}",
+  "discuss_url": "https://discord.com/invite/2PtuMAg",
+  "discuss_label_en": "💬 Discuss:",
+  "discuss_label_ru": "💬 Обсудить:",
+  "article_label_en": "📖 Read the full article:",
+  "article_label_ru": "📖 Полная статья:",
+  "subscribe_en": "👍 Follow @suenot for more AI & developer content.",
+  "subscribe_ru": "👍 Подписывайтесь на @suenot — больше материалов по AI и разработке.",
+  "extra_contact_urls": ["https://x.com/suenot", "https://discord.com/invite/2PtuMAg", "https://t.me/suenot_dev"],
+  "seed_keywords_default": "ai llm,large language model,ai explained,open source ai,ai tutorial,machine learning,ai review"
+}
