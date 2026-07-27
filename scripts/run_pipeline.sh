@@ -56,10 +56,10 @@ fi
 
 echo "=== Step 0: strip the NotebookLM watermark ==="
 # Cosmetic, so it must never cost us the deck: on any failure keep the original
-# PDF and carry on. Set SKIP_WATERMARK_CLEAN=1 to bypass entirely.
+# PDF and carry on. OFF by default — set CLEAN_WATERMARK=1 to enable it.
 CLEAN_PDF="$TEMP_DIR/slides_clean.pdf"
-if [[ "${SKIP_WATERMARK_CLEAN:-0}" == "1" ]]; then
-    echo "skipped (SKIP_WATERMARK_CLEAN=1)"
+if [[ "${CLEAN_WATERMARK:-0}" != "1" ]]; then
+    echo "skipped (watermark clean off by default; set CLEAN_WATERMARK=1 to enable)"
 elif "$VENV_PYTHON" "$SCRIPT_DIR/clean_slides.py" "$PDF" -o "$CLEAN_PDF" \
         > "$TEMP_DIR/clean_slides.log" 2>&1 && [[ -f "$CLEAN_PDF" ]]; then
     echo "watermark removed -> $CLEAN_PDF"
