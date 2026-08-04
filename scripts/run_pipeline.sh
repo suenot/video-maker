@@ -159,4 +159,16 @@ echo "=== Step 7: Generate thumbnail ==="
     --slides-dir "$TEMP_DIR/slides" \
     --output "$OUT_DIR/${OUT_NAME%.mp4}_thumbnail.png"
 
+if [[ -n "${WATCH_NEXT:-}" ]]; then
+    echo "=== Step 8: Append social and watch-next end screen ==="
+    ENDCARD_VIDEO="$OUT_DIR/${OUT_NAME%.mp4}.endcard.mp4"
+    "$VENV_PYTHON" "$SCRIPT_DIR/append_endcard.py" \
+        --video "$OUT_DIR/$OUT_NAME" \
+        --output "$ENDCARD_VIDEO" \
+        --follow "@${CHANNEL}" \
+        --socials "X @suenot  |  Telegram @suenot_dev  |  Discord" \
+        --watch-next "$WATCH_NEXT"
+    mv "$ENDCARD_VIDEO" "$OUT_DIR/$OUT_NAME"
+fi
+
 echo "=== Done: $OUT_DIR/$OUT_NAME ==="
