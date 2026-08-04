@@ -71,7 +71,14 @@ def append(video: Path, output: Path, follow: str, socials: str,
         ])
         run([
             "ffmpeg", "-y", "-i", str(video), "-i", str(clip),
-            "-filter_complex", "[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[v][a]",
+            "-filter_complex", (
+                "[0:v]scale=1920:1080:force_original_aspect_ratio=decrease,"
+                "pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1[v0];"
+                "[1:v]setsar=1[v1];"
+                "[0:a]aresample=48000,aformat=channel_layouts=stereo[a0];"
+                "[1:a]aresample=48000,aformat=channel_layouts=stereo[a1];"
+                "[v0][a0][v1][a1]concat=n=2:v=1:a=1[v][a]"
+            ),
             "-map", "[v]", "-map", "[a]", "-c:v", "h264_videotoolbox",
             "-allow_sw", "1", "-q:v", "68", "-pix_fmt", "yuv420p",
             "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart",
