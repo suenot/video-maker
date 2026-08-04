@@ -32,6 +32,25 @@ def centered(draw: ImageDraw.ImageDraw, text: str, y: int, face, fill: str):
     draw.text(((W - (box[2] - box[0])) / 2, y), text, font=face, fill=fill)
 
 
+def centered_wrapped(draw: ImageDraw.ImageDraw, text: str, y: int,
+                     face, fill: str, max_width: int = 1420, spacing: int = 10):
+    words, lines, line = text.split(), [], ""
+    for word in words:
+        candidate = f"{line} {word}".strip()
+        if draw.textlength(candidate, font=face) <= max_width or not line:
+            line = candidate
+        else:
+            lines.append(line)
+            line = word
+    if line:
+        lines.append(line)
+    block = "\n".join(lines)
+    box = draw.multiline_textbbox((0, 0), block, font=face, spacing=spacing,
+                                  align="center")
+    draw.multiline_text(((W - (box[2] - box[0])) / 2, y), block, font=face,
+                        fill=fill, spacing=spacing, align="center")
+
+
 def make_card(path: Path, follow: str, socials: str, watch_next: str):
     image = Image.new("RGB", (W, H), BG)
     draw = ImageDraw.Draw(image)
@@ -42,8 +61,8 @@ def make_card(path: Path, follow: str, socials: str, watch_next: str):
     centered(draw, socials, 412, font(31), MUTED)
     draw.line((260, 542, W - 260, 542), fill="#31435D", width=2)
     centered(draw, "WATCH NEXT", 614, font(34, True), ACCENT)
-    centered(draw, watch_next, 680, font(54, True), TEXT)
-    centered(draw, "A practical next step, selected by suenot", 765, font(30), MUTED)
+    centered_wrapped(draw, watch_next, 665, font(48, True), TEXT)
+    centered(draw, "A practical next step, selected by suenot", 835, font(30), MUTED)
     image.save(path, "PNG", optimize=True)
 
 
