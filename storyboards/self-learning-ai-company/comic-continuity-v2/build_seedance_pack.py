@@ -71,28 +71,6 @@ def anchor_overview(anchors: list[dict]) -> None:
     sheet.save(SHEETS / "anchor-chain-overview.jpg", quality=95)
 
 
-def pair_overview(scenes: list[dict], by_id: dict[str, dict]) -> None:
-    card_w, card_h = 640, 180
-    cols = 3
-    rows = 5
-    header = 82
-    sheet = Image.new("RGB", (cols * card_w, header + rows * card_h), PAPER)
-    draw = ImageDraw.Draw(sheet)
-    draw.text((30, 25), "SEEDANCE PAIRS — EACH END IS THE NEXT START", font=font(30, True), fill=INK)
-    for index, scene in enumerate(scenes):
-        start, end = by_id[scene["start"]], by_id[scene["end"]]
-        x, y = (index % cols) * card_w, header + (index // cols) * card_h
-        for offset, anchor in ((0, start), (320, end)):
-            image = Image.open(ANCHORS / anchor_filename(anchor)).convert("RGB")
-            image = image.resize((320, 180), Image.Resampling.LANCZOS)
-            sheet.paste(image, (x + offset, y))
-        draw.rounded_rectangle((x + 14, y + 12, x + 154, y + 45), radius=10, fill=(255, 248, 235))
-        draw.text((x + 24, y + 18), f"S{scene['id']:02d}: {scene['start']} → {scene['end']}", font=font(14, True), fill=INK)
-        draw.line((x + 303, y + 89, x + 337, y + 89), fill=CYAN, width=4)
-        draw.polygon(((x + 337, y + 89), (x + 327, y + 82), (x + 327, y + 96)), fill=CYAN)
-    sheet.save(SHEETS / "scene-pairs-overview.jpg", quality=95)
-
-
 def main() -> None:
     data = json.loads(MANIFEST.read_text())
     PROMPTS.mkdir(exist_ok=True)
@@ -103,7 +81,6 @@ def main() -> None:
         filename = f"{scene['id']:02d}-{scene['start'].lower()}-to-{scene['end'].lower()}.md"
         (PROMPTS / filename).write_text(prompt_for(scene, start, end))
     anchor_overview(data["anchors"])
-    pair_overview(data["scenes"], by_id)
 
 
 if __name__ == "__main__":
