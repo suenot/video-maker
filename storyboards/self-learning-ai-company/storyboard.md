@@ -1,5 +1,7 @@
 # Storyboard: Self-Learning Company
 
+> Этот файл содержит раннюю абстрактную визуальную пробу. Для текущей задачи использовать [motion-storyboard.md](motion-storyboard.md): он построен по реальным текстам и диаграммам исходного NotebookLM-видео.
+
 Статус: концепт на согласование. Seedance 2.0 и Higgsfield пока не запускались.
 
 Рабочая тема: **Build a Self-Learning Company with Closed Feedback Loops**.
