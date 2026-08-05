@@ -61,3 +61,8 @@ Comic лучше оставить отдельным направлением д
 - схема переходов и тайминг, синхронизированный с NotebookLM-аудио.
 
 После выбора стиля нужно сделать один полный образцовый слайд: рекомендую Slide 03 для editorial или Slide 08 для blueprint. Он станет шаблоном для нарезки, upscale, motion-слоев и будущих Seedance-вставок.
+
+Полные четырехкадровые версии двух выбранных направлений:
+
+- [Editorial systems map](editorial-storyboard.md)
+- [Warm comic explainer](comic-storyboard.md)
