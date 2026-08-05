@@ -1,0 +1,188 @@
+{
+  "project": "Self-Learning AI Company — comic explainer production frames",
+  "format": "1920x1080",
+  "language": "en",
+  "notes": "Each scene has a restrained start frame and a fully explained end frame. The source illustration deliberately contains no generated lettering; all readable copy is rendered deterministically by render_comic_frames.py.",
+  "scenes": [
+    {
+      "id": 1,
+      "slug": "ai-roi-architecture",
+      "section": "THE PREMISE",
+      "title": "Architecting AI for Measurable ROI",
+      "start": "AI becomes valuable when its operations can be measured.",
+      "bullets": [
+        "Build a closed loop: observe, decide, act, measure, improve.",
+        "Treat AI as an operational system — not a collection of pilots.",
+        "The goal: enterprise scale with auditable financial impact."
+      ]
+    },
+    {
+      "id": 2,
+      "slug": "unmeasurable-ai-crisis",
+      "section": "THE PROBLEM",
+      "title": "The Financial Crisis of Unmeasurable AI",
+      "start": "Most AI pilots fail before their value can be proven.",
+      "bullets": [
+        "Only 14% of finance chiefs can clearly see ROI from current AI investments.",
+        "42% of companies abandoned at least one initiative; average sunk cost: $7.2M.",
+        "Static automation breaks at scale — and isolated AI cannot prove its worth."
+      ]
+    },
+    {
+      "id": 3,
+      "slug": "attribution",
+      "section": "MEASUREMENT",
+      "title": "The Root Cause: Attribution",
+      "start": "Sentiment is not operational evidence.",
+      "bullets": [
+        "The illusion: survey-based productivity scores cannot be audited.",
+        "The reality: compare AI and non-AI transaction cohorts.",
+        "Measure performance against revenue, cost, error rate and cycle time."
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "closed-loop-transition",
+      "section": "ARCHITECTURE",
+      "title": "From Automation to Closed-Loop AI",
+      "start": "A workflow must adapt while it is running.",
+      "bullets": [
+        "Adaptability: dynamic routing and self-healing, not static runbooks.",
+        "Measurement: operational tracing and causal loops, not anecdotes.",
+        "Orchestration and scale: agent negotiation on a distributed, async system."
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "feedback-loop",
+      "section": "THE ENGINE",
+      "title": "The Missing Engine: The AI Feedback Loop",
+      "start": "Every interaction should make the system better.",
+      "bullets": [
+        "Data accumulation: capture live signals from users, infrastructure and operations.",
+        "Data exploitation: refine algorithms, improve success and remove friction.",
+        "The two processes reinforce one another in a continuous loop."
+      ]
+    },
+    {
+      "id": 6,
+      "slug": "multi-agent-orchestration",
+      "section": "ORCHESTRATION",
+      "title": "Multi-Agent Orchestration",
+      "start": "Specialists can work together without creating more overhead.",
+      "bullets": [
+        "Route each task to the best specialist agent, then coordinate the handoff.",
+        "Track task completion: success, fallback or incomplete.",
+        "Recover from errors automatically — or escalate gracefully to a human."
+      ]
+    },
+    {
+      "id": 7,
+      "slug": "atomic-design",
+      "section": "WORKFLOW DESIGN",
+      "title": "Atomic Design Makes Workflows Reusable",
+      "start": "Break complexity into parts that can be recombined.",
+      "bullets": [
+        "Traditional programs are static, episodic and slow to adapt.",
+        "Atomic units can be mixed, matched and reused across workflows.",
+        "Orchestration assembles the right process at the moment of need."
+      ]
+    },
+    {
+      "id": 8,
+      "slug": "pre-deployment-roi",
+      "section": "ROI WORKFLOW",
+      "title": "Measure ROI Before Deployment",
+      "start": "Define the baseline before AI changes the operation.",
+      "bullets": [
+        "1. Count total cost: software, integration, change management and maintenance.",
+        "2. Establish operational baselines — the step teams most often skip.",
+        "3. Build a financial model from baseline data and explicit assumptions."
+      ]
+    },
+    {
+      "id": 9,
+      "slug": "post-deployment-roi",
+      "section": "ROI WORKFLOW",
+      "title": "Measure ROI After Deployment",
+      "start": "The model becomes real only when telemetry meets the baseline.",
+      "bullets": [
+        "4. Track cycle time, error rates and exception frequency — not surveys.",
+        "5. Run structured reviews at 90 days and 12 months.",
+        "Compare real outcomes against the pre-deployment financial model."
+      ]
+    },
+    {
+      "id": 10,
+      "slug": "observability",
+      "section": "OBSERVABILITY",
+      "title": "Native Observability and Real-Time Tracing",
+      "start": "If you cannot trace an AI decision, you cannot improve it.",
+      "bullets": [
+        "Agent tracing records every tool call, decision and handoff.",
+        "Pipeline monitoring exposes throughput, latency, queues and failures.",
+        "Failed calls and edge cases feed retraining and workflow revisions."
+      ]
+    },
+    {
+      "id": 11,
+      "slug": "stakeholder-lenses",
+      "section": "ALIGNMENT",
+      "title": "One Architecture, Three Stakeholder Lenses",
+      "start": "The same AI engine must answer three different questions.",
+      "bullets": [
+        "Executive: hard savings, revenue, time-to-value and roadmap.",
+        "Product: task funnels, fallbacks and user friction.",
+        "Technical: orchestration latency, tool success and error recovery."
+      ]
+    },
+    {
+      "id": 12,
+      "slug": "finance-proof",
+      "section": "PROOF AT SCALE",
+      "title": "Enterprise Finance: Proven Returns",
+      "start": "Closed-loop finance turns visibility into value.",
+      "bullets": [
+        "$3.70 return per $1 invested; top performers reach $10.30.",
+        "Track month-end close, reconciliation time, error rate and data lineage.",
+        "ROI becomes a recurring operating metric, not a one-time claim."
+      ]
+    },
+    {
+      "id": 13,
+      "slug": "it-operations-proof",
+      "section": "PROOF AT SCALE",
+      "title": "IT Operations: Autonomous Triage",
+      "start": "The AI control room filters noise before humans see it.",
+      "bullets": [
+        "85% of system-generated events can be auto-triaged or resolved.",
+        "Up to 50% of service requests are fully automated; 60% noise suppressed.",
+        "Continuous telemetry drives health checks, triage and self-healing."
+      ]
+    },
+    {
+      "id": 14,
+      "slug": "manufacturing-proof",
+      "section": "PROOF AT SCALE",
+      "title": "Manufacturing: The Closed Loop in Action",
+      "start": "A factory can adapt to its world while it is operating.",
+      "bullets": [
+        "Up to 12% lower raw-material use and a 25% higher recovery rate.",
+        "Up to 15% lower operational cost through real-time adaptation.",
+        "Demand, supply chain and market signals continuously tune the system."
+      ]
+    },
+    {
+      "id": 15,
+      "slug": "autonomous-enterprise",
+      "section": "THE MANDATE",
+      "title": "The Autonomous Enterprise",
+      "start": "The gap between pilots and ROI is architecture — not technology.",
+      "bullets": [
+        "A mature closed-loop system can deliver 330% return over three years.",
+        "Typical payback arrives in 3–6 months when measurement is designed in.",
+        "Make the company learn from every decision, then prove the result."
+      ]
+    }
+  ]
+}
