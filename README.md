@@ -31,7 +31,7 @@ Given an audio file (narration) and a PDF slide deck, the pipeline:
 3. **Transcribes audio** — speech-to-text via OpenAI Whisper with word-level timestamps
 4. **Generates SRT subtitles** — Whisper segments converted to YouTube-ready SRT format
 5. **Synchronizes slides with audio** — matches transcription text to slide OCR text using word overlap + bigram scoring to determine when each slide should appear
-6. **Generates video** — assembles slides + audio into MP4 using FFmpeg with hardware-accelerated encoding (HEVC/H.264 via VideoToolbox on macOS)
+6. **Generates video** — assembles slides + audio into an exact 1920×1080 MP4 using FFmpeg with hardware-accelerated encoding (HEVC/H.264 via VideoToolbox on macOS)
 7. **Researches YouTube tags** — combines YouTube Suggest API, competitor title analysis (via yt-dlp), and intent-based phrases
 8. **Generates metadata** — title, description with timestamps, tags, category, problems (for YouTube Education)
 9. **Generates thumbnail** — 1280×720 PNG from the first slide
@@ -136,6 +136,16 @@ The pipeline supports three codecs:
 | `libx264` | Slow (CPU) | Small | Best compression, but may OOM on large slides |
 
 Default: `hevc_videotoolbox` at 1920×1080 resolution, 1 fps (optimal for static slide content).
+
+### Opening cover
+
+Put `cover_<lang>.png` next to the source audio, for example
+`input/<slug>/cover_en.png`. The pipeline shows it for the first three seconds
+by replacing the beginning of slide one; it does not extend the runtime or
+shift narration/subtitles. Override the duration with `COVER_DURATION=3.54`.
+
+For an individual render, pass `--cover path/to/cover.png --cover-duration 3.0`
+to `generate_video.py`.
 
 ## Vertical Shorts
 

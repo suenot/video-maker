@@ -103,11 +103,20 @@ echo "=== Step 4: Sync slides with audio ==="
     --look-ahead 3
 
 echo "=== Step 5: Generate video ==="
-"$VENV_PYTHON" "$SCRIPT_DIR/generate_video.py" \
-    --timeline "$TEMP_DIR/timeline.json" \
-    --slides-dir "$TEMP_DIR/slides" \
-    --audio "$AUDIO" \
+VIDEO_ARGS=(
+    --timeline "$TEMP_DIR/timeline.json"
+    --slides-dir "$TEMP_DIR/slides"
+    --audio "$AUDIO"
     --output "$OUT_DIR/$OUT_NAME"
+)
+# A cover replaces the opening seconds of slide one, so narration and subtitle
+# timestamps remain unchanged. Drop cover_<lang>.png beside the source audio to
+# opt in; COVER_DURATION defaults to three seconds.
+COVER="${COVER:-$PROJECT_DIR/input/$SLUG/cover_${LANG}.png}"
+if [[ -f "$COVER" ]]; then
+    VIDEO_ARGS+=(--cover "$COVER" --cover-duration "${COVER_DURATION:-3.0}")
+fi
+"$VENV_PYTHON" "$SCRIPT_DIR/generate_video.py" "${VIDEO_ARGS[@]}"
 
 echo "=== Step 5.5: Research YouTube tags ==="
 # SEED_KEYWORDS fallback: read seed_keywords_default from channels/$CHANNEL.json

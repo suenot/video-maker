@@ -1,0 +1,81 @@
+{
+  "slug": "last30days-research-agent",
+  "title": "LAST30DAYS",
+  "cover_duration": 3.54,
+  "runtime": 102.934,
+  "cover": {
+    "eyebrow": "SOURCE-CODE AUDIT · v3.18.4",
+    "title": "LAST30DAYS",
+    "subtitle": "WHAT THE 39K-STAR RESEARCH AGENT ACTUALLY DOES",
+    "footer": "Local cookies. Practical math. Open bugs."
+  },
+  "scenes": [
+    {
+      "start": 0.0,
+      "end": 15.779,
+      "art": "01-local-cookies-code-vs-hype.png",
+      "eyebrow": "01 · CODE VS HYPE",
+      "title": "LOCAL COOKIES.\nREAL CODE.",
+      "subtitle": "Last30Days runs from your logged-in browser session. This audit checks the implementation, not the claims.",
+      "tags": ["YOUR MACHINE", "YOUR SESSION", "NO CENTRAL COOKIE POOL"]
+    },
+    {
+      "start": 15.779,
+      "end": 34.34,
+      "art": "02-polymarket-ranking.png",
+      "eyebrow": "02 · POLYMARKET RANKING",
+      "title": "VOLUME IS STILL\nTHE HEAVIEST SIGNAL",
+      "subtitle": "Money still talks. Log compression keeps one whale from flattening every other market.",
+      "hero": ".50",
+      "formula": [
+        "market_quality = .50V + .25L + .15ΔP + .10C",
+        "score = text × (.75 + .25 × market_quality)"
+      ]
+    },
+    {
+      "start": 34.34,
+      "end": 65.78,
+      "art": "03-jaccard-deduplication.png",
+      "eyebrow": "03 · DEDUPLICATION",
+      "title": "NO EMBEDDINGS.\nNONE.",
+      "subtitle": "Solid, old-school text matching — strictly within a single source.",
+      "formula": [
+        "max(Jaccard(char 3-grams),",
+        "    Jaccard(tokens)) ≥ .70"
+      ],
+      "tags": ["CHAR 3-GRAMS", "TOKEN SETS", "ONE SOURCE ONLY"]
+    },
+    {
+      "start": 65.78,
+      "end": 94.18,
+      "art": "04-open-bugs.png",
+      "eyebrow": "04 · VERIFIED ON GITHUB",
+      "title": "TWO BUGS ARE\nSTILL OPEN",
+      "subtitle": "The repository contradicts the polished version of the story.",
+      "issues": [
+        ["#887", "ENTITY-MISS DEMOTION"],
+        ["#818", "GLOBAL PATH REGRESSION"]
+      ],
+      "footer": "STATUS · OPEN · v3.18.4"
+    },
+    {
+      "start": 94.18,
+      "end": 102.934,
+      "art": "05-conclusion.png",
+      "eyebrow": "05 · THE ACTUAL ENGINE",
+      "title": "PRACTICAL MATH.\nOPEN BUGS.",
+      "subtitle": "Clever platform extraction — not flawless AI magic.",
+      "quote": "Confidence is free.\nVerification is cheap."
+    }
+  ],
+  "styles": {
+    "midnight": {
+      "art_dir": "source-art/midnight",
+      "label": "Dark computational theater"
+    },
+    "warm-editorial": {
+      "art_dir": "source-art/warm-editorial",
+      "label": "Warm narrative explainer"
+    }
+  }
+}
