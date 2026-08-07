@@ -7,8 +7,11 @@ the same closing experience, regardless of the source deck.
 """
 
 import argparse
+import math
+import struct
 import subprocess
 import tempfile
+import wave
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -20,6 +23,8 @@ PANEL = "#151E2D"
 ACCENT = "#62D9FF"
 TEXT = "#F6F8FC"
 MUTED = "#AAB7C8"
+LEFT_VIDEO_ZONE = (96, 294, 736, 654)
+RIGHT_VIDEO_ZONE = (1184, 294, 1824, 654)
 
 
 def font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
@@ -66,28 +71,99 @@ def make_card(path: Path, follow: str, socials: str, watch_next: str):
     image.save(path, "PNG", optimize=True)
 
 
+def validate_card(path: Path) -> None:
+    if not path.is_file():
+        raise FileNotFoundError(path)
+    with Image.open(path) as image:
+        if image.size != (W, H):
+            raise ValueError(f"End card must be {W}x{H}, got {image.size[0]}x{image.size[1]}")
+
+
+def write_music_bed(path: Path, duration: float, sample_rate: int = 48000) -> None:
+    """Write a quiet original chord bed with no external samples."""
+    if duration <= 0:
+        raise ValueError("Music duration must be positive")
+    chords = [
+        (261.63, 329.63, 392.00, 493.88),  # Cmaj9
+        (220.00, 261.63, 329.63, 392.00),  # Am7
+        (174.61, 220.00, 261.63, 329.63),  # Fmaj7
+        (196.00, 246.94, 293.66, 440.00),  # Gsus2
+    ]
+    frame_count = round(duration * sample_rate)
+    segment = duration / len(chords)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with wave.open(str(path), "wb") as output:
+        output.setnchannels(2)
+        output.setsampwidth(2)
+        output.setframerate(sample_rate)
+        frames = bytearray()
+        for index in range(frame_count):
+            t = index / sample_rate
+            chord_index = min(len(chords) - 1, int(t / segment))
+            chord = chords[chord_index]
+            local_t = t - chord_index * segment
+            step = int(local_t * 2.0) % len(chord)
+            step_phase = (local_t * 2.0) % 1.0
+            pluck_env = math.exp(-4.2 * step_phase)
+            fade_in = min(1.0, t / 0.7)
+            fade_out = min(1.0, max(0.0, duration - t) / 2.0)
+            envelope = fade_in * fade_out
+
+            left_pad = sum(
+                math.sin(2 * math.pi * frequency * t + voice_index * 0.17)
+                for voice_index, frequency in enumerate(chord)
+            ) / len(chord)
+            right_pad = sum(
+                math.sin(2 * math.pi * frequency * t - voice_index * 0.13)
+                for voice_index, frequency in enumerate(chord)
+            ) / len(chord)
+            pluck = math.sin(2 * math.pi * chord[step] * 2 * t) * pluck_env
+            left = envelope * (0.034 * left_pad + 0.012 * pluck * (0.8 if step % 2 else 1.0))
+            right = envelope * (0.034 * right_pad + 0.012 * pluck * (1.0 if step % 2 else 0.8))
+            left_i = max(-32767, min(32767, round(left * 32767)))
+            right_i = max(-32767, min(32767, round(right * 32767)))
+            frames.extend(struct.pack("<hh", left_i, right_i))
+        output.writeframes(frames)
+
+
 def run(cmd: list[str]):
     print(" ".join(cmd))
     subprocess.run(cmd, check=True)
 
 
 def append(video: Path, output: Path, follow: str, socials: str,
-           watch_next: str, duration: float):
+           watch_next: str | None, duration: float,
+           card_path: Path | None = None, music: str = "silent"):
     if not video.is_file():
         raise FileNotFoundError(video)
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="yt-endcard-") as temp:
-        card = Path(temp) / "endcard.png"
+        temp_dir = Path(temp)
+        card = card_path or temp_dir / "endcard.png"
         clip = Path(temp) / "endcard.mp4"
-        make_card(card, follow, socials, watch_next)
-        run([
-            "ffmpeg", "-y", "-loop", "1", "-i", str(card),
-            "-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo",
+        if card_path:
+            validate_card(card)
+        else:
+            if not watch_next:
+                raise ValueError("watch_next is required when card_path is not set")
+            make_card(card, follow, socials, watch_next)
+
+        clip_cmd = ["ffmpeg", "-y", "-loop", "1", "-i", str(card)]
+        if music == "generated":
+            music_path = temp_dir / "music-bed.wav"
+            write_music_bed(music_path, duration)
+            clip_cmd.extend(["-i", str(music_path)])
+        elif music == "silent":
+            clip_cmd.extend(["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"])
+        else:
+            raise ValueError(f"Unknown music mode: {music}")
+        clip_cmd.extend([
             "-t", str(duration), "-r", "30", "-c:v", "h264_videotoolbox",
             "-allow_sw", "1", "-q:v", "68", "-pix_fmt", "yuv420p",
             "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart",
             str(clip),
         ])
+        run(clip_cmd)
         run([
             "ffmpeg", "-y", "-i", str(video), "-i", str(clip),
             "-filter_complex", (
@@ -114,11 +190,16 @@ def main():
         "--socials",
         default="X @suenot  |  Telegram @suenot_dev  |  Discord",
     )
-    parser.add_argument("--watch-next", required=True)
+    parser.add_argument("--watch-next")
+    parser.add_argument("--card", type=Path,
+                        help="Pre-rendered exact 1920x1080 end-screen card")
+    parser.add_argument("--music", choices=["silent", "generated"], default="silent")
     parser.add_argument("--duration", type=float, default=10.0)
     args = parser.parse_args()
+    if not args.card and not args.watch_next:
+        parser.error("--watch-next is required unless --card is supplied")
     append(Path(args.video), Path(args.output), args.follow, args.socials,
-           args.watch_next, args.duration)
+           args.watch_next, args.duration, args.card, args.music)
 
 
 if __name__ == "__main__":

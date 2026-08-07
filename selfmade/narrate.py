@@ -14,6 +14,15 @@ import subprocess
 import time
 from pathlib import Path
 
+import aiohttp.connector
+from aiohttp.resolver import ThreadedResolver
+
+# aiodns does not understand macOS scoped resolvers and can report DNS failure
+# while socket.getaddrinfo and every native client work normally. edge-tts
+# creates its own ClientSession, so select aiohttp's system-thread resolver
+# before importing it instead of trying to inject a connector downstream.
+aiohttp.connector.DefaultResolver = ThreadedResolver
+
 import edge_tts
 
 TICKS_PER_SECOND = 10_000_000  # edge-tts reports offsets in 100ns ticks
@@ -26,8 +35,10 @@ MAX_ATTEMPTS = 3
 RETRY_BACKOFF_SECONDS = 5  # multiplied by attempt number
 
 
-async def _stream(text, voice, out_path):
-    communicate = edge_tts.Communicate(text, voice, boundary="WordBoundary")
+async def _stream(text, voice, out_path, rate="+0%"):
+    communicate = edge_tts.Communicate(
+        text, voice, rate=rate, boundary="WordBoundary",
+    )
     words = []
     with open(out_path, "wb") as f:
         async for chunk in communicate.stream():
@@ -64,8 +75,10 @@ async def _stream(text, voice, out_path):
     return words
 
 
-async def _synthesize_once(text, voice, tmp_path, timeout):
-    return await asyncio.wait_for(_stream(text, voice, tmp_path), timeout=timeout)
+async def _synthesize_once(text, voice, tmp_path, timeout, rate):
+    return await asyncio.wait_for(
+        _stream(text, voice, tmp_path, rate=rate), timeout=timeout,
+    )
 
 
 def synthesize(
@@ -74,6 +87,7 @@ def synthesize(
     out_mp3,
     timeout=SYNTHESIS_TIMEOUT_SECONDS,
     attempts=MAX_ATTEMPTS,
+    rate="+0%",
 ):
     """Write narration audio and return [{word, start, end}] in seconds.
 
@@ -90,7 +104,9 @@ def synthesize(
     last_error = None
     for attempt in range(1, attempts + 1):
         try:
-            words = asyncio.run(_synthesize_once(text, voice, tmp_path, timeout))
+            words = asyncio.run(
+                _synthesize_once(text, voice, tmp_path, timeout, rate),
+            )
         except Exception as exc:  # network errors, timeouts, empty-result RuntimeError
             last_error = exc
             tmp_path.unlink(missing_ok=True)

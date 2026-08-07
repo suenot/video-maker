@@ -65,3 +65,32 @@ Scene prompts:
    out of a query sieve; a path sign points into the wrong folder maze.
 5. The robot packs four verified tools — relevance lens, compression spring,
    exact key and calm zero-exit door — while a hype cloud is filtered away.
+
+## Threeblue — Russian mathematical audit
+
+Style anchor:
+
+```text
+Pure black mathematical animation stage; original educational vector-motion
+still; thin white geometric construction lines; LaTeX-like visual rhythm;
+cyan #58C4DD for active quantities, green #83C167 for valid states,
+yellow #FFFF00 for emphasis, red #FC6255 for errors; graphs, sets, transforms,
+braces and arrows revealed as a clear visual argument. No logo, proprietary
+characters, text, letters, numbers or watermark. Main construction in the
+right two-thirds; clean negative space on the left.
+```
+
+Local references used from `/Users/suenot/projects/sdvg/youtube_styles`:
+
+- `3blue1brown/GlYgs6v2YfU/slides/0005.webp`
+- `3blue1brown/GlYgs6v2YfU/slides/0026.webp`
+- `3blue1brown/GlYgs6v2YfU/slides/0053.webp`
+- `3blue1brown/GlYgs6v2YfU/slides/0057.webp`
+- `3blue1brown/IHZwWFHWa-w/slides/0034.webp`
+- `3blue1brown/l6DKRf-fAAM/slides/0025.webp`
+- `3blue1brown/l6DKRf-fAAM/slides/0073.webp`
+- `3blue1brown/WUvTyaaNkzM/slides/0008.webp`
+
+The Russian copy is rendered locally from `variant-manifest.json`, keeping
+formulas, issue numbers, the dated 57,597-star snapshot and the two-stage
+clustering caveat exact instead of asking image generation to draw text.
