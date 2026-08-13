@@ -25,6 +25,9 @@ output_davinci/
 temp/*
 !temp/.gitkeep
 
+# Storyboard preview renders (source HTML and assets stay tracked)
+storyboards/buzz-claude-code-codex/buzz-blueprint.mp4
+
 # Ingested third-party videos (research input, never committed or republished)
 ingest/
 

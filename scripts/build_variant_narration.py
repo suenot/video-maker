@@ -22,6 +22,11 @@ from selfmade import narrate  # noqa: E402
 TOKEN_RE = re.compile(r"[\w]+(?:[.,][\w]+)*", flags=re.UNICODE)
 
 
+def spoken_copy(scene: dict) -> str:
+    """Return optional TTS-only copy while keeping display copy unchanged."""
+    return scene.get("spoken_narration", scene["narration"])
+
+
 def caption_chunks(text: str, max_words: int = 11) -> list[str]:
     """Split exact source copy into readable cues without losing punctuation."""
     clauses = re.split(r"(?<=[.!?;,])\s+", text.strip())
@@ -166,7 +171,10 @@ def synthesize_variant(manifest_path: Path, style: str, build_root: Path,
     audio_parts = []
     for index, scene in enumerate(scenes, start=1):
         part = work_dir / f"{index:02d}-{scene['id']}.mp3"
-        words = narrate.synthesize(scene["narration"], voice, part, rate=rate)
+        # Keep display copy technically correct while allowing explicit phonetic
+        # spellings for names that TTS engines commonly mispronounce.
+        spoken_text = spoken_copy(scene)
+        words = narrate.synthesize(spoken_text, voice, part, rate=rate)
         duration = narrate.probe_duration(part)
         timing_rows.append({"duration": duration, "words": words})
         audio_parts.append(part)

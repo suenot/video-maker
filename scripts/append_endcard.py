@@ -18,6 +18,8 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 W, H = 1920, 1080
+SHORT_W, SHORT_H = 1080, 1920
+SUPPORTED_CARD_SIZES = {(W, H), (SHORT_W, SHORT_H)}
 BG = "#0C111B"
 PANEL = "#151E2D"
 ACCENT = "#62D9FF"
@@ -71,12 +73,20 @@ def make_card(path: Path, follow: str, socials: str, watch_next: str):
     image.save(path, "PNG", optimize=True)
 
 
-def validate_card(path: Path) -> None:
+def validate_card(path: Path) -> tuple[int, int]:
     if not path.is_file():
         raise FileNotFoundError(path)
     with Image.open(path) as image:
-        if image.size != (W, H):
-            raise ValueError(f"End card must be {W}x{H}, got {image.size[0]}x{image.size[1]}")
+        size = image.size
+    if size not in SUPPORTED_CARD_SIZES:
+        supported = " or ".join(
+            f"{width}x{height}"
+            for width, height in sorted(SUPPORTED_CARD_SIZES)
+        )
+        raise ValueError(
+            f"End card must be {supported}, got {size[0]}x{size[1]}"
+        )
+    return size
 
 
 def write_music_bed(path: Path, duration: float, sample_rate: int = 48000) -> None:
@@ -142,11 +152,12 @@ def append(video: Path, output: Path, follow: str, socials: str,
         card = card_path or temp_dir / "endcard.png"
         clip = Path(temp) / "endcard.mp4"
         if card_path:
-            validate_card(card)
+            output_width, output_height = validate_card(card)
         else:
             if not watch_next:
                 raise ValueError("watch_next is required when card_path is not set")
             make_card(card, follow, socials, watch_next)
+            output_width, output_height = W, H
 
         clip_cmd = ["ffmpeg", "-y", "-loop", "1", "-i", str(card)]
         if music == "generated":
@@ -167,8 +178,10 @@ def append(video: Path, output: Path, follow: str, socials: str,
         run([
             "ffmpeg", "-y", "-i", str(video), "-i", str(clip),
             "-filter_complex", (
-                "[0:v]scale=1920:1080:force_original_aspect_ratio=decrease,"
-                "pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1[v0];"
+                f"[0:v]scale={output_width}:{output_height}:"
+                "force_original_aspect_ratio=decrease,"
+                f"pad={output_width}:{output_height}:(ow-iw)/2:(oh-ih)/2,"
+                "setsar=1[v0];"
                 "[1:v]setsar=1[v1];"
                 "[0:a]aresample=48000,aformat=channel_layouts=stereo[a0];"
                 "[1:a]aresample=48000,aformat=channel_layouts=stereo[a1];"
@@ -192,7 +205,7 @@ def main():
     )
     parser.add_argument("--watch-next")
     parser.add_argument("--card", type=Path,
-                        help="Pre-rendered exact 1920x1080 end-screen card")
+                        help="Pre-rendered 1920x1080 or 1080x1920 end-screen card")
     parser.add_argument("--music", choices=["silent", "generated"], default="silent")
     parser.add_argument("--duration", type=float, default=10.0)
     args = parser.parse_args()

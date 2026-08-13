@@ -1,73 +1,113 @@
-# Cutting Shorts from a finished video
+# Native Shorts from a narrated slide deck
 
-A video always comes first; Shorts are cut from it afterwards. One video yields
-several Shorts, each carrying a *different* idea from it — not the same clip
-trimmed twice, and not a vertical copy of the whole video.
+The canonical end-to-end workflow is
+[`youtube-content-pipeline`](../.agents/skills/youtube-content-pipeline/SKILL.md).
+This document is the concise implementation note for the vertical branch.
 
-Why several: the slide deck routinely says more than the narration covers. A
-Brief audio over a ten-slide deck leaves half the deck unused, and that unused
-material is exactly what a second and third Short are made of.
+## Default rule
 
-## Choosing the ideas
+Generate a separate 1080x1920 image for every scene. Reuse the approved
+semantic contract, narration, scene order, and visual style, but compose each
+vertical frame natively. Do not crop, blur, letterbox, pad, or shrink the
+desktop video into a vertical canvas.
 
-Read the deck and the SRT, then list the ideas that stand on their own — each
-must make sense to someone who has not seen the video. A useful set for a
-technical piece is: the mechanism, the counter-intuitive consequence, the
-number that decides it, and the defence. Four ideas, four Shorts.
+`scripts/make_short.py` is a legacy utility for an explicitly requested excerpt
+from existing landscape footage. It is not the default for slide-deck videos.
 
-## English channels: NotebookLM
+## Frame set
 
-`Short Video Overview` renders Latin script only, so this path is for English.
-Give it a storyboard for ONE idea, not a summary of the whole video:
+Use the same roles as desktop:
 
-```
-cd ~/projects/sdvg/gaia
-venv/bin/python notebooklm_gen.py \
-  --notebook "<the notebook the video came from>" \
-  --video --video-format Short --language English \
-  --video-prompt "Vertical short, 5 beats, punchy and concrete.
-1) HOOK: ...
-2) PAIN: ...
-3) MECHANICS: ...
-4) DEFENSE: ...
-5) TAKEAWAY: ...
-English only, large legible on-screen text, no dense paragraphs."
-```
+1. `cover.png` is the cover/opening frame and thumbnail source.
+2. `slide_001.png..slide_NNN.png` map one-to-one to the narrated scenes.
+3. `endcard.png` is a contact-only end card.
 
-Reuse the notebook that produced the video — the sources are already there.
+The Shorts end card must not contain `NEXT VIDEO`, an empty video frame, or a
+watch-next placeholder. YouTube's native interface handles related-video
+navigation separately.
 
-## Russian and Chinese channels: our own renderer
+## UI-safe composition
 
-NotebookLM turns Cyrillic and CJK subtitles into tofu squares and puts English
-headings in frame, so those Shorts are rendered locally from the finished video
-and its SRT:
+Canvas: `1080x1920`.
 
-```
-venv/bin/python scripts/make_short.py \
-  --video output/<slug>/<slug>_zh.mp4 \
-  --srt   output/<slug>/<slug>_zh.srt \
-  --lang zh --start 7.6 --end 46.4 \
-  --title "<hook line, pinned at the top>" \
-  --out output/<slug>-short-zh/<slug>-short-zh.mp4
-```
+- Keep critical text and diagrams inside `x=80..850, y=180..1430`.
+- Leave `x=900..1080` clear for like, comment, and share controls.
+- Leave `y=1500..1920` clear for captions and bottom UI.
+- Keep contact URLs above `y=1430` and left of `x=850`.
+- Do not burn a persistent title or subtitles over the contact card.
 
-Pick the window around one idea, and write a hook title that is not the video's
-title. Check one rendered frame before uploading — the font fallback is the
-thing that breaks silently.
+Create a safe-zone review set before rendering:
 
-## Publishing
-
-Same publisher as any video; the title carries `#Shorts`:
-
-```
-cd ~/projects/trading/marketmaker/video_youtube_publish
-venv/bin/python publish.py --video <short.mp4> --metadata <meta.json> \
-  --channel-handle @marketmaker-zh --visibility public --debug
+```bash
+mkdir -p temp/<slug>/qa/shorts-safe
+for frame in output/<slug>/slides-shorts/slide_*.png \
+             output/<slug>/slides-shorts/cover.png \
+             output/<slug>/slides-shorts/endcard.png; do
+  test -f "$frame" || continue
+  ffmpeg -v error -y -i "$frame" \
+    -vf "drawbox=x=900:y=0:w=180:h=1920:color=red@0.25:t=fill,drawbox=x=0:y=1500:w=1080:h=420:color=red@0.25:t=fill" \
+    -frames:v 1 "temp/<slug>/qa/shorts-safe/$(basename "$frame")"
+done
 ```
 
-`publish.py` refuses to upload a title the channel already has (exit 10) and
-aborts if the channel switch did not land (exit 5) — so a retry after a failure
-is safe. Set the video language afterwards with `edit_details.py --language`.
+No required word, number, CTA, or contact may intersect the red masks.
 
-Finally record each Short in the CRM against its parent video, with a note of
-which idea it carries.
+## Render
+
+Build the narrated body from the native frames:
+
+```bash
+venv/bin/python scripts/generate_video.py \
+  --timeline temp/<slug>/timeline.json \
+  --slides-dir output/<slug>/slides-shorts \
+  --audio input/<slug>/audio_en.m4a \
+  --scale-width 1080 --scale-height 1920 \
+  --fps 30 \
+  --codec libx264 \
+  --output output/<slug>/<slug>-short-body.mp4
+```
+
+Append the native contact card:
+
+```bash
+venv/bin/python scripts/append_endcard.py \
+  --video output/<slug>/<slug>-short-body.mp4 \
+  --card output/<slug>/slides-shorts/endcard.png \
+  --duration 10 --music silent \
+  --output output/<slug>/<slug>-short.mp4
+```
+
+The card must be exactly 1080x1920. The script preserves the native vertical
+canvas instead of converting it to desktop dimensions. Narration plus the
+10-second card must stay within YouTube's current Shorts limit. At this version
+the limit is 180 seconds; verify the
+[official rule](https://support.google.com/youtube/answer/15424877) before
+publication.
+
+When desktop and Short use the same audio and timeline, copy the same SRT cues
+to separately named files. The last cue ends with narration; the contact card
+stays clear.
+
+## Validate
+
+```bash
+ffprobe -v error \
+  -show_entries format=duration:stream=codec_type,codec_name,width,height,r_frame_rate,sample_rate,channels,duration \
+  -of json output/<slug>/<slug>-short.mp4
+ffmpeg -v error -i output/<slug>/<slug>-short.mp4 -f null -
+```
+
+Require 1080x1920 H.264, AAC audio, a clean full decode, exact scene order, and
+a complete contact card. Inspect frames at every cut and in the actual Shorts
+UI before publication.
+
+## Publish
+
+Publish only after the desktop video is public and its exact URL is present in
+the Short metadata. Use a unique Short title, upload as Private, verify the
+channel, language, captions, processing, restrictions, duration, and aspect,
+then change the existing upload to Public and verify its saved Studio state and
+public URL.
+
+Never commit the Short MP4, source audio, generated frames, captions, upload
+logs, or browser profile.

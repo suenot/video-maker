@@ -1,0 +1,4 @@
+interface:
+  display_name: "YouTube Content Pipeline"
+  short_description: "Build native desktop videos and Shorts end to end"
+  default_prompt: "Use $youtube-content-pipeline to build and validate this video package from its original narration and slides."

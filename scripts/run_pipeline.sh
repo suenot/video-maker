@@ -5,6 +5,8 @@ set -euo pipefail
 #   slug defaults to plateau-analysis-overfitting.
 #   Override YouTube tag seeds with the SEED_KEYWORDS env var.
 #   Override branding with the CHANNEL env var (marketmaker | suenot | ...).
+#   Override OCR sync with SLIDE_STARTS=/path/to/starts.json. The JSON file is
+#   an array with one start timestamp per slide, beginning with 0.
 
 LANG="${1:-}"
 if [[ -z "$LANG" ]]; then
@@ -94,13 +96,18 @@ echo "=== Step 3.5: Convert subtitles to SRT ==="
     --output "$OUT_DIR/${OUT_NAME%.mp4}.srt"
 
 echo "=== Step 4: Sync slides with audio ==="
-"$VENV_PYTHON" "$SCRIPT_DIR/sync_slides.py" \
-    --subtitles "$TEMP_DIR/subtitles.json" \
-    --slides-text "$TEMP_DIR/slides_text.json" \
-    --output "$TEMP_DIR/timeline.json" \
-    --min-duration 5.0 \
-    --advance-ratio 1.3 \
+SYNC_ARGS=(
+    --subtitles "$TEMP_DIR/subtitles.json"
+    --slides-text "$TEMP_DIR/slides_text.json"
+    --output "$TEMP_DIR/timeline.json"
+    --min-duration 5.0
+    --advance-ratio 1.3
     --look-ahead 3
+)
+if [[ -n "${SLIDE_STARTS:-}" ]]; then
+    SYNC_ARGS+=(--slide-starts "$SLIDE_STARTS")
+fi
+"$VENV_PYTHON" "$SCRIPT_DIR/sync_slides.py" "${SYNC_ARGS[@]}"
 
 echo "=== Step 5: Generate video ==="
 VIDEO_ARGS=(

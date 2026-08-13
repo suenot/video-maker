@@ -57,8 +57,10 @@ pip install pytrends
 
 ```
 video_maker/
+├── .agents/skills/
+│   └── youtube-content-pipeline/    # Канонический скилл полного процесса
 ├── .claude/skills/
-│   └── youtube-video-publishing.md  # Агентный скилл: полный воркфлоу публикации
+│   └── youtube-content-pipeline -> ../../.agents/skills/youtube-content-pipeline
 ├── scripts/
 │   ├── run_pipeline.sh          # Основной запуск пайплайна
 │   ├── pdf_to_images.py         # PDF → PNG-изображения слайдов
@@ -67,7 +69,8 @@ video_maker/
 │   ├── subtitles_to_srt.py      # JSON Whisper → SRT-субтитры
 │   ├── sync_slides.py           # Построение маппинга слайд-время
 │   ├── generate_video.py        # Слайды + аудио → MP4
-│   ├── make_short.py            # Горизонтальное видео + SRT → Short 1080×1920
+│   ├── make_short.py            # Старый режим нарезки горизонтального видео
+│   ├── append_endcard.py        # Финальный экран 16:9 или 9:16
 │   ├── ingest_youtube.py        # Чужое видео с YouTube → source.md для NotebookLM
 │   ├── research_youtube_tags.py # Исследование YouTube-тегов
 │   ├── generate_metadata.py     # Генерация метаданных YouTube
@@ -108,6 +111,9 @@ python scripts/subtitles_to_srt.py --subtitles temp/subtitles.json --output outp
 # 5. Синхронизация слайдов с аудио
 python scripts/sync_slides.py --subtitles temp/subtitles.json --slides-text temp/slides_text.json --output temp/timeline.json
 
+# Если OCR пропустил слайды, передайте точное время старта каждого слайда
+python scripts/sync_slides.py --subtitles temp/subtitles.json --slides-text temp/slides_text.json --slide-starts temp/slide-starts.json --output temp/timeline.json
+
 # 6. Генерация видео
 python scripts/generate_video.py --timeline temp/timeline.json --slides-dir temp/slides --audio input/audio.m4a --output output/video.mp4
 
@@ -135,57 +141,34 @@ python scripts/generate_thumbnail.py --slides-dir temp/slides --output output/th
 
 ## Вертикальные Shorts
 
-Функция NotebookLM "Short Video Overview" рендерит **только латиницу** — на русских и
-китайских источниках надписи в кадре возвращаются на английском, а вшитые субтитры
-выглядят как пустые квадраты-тофу. Поэтому Shorts для `@marketmaker-school-ru` и
-`@marketmaker-zh` собираются локально: `scripts/make_short.py` берет уже готовое
-горизонтальное видео вместе с его SRT и делает вертикальный ролик 1080×1920 с корректно
-отрисованной кириллицей и иероглифами.
+Основной производственный режим использует отдельный набор **нативных слайдов
+1080x1920**, созданных по тем же смысловым контрактам, что и desktop-версия.
+Short нельзя получать обрезкой, размытием, полями или уменьшением видео 16:9.
 
 ```bash
-python scripts/make_short.py \
-    --video output/<slug>/<slug>_ru.mp4 \
-    --srt   output/<slug>/<slug>_ru.srt \
-    --start 1:00 --end 1:52 \
-    --lang ru \
-    --title "Почему маркет-мейкер теряет деньги" \
-    --out output/<slug>/<slug>_ru_short.mp4
+python scripts/generate_video.py \
+    --timeline temp/<slug>/timeline.json \
+    --slides-dir output/<slug>/slides-shorts \
+    --audio input/<slug>/audio_ru.m4a \
+    --scale-width 1080 --scale-height 1920 \
+    --fps 30 \
+    --codec libx264 \
+    --output output/<slug>/<slug>-short-body.mp4
+
+python scripts/append_endcard.py \
+    --video output/<slug>/<slug>-short-body.mp4 \
+    --card output/<slug>/slides-shorts/endcard.png \
+    --duration 10 --music silent \
+    --output output/<slug>/<slug>-short.mp4
 ```
 
-| Флаг | Описание |
-|---|---|
-| `--video`, `--srt` | Готовый MP4 16:9 и его SRT |
-| `--start`, `--end` | Вырезаемый отрезок, `SS.s` или `MM:SS`; без `--end` берется конец исходника |
-| `--lang` | `ru` \| `zh` \| `en` — выбирает шрифт и правила переноса строк |
-| `--title` | Необязательный хук-заголовок, закрепленный сверху на весь ролик |
-| `--font`, `--font-index` | Переопределить файл шрифта / начертание внутри `.ttc` |
-| `--sub-size`, `--title-size` | Кегль в пикселях (72 / 82) |
-| `--sub-fps` | Частота кадров PNG-последовательности субтитров (10) |
-| `--codec` | `libx264` (по умолчанию) или `h264_videotoolbox` |
-| `--keep-temp` | Оставить отрисованные PNG субтитров для проверки |
+Весь важный текст должен находиться внутри `x=80..850, y=180..1430`; справа и
+снизу нужно оставить место для интерфейса YouTube. На финальном экране Shorts
+остаются только контакты, без блока `NEXT VIDEO`. Полные правила и проверки
+описаны в [процессе нативных Shorts](docs/shorts-flow.md) и каноническом скилле.
 
-**Кадрирование.** Исходник масштабируется до ширины 1080 и центрируется по вертикали;
-пустые поля сверху и снизу заполняются размытой, затемненной и увеличенной копией того же
-кадра (`split` → `scale`+`crop`+`boxblur` → `overlay`), так что черных полос нет.
-
-**Субтитры.** Локальный FFmpeg собран без libass и freetype, поэтому фильтров `subtitles`,
-`ass` и `drawtext` просто нет — `ffmpeg -filters | grep -E "subtitles|drawtext|ass"` не
-находит ничего. Дорожка субтитров растрируется через Pillow в последовательность
-прозрачных PNG (10 fps; одинаковые слои связываются жесткими ссылками, так что ролику на
-50 с нужно около 25 уникальных PNG) и накладывается вторым входом через `overlay`.
-
-**Шрифты.** Arial Black для `ru`/`en`, Hiragino Sans GB W6 для `zh`. Каждый символ
-субтитров и заголовка сверяется с глифом notdef до начала рендера; если символ вышел бы
-квадратом-тофу, скрипт падает с ошибкой и перечисляет проблемные символы, а не выпускает
-сломанный текст.
-
-**Типографика.** Белый текст с темной обводкой на полупрозрачной скругленной подложке, в
-нижней трети кадра. Кириллица и латиница переносятся по словам, иероглифы — посимвольно
-(без переноса перед закрывающей пунктуацией). Реплики длиннее 3 строк уменьшаются до
-46 px, чтобы не закрывать слайд.
-
-**Выход.** H.264 High / yuv420p, 30 fps, AAC 192 kb/s, `+faststart`. На отрезок длиннее
-180 с выводится предупреждение — это потолок YouTube для Shorts.
+`scripts/make_short.py` остается только для явно запрошенной нарезки уже
+существующего горизонтального видео. Это не основной режим производства деки.
 
 ## Загрузка исходного видео
 
@@ -272,19 +255,17 @@ input/<slug>/
 | `<slug>_metadata.txt` | Человекочитаемые метаданные для YouTube Studio |
 | `<slug>_thumbnail.png` | Миниатюра 1280×720 |
 
-## Агентный скилл (.claude/skills)
+## Канонический агентный скилл
 
-Файл `.claude/skills/youtube-video-publishing.md` — ключевая часть этого проекта. Это определение агентного скилла для [Claude Code](https://docs.anthropic.com/en/docs/claude-code), которое обучает ИИ-ассистента полному воркфлоу публикации YouTube-видео:
+Единый версионируемый источник процесса находится в
+`.agents/skills/youtube-content-pipeline/SKILL.md`. Claude Code открывает тот же
+каталог через `.claude/skills/youtube-content-pipeline`, поэтому разные агенты
+не получают расходящиеся копии правил.
 
-- **Правила заголовков** — размещение ключевых слов, ограничения длины, без кликбейта
-- **Шаблон описания** — SEO-хук, таймкоды, ссылка на статью, Telegram CTA, теги
-- **Пайплайн тегов** — как исследовать и фильтровать тематические YouTube-теги
-- **Поля YouTube Education** — генерация Category, Type, Level, Problems
-- **Правила извлечения заголовков слайдов** — фильтрация OCR, детекция фрагментов, объединение строк
-- **Правила кодирования видео** — выбор кодека, разрешение, обоснование framerate
-- **Интеграция пайплайна** — как все скрипты связаны между собой
-
-Когда вы открываете этот проект в Claude Code, агент автоматически подхватывает скилл и может запускать весь пайплайн, генерировать метаданные, исправлять проблемы кодирования и т.д. — с полным контекстом о соглашениях и правилах качества проекта.
+Скилл описывает поиск исходников, проверку фактов и озвучки, выбор стиля,
+смысловые контракты сцен, нативную генерацию 16:9 и 9:16, точный timeline,
+проверку рендера, публикацию через Private, добавление видео в статьи и жесткий
+запрет на коммит сгенерированных видео и аудио.
 
 ## Связанные проекты
 

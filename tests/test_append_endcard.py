@@ -8,6 +8,8 @@ from scripts.append_endcard import (
     H,
     LEFT_VIDEO_ZONE,
     RIGHT_VIDEO_ZONE,
+    SHORT_H,
+    SHORT_W,
     W,
     validate_card,
     write_music_bed,
@@ -22,14 +24,17 @@ def test_end_screen_video_zones_are_two_exact_16_by_9_regions():
     assert LEFT_VIDEO_ZONE[2] < RIGHT_VIDEO_ZONE[0]
 
 
-def test_validate_card_requires_exact_1080p(tmp_path):
-    good = tmp_path / "good.png"
+def test_validate_card_accepts_native_desktop_and_short_sizes(tmp_path):
+    desktop = tmp_path / "desktop.png"
+    short = tmp_path / "short.png"
     bad = tmp_path / "bad.png"
-    Image.new("RGB", (W, H)).save(good)
+    Image.new("RGB", (W, H)).save(desktop)
+    Image.new("RGB", (SHORT_W, SHORT_H)).save(short)
     Image.new("RGB", (1280, 720)).save(bad)
 
-    validate_card(good)
-    with pytest.raises(ValueError, match="1920x1080"):
+    assert validate_card(desktop) == (W, H)
+    assert validate_card(short) == (SHORT_W, SHORT_H)
+    with pytest.raises(ValueError, match="1080x1920.*1920x1080"):
         validate_card(bad)
 
 

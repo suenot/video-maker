@@ -92,6 +92,43 @@ def even_timeline(slides, total):
             for i in range(n)]
 
 
+def manual_timeline(slide_starts, slide_count, total):
+    """PURE: build a complete timeline from one start time per slide."""
+    if len(slide_starts) != slide_count:
+        raise ValueError(
+            f"Expected {slide_count} slide start times, got {len(slide_starts)}"
+        )
+    if not slide_starts:
+        raise ValueError("At least one slide start time is required")
+    if total <= 0:
+        raise ValueError("Subtitle duration must be positive")
+
+    starts = [float(start) for start in slide_starts]
+    if starts[0] != 0.0:
+        raise ValueError("The first slide must start at 0 seconds")
+    if any(right <= left for left, right in zip(starts, starts[1:])):
+        raise ValueError("Slide start times must be strictly increasing")
+    if starts[-1] >= total:
+        raise ValueError("The final slide must start before the subtitles end")
+
+    return [
+        {
+            "slide": index,
+            "start": start,
+            "end": starts[index + 1] if index + 1 < slide_count else total,
+        }
+        for index, start in enumerate(starts)
+    ]
+
+
+def subtitle_duration(subtitles):
+    """PURE: return the final subtitle timestamp."""
+    return max(
+        (float(segment["end"]) for segment in subtitles.get("segments", [])),
+        default=0.0,
+    )
+
+
 def timeline_quality(timeline, slides):
     """PURE: (fraction of slides shown, share held by the longest segment)."""
     if not timeline:
@@ -114,6 +151,10 @@ def main():
                         help="Score ratio required to advance to next slide")
     parser.add_argument("--look-ahead", type=int, default=3,
                         help="How many upcoming slides to evaluate")
+    parser.add_argument(
+        "--slide-starts",
+        help="JSON array with one start time per slide; bypasses OCR matching",
+    )
     parser.add_argument("--min-coverage", type=float, default=0.7,
                         help="Fraction of slides that must appear before the "
                              "matched timeline is trusted")
@@ -128,23 +169,30 @@ def main():
         slides_data = json.load(f)
     slides = slides_data["pages"]
 
-    timeline = build_timeline(subs, slides,
-                               min_duration=args.min_duration,
-                               advance_ratio=args.advance_ratio,
-                               look_ahead=args.look_ahead)
+    if args.slide_starts:
+        with open(args.slide_starts, "r", encoding="utf-8") as f:
+            starts = json.load(f)
+        timeline = manual_timeline(
+            starts, len(slides), subtitle_duration(subs)
+        )
+    else:
+        timeline = build_timeline(subs, slides,
+                                  min_duration=args.min_duration,
+                                  advance_ratio=args.advance_ratio,
+                                  look_ahead=args.look_ahead)
 
-    # Matching narration to slide text degenerates whenever the deck says more
-    # than the narration does — a Brief audio over a ten-slide deck leaves one
-    # slide parked on screen for most of the run. An even split is not clever,
-    # but a viewer cannot tell it from intent, and a frozen slide they can.
-    coverage, worst = timeline_quality(timeline, slides)
-    if coverage < args.min_coverage or worst > args.max_share:
-        total = max((seg["end"] for seg in timeline), default=0.0)
-        if not total:
-            total = max((c["end"] for c in subs), default=0.0)
-        print(f"sync degenerated (showed {len(timeline)}/{len(slides)} slides, "
-              f"longest held {worst:.0%}); falling back to an even split")
-        timeline = even_timeline(slides, total)
+        # Matching narration to slide text degenerates whenever the deck says more
+        # than the narration does — a Brief audio over a ten-slide deck leaves one
+        # slide parked on screen for most of the run. An even split is not clever,
+        # but a viewer cannot tell it from intent, and a frozen slide they can.
+        coverage, worst = timeline_quality(timeline, slides)
+        if coverage < args.min_coverage or worst > args.max_share:
+            total = max((seg["end"] for seg in timeline), default=0.0)
+            if not total:
+                total = subtitle_duration(subs)
+            print(f"sync degenerated (showed {len(timeline)}/{len(slides)} slides, "
+                  f"longest held {worst:.0%}); falling back to an even split")
+            timeline = even_timeline(slides, total)
 
     with open(args.output, "w", encoding="utf-8") as f:
         json.dump({"timeline": timeline, "slide_count": len(slides)}, f, ensure_ascii=False, indent=2)

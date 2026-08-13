@@ -1,6 +1,27 @@
 import pytest
 
-from scripts.build_variant_narration import build_timeline, caption_chunks, render_srt
+from scripts.build_variant_narration import (
+    build_timeline,
+    caption_chunks,
+    render_srt,
+    spoken_copy,
+)
+
+
+def test_spoken_copy_can_guide_pronunciation_without_changing_subtitles():
+    scene = {
+        "narration": "Each member has a Nostr keypair.",
+        "spoken_narration": "Each member has a Noh stir keypair.",
+    }
+
+    assert spoken_copy(scene) == "Each member has a Noh stir keypair."
+    assert scene["narration"] == "Each member has a Nostr keypair."
+
+
+def test_spoken_copy_defaults_to_display_narration():
+    assert spoken_copy({"narration": "Stand up a local relay."}) == (
+        "Stand up a local relay."
+    )
 
 
 def test_build_timeline_is_contiguous_and_matches_encoded_audio():

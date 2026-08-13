@@ -61,8 +61,10 @@ pip install pytrends
 
 ```
 video_maker/
+├── .agents/skills/
+│   └── youtube-content-pipeline/    # Canonical end-to-end agent skill
 ├── .claude/skills/
-│   └── youtube-video-publishing.md  # Agent skill: full publishing workflow
+│   └── youtube-content-pipeline -> ../../.agents/skills/youtube-content-pipeline
 ├── scripts/
 │   ├── run_pipeline.sh          # Main pipeline runner
 │   ├── pdf_to_images.py         # PDF → PNG slide images
@@ -71,7 +73,8 @@ video_maker/
 │   ├── subtitles_to_srt.py      # Whisper JSON → SRT subtitles
 │   ├── sync_slides.py           # Build slide-to-time mapping
 │   ├── generate_video.py        # Slides + audio → MP4
-│   ├── make_short.py            # Landscape video + SRT → 1080×1920 Short
+│   ├── make_short.py            # Legacy cut from landscape footage
+│   ├── append_endcard.py        # Native 16:9 or 9:16 end card
 │   ├── ingest_youtube.py        # Third-party YouTube video → NotebookLM source.md
 │   ├── research_youtube_tags.py # YouTube tag research
 │   ├── generate_metadata.py     # Generate YouTube metadata
@@ -112,6 +115,9 @@ python scripts/subtitles_to_srt.py --subtitles temp/subtitles.json --output outp
 # 5. Sync slides with audio timeline
 python scripts/sync_slides.py --subtitles temp/subtitles.json --slides-text temp/slides_text.json --output temp/timeline.json
 
+# When OCR misses slides, provide one exact start time per slide
+python scripts/sync_slides.py --subtitles temp/subtitles.json --slides-text temp/slides_text.json --slide-starts temp/slide-starts.json --output temp/timeline.json
+
 # 6. Generate video
 python scripts/generate_video.py --timeline temp/timeline.json --slides-dir temp/slides --audio input/audio.m4a --output output/video.mp4
 
@@ -149,56 +155,35 @@ to `generate_video.py`.
 
 ## Vertical Shorts
 
-NotebookLM's "Short Video Overview" renders **Latin script only** — fed Russian or
-Chinese sources it returns English on-screen headings and burned-in subtitles that are
-empty tofu squares. So Shorts for `@marketmaker-school-ru` and `@marketmaker-zh` are cut
-locally instead: `scripts/make_short.py` takes an already-finished landscape video plus
-its SRT and produces a 1080×1920 Short with correctly rendered Cyrillic / CJK subtitles.
+The production default is a separate set of **native 1080×1920 slides** generated
+from the same semantic scene contracts as the desktop deck. A Short is not a
+cropped, blurred, padded, letterboxed, or scaled-down copy of the 16:9 video.
 
 ```bash
-python scripts/make_short.py \
-    --video output/<slug>/<slug>_ru.mp4 \
-    --srt   output/<slug>/<slug>_ru.srt \
-    --start 1:00 --end 1:52 \
-    --lang ru \
-    --title "Почему маркет-мейкер теряет деньги" \
-    --out output/<slug>/<slug>_ru_short.mp4
+python scripts/generate_video.py \
+    --timeline temp/<slug>/timeline.json \
+    --slides-dir output/<slug>/slides-shorts \
+    --audio input/<slug>/audio_en.m4a \
+    --scale-width 1080 --scale-height 1920 \
+    --fps 30 \
+    --codec libx264 \
+    --output output/<slug>/<slug>-short-body.mp4
+
+python scripts/append_endcard.py \
+    --video output/<slug>/<slug>-short-body.mp4 \
+    --card output/<slug>/slides-shorts/endcard.png \
+    --duration 10 --music silent \
+    --output output/<slug>/<slug>-short.mp4
 ```
 
-| Flag | Description |
-|---|---|
-| `--video`, `--srt` | Finished 16:9 mp4 and its SRT |
-| `--start`, `--end` | Segment to cut, `SS.s` or `MM:SS`; `--end` defaults to the end of the source |
-| `--lang` | `ru` \| `zh` \| `en` — selects the font and the line-breaking rules |
-| `--title` | Optional hook line pinned at the top for the whole Short |
-| `--font`, `--font-index` | Override the font file / the face inside a `.ttc` |
-| `--sub-size`, `--title-size` | Type sizes in px (72 / 82) |
-| `--sub-fps` | Frame rate of the subtitle PNG sequence (10) |
-| `--codec` | `libx264` (default) or `h264_videotoolbox` |
-| `--keep-temp` | Keep the rendered subtitle PNGs for inspection |
+Keep critical Short content within `x=80..850, y=180..1430`; leave the right
+controls strip and bottom caption region clear. The vertical end card contains
+contacts only — no `NEXT VIDEO` placeholder. See [the native Shorts
+flow](docs/shorts-flow.md) and the canonical skill for the full contracts and QA
+gates.
 
-**Framing.** The source is scaled to 1080 wide and centred vertically; the empty top and
-bottom are filled with a blurred, darkened, zoomed copy of the same frame
-(`split` → `scale`+`crop`+`boxblur` → `overlay`), so there are no black bars.
-
-**Subtitles.** The local FFmpeg is built without libass and freetype, so the `subtitles`,
-`ass` and `drawtext` filters do not exist — `ffmpeg -filters | grep -E "subtitles|drawtext|ass"`
-comes back empty. The subtitle track is therefore rasterised with Pillow into a transparent
-PNG sequence (10 fps; identical layers are hard-linked, so a 50 s Short needs ~25 unique
-PNGs) and composited as a second input with `overlay`.
-
-**Fonts.** Arial Black for `ru`/`en`, Hiragino Sans GB W6 for `zh`. Every character in the
-cues and the title is compared against the font's notdef glyph before anything is rendered;
-if a glyph would come out as a tofu box the script aborts and names the offending
-characters rather than shipping broken text.
-
-**Typography.** White text with a dark stroke over a semi-transparent rounded box, in the
-bottom third. Cyrillic and Latin wrap per word, CJK per character (never breaking before
-closing punctuation). Cues that need more than 3 lines shrink down to 46 px instead of
-covering the slide.
-
-**Output.** H.264 High / yuv420p, 30 fps, AAC 192 kb/s, `+faststart`. Segments longer than
-180 s print a warning — that is YouTube's ceiling for Shorts.
+`scripts/make_short.py` remains available only for an explicitly requested cut
+from existing landscape footage. It is not the deck-production default.
 
 ## Ingesting a Source Video
 
@@ -283,19 +268,17 @@ input/<slug>/
 | `<slug>_metadata.txt` | Human-readable metadata for YouTube Studio |
 | `<slug>_thumbnail.png` | 1280×720 thumbnail image |
 
-## Agent Skill (.claude/skills)
+## Canonical Agent Skill
 
-The `.claude/skills/youtube-video-publishing.md` file is a key part of this project. It's an agent skill definition for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) that teaches the AI assistant the complete YouTube video publishing workflow:
+The versioned source of truth is
+`.agents/skills/youtube-content-pipeline/SKILL.md`. Claude Code reaches the same
+directory through `.claude/skills/youtube-content-pipeline`, so both agents use
+one workflow rather than drifting copies.
 
-- **Title rules** — keyword placement, length limits, no clickbait
-- **Description template** — SEO hook, timestamps, article link, Telegram CTA, tags
-- **Tag pipeline** — how to research and filter thematic YouTube tags
-- **YouTube Education fields** — Category, Type, Level, Problems generation
-- **Slide title extraction rules** — OCR filtering, fragment detection, line merging
-- **Video encoding rules** — codec selection, resolution, framerate rationale
-- **Pipeline integration** — how all scripts connect
-
-When you open this project in Claude Code, the agent automatically picks up the skill and can run the full pipeline, generate metadata, fix encoding issues, etc. — with full context about the project's conventions and quality rules.
+The skill covers source discovery, factual and narration QA, style selection,
+semantic scene contracts, native 16:9 and 9:16 generation, exact timelines,
+render validation, private-first YouTube delivery, article embedding, and the
+absolute rule that generated videos and audio never enter Git.
 
 ## Related Projects
 
