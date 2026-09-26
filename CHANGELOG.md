@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add a reproducible bilingual order-types video storyboard, narration and metadata plan, factual audit, and native desktop/Shorts frame renderer.
+
 ## [1.0.0] - 2026-08-13
 
 ### Added

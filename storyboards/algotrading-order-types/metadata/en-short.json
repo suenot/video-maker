@@ -1,0 +1,15 @@
+{
+  "title": "Market, Limit, Stop: Order Types in 3 Minutes #Shorts",
+  "description": "Compare market, limit, post-only, stop, IOC and FOK orders on one illustrative order book. A stop trigger at 99 can lead to a sale below 99 or no fill, depending on the order. Venue rules and liquidity vary.\n\n📖 Full article: https://marketmaker.cc/en/blog/post/algotrading-order-types",
+  "tags": [
+    "Shorts",
+    "stop order",
+    "stop market",
+    "stop limit",
+    "order types",
+    "algorithmic trading",
+    "trade execution",
+    "slippage",
+    "crypto trading"
+  ]
+}
