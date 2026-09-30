@@ -87,7 +87,7 @@
         "state": "scheduled",
         "notebook": "https://notebook.google.com/notebook/74003a9e-c88a-4d5d-a593-70b94a0fa765",
         "requested_at": "2026-09-30T16:24:55+04:00",
-        "checked_at": "2026-09-30T18:54:46+04:00",
+        "checked_at": "2026-09-30T15:16:20+00:00",
         "retry_attempted_at": "2026-09-30T18:42:00+04:00",
         "retry_result": "Generate later submitted; scheduled Slide Deck card confirmed.",
         "after": "2026-09-30T19:00:00+04:00",
@@ -98,19 +98,38 @@
       "ru_audio": {
         "state": "scheduled",
         "after": "2026-09-30T19:00:00+04:00",
-        "checked_at": "2026-09-30T18:54:46+04:00"
+        "checked_at": "2026-09-30T15:16:20+00:00"
       },
       "ru_slides": {
         "state": "scheduled",
         "after": "2026-09-30T19:00:00+04:00",
-        "checked_at": "2026-09-30T18:54:46+04:00"
+        "checked_at": "2026-09-30T15:16:20+00:00"
       },
       "original_en_slides": {
         "state": "failed",
         "message": "Slide Deck generation failed. Try a new one."
       }
     },
-    "browser_timezone": "Asia/Tbilisi"
+    "browser_timezone": "Asia/Tbilisi",
+    "usage_check": {
+      "checked_at": "2026-09-30T15:05:36.919Z",
+      "browser_timezone": "Asia/Tbilisi",
+      "current_window_used_percent": 32,
+      "weekly_used_percent": 2,
+      "displayed_window_reset": "19:00",
+      "displayed_weekly_reset": "7 ოქტომბერი at 14:00",
+      "quota_exhausted": false,
+      "note": "The existing jobs remain scheduled after the displayed reset. No immediate-start action is present in the scheduled artifact menu.",
+      "policy_source": "https://support.google.com/gemininotebook/answer/17670842?hl=en",
+      "generate_later_policy": "Google documents that delayed generation may take a couple hours."
+    },
+    "observer": {
+      "script": "temp/algotrading-order-types/gaia/watch-queued-sources.py",
+      "handle": "temp/algotrading-order-types/gaia/watch-handle.json",
+      "state": "temp/algotrading-order-types/gaia/watch-state.json",
+      "poll_interval_seconds": 120,
+      "ownership": "One Camoufox context; read-only polling; exits on a ready source or an explicitly failed new job."
+    }
   },
   "artifacts": {
     "en": {
@@ -177,7 +196,7 @@
     }
   },
   "next_steps": [
-    "After 19:00 Asia/Tbilisi, inspect the already scheduled English PDF card and download when ready. Do not create another generation request while the card is scheduled or generating.",
+    "Follow the live read-only observer. After it reports a ready source and closes Camoufox, download from the existing notebook; use the corrected-English revised-slides-download phase for its PDF. Do not create duplicate jobs while existing cards are scheduled or generating.",
     "Download the already scheduled Russian audio and PDF after 19:00 Asia/Tbilisi; inspect narration before accepting it.",
     "Confirm the visual style and inspect a representative slide before full restyling.",
     "Build desktop and native vertical renders with exact semantic timelines, then complete media QA.",
