@@ -39,8 +39,16 @@ Do not label an unfinished render as delivered to advance the queue.
 - Use Gaia at `/Users/suenot/projects/sdvg/gaia` to operate Google NotebookLM.
 - Use only Camoufox with its own existing saved session. Never launch Firefox
   or bootstrap from Firefox cookies.
+- NotebookLM uses Gaia's `.camoufox_profile/` and `.camoufox_fp.pkl`, with
+  the user-designated Google identity recorded in ignored local session
+  settings. Do not substitute the YouTube publisher profile. Verify the
+  active account before creating a notebook, adding sources, or generating.
 - Allow one owner of the shared Camoufox profile at a time. Inspect live
   processes before opening the profile or attempting recovery.
+- While an account-login process owns the Gaia profile, leave generation
+  stopped until sign-in and the expected account are verified. Reconcile
+  notebooks in that account before starting a watcher or new source jobs;
+  retain previous-session jobs and accepted media with their actual provenance.
 - Generate narration and the semantic slide reference in NotebookLM. Preserve
   the original audio/PDF and hashes; audit technical claims before accepting
   them. Do not replace this source stage with locally authored TTS or slides.
