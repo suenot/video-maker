@@ -14,9 +14,15 @@ source provenance, actual progress, QA, approvals, and publication records.
 ## Order and completion
 
 1. Finish `algotrading-order-types` EN/RU first.
-2. Continue with funding-rate arbitrage, statistical arbitrage, order-flow
+2. Complete the user-requested pipeline audit and justified efficiency
+   improvements. Delegate bounded audit scopes to `gpt-6.1-sol` with `ultra`
+   reasoning; keep the parent chat on its configured model and effort. Audit
+   SOP/DoD, workflow transitions, duplicate prevention, artifact reuse,
+   recovery, and possible Pydantic/pydantic-ai use before choosing changes.
+   Verify and commit/push the changes before starting another article.
+3. Continue with funding-rate arbitrage, statistical arbitrage, order-flow
    imbalance, and TWAP/VWAP/POV, following the previous priority audit.
-3. Reconcile the remaining candidates against existing videos before choosing
+4. Reconcile the remaining candidates against existing videos before choosing
    the next article. Prefer published articles to drafts. Do not produce a
    second video merely because an article lacks its YouTube field.
 

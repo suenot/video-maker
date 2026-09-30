@@ -14,6 +14,36 @@
   "production_policy": "storyboards/article-video-workflow.md",
   "authoritative_per_video_state": "storyboards/<slug>/production-manifest.json",
   "deduplication": "No youtube frontmatter is only a candidate signal. Before generation check existing artifacts, manifests, upload records, and actual target-channel Studio state; resume missing stages instead of rebuilding completed ones.",
+  "ordered_work": [
+    {
+      "task": "algotrading-order-types",
+      "state": "in_progress",
+      "done_when": "EN/RU desktop and native vertical package passes QA, sources/manifests are recorded, and reusable changes are committed and pushed; publication approval may remain pending."
+    },
+    {
+      "task": "pipeline-audit-and-improvement",
+      "state": "queued",
+      "depends_on": "algotrading-order-types",
+      "delegation": {
+        "model": "gpt-6.1-sol",
+        "reasoning_effort": "ultra"
+      },
+      "scope": [
+        "SOP with trigger, inputs, owner, steps, failure handling",
+        "Verifiable per-stage Definition of Done",
+        "Explicit workflow states and valid handoffs",
+        "Deduplication, idempotency, retries and quota-aware recovery",
+        "Reuse of validated artifacts and reduced repeated work",
+        "Evaluate Pydantic for state/input validation and pydantic-ai only if it solves an identified orchestration problem"
+      ],
+      "done_when": "Evidence-backed audit, smallest justified changes, proportionate checks, commit and default-branch push, documented deployment and smoke checks only if a deployed product is affected."
+    },
+    {
+      "task": "continue-article-video-queue",
+      "state": "queued",
+      "depends_on": "pipeline-audit-and-improvement"
+    }
+  ],
   "items": [
     {"slug": "algotrading-order-types","languages": {"en": {"article": "marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md","youtube": null,"draft": false,"date": "2026-03-23"},"ru": {"article": "marketmaker-cc-landing/src/content/blog/algotrading-order-types.ru.md","youtube": null,"draft": false,"date": "2026-03-23"}},"local_mp4": [],"manifest": "storyboards/algotrading-order-types/production-manifest.json","languages_without_article_video_link": ["en","ru"],"state": "in_progress"},
     {"slug": "funding-rate-arbitrage-cross-exchange","languages": {"en": {"article": "marketmaker-cc-landing/src/content/blog/funding-rate-arbitrage-cross-exchange.en.md","youtube": null,"draft": false,"date": "2026-03-05"},"ru": {"article": "marketmaker-cc-landing/src/content/blog/funding-rate-arbitrage-cross-exchange.ru.md","youtube": null,"draft": false,"date": "2026-03-05"}},"local_mp4": [],"manifest": null,"languages_without_article_video_link": ["en","ru"],"state": "verify_video_absence_before_generation"},
