@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "slug": "algotrading-order-types",
+  "language": [
+    "en",
+    "ru"
+  ],
+  "scope": "Gaia/NotebookLM audio and slide decks, then video-maker desktop and independent Shorts for both channels",
+  "status": "english_audio_ready_notebooklm_sources_pending",
+  "sources": {
+    "article_en": {
+      "path": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md",
+      "sha256": "c0a9ac96794825681f203aef9a225952cd0458ae1259006555795059a88f3b9c"
+    },
+    "gaia_brief_en": {
+      "path": "storyboards/algotrading-order-types/gaia-brief.en.md",
+      "sha256": "36a32e9e24451a4c263959aaa9437d12ea88f9b5c61eb647736d4d7072fa9007"
+    },
+    "article_ru": {
+      "path": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.ru.md",
+      "sha256": "0bb258344db9e28218b8477dd2aefdc3580d0902ca3491de86f5624a9689ee7e"
+    },
+    "gaia_brief_ru": {
+      "path": "storyboards/algotrading-order-types/gaia-brief.ru.md",
+      "sha256": "5199b86801bdc2fafd3dd866f0003cb27c105efd3ce896cef77c316e9e8f75fc"
+    },
+    "product_facts": {
+      "path": "storyboards/algotrading-order-types/product-facts.md",
+      "sha256": "3f2a7e56550cbb891bb7b5f416d6078ba54add44d39a84c96eaa2dba6bcca347",
+      "verified_at": "2026-09-30"
+    },
+    "audio_en": {
+      "path": "input/algotrading-order-types/audio_en.m4a",
+      "sha256": "cf2d04c8b8e74b4bc468494a052e9dbe330e092d11ccdeb7e8cb45fc98aa9206",
+      "duration_seconds": 92.16,
+      "codec": "aac",
+      "sample_rate": 44100,
+      "channels": 2
+    },
+    "narration_source_en": {
+      "path": "storyboards/algotrading-order-types/narration-source.en.md",
+      "sha256": "93b031d76d9f9c1b3d0e8253faafff4085832f8730371885d81c79ed535533c0"
+    }
+  },
+  "gaia": {
+    "checkout": "/Users/suenot/projects/sdvg/gaia",
+    "notebooks": {
+      "en": "https://notebook.google.com/notebook/74003a9e-c88a-4d5d-a593-70b94a0fa765",
+      "ru": "https://notebook.google.com/notebook/2b5b52bb-bd05-4213-9319-b8a43030cbd8",
+      "en_original": "https://notebook.google.com/notebook/a6ceb6b3-eec8-4068-bfe8-b014b53cd555"
+    },
+    "runs": {
+      "en": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/en/revised-audio",
+      "ru": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/ru",
+      "en_original": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/en"
+    },
+    "audio": {
+      "en": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/en/revised-audio/notebooklm_audio_20260930_162318.m4a",
+      "ru": null
+    },
+    "slides": {
+      "en": null,
+      "ru": null
+    },
+    "shorts": {
+      "en": null,
+      "ru": null
+    },
+    "browser": "camoufox_only",
+    "session_profile": "../video_youtube_publish/.camoufox_profile",
+    "source_ingestion_ru": {
+      "source": "combined_article_and_brief",
+      "path": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/ru/source.md"
+    },
+    "source_ingestion_en_original": {
+      "article": "copied_text_source",
+      "brief": "audio_and_slides_steering_prompts",
+      "note": "The separate second brief source was not added by the current UI helper; its complete content was passed to both generation dialogs."
+    },
+    "source_ingestion_en": {
+      "source": "corrected_narration_source_only",
+      "path": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/en/revised-audio/source.md",
+      "sha256": "93b031d76d9f9c1b3d0e8253faafff4085832f8730371885d81c79ed535533c0"
+    },
+    "generation_state": {
+      "en_slides": {
+        "state": "generating",
+        "notebook": "https://notebook.google.com/notebook/74003a9e-c88a-4d5d-a593-70b94a0fa765",
+        "requested_at": "2026-09-30T16:24:55+04:00"
+      },
+      "ru_audio": {
+        "state": "scheduled",
+        "after": "2026-09-30T19:00:00+04:00"
+      },
+      "ru_slides": {
+        "state": "scheduled",
+        "after": "2026-09-30T19:00:00+04:00"
+      },
+      "original_en_slides": {
+        "state": "failed",
+        "message": "Slide Deck generation failed. Try a new one."
+      }
+    },
+    "browser_timezone": "Asia/Tbilisi"
+  },
+  "artifacts": {
+    "en": {
+      "audio": "input/algotrading-order-types/audio_en.m4a",
+      "srt": "output/algotrading-order-types/algotrading-order-types-en.srt",
+      "srt_sha256": "1bd2dc16529ab1d68f701e0ce351207f69a22dc38224d9d624ab556213ec02b4",
+      "transcript": "temp/algotrading-order-types/en-revised/subtitles-corrected.json",
+      "caption_corrections": "temp/algotrading-order-types/en-revised/caption-corrections.json"
+    },
+    "ru": {}
+  },
+  "approvals": {
+    "source": null,
+    "style": null,
+    "frames": null,
+    "render": null,
+    "publish": null
+  },
+  "youtube": {
+    "en_desktop_url": null,
+    "en_short_url": null,
+    "ru_desktop_url": null,
+    "ru_short_url": null
+  },
+  "workflow_constraints": {
+    "browser": "Camoufox only; never operate Firefox or bootstrap from its cookies",
+    "publication": "pending_quality_approval",
+    "discarded_previous_build": "b613f8b reverted by 5d0caa8; selfmade renders are not accepted NotebookLM artifacts"
+  },
+  "qa": {
+    "en_original_audio": {
+      "status": "failed",
+      "duration_seconds": 98.777687,
+      "transcript": "temp/algotrading-order-types/en/subtitles.json",
+      "reason": "At 36.18-46.74s, \"a stop market gets you filled\" incorrectly implies execution is guaranteed. A revised NotebookLM audio is required."
+    },
+    "style": {
+      "status": "awaiting_selection",
+      "options": [
+        "Ink Theater matching existing Distance Approach previews",
+        "NotebookLM design without additional restyling"
+      ]
+    },
+    "en_revised_audio": {
+      "status": "factual_review_passed",
+      "duration_seconds": 92.16,
+      "full_decode": "passed",
+      "stop_order_caveat": "explicitly retained at 43.34-56.58s",
+      "coverage_note": "Brief overview; inspect the generated deck before accepting scene coverage. Detailed post-only/chasing demonstrations are not spoken in this Brief.",
+      "caption_normalization": "5 cues; timestamps and source audio unchanged"
+    }
+  },
+  "next_steps": [
+    "Download the English PDF from the corrected-source notebook when ready. Do not regenerate the failed original-source deck.",
+    "Download the already scheduled Russian audio and PDF after 19:00 Asia/Tbilisi; inspect narration before accepting it.",
+    "Confirm the visual style and inspect a representative slide before full restyling.",
+    "Build desktop and native vertical renders with exact semantic timelines, then complete media QA.",
+    "Await quality approval before any YouTube upload."
+  ]
+}
