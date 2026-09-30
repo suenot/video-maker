@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "slug": "algotrading-order-types",
+  "state": "metadata_draft_pending_sources_render_and_quality_review",
+  "channel_verification": "Recheck the actual EN/RU target channel in Camoufox Studio before any upload. The mutable handle in shared channel configuration is not sufficient evidence.",
+  "en": {
+    "desktop_title": "Order Types in Algo Trading: Trigger, Price, and Fill",
+    "short_title": "Your Stop Triggered. Why Is the Position Still Open?",
+    "desktop_description": "A triggered order, an execution price, and a completed fill are different things. This brief explains market and limit orders, IOC versus FOK, stop-market versus stop-limit, TWAP/VWAP pacing, and exchange-hosted versus locally managed linked orders. Neither stop type guarantees a completed exit. Prices and quantities shown in examples are illustrative.",
+    "short_description": "A stop condition activates an order. It does not guarantee a completed exit. See how liquidity, limit prices, and venue rules affect the outcome, then check trigger, price, partial fills, time in force, venue support, and strategy-process dependence.",
+    "tags": ["algorithmic trading", "order types", "market order", "limit order", "stop market", "stop limit", "IOC", "FOK", "TWAP", "VWAP", "OCO", "marketmaker"],
+    "thumbnail_text": "TRIGGERED DOES NOT MEAN FILLED",
+    "chapter_draft": [
+      {"time": "0:00", "title": "Trigger, price, and fill"},
+      {"time": "0:16", "title": "Market, limit, IOC, and FOK"},
+      {"time": "0:35", "title": "Stop orders and price gaps"},
+      {"time": "0:57", "title": "Pacing and linked orders"},
+      {"time": "1:13", "title": "The execution checklist"}
+    ],
+    "article": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md",
+    "article_url_candidate": "https://marketmaker.cc/en/blog/post/algotrading-order-types"
+  },
+  "ru": {
+    "desktop_title": "Типы ордеров: триггер, цена и исполнение",
+    "short_title": "Стоп сработал, а позиция осталась открытой. Почему?",
+    "description_state": "pending_review_of_actual_russian_notebooklm_narration",
+    "thumbnail_text": "СТОП СРАБОТАЛ. ПОЗИЦИЯ ОТКРЫТА",
+    "article": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.ru.md",
+    "article_url_candidate": "https://marketmaker.cc/ru/blog/post/algotrading-order-types"
+  },
+  "endcard": {
+    "duration_seconds": 10,
+    "silent": true,
+    "visible_contacts": ["marketmaker.cc", "t.me/marketmaker_cc"],
+    "contact_urls": ["https://marketmaker.cc", "https://t.me/marketmaker_cc"],
+    "desktop_next_video": {"value": null, "state": "not_in_scope"},
+    "shorts_next_video": {"value": null, "state": "not_in_scope"},
+    "native_aspects": {"desktop": [1920, 1080], "shorts": [1080, 1920]}
+  },
+  "delivery_constraints": [
+    "Descriptions are drafts. Verify their coverage against accepted narration before writing final upload metadata.",
+    "Do not include an article URL in upload descriptions until its production route is verified successful.",
+    "Add the exact desktop YouTube URL to the Short description only after approved desktop publication passes verification.",
+    "Keep desktop and Short titles distinct after case/punctuation normalization.",
+    "Validate every chapter against the final timeline, starting at 0:00 and keeping each chapter at least ten seconds.",
+    "Native vertical frames and contacts must pass safe-zone QA; no desktop-to-vertical crop.",
+    "This draft does not authorize uploading or publishing. Keep the quality-review approval gate."
+  ]
+}

@@ -87,7 +87,7 @@
         "state": "scheduled",
         "notebook": "https://notebook.google.com/notebook/74003a9e-c88a-4d5d-a593-70b94a0fa765",
         "requested_at": "2026-09-30T16:24:55+04:00",
-        "checked_at": "2026-09-30T18:47:55+04:00",
+        "checked_at": "2026-09-30T18:54:46+04:00",
         "retry_attempted_at": "2026-09-30T18:42:00+04:00",
         "retry_result": "Generate later submitted; scheduled Slide Deck card confirmed.",
         "after": "2026-09-30T19:00:00+04:00",
@@ -97,11 +97,13 @@
       },
       "ru_audio": {
         "state": "scheduled",
-        "after": "2026-09-30T19:00:00+04:00"
+        "after": "2026-09-30T19:00:00+04:00",
+        "checked_at": "2026-09-30T18:54:46+04:00"
       },
       "ru_slides": {
         "state": "scheduled",
-        "after": "2026-09-30T19:00:00+04:00"
+        "after": "2026-09-30T19:00:00+04:00",
+        "checked_at": "2026-09-30T18:54:46+04:00"
       },
       "original_en_slides": {
         "state": "failed",
@@ -119,9 +121,13 @@
       "caption_corrections": "temp/algotrading-order-types/en-revised/caption-corrections.json",
       "semantic_scenes": "storyboards/algotrading-order-types/semantic-scenes.en.json",
       "semantic_scenes_sha256": "750e0fb0a9ea0c25eb33562d159324762722c492c8b1139cdbf4ac39e79d3fe9",
-      "timeline_draft": "temp/algotrading-order-types/en-revised/timeline-draft.json"
+      "timeline_draft": "temp/algotrading-order-types/en-revised/timeline-draft.json",
+      "desktop_srt": "output/algotrading-order-types/algotrading-order-types-en-desktop.srt",
+      "short_srt": "output/algotrading-order-types/algotrading-order-types-en-short.srt"
     },
-    "ru": {}
+    "ru": {},
+    "publication_brief": "storyboards/algotrading-order-types/publication-brief.json",
+    "publication_brief_sha256": "67589557b2feb042bfc0f24eacb4d22d6efc2cc5cafea95bce130b08d519bc29"
   },
   "approvals": {
     "source": null,
