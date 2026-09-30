@@ -84,9 +84,14 @@
     },
     "generation_state": {
       "en_slides": {
-        "state": "generating",
+        "state": "failed",
         "notebook": "https://notebook.google.com/notebook/74003a9e-c88a-4d5d-a593-70b94a0fa765",
-        "requested_at": "2026-09-30T16:24:55+04:00"
+        "requested_at": "2026-09-30T16:24:55+04:00",
+        "message": "Slide Deck generation failed. Try a new one.",
+        "checked_at": "2026-09-30T18:08:30+04:00",
+        "retry_attempted_at": "2026-09-30T18:07:16+04:00",
+        "retry_result": "No queued or generating slide card appeared; the failure card remains.",
+        "retry_after": "2026-09-30T19:00:00+04:00"
       },
       "ru_audio": {
         "state": "scheduled",
@@ -155,7 +160,7 @@
     }
   },
   "next_steps": [
-    "Download the English PDF from the corrected-source notebook when ready. Do not regenerate the failed original-source deck.",
+    "Retry the English PDF from the corrected-source notebook after the quota reset at 19:00 Asia/Tbilisi, then verify the artifact card and download when ready. Do not regenerate the failed original-source deck.",
     "Download the already scheduled Russian audio and PDF after 19:00 Asia/Tbilisi; inspect narration before accepting it.",
     "Confirm the visual style and inspect a representative slide before full restyling.",
     "Build desktop and native vertical renders with exact semantic timelines, then complete media QA.",
