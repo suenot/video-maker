@@ -84,14 +84,16 @@
     },
     "generation_state": {
       "en_slides": {
-        "state": "failed",
+        "state": "scheduled",
         "notebook": "https://notebook.google.com/notebook/74003a9e-c88a-4d5d-a593-70b94a0fa765",
         "requested_at": "2026-09-30T16:24:55+04:00",
-        "message": "Slide Deck generation failed. Try a new one.",
-        "checked_at": "2026-09-30T18:08:30+04:00",
-        "retry_attempted_at": "2026-09-30T18:07:16+04:00",
-        "retry_result": "No queued or generating slide card appeared; the failure card remains.",
-        "retry_after": "2026-09-30T19:00:00+04:00"
+        "checked_at": "2026-09-30T18:47:55+04:00",
+        "retry_attempted_at": "2026-09-30T18:42:00+04:00",
+        "retry_result": "Generate later submitted; scheduled Slide Deck card confirmed.",
+        "after": "2026-09-30T19:00:00+04:00",
+        "previous_failure": "Slide Deck generation failed. Try a new one.",
+        "recovery_note": "The earlier attempt did not submit: Generate now was disabled by quota. The local helper now selects Generate later and checks the artifact card.",
+        "generation_helper": "temp/algotrading-order-types/gaia/run-notebooklm.py"
       },
       "ru_audio": {
         "state": "scheduled",
@@ -114,7 +116,10 @@
       "srt": "output/algotrading-order-types/algotrading-order-types-en.srt",
       "srt_sha256": "1bd2dc16529ab1d68f701e0ce351207f69a22dc38224d9d624ab556213ec02b4",
       "transcript": "temp/algotrading-order-types/en-revised/subtitles-corrected.json",
-      "caption_corrections": "temp/algotrading-order-types/en-revised/caption-corrections.json"
+      "caption_corrections": "temp/algotrading-order-types/en-revised/caption-corrections.json",
+      "semantic_scenes": "storyboards/algotrading-order-types/semantic-scenes.en.json",
+      "semantic_scenes_sha256": "750e0fb0a9ea0c25eb33562d159324762722c492c8b1139cdbf4ac39e79d3fe9",
+      "timeline_draft": "temp/algotrading-order-types/en-revised/timeline-draft.json"
     },
     "ru": {}
   },
@@ -157,10 +162,16 @@
       "stop_order_caveat": "explicitly retained at 43.34-56.58s",
       "coverage_note": "Brief overview; inspect the generated deck before accepting scene coverage. Detailed post-only/chasing demonstrations are not spoken in this Brief.",
       "caption_normalization": "5 cues; timestamps and source audio unchanged"
+    },
+    "en_semantic_scenes": {
+      "status": "semantic_draft_pending_pdf_and_style_proof",
+      "scene_count": 11,
+      "transcript_segment_count": 25,
+      "segment_coverage": "Every accepted transcript segment exactly once, with continuous 0-92.16s boundaries; source audio hash verified."
     }
   },
   "next_steps": [
-    "Retry the English PDF from the corrected-source notebook after the quota reset at 19:00 Asia/Tbilisi, then verify the artifact card and download when ready. Do not regenerate the failed original-source deck.",
+    "After 19:00 Asia/Tbilisi, inspect the already scheduled English PDF card and download when ready. Do not create another generation request while the card is scheduled or generating.",
     "Download the already scheduled Russian audio and PDF after 19:00 Asia/Tbilisi; inspect narration before accepting it.",
     "Confirm the visual style and inspect a representative slide before full restyling.",
     "Build desktop and native vertical renders with exact semantic timelines, then complete media QA.",

@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "slug": "algotrading-order-types",
+  "language": "en",
+  "status": "semantic_draft_pending_notebooklm_pdf_and_style_proof",
+  "audio": "input/algotrading-order-types/audio_en.m4a",
+  "audio_sha256": "cf2d04c8b8e74b4bc468494a052e9dbe330e092d11ccdeb7e8cb45fc98aa9206",
+  "audio_duration_seconds": 92.16,
+  "transcript": "temp/algotrading-order-types/en-revised/subtitles-corrected.json",
+  "global_constraints": [
+    "Preserve the original accepted NotebookLM narration and its timestamps.",
+    "Use the downloaded NotebookLM PDF as the semantic reference before image generation; this file is a draft scene map, not final art approval.",
+    "Do not copy source watermarks, logos, invented commands, QR codes, or unrelated visual-example content.",
+    "Do not imply guaranteed execution, better price, or profit.",
+    "Any quantities and prices are illustrative and must be labeled Illustrative.",
+    "Render each aspect independently from the same meaning; do not crop desktop art into a Short."
+  ],
+  "layouts": {
+    "desktop": "1920x1080. Keep comparison columns and arrows readable. One thesis per frame.",
+    "shorts": "1080x1920. Stack comparisons vertically; keep critical content within x=80..850, y=180..1430, with x=900..1080 and y=1500..1920 quiet."
+  },
+  "cover": {"role": "separate_thumbnail", "in_narrated_timeline": false},
+  "endcard": {"role": "silent_after_narration", "duration_seconds": 10, "contacts": "pending_channel_metadata", "shorts_next_video_block": false},
+  "scenes": [
+    {
+      "id": 1, "frame": "slide_001.png", "start": 0, "end": 10.58, "subtitle_segments": [0, 1, 2],
+      "thesis": "Trigger, execution price, and completed fill are distinct events.",
+      "visible_text": ["TRIGGER", "EXECUTION PRICE", "COMPLETED FILL", "Three different things"],
+      "relationships": "Show three separate labeled states connected in order; mark each transition as conditional rather than automatic.",
+      "forbidden": ["A trigger automatically guarantees a full fill", "An execution-price label presented as a guaranteed market price"]
+    },
+    {
+      "id": 2, "frame": "slide_002.png", "start": 10.58, "end": 18.76, "subtitle_segments": [3, 4],
+      "thesis": "Submitting an order is a request whose outcome depends on market constraints.",
+      "visible_text": ["AN ORDER IS A REQUEST", "Liquidity", "Venue rules", "Possible outcomes", "Filled", "Partially filled", "Unfilled"],
+      "relationships": "Route one submitted request through a constraints box into alternative outcomes; outcomes must branch rather than appear as required successive steps.",
+      "forbidden": ["Treating every request as a completed trade", "Unfilled shown as necessarily failed software"]
+    },
+    {
+      "id": 3, "frame": "slide_003.png", "start": 18.76, "end": 23.02, "subtitle_segments": [5],
+      "thesis": "A market order seeks available liquidity without guaranteeing a price or complete fill.",
+      "visible_text": ["MARKET ORDER", "Seeks immediate liquidity", "Price and full fill are not guaranteed"],
+      "relationships": "An incoming order consumes available book liquidity across distinct price levels; do not show a fixed guaranteed execution price.",
+      "forbidden": ["Guaranteed execution", "Guaranteed best price", "Assuming infinite liquidity"]
+    },
+    {
+      "id": 4, "frame": "slide_004.png", "start": 23.02, "end": 25.96, "subtitle_segments": [6],
+      "thesis": "A limit order bounds acceptable execution prices while remaining subject to fill availability.",
+      "visible_text": ["LIMIT ORDER", "BUY: MAX PRICE", "SELL: MIN PRICE", "Fill is not guaranteed"],
+      "relationships": "Separate buy and sell limits clearly, showing a maximum for buy and a minimum for sell. Keep copy short for this 2.94-second scene.",
+      "forbidden": ["Buy limit described as minimum price", "Sell limit described as maximum price", "Every limit order is a maker"]
+    },
+    {
+      "id": 5, "frame": "slide_005.png", "start": 25.96, "end": 35.68, "subtitle_segments": [7, 8],
+      "thesis": "IOC cancels the unfilled remainder; FOK executes the entire quantity immediately or cancels.",
+      "visible_text": ["TIME IN FORCE", "IOC", "Immediate or Cancel", "Partial fill allowed; cancel remainder", "FOK", "Fill or Kill", "Full quantity immediately or cancel"],
+      "relationships": "Compare IOC and FOK using the same available liquidity. If using order quantity 5 and available quantity 2, IOC fills 2 and cancels 3, while FOK cancels the entire 5 without a partial fill. Include Illustrative if numbers appear.",
+      "forbidden": ["IOC requires a complete immediate fill", "FOK allows a partial fill", "A claim that all venues offer every time-in-force option"]
+    },
+    {
+      "id": 6, "frame": "slide_006.png", "start": 35.68, "end": 43.34, "subtitle_segments": [9, 10, 11],
+      "thesis": "A stop condition activates an order; the trigger itself is not an execution guarantee.",
+      "visible_text": ["STOP = TRIGGER", "Trigger activates an order", "Not an absolute safety net"],
+      "relationships": "Show condition reached, then a new order submitted; keep a visible separation between trigger and execution outcome.",
+      "forbidden": ["A trigger marker labeled as executed trade", "A guarantee of an exit at the stop price"]
+    },
+    {
+      "id": 7, "frame": "slide_007.png", "start": 43.34, "end": 57.10, "subtitle_segments": [12, 13, 14],
+      "thesis": "Stop-market submits a market order; stop-limit submits a limit order, and neither guarantees a completed exit.",
+      "visible_text": ["STOP-MARKET", "Submits a market order", "Liquidity and venue limits can prevent a full fill", "STOP-LIMIT", "Submits a limit order", "Can remain unfilled after a price gap", "NEITHER GUARANTEES A COMPLETED EXIT"],
+      "relationships": "Use the same price-gap event for both branches. Distinguish the trigger threshold from the submitted limit and from actual fills. The warning must remain legible in both aspect ratios.",
+      "forbidden": ["Stop-market always gets you filled", "Stop-limit automatically fills after a gap", "Identical icons implying identical execution behavior"]
+    },
+    {
+      "id": 8, "frame": "slide_008.png", "start": 57.10, "end": 67.28, "subtitle_segments": [15, 16, 17],
+      "thesis": "TWAP and VWAP guide pacing or benchmarks without guaranteeing a better price.",
+      "visible_text": ["EXECUTION ALGORITHMS", "TWAP", "Time-weighted", "VWAP", "Volume-weighted", "Control pacing or a benchmark", "No better-price guarantee"],
+      "relationships": "Show an order split over time for TWAP and a volume-related execution pattern for VWAP. Present both as execution methods rather than price predictions.",
+      "forbidden": ["Guaranteed lower cost", "Guaranteed alpha", "VWAP represented as equal slices regardless of volume"]
+    },
+    {
+      "id": 9, "frame": "slide_009.png", "start": 67.28, "end": 73, "subtitle_segments": [18],
+      "thesis": "Linked order conditions can be exchange-hosted or managed by a local strategy.",
+      "visible_text": ["LINKED ORDERS", "OCO", "Exchange-hosted", "Locally managed", "Venue support varies", "Local conditions depend on the strategy process"],
+      "relationships": "Show two clearly labeled locations for the condition logic. Local process/connectivity dependence applies to locally managed conditions, not universally to native OCO.",
+      "forbidden": ["All OCO orders are synthetic", "Stopping a bot automatically cancels exchange-accepted orders", "Universal venue support"]
+    },
+    {
+      "id": 10, "frame": "slide_010.png", "start": 73, "end": 83.86, "subtitle_segments": [19, 20, 21],
+      "thesis": "Specify both desired behavior and failure handling for every order.",
+      "visible_text": ["BEFORE EVERY ORDER", "Trigger", "Acceptable price", "Partial-fill behavior", "Time in force", "Venue support", "Strategy-process dependence"],
+      "relationships": "Present six distinct checklist rows with equal visual weight; keep the final two items visible in the native vertical safe zone.",
+      "forbidden": ["A trading signal presented as the entire execution checklist", "Unreadable six-column vertical layout"]
+    },
+    {
+      "id": 11, "frame": "slide_011.png", "start": 83.86, "end": 92.16, "subtitle_segments": [22, 23, 24],
+      "thesis": "Design the execution system for failures as well as the ideal trade.",
+      "visible_text": ["DESIGN FOR THE FAILURE CASE", "Plan the trade", "Engineer the execution"],
+      "relationships": "Reconnect request, constraints, and observed outcome. Keep the final narrated frame through the audio tail; the silent contacts card follows it.",
+      "forbidden": ["A guaranteed winning strategy", "A claim that these order choices alone create profit", "Ending the frame before the complete final sentence"]
+    }
+  ]
+}
