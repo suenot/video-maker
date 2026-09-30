@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Resume the bilingual order-types package through Gaia/NotebookLM with primary-source factual guardrails and recorded source provenance.
+- Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
 
 ## [1.0.0] - 2026-08-13
 
