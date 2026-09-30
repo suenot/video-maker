@@ -139,14 +139,17 @@
       "transcript": "temp/algotrading-order-types/en-revised/subtitles-corrected.json",
       "caption_corrections": "temp/algotrading-order-types/en-revised/caption-corrections.json",
       "semantic_scenes": "storyboards/algotrading-order-types/semantic-scenes.en.json",
-      "semantic_scenes_sha256": "750e0fb0a9ea0c25eb33562d159324762722c492c8b1139cdbf4ac39e79d3fe9",
+      "semantic_scenes_sha256": "eaebbb729941fb61704c74ae1eeb19b532c19023b0284cd03a210cd09458c18b",
       "timeline_draft": "temp/algotrading-order-types/en-revised/timeline-draft.json",
       "desktop_srt": "output/algotrading-order-types/algotrading-order-types-en-desktop.srt",
-      "short_srt": "output/algotrading-order-types/algotrading-order-types-en-short.srt"
+      "short_srt": "output/algotrading-order-types/algotrading-order-types-en-short.srt",
+      "transcript_sha256": "d35377af704d03b83d427d81df9a9c56c3cd138188b0ae1f7077be68d8381f7d",
+      "raw_asr_transcript": "temp/algotrading-order-types/en-revised/subtitles.json",
+      "raw_asr_sha256": "3f972d211b8eaf4549115ca8dd0f7dce00343e0dc5bfb11a1411904cf220c971"
     },
     "ru": {},
     "publication_brief": "storyboards/algotrading-order-types/publication-brief.json",
-    "publication_brief_sha256": "67589557b2feb042bfc0f24eacb4d22d6efc2cc5cafea95bce130b08d519bc29"
+    "publication_brief_sha256": "88cb7b94627992949cfb10973d49789da857e335dfc9df69dfd42f8b5fa2c2a7"
   },
   "approvals": {
     "source": null,
@@ -190,9 +193,26 @@
     },
     "en_semantic_scenes": {
       "status": "semantic_draft_pending_pdf_and_style_proof",
-      "scene_count": 11,
+      "scene_count": 10,
       "transcript_segment_count": 25,
-      "segment_coverage": "Every accepted transcript segment exactly once, with continuous 0-92.16s boundaries; source audio hash verified."
+      "segment_coverage": "All 25 accepted transcript segments exactly once across 10 contiguous scenes, 0-92.16s; original audio and all SRT hashes unchanged."
+    },
+    "en_package_review": {
+      "reviewer_model": "gpt-6.1-sol",
+      "reasoning_effort": "ultra",
+      "status": "draft_findings_resolved",
+      "corrections": [
+        "Rebuilt full transcript text from corrected segment copy; raw word/token data stays in the separate original ASR artifact.",
+        "Combined market and limit into one 7.2-second comparison frame; source audio, caption text, and caption timing remain unchanged."
+      ],
+      "scope_limit": "Source PDF, style proof, frames, native-aspect safe zones, final cuts and media decode remain unverified.",
+      "rechecked_at": "2026-09-30T16:40:05+00:00"
+    },
+    "publication_article_links": {
+      "status": "passed",
+      "checked_at": "2026-09-30T16:40:51+00:00",
+      "evidence": "temp/algotrading-order-types/publication-link-check/result.json",
+      "checks": "EN/RU production URLs return HTTP 200 with the expected article title, slug and document language."
     }
   },
   "next_steps": [

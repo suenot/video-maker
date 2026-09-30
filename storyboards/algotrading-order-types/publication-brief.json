@@ -18,7 +18,13 @@
       {"time": "1:13", "title": "The execution checklist"}
     ],
     "article": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md",
-    "article_url_candidate": "https://marketmaker.cc/en/blog/post/algotrading-order-types"
+    "article_url": "https://marketmaker.cc/en/blog/post/algotrading-order-types",
+    "article_url_verification": {
+      "checked_at": "2026-09-30T16:40:51+00:00",
+      "http_status": 200,
+      "title": "Order Types in Algorithmic Trading: From Limit with Chasing to Virtual Orders",
+      "language": "en"
+    }
   },
   "ru": {
     "desktop_title": "Типы ордеров: триггер, цена и исполнение",
@@ -26,7 +32,13 @@
     "description_state": "pending_review_of_actual_russian_notebooklm_narration",
     "thumbnail_text": "СТОП СРАБОТАЛ. ПОЗИЦИЯ ОТКРЫТА",
     "article": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.ru.md",
-    "article_url_candidate": "https://marketmaker.cc/ru/blog/post/algotrading-order-types"
+    "article_url": "https://marketmaker.cc/ru/blog/post/algotrading-order-types",
+    "article_url_verification": {
+      "checked_at": "2026-09-30T16:40:51+00:00",
+      "http_status": 200,
+      "title": "Виды ордеров в алготрейдинге: от limit с chasing до virtual orders",
+      "language": "ru"
+    }
   },
   "endcard": {
     "duration_seconds": 10,
