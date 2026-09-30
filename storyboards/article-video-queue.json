@@ -2,7 +2,7 @@
   "schema_version": 1,
   "project": "marketmaker",
   "mode": "continuous_notebooklm_production",
-  "updated_at": "2026-09-30T21:49:31.640407+00:00",
+  "updated_at": "2026-09-30T22:12:08.452866+00:00",
   "current_slug": "algotrading-order-types",
   "priority_order": [
     "algotrading-order-types",
@@ -17,7 +17,7 @@
   "ordered_work": [
     {
       "task": "algotrading-order-types",
-      "state": "ready_for_quality_review",
+      "state": "rejected_wrong_flow",
       "done_when": "EN/RU desktop and native vertical package passes QA, sources/manifests are recorded, and reusable changes are committed and pushed; publication approval may remain pending."
     },
     {
@@ -45,7 +45,7 @@
     }
   ],
   "items": [
-    {"slug": "algotrading-order-types","languages": {"en": {"article": "marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md","youtube": null,"draft": false,"date": "2026-03-23"},"ru": {"article": "marketmaker-cc-landing/src/content/blog/algotrading-order-types.ru.md","youtube": null,"draft": false,"date": "2026-03-23"}},"local_mp4": ["output/algotrading-order-types/algotrading-order-types-en-desktop.mp4","output/algotrading-order-types/algotrading-order-types-en-short.mp4","output/algotrading-order-types/algotrading-order-types-ru-desktop.mp4","output/algotrading-order-types/algotrading-order-types-ru-short.mp4"],"manifest": "storyboards/algotrading-order-types/production-manifest.json","languages_without_article_video_link": ["en","ru"],"state": "ready_for_quality_review"},
+    {"slug": "algotrading-order-types","languages": {"en": {"article": "marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md","youtube": null,"draft": false,"date": "2026-03-23"},"ru": {"article": "marketmaker-cc-landing/src/content/blog/algotrading-order-types.ru.md","youtube": null,"draft": false,"date": "2026-03-23"}},"local_mp4": ["output/algotrading-order-types/algotrading-order-types-en-desktop.mp4","output/algotrading-order-types/algotrading-order-types-en-short.mp4","output/algotrading-order-types/algotrading-order-types-ru-desktop.mp4","output/algotrading-order-types/algotrading-order-types-ru-short.mp4"],"manifest": "storyboards/algotrading-order-types/production-manifest.json","languages_without_article_video_link": ["en","ru"],"state": "rejected_wrong_flow"},
     {"slug": "funding-rate-arbitrage-cross-exchange","languages": {"en": {"article": "marketmaker-cc-landing/src/content/blog/funding-rate-arbitrage-cross-exchange.en.md","youtube": null,"draft": false,"date": "2026-03-05"},"ru": {"article": "marketmaker-cc-landing/src/content/blog/funding-rate-arbitrage-cross-exchange.ru.md","youtube": null,"draft": false,"date": "2026-03-05"}},"local_mp4": [],"manifest": null,"languages_without_article_video_link": ["en","ru"],"state": "verify_video_absence_before_generation"},
     {"slug": "statistical-arbitrage-pairs-trading-crypto","languages": {"en": {"article": "marketmaker-cc-landing/src/content/blog/statistical-arbitrage-pairs-trading-crypto.en.md","youtube": null,"draft": false,"date": "2026-03-19"},"ru": {"article": "marketmaker-cc-landing/src/content/blog/statistical-arbitrage-pairs-trading-crypto.ru.md","youtube": null,"draft": false,"date": "2026-03-19"}},"local_mp4": [],"manifest": null,"languages_without_article_video_link": ["en","ru"],"state": "verify_video_absence_before_generation"},
     {"slug": "order-flow-imbalance-prediction","languages": {"en": {"article": "marketmaker-cc-landing/src/content/blog/order-flow-imbalance-prediction.en.md","youtube": null,"draft": false,"date": "2026-08-17"},"ru": {"article": "marketmaker-cc-landing/src/content/blog/order-flow-imbalance-prediction.ru.md","youtube": null,"draft": false,"date": "2026-08-17"}},"local_mp4": [],"manifest": null,"languages_without_article_video_link": ["en","ru"],"state": "verify_video_absence_before_generation"},

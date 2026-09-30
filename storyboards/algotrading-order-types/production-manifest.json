@@ -6,7 +6,7 @@
     "ru"
   ],
   "scope": "Gaia/NotebookLM audio and slide decks, then video-maker desktop and independent Shorts for both channels",
-  "status": "ready_for_quality_review",
+  "status": "rejected_wrong_flow",
   "sources": {
     "article_en": {
       "path": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md",
@@ -304,7 +304,8 @@
       "short_metadata": "output/algotrading-order-types/algotrading-order-types-en-short_metadata.json",
       "raw_asr_transcript_sha256": "3f972d211b8eaf4549115ca8dd0f7dce00343e0dc5bfb11a1411904cf220c971",
       "frame_source_sha256": "d0bd3b40ef32aa848e6652e116f947585a7681484feedfb4c7910978930d143f",
-      "timeline_sha256": "bd9f08118edc3848a4c363ba9a325b02f30aa820d8389168da90ece2a2c55041"
+      "timeline_sha256": "bd9f08118edc3848a4c363ba9a325b02f30aa820d8389168da90ece2a2c55041",
+      "quality_status": "rejected_wrong_flow"
     },
     "ru": {
       "audio": "input/algotrading-order-types/audio_ru_edited.m4a",
@@ -331,7 +332,8 @@
       "timeline_sha256": "dc5e31673197b3c70438b81069bb204866adc156f0c7a5b953417e1618cb59fb",
       "srt_sha256": "9b869da00a7c32eb3f3e5123d86256d4fe68171331c499b8ce87290ede32a31b",
       "srt": "output/algotrading-order-types/algotrading-order-types-ru-desktop.srt",
-      "edit_decision_list": "storyboards/algotrading-order-types/audio-edit.ru.json"
+      "edit_decision_list": "storyboards/algotrading-order-types/audio-edit.ru.json",
+      "quality_status": "rejected_wrong_flow"
     },
     "publication_brief": "storyboards/algotrading-order-types/publication-brief.json",
     "publication_brief_sha256": "efd10a4a958ed50d776a8df316d1f373e81d90a9cc64361b272165ee41f490b7",
@@ -353,7 +355,7 @@
   },
   "workflow_constraints": {
     "browser": "Camoufox only; never operate Firefox or bootstrap from its cookies",
-    "publication": "pending_quality_approval",
+    "publication": "blocked_rejected_package",
     "discarded_previous_build": "b613f8b reverted by 5d0caa8; selfmade renders are not accepted NotebookLM artifacts"
   },
   "qa": {
@@ -364,7 +366,7 @@
       "reason": "At 36.18-46.74s, \"a stop market gets you filled\" incorrectly implies execution is guaranteed. A revised NotebookLM audio is required."
     },
     "style": {
-      "status": "selected_proof_inspected",
+      "status": "rejected_by_user",
       "style_id": "01-engineering-blueprint",
       "human_quality_approval": null
     },
@@ -526,15 +528,20 @@
         "Title/description/tag size limits; verified article URLs; language-specific metadata and equal aspect SRTs."
       ],
       "human_quality_approval": null
+    },
+    "human_quality_review": {
+      "status": "rejected",
+      "reason": "The user rejected all four Blueprint videos: agent-authored scenes replaced the existing NotebookLM slides/PDF flow. Technical QA does not establish acceptance.",
+      "recorded_at": "2026-09-30T22:12:08.452866+00:00"
     }
   },
   "next_steps": [
-    "Human quality review of the four concrete videos, including Russian pronunciation and the edited audio join.",
-    "Complete the queued pipeline audit before starting the next article.",
-    "Upload/publish only after quality approval and explicit target-channel verification."
+    "Reuse the existing documented Gaia/NotebookLM audio + PDF and video-maker stages; do not run the rejected native-frame generators.",
+    "Apply the historical instruction to restyle the actual NotebookLM slides through Codex GPT Image with their content retained.",
+    "Complete the current package before pipeline implementation or another article. Publish only after human quality approval."
   ],
   "style": {
-    "status": "selected_proof_inspected",
+    "status": "rejected_by_user",
     "library_id": "buzz-hook-slide",
     "style_id": "01-engineering-blueprint",
     "contract": "storyboards/algotrading-order-types/style-contract.json",
@@ -546,5 +553,26 @@
       "output/algotrading-order-types/style-proof/ioc-fok-native-short.png"
     ]
   },
-  "updated_at": "2026-09-30T21:49:31.640407+00:00"
+  "updated_at": "2026-09-30T22:12:08.452866+00:00",
+  "flow_recovery": {
+    "status": "existing_flow_located_and_studied",
+    "description": "README.md:11-34,94-126",
+    "runner": "scripts/run_pipeline.sh",
+    "claude_evidence": {
+      "session": "/Users/suenot/.claude/projects/-Users-suenot-projects-trading-marketmaker/9c22e0ae-a669-4bd7-9ea6-ee7a33051846.jsonl",
+      "date": "2026-08-02",
+      "flow_line": 170,
+      "generation_line": 523,
+      "build_line": 629,
+      "completed_eight_line": 1620
+    },
+    "codex_evidence": {
+      "session": "/Users/suenot/.codex/sessions/2026/08/20/rollout-2026-08-20T00-18-20-01a01be3-a9f3-7d30-8ced-b0a7cab33a2f.jsonl",
+      "separate_audio_slides_line": 222,
+      "restyle_actual_slides_line": 1368,
+      "codex_image_requirement_line": 1448
+    },
+    "reuse_required": true,
+    "new_pipeline_required": false
+  }
 }

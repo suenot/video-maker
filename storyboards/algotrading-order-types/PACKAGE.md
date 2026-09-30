@@ -1,8 +1,10 @@
 # Order types video package
 
-The four local videos are ready for human quality review. The production
-manifest is authoritative; publication approval and human audio listening remain
-pending. English narration is the previously accepted NotebookLM source, with
+The user rejected all four local Blueprint videos because the existing
+NotebookLM slide-and-audio flow was replaced with agent-authored diagrams.
+They are retained as rejected artifacts, not as an accepted production package.
+The production manifest is authoritative; publication is blocked.
+English narration is the previously accepted NotebookLM source, with
 its original account provenance retained. Both new PDFs and the Russian source
 were generated through the designated Gaia Camoufox account.
 
@@ -26,7 +28,15 @@ duration change, source/production hashes and repeated transcription. Human
 review should include pronunciation and the audio join. Captions use written
 order-type acronyms; caption normalization is not an audio correction.
 
-## Rebuild the accepted native frames
+## Historical reproduction of the rejected native frames
+
+The commands below reproduce the rejected package only. Do not use them to
+resume production. The existing flow is documented in [README.md](../../README.md)
+and implemented in [run_pipeline.sh](../../scripts/run_pipeline.sh): separate
+NotebookLM audio and PDF deck, PDF pages to PNG, OCR and Whisper, slide alignment,
+then video assembly. The August 2 Claude session records eight completed videos
+using this flow. The August 20 Codex instructions require any Ink Theater
+restyling to edit the actual NotebookLM slides while retaining their content.
 
 Use Codex `load_workspace_dependencies` to obtain the current dependency root
 and bundled Node executable. Set `ORDER_TYPES_RUNTIME_ROOT` to that root and
@@ -44,7 +54,7 @@ accepted semantic contracts and Noto Sans fonts from the bundled runtime. All
 SHA-256 matches during delivery. A changed runtime, source, contract or frame
 requires checking the affected outputs before rendering.
 
-Render only these aspect-matched frames with the accepted language audio and
+The rejected renders used these aspect-matched frames with the language audio and
 timeline from the manifest. Cover images do not consume narration. Use the
 canonical video maker and pre-rendered contacts-only cards; keep final video
 timing at constant 30 fps. The delivered files include a CFR normalization of

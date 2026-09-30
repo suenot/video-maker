@@ -6,14 +6,24 @@ without videos through Google NotebookLM. The active Goal belongs to Codex chat
 checks this same chat every 30 minutes; it is a continuation check, not a second
 browser worker.
 
-Use the canonical [YouTube content pipeline](../.agents/skills/youtube-content-pipeline/SKILL.md).
+The existing NotebookLM production flow is described in
+[README.md](../README.md) and implemented by
+[run_pipeline.sh](../scripts/run_pipeline.sh). It already performs PDF page
+extraction, OCR, Whisper transcription, slide/audio alignment and video assembly.
+Reuse these stages; do not recreate the pipeline or replace the NotebookLM deck
+with agent-authored diagrams. The August 2 Claude session records eight completed
+videos through this flow. Apply the additional
+[YouTube content pipeline](../.agents/skills/youtube-content-pipeline/SKILL.md)
+contracts within the user's requested flow.
 The queue is [article-video-queue.json](article-video-queue.json). Individual
 `storyboards/<slug>/production-manifest.json` files remain authoritative for
 source provenance, actual progress, QA, approvals, and publication records.
 
 ## Order and completion
 
-1. Finish `algotrading-order-types` EN/RU first.
+1. Finish `algotrading-order-types` EN/RU first. The user rejected its four
+   Blueprint renders on 2026-10-01; they do not complete this task. Original
+   flow discovery is complete, and production must reuse the existing stages.
 2. Complete the user-requested pipeline audit and justified efficiency
    improvements. Delegate bounded audit scopes to `gpt-6.1-sol` with `ultra`
    reasoning; keep the parent chat on its configured model and effort. Audit
@@ -49,7 +59,7 @@ Do not label an unfinished render as delivered to advance the queue.
   stopped until sign-in and the expected account are verified. Reconcile
   notebooks in that account before starting a watcher or new source jobs;
   retain previous-session jobs and accepted media with their actual provenance.
-- Generate narration and the semantic slide reference in NotebookLM. Preserve
+- Generate separate narration and slide-deck artifacts in NotebookLM. Preserve
   the original audio/PDF and hashes; audit technical claims before accepting
   them. Do not replace this source stage with locally authored TTS or slides.
 - Generated media, profiles, screenshots, and download logs stay in ignored
@@ -94,6 +104,9 @@ An explicit user pause or stop takes precedence over scheduled continuation.
 
 ## Rendering and review
 
+The August 20 Codex instructions require Ink Theater restyling to edit each
+actual NotebookLM slide through Codex GPT Image, preserving its text, diagrams
+and explanatory structure. Do not substitute newly invented diagrams or posters.
 Follow the canonical style-proof gate before full restyling. Keep source
 meaning separate from visual examples, and preserve the requested NotebookLM
 production flow. Build independent 1920x1080 desktop and 1080x1920 vertical
