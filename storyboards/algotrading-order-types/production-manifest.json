@@ -6,7 +6,7 @@
     "ru"
   ],
   "scope": "Gaia/NotebookLM audio and slide decks, then video-maker desktop and independent Shorts for both channels",
-  "status": "notebooklm_account_login_required",
+  "status": "ready_for_quality_review",
   "sources": {
     "article_en": {
       "path": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md",
@@ -41,21 +41,85 @@
     "narration_source_en": {
       "path": "storyboards/algotrading-order-types/narration-source.en.md",
       "sha256": "93b031d76d9f9c1b3d0e8253faafff4085832f8730371885d81c79ed535533c0"
+    },
+    "narration_source_ru": {
+      "path": "storyboards/algotrading-order-types/narration-source.ru.md",
+      "sha256": "29e0bf784437aa9526be833fa4d6f9e8fc845bb852857ee092592c7058057bdf"
+    },
+    "slides_en": {
+      "path": "input/algotrading-order-types/slides_en.pdf",
+      "sha256": "7682dbb040787eb51edcaae75e8ebed18dd86ffeff2ba9a7bbb91d2b13fcf66a",
+      "page_count": 11,
+      "notebook": "https://notebook.google.com/notebook/b991882e-33a5-43e5-86d2-bb92a18b1328",
+      "gaia_path": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/en/notebooklm_slides_20261001_004440.pdf"
+    },
+    "slides_ru": {
+      "path": "input/algotrading-order-types/slides_ru.pdf",
+      "sha256": "a969657b6bda616009dfb12ced8009a62a9ee92245aa43bd70ba5a409aef861f",
+      "page_count": 11,
+      "notebook": "https://notebook.google.com/notebook/110d2424-6b00-4862-8136-73733595d8c1",
+      "gaia_path": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/ru/notebooklm_slides_20261001_005025.pdf"
+    },
+    "rejected_audio_ru_first": {
+      "path": "input/algotrading-order-types/rejected/audio_ru_first.m4a",
+      "sha256": "4cd2ee65c4ba090ded71ae912dc4c444496433ae0ab2fa1804da79fef9325116",
+      "duration_seconds": 135.813515,
+      "codec": "aac",
+      "sample_rate": 44100,
+      "channels": 2,
+      "notebook": "https://notebook.google.com/notebook/110d2424-6b00-4862-8136-73733595d8c1",
+      "gaia_path": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/ru/notebooklm_audio_20261001_004902.m4a",
+      "full_decode": "passed",
+      "factual_review": "rejected",
+      "reason": "Recognized wording at 35.80-41.34s overstates time-in-force as preventing partial or unfilled outcomes; captions cannot repair source audio.",
+      "asr": "temp/algotrading-order-types/ru-source/subtitles.json"
+    },
+    "audio_ru": {
+      "path": "input/algotrading-order-types/audio_ru_edited.m4a",
+      "sha256": "3104da7922501ba88d0027b1043666799cfc2d61099570e71f636b7e3e72771a",
+      "duration_seconds": 133.588912,
+      "codec": "aac",
+      "sample_rate": 44100,
+      "channels": 2,
+      "notebook": "https://notebook.google.com/notebook/110d2424-6b00-4862-8136-73733595d8c1",
+      "artifact_id": "a751cbca-55b9-48e3-9aba-cc96f4ec80ce",
+      "artifact_title": "Почему биржевой ордер может не исполниться",
+      "full_decode": "passed",
+      "factual_review": "passed_after_recorded_clause_edit",
+      "original_audio_sha256": "b6f17c037878960fe003ffcd3770cf2ff9f3f45c3e3d2adb207effbb9a95c889",
+      "edit_decision_list": "storyboards/algotrading-order-types/audio-edit.ru.json",
+      "human_listening": "pending",
+      "original_gaia_path": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/ru/revised-audio/notebooklm_audio_bound_20261001_011347.m4a",
+      "derived_from": "audio_ru_original"
+    },
+    "audio_ru_original": {
+      "path": "input/algotrading-order-types/audio_ru_original.m4a",
+      "sha256": "b6f17c037878960fe003ffcd3770cf2ff9f3f45c3e3d2adb207effbb9a95c889",
+      "duration_seconds": 137.438912,
+      "codec": "aac",
+      "sample_rate": 44100,
+      "channels": 2,
+      "notebook": "https://notebook.google.com/notebook/110d2424-6b00-4862-8136-73733595d8c1",
+      "artifact_id": "a751cbca-55b9-48e3-9aba-cc96f4ec80ce",
+      "artifact_title": "Почему биржевой ордер может не исполниться",
+      "gaia_path": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/ru/revised-audio/notebooklm_audio_bound_20261001_011347.m4a",
+      "full_decode": "passed",
+      "factual_review": "Preserved original; unsupported queue-priority-loss clause removed only in the separate production audio."
     }
   },
   "gaia": {
     "checkout": "/Users/suenot/projects/sdvg/gaia",
     "audio": {
       "en": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/en/revised-audio/notebooklm_audio_20260930_162318.m4a",
-      "ru": null
+      "ru": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/ru/revised-audio/notebooklm_audio_bound_20261001_011347.m4a"
     },
     "slides": {
-      "en": null,
-      "ru": null
+      "en": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/en/notebooklm_slides_20261001_004440.pdf",
+      "ru": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/ru/notebooklm_slides_20261001_005025.pdf"
     },
     "shorts": {
-      "en": null,
-      "ru": null
+      "en": "Independent native video-maker frames based on reviewed NotebookLM sources.",
+      "ru": "Independent native video-maker frames based on reviewed NotebookLM sources."
     },
     "browser": "camoufox_only",
     "session_profile": "/Users/suenot/projects/sdvg/gaia/.camoufox_profile",
@@ -66,7 +130,7 @@
       "poll_interval_seconds": 120,
       "ownership": "One Camoufox context; read-only polling; exits on a ready source or an explicitly failed new job.",
       "active": false,
-      "stop_reason": "Stopped for account correction; active notebooks must be reconciled after the designated Gaia account is authenticated."
+      "stop_reason": "All missing source media downloaded; observer exited when Russian audio became ready."
     },
     "previous_session_notebooks": {
       "en": "https://notebook.google.com/notebook/74003a9e-c88a-4d5d-a593-70b94a0fa765",
@@ -74,8 +138,8 @@
       "en_original": "https://notebook.google.com/notebook/a6ceb6b3-eec8-4068-bfe8-b014b53cd555"
     },
     "notebooks": {
-      "en": null,
-      "ru": null
+      "en": "https://notebook.google.com/notebook/b991882e-33a5-43e5-86d2-bb92a18b1328",
+      "ru": "https://notebook.google.com/notebook/110d2424-6b00-4862-8136-73733595d8c1"
     },
     "previous_session_generation_state": {
       "en_slides": {
@@ -105,17 +169,38 @@
         "message": "Slide Deck generation failed. Try a new one."
       }
     },
-    "generation_state": {},
+    "generation_state": {
+      "en_slides": {
+        "state": "downloaded",
+        "notebook": "https://notebook.google.com/notebook/b991882e-33a5-43e5-86d2-bb92a18b1328",
+        "checked_at": "2026-09-30T20:45:03.722078+00:00",
+        "evidence": "temp/algotrading-order-types/gaia/pdf-download-en.json"
+      },
+      "ru_slides": {
+        "state": "downloaded",
+        "notebook": "https://notebook.google.com/notebook/110d2424-6b00-4862-8136-73733595d8c1",
+        "checked_at": "2026-09-30T20:50:48.606565+00:00",
+        "evidence": "temp/algotrading-order-types/gaia/pdf-download-ru.json"
+      },
+      "ru_audio": {
+        "state": "downloaded_original_preserved_production_edit_reviewed",
+        "notebook": "https://notebook.google.com/notebook/110d2424-6b00-4862-8136-73733595d8c1",
+        "artifact_id": "a751cbca-55b9-48e3-9aba-cc96f4ec80ce",
+        "checked_at": "2026-09-30T21:13:47.833974+00:00",
+        "run": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/ru/revised-audio",
+        "evidence": "temp/algotrading-order-types/gaia/revised-ru-audio-download.json"
+      }
+    },
     "session_fingerprint": "/Users/suenot/projects/sdvg/gaia/.camoufox_fp.pkl",
     "session_settings": "temp/algotrading-order-types/gaia/session-settings.json",
     "account_guard": "temp/algotrading-order-types/gaia/camoufox_account.py",
     "account_verification": {
-      "status": "awaiting_user_google_sign_in",
-      "checked_at": "2026-09-30T17:13:37+00:00",
+      "status": "verified",
+      "checked_at": "2026-09-30T17:35:30+00:00",
       "expected_identity": "User-designated NotebookLM account, stored only in the ignored local session settings.",
       "previous_session": "Publisher profile account mismatch confirmed. Its jobs are retained as previous-session provenance and are not active NotebookLM jobs for this profile.",
-      "evidence": "temp/algotrading-order-types/gaia/account-check.json",
-      "recovery": "Saved-session read was denied by macOS privacy protection. A dedicated Gaia Camoufox window is open at the selected Google account password step.",
+      "evidence": "temp/algotrading-order-types/gaia/designated-notebooks.json",
+      "recovery": "Manual Google sign-in completed; exact account guard passed in a fresh Gaia Camoufox context.",
       "generation_gate": "Account identity is checked before notebook creation, source ingestion and generation. Unverified legacy notebook URLs are refused."
     },
     "account_login": {
@@ -123,7 +208,8 @@
       "state": "temp/algotrading-order-types/gaia/account-login-state.json",
       "handle": "temp/algotrading-order-types/gaia/session-settings.json",
       "ownership": "The login process owns the Gaia Camoufox profile; do not open a second context while it is live.",
-      "verification": "The live login observer was started before the locale-aware exact-email update. Its state is only an availability hint. If its URL is already NotebookLM while its state still says awaiting login, inspect the actual active account in the same native Camoufox window; do not open a second context. After confirmed completed sign-in, close the login owner gracefully and verify identity with the exact generator guard before any source job."
+      "verification": "The live login observer was started before the locale-aware exact-email update. Its state is only an availability hint. If its URL is already NotebookLM while its state still says awaiting login, inspect the actual active account in the same native Camoufox window; do not open a second context. After confirmed completed sign-in, close the login owner gracefully and verify identity with the exact generator guard before any source job.",
+      "active": false
     },
     "account_guard_sha256": "f3b22accc4297be8b28f81d657cd7ea13e76cbd20f063d4cb1a69dee317562c7",
     "previous_session_runs": {
@@ -132,8 +218,8 @@
       "en_original": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/en"
     },
     "runs": {
-      "en": null,
-      "ru": null
+      "en": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/en",
+      "ru": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/ru"
     },
     "previous_session_usage_check": {
       "checked_at": "2026-09-30T15:05:36.919Z",
@@ -148,10 +234,18 @@
       "generate_later_policy": "Google documents that delayed generation may take a couple hours."
     },
     "usage_check": {
-      "status": "not_checked_in_designated_account"
+      "checked_at": "2026-09-30T17:37:50.588Z",
+      "browser_timezone": "Asia/Tbilisi",
+      "current_window_used_percent": 0,
+      "weekly_used_percent": 0,
+      "displayed_window_reset": "02:37",
+      "displayed_weekly_reset": "7 ოქტ at 21:37",
+      "quota_exhausted": false,
+      "evidence": "temp/algotrading-order-types/gaia/designated-usage-state.json",
+      "policy_source": "https://support.google.com/gemininotebook/answer/17670842?hl=en"
     },
     "previous_session_browser_timezone": "Asia/Tbilisi",
-    "browser_timezone": null,
+    "browser_timezone": "Asia/Tbilisi",
     "previous_session_source_ingestion": {
       "source_ingestion_ru": {
         "source": "combined_article_and_brief",
@@ -167,6 +261,20 @@
         "path": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/en/revised-audio/source.md",
         "sha256": "93b031d76d9f9c1b3d0e8253faafff4085832f8730371885d81c79ed535533c0"
       }
+    },
+    "source_ingestion": {
+      "en": {
+        "source": "corrected_narration_source_only",
+        "path": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/en/source.md",
+        "sha256": "93b031d76d9f9c1b3d0e8253faafff4085832f8730371885d81c79ed535533c0",
+        "notebook": "https://notebook.google.com/notebook/b991882e-33a5-43e5-86d2-bb92a18b1328"
+      },
+      "ru": {
+        "source": "corrected_narration_source_only",
+        "path": "/Users/suenot/projects/sdvg/gaia/output/algotrading-order-types/2026-09-30/designated-account/ru/source.md",
+        "sha256": "29e0bf784437aa9526be833fa4d6f9e8fc845bb852857ee092592c7058057bdf",
+        "notebook": "https://notebook.google.com/notebook/110d2424-6b00-4862-8136-73733595d8c1"
+      }
     }
   },
   "artifacts": {
@@ -177,17 +285,58 @@
       "transcript": "temp/algotrading-order-types/en-revised/subtitles-corrected.json",
       "caption_corrections": "temp/algotrading-order-types/en-revised/caption-corrections.json",
       "semantic_scenes": "storyboards/algotrading-order-types/semantic-scenes.en.json",
-      "semantic_scenes_sha256": "eaebbb729941fb61704c74ae1eeb19b532c19023b0284cd03a210cd09458c18b",
+      "semantic_scenes_sha256": "dc10e4b687d7656c870bca7cf7ed71e4377134516e476f1e0c41431490255211",
       "timeline_draft": "temp/algotrading-order-types/en-revised/timeline-draft.json",
       "desktop_srt": "output/algotrading-order-types/algotrading-order-types-en-desktop.srt",
       "short_srt": "output/algotrading-order-types/algotrading-order-types-en-short.srt",
       "transcript_sha256": "d35377af704d03b83d427d81df9a9c56c3cd138188b0ae1f7077be68d8381f7d",
       "raw_asr_transcript": "temp/algotrading-order-types/en-revised/subtitles.json",
-      "raw_asr_sha256": "3f972d211b8eaf4549115ca8dd0f7dce00343e0dc5bfb11a1411904cf220c971"
+      "raw_asr_sha256": "3f972d211b8eaf4549115ca8dd0f7dce00343e0dc5bfb11a1411904cf220c971",
+      "desktop_slides": "output/algotrading-order-types/en/slides-desktop",
+      "shorts_slides": "output/algotrading-order-types/en/slides-shorts",
+      "frame_geometry": "temp/algotrading-order-types/en-native-frame-geometry.json",
+      "timeline": "temp/algotrading-order-types/en-revised/timeline-draft.json",
+      "frame_source": "storyboards/algotrading-order-types/render-native-frames.en.mjs",
+      "thumbnail": "output/algotrading-order-types/en/slides-desktop/thumbnail.png",
+      "desktop_video": "output/algotrading-order-types/algotrading-order-types-en-desktop.mp4",
+      "short_video": "output/algotrading-order-types/algotrading-order-types-en-short.mp4",
+      "desktop_metadata": "output/algotrading-order-types/algotrading-order-types-en-desktop_metadata.json",
+      "short_metadata": "output/algotrading-order-types/algotrading-order-types-en-short_metadata.json",
+      "raw_asr_transcript_sha256": "3f972d211b8eaf4549115ca8dd0f7dce00343e0dc5bfb11a1411904cf220c971",
+      "frame_source_sha256": "d0bd3b40ef32aa848e6652e116f947585a7681484feedfb4c7910978930d143f",
+      "timeline_sha256": "bd9f08118edc3848a4c363ba9a325b02f30aa820d8389168da90ece2a2c55041"
     },
-    "ru": {},
+    "ru": {
+      "audio": "input/algotrading-order-types/audio_ru_edited.m4a",
+      "transcript": "temp/algotrading-order-types/ru-edited/subtitles-corrected.json",
+      "caption_corrections": "temp/algotrading-order-types/ru-edited/caption-corrections.json",
+      "raw_asr_transcript": "temp/algotrading-order-types/ru-edited/subtitles-asr.json",
+      "semantic_scenes": "storyboards/algotrading-order-types/semantic-scenes.ru.json",
+      "timeline": "temp/algotrading-order-types/ru-edited/timeline-final.json",
+      "desktop_slides": "output/algotrading-order-types/ru/slides-desktop",
+      "shorts_slides": "output/algotrading-order-types/ru/slides-shorts",
+      "frame_geometry": "temp/algotrading-order-types/ru-native-frame-geometry.json",
+      "frame_source": "storyboards/algotrading-order-types/render-native-frames.ru.mjs",
+      "thumbnail": "output/algotrading-order-types/ru/thumbnail.png",
+      "desktop_video": "output/algotrading-order-types/algotrading-order-types-ru-desktop.mp4",
+      "short_video": "output/algotrading-order-types/algotrading-order-types-ru-short.mp4",
+      "desktop_srt": "output/algotrading-order-types/algotrading-order-types-ru-desktop.srt",
+      "short_srt": "output/algotrading-order-types/algotrading-order-types-ru-short.srt",
+      "desktop_metadata": "output/algotrading-order-types/algotrading-order-types-ru-desktop_metadata.json",
+      "short_metadata": "output/algotrading-order-types/algotrading-order-types-ru-short_metadata.json",
+      "transcript_sha256": "bef05a0c3b71d4cf882130aa1615921eb0e78ea1136f704d13034cde71181fd2",
+      "raw_asr_transcript_sha256": "0de258498aec08cc48d3be6393e9118c9a436d838becc9d911f176155c496676",
+      "semantic_scenes_sha256": "7bff076addad8a5552a533225017b34fe14449c5e3a3780319e264c0ac46d640",
+      "frame_source_sha256": "43ae2d6ba4b0db5c5a8c86a45f6aa4bf40f24baa200c7a3c457ecbe9202e1797",
+      "timeline_sha256": "dc5e31673197b3c70438b81069bb204866adc156f0c7a5b953417e1618cb59fb",
+      "srt_sha256": "9b869da00a7c32eb3f3e5123d86256d4fe68171331c499b8ce87290ede32a31b",
+      "srt": "output/algotrading-order-types/algotrading-order-types-ru-desktop.srt",
+      "edit_decision_list": "storyboards/algotrading-order-types/audio-edit.ru.json"
+    },
     "publication_brief": "storyboards/algotrading-order-types/publication-brief.json",
-    "publication_brief_sha256": "88cb7b94627992949cfb10973d49789da857e335dfc9df69dfd42f8b5fa2c2a7"
+    "publication_brief_sha256": "efd10a4a958ed50d776a8df316d1f373e81d90a9cc64361b272165ee41f490b7",
+    "inventory": "storyboards/algotrading-order-types/artifact-inventory.json",
+    "inventory_sha256": "08a92524dcfd4322469fa4b7d444afca358381c86d9c767f6c27fd0e8d308ce7"
   },
   "approvals": {
     "source": null,
@@ -215,11 +364,9 @@
       "reason": "At 36.18-46.74s, \"a stop market gets you filled\" incorrectly implies execution is guaranteed. A revised NotebookLM audio is required."
     },
     "style": {
-      "status": "awaiting_selection",
-      "options": [
-        "Ink Theater matching existing Distance Approach previews",
-        "NotebookLM design without additional restyling"
-      ]
+      "status": "selected_proof_inspected",
+      "style_id": "01-engineering-blueprint",
+      "human_quality_approval": null
     },
     "en_revised_audio": {
       "status": "factual_review_passed",
@@ -231,7 +378,7 @@
       "account_provenance": "Retained factual/technical acceptance of the existing NotebookLM audio. The source comes from the previous publisher session; do not silently relabel it as generated by the designated account."
     },
     "en_semantic_scenes": {
-      "status": "semantic_draft_pending_pdf_and_style_proof",
+      "status": "native_frames_independent_review_passed",
       "scene_count": 10,
       "transcript_segment_count": 25,
       "segment_coverage": "All 25 accepted transcript segments exactly once across 10 contiguous scenes, 0-92.16s; original audio and all SRT hashes unchanged."
@@ -244,7 +391,7 @@
         "Rebuilt full transcript text from corrected segment copy; raw word/token data stays in the separate original ASR artifact.",
         "Combined market and limit into one 7.2-second comparison frame; source audio, caption text, and caption timing remain unchanged."
       ],
-      "scope_limit": "Source PDF, style proof, frames, native-aspect safe zones, final cuts and media decode remain unverified.",
+      "scope_limit": "This record covers the early scene/transcript review; later source-PDF, native-frame and final-render checks are recorded separately below.",
       "rechecked_at": "2026-09-30T16:40:05+00:00"
     },
     "publication_article_links": {
@@ -254,7 +401,7 @@
       "checks": "EN/RU production URLs return HTTP 200 with the expected article title, slug and document language."
     },
     "account_binding": {
-      "status": "generation_guard_verified_runtime_login_pending",
+      "status": "runtime_account_verified",
       "reviewer_model": "gpt-6.1-sol",
       "reasoning_effort": "ultra",
       "checked_at": "2026-09-30T17:23:52+00:00",
@@ -264,14 +411,140 @@
         "Legacy notebook URL and unconfigured watcher refused before browser launch.",
         "Guards precede notebook creation, source ingestion and generation; Python compilation passed."
       ],
-      "scope_limit": "Actual successful Google sign-in and runtime identity in the designated NotebookLM account remain unverified."
+      "scope_limit": "The exact active Google account is verified in NotebookLM; source PDFs, Russian narration and final video QA remain unverified.",
+      "runtime_evidence": "temp/algotrading-order-types/gaia/designated-notebooks.json"
+    },
+    "ru_audio": {
+      "status": "factual_asr_and_edit_review_passed",
+      "full_decode": "passed",
+      "original_preserved": true,
+      "edit_decision_list": "storyboards/algotrading-order-types/audio-edit.ru.json",
+      "edited_asr": "temp/algotrading-order-types/ru-edited/subtitles-asr.json",
+      "join_asr": "passed",
+      "human_listening": "pending",
+      "evidence": "temp/algotrading-order-types/ru-edited/qa-summary.json"
+    },
+    "en_source_pdf": {
+      "status": "semantic_reference_review_passed",
+      "reviewer_model": "gpt-6.1-sol",
+      "reasoning_effort": "ultra",
+      "pages_reviewed": 11,
+      "scope": "All 11 source pages reviewed as semantic references; native diagrams use the verified corrected relationships.",
+      "corrections_for_production": [
+        "Qualify missing full-fill/better-price guarantees; preserve the limit price boundary.",
+        "Show hosting/local logic without adding OTOCO entry to the brief EN narration.",
+        "Use the same illustrative liquidity for IOC/FOK; keep the illustrative label readable."
+      ],
+      "scope_limit": "Recorded source corrections applied to the reviewed native frames; human quality approval pending."
+    },
+    "ru_source_pdf": {
+      "status": "semantic_reference_review_passed_with_recorded_corrections",
+      "pages_reviewed": 11,
+      "reviewer_model": "gpt-6.1-sol",
+      "reasoning_effort": "ultra",
+      "corrections_for_production": [
+        "Algorithms/linked orders use exchange orders without requiring a stop layer.",
+        "Do not copy unsorted numeric price levels; use symbolic bounds or a correctly sorted illustrative book.",
+        "IOC permits zero/partial/full fill; resting crossing-limit remainder depends on venue rules and TIF.",
+        "Changing an order may lose priority; no universal last-in-queue rule or better-price claim.",
+        "Venue hosting is management under venue rules, not a guarantee.",
+        "Keep partial-fill handling, TIF and venue support distinct in the decision checklist."
+      ],
+      "scope_limit": "Recorded source corrections applied to the reviewed native frames; human quality approval pending.",
+      "scope": "All 11 source pages reviewed as semantic references; native diagrams use the verified corrected relationships."
+    },
+    "en_native_frames": {
+      "status": "lead_and_independent_visual_review_passed",
+      "reviewer_model": "gpt-6.1-sol",
+      "reasoning_effort": "ultra",
+      "narrated_frames_per_aspect": 10,
+      "transcript_segment_count": 25,
+      "geometry": "passed",
+      "desktop_size": [
+        1920,
+        1080
+      ],
+      "short_size": [
+        1080,
+        1920
+      ],
+      "short_minimum_font_px": 32,
+      "ocr": "temp/algotrading-order-types/qa/en-frame-ocr-resolution.json",
+      "short_safe_overlay_review": "passed",
+      "short_safe_contact_sheet": "temp/algotrading-order-types/qa/en-short-safe-contact-sheet.png",
+      "human_quality_approval": null
+    },
+    "ru_native_frames": {
+      "status": "lead_and_independent_visual_review_passed",
+      "reviewer_model": "gpt-6.1-sol",
+      "reasoning_effort": "ultra",
+      "narrated_frames_per_aspect": 12,
+      "transcript_segment_count": 44,
+      "geometry": "passed",
+      "desktop_size": [
+        1920,
+        1080
+      ],
+      "short_size": [
+        1080,
+        1920
+      ],
+      "short_minimum_font_px": 32,
+      "ocr": "temp/algotrading-order-types/qa/ru-frame-ocr-check.json",
+      "short_safe_overlay_review": "passed",
+      "short_safe_contact_sheet": "temp/algotrading-order-types/qa/ru-short-safe-contact-sheet.png",
+      "human_quality_approval": null
+    },
+    "frame_source_reproduction": {
+      "status": "passed",
+      "checks": "All 54 PNGs, including covers/endcards/thumbnails, reproduce with exactly the accepted SHA-256.",
+      "evidence": "temp/algotrading-order-types/qa/frame-reproduction.json"
+    },
+    "final_renders": {
+      "status": "automated_and_visual_qa_passed",
+      "summary": "storyboards/algotrading-order-types/render-validation.json",
+      "summary_sha256": "a37012781c374dec53e72884f273aad3a5b4a3510a5bc3890bfe9a68742bbd0e",
+      "human_listening_and_quality_approval": "pending"
+    },
+    "short_duration_policy": {
+      "limit_seconds": 180,
+      "checked_at": "2026-09-30",
+      "source": "https://support.google.com/youtube/answer/15424877?hl=en",
+      "result": "Both delivered native Shorts, including the 10-second end card, fit the verified limit."
+    },
+    "final_audio_spot_checks": {
+      "status": "technical_claims_and_last_sentence_confirmed_by_asr",
+      "en": "temp/algotrading-order-types/qa/en-final-audio-spot-checks.json",
+      "ru": "temp/algotrading-order-types/qa/ru-final-audio-spot-checks.json",
+      "scope_limit": "Short-clip ASR is corroborating evidence; clipped recognition suffixes are not accepted captions. Human listening remains pending."
+    },
+    "final_metadata": {
+      "status": "passed",
+      "checks": [
+        "Descriptions match the accepted language narration and corrected native diagrams.",
+        "Titles distinct; chapter start zero and all chapter intervals at least 10 seconds.",
+        "Title/description/tag size limits; verified article URLs; language-specific metadata and equal aspect SRTs."
+      ],
+      "human_quality_approval": null
     }
   },
   "next_steps": [
-    "Complete Google sign-in in the dedicated Gaia Camoufox window and verify the exact account against local session settings.",
-    "Inspect the designated account existing notebooks and artifacts before creating any source jobs; record the verified active notebook URLs.",
-    "Reuse the accepted English audio with its original provenance where suitable; resume only missing accepted sources.",
-    "Audit Russian narration and downloaded PDFs, then build independent desktop and vertical cuts and complete media QA.",
-    "Await quality approval before any YouTube upload."
-  ]
+    "Human quality review of the four concrete videos, including Russian pronunciation and the edited audio join.",
+    "Complete the queued pipeline audit before starting the next article.",
+    "Upload/publish only after quality approval and explicit target-channel verification."
+  ],
+  "style": {
+    "status": "selected_proof_inspected",
+    "library_id": "buzz-hook-slide",
+    "style_id": "01-engineering-blueprint",
+    "contract": "storyboards/algotrading-order-types/style-contract.json",
+    "contract_sha256": "9ca4d79de096baca755ed39274e690e9359fc3326761784ee04adc9dd5fd12e5",
+    "selected_by": "Agent within continuous production scope",
+    "human_quality_approval": null,
+    "proofs": [
+      "output/algotrading-order-types/style-proof/ioc-fok-desktop.png",
+      "output/algotrading-order-types/style-proof/ioc-fok-native-short.png"
+    ]
+  },
+  "updated_at": "2026-09-30T21:49:31.640407+00:00"
 }

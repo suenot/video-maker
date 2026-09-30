@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "language": "ru",
+  "source": {
+    "path": "input/algotrading-order-types/audio_ru_original.m4a",
+    "sha256": "b6f17c037878960fe003ffcd3770cf2ff9f3f45c3e3d2adb207effbb9a95c889",
+    "duration_seconds": 137.438912
+  },
+  "production": {
+    "path": "input/algotrading-order-types/audio_ru_edited.m4a",
+    "sha256": "3104da7922501ba88d0027b1043666799cfc2d61099570e71f636b7e3e72771a",
+    "duration_seconds": 133.588912,
+    "codec": "AAC 44100 Hz stereo"
+  },
+  "reason": "Remove the unsupported universal queue-priority-loss claim while preserving 'без обещания лучшей цены'. No synthesized speech is used.",
+  "removed_spoken_clause": {
+    "text": "а двигающаяся за рынком заявка теряет место в очереди",
+    "raw_asr_word_interval_seconds": [
+      85.68,
+      88.78
+    ],
+    "cut_between_source_seconds": [
+      85.45,
+      89.25
+    ]
+  },
+  "edl": [
+    {
+      "source_seconds": [
+        0,
+        85.4
+      ],
+      "production_seconds": [
+        0,
+        85.4
+      ],
+      "operation": "retain"
+    },
+    {
+      "source_a_seconds": [
+        85.4,
+        85.45
+      ],
+      "source_b_seconds": [
+        89.25,
+        89.3
+      ],
+      "production_seconds": [
+        85.4,
+        85.45
+      ],
+      "operation": "equal-power-free linear 50 ms audio crossfade across source pauses"
+    },
+    {
+      "source_seconds": [
+        89.3,
+        137.438912
+      ],
+      "production_seconds": [
+        85.45,
+        133.588912
+      ],
+      "operation": "retain with -3.85 s offset"
+    }
+  ],
+  "command_filter": "atrim=start=0:end=85.45,asetpts=PTS-STARTPTS; atrim=start=89.25,asetpts=PTS-STARTPTS; acrossfade=d=0.05:c1=tri:c2=tri",
+  "verification": {
+    "full_decode": "passed",
+    "join_asr": "passed: temp/algotrading-order-types/ru-edited/subtitles-asr.json segments 28–29 recognize 'без обещания лучшей цены. В-третьих, учтите структурные условия.' with no queue-loss clause",
+    "human_audio_review": null
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "slug": "algotrading-order-types",
+  "style": "01-engineering-blueprint",
+  "selected_by": "Agent within the authorized continuous article-video production scope",
+  "library_manifest": "/Users/suenot/projects/sdvg/youtube_styles/style-library/buzz-hook-slide/manifest.json",
+  "semantic_reference": "Original NotebookLM audio and PDFs, with the recorded factual corrections applied to the native scene contracts",
+  "rendering": "Native vector diagrams and deterministic text placement, independently composed at each target aspect",
+  "palette": {"paper":"#F4F0E7","structure":"#24282D","system":"#315F9B","exception":"#C86452","rule":"#CAC4B8"},
+  "typography": "Noto Sans Regular/Bold; explicit line wrapping; minimum 32px in the native Short; no automatic text shrinking",
+  "desktop": {"canvas":[1920,1080],"critical_bounds":[120,95,1800,980]},
+  "short": {"canvas":[1080,1920],"critical_bounds":[80,180,850,1430],"quiet_controls_region":"Right controls: x>=900; bottom UI: y>=1500"},
+  "proof": {
+    "scene":"IOC/FOK with the same illustrative order of 5 and available quantity of 2",
+    "desktop":"output/algotrading-order-types/style-proof/ioc-fok-desktop.png",
+    "short":"output/algotrading-order-types/style-proof/ioc-fok-native-short.png",
+    "geometry":"temp/algotrading-order-types/native-style-proof-geometry.json",
+    "lead_visual_review":"passed",
+    "human_quality_approval":null
+  },
+  "constraints":[
+    "Use the library's technical-print palette and hierarchy; replace example-specific semantics with the verified order execution relationships.",
+    "Keep all critical Short text and diagram relationships within the critical bounds.",
+    "A source PDF is a semantic reference; its watermarks and source diagram defects are not production content.",
+    "No guarantee of complete fill, better execution price or profit.",
+    "No unsorted price ladder; use symbolic bounds when actual price levels are unnecessary.",
+    "IOC permits zero, partial or full fill; FOK either fills the complete quantity immediately or cancels the whole request.",
+    "Every numeric diagram is visibly labeled illustrative.",
+    "Keep cover outside narrated timeline; append a silent 10-second contacts-only end card.",
+    "Keep YouTube publication pending human quality approval."
+  ]
+}

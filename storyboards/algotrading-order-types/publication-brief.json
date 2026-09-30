@@ -1,21 +1,49 @@
 {
   "schema_version": 1,
   "slug": "algotrading-order-types",
-  "state": "metadata_draft_pending_sources_render_and_quality_review",
+  "state": "metadata_prepared_quality_approval_pending",
   "channel_verification": "Recheck the actual EN/RU target channel in Camoufox Studio before any upload. The mutable handle in shared channel configuration is not sufficient evidence.",
   "en": {
     "desktop_title": "Order Types in Algo Trading: Trigger, Price, and Fill",
     "short_title": "Your Stop Triggered. Why Is the Position Still Open?",
     "desktop_description": "A triggered order, an execution price, and a completed fill are different things. This brief explains market and limit orders, IOC versus FOK, stop-market versus stop-limit, TWAP/VWAP pacing, and exchange-hosted versus locally managed linked orders. Neither stop type guarantees a completed exit. Prices and quantities shown in examples are illustrative.",
     "short_description": "A stop condition activates an order. It does not guarantee a completed exit. See how liquidity, limit prices, and venue rules affect the outcome, then check trigger, price, partial fills, time in force, venue support, and strategy-process dependence.",
-    "tags": ["algorithmic trading", "order types", "market order", "limit order", "stop market", "stop limit", "IOC", "FOK", "TWAP", "VWAP", "OCO", "marketmaker"],
-    "thumbnail_text": "TRIGGERED DOES NOT MEAN FILLED",
+    "tags": [
+      "algorithmic trading",
+      "order types",
+      "market order",
+      "limit order",
+      "stop market",
+      "stop limit",
+      "IOC",
+      "FOK",
+      "TWAP",
+      "VWAP",
+      "OCO",
+      "marketmaker"
+    ],
+    "thumbnail_text": "ORDER TYPES / Trigger / Price / Fill",
     "chapter_draft": [
-      {"time": "0:00", "title": "Trigger, price, and fill"},
-      {"time": "0:16", "title": "Market, limit, IOC, and FOK"},
-      {"time": "0:35", "title": "Stop orders and price gaps"},
-      {"time": "0:57", "title": "Pacing and linked orders"},
-      {"time": "1:13", "title": "The execution checklist"}
+      {
+        "time": "0:00",
+        "title": "Trigger, price, and fill"
+      },
+      {
+        "time": "0:18",
+        "title": "Market, limit, IOC, and FOK"
+      },
+      {
+        "time": "0:35",
+        "title": "Stop orders and price gaps"
+      },
+      {
+        "time": "0:57",
+        "title": "Pacing and linked orders"
+      },
+      {
+        "time": "1:13",
+        "title": "The execution checklist"
+      }
     ],
     "article": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md",
     "article_url": "https://marketmaker.cc/en/blog/post/algotrading-order-types",
@@ -24,13 +52,14 @@
       "http_status": 200,
       "title": "Order Types in Algorithmic Trading: From Limit with Chasing to Virtual Orders",
       "language": "en"
-    }
+    },
+    "description_state": "verified_against_accepted_narration"
   },
   "ru": {
     "desktop_title": "Типы ордеров: триггер, цена и исполнение",
     "short_title": "Стоп сработал, а позиция осталась открытой. Почему?",
-    "description_state": "pending_review_of_actual_russian_notebooklm_narration",
-    "thumbnail_text": "СТОП СРАБОТАЛ. ПОЗИЦИЯ ОТКРЫТА",
+    "description_state": "verified_against_edited_notebooklm_narration",
+    "thumbnail_text": "ТИПЫ ОРДЕРОВ / УСЛОВИЕ / ЦЕНА / ИСПОЛНЕНИЕ",
     "article": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.ru.md",
     "article_url": "https://marketmaker.cc/ru/blog/post/algotrading-order-types",
     "article_url_verification": {
@@ -38,16 +67,79 @@
       "http_status": 200,
       "title": "Виды ордеров в алготрейдинге: от limit с chasing до virtual orders",
       "language": "ru"
-    }
+    },
+    "desktop_description": "Срабатывание условия, цена сделки и исполнение объема — разные события. Разбираем рыночные и лимитные заявки, IOC и FOK, post-only, стоп-рыночные и стоп-лимитные ордера, TWAP/VWAP и размещение связанных условий. Остановка бота сама по себе не отменяет принятый биржей ордер. Для каждой заявки нужно проверить частичное исполнение, срок действия, поддержку площадки и зависимость от процесса стратегии. Числа в схемах условные; гарантии прибыли, лучшей цены или полного исполнения нет.",
+    "short_description": "Стоп-цена активирует заявку, но не становится ценой сделки и не гарантирует полного закрытия позиции. Ликвидность, лимит цены и правила площадки меняют результат. Проверьте условия активации, частичное исполнение, срок действия и место, где обслуживается логика ордера.",
+    "tags": [
+      "алготрейдинг",
+      "типы ордеров",
+      "рыночный ордер",
+      "лимитный ордер",
+      "стоп ордер",
+      "IOC",
+      "FOK",
+      "post-only",
+      "TWAP",
+      "VWAP",
+      "OCO",
+      "marketmaker"
+    ],
+    "chapter_draft": [
+      {
+        "time": "0:00",
+        "title": "Условие, цена и исполнение"
+      },
+      {
+        "time": "0:21",
+        "title": "Рыночные и лимитные заявки"
+      },
+      {
+        "time": "0:37",
+        "title": "IOC, FOK и post-only"
+      },
+      {
+        "time": "0:55",
+        "title": "Стоп-триггер и ценовой разрыв"
+      },
+      {
+        "time": "1:20",
+        "title": "TWAP, VWAP и связанные условия"
+      },
+      {
+        "time": "1:38",
+        "title": "Остановка бота и проверка перед заявкой"
+      }
+    ]
   },
   "endcard": {
     "duration_seconds": 10,
     "silent": true,
-    "visible_contacts": ["marketmaker.cc", "t.me/marketmaker_cc"],
-    "contact_urls": ["https://marketmaker.cc", "https://t.me/marketmaker_cc"],
-    "desktop_next_video": {"value": null, "state": "not_in_scope"},
-    "shorts_next_video": {"value": null, "state": "not_in_scope"},
-    "native_aspects": {"desktop": [1920, 1080], "shorts": [1080, 1920]}
+    "visible_contacts": [
+      "marketmaker.cc",
+      "t.me/marketmaker_cc"
+    ],
+    "contact_urls": [
+      "https://marketmaker.cc",
+      "https://t.me/marketmaker_cc"
+    ],
+    "desktop_next_video": {
+      "value": null,
+      "state": "not_in_scope"
+    },
+    "shorts_next_video": {
+      "value": null,
+      "state": "not_in_scope"
+    },
+    "native_aspects": {
+      "desktop": [
+        1920,
+        1080
+      ],
+      "shorts": [
+        1080,
+        1920
+      ]
+    }
   },
   "delivery_constraints": [
     "Descriptions are drafts. Verify their coverage against accepted narration before writing final upload metadata.",
