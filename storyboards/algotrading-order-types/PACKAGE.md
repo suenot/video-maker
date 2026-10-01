@@ -2,9 +2,21 @@
 
 The replacement package reuses the existing NotebookLM audio/PDF and video-maker
 flow recovered from the August sessions. The four previous Blueprint videos
-remain rejected. Publication is blocked pending replacement QA and human review.
+remain rejected. All four replacement MP4s pass local technical, factual and
+frame checks. Human listening and quality approval remain pending.
 
-## Current replacement progress
+## Current replacement delivery
+
+| Language | Format | Duration | Current MP4 |
+| --- | --- | --- | --- |
+| EN | Desktop, eleven slides | 252.800 s | [EN desktop](../../output/algotrading-order-types/flow-v3/en/algotrading-order-types-en-desktop.mp4) |
+| RU | Desktop, eleven slides | 268.067 s | [RU desktop](../../output/algotrading-order-types/flow-v4/ru/algotrading-order-types-ru-desktop.mp4) |
+| EN | Standalone native portrait IOC/FOK Short | 97.133 s | [EN Short](../../output/algotrading-order-types/flow-v3/en/ioc-fok-short/algotrading-order-types-en-short.mp4) |
+| RU | Standalone native portrait IOC/FOK Short | 122.533 s | [RU Short](../../output/algotrading-order-types/flow-v4/ru/ioc-fok-short/algotrading-order-types-ru-short.mp4) |
+
+Each duration includes a silent ten-second contacts card. Desktop output is
+1920x1080; Shorts are 1080x1920. All four are H.264, constant 30 fps, with AAC
+48 kHz stereo and separate SRT files. No replacement has been uploaded.
 
 - Reviewed NotebookLM decks: EN v3 and RU v4, eleven pages each. Corrections were
   made through NotebookLM native per-page revision; unchanged pages were reused
@@ -14,23 +26,55 @@ remain rejected. Publication is blocked pending replacement QA and human review.
   in [EN desktop edits](notebooklm-image-edits.en-desktop.json) and
   [RU desktop edits](notebooklm-image-edits.ru-desktop.json). EN page 1 reuses the
   separately reviewed style proof.
-- EN native vertical page 1 passes exact-text, relationship and safe-zone review.
-  The remaining EN vertical pages are being generated; RU vertical pages remain
-  pending. The [vertical proof record](notebooklm-image-edits.json) preserves all
-  attempted prompts and identifies the accepted v4 proof.
-- New designated-account NotebookLM audio was downloaded for both languages,
-  transcribed completely and rejected during narration review. EN needs an
-  unambiguous acceptance/execution negation and qualified post-only wording; RU
-  omits the TWAP/VWAP distinction and full final checklist. Corrected concise
-  eleven-paragraph source scripts are being ingested. These audio attempts are
-  preserved and are not final-production selections.
-- No replacement MP4 has been rendered. Human listening and quality approval
-  remain pending.
+- Desktop narration uses separate NotebookLM Deep Dive artifacts, generated
+  with the saved Gaia Camoufox profile for poebyte@gmail.com. Complete ASR review
+  covers all eleven topics. The [EN audio edit](audio-edit.en-flow.json) and
+  [RU audio edit](audio-edit.ru-flow.json) retain original audio and document
+  source-fragment edits, production WAV hashes, cues and final render checks.
+  The RU final checklist contains the general time-in-force check and retains
+  the complete no-guarantees ending.
+- Shorts independently explain the IOC/FOK example from source page 4, with
+  separate NotebookLM Brief audio and native portrait image edits. See
+  [EN selection](short-selection.en-flow.json),
+  [RU selection](short-selection.ru-flow.json),
+  [EN portrait edits](notebooklm-image-edits.en-short.json) and
+  [RU portrait edits](notebooklm-image-edits.ru-short.json). All other deck pages
+  are outside the current Short scope; page 1 portrait proofs remain reusable
+  style evidence.
+- Final MP4 frames retain the complete diagrams, numbers and footnotes inside
+  the hard Short safe zone, including the contacts card. Root and independent
+  review checked the actual rendered frames. Native input PNG placement
+  failures and the exact final placement transforms remain recorded.
+- Earlier Brief attempts are preserved as rejected narration. They are not
+  current production selections.
+
+[artifact-inventory.flow.json](artifact-inventory.flow.json) records current
+paths, hashes, source pages, original and render frames, media properties and
+metadata. [render-validation.flow.json](render-validation.flow.json) records
+zero-start contiguous timelines, complete WAV coverage, subtitle bounds, all
+desktop scene transitions, Short safe zones and final audio tails. All four
+files fully decode, begin at video PTS zero and retain the full production WAV
+before their contacts cards. Human listening and quality approval are separate
+pending checks; local checks do not grant publication approval.
+
+The existing renderer needed temporary input normalization for EN desktop
+page 1, whose original dimensions differ from the remaining pages. Use the
+manifest's `render_frames` directory when resuming this render. Original edits
+are retained. The final body is padded to the next 30-fps frame boundary before
+the contacts card, preventing truncated narration. These are recorded assembly
+workarounds; the canonical pipeline was not rewritten.
 
 See [production-manifest.json](production-manifest.json), specifically
-`flow_progress`, for selected PDFs, hashes, source IDs, rejected narration IDs
-and current stage. The older `artifacts`, `style` and `qa` records describe the
-rejected Blueprint package and do not approve the replacement.
+`sources`, `artifacts` and `flow_progress`, for selected PDFs, audio artifact IDs
+and current delivery. Original Blueprint sources, artifacts, style and QA are
+preserved under `rejected_blueprint_package`; they do not approve the replacement.
+
+[metadata.flow.json](metadata.flow.json) contains distinct desktop/Short
+metadata, chapters derived from the current timelines and article URLs checked
+with HTTP 200 on 2026-10-01. New thumbnails, human quality acceptance and target
+channel verification are required before Private upload and Studio checks.
+The existing native goal was observed as `blocked`; automatic continuation
+requires resuming that goal in Codex. No replacement loop was created.
 
 ## Rejected Blueprint package evidence
 

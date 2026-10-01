@@ -1,0 +1,45 @@
+{
+  "topic": "IOC versus FOK",
+  "source_pages": [
+    4
+  ],
+  "notebook": "https://notebook.google.com/notebook/b991882e-33a5-43e5-86d2-bb92a18b1328",
+  "source_id": "ca2b3ff0-f265-48ff-bcda-f9fac1126076",
+  "artifact_id": "cfb95dbc-e97e-4833-ace7-dd0f2435efcc",
+  "account_guard": "passed",
+  "raw_audio": "input/algotrading-order-types/revisions/audio_en-ioc-fok-short.m4a",
+  "raw_audio_sha256": "428dbe92a492d5f05a4cccbc705f287d1a8d3aa0b7d54508172a0a21a202aeb4",
+  "production_audio": "input/algotrading-order-types/revisions/audio_en-ioc-fok-short-production.wav",
+  "production_audio_sha256": "44b64a2cfeb4ff348c2904288eb2bdbbd5fba7b82a45791d1caf41fb8aefa7ad",
+  "production_duration_seconds": 87.121271,
+  "audio_edit": "None; only decode/resample to48kHz stereo",
+  "complete_transcript_review": "passed_illustrative100_60_IOC60_40_FOK0_100_general_zero_some_all_conditional_FOK_no_execution_guarantee_venue_rules",
+  "caption_corrections": [
+    {
+      "start": 38.1,
+      "before": " can immediately execute zero, sum,",
+      "after": " can immediately execute zero, some,",
+      "reason": "Whisper homophone correction; source/audio technical phrase zero, some, or all."
+    }
+  ],
+  "timeline": "temp/algotrading-order-types/flow-v3/en/audio-ioc-fok-short/timeline.json",
+  "srt": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/algotrading-order-types-en-short.srt",
+  "frame_input_geometry": "failed_x_min66_requires_video_translation",
+  "frame_video_transform": "pad=1100:1920:20:0:color=0xF4E8D2,crop=1080:1920:0:0; independent native portrait remains native portrait; no desktop conversion",
+  "short_limit_source": "https://support.google.com/youtube/answer/15424877?hl=en",
+  "short_limit_checked_at": "2026-10-01",
+  "short_limit_seconds": 180,
+  "human_listening": null,
+  "human_quality_approval": null,
+  "status": "technically_checked_human_quality_review_pending",
+  "final_video": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/algotrading-order-types-en-short.mp4",
+  "final_video_sha256": "6fb02e8af9e1f83df20008de7432dc5620e3b20a01522344d5df41f6b74f7c53",
+  "final_duration_seconds": 97.133333,
+  "render_qa": "temp/algotrading-order-types/flow-v3/en/audio-ioc-fok-short/render-qa.json",
+  "final_frame_safe_zone": "passed_root_and_independent_exact_final_MP4_overlay",
+  "final_semantic_review": "passed_all_source_page4_text_numbers_and_relationships",
+  "final_audio_tail_asr": {
+    "path": "temp/algotrading-order-types/final-audio-tail-checks/en-short.json",
+    "status": "Complete final sentence confirmed in actual MP4 audio; human listening remains pending."
+  }
+}

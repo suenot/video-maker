@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "slug": "algotrading-order-types",
+  "language": "ru",
+  "aspect": "native_9:16",
+  "source_pdf": "input/algotrading-order-types/revisions/slides_ru-v4.pdf",
+  "source_pdf_sha256": "9b729771012a354683f7fe29c55fce13e68a7da95acc0f0064287e93f35cc728",
+  "prompts_frozen_before_generation": true,
+  "frames": [
+    {
+      "page": 1,
+      "source": "temp/algotrading-order-types/flow-v4/ru/source-slides/slide_001.png",
+      "source_sha256": "c1dda75c2cb9c246acabc31879bcd157c746e7f1c37219fd14dcc8d734deec62",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-short-v4.png",
+      "style_reference_sha256": "6f1cd36c96b199468db82605b85ef1b434648b94d2a92572a58537c470bd64be",
+      "output": "output/algotrading-order-types/flow-v4/ru/slides-shorts/slide_001.png",
+      "prompt": "Edit IMAGE 1, the actual Russian NotebookLM page 1, into a native 1080x1920 vertical slide. IMAGE 1 is the sole content authority. IMAGE 2 is STYLE ONLY: warm ivory paper, dense fine engraved black lines, high-contrast Cyrillic serif typography, restrained red/blue decorative border. Absolutely do not copy its English title, three diamonds, arrows, explanatory text or semantic objects. Preserve the EXACT source Russian title \"Три слоя исполнения ордеров\" and subtitle \"Механика биржевых заявок, алгоритмов и локальных условий\". Do not translate, shorten, paraphrase, append any words, or add any label. Preserve the source's abstract horizontal stacked red upper / green lower order-book depth forms as an abstract chart texture with their same geometry and color relationship; they are NOT mountains, scenery, a skyline or people. Recompose these source forms below the title instead of inventing a new illustration. Keep every meaningful form inside the reserved content area. Remove only the tiny Gemini watermark during genuine restyling.\nNATIVE PORTRAIT LAYOUT: This is a newly composed 9:16 frame, not a landscape image inside a portrait canvas. At final1080x1920, all critical text and source chart geometry must lie within x=140..790 and y=210..1390. A narrow tall engraved panel occupies the upper LEFT portion of the full paper canvas, with title at y=240..600, subtitle at y=650..870, original abstract red/green forms at y=930..1290. The border can occupy x=110..825,y=190..1420, but critical content never touches it. Keep the ENTIRE RIGHT x>=900 strip and ENTIRE BOTTOM y>=1500 area visually quiet ivory paper. Text must be large and fully readable, using line breaks as needed without changing any word. All title/subtitle and chart end well above y=1390. Do not fill the blank controls area with ornament, labels or a footer. No watermark, no extra content, no arrow, no three-layer stack or sample semantics.",
+      "generation_status": "generated",
+      "qa": {
+        "status": "accepted_visual_ocr_safe_zones",
+        "exact_visible_text": [
+          "Три слоя исполнения ордеров",
+          "Механика биржевых заявок, алгоритмов и локальных условий"
+        ],
+        "root_visual_comparison": "Exact title and subtitle; two unlabeled abstract red-upper/green-lower depth forms retained, no added text/object or watermark. Source contains no numeric depth data.",
+        "ocr": "Tesseract rus psm11 recognizes every expected word; spurious readings from ornaments are excluded by direct full-resolution visual comparison.",
+        "ocr_evidence": "temp/algotrading-order-types/flow-v4/ru/shorts-qa/slide_001-ocr.txt",
+        "safe_zone_overlay": "temp/algotrading-order-types/flow-v4/ru/shorts-qa/slide_001-safe-zone.png",
+        "root_exact_overlay_review": "passed: all semantic glyphs and both form edges inside x80..850,y180..1430; x>=900 and y>=1500 quiet paper; right form bottom approximately1390.",
+        "independent_review": "/root/order_types_package_review/render_qa_contract_audit: exact text, source forms, no extra content/watermark and precise overlay passed.",
+        "human_approval": null
+      },
+      "attempts": [
+        {
+          "prompt": "Edit IMAGE 1, the actual Russian NotebookLM page 1, into a native 1080x1920 vertical slide. IMAGE 1 is the sole content authority. IMAGE 2 is STYLE ONLY: warm ivory paper, dense fine engraved black lines, high-contrast Cyrillic serif typography, restrained red/blue decorative border. Absolutely do not copy its English title, three diamonds, arrows, explanatory text or semantic objects. Preserve the EXACT source Russian title \"Три слоя исполнения ордеров\" and subtitle \"Механика биржевых заявок, алгоритмов и локальных условий\". Do not translate, shorten, paraphrase, append any words, or add any label. Preserve the source's abstract horizontal stacked red upper / green lower order-book depth forms as an abstract chart texture with their same geometry and color relationship; they are NOT mountains, scenery, a skyline or people. Recompose these source forms below the title instead of inventing a new illustration. Keep every meaningful form inside the reserved content area. Remove only the tiny Gemini watermark during genuine restyling.\nNATIVE PORTRAIT LAYOUT: This is a newly composed 9:16 frame, not a landscape image inside a portrait canvas. At final1080x1920, all critical text and source chart geometry must lie within x=140..790 and y=210..1390. A narrow tall engraved panel occupies the upper LEFT portion of the full paper canvas, with title at y=240..600, subtitle at y=650..870, original abstract red/green forms at y=930..1290. The border can occupy x=110..825,y=190..1420, but critical content never touches it. Keep the ENTIRE RIGHT x>=900 strip and ENTIRE BOTTOM y>=1500 area visually quiet ivory paper. Text must be large and fully readable, using line breaks as needed without changing any word. All title/subtitle and chart end well above y=1390. Do not fill the blank controls area with ornament, labels or a footer. No watermark, no extra content, no arrow, no three-layer stack or sample semantics.",
+          "imagegen_original": "/Users/suenot/.codex/generated_images/01a0f224-5110-7581-ae55-6d7346a5bada/exec-2b9270b7-f88a-46f5-899e-e5d059ec9e13.png",
+          "imagegen_original_sha256": "9f4563c89423ccc41f6fd901da453dd8b2e992c8c522df79964d3de1ff107731",
+          "qa_status": "failed_safe_zone_graph_edges",
+          "review": "Title/subtitle exact and all source shapes preserved; chart left edge normalizes to x~75 and bottom y~1445, outside the strict critical region. Bottom border ornament also intrudes below y1500."
+        }
+      ],
+      "revision_prompt": "Edit this generated native Russian page 1 with only the following precise geometric corrections. Keep the entire Russian title and subtitle EXACTLY unchanged, including all words and serif style. Keep their current positions and colors. Keep both original abstract red-upper/green-lower horizontal bar-depth forms, all bars and their relationships, with no invented labels or objects. At the CURRENT image resolution 941x1672, move the abstract bar chart right so its leftmost bar is at x=90 and its rightmost edge is at x<=650. Vertically compress the entire existing chart as one group by about12%, holding its top at y=815 and bringing its bottom to y<=1205. Do not overlap or alter the subtitle. Shorten the existing decorative frame from the bottom: place its lower horizontal border at y=1280 and its lower corner ornaments entirely at y<=1280, enclosing the chart. Keep the upper frame and title unchanged. Preserve the warm ivory paper background and restrained engraved style. This source image is the sole content authority. Do not add any text, badge, arrow, diagram, number, icon or semantic object. Output the same native9:16 aspect. The full x>=785 right strip and full y>=1305 bottom area at this 941x1672 resolution must be quiet ivory paper; this will map to Shorts control areas at1080x1920. All critical text/shape content must be within x=70..740,y=157..1240 in this current-resolution image. No crop, no padding, no landscape inset, no watermark.",
+      "imagegen_original": "/Users/suenot/.codex/generated_images/01a0f224-5110-7581-ae55-6d7346a5bada/exec-4f25c189-a288-42cd-9ae3-a4f463b32570.png",
+      "imagegen_original_sha256": "14311f68b72cd27bff78f13ad93ed9a0ef8f9f5a06a0e0165779b1f8e90c2c87",
+      "output_sha256": "27e1ec84cab25c2c39bade4f7fa3109e1df628ea900ffd84659dabf2ecc17cfd",
+      "output_dimensions": [
+        1080,
+        1920
+      ],
+      "normalization": "ffmpeg scale only, original native941x1672 retained; no crop, padding, blur or landscape inset",
+      "role": "reusable_native_style_proof_not_selected_short_scene"
+    },
+    {
+      "page": 4,
+      "source": "temp/algotrading-order-types/flow-v4/ru/source-slides/slide_004.png",
+      "source_sha256": "0873cd68252defc7aa499989ffa75508c4e50427f7aa64bd7d0ce9427b73acfd",
+      "style_reference": "output/algotrading-order-types/flow-v4/ru/slides-shorts/slide_001.png",
+      "style_reference_sha256": "27e1ec84cab25c2c39bade4f7fa3109e1df628ea900ffd84659dabf2ecc17cfd",
+      "output": "output/algotrading-order-types/flow-v4/ru/slides-shorts/slide_004.png",
+      "prompt": "Edit IMAGE1, the ACTUAL NotebookLM Russian page4, into a newly composed native9:16 portrait slide at1080x1920. IMAGE1 is the sole authority for exact wording, numbers, icons, arrows and relationships. IMAGE2 is only the accepted visual style and upper-left controls-safe portrait layout. Never copy its title, subtitle, order-book texture, or other semantic content. Use warm ivory, dense black engraved lines, legible Cyrillic serif and restrained red/cobalt accents. Keep source green/red branch meanings. Remove only the tiny Gemini watermark as part of genuine restyling. Never replace the source with a newly authored diagram.\nPreserve EXACT visible text: \"Сроки действия (TIF) при частичной ликвидности\"; \"Сценарий: Отправлена заявка на 100 единиц. В стакане доступно только 60 единиц.\"; \"IOC (Immediate Or Cancel)\"; \"FOK (Fill Or Kill)\"; \"Panel 1\", \"Panel 2\", \"Panel 3\"; both \"Заявка: 100\" cards; IOC green \"60\" with \"Исполнено\" and checkmark, red \"40\" with \"Отменено\" and X; FOK canceled full \"100\" crossed with red X and complete \"Отменено: 100, Исполнено: 0\"; complete IOC footer \"Может исполниться полностью, частично или не исполниться совсем.\"; complete FOK footer \"Исполняется только полностью при немедленной доступности всего объема.\" No added, missing, paraphrased, reordered-meaning, misspelled or truncated copy.\nReflow the two independent source groups VERTICALLY: IOC on top, FOK below. Within IOC preserve downward flow from request100 splitting into two branches60filled/40canceled; within FOK preserve downward flow from request100 to entire100canceled/0filled. NEVER connect IOC to FOK. Both use the SAME100/60scenario. Keep both full footers under their respective diagrams.\nSTRICT CONTROLS-SAFE NATIVE LAYOUT: full1080x1920 canvas is warm ivory. A compact engraved upper-left panel contains ALL semantic content inside x=140..790,y=210..1390. Rightmostx>=900 and bottomy>=1500 are plain quiet ivory, with no critical word, number, arrow, icon or footer. Use title at y=220..340, scenario y=355..480, complete IOC group y=510..875, complete FOK group y=920..1370. Title may wrap; body text may wrap efficiently, but every word remains crisp and readable. Only thin non-semantic border may extend outside that inner content rectangle. Keep all meaningful graphics well inside boundaries. Do not create a full-width poster or enlarge the panel to use the reserved control space. No crop, padding, blur, landscape inset, watermark, new object or claim.",
+      "generation_status": "generated",
+      "qa": {
+        "status": "semantic_pass_input_geometry_fail_pending_video_placement",
+        "root_visible_text_review": "All title/scenario/Panel1/Panel2/Panel3/case labels, figures and complete general-case footers match actual source page4.",
+        "root_diagram_review": "IOC100 branches to60filled and40canceled; FOK100 cancelsall100/fills0; no arrow between independent IOC/FOK groups. No extra semantic object, text or watermark.",
+        "input_geometry_finding": "FOK group and final footer extend below strict y1430 after normalization; do not claim source image controls-safe.",
+        "required_next_gate": "Exact safe placement of this independently composed portrait on the VIDEO-render stage, then root and independent review of extracted final MP4 frames. No changes to input PNG semantics."
+      },
+      "imagegen_original": "/Users/suenot/.codex/generated_images/01a0f224-5110-7581-ae55-6d7346a5bada/exec-d4b1f203-9c3a-4cdd-98e4-1843a2478a89.png",
+      "imagegen_original_sha256": "6c1184ace59354d78a2f86acbae2d66bdab9fc1e0ee93894eda0b6c39f0c1db7",
+      "output_sha256": "7f242410fde13aceb70cde6a3aaa5ad8fa2c075bfc926af8c27a08f4837b5e30",
+      "output_dimensions": [
+        1080,
+        1920
+      ],
+      "normalization": "Technical resolution normalization only; independently generated native portrait, no desktop crop or transfer"
+    }
+  ],
+  "remaining_pages": "not_in_current_short_scope",
+  "human_approval": null,
+  "selected_short": {
+    "topic": "IOC versus FOK",
+    "source_pages": [
+      4
+    ],
+    "choice": "Routine editorial selection under continuous autonomous video production; human quality/publication approval remains pending."
+  }
+}

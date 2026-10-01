@@ -1,0 +1,545 @@
+{
+  "schema_version": 1,
+  "slug": "algotrading-order-types",
+  "updated_at": "2026-10-01T07:27:03.331395+00:00",
+  "selection": "current_corrected_existing_NotebookLM_flow",
+  "publication": "blocked_pending_human_quality_review",
+  "artifacts": {
+    "en_desktop": {
+      "language": "en",
+      "format": "desktop",
+      "source_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "video": {
+        "path": "output/algotrading-order-types/flow-v3/en/algotrading-order-types-en-desktop.mp4",
+        "sha256": "7f4fa7a0df1dab19e4e67b00bad332b5a4f7f47dce8044d899cb43334fd9c9b0",
+        "bytes": 242327490
+      },
+      "raw_audio": {
+        "path": "input/algotrading-order-types/revisions/audio_en-deep-dive.m4a",
+        "sha256": "ad6227f1c6e1f2beb85896daea2c84bb9af0673821cd8bb1b5db34a648f9b7c8",
+        "bytes": 8271262
+      },
+      "production_audio": {
+        "path": "input/algotrading-order-types/revisions/audio_en-deep-dive_edited.wav",
+        "sha256": "c13a05f8edf339363f9dcac553004dfb63896699fe4ea8f3e42ba3adc7a72611",
+        "bytes": 46612926
+      },
+      "production_audio_duration_seconds": 242.77525,
+      "audio_selection_manifest": {
+        "path": "storyboards/algotrading-order-types/audio-edit.en-flow.json",
+        "sha256": "22e8052ab5bfa894f7cb7b66e0aab13c63614a23f96951ea059f9959f014f239",
+        "bytes": 6384
+      },
+      "timeline": {
+        "path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/timeline-final.json",
+        "sha256": "33660cd9927c06dfe05aa31ce01728e881416e506cbe75014a65e6d7034973c4",
+        "bytes": 896
+      },
+      "subtitles": {
+        "path": "output/algotrading-order-types/flow-v3/en/algotrading-order-types-en-desktop.srt",
+        "sha256": "2213f3737cab1408d881222dcf66633cee37670adddfbe4bca0ee87fe657ecbf",
+        "bytes": 6316
+      },
+      "metadata": {
+        "path": "output/algotrading-order-types/flow-v3/en/algotrading-order-types-en-desktop_metadata.json",
+        "sha256": "0f71643a4cae80219e6c5a932c398c3d39d415be2f93a2088bb066764fc46d54",
+        "bytes": 1179
+      },
+      "original_frames_directory": "output/algotrading-order-types/flow-v3/en/slides-desktop",
+      "original_frames": [
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_001.png",
+          "sha256": "b9d7489339887e7e813d770e588fa8e382526536beeff477d06581e671d99258",
+          "bytes": 3123502
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_002.png",
+          "sha256": "c6c4fca125e55bc5e5272bc84fc27b5e348a84e1491bc8c1484cbdb57643e746",
+          "bytes": 4232540
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_003.png",
+          "sha256": "8ea9aafd7835f421f37177dd53a271170c94f9b12d95d453b0ae15f30199cb68",
+          "bytes": 4121919
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_004.png",
+          "sha256": "6d454f58cbd380052cbf78a59270851fed1216ca27ab4f623a2bbe91b3df9a3f",
+          "bytes": 3825781
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_005.png",
+          "sha256": "3321f1256cebd24a691d117556eb71bd2d19ff3779d5f35815bb31a2476ae8f5",
+          "bytes": 4063332
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_006.png",
+          "sha256": "cb32a8f50170762b01c853d7e249e6e53f9097e47bb91ff6d3a1d535fa43e765",
+          "bytes": 4044339
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_007.png",
+          "sha256": "f3be8f6f5e8392d06e4901c30714a7066bd4f46035795ad621af5fe82aa8d57b",
+          "bytes": 3764686
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_008.png",
+          "sha256": "644fa4271ac3ab741178c9e6f49366c08edb78cbd54d2c1205270d03f161be3d",
+          "bytes": 3745897
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_009.png",
+          "sha256": "a1574e073e2d93331ab1f8841877f50df04cbfa4f80d28363782f1e1500e8363",
+          "bytes": 3762255
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_010.png",
+          "sha256": "c169df0f999407ab5c7249a777d7a656a7772ea731ac4c8c72ee82a21d9d1251",
+          "bytes": 3782049
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_011.png",
+          "sha256": "bf26351c2b7bef27c8ec7426a0a5b472a53742b982e976b7cfc62da37a3bd475",
+          "bytes": 3514153
+        }
+      ],
+      "render_frames_directory": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/slides-render",
+      "render_frames": [
+        {
+          "path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/slides-render/slide_001.png",
+          "sha256": "aa2837fffc146c5e132e6a2f06c8c5c5321a884d8921106137fae226373b0ce1",
+          "bytes": 3937449
+        },
+        {
+          "path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/slides-render/slide_002.png",
+          "sha256": "c6c4fca125e55bc5e5272bc84fc27b5e348a84e1491bc8c1484cbdb57643e746",
+          "bytes": 4232540
+        },
+        {
+          "path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/slides-render/slide_003.png",
+          "sha256": "8ea9aafd7835f421f37177dd53a271170c94f9b12d95d453b0ae15f30199cb68",
+          "bytes": 4121919
+        },
+        {
+          "path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/slides-render/slide_004.png",
+          "sha256": "6d454f58cbd380052cbf78a59270851fed1216ca27ab4f623a2bbe91b3df9a3f",
+          "bytes": 3825781
+        },
+        {
+          "path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/slides-render/slide_005.png",
+          "sha256": "3321f1256cebd24a691d117556eb71bd2d19ff3779d5f35815bb31a2476ae8f5",
+          "bytes": 4063332
+        },
+        {
+          "path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/slides-render/slide_006.png",
+          "sha256": "cb32a8f50170762b01c853d7e249e6e53f9097e47bb91ff6d3a1d535fa43e765",
+          "bytes": 4044339
+        },
+        {
+          "path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/slides-render/slide_007.png",
+          "sha256": "f3be8f6f5e8392d06e4901c30714a7066bd4f46035795ad621af5fe82aa8d57b",
+          "bytes": 3764686
+        },
+        {
+          "path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/slides-render/slide_008.png",
+          "sha256": "644fa4271ac3ab741178c9e6f49366c08edb78cbd54d2c1205270d03f161be3d",
+          "bytes": 3745897
+        },
+        {
+          "path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/slides-render/slide_009.png",
+          "sha256": "a1574e073e2d93331ab1f8841877f50df04cbfa4f80d28363782f1e1500e8363",
+          "bytes": 3762255
+        },
+        {
+          "path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/slides-render/slide_010.png",
+          "sha256": "c169df0f999407ab5c7249a777d7a656a7772ea731ac4c8c72ee82a21d9d1251",
+          "bytes": 3782049
+        },
+        {
+          "path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/slides-render/slide_011.png",
+          "sha256": "bf26351c2b7bef27c8ec7426a0a5b472a53742b982e976b7cfc62da37a3bd475",
+          "bytes": 3514153
+        }
+      ],
+      "endcard": {
+        "path": "output/algotrading-order-types/flow-v3/en/slides-desktop/endcard.png",
+        "sha256": "315df730e841ffa337185471585493056678757ec17fd54a8478492de88eea1c",
+        "bytes": 46104
+      },
+      "human_listening": null,
+      "human_quality_approval": null,
+      "youtube_url": null,
+      "duration_seconds": 252.8,
+      "body_duration_seconds": 242.8,
+      "media": {
+        "video_codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frame_count": 7584,
+        "audio_codec": "aac",
+        "audio_sample_rate_hz": 48000,
+        "audio_channels": 2
+      }
+    },
+    "ru_desktop": {
+      "language": "ru",
+      "format": "desktop",
+      "source_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "video": {
+        "path": "output/algotrading-order-types/flow-v4/ru/algotrading-order-types-ru-desktop.mp4",
+        "sha256": "b46adc7b72f6d5983818b28990e9d73cd2f0675201c73578e2b3c84ff74b3e39",
+        "bytes": 240481848
+      },
+      "raw_audio": {
+        "path": "input/algotrading-order-types/revisions/audio_ru-deep-dive.m4a",
+        "sha256": "3a823b0c1d76a387caeda474382c2bf834841aa1df072cbe6cce6537e5aeeea4",
+        "bytes": 9271148
+      },
+      "production_audio": {
+        "path": "input/algotrading-order-types/revisions/audio_ru-deep-dive-production-v2.wav",
+        "sha256": "25f003378b6259832edf052f69f96fa0db210f5ec54365e0537c3f1721d38714",
+        "bytes": 49547598
+      },
+      "production_audio_duration_seconds": 258.06,
+      "audio_selection_manifest": {
+        "path": "storyboards/algotrading-order-types/audio-edit.ru-flow.json",
+        "sha256": "4b4e7b4f4ba6eacdf5fd8a6a0840f33a4fe3a992cb0fe2ff678612c7d399339d",
+        "bytes": 9208
+      },
+      "timeline": {
+        "path": "temp/algotrading-order-types/flow-v4/ru/audio-production-v2/timeline.json",
+        "sha256": "6dbc997418d7d257a58d365972a7739d677e392141dc98eb645973c5c7f4e02f",
+        "bytes": 848
+      },
+      "subtitles": {
+        "path": "output/algotrading-order-types/flow-v4/ru/algotrading-order-types-ru-desktop.srt",
+        "sha256": "0ca0545d55912727383d64946fb15b27f065c9328c87db50d6e9db6e6e7f6c7a",
+        "bytes": 9982
+      },
+      "metadata": {
+        "path": "output/algotrading-order-types/flow-v4/ru/algotrading-order-types-ru-desktop_metadata.json",
+        "sha256": "79549ed916f3abc53d952e87f67cecae9de047f44784f18dc06037f09d82b2f6",
+        "bytes": 1656
+      },
+      "original_frames_directory": "output/algotrading-order-types/flow-v4/ru/slides-desktop",
+      "original_frames": [
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_001.png",
+          "sha256": "a0cd4021739cffc5944e6dd678276da8d8a3fd731cfbc9889583ba922ee0fb52",
+          "bytes": 4037750
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_002.png",
+          "sha256": "18e2098857effbefbcf949c7de991a1310c8b06b00e65aa2dc933dbae49e906d",
+          "bytes": 3636000
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_003.png",
+          "sha256": "b68da65a85182cef82715fa3d196736164959a2ba92d7b88a411fd657778f3d1",
+          "bytes": 4290790
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_004.png",
+          "sha256": "4cafab8bf2801ecdea6a0701f2cd772704da536d1b204fe251000e55367ba360",
+          "bytes": 4235717
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_005.png",
+          "sha256": "f5cec6a8fa447d1bff5acccfd2d4d82d85d14c547f829f98cfcb48186cf24014",
+          "bytes": 3961657
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_006.png",
+          "sha256": "da75ca3c50d6eaf43003897289b3d927742e7017ad6ceda28a76bafe465d5910",
+          "bytes": 3495358
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_007.png",
+          "sha256": "c54040e3230117297839ab63fa29f93fdcf3e4a0c7cbbc53291d6cde3c8f1738",
+          "bytes": 3853740
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_008.png",
+          "sha256": "139a5cf01aa63853ca2dd88b540a0fd7386fb16cc0ad082985185096b75c943e",
+          "bytes": 4182130
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_009.png",
+          "sha256": "3bbda1e23f4d3003fa1e390dbe6234289e64f844343604ac7d6694d8efefd9f5",
+          "bytes": 3647449
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_010.png",
+          "sha256": "b2385f348e37666cc7ff19c02c269f828c31a2ae5bf7f3dcd95f586002e3ed70",
+          "bytes": 3949429
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_011.png",
+          "sha256": "72b82f25e3ace4e5c910f33383f8365a01e7dee95039bda08ceed6f8e089f1ff",
+          "bytes": 3738583
+        }
+      ],
+      "render_frames_directory": "output/algotrading-order-types/flow-v4/ru/slides-desktop",
+      "render_frames": [
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_001.png",
+          "sha256": "a0cd4021739cffc5944e6dd678276da8d8a3fd731cfbc9889583ba922ee0fb52",
+          "bytes": 4037750
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_002.png",
+          "sha256": "18e2098857effbefbcf949c7de991a1310c8b06b00e65aa2dc933dbae49e906d",
+          "bytes": 3636000
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_003.png",
+          "sha256": "b68da65a85182cef82715fa3d196736164959a2ba92d7b88a411fd657778f3d1",
+          "bytes": 4290790
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_004.png",
+          "sha256": "4cafab8bf2801ecdea6a0701f2cd772704da536d1b204fe251000e55367ba360",
+          "bytes": 4235717
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_005.png",
+          "sha256": "f5cec6a8fa447d1bff5acccfd2d4d82d85d14c547f829f98cfcb48186cf24014",
+          "bytes": 3961657
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_006.png",
+          "sha256": "da75ca3c50d6eaf43003897289b3d927742e7017ad6ceda28a76bafe465d5910",
+          "bytes": 3495358
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_007.png",
+          "sha256": "c54040e3230117297839ab63fa29f93fdcf3e4a0c7cbbc53291d6cde3c8f1738",
+          "bytes": 3853740
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_008.png",
+          "sha256": "139a5cf01aa63853ca2dd88b540a0fd7386fb16cc0ad082985185096b75c943e",
+          "bytes": 4182130
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_009.png",
+          "sha256": "3bbda1e23f4d3003fa1e390dbe6234289e64f844343604ac7d6694d8efefd9f5",
+          "bytes": 3647449
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_010.png",
+          "sha256": "b2385f348e37666cc7ff19c02c269f828c31a2ae5bf7f3dcd95f586002e3ed70",
+          "bytes": 3949429
+        },
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/slide_011.png",
+          "sha256": "72b82f25e3ace4e5c910f33383f8365a01e7dee95039bda08ceed6f8e089f1ff",
+          "bytes": 3738583
+        }
+      ],
+      "endcard": {
+        "path": "output/algotrading-order-types/flow-v4/ru/slides-desktop/endcard.png",
+        "sha256": "315df730e841ffa337185471585493056678757ec17fd54a8478492de88eea1c",
+        "bytes": 46104
+      },
+      "human_listening": null,
+      "human_quality_approval": null,
+      "youtube_url": null,
+      "duration_seconds": 268.066667,
+      "body_duration_seconds": 258.06666666666666,
+      "media": {
+        "video_codec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frame_count": 8042,
+        "audio_codec": "aac",
+        "audio_sample_rate_hz": 48000,
+        "audio_channels": 2
+      }
+    },
+    "en_short": {
+      "language": "en",
+      "format": "short",
+      "source_pages": [
+        4
+      ],
+      "video": {
+        "path": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/algotrading-order-types-en-short.mp4",
+        "sha256": "6fb02e8af9e1f83df20008de7432dc5620e3b20a01522344d5df41f6b74f7c53",
+        "bytes": 42753266
+      },
+      "raw_audio": {
+        "path": "input/algotrading-order-types/revisions/audio_en-ioc-fok-short.m4a",
+        "sha256": "428dbe92a492d5f05a4cccbc705f287d1a8d3aa0b7d54508172a0a21a202aeb4",
+        "bytes": 2804703
+      },
+      "production_audio": {
+        "path": "input/algotrading-order-types/revisions/audio_en-ioc-fok-short-production.wav",
+        "sha256": "44b64a2cfeb4ff348c2904288eb2bdbbd5fba7b82a45791d1caf41fb8aefa7ad",
+        "bytes": 16727362
+      },
+      "production_audio_duration_seconds": 87.121271,
+      "audio_selection_manifest": {
+        "path": "storyboards/algotrading-order-types/short-selection.en-flow.json",
+        "sha256": "fb91a377cba748db262991893155f751b1192b324e9599226123216300474e7e",
+        "bytes": 2630
+      },
+      "timeline": {
+        "path": "temp/algotrading-order-types/flow-v3/en/audio-ioc-fok-short/timeline.json",
+        "sha256": "d9774bc84dd10e99b02b36e3786033049bdfda1ad1584ea3672b7644e35fd5b2",
+        "bytes": 146
+      },
+      "subtitles": {
+        "path": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/algotrading-order-types-en-short.srt",
+        "sha256": "73666b2ecbc759cab37f5ad48a17ffc2a664e7f7ff51148908004b1f7ce35430",
+        "bytes": 2992
+      },
+      "metadata": {
+        "path": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/algotrading-order-types-en-short_metadata.json",
+        "sha256": "67e279bf0481964c41391c476380eeb99caa3b8359a91dfb2736f9fb6164f72b",
+        "bytes": 890
+      },
+      "original_frames_directory": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/slides",
+      "original_frames": [
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/slides/slide_001.png",
+          "sha256": "930a6c40f87b8f164a94ad6d155003effa1f36a11048c24d0725ee9af9053e1e",
+          "bytes": 3329081
+        }
+      ],
+      "render_frames_directory": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/slides",
+      "render_frames": [
+        {
+          "path": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/slides/slide_001.png",
+          "sha256": "930a6c40f87b8f164a94ad6d155003effa1f36a11048c24d0725ee9af9053e1e",
+          "bytes": 3329081
+        }
+      ],
+      "endcard": {
+        "path": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/slides/endcard.png",
+        "sha256": "9e725aada2dfd7214f546330d237732dd95fb9cc0358da83560510ee967f76ed",
+        "bytes": 33381
+      },
+      "human_listening": null,
+      "human_quality_approval": null,
+      "youtube_url": null,
+      "duration_seconds": 97.133333,
+      "body_duration_seconds": 87.13333333333334,
+      "media": {
+        "video_codec": "h264",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1",
+        "frame_count": 2914,
+        "audio_codec": "aac",
+        "audio_sample_rate_hz": 48000,
+        "audio_channels": 2
+      }
+    },
+    "ru_short": {
+      "language": "ru",
+      "format": "short",
+      "source_pages": [
+        4
+      ],
+      "video": {
+        "path": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/algotrading-order-types-ru-short.mp4",
+        "sha256": "d5f50cd3129b9ef50539e8241200190fcca806d9c303b64d7aa923c17505cfde",
+        "bytes": 31828717
+      },
+      "raw_audio": {
+        "path": "input/algotrading-order-types/revisions/audio_ru-ioc-fok-short.m4a",
+        "sha256": "6e816448261ff31eba653f0a6efaf6fb136302fcbd9c4543c914a895563543af",
+        "bytes": 3622311
+      },
+      "production_audio": {
+        "path": "input/algotrading-order-types/revisions/audio_ru-ioc-fok-short-production.wav",
+        "sha256": "b384e715a814498cb178fc18d9e6e0ff48b15e36c6c62c4af0869299a65393e5",
+        "bytes": 21604670
+      },
+      "production_audio_duration_seconds": 112.523917,
+      "audio_selection_manifest": {
+        "path": "storyboards/algotrading-order-types/short-selection.ru-flow.json",
+        "sha256": "7349ac852db27ebdd2cf334fb6d93333a567bd77ca43aa69dca701654da8ede0",
+        "bytes": 3183
+      },
+      "timeline": {
+        "path": "temp/algotrading-order-types/flow-v4/ru/audio-ioc-fok-short/timeline.json",
+        "sha256": "ff1b8bc60b4a205fc90deac89ba838184fe9582dbf2c36584cca1e908c327971",
+        "bytes": 147
+      },
+      "subtitles": {
+        "path": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/algotrading-order-types-ru-short.srt",
+        "sha256": "acc1818eab81d3035ded8aff632c64e02bc9284bc50936923e080a2fc1a93cae",
+        "bytes": 4229
+      },
+      "metadata": {
+        "path": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/algotrading-order-types-ru-short_metadata.json",
+        "sha256": "fbd013eb51712e7529b344a7e9680249bb1746329902fd772317a9b379043b63",
+        "bytes": 1258
+      },
+      "original_frames_directory": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/slides",
+      "original_frames": [
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/slides/slide_001.png",
+          "sha256": "7f242410fde13aceb70cde6a3aaa5ad8fa2c075bfc926af8c27a08f4837b5e30",
+          "bytes": 2598624
+        }
+      ],
+      "render_frames_directory": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/slides",
+      "render_frames": [
+        {
+          "path": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/slides/slide_001.png",
+          "sha256": "7f242410fde13aceb70cde6a3aaa5ad8fa2c075bfc926af8c27a08f4837b5e30",
+          "bytes": 2598624
+        }
+      ],
+      "endcard": {
+        "path": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/slides/endcard.png",
+        "sha256": "9e725aada2dfd7214f546330d237732dd95fb9cc0358da83560510ee967f76ed",
+        "bytes": 33381
+      },
+      "human_listening": null,
+      "human_quality_approval": null,
+      "youtube_url": null,
+      "duration_seconds": 122.533333,
+      "body_duration_seconds": 112.53333333333333,
+      "media": {
+        "video_codec": "h264",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1",
+        "frame_count": 3676,
+        "audio_codec": "aac",
+        "audio_sample_rate_hz": 48000,
+        "audio_channels": 2
+      }
+    }
+  }
+}

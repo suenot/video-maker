@@ -1,0 +1,77 @@
+{
+  "publication_state": "human_quality_approval_pending",
+  "article_urls_http200_checked_at": "2026-10-01",
+  "desktop_youtube_urls": null,
+  "metadata": {
+    "en": {
+      "desktop": {
+        "title": "Order Execution Mechanics: Limits, Stops, IOC and FOK",
+        "description": "Trigger conditions, price constraints and completed fills are separate events. This walkthrough follows eleven NotebookLM slides on market and limit orders, liquidity, IOC/FOK, post-only rules, stops, execution algorithms, linked orders and local failure handling.\n\nExamples are illustrative. Time-in-force does not guarantee execution; venue support and exact rules must be checked.\n\n0:00 Three layers of execution\n0:42 Inside the order book\n1:01 IOC, FOK and liquidity\n1:44 Stops and execution risk\n2:15 TWAP, VWAP and chasing limits\n2:36 OCO and Binance Spot OTOCO\n2:57 Exchange versus local conditions\n3:29 Six checks before submission\n\nhttps://marketmaker.cc/en/blog/post/algotrading-order-types\nhttps://marketmaker.cc\nhttps://t.me/marketmaker_cc",
+        "tags": [
+          "order types",
+          "IOC",
+          "FOK",
+          "market microstructure",
+          "NotebookLM"
+        ],
+        "category": "Education",
+        "language": "en",
+        "visibility": "private",
+        "publication_state": "blocked_pending_quality_review",
+        "channel_verification": "required_before_upload",
+        "desktop_url_state": "pending"
+      },
+      "short": {
+        "title": "IOC vs FOK: A 100-Unit Liquidity Example",
+        "description": "Request 100 units with 60 immediately available under acceptable order parameters. In this illustrative example IOC may fill 60 and cancel 40; FOK fills 0 and cancels 100.\n\nIn general IOC may fill zero, some or all and cancels the remainder. FOK fills the entire requested quantity only if immediately available, otherwise cancels the whole order. Neither mode guarantees a trade; check venue rules. #Shorts\n\nhttps://marketmaker.cc/en/blog/post/algotrading-order-types\nhttps://marketmaker.cc\nhttps://t.me/marketmaker_cc",
+        "tags": [
+          "IOC",
+          "FOK",
+          "liquidity",
+          "Shorts"
+        ],
+        "category": "Education",
+        "language": "en",
+        "visibility": "private",
+        "publication_state": "blocked_pending_quality_review",
+        "channel_verification": "required_before_upload",
+        "desktop_url_state": "pending"
+      }
+    },
+    "ru": {
+      "desktop": {
+        "title": "Как исполняются биржевые заявки: лимиты, стопы и алгоритмы",
+        "description": "Условие активации, цена сделки и исполненный объем — разные события. Видео следует одиннадцати слайдам NotebookLM: стакан, лимиты, IOC/FOK, post-only, стопы, алгоритмы исполнения, связанные заявки и поведение при сбое стратегии.\n\nЧисловые примеры условные. Срок действия не гарантирует исполнения; поддержку функций и правила площадки нужно проверять.\n\n0:00 Три события исполнения\n0:45 Лимиты и стакан\n1:14 IOC, FOK и ликвидность\n1:50 Пассивные заявки post-only\n2:06 Стопы и ценовой разрыв\n2:33 TWAP и VWAP\n2:51 Следящие лимитные заявки\n3:09 OCO и Binance Spot OTOCO\n3:33 Биржевые и локальные условия\n3:57 Шесть проверок перед отправкой\n\nhttps://marketmaker.cc/ru/blog/post/algotrading-order-types\nhttps://marketmaker.cc\nhttps://t.me/marketmaker_cc",
+        "tags": [
+          "order types",
+          "IOC",
+          "FOK",
+          "market microstructure",
+          "NotebookLM"
+        ],
+        "category": "Education",
+        "language": "ru",
+        "visibility": "private",
+        "publication_state": "blocked_pending_quality_review",
+        "channel_verification": "required_before_upload",
+        "desktop_url_state": "pending"
+      },
+      "short": {
+        "title": "100 запрошено, 60 доступно: что сделают IOC и FOK",
+        "description": "Условный пример: запрошено 100 единиц, немедленно доступно 60 по допустимым параметрам заявки. IOC может исполнить 60 и отменить 40; FOK исполняет 0 и отменяет все 100.\n\nВ общем случае IOC может исполнить ноль, часть или весь объем и отменяет остаток. FOK исполняет весь запрошенный объем только при его немедленной доступности, иначе отменяет заявку целиком. Сделка не гарантирована; проверяйте правила площадки. #Shorts\n\nhttps://marketmaker.cc/ru/blog/post/algotrading-order-types\nhttps://marketmaker.cc\nhttps://t.me/marketmaker_cc",
+        "tags": [
+          "IOC",
+          "FOK",
+          "liquidity",
+          "Shorts"
+        ],
+        "category": "Education",
+        "language": "ru",
+        "visibility": "private",
+        "publication_state": "blocked_pending_quality_review",
+        "channel_verification": "required_before_upload",
+        "desktop_url_state": "pending"
+      }
+    }
+  }
+}

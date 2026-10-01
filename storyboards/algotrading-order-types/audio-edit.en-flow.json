@@ -1,0 +1,208 @@
+{
+  "artifact": "audio-edit.en-flow",
+  "source_audio": "input/algotrading-order-types/revisions/audio_en-deep-dive.m4a",
+  "source_sha256": "ad6227f1c6e1f2beb85896daea2c84bb9af0673821cd8bb1b5db34a648f9b7c8",
+  "source_duration_seconds": 256.975238,
+  "production_audio": "input/algotrading-order-types/revisions/audio_en-deep-dive_edited.wav",
+  "production_sha256": "c13a05f8edf339363f9dcac553004dfb63896699fe4ea8f3e42ba3adc7a72611",
+  "production_duration_seconds": 242.77525,
+  "production_format": {
+    "codec": "pcm_s16le",
+    "sample_rate_hz": 48000,
+    "channels": 2
+  },
+  "edl": {
+    "keep_source_intervals_seconds": [
+      [
+        5.48,
+        102.88
+      ],
+      [
+        108.77,
+        141.55
+      ],
+      [
+        144.34,
+        256.975238
+      ]
+    ],
+    "removed_source_intervals_seconds": [
+      [
+        0,
+        5.48
+      ],
+      [
+        102.88,
+        108.77
+      ],
+      [
+        141.55,
+        144.34
+      ]
+    ],
+    "crossfade_seconds": 0.02,
+    "crossfade_count": 2,
+    "production_intervals_seconds": [
+      [
+        0,
+        97.4
+      ],
+      [
+        97.38,
+        130.16
+      ],
+      [
+        130.14,
+        242.77525
+      ]
+    ],
+    "removed_reasons": [
+      "Opening service-source name and preamble",
+      "Unqualified post-only rejection/cancellation assertion",
+      "Unsupported stop-limit guarantee assertion"
+    ]
+  },
+  "verification": {
+    "full_decode": "passed_production_wav_and_final_mp4",
+    "edited_asr_json": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/subtitles-edited.json",
+    "edited_asr_sha256": "36a145197b3d28079bdcb111fa33dc789dbde83bfe015b47840cdc1612c4b953",
+    "edited_asr_model": "Whisper small, language en, word timestamps",
+    "join_asr_and_energy": [
+      {
+        "production_join_s": 97.38,
+        "before_rms_50ms": 0.0668,
+        "after_rms_50ms": 0.07973,
+        "asr_context": "Right, acceptance is not execution. Yeah, that is a crucial distinction..."
+      },
+      {
+        "production_join_s": 130.14,
+        "before_rms_50ms": 0.024806,
+        "after_rms_50ms": 0.027062,
+        "asr_context": "And a stop limit, it may remain unfilled after a price gap. Wow..."
+      }
+    ],
+    "negative_claims_removed_in_asr": true,
+    "all_eleven_topics_present_in_asr": true,
+    "human_audio_listening": null,
+    "natural_splice_human_review": null,
+    "edited_asr_reviewed_json": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/subtitles-edited.reviewed.json",
+    "edited_asr_reviewed_sha256": "edc2d51b893488f916fec3edd033389b848ef0b38836977dd25b747a7389adf3",
+    "caption_normalizations": [
+      {
+        "from": "T-Wop spreads execution over time.",
+        "to": "TWAP spreads execution over time.",
+        "reason": "source-page technical term; caption spelling only, no audio repair"
+      },
+      {
+        "from": "V-Wop uses traded volume as a reference.",
+        "to": "VWAP uses traded volume as a reference.",
+        "reason": "source-page technical term; caption spelling only, no audio repair"
+      },
+      {
+        "from": "BinanceSpotOTOTOOCO.",
+        "to": "Binance Spot OTOCO.",
+        "reason": "source-page technical term; caption spelling only, no audio repair"
+      }
+    ],
+    "negative_claims_absent_in_edited_asr": [
+      "env3 documentation",
+      "just rejected or cancelled",
+      "basically guarantees"
+    ],
+    "semantic_topic_checks": [
+      {
+        "slide": 1,
+        "start_seconds": 0,
+        "verified_in_asr": true
+      },
+      {
+        "slide": 2,
+        "start_seconds": 18.4,
+        "verified_in_asr": true
+      },
+      {
+        "slide": 3,
+        "start_seconds": 41.04,
+        "verified_in_asr": true
+      },
+      {
+        "slide": 4,
+        "start_seconds": 60.6,
+        "verified_in_asr": true
+      },
+      {
+        "slide": 5,
+        "start_seconds": 90.92,
+        "verified_in_asr": true
+      },
+      {
+        "slide": 6,
+        "start_seconds": 103.58,
+        "verified_in_asr": true
+      },
+      {
+        "slide": 7,
+        "start_seconds": 134.46,
+        "verified_in_asr": true
+      },
+      {
+        "slide": 8,
+        "start_seconds": 155.5,
+        "verified_in_asr": true
+      },
+      {
+        "slide": 9,
+        "start_seconds": 176.5,
+        "verified_in_asr": true
+      },
+      {
+        "slide": 10,
+        "start_seconds": 193.66,
+        "verified_in_asr": true
+      },
+      {
+        "slide": 11,
+        "start_seconds": 208.28,
+        "verified_in_asr": true
+      }
+    ]
+  },
+  "timeline_path": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/timeline-final.json",
+  "timeline_sha256": "33660cd9927c06dfe05aa31ce01728e881416e506cbe75014a65e6d7034973c4",
+  "srt_path": "output/algotrading-order-types/flow-v3/en/algotrading-order-types-en-desktop.srt",
+  "srt_sha256": "2213f3737cab1408d881222dcf66633cee37670adddfbe4bca0ee87fe657ecbf",
+  "video_qa": {
+    "status": "passed_local_technical_and_scene_qa",
+    "final_mp4": "output/algotrading-order-types/flow-v3/en/algotrading-order-types-en-desktop.mp4",
+    "final_sha256": "7f4fa7a0df1dab19e4e67b00bad332b5a4f7f47dce8044d899cb43334fd9c9b0",
+    "final_duration_seconds": 252.8,
+    "body_complete_path": "output/algotrading-order-types/flow-v3/en/algotrading-order-types-en-desktop-body-complete.mp4",
+    "body_complete_sha256": "eb73f4c6bad2e9147f7a1f74251ca9dfe1d071c2218f1d859ed28181747c3fe5",
+    "body_complete_duration_seconds": 242.8,
+    "endcard_path": "output/algotrading-order-types/flow-v3/en/slides-desktop/endcard.png",
+    "endcard_sha256": "315df730e841ffa337185471585493056678757ec17fd54a8478492de88eea1c",
+    "card_start_seconds": 242.8,
+    "video_frame_count": 7584,
+    "video_fps": "30/1",
+    "video_codec": "h264",
+    "video_resolution": [
+      1920,
+      1080
+    ],
+    "audio_codec": "aac",
+    "audio_sample_rate_hz": 48000,
+    "audio_channels": 2,
+    "frame_pts_max_deviation_from_1_30_s": 6.666666915108865e-07,
+    "tail_difference_from_ceil_wav_frame_seconds": 0.0,
+    "full_decode": "passed_no_errors",
+    "contact_sheet": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/contact-sheet.png",
+    "cut_frame_pairs_checked": 10,
+    "endcard_edges_checked": [
+      242.7,
+      242.9,
+      252.5
+    ],
+    "human_render_review": null,
+    "human_listening_review": null
+  }
+}

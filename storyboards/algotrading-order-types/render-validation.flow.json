@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "slug": "algotrading-order-types",
+  "updated_at": "2026-10-01T07:27:03.331395+00:00",
+  "status": "passed_local_technical_fact_scene_and_safe_zone_QA_human_review_pending",
+  "artifacts": {
+    "en_desktop": {
+      "timeline": "passed_zero_start_contiguous_all_selected_pages_exact_WAV_end",
+      "subtitle_cues": 72,
+      "subtitle_last_end_seconds": 242.439,
+      "subtitles": "passed_nonempty_ordered_within_narrated_body",
+      "metadata": "passed_title_description_chapter_bounds_private_quality_gate",
+      "full_decode": "passed_reused_completed_worker_check",
+      "source_render_review": {
+        "status": "passed_local_technical_and_scene_qa",
+        "final_mp4": "output/algotrading-order-types/flow-v3/en/algotrading-order-types-en-desktop.mp4",
+        "final_sha256": "7f4fa7a0df1dab19e4e67b00bad332b5a4f7f47dce8044d899cb43334fd9c9b0",
+        "final_duration_seconds": 252.8,
+        "body_complete_path": "output/algotrading-order-types/flow-v3/en/algotrading-order-types-en-desktop-body-complete.mp4",
+        "body_complete_sha256": "eb73f4c6bad2e9147f7a1f74251ca9dfe1d071c2218f1d859ed28181747c3fe5",
+        "body_complete_duration_seconds": 242.8,
+        "endcard_path": "output/algotrading-order-types/flow-v3/en/slides-desktop/endcard.png",
+        "endcard_sha256": "315df730e841ffa337185471585493056678757ec17fd54a8478492de88eea1c",
+        "card_start_seconds": 242.8,
+        "video_frame_count": 7584,
+        "video_fps": "30/1",
+        "video_codec": "h264",
+        "video_resolution": [
+          1920,
+          1080
+        ],
+        "audio_codec": "aac",
+        "audio_sample_rate_hz": 48000,
+        "audio_channels": 2,
+        "frame_pts_max_deviation_from_1_30_s": 6.666666915108865e-07,
+        "tail_difference_from_ceil_wav_frame_seconds": 0.0,
+        "full_decode": "passed_no_errors",
+        "contact_sheet": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/contact-sheet.png",
+        "cut_frame_pairs_checked": 10,
+        "endcard_edges_checked": [
+          242.7,
+          242.9,
+          252.5
+        ],
+        "human_render_review": null,
+        "human_listening_review": null
+      },
+      "human_listening": null,
+      "human_quality_approval": null,
+      "independent_final_probe": {
+        "status": "passed",
+        "first_frame_pts_seconds": 0.0,
+        "body_duration_seconds": 242.8,
+        "endcard_duration_seconds": 10,
+        "final_duration_seconds": 252.8,
+        "audio_video_tail_difference_seconds": 0.0
+      }
+    },
+    "ru_desktop": {
+      "timeline": "passed_zero_start_contiguous_all_selected_pages_exact_WAV_end",
+      "subtitle_cues": 77,
+      "subtitle_last_end_seconds": 257.86,
+      "subtitles": "passed_nonempty_ordered_within_narrated_body",
+      "metadata": "passed_title_description_chapter_bounds_private_quality_gate",
+      "full_decode": "passed_reused_completed_worker_check",
+      "source_render_review": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "30/1",
+            "duration": "268.066667"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "duration": "268.066667"
+          }
+        ],
+        "format": {
+          "duration": "268.066667"
+        },
+        "final": "output/algotrading-order-types/flow-v4/ru/algotrading-order-types-ru-desktop.mp4",
+        "decode": "passed",
+        "av_tail_seconds": 0.0,
+        "narrated_duration_seconds": 258.06,
+        "endcard_start_seconds": 258.06666666666666,
+        "final_frame_review": "passed_root_all11contact_sheet_plus_full_checklist_and_last_contacts_frame",
+        "human_quality_approval": null,
+        "final_cut_comparison": "temp/algotrading-order-types/flow-v4/ru/audio-production-v2/final-cut-source-comparison.json",
+        "independent_review": "Passed reviewed changed narration and/or actual final Short extracted frames; human listening and approval remain pending."
+      },
+      "human_listening": null,
+      "human_quality_approval": null,
+      "independent_final_probe": {
+        "status": "passed",
+        "first_frame_pts_seconds": 0.0,
+        "body_duration_seconds": 258.06666666666666,
+        "endcard_duration_seconds": 10,
+        "final_duration_seconds": 268.066667,
+        "audio_video_tail_difference_seconds": 0.0
+      }
+    },
+    "en_short": {
+      "timeline": "passed_zero_start_contiguous_all_selected_pages_exact_WAV_end",
+      "subtitle_cues": 40,
+      "subtitle_last_end_seconds": 86.68,
+      "subtitles": "passed_nonempty_ordered_within_narrated_body",
+      "metadata": "passed_title_description_chapter_bounds_private_quality_gate",
+      "full_decode": "passed_reused_completed_worker_check",
+      "source_render_review": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1",
+            "duration": "97.133333"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "duration": "97.133333"
+          }
+        ],
+        "format": {
+          "duration": "97.133333"
+        },
+        "final": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/algotrading-order-types-en-short.mp4",
+        "decode": "passed",
+        "av_tail_seconds": 0.0,
+        "narrated_duration_seconds": 87.121271,
+        "endcard_start_seconds": 87.13333333333334,
+        "final_frame_review": "passed_root_and_independent",
+        "human_quality_approval": null,
+        "ocr_false_positive": "psm11 title bbox includes decorative topborder; directroot+independentletterreview actualfirsttitleink y191, notcriticaldecorabove180."
+      },
+      "human_listening": null,
+      "human_quality_approval": null,
+      "independent_final_probe": {
+        "status": "passed",
+        "first_frame_pts_seconds": 0.0,
+        "body_duration_seconds": 87.13333333333334,
+        "endcard_duration_seconds": 10,
+        "final_duration_seconds": 97.133333,
+        "audio_video_tail_difference_seconds": 0.0
+      }
+    },
+    "ru_short": {
+      "timeline": "passed_zero_start_contiguous_all_selected_pages_exact_WAV_end",
+      "subtitle_cues": 29,
+      "subtitle_last_end_seconds": 112.18,
+      "subtitles": "passed_nonempty_ordered_within_narrated_body",
+      "metadata": "passed_title_description_chapter_bounds_private_quality_gate",
+      "full_decode": "passed_reused_completed_worker_check",
+      "source_render_review": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1",
+            "duration": "122.533333"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "channels": 2,
+            "r_frame_rate": "0/0",
+            "duration": "122.533333"
+          }
+        ],
+        "format": {
+          "duration": "122.533333"
+        },
+        "final": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/algotrading-order-types-ru-short.mp4",
+        "decode": "passed",
+        "av_tail_seconds": 0.0,
+        "narrated_duration_seconds": 112.523917,
+        "endcard_start_seconds": 112.53333333333333,
+        "final_frame_review": "passed_root_and_independent",
+        "human_quality_approval": null,
+        "independent_review": "Passed reviewed changed narration and/or actual final Short extracted frames; human listening and approval remain pending."
+      },
+      "human_listening": null,
+      "human_quality_approval": null,
+      "independent_final_probe": {
+        "status": "passed",
+        "first_frame_pts_seconds": 0.0,
+        "body_duration_seconds": 112.53333333333333,
+        "endcard_duration_seconds": 10,
+        "final_duration_seconds": 122.533333,
+        "audio_video_tail_difference_seconds": 0.0
+      }
+    }
+  },
+  "independent_review": {
+    "ru_desktop": "Passed repaired time-in-force checklist join and complete final no-guarantees sentence.",
+    "en_short": "Passed actual final MP4 body/card hard safe-zone overlays and complete source page 4 contents.",
+    "ru_short": "Passed actual final MP4 body/card hard safe-zone overlays and complete source page 4 contents."
+  },
+  "root_frame_review": {
+    "en_desktop": "All eleven scenes, ten before/after cut pairs and contacts card edges reviewed.",
+    "ru_desktop": "All eleven scenes, full final checklist and last contacts frame reviewed; all twenty-two cut frames match the correct source page.",
+    "shorts": "Actual final body and card frames retain all critical glyphs and relationships inside x80..850/y180..1430; controls at x900+ and y1500+ remain clear."
+  },
+  "human_listening": null,
+  "human_quality_approval": null
+}

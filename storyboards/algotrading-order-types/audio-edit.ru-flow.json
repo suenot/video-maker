@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "language": "ru",
+  "notebook": "https://notebook.google.com/notebook/110d2424-6b00-4862-8136-73733595d8c1",
+  "artifact_id": "81cbd4bc-d979-4526-a743-676dfbaf3d5b",
+  "source_id": "ecb1bbf5-6220-49f2-8cf0-68de0c786ff8",
+  "account_guard": "passed",
+  "raw_audio": "input/algotrading-order-types/revisions/audio_ru-deep-dive.m4a",
+  "raw_audio_sha256": "3a823b0c1d76a387caeda474382c2bf834841aa1df072cbe6cce6537e5aeeea4",
+  "raw_duration_seconds": 288.043537,
+  "retained_intervals_seconds": [
+    [
+      0,
+      40
+    ],
+    [
+      46.8,
+      251.65
+    ],
+    [
+      77.42,
+      78.44
+    ],
+    [
+      254.46,
+      260.15
+    ],
+    [
+      263.2,
+      269.78
+    ]
+  ],
+  "crossfade_seconds": 0.02,
+  "removed_clause": "Absolutely asynchronous events plus misleading exchange merely promises to process signal; distinct trigger/price/volume enumeration retained.",
+  "production_audio": "input/algotrading-order-types/revisions/audio_ru-deep-dive-production-v2.wav",
+  "audio_replacement": "None; source fragments only, original preserved.",
+  "human_listening": null,
+  "human_quality_approval": null,
+  "status": "technically_checked_human_quality_review_pending",
+  "production_audio_sha256": "25f003378b6259832edf052f69f96fa0db210f5ec54365e0537c3f1721d38714",
+  "production_duration_seconds": 258.06,
+  "caption_corrections": [
+    {
+      "start": 0.0,
+      "before": " Ну что, сегодня мы без долгих вступлений, сразу разбираем документацию БИРШ и архитектуру торговых систем.",
+      "after": " Ну что, сегодня мы без долгих вступлений, сразу разбираем документацию бирж и архитектуру торговых систем.",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 15.08,
+      "before": " Потому что принятие заявки БИРЖей вообще не означает завершенную сделку.",
+      "after": " Потому что принятие заявки биржей вообще не означает завершенную сделку.",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 21.36,
+      "before": " И вот тут возникает вопрос. Если сервер уже сказал «да», откуда берется этот скрытый риск не исполнения?",
+      "after": " И вот тут возникает вопрос. Если сервер уже сказал «да», откуда берется этот скрытый риск неисполнения?",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 73.82,
+      "before": " Возьмем запрос на 101, когда немедленно доступно только 60.",
+      "after": " Возьмем запрос на 100 единиц, когда немедленно доступно только 60.",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 79.7,
+      "before": " Режим IOC, ну, и Медиату Кенсел, исполнит эти доступные 60 и отменит оставшийся 40.",
+      "after": " Режим IOC, ну, и Immediate Or Cancel, исполнит эти доступные 60 и отменит оставшийся 40.",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 90.56,
+      "before": " А если режим ФОК — Fill or Kill?",
+      "after": " А если режим FOK — Fill or Kill?",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 94.04,
+      "before": " О, тогда в этой же ситуации биржа отменит все 101.",
+      "after": " О, тогда в этой же ситуации биржа отменит все 100 единиц.",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 99.96,
+      "before": " Да, потому что ФОК требует немедленного исполнения всего запрошенного объема без каких-либо исключений.",
+      "after": " Да, потому что FOK требует немедленного исполнения всего запрошенного объема без каких-либо исключений.",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 109.62,
+      "before": " Тогда, кажется, логично выставить пассивную постонли заявку.",
+      "after": " Тогда, кажется, логично выставить пассивную post-only заявку.",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 114.68,
+      "before": " Ну, принято, постонли остается пассивной, да.",
+      "after": " Ну, принято, post-only остается пассивной, да.",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 152.38,
+      "before": " Жесть. А если перейти от простых триггеров к алгоритмическому исполнению, вот алгоритм T-ВАП распределяет исполнение равномерного времени.",
+      "after": " Жесть. А если перейти от простых триггеров к алгоритмическому исполнению, вот алгоритм TWAP распределяет исполнение равномерного времени.",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 161.3,
+      "before": " А V-ВАП используют порторгованный объем, как ориентир.",
+      "after": " А VWAP используют проторгованный объем, как ориентир.",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 197.82,
+      "before": " Но в источниках описана специфика Binance Spot OTO OCO.",
+      "after": " Но в источниках описана специфика Binance Spot OTOCO.",
+      "kind": "ASR_written_name_or_number_normalization"
+    },
+    {
+      "start": 217.44,
+      "before": " Бержевые условия обслуживает сама площадка.",
+      "after": " Биржевые условия обслуживает сама площадка.",
+      "kind": "ASR_written_name_or_number_normalization"
+    }
+  ],
+  "number_disambiguation_evidence": "temp/algotrading-order-types/flow-v4/ru/audio-deep-dive/ioc-fok-check.json",
+  "full_edited_transcription_review": "passed_all11topics_full6checks_including_time_in_force_complete_no_guarantees_final_sentence",
+  "join_review": "Full edited ASR confirms checklist: частичного исполнения, время действия заявки, поддержка функций...; no IOC-only policy substituted for generalTIF.",
+  "superseded_edit": {
+    "production_audio": "input/algotrading-order-types/revisions/audio_ru-deep-dive-production.wav",
+    "production_audio_sha256": "7eae896c950af61d6de0dbcd181263246634c19f5946fff26cdc4223a6453a9c",
+    "production_duration_seconds": 281.223542,
+    "retained_intervals_seconds": [
+      [
+        0,
+        40
+      ],
+      [
+        46.8,
+        288.043537
+      ]
+    ],
+    "status": "edited_transcript_reviewed_pending_independent_review"
+  },
+  "additional_source_fragment_edits": [
+    {
+      "reason": "Checklist item4 must name time-in-force instead of imposing IOC policy on allTIF.",
+      "retained_words": "время действия заявки",
+      "source_interval_seconds": [
+        77.42,
+        78.44
+      ],
+      "replaced_raw_interval_seconds": [
+        251.65,
+        254.46
+      ]
+    },
+    {
+      "reason": "Remove unsupported blanket uncontrolled-risk/prediction-vs-survival conclusion and colossal-risk filler; retain complete final no-profit/better-price/full-execution-guarantee sentence.",
+      "source_end_seconds": 269.78
+    }
+  ],
+  "timeline": "temp/algotrading-order-types/flow-v4/ru/audio-production-v2/timeline.json",
+  "srt": "output/algotrading-order-types/flow-v4/ru/algotrading-order-types-ru-desktop.srt",
+  "final_video": "output/algotrading-order-types/flow-v4/ru/algotrading-order-types-ru-desktop.mp4",
+  "final_video_sha256": "b46adc7b72f6d5983818b28990e9d73cd2f0675201c73578e2b3c84ff74b3e39",
+  "render_qa": "temp/algotrading-order-types/flow-v4/ru/audio-production-v2/render-qa.json",
+  "final_audio_tail_asr": {
+    "path": "temp/algotrading-order-types/final-audio-tail-checks/ru-desktop.json",
+    "status": "Complete final sentence confirmed in actual MP4 audio; human listening remains pending."
+  },
+  "independent_review": "Passed changed checklist/time-in-force join and complete final no-guarantees sentence."
+}

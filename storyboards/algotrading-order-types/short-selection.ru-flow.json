@@ -1,0 +1,51 @@
+{
+  "topic": "IOC versus FOK",
+  "source_pages": [
+    4
+  ],
+  "notebook": "https://notebook.google.com/notebook/110d2424-6b00-4862-8136-73733595d8c1",
+  "source_id": "c1ad4f51-137d-468c-9e66-2ec89465646f",
+  "artifact_id": "be78b075-8ef9-4175-b3f1-212e58610565",
+  "account_guard": "passed",
+  "raw_audio": "input/algotrading-order-types/revisions/audio_ru-ioc-fok-short.m4a",
+  "raw_audio_sha256": "6e816448261ff31eba653f0a6efaf6fb136302fcbd9c4543c914a895563543af",
+  "production_audio": "input/algotrading-order-types/revisions/audio_ru-ioc-fok-short-production.wav",
+  "production_audio_sha256": "b384e715a814498cb178fc18d9e6e0ff48b15e36c6c62c4af0869299a65393e5",
+  "production_duration_seconds": 112.523917,
+  "audio_edit": "None; only decode/resample to48kHz stereo",
+  "complete_transcript_review": "passed_illustrative100_60_IOC60_40_FOK0_100_general_zero_some_all_conditional_FOK_no_execution_guarantee_venue_rules",
+  "caption_corrections": [
+    {
+      "start": 26.96,
+      "before": " Режим IOC или immediate O-cancel.",
+      "after": " Режим IOC или Immediate Or Cancel.",
+      "reason": "Correct written English expansion in Russian captions; no audio edit."
+    },
+    {
+      "start": 35.46,
+      "before": " А вот FOK, PhiloKill, в этом же примере исполняет ровно ноль и отменяет все 100,",
+      "after": " А вот FOK, Fill Or Kill, в этом же примере исполняет ровно ноль и отменяет все 100,",
+      "reason": "Correct written English expansion in Russian captions; no audio edit."
+    }
+  ],
+  "timeline": "temp/algotrading-order-types/flow-v4/ru/audio-ioc-fok-short/timeline.json",
+  "srt": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/algotrading-order-types-ru-short.srt",
+  "frame_input_geometry": "failed_footer_below_y1430_requires_native_portrait_video_placement",
+  "frame_video_transform": "scale=908:1614,pad=1080:1920:90:70:color=0xF4E8D2; independent native portrait remains native portrait; no desktop conversion",
+  "short_limit_source": "https://support.google.com/youtube/answer/15424877?hl=en",
+  "short_limit_checked_at": "2026-10-01",
+  "short_limit_seconds": 180,
+  "human_listening": null,
+  "human_quality_approval": null,
+  "status": "technically_checked_human_quality_review_pending",
+  "final_video": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/algotrading-order-types-ru-short.mp4",
+  "final_video_sha256": "d5f50cd3129b9ef50539e8241200190fcca806d9c303b64d7aa923c17505cfde",
+  "final_duration_seconds": 122.533333,
+  "render_qa": "temp/algotrading-order-types/flow-v4/ru/audio-ioc-fok-short/render-qa.json",
+  "root_final_frame_safe_zone": "passed_full_title_diagrams_100_60_40_0_and_complete_IOC_FOK_footers_within_hard_safe_zone",
+  "final_audio_tail_asr": {
+    "path": "temp/algotrading-order-types/final-audio-tail-checks/ru-short.json",
+    "status": "Complete final sentence confirmed in actual MP4 audio; human listening remains pending."
+  },
+  "independent_review": "Passed actual final MP4 body/card hard safe-zone overlays and complete source page4 IOC/FOK text and relationships."
+}
