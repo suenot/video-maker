@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "slug": "funding-rate-arbitrage-cross-exchange",
+  "language": "en",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/funding-rate-arbitrage-cross-exchange.en.md",
+  "article_sha256": "45ff3b1d246cd0e0f08090e43d3b992bdac320c8d495bdd8dcc70378bc3530b6",
+  "notebook_title": "MM sources | funding-rate-arbitrage-cross-exchange | EN",
+  "source_title": "MM article funding-rate-arbitrage-cross-exchange EN 45ff3b1d246c",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/funding-rate-arbitrage-cross-exchange.en.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/funding-rate-arbitrage-cross-exchange.en.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/funding-rate-arbitrage-cross-exchange.en.audio.txt",
+  "article_title": "Funding Rate Arbitrage Across Exchanges: How to Profit from Rate Differences",
+  "article_date": "2026-03-05",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "fa6211e2f591861211d45b086aaea907879a93dc101f5302d39ccadc4e7cb65a",
+  "slides_prompt_sha256": "40dacf31449bb67ce1efadcf2d605b3158f2bc6fc61bf83649822d3773886c5e",
+  "audio_prompt_sha256": "7bb9e4fa353940dee47b47bc6257cf9592747c0b8ff805021f803e54371c2774"
+}

@@ -1,0 +1,557 @@
+{
+  "schema_version": 1,
+  "scope": "slides_and_audio_drafts",
+  "jobs": {
+    "funding-rate-arbitrage-cross-exchange:en": {
+      "slug": "funding-rate-arbitrage-cross-exchange",
+      "language": "en",
+      "article_sha256": "45ff3b1d246cd0e0f08090e43d3b992bdac320c8d495bdd8dcc70378bc3530b6",
+      "input_hashes": {
+        "article": "45ff3b1d246cd0e0f08090e43d3b992bdac320c8d495bdd8dcc70378bc3530b6",
+        "source_text": "fa6211e2f591861211d45b086aaea907879a93dc101f5302d39ccadc4e7cb65a",
+        "slides_prompt": "40dacf31449bb67ce1efadcf2d605b3158f2bc6fc61bf83649822d3773886c5e",
+        "audio_prompt": "7bb9e4fa353940dee47b47bc6257cf9592747c0b8ff805021f803e54371c2774"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "downloaded_pending_editorial_review",
+          "baseline_ids": [],
+          "prompt_sha256": "40dacf31449bb67ce1efadcf2d605b3158f2bc6fc61bf83649822d3773886c5e",
+          "requested_at": "2026-10-01T19:20:28.441793+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "713bd3f0-fc93-4d15-9f50-20dd3a4c5485",
+          "artifact_id": "389c50f2-1019-4eba-a9dc-f60be615f6fa",
+          "card_text": "tablet\nUnread\nFunding Rate Arbitrage Across Exchanges\n1 source · 17m ago\nmore_vert",
+          "observed_at": "2026-10-01T19:46:02.267943+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/funding-rate-arbitrage-cross-exchange/en/slides.pdf",
+          "sha256": "c1607330f1b1eaa4ffc5babf5a2c84286f1b33f107463fbd3c0825a1dc472c43",
+          "bytes": 13977074,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-01T19:46:30.550251+00:00",
+          "editorial_review": "pending"
+        },
+        "audio": {
+          "state": "downloaded_pending_editorial_review",
+          "baseline_ids": [
+            "389c50f2-1019-4eba-a9dc-f60be615f6fa"
+          ],
+          "prompt_sha256": "7bb9e4fa353940dee47b47bc6257cf9592747c0b8ff805021f803e54371c2774",
+          "requested_at": "2026-10-01T19:20:45.958317+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "713bd3f0-fc93-4d15-9f50-20dd3a4c5485",
+          "artifact_id": "dac63646-b5e2-4b5a-982b-d2b01267e9e8",
+          "card_text": "audio_spark\nUnread\nMarket neutral returns from funding arbitrage\n22:20 · Deep Dive · 1 source · 16m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-01T19:46:31.584260+00:00",
+          "duration_seconds": 1340.650522,
+          "path": "input/notebooklm-sources/funding-rate-arbitrage-cross-exchange/en/audio.m4a",
+          "sha256": "b9dac2e9cac59171ad2ecaa0cdb9014c3d98679c2017b25fa9500d93b62102a4",
+          "bytes": 43148195,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-01T19:48:04.128889+00:00",
+          "editorial_review": "pending"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-01T19:14:24.516817+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/funding-rate-arbitrage-cross-exchange-en-notebook-baseline.json",
+        "baseline_sha256": "daafdc9cc04714aa4142229e0a7bd8b411ab7d769025c5ce19e30fe89403fd76",
+        "baseline_count": 257,
+        "resolved_at": "2026-10-01T19:18:28.358710+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/79e988e8-071c-44b8-bf97-331aca0a16c0",
+      "source_intent": {
+        "at": "2026-10-01T19:15:09.202670+00:00",
+        "sha256": "fa6211e2f591861211d45b086aaea907879a93dc101f5302d39ccadc4e7cb65a",
+        "baseline_ids": []
+      },
+      "state": "source_ready",
+      "input_revisions": [
+        {
+          "at": "2026-10-01T19:18:28.357218+00:00",
+          "reason": "Funding prompts finalized before any artifact submission; uploaded article unchanged.",
+          "previous": {
+            "article": "45ff3b1d246cd0e0f08090e43d3b992bdac320c8d495bdd8dcc70378bc3530b6",
+            "source_text": "fa6211e2f591861211d45b086aaea907879a93dc101f5302d39ccadc4e7cb65a",
+            "slides_prompt": "4fd405dbac924b799275b054f1d888151779a0d66f9a3ddac7c43cf8a25bc8ad",
+            "audio_prompt": "0d87c88e215921c1c34ebc7fdb3af6bb00950569ea9e64e161047295abf5e31a"
+          },
+          "current": {
+            "article": "45ff3b1d246cd0e0f08090e43d3b992bdac320c8d495bdd8dcc70378bc3530b6",
+            "source_text": "fa6211e2f591861211d45b086aaea907879a93dc101f5302d39ccadc4e7cb65a",
+            "slides_prompt": "40dacf31449bb67ce1efadcf2d605b3158f2bc6fc61bf83649822d3773886c5e",
+            "audio_prompt": "7bb9e4fa353940dee47b47bc6257cf9592747c0b8ff805021f803e54371c2774"
+          }
+        }
+      ],
+      "source_id": "713bd3f0-fc93-4d15-9f50-20dd3a4c5485",
+      "source_title": "MM article funding-rate-arbitrage-cross-exchange EN 45ff3b1d246c",
+      "source_sha256": "fa6211e2f591861211d45b086aaea907879a93dc101f5302d39ccadc4e7cb65a",
+      "source_display_name": "MM article funding-rate-arbitrage-cross-exchange …",
+      "selected_source_ids": [
+        "713bd3f0-fc93-4d15-9f50-20dd3a4c5485"
+      ]
+    },
+    "funding-rate-arbitrage-cross-exchange:ru": {
+      "slug": "funding-rate-arbitrage-cross-exchange",
+      "language": "ru",
+      "article_sha256": "6437d247a17b108cf5373e4eafaa7a0af83b794863ded56bdc806052352856ad",
+      "input_hashes": {
+        "article": "6437d247a17b108cf5373e4eafaa7a0af83b794863ded56bdc806052352856ad",
+        "source_text": "c7ecec95e9a9c9216ee442ef27d57bb03a9571925d3c844bed00d39d9599a44f",
+        "slides_prompt": "09d0cd69b452310ca702f5ff63d1ae5043fdd9e10292ceeffffdabe7b1318844",
+        "audio_prompt": "8134342e6b4e0dbe9702066c3d150d9231bc27b32f8d73559a66464de8afcae4"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "downloaded_pending_editorial_review",
+          "baseline_ids": [],
+          "prompt_sha256": "09d0cd69b452310ca702f5ff63d1ae5043fdd9e10292ceeffffdabe7b1318844",
+          "requested_at": "2026-10-01T19:48:18.151431+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "7391febc-c9da-42cf-bada-3f88d71e5b40",
+          "artifact_id": "cc0c7c24-93e7-4ff6-aece-41e4510ba308",
+          "card_text": "tablet\nUnread\nАрбитраж Funding Rates\n1 source · 3m ago\nmore_vert",
+          "observed_at": "2026-10-01T20:00:16.386698+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/funding-rate-arbitrage-cross-exchange/ru/slides.pdf",
+          "sha256": "c6305836b462d771e65c427977577aa8cc7ec5f4a20a561afc718718841de7fe",
+          "bytes": 14922610,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-01T20:00:35.314308+00:00",
+          "editorial_review": "pending"
+        },
+        "audio": {
+          "state": "downloaded_pending_editorial_review",
+          "baseline_ids": [
+            "cc0c7c24-93e7-4ff6-aece-41e4510ba308"
+          ],
+          "prompt_sha256": "8134342e6b4e0dbe9702066c3d150d9231bc27b32f8d73559a66464de8afcae4",
+          "requested_at": "2026-10-01T19:48:36.146379+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "7391febc-c9da-42cf-bada-3f88d71e5b40",
+          "artifact_id": "d8b5b4f5-4134-4fbf-92da-f387650e9eac",
+          "card_text": "audio_spark\nUnread\nАрбитраж фандинга на криптобиржах\n15:16 · Deep Dive · 1 source · 2m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-01T20:00:36.347438+00:00",
+          "duration_seconds": 916.932789,
+          "path": "input/notebooklm-sources/funding-rate-arbitrage-cross-exchange/ru/audio.m4a",
+          "sha256": "4914e809abf0a28fdf360fd9803284773ba91f06abc1f2086e4d249cb4dbdd40",
+          "bytes": 29511248,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-01T20:01:15.593265+00:00",
+          "editorial_review": "pending"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-01T19:21:00.460298+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/funding-rate-arbitrage-cross-exchange-ru-notebook-baseline.json",
+        "baseline_sha256": "e126d463cce3791c995fc729acd811ca9ee5dadcccf443b7f2535424ec34b163",
+        "baseline_count": 258,
+        "resolved_at": "2026-10-01T19:21:10.280065+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/a9456349-2ba4-4749-82b8-fec2cbcb9456",
+      "source_intent": {
+        "at": "2026-10-01T19:21:14.401152+00:00",
+        "sha256": "c7ecec95e9a9c9216ee442ef27d57bb03a9571925d3c844bed00d39d9599a44f",
+        "baseline_ids": []
+      },
+      "source_id": "7391febc-c9da-42cf-bada-3f88d71e5b40",
+      "source_title": "MM article funding-rate-arbitrage-cross-exchange RU 6437d247a17b",
+      "source_sha256": "c7ecec95e9a9c9216ee442ef27d57bb03a9571925d3c844bed00d39d9599a44f",
+      "state": "source_ready",
+      "source_display_name": "MM article funding-rate-arbitrage-cross-exchange …",
+      "selected_source_ids": [
+        "7391febc-c9da-42cf-bada-3f88d71e5b40"
+      ]
+    },
+    "statistical-arbitrage-pairs-trading-crypto:en": {
+      "slug": "statistical-arbitrage-pairs-trading-crypto",
+      "language": "en",
+      "article_sha256": "e587050d45b9efc8559e64216a09dd1dcf7b983e292604e2d3f29ce1ac3f74db",
+      "input_hashes": {
+        "article": "e587050d45b9efc8559e64216a09dd1dcf7b983e292604e2d3f29ce1ac3f74db",
+        "source_text": "75c5f15beb15aded0697c06b85d6d8e39d723375463af73b4aaeddbb27920936",
+        "slides_prompt": "4848a8aae8e016e24560ebe75001a3e821e0b5f4a6e2c84ba207cf2b8d346ae2",
+        "audio_prompt": "f59a3d2a6eef2ceec51f2b810a5c32e6d03cd6539305b981c61bbd68709e117a"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "downloaded_pending_editorial_review",
+          "baseline_ids": [],
+          "prompt_sha256": "4848a8aae8e016e24560ebe75001a3e821e0b5f4a6e2c84ba207cf2b8d346ae2",
+          "requested_at": "2026-10-01T19:49:10.857434+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "842a14d1-ece8-47db-b40f-aa441b9516f3",
+          "artifact_id": "ddfe54fa-c29e-43c8-829e-61b2b62dc25b",
+          "card_text": "tablet\nUnread\nBuilding a Statistical Arbitrage Engine for Crypto Markets\n1 source · 1m ago\nmore_vert",
+          "observed_at": "2026-10-01T20:01:22.479573+00:00",
+          "pages": 13,
+          "path": "input/notebooklm-sources/statistical-arbitrage-pairs-trading-crypto/en/slides.pdf",
+          "sha256": "26cbaa914fdf4ff511396a6168155b34618fb87c0b60bf1dec17dc8a43e947b5",
+          "bytes": 17689811,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-01T20:01:35.871475+00:00",
+          "editorial_review": "pending"
+        },
+        "audio": {
+          "state": "downloaded_pending_editorial_review",
+          "baseline_ids": [
+            "ddfe54fa-c29e-43c8-829e-61b2b62dc25b"
+          ],
+          "prompt_sha256": "f59a3d2a6eef2ceec51f2b810a5c32e6d03cd6539305b981c61bbd68709e117a",
+          "requested_at": "2026-10-01T19:55:29.122976+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "842a14d1-ece8-47db-b40f-aa441b9516f3",
+          "artifact_id": "f70f5597-7d41-489b-afa6-1ce2b4dc053e",
+          "card_text": "audio_spark\nUnread\nStatistical Arbitrage and Crypto Pairs Trading\n28:25 · Deep Dive · 1 source · 1m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-01T20:05:01.692790+00:00",
+          "duration_seconds": 1705.319909,
+          "path": "input/notebooklm-sources/statistical-arbitrage-pairs-trading-crypto/en/audio.m4a",
+          "sha256": "c3e99f73853e3f91c7f2065210288b6662d783b7ed6b7040fb117687c034ce2f",
+          "bytes": 54884612,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-01T20:06:43.686189+00:00",
+          "editorial_review": "pending"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-01T19:48:49.903654+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/statistical-arbitrage-pairs-trading-crypto-en-notebook-baseline.json",
+        "baseline_sha256": "081f57c5c43a835de65dfc4ca521173b1243478f6efff8b6c73040f91981dff5",
+        "baseline_count": 259,
+        "resolved_at": "2026-10-01T19:48:52.261827+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/e2d4d03d-f48e-43a0-9cb7-f8ba02d4b7bf",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-01T19:48:57.794944+00:00",
+        "sha256": "75c5f15beb15aded0697c06b85d6d8e39d723375463af73b4aaeddbb27920936",
+        "baseline_ids": []
+      },
+      "source_id": "842a14d1-ece8-47db-b40f-aa441b9516f3",
+      "source_title": "MM article statistical-arbitrage-pairs-trading-crypto EN e587050d45b9",
+      "source_sha256": "75c5f15beb15aded0697c06b85d6d8e39d723375463af73b4aaeddbb27920936",
+      "state": "source_ready",
+      "source_display_name": "MM article statistical-arbitrage-pairs-trading-cr…",
+      "selected_source_ids": [
+        "842a14d1-ece8-47db-b40f-aa441b9516f3"
+      ]
+    },
+    "statistical-arbitrage-pairs-trading-crypto:ru": {
+      "slug": "statistical-arbitrage-pairs-trading-crypto",
+      "language": "ru",
+      "article_sha256": "01ea28ecb77c4d57afcfe88f2fcaf4ded7fd0957fd2cad3dd950111750d9c9d0",
+      "input_hashes": {
+        "article": "01ea28ecb77c4d57afcfe88f2fcaf4ded7fd0957fd2cad3dd950111750d9c9d0",
+        "source_text": "f453269fb265ceb24c6d8cb6678a3913895f43b33e7d6d9a3be2722f7339a191",
+        "slides_prompt": "964df0cf5bac44ab4f175658083df9ebe75f33d6fd6a533f6810886d38c25db2",
+        "audio_prompt": "be8ab6520cb6e8c0b6ecd102401bd2636f5f963f611cd3f334d07c8e54dd6940"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "downloaded_pending_editorial_review",
+          "baseline_ids": [],
+          "prompt_sha256": "964df0cf5bac44ab4f175658083df9ebe75f33d6fd6a533f6810886d38c25db2",
+          "requested_at": "2026-10-01T20:12:08.050573+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "b2d5b5a1-9d14-4f26-8f40-b2275796d2c3",
+          "artifact_id": "c474cf2b-74cb-47d9-afe6-7164d78dd4ef",
+          "card_text": "tablet\nUnread\nСтатистический арбитраж на крипторынках\n1 source · 5m ago\nmore_vert",
+          "observed_at": "2026-10-01T20:25:45.040462+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/statistical-arbitrage-pairs-trading-crypto/ru/slides.pdf",
+          "sha256": "43542eb830e72a3c0495032fb06ff59aae5f7591a4fe161ceb5893b1b7e3ae32",
+          "bytes": 13289274,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-01T20:26:02.015537+00:00",
+          "editorial_review": "pending"
+        },
+        "audio": {
+          "state": "downloaded_pending_editorial_review",
+          "baseline_ids": [
+            "c474cf2b-74cb-47d9-afe6-7164d78dd4ef"
+          ],
+          "prompt_sha256": "be8ab6520cb6e8c0b6ecd102401bd2636f5f963f611cd3f334d07c8e54dd6940",
+          "requested_at": "2026-10-01T20:12:25.170996+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "b2d5b5a1-9d14-4f26-8f40-b2275796d2c3",
+          "artifact_id": "9b982055-9ec7-4347-9b40-df337291858b",
+          "card_text": "audio_spark\nUnread\nМатематика прибыли в криптохаосе без прогнозов\n24:07 · Deep Dive · 1 source · 4m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-01T20:26:03.055852+00:00",
+          "duration_seconds": 1447.276553,
+          "path": "input/notebooklm-sources/statistical-arbitrage-pairs-trading-crypto/ru/audio.m4a",
+          "sha256": "38715a6204194b9e756ab3905a76ea9c51da7236d1c4ed41bc057d2679e168cb",
+          "bytes": 46579756,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-01T20:26:49.408399+00:00",
+          "editorial_review": "pending"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-01T19:55:44.330257+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/statistical-arbitrage-pairs-trading-crypto-ru-notebook-baseline.json",
+        "baseline_sha256": "8fa7a7b9418f5b8665cb7934ae4535366555dbd7466603a55828b2c3e05c9596",
+        "baseline_count": 260,
+        "resolved_at": "2026-10-01T19:55:46.780546+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/e070744b-5868-44ab-af00-a14cb82a0350",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-01T19:55:50.945933+00:00",
+        "sha256": "f453269fb265ceb24c6d8cb6678a3913895f43b33e7d6d9a3be2722f7339a191",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [
+        "pending_upload_doc_id_E78E86A6-EFC9-450C-A6AB-79DEAC767D51"
+      ],
+      "source_id": "b2d5b5a1-9d14-4f26-8f40-b2275796d2c3",
+      "source_title": "MM article statistical-arbitrage-pairs-trading-crypto RU 01ea28ecb77c",
+      "source_sha256": "f453269fb265ceb24c6d8cb6678a3913895f43b33e7d6d9a3be2722f7339a191",
+      "state": "source_ready",
+      "source_display_name": "MM article statistical-arbitrage-pairs-trading-cr…",
+      "selected_source_ids": [
+        "b2d5b5a1-9d14-4f26-8f40-b2275796d2c3"
+      ]
+    },
+    "order-flow-imbalance-prediction:en": {
+      "slug": "order-flow-imbalance-prediction",
+      "language": "en",
+      "article_sha256": "07f9a83f81aa9395bfd2580af153c23761171317aca7020a71c732d928dfed32",
+      "input_hashes": {
+        "article": "07f9a83f81aa9395bfd2580af153c23761171317aca7020a71c732d928dfed32",
+        "source_text": "3594728d9d85a03b2a4c20e2d71b46676cb788069cd551af995d29fe01063afe",
+        "slides_prompt": "d4dbc92ca069f345df90315d1de0c174ed172074be7a2ec6a92ceaf1deae3cef",
+        "audio_prompt": "2e1d2b8e7223a47861a2482ecb3959250cb0ad53fc42e12f791f8edfc14bd6a9"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "baseline_ids": [],
+          "prompt_sha256": "d4dbc92ca069f345df90315d1de0c174ed172074be7a2ec6a92ceaf1deae3cef",
+          "requested_at": "2026-10-01T20:16:01.512297+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "d4761b93-2067-4d00-92f2-1f19bfd9df32",
+          "recovery_history": [
+            {
+              "at": "2026-10-01T20:15:28.668067+00:00",
+              "previous_state": "submitting",
+              "reason": "Recorded failure occurred at absent Generate-now guard before the click call; no submission attempted. Visible dialog offers Generate later only.",
+              "log": "temp/notebooklm-source-queue/run-2026-10-01-10.log",
+              "screenshot": "temp/notebooklm-source-queue/order-flow-imbalance-prediction-en-error.png",
+              "screenshot_sha256": "036ed7e47540c294ade8e7557ad330a6b09d347b7dd7253996075dd409a56b97"
+            }
+          ],
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nEnglish\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 03:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "submission_mode": "later",
+          "artifact_id": "36a9b7d0-dd13-4099-9a71-f38229e2f3fa",
+          "card_text": "tablet\nOrder Flow Imbalance Analysis\nScheduled for after 4am\nmore_vert",
+          "observed_at": "2026-10-01T20:31:37.187057+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nEnglish\nLength\nShort\nDefault\nLong\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Core Mechanics\n+ Practical Application\n+ Model Comparison\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 03:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "36a9b7d0-dd13-4099-9a71-f38229e2f3fa"
+          ],
+          "prompt_sha256": "2e1d2b8e7223a47861a2482ecb3959250cb0ad53fc42e12f791f8edfc14bd6a9",
+          "requested_at": "2026-10-01T20:16:16.448577+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "d4761b93-2067-4d00-92f2-1f19bfd9df32",
+          "submission_mode": "later",
+          "artifact_id": "d2e0cdf5-b377-431d-9b33-70cb3395fa32",
+          "card_text": "audio_spark\nOrder Flow Imbalance Analysis\nScheduled for after 4am\nmore_vert",
+          "observed_at": "2026-10-01T20:31:38.214125+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-01T20:12:38.459938+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/order-flow-imbalance-prediction-en-notebook-baseline.json",
+        "baseline_sha256": "e3c8e7759785f0bfe1f16ac3d713ce23d13daeb71198a389d299ef2391349dad",
+        "baseline_count": 261,
+        "resolved_at": "2026-10-01T20:12:40.911004+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/10811e31-7f5a-4cd8-9162-aeff0b2bf270",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-01T20:12:44.913217+00:00",
+        "sha256": "3594728d9d85a03b2a4c20e2d71b46676cb788069cd551af995d29fe01063afe",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "d4761b93-2067-4d00-92f2-1f19bfd9df32",
+      "source_title": "MM article order-flow-imbalance-prediction EN 07f9a83f81aa",
+      "source_sha256": "3594728d9d85a03b2a4c20e2d71b46676cb788069cd551af995d29fe01063afe",
+      "state": "source_ready",
+      "source_display_name": "MM article order-flow-imbalance-prediction EN 07f…",
+      "selected_source_ids": [
+        "d4761b93-2067-4d00-92f2-1f19bfd9df32"
+      ]
+    },
+    "order-flow-imbalance-prediction:ru": {
+      "slug": "order-flow-imbalance-prediction",
+      "language": "ru",
+      "article_sha256": "386533b4650170489425511b675f7e78960ef54b01e5ff0639c8ad97094961ae",
+      "input_hashes": {
+        "article": "386533b4650170489425511b675f7e78960ef54b01e5ff0639c8ad97094961ae",
+        "source_text": "5e605216f42b203f744e3dbf1fa643a5de30f33fb2d6e7103de2821f04ab3d8c",
+        "slides_prompt": "2f8346fa5a6d7147bdfa8d5969f10c0a0ade855f981c61fc12ffb2607ee259a8",
+        "audio_prompt": "31651241715d7218242da003abb8f70feed567f6eaae1033f90888e5bd241b8f"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "2f8346fa5a6d7147bdfa8d5969f10c0a0ade855f981c61fc12ffb2607ee259a8",
+          "requested_at": "2026-10-01T20:27:10.244704+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "2cc80eaf-db29-4f7b-b72d-07ff4c0730bf",
+          "submission_mode": "later",
+          "artifact_id": "e2490438-e57d-41a6-b147-edd8271812a1",
+          "card_text": "tablet\nOrder-Flow Imbalance Decomposition and Prediction Models\nScheduled for after 4am\nmore_vert",
+          "observed_at": "2026-10-01T20:31:44.986764+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Core Mechanics\n+ Practical Application\n+ Strategic Narrative\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "e2490438-e57d-41a6-b147-edd8271812a1"
+          ],
+          "prompt_sha256": "31651241715d7218242da003abb8f70feed567f6eaae1033f90888e5bd241b8f",
+          "requested_at": "2026-10-01T20:27:29.622974+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "2cc80eaf-db29-4f7b-b72d-07ff4c0730bf",
+          "submission_mode": "later",
+          "artifact_id": "37cb0d92-8098-43cd-930a-7d4fdc6f64b7",
+          "card_text": "audio_spark\nOrder-Flow Imbalance Decomposition and Prediction Models\nScheduled for after 4am\nmore_vert",
+          "observed_at": "2026-10-01T20:31:46.015878+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-01T20:16:31.718097+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/order-flow-imbalance-prediction-ru-notebook-baseline.json",
+        "baseline_sha256": "0a371b2744766e468ddd7ebb4643d0467b953ca59f731794f90d784da047c369",
+        "baseline_count": 262,
+        "resolved_at": "2026-10-01T20:16:35.061572+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/d785f268-42ce-478a-83d9-c0eb445f15f3",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-01T20:16:40.169903+00:00",
+        "sha256": "5e605216f42b203f744e3dbf1fa643a5de30f33fb2d6e7103de2821f04ab3d8c",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [
+        "pending_upload_doc_id_45F135F1-DBE7-4013-B2A7-7F4641D3329F"
+      ],
+      "state": "source_ready",
+      "source_id": "2cc80eaf-db29-4f7b-b72d-07ff4c0730bf",
+      "source_title": "MM article order-flow-imbalance-prediction RU 386533b46501",
+      "source_sha256": "5e605216f42b203f744e3dbf1fa643a5de30f33fb2d6e7103de2821f04ab3d8c",
+      "source_display_name": "MM article order-flow-imbalance-prediction RU 386…",
+      "selected_source_ids": [
+        "2cc80eaf-db29-4f7b-b72d-07ff4c0730bf"
+      ]
+    },
+    "twap-vwap-pov-execution-algorithms:en": {
+      "slug": "twap-vwap-pov-execution-algorithms",
+      "language": "en",
+      "article_sha256": "6a11e40ea5f892df56641d6130e5e1159ad9ff1fa24d5ff552fde6d0e83cb2e4",
+      "input_hashes": {
+        "article": "6a11e40ea5f892df56641d6130e5e1159ad9ff1fa24d5ff552fde6d0e83cb2e4",
+        "source_text": "7452a2734476df308cbe145dc6a516669a6441f3f609fd46ecedcaca72a60001",
+        "slides_prompt": "fc1652bfa4e082236ba2998f46d0fcad29f2972a2b13e8c1a07c5c0d04b23b1f",
+        "audio_prompt": "9b4ee294cb2ec97308b861af50297e85c18f2bfbc47a4d534d0c3af992f44194"
+      },
+      "artifacts": {},
+      "notebook_intent": {
+        "at": "2026-10-01T20:16:58.504526+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/twap-vwap-pov-execution-algorithms-en-notebook-baseline.json",
+        "baseline_sha256": "50df2a3deb2c7ba25a5fb72d4c69fd12a28a0652710287c82e70f6c2be0e9c48",
+        "baseline_count": 263,
+        "resolved_at": "2026-10-01T20:17:03.141476+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/540ff659-31fd-4420-a7f4-fee00e8979a4",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "temporary_source_ids": [],
+      "source_recovery_history": [
+        {
+          "at": "2026-10-01T20:31:24.884715+00:00",
+          "reason": "Interrupted legacy source helper stopped while scanning button visibility before Insert. Fresh saved-notebook view confirms zero sources; hard quota disables all features until 03:51. Reuse same notebook after reset.",
+          "previous_intent": {
+            "at": "2026-10-01T20:18:05.738890+00:00",
+            "sha256": "7452a2734476df308cbe145dc6a516669a6441f3f609fd46ecedcaca72a60001",
+            "baseline_ids": []
+          },
+          "log": "temp/notebooklm-source-queue/run-2026-10-01-11.log",
+          "empty_notebook_evidence": "temp/notebooklm-source-queue/twap-vwap-pov-execution-algorithms-en-error.png",
+          "evidence_sha256": "14c3e0888df1078376f7163478fcc1d5fcfb461173dd910792134a1b19f1bd29"
+        }
+      ],
+      "state": "quota_wait"
+    }
+  },
+  "checked_at": "2026-10-01T20:31:51.593710+00:00",
+  "browser_geometry_requested": {
+    "width": 1979,
+    "height": 1290,
+    "screen_width": 2056,
+    "screen_height": 1329,
+    "x": 77,
+    "y": 39
+  },
+  "browser_geometry_verified": {
+    "outer_width": 1979,
+    "outer_height": 1290,
+    "inner_width": 1939,
+    "inner_height": 1200,
+    "device_pixel_ratio": 2
+  },
+  "quota": {
+    "notice": "AI usage limit reached. All features will be available after 03:51.",
+    "browser_timezone": "Asia/Tbilisi",
+    "observed_at": "2026-10-01T20:31:51.592748+00:00",
+    "not_before": "2026-10-01T23:51:00+00:00"
+  }
+}

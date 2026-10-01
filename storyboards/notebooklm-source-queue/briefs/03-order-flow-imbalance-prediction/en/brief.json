@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "slug": "order-flow-imbalance-prediction",
+  "language": "en",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/order-flow-imbalance-prediction.en.md",
+  "article_sha256": "07f9a83f81aa9395bfd2580af153c23761171317aca7020a71c732d928dfed32",
+  "notebook_title": "MM sources | order-flow-imbalance-prediction | EN",
+  "source_title": "MM article order-flow-imbalance-prediction EN 07f9a83f81aa",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/order-flow-imbalance-prediction.en.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/order-flow-imbalance-prediction.en.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/order-flow-imbalance-prediction.en.audio.txt",
+  "article_title": "Order Flow Imbalance: The Cont-Kukanov-Stoikov Event Decomposition",
+  "article_date": "2026-08-17",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "3594728d9d85a03b2a4c20e2d71b46676cb788069cd551af995d29fe01063afe",
+  "slides_prompt_sha256": "d4dbc92ca069f345df90315d1de0c174ed172074be7a2ec6a92ceaf1deae3cef",
+  "audio_prompt_sha256": "2e1d2b8e7223a47861a2482ecb3959250cb0ad53fc42e12f791f8edfc14bd6a9"
+}

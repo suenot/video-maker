@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Record the separate continuous NotebookLM source-draft SOP and acceptance conditions, full-size Camoufox launch policy, and the user's vertical montage reference.
+- Record the page-4-derived EN/RU Shorts v2 correction and independent final-frame checks; retain rejected artifacts and pending desktop/human review without blocking source drafting.
 - Supersede the order-types visual-pass claims after final-frame quality audit; require separate phone-size composition/legibility, narration pacing and source-placeholder review before queue advancement.
 - Deliver four corrected order-types MP4s through the existing NotebookLM PDF/audio flow; record selected Deep Dive and standalone IOC/FOK sources, source-fragment audio edits, current artifact hashes, complete narration timing, actual-frame safe-zone checks and pending human quality review.
 - Record corrected eleven-page NotebookLM decks, actual-page desktop image edits, native vertical proof, and rejected narration attempts without promoting the previous rejected videos.
@@ -17,6 +19,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bind NotebookLM production to the designated Gaia Camoufox account and record account verification before source generation.
 - Preserve the rejected bilingual order-types Blueprint package for provenance; record the user's quality rejection and the recovered existing NotebookLM PDF/audio flow before further production.
 - Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
+
+## [1.1.0] - 2026-10-02
+
+### Added
+
+- Add a bounded, resumable NotebookLM slide-PDF and Deep Dive audio source worker with frozen full-article inputs, saved artifact identity, exact original downloads and integrity/hash checks.
+- Freeze the initial four-article EN/RU source batch and record the active same-chat continuation automation.
+
+### Fixed
+
+- Preserve submission intents through quota waits, delayed customize dialogs and temporary upload-ID replacement, preventing blind duplicate generation.
+- Open the designated saved Camoufox profile at the usable display size, retaining native-window backups and refusing a concurrent profile owner.
+- Let completed source drafts retain their provenance without blocking unfinished jobs after later article/video updates.
 
 ## [1.0.0] - 2026-08-13
 
@@ -40,5 +55,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Document private-first uploads and retained Studio/public-state verification.
 - Document that generated videos and audio must never be committed.
 
-[Unreleased]: https://github.com/suenot/video-maker/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/suenot/video-maker/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/suenot/video-maker/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/suenot/video-maker/releases/tag/v1.0.0

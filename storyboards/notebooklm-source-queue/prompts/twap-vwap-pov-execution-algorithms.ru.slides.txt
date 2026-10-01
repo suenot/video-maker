@@ -1,0 +1,11 @@
+Create a comprehensive NotebookLM slide deck from this article. Use only the attached source named "MM article twap-vwap-pov-execution-algorithms RU 07296eebb62e". Produce in Russian. Follow the article sections in this order:
+1. Три планировщика, три скрытые ставки
+2. Оценка кривых объема на рынке, который никогда не закрывается
+3. Патологии POV: алгоритм, который гоняется за собственным хвостом
+4. Бенчмарки: почему обгон VWAP все еще может стоить вам денег
+5. Эксперимент: три алгоритма, одна лента
+6. Выбор на практике
+
+Сравните TWAP, VWAP и POV в порядке статьи: допущения планировщиков, оценка кривой объема на круглосуточном рынке, обратная связь и патологии POV, выбор бенчмарка, эксперимент на одной ленте и практический выбор. Сохраните компромиссы каждого алгоритма и оговорки об издержках исполнения.
+Preserve the full substantive coverage, worked examples, equations, data assumptions, caveats and risks from the source. Attribute numerical or time-sensitive claims to the article as illustrative or unverified rather than current facts. Do not add outside facts, guaranteed returns, investment advice or claims absent from the source. Explain sample code as instructional, not production-ready. This source draft needs human editorial and primary-fact review.
+Use enough slides for every major section and material subsection. Keep visible text precise and readable; preserve technical relationships without compressing away risk details. End with the article’s practical conclusion.

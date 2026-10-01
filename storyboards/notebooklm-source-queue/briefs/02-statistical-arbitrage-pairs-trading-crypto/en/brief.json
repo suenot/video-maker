@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "slug": "statistical-arbitrage-pairs-trading-crypto",
+  "language": "en",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/statistical-arbitrage-pairs-trading-crypto.en.md",
+  "article_sha256": "e587050d45b9efc8559e64216a09dd1dcf7b983e292604e2d3f29ce1ac3f74db",
+  "notebook_title": "MM sources | statistical-arbitrage-pairs-trading-crypto | EN",
+  "source_title": "MM article statistical-arbitrage-pairs-trading-crypto EN e587050d45b9",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/statistical-arbitrage-pairs-trading-crypto.en.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/statistical-arbitrage-pairs-trading-crypto.en.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/statistical-arbitrage-pairs-trading-crypto.en.audio.txt",
+  "article_title": "Statistical Arbitrage and Pairs Trading in Crypto Markets: From Cointegration to the Kalman Filter",
+  "article_date": "2026-03-19",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "75c5f15beb15aded0697c06b85d6d8e39d723375463af73b4aaeddbb27920936",
+  "slides_prompt_sha256": "4848a8aae8e016e24560ebe75001a3e821e0b5f4a6e2c84ba207cf2b8d346ae2",
+  "audio_prompt_sha256": "f59a3d2a6eef2ceec51f2b810a5c32e6d03cd6539305b981c61bbd68709e117a"
+}

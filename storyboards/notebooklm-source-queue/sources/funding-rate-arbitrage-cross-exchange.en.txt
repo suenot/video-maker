@@ -1,0 +1,528 @@
+MM article funding-rate-arbitrage-cross-exchange EN 45ff3b1d246c
+
+---
+title: "Funding Rate Arbitrage Across Exchanges: How to Profit from Rate Differences"
+description: "How funding rate arbitrage works across crypto exchanges, why rates differ on Binance, Bybit, OKX and dYdX, and how to build a monitoring and execution system to extract profit from these discrepancies."
+tags: ["algo trading", "funding rates", "arbitrage", "crypto", "Binance", "Bybit", "market making"]
+date: "2026-03-05"
+lang: "en"
+image: "/images/blog/funding-rate-arbitrage-cross-exchange.webp"
+slug: "funding-rate-arbitrage-cross-exchange"
+authors: ["suenot"]
+---
+
+# Funding Rate Arbitrage Across Exchanges: How to Profit from Rate Differences
+
+The funding rate on ETHUSDT is 0.01% on Binance and 0.035% on Bybit. The same coin, the same moment in time, but rates differ by 3.5x. Someone pays more, someone pays less. And someone profits from this difference.
+
+Funding rate arbitrage is one of the few strategies in crypto that does not depend on market direction. You do not predict the price. You extract profit from the structural divergence of rates between venues.
+
+## Why Funding Rates Differ Across Exchanges
+
+The funding rate is a mechanism that anchors the price of a perpetual futures contract to the spot price. Each exchange calculates it independently based on its own data:
+
+- **Trader composition.** Binance is dominated by retail traders who tend to go long. Bybit and OKX have more professional participants. Different long/short balance leads to different funding.
+- **Calculation formula.** Each exchange uses its own formula. Binance factors in the premium index and interest rate. Bybit and OKX do the same but with different weights and averaging periods.
+- **Liquidity.** On less liquid exchanges, the premium (difference between futures and spot) is more volatile, causing funding to fluctuate more widely.
+- **Payment frequency.** Most exchanges pay funding every 8 hours (00:00, 08:00, 16:00 UTC). But some (Bybit for certain pairs, dYdX) pay every hour, creating additional opportunities.
+
+### Typical Divergences
+
+![Funding rate spreads across exchanges](/images/blog/funding-rate-spread-dynamics.webp)
+
+In a calm market, funding rates on major exchanges are close — the difference is 0.001-0.005%. But during periods of heightened volatility, divergences grow:
+
+| Market Phase | Binance | Bybit | OKX | dYdX | Spread |
+|------------|---------|-------|-----|------|-------|
+| Calm | 0.01% | 0.012% | 0.009% | 0.01% | ~0.003% |
+| Bullish trend | 0.03% | 0.05% | 0.025% | 0.04% | ~0.025% |
+| Extreme bullish | 0.1% | 0.2% | 0.08% | 0.15% | ~0.12% |
+| Bearish trend | -0.02% | -0.01% | -0.025% | -0.015% | ~0.015% |
+
+A spread of 0.025% per 8 hours is 0.075% per day. With a position size of $100K, that is $75/day or ~$2,250/month — without directional risk.
+
+## Basic Arbitrage Mechanics
+
+![Cross-exchange funding rate arbitrage: opposite positions on two exchanges](/images/blog/funding-arb-mechanics.webp)
+
+The idea is simple: **open opposite positions on two exchanges** so that you receive funding on one and pay less on the other.
+
+### Example
+
+Binance: funding rate = +0.01% (longs pay shorts)
+Bybit: funding rate = +0.04% (longs pay shorts)
+
+Actions:
+1. Open a **short** on Bybit — receive 0.04% every 8 hours
+2. Open a **long** on Binance — pay 0.01% every 8 hours
+3. Positions are mirrored — price risk is neutral
+4. Net profit: 0.04% - 0.01% = **0.03% per 8 hours**
+
+Per day (3 payments): 0.09%. Per month: ~2.7%. Without directional risk.
+
+```python
+def funding_arbitrage_pnl(
+    rate_short_exchange: float,  # rate on the exchange where we short
+    rate_long_exchange: float,   # rate on the exchange where we long
+    position_size: float,        # position size in USD
+    payments_per_day: int = 3,
+    days: int = 30,
+) -> float:
+    """
+    PnL from funding rate arbitrage over a period.
+
+    With positive funding: short receives, long pays.
+    With negative funding: short pays, long receives.
+    """
+    # Short receives rate_short, long pays rate_long
+    spread = rate_short_exchange - rate_long_exchange
+    daily_pnl = spread * payments_per_day * position_size
+    return daily_pnl * days
+
+# Example: short on Bybit (0.04%), long on Binance (0.01%)
+pnl = funding_arbitrage_pnl(0.0004, 0.0001, 100_000, days=30)
+# = (0.0004 - 0.0001) * 3 * 100_000 * 30 = $2,700
+```
+
+## Risks and Pitfalls
+
+![Risks of cross-exchange arbitrage: liquidation, price divergence, fee erosion](/images/blog/funding-arb-risks.webp)
+
+The strategy looks like "free money." It is not. There are several serious risks.
+
+### 1. Price Divergence Between Exchanges
+
+Positions on different exchanges are not at the same price. The spread between Binance and Bybit is usually 0.01-0.05%, but during moments of high volatility it can reach 0.5-1%. If you do not open positions simultaneously, the divergence can exceed the funding profit.
+
+**Solution:** simultaneous opening via API with minimal latency. Ideally — collocated servers near both exchanges.
+
+### 2. Funding Rate Changes
+
+You opened positions at a spread of 0.03%. An hour later the spread narrowed to 0.005% or reversed. Now you are paying on both exchanges.
+
+**Solution:** real-time spread monitoring and automatic closing when the spread falls below a threshold.
+
+```python
+def should_close(
+    current_spread: float,
+    entry_spread: float,
+    min_spread: float = 0.0001,     # 0.01%
+    trading_costs: float = 0.0005,  # 0.05% for opening + closing
+) -> bool:
+    """
+    Close the position if the spread has fallen below the threshold
+    or if the current spread does not cover trading costs.
+    """
+    return current_spread < min_spread or current_spread < trading_costs
+```
+
+### 3. Trading Commissions
+
+Opening and closing positions on two exchanges means 4 orders. At a maker fee of 0.02% and taker fee of 0.05%:
+
+- Optimistic scenario (all maker): $4 \times 0.02\% = 0.08\%$
+- Pessimistic scenario (all taker): $4 \times 0.05\% = 0.20\%$
+
+For commissions to break even, the position must be held long enough:
+
+$$\text{Breakeven time} = \frac{\text{Total commissions}}{\text{Spread} \times \text{Payments per day}}$$
+
+```python
+def breakeven_days(
+    total_commissions_pct: float,  # total commissions in %
+    spread: float,                  # funding rate spread
+    payments_per_day: int = 3,
+) -> float:
+    daily_income = spread * payments_per_day
+    return total_commissions_pct / daily_income if daily_income > 0 else float('inf')
+
+# With maker fees: 0.08% / (0.03% * 3) = 0.89 days
+# With taker fees: 0.20% / (0.03% * 3) = 2.22 days
+```
+
+### 4. Margin Requirements
+
+Positions on both exchanges require collateral. At 5x leverage on each exchange with a $100K position:
+
+- Binance: $20K collateral
+- Bybit: $20K collateral
+- Total locked: **$40K** for a $100K position
+
+Return on capital:
+$$\text{ROC} = \frac{\$2700}{\$40000} \times 100\% = 6.75\% \text{ per month}$$
+
+At 10x leverage, collateral drops to $20K, ROC rises to 13.5%. But the risk of liquidation from price divergence also increases.
+
+### 5. Liquidation Risk
+
+If the asset price moves sharply, one of the positions generates an unrealized loss. On the exchange with the losing position, margin must be maintained. If margin is insufficient — liquidation. Meanwhile, the profit on the other exchange does not help — it is in a different account.
+
+**Solution:**
+- Keep a margin reserve (at least 2x the minimum)
+- Set up margin level alerts
+- Automatic rebalancing: when an imbalance occurs — transfer funds between exchanges
+
+## Funding Rate Monitoring System
+
+![Real-time funding rate monitoring dashboard across multiple exchanges](/images/blog/funding-arb-monitoring.webp)
+
+The first step toward arbitrage is data collection. You need to track funding rates across all exchanges of interest in real time.
+
+```python
+import asyncio
+import ccxt.pro as ccxt
+from dataclasses import dataclass
+from datetime import datetime
+
+@dataclass
+class FundingSnapshot:
+    exchange: str
+    symbol: str
+    rate: float
+    next_funding_time: datetime
+    timestamp: datetime
+
+class FundingMonitor:
+    """
+    Monitor funding rates across multiple exchanges.
+    """
+    def __init__(self, symbols: list[str], exchanges: list[str]):
+        self.symbols = symbols
+        self.exchanges = {
+            name: getattr(ccxt, name)() for name in exchanges
+        }
+        self.latest: dict[str, dict[str, FundingSnapshot]] = {}
+
+    async def fetch_funding(self, exchange_name: str, exchange, symbol: str):
+        """Fetch current funding rate from an exchange."""
+        try:
+            funding = await exchange.fetch_funding_rate(symbol)
+            return FundingSnapshot(
+                exchange=exchange_name,
+                symbol=symbol,
+                rate=funding['fundingRate'],
+                next_funding_time=datetime.fromtimestamp(
+                    funding['fundingTimestamp'] / 1000
+                ),
+                timestamp=datetime.utcnow(),
+            )
+        except Exception as e:
+            print(f"Error fetching {exchange_name} {symbol}: {e}")
+            return None
+
+    async def scan(self) -> list[dict]:
+        """
+        Scan all exchanges and find arbitrage opportunities.
+        """
+        # Collect funding rates in parallel
+        tasks = []
+        for ex_name, ex in self.exchanges.items():
+            for symbol in self.symbols:
+                tasks.append(self.fetch_funding(ex_name, ex, symbol))
+
+        snapshots = await asyncio.gather(*tasks)
+        snapshots = [s for s in snapshots if s is not None]
+
+        # Group by symbol
+        by_symbol: dict[str, list[FundingSnapshot]] = {}
+        for s in snapshots:
+            by_symbol.setdefault(s.symbol, []).append(s)
+
+        # Find spreads
+        opportunities = []
+        for symbol, rates in by_symbol.items():
+            rates.sort(key=lambda x: x.rate)
+            lowest = rates[0]   # long here (pay less)
+            highest = rates[-1] # short here (receive more)
+            spread = highest.rate - lowest.rate
+
+            opportunities.append({
+                'symbol': symbol,
+                'long_exchange': lowest.exchange,
+                'long_rate': lowest.rate,
+                'short_exchange': highest.exchange,
+                'short_rate': highest.rate,
+                'spread': spread,
+                'annualized': spread * 3 * 365 * 100,  # in % annualized
+            })
+
+        return sorted(opportunities, key=lambda x: -x['spread'])
+```
+
+### Sample Output
+
+```
+Symbol     | Long @      | Rate    | Short @     | Rate    | Spread  | APR
+-----------+-------------+---------+-------------+---------+---------+--------
+ETHUSDT    | Binance     | 0.010%  | Bybit       | 0.040%  | 0.030%  | 32.9%
+BTCUSDT    | OKX         | 0.008%  | Binance     | 0.020%  | 0.012%  | 13.1%
+SOLUSDT    | Binance     | 0.015%  | dYdX        | 0.055%  | 0.040%  | 43.8%
+ARBUSDT    | Bybit       | 0.005%  | OKX         | 0.030%  | 0.025%  | 27.4%
+```
+
+## Execution: Simultaneous Position Opening
+
+![Simultaneous arbitrage execution across exchanges](/images/blog/arbitrage-execution-flow.webp)
+
+It is critically important to open the long and short as simultaneously as possible to avoid directional risk exposure.
+
+```python
+import asyncio
+
+async def execute_arbitrage(
+    long_exchange,
+    short_exchange,
+    symbol: str,
+    size: float,
+    max_slippage_pct: float = 0.05,
+):
+    """
+    Simultaneously open a long and short on two exchanges.
+    """
+    # Get current prices
+    long_ticker = await long_exchange.fetch_ticker(symbol)
+    short_ticker = await short_exchange.fetch_ticker(symbol)
+
+    # Check the spread between exchanges
+    price_spread = abs(
+        long_ticker['ask'] - short_ticker['bid']
+    ) / long_ticker['ask'] * 100
+
+    if price_spread > max_slippage_pct:
+        raise ValueError(
+            f"Price spread {price_spread:.3f}% exceeds max slippage"
+        )
+
+    # Open simultaneously
+    long_order, short_order = await asyncio.gather(
+        long_exchange.create_market_buy_order(symbol, size),
+        short_exchange.create_market_sell_order(symbol, size),
+    )
+
+    return long_order, short_order
+```
+
+### Position Management
+
+After opening, continuous monitoring is required:
+
+1. **Funding rate spread.** If the spread contracts below the threshold — close.
+2. **Margin balance.** If margin on one exchange falls below the safe level — rebalance or close.
+3. **Price divergence.** If unrealized P&L on one side exceeds the limit — close.
+
+```python
+async def monitor_and_manage(
+    long_exchange,
+    short_exchange,
+    symbol: str,
+    size: float,
+    min_spread: float = 0.0001,
+    max_unrealized_loss_pct: float = 2.0,
+    check_interval: int = 60,
+):
+    """
+    Monitor an open arbitrage position.
+    """
+    while True:
+        # Check the current spread
+        long_funding = await long_exchange.fetch_funding_rate(symbol)
+        short_funding = await short_exchange.fetch_funding_rate(symbol)
+        current_spread = (
+            short_funding['fundingRate'] - long_funding['fundingRate']
+        )
+
+        # Check margin balance
+        long_balance = await long_exchange.fetch_balance()
+        short_balance = await short_exchange.fetch_balance()
+
+        # Check unrealized P&L
+        long_positions = await long_exchange.fetch_positions([symbol])
+        short_positions = await short_exchange.fetch_positions([symbol])
+
+        long_upnl = long_positions[0]['unrealizedPnl'] if long_positions else 0
+        short_upnl = short_positions[0]['unrealizedPnl'] if short_positions else 0
+
+        total_upnl_pct = (long_upnl + short_upnl) / size * 100
+
+        # Closing conditions
+        if current_spread < min_spread:
+            print(f"Spread collapsed: {current_spread:.4%}")
+            await close_both(long_exchange, short_exchange, symbol, size)
+            break
+
+        if abs(total_upnl_pct) > max_unrealized_loss_pct:
+            print(f"Unrealized loss exceeded: {total_upnl_pct:.2f}%")
+            await close_both(long_exchange, short_exchange, symbol, size)
+            break
+
+        await asyncio.sleep(check_interval)
+```
+
+## Advanced Variants
+
+### Spot-Perp Arbitrage
+
+![Spot-perpetual futures carry trade: spot holdings and short perp position on one exchange](/images/blog/funding-arb-spot-perp.webp)
+
+Instead of futures on two exchanges, you can use spot + futures on a single exchange:
+
+- **Buy spot** (no funding)
+- **Short the perpetual futures** (receive funding when the rate is positive)
+
+Advantage: everything on one exchange, simpler margin management. Disadvantage: only works with positive funding (longs pay shorts), which is observed ~70% of the time during a bull market.
+
+```python
+def spot_perp_carry(
+    funding_rate: float,      # current funding rate
+    spot_fee: float = 0.001,  # spot commission (0.1%)
+    perp_fee: float = 0.0005, # futures commission (0.05%)
+    leverage: int = 1,
+) -> dict:
+    """
+    Calculate the yield of a spot-perp carry trade.
+    """
+    # Entry/exit costs
+    total_fees = (spot_fee + perp_fee) * 2  # opening + closing
+
+    # Daily income from funding (at 3 payments)
+    daily_income = funding_rate * 3
+
+    # Breakeven
+    breakeven_days = total_fees / daily_income if daily_income > 0 else float('inf')
+
+    return {
+        'daily_income_pct': daily_income * 100,
+        'monthly_income_pct': daily_income * 30 * 100,
+        'annualized_pct': daily_income * 365 * 100,
+        'total_fees_pct': total_fees * 100,
+        'breakeven_days': breakeven_days,
+    }
+
+# Example: funding rate 0.03%
+result = spot_perp_carry(0.0003)
+# daily: 0.09%, monthly: 2.7%, annualized: 32.9%, breakeven: 3.3 days
+```
+
+### Multi-Exchange Arbitrage
+
+![Multi-exchange network graph showing funding rate differentials between five exchanges](/images/blog/funding-arb-multi-exchange.webp)
+
+When monitoring 5+ exchanges simultaneously, you can find more favorable opportunities. Algorithm:
+
+1. Collect funding rates from all exchanges
+2. Find the pair with the maximum spread
+3. Check liquidity and order book depth on both exchanges
+4. If spread > threshold — open positions
+5. Continuously rescan: if the best pair changes — rotate
+
+```python
+def find_best_pair(
+    rates: dict[str, float],  # {"binance": 0.01, "bybit": 0.04, "okx": 0.02}
+    min_spread: float = 0.0002,
+) -> tuple[str, str, float] | None:
+    """
+    Find the exchange pair with the maximum funding rate spread.
+    Returns: (long_exchange, short_exchange, spread) or None.
+    """
+    exchanges = list(rates.keys())
+    best = None
+
+    for i, ex_long in enumerate(exchanges):
+        for ex_short in exchanges[i+1:]:
+            # Long on the exchange with the lower rate, short on the one with the higher rate
+            if rates[ex_long] < rates[ex_short]:
+                spread = rates[ex_short] - rates[ex_long]
+                long_ex, short_ex = ex_long, ex_short
+            else:
+                spread = rates[ex_long] - rates[ex_short]
+                long_ex, short_ex = ex_short, ex_long
+
+            if spread >= min_spread:
+                if best is None or spread > best[2]:
+                    best = (long_ex, short_ex, spread)
+
+    return best
+```
+
+### Predicting the Funding Rate
+
+![Funding rate prediction using premium index data with confidence cone](/images/blog/funding-arb-prediction.webp)
+
+The funding rate is calculated using a formula that includes the premium index — the difference between the futures price and the spot price. The premium updates more frequently than funding (every minute vs every 8 hours). This means you can **predict** the next funding rate minutes or hours before the payment.
+
+```python
+def predict_next_funding(
+    premium_index: float,
+    interest_rate: float = 0.0001,  # 0.01% per 8h (standard)
+    clamp_range: float = 0.0005,    # ±0.05%
+) -> float:
+    """
+    Predict the next funding rate based on the current premium index.
+    Binance formula: FR = clamp(Premium - Interest, -0.05%, 0.05%) + Interest
+    """
+    diff = premium_index - interest_rate
+    clamped = max(-clamp_range, min(clamp_range, diff))
+    return clamped + interest_rate
+```
+
+Knowing the predicted funding rate, you can open positions **before** the payment, when the spread has not yet attracted the attention of other arbitrageurs.
+
+## Infrastructure Requirements
+
+![Low-latency trading infrastructure for cross-exchange arbitrage](/images/blog/funding-arb-infrastructure.webp)
+
+For serious funding rate arbitrage, you need infrastructure:
+
+| Component | Minimum | Optimal |
+|-----------|---------|------------|
+| Server | Cloud VPS | Collocated near exchanges |
+| Latency | < 500ms | < 50ms |
+| API keys | 2 exchanges | 5+ exchanges |
+| Capital per exchange | $10K each | $50K+ each |
+| Monitoring | Logs + alerts | Dashboard + auto-rebalancing |
+| Data | REST API polling | WebSocket streaming |
+
+### Economics at Different Scales
+
+| Capital | Position (5x) | Spread 0.03% | Monthly PnL | ROC |
+|---------|-------------|-------------|-------------|-----|
+| $10K | $25K | 0.03% | ~$675 | ~6.75% |
+| $50K | $125K | 0.03% | ~$3,375 | ~6.75% |
+| $200K | $500K | 0.03% | ~$13,500 | ~6.75% |
+
+ROC does not depend on scale (given sufficient liquidity). But the absolute profit at $10K capital may not justify infrastructure costs and time.
+
+## Conclusion
+
+Funding rate arbitrage is a structural, delta-neutral strategy. It does not require price prediction, but it requires:
+
+1. **Infrastructure** — real-time monitoring of rates across multiple exchanges
+2. **Execution speed** — simultaneous opening of positions across different venues
+3. **Risk management** — controlling margin, price divergence, and spread changes
+4. **Capital** — profit is proportional to position size
+
+Funding rate spreads are not constant. They widen during periods of volatility and narrow during calm periods. The task is to automatically find and exploit divergences while they exist.
+
+For more on how funding rates affect leveraged strategies — see the article [Funding Rates Kill Your Leverage: Why PnL×50x Is a Fiction](/ru/blog/post/funding-rates-kill-leverage).
+
+---
+
+## Useful Links
+
+1. [Binance — Funding Rate History](https://www.binance.com/en/futures/funding-history/quarterly/0)
+2. [Binance — Introduction to Funding Rates](https://www.binance.com/en/support/faq/introduction-to-binance-futures-funding-rates-360033525031)
+3. [Bybit — Understanding Funding Rates](https://learn.bybit.com/trading/what-is-funding-rate/)
+4. [dYdX — Perpetual Funding Rate Mechanism](https://dydx.exchange/)
+5. [Coinglass — Funding Rate Monitor](https://www.coinglass.com/FundingRate)
+
+## Citation
+
+```bibtex
+@article{soloviov2026fundingarbitrage,
+  author = {Soloviov, Eugen},
+  title = {Funding Rate Arbitrage Across Exchanges: How to Profit from Rate Differences},
+  year = {2026},
+  url = {https://marketmaker.cc/ru/blog/post/funding-rate-arbitrage-cross-exchange},
+  description = {How funding rate arbitrage works across crypto exchanges, why rates differ on Binance, Bybit, OKX and dYdX, and how to build a monitoring and execution system.}
+}
+```

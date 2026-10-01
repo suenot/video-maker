@@ -1,0 +1,15 @@
+Create a comprehensive NotebookLM slide deck from this article. Use only the attached source named "MM article statistical-arbitrage-pairs-trading-crypto EN e587050d45b9". Produce in English. Follow the article sections in this order:
+1. 1. A Brief History: From a Jesuit to the Quants
+2. 2. The Mathematical Foundation: Correlation Is a Trap
+3. 3. Selecting Pairs in the Crypto Market
+4. 4. Three Trading Approaches
+5. 5. Kalman Filter for Adaptive Hedge Ratio
+6. 6. Entry and Exit Signals
+7. 7. Backtesting: Doing It Right
+8. 8. Real-World Problems
+9. 9. End-to-End Python Implementation
+10. Instead of a Conclusion
+
+Explain cointegration versus correlation, Engle-Granger and Johansen, OU and z-scores, pair selection, the three trading approaches, adaptive Kalman hedge ratio, signals, walk-forward validation and transaction costs, real-world failure modes, then the Python implementation. Treat performance, historical and current-market figures as claims in the article requiring verification.
+Preserve the full substantive coverage, worked examples, equations, data assumptions, caveats and risks from the source. Attribute numerical or time-sensitive claims to the article as illustrative or unverified rather than current facts. Do not add outside facts, guaranteed returns, investment advice or claims absent from the source. Explain sample code as instructional, not production-ready. This source draft needs human editorial and primary-fact review.
+Use enough slides for every major section and material subsection. Keep visible text precise and readable; preserve technical relationships without compressing away risk details. End with the article’s practical conclusion.

@@ -1,0 +1,215 @@
+{
+  "version": 2,
+  "topic": "IOC versus FOK",
+  "source_pages": [
+    4
+  ],
+  "fps": 30,
+  "body_tail_frames": 2,
+  "endcard_seconds": 10,
+  "languages": {
+    "en": {
+      "source_id": "ca2b3ff0-f265-48ff-bcda-f9fac1126076",
+      "artifact_id": "cfb95dbc-e97e-4833-ace7-dd0f2435efcc",
+      "production_audio": "input/algotrading-order-types/revisions/audio_en-ioc-fok-short-production.wav",
+      "production_audio_sha256": "44b64a2cfeb4ff348c2904288eb2bdbbd5fba7b82a45791d1caf41fb8aefa7ad",
+      "production_duration_seconds": 87.121271,
+      "body_frames": 2616,
+      "source_slide": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_004.png",
+      "endcard": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/slides/endcard.png",
+      "segments": [
+        {
+          "start_frame": 0,
+          "end_frame": 353,
+          "view": "rules",
+          "cue": "0.00 opening distinction",
+          "view_sha256": "9a89f8da713e509bb160d0711c949f7862da605d24dee680173a61d845a2a941"
+        },
+        {
+          "start_frame": 353,
+          "end_frame": 476,
+          "view": "setup",
+          "cue": "11.76 first request 100",
+          "view_sha256": "d7aa46a08f28d411dde55ba9b014de33c3636199944008ced6b8dc5ee4fd9e51"
+        },
+        {
+          "start_frame": 476,
+          "end_frame": 669,
+          "view": "ioc",
+          "cue": "15.86 IOC immediate-or-cancel",
+          "view_sha256": "e7f929a97f67948e3b2c2e37c618edce0ba76687d9b2c29f4402bc2ab9a3decc"
+        },
+        {
+          "start_frame": 669,
+          "end_frame": 1024,
+          "view": "fok",
+          "cue": "22.30 FOK in same scenario",
+          "view_sha256": "f695cdfc1195425ffb3f3708efa75b1413ca71e2db4a287bc401874c225f8b7f"
+        },
+        {
+          "start_frame": 1024,
+          "end_frame": 1308,
+          "view": "rules",
+          "cue": "34.12 general rules",
+          "view_sha256": "9a89f8da713e509bb160d0711c949f7862da605d24dee680173a61d845a2a941"
+        },
+        {
+          "start_frame": 1308,
+          "end_frame": 1647,
+          "view": "fok",
+          "cue": "43.60 FOK whole quantity",
+          "view_sha256": "f695cdfc1195425ffb3f3708efa75b1413ca71e2db4a287bc401874c225f8b7f"
+        },
+        {
+          "start_frame": 1647,
+          "end_frame": 1832,
+          "view": "rules",
+          "cue": "54.90 venue execution caveat",
+          "view_sha256": "9a89f8da713e509bb160d0711c949f7862da605d24dee680173a61d845a2a941"
+        },
+        {
+          "start_frame": 1832,
+          "end_frame": 2102,
+          "view": "fok",
+          "cue": "61.08 FOK guarantee question",
+          "view_sha256": "f695cdfc1195425ffb3f3708efa75b1413ca71e2db4a287bc401874c225f8b7f"
+        },
+        {
+          "start_frame": 2102,
+          "end_frame": 2292,
+          "view": "rules",
+          "cue": "70.08 venue rules",
+          "view_sha256": "9a89f8da713e509bb160d0711c949f7862da605d24dee680173a61d845a2a941"
+        },
+        {
+          "start_frame": 2292,
+          "end_frame": 2356,
+          "view": "ioc",
+          "cue": "76.40 IOC partial-fill recap",
+          "view_sha256": "e7f929a97f67948e3b2c2e37c618edce0ba76687d9b2c29f4402bc2ab9a3decc"
+        },
+        {
+          "start_frame": 2356,
+          "end_frame": 2449,
+          "view": "fok",
+          "cue": "78.52 FOK all-or-nothing recap",
+          "view_sha256": "f695cdfc1195425ffb3f3708efa75b1413ca71e2db4a287bc401874c225f8b7f"
+        },
+        {
+          "start_frame": 2449,
+          "end_frame": 2616,
+          "view": "rules",
+          "cue": "81.64 conditional availability / venue rules",
+          "view_sha256": "9a89f8da713e509bb160d0711c949f7862da605d24dee680173a61d845a2a941"
+        }
+      ],
+      "source_slide_sha256": "61109f9401f0e0472070ac6a42d5d2e2a975ddc5e958e71728db7dee7dd3332c",
+      "endcard_sha256": "9e725aada2dfd7214f546330d237732dd95fb9cc0358da83560510ee967f76ed"
+    },
+    "ru": {
+      "source_id": "c1ad4f51-137d-468c-9e66-2ec89465646f",
+      "artifact_id": "be78b075-8ef9-4175-b3f1-212e58610565",
+      "production_audio": "input/algotrading-order-types/revisions/audio_ru-ioc-fok-short-production.wav",
+      "production_audio_sha256": "b384e715a814498cb178fc18d9e6e0ff48b15e36c6c62c4af0869299a65393e5",
+      "production_duration_seconds": 112.523917,
+      "body_frames": 3378,
+      "source_slide": "temp/algotrading-order-types/flow-v4/ru/source-slides/slide_004.png",
+      "endcard": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/slides/endcard.png",
+      "segments": [
+        {
+          "start_frame": 0,
+          "end_frame": 609,
+          "view": "rules",
+          "cue": "0.00 initial distinction",
+          "view_sha256": "e6717ebc51eaf16faeaf0a854399289c5d24fcbd9556b39a2fbfa146c029e6ff"
+        },
+        {
+          "start_frame": 609,
+          "end_frame": 809,
+          "view": "setup",
+          "cue": "20.30 example setup",
+          "view_sha256": "12bd98adcf7bf801edca926a8332f51f268a94eed9df5efe0bab490fafff399f"
+        },
+        {
+          "start_frame": 809,
+          "end_frame": 1064,
+          "view": "ioc",
+          "cue": "26.96 IOC example",
+          "view_sha256": "5714ef65b0ae8ba6a92f2d9f68d04162614f4f9be9c439726b9cc619a2258aa0"
+        },
+        {
+          "start_frame": 1064,
+          "end_frame": 1331,
+          "view": "fok",
+          "cue": "35.46 FOK example",
+          "view_sha256": "a95f982e03e06c0783bdef61008c09439c70050714bfde4db2faf80457d9f28a"
+        },
+        {
+          "start_frame": 1331,
+          "end_frame": 1528,
+          "view": "rules",
+          "cue": "44.38 universal rules",
+          "view_sha256": "e6717ebc51eaf16faeaf0a854399289c5d24fcbd9556b39a2fbfa146c029e6ff"
+        },
+        {
+          "start_frame": 1528,
+          "end_frame": 1729,
+          "view": "ioc",
+          "cue": "50.92 IOC zero/part/all",
+          "view_sha256": "5714ef65b0ae8ba6a92f2d9f68d04162614f4f9be9c439726b9cc619a2258aa0"
+        },
+        {
+          "start_frame": 1729,
+          "end_frame": 2156,
+          "view": "fok",
+          "cue": "57.62 FOK whole or cancel",
+          "view_sha256": "a95f982e03e06c0783bdef61008c09439c70050714bfde4db2faf80457d9f28a"
+        },
+        {
+          "start_frame": 2156,
+          "end_frame": 2247,
+          "view": "rules",
+          "cue": "71.88 no guarantees",
+          "view_sha256": "e6717ebc51eaf16faeaf0a854399289c5d24fcbd9556b39a2fbfa146c029e6ff"
+        },
+        {
+          "start_frame": 2247,
+          "end_frame": 2423,
+          "view": "fok",
+          "cue": "74.90 FOK can result in no trade",
+          "view_sha256": "a95f982e03e06c0783bdef61008c09439c70050714bfde4db2faf80457d9f28a"
+        },
+        {
+          "start_frame": 2423,
+          "end_frame": 2759,
+          "view": "rules",
+          "cue": "80.78 no profit/venue caveat",
+          "view_sha256": "e6717ebc51eaf16faeaf0a854399289c5d24fcbd9556b39a2fbfa146c029e6ff"
+        },
+        {
+          "start_frame": 2759,
+          "end_frame": 2920,
+          "view": "ioc",
+          "cue": "91.98 IOC recap",
+          "view_sha256": "5714ef65b0ae8ba6a92f2d9f68d04162614f4f9be9c439726b9cc619a2258aa0"
+        },
+        {
+          "start_frame": 2920,
+          "end_frame": 3112,
+          "view": "fok",
+          "cue": "97.32 FOK recap",
+          "view_sha256": "a95f982e03e06c0783bdef61008c09439c70050714bfde4db2faf80457d9f28a"
+        },
+        {
+          "start_frame": 3112,
+          "end_frame": 3378,
+          "view": "rules",
+          "cue": "103.74 neither guarantees execution",
+          "view_sha256": "e6717ebc51eaf16faeaf0a854399289c5d24fcbd9556b39a2fbfa146c029e6ff"
+        }
+      ],
+      "source_slide_sha256": "0873cd68252defc7aa499989ffa75508c4e50427f7aa64bd7d0ce9427b73acfd",
+      "endcard_sha256": "9e725aada2dfd7214f546330d237732dd95fb9cc0358da83560510ee967f76ed"
+    }
+  }
+}

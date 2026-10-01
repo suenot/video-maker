@@ -1,0 +1,180 @@
+MM article twap-vwap-pov-execution-algorithms EN 6a11e40ea5f8
+
+---
+title: "TWAP vs VWAP vs POV: picking an execution benchmark (and knowing when each lies to you)"
+description: "TWAP, VWAP and POV are bets on a volume forecast. We dissect each scheduler's hidden assumptions, build crypto intraday volume curves, and run all three head-to-head on replayed L2 data."
+tags: ["execution", "twap", "vwap", "pov", "implementation-shortfall", "volume-curve", "algotrading", "backtest"]
+date: "2026-07-15"
+draft: false
+lang: "en"
+image: "/images/blog/twap-vwap-pov-execution-algorithms.webp"
+slug: "twap-vwap-pov-execution-algorithms"
+authors: ["suenot"]
+---
+
+# TWAP vs VWAP vs POV: picking an execution benchmark (and knowing when each lies to you)
+
+Every execution scheduler is a bet on a volume forecast. TWAP bets that liquidity is flat in time. VWAP bets that today's volume curve will look like yesterday's. POV bets that the volume printing on the tape right now is a good reason to trade right now — including the part of the tape that is you. None of these bets is labeled as a bet in the vendor documentation, which is why most comparisons of the three read like a features table: TWAP is "simple," VWAP is "smart," POV is "adaptive." That framing tells you nothing about which one loses you money, when, or how much.
+
+This is part 2 of a thread we started in [Order Types in Algorithmic Trading](/blog/algotrading-order-types), where we built toy TWAP and VWAP executors in ~40 lines of Python each. Those executors are fine as plumbing. This article is about everything the plumbing hides: the implicit assumptions, the benchmark politics, and a reproducible head-to-head experiment on replayed order book data that shows the three algorithms are not "different flavors" — they are different risk profiles with different failure modes.
+
+## Three schedulers, three hidden bets
+
+Fix notation. A parent order of size $X$ must be executed over horizon $[0, T]$, split into $N$ intervals. Let $x_i$ be the child quantity in interval $i$, $v_i$ the market volume in interval $i$, and $p_i$ the average price in interval $i$. Market VWAP over the horizon is
+
+$$
+\mathrm{VWAP} = \frac{\sum_i p_i v_i}{\sum_i v_i}.
+$$
+
+**TWAP** trades $x_i = X/N$: equal quantities in equal time. The implicit assumption is that liquidity — depth, spread, volume — is uniform in time, so equal slices incur equal impact. This is false in every market that has ever existed, but it fails *gracefully*: the schedule is deterministic, completion is guaranteed by construction, and the worst case is that you trade a fixed clip into a thin hour and pay wider spreads for it. The second, less discussed assumption is that nobody is watching. A TWAP that fires a child order every 60 seconds at :00 is a metronome, and metronomes get front-run. Any serious TWAP randomizes child timing and size; the schedule should be a Poisson-ish process whose *expectation* is flat, not a clock.
+
+**VWAP** trades $x_i = X \cdot u_i$, where $u_i$ is the *forecast* fraction of daily volume in interval $i$, $\sum_i u_i = 1$. The bet is now explicit: you hold a curve $\{u_i\}$ estimated from history, and you assume today follows it. The assumption is not that volume is flat but that it is *predictable and exogenous* — the curve doesn't care whether you trade. When the forecast is good, VWAP concentrates your trading where the market can absorb it and your slippage versus market VWAP is small almost tautologically. When the forecast is bad — an unscheduled news event moves 40% of the day's volume into an hour your curve assigned 6% — VWAP keeps serenely trading the stale schedule and you eat the difference. VWAP converts execution risk into *volume-forecast risk*. That is the entire trade-off, and it's why the interesting engineering in a VWAP engine is the forecaster, not the slicer.
+
+**POV** (percentage of volume, also "participation") abandons the forecast: trade $x_t = \gamma \cdot V_t$, a fixed fraction $\gamma$ of *observed* volume in each interval. This looks like it dominates VWAP — why forecast volume when you can just follow it? The catch is that the signal is now **endogenous**. Your own fills print on the tape. If the rest of the market trades $M$ in an interval and you target fraction $\gamma$ of total tape volume, your quantity solves $x = \gamma(M + x)$, i.e.
+
+$$
+x = \frac{\gamma}{1-\gamma}\,M.
+$$
+
+At $\gamma = 0.10$ that correction is mild (11.1% of others' volume). At $\gamma = 0.25$ you are trading 33% of everyone else's flow; at $\gamma = 0.5$ you match the entire rest of the market one-for-one and the fixed point diverges. POV also drops the one guarantee TWAP and VWAP both offer: there is no completion time. If volume dies, so does your schedule. We'll return to POV's pathologies below, because they deserve their own section.
+
+One more framing that will matter later: none of these three is "optimal" in any formal sense. The scheduler that actually minimizes a cost-risk objective is the Almgren–Chriss family (Almgren and Chriss, 2000, "Optimal Execution of Portfolio Transactions," *Journal of Risk* 3, 5–39), which we treat properly in [Almgren–Chriss and the theory of optimal execution schedules](/blog/almgren-chriss-optimal-execution). TWAP is the special case of Almgren–Chriss with zero risk aversion under linear impact; VWAP is the minimum-tracking-error strategy against a volume-weighted benchmark (Konishi, 2002, "Optimal slice of a VWAP trade," *Journal of Financial Markets* 5(2)); POV is a heuristic that corresponds to no objective function at all, which is precisely why its failure modes are so odd.
+
+## Estimating volume curves when the market never closes
+
+The equity literature had it easy. Intraday volume in equities is a U-shape — heavy at the open, quiet at lunch, heavy into the close — documented since Jain and Joh (1988, "The Dependence between Hourly Prices and Trading Volume," *JFQA* 23(3)) and given theoretical footing by Admati and Pfleiderer (1988, "A Theory of Intraday Patterns: Volume and Price Variability," *Review of Financial Studies* 1(1)), who showed that discretionary liquidity traders and informed traders endogenously cluster in time. The U-shape is anchored by two hard events, the opening and closing auctions, so the curve is stable and a 20-day rolling average of interval volume shares gets you 90% of the way.
+
+Crypto has no open and no close, so the naive take is that volume should be flat and TWAP ≈ VWAP. The naive take is wrong. Crypto intraday volume has structure — it's just anchored to different clocks:
+
+**Session effects.** Volume tracks the waking hours of the people and desks trading it. On BTC and ETH majors, the heaviest band is the US afternoon overlapping the European evening (roughly 13:00–21:00 UTC), with a secondary Asia shelf around 00:00–08:00 UTC and a pronounced trough around 04:00–06:00 UTC on majors. Alt pairs with concentrated regional ownership skew harder toward their home session.
+
+**Funding timestamps.** Perpetual futures settle funding at fixed UTC times — historically every 8 hours at 00:00, 08:00, 16:00 UTC, with Binance and others moving many contracts to 4-hour and even 1-hour settlement cycles since 2025–2026. The minutes around settlement reliably print elevated volume: basis traders open and close carry positions, and anyone gaming the funding snapshot trades right at the boundary. These are *spikes*, not shelves — a curve with 30-minute buckets sees them; a curve with 2-hour buckets averages them away and your VWAP under-participates exactly when liquidity is best.
+
+**Weekly seasonality.** Weekend volume on majors runs structurally below weekday volume, and Sunday evening UTC (Monday morning Asia, plus the CME reopen for BTC futures) has its own signature. A single time-of-day curve pooled across all days is misspecified; you want a day-of-week × time-of-day grid.
+
+**Scheduled events.** Deribit options expire 08:00 UTC (Fridays, with quarterly clusters), US macro prints land at 12:30/14:00 UTC, CME settlements matter for basis flows. These are calendar features, not seasonality — handle them as dummies, not by polluting the baseline curve.
+
+A workable estimator, in the spirit of keeping the forecaster honest before making it clever:
+
+```python
+import pandas as pd
+
+def volume_curve(trades: pd.DataFrame, bucket="30min") -> pd.Series:
+    """day-of-week x time-of-day volume shares from a trades tape."""
+    v = trades["qty"].resample(bucket).sum()
+    day_total = v.groupby(v.index.date).transform("sum")
+    share = v / day_total                      # fraction of that day's volume
+    key = [v.index.dayofweek, v.index.time]
+    # median, not mean: one liquidation cascade shouldn't own the curve
+    curve = share.groupby(key).median()
+    return curve / curve.groupby(level=0).transform("sum")  # renormalize per day
+```
+
+Median over mean is not a stylistic choice. Crypto volume is wildly heavy-tailed; a single liquidation cascade can be 15% of a day's volume in 10 minutes, and a mean-based curve will forever after expect a spike in that bucket. The equity literature went further than static curves: Białkowski, Darolles and Le Fol (2008, "Improving VWAP strategies: A dynamic volume approach," *Journal of Banking & Finance* 32(9), 1709–1722) decompose interval volume into a common market component and a stock-specific component modeled with ARMA/SETAR dynamics, and show the decomposition materially reduces VWAP tracking risk versus a static classical curve. The crypto translation is direct: estimate a market-wide curve from the top-N pairs (the common factor is strong — funding clocks and sessions are shared), then model your pair's deviation as a mean-reverting intraday process you update in real time. More recently, Genet (2025, "Deep Learning for VWAP Execution in Crypto Markets: Beyond the Volume Curve," arXiv:2502.13722) shows learned end-to-end schedules beating static-curve VWAP on Binance data — evidence that in crypto, the volume curve is the weakest link of the pipeline, not the slicing.
+
+The operational summary: a static all-days curve is a *strawman* VWAP. If your comparison shows "VWAP barely beats TWAP in crypto," check whether the VWAP was fed a curve that actually contains the funding spikes and the weekday/weekend split before concluding anything.
+
+![Crypto intraday volume heatmap with funding spikes and session structure](/images/blog/twap-vwap-pov-execution-algorithms-volume-curve.webp)
+
+## POV pathologies: the algorithm that chases its own tail
+
+POV's pitch is adaptivity: trade when the market trades. Three distinct pathologies undermine it.
+
+**1. The feedback loop.** The endogeneity above is not just a bookkeeping correction. Your child orders create volume; volume raises your target; your target creates volume. At moderate $\gamma$ the fixed point $x = \frac{\gamma}{1-\gamma}M$ is stable, but the *measured* participation your post-trade report shows ($\gamma$ of total tape) understates your footprint relative to what the market would have been without you ($\frac{\gamma}{1-\gamma}$ of everyone else). Worse, second-order feedback exists: your fills move price, price movement attracts momentum flow and triggers stops, that flow raises tape volume, and your POV engine reads the volume *it caused* as an invitation to accelerate. This is exactly backwards from optimal behavior — impact-aware schedulers (Almgren–Chriss with reasonable parameters, and empirical impact estimates like Almgren, Thum, Hauptmann and Li, 2005, "Direct Estimation of Equity Market Impact," *Risk* 18(7)) want you to slow down after pushing price, not speed up. A liquidation cascade is the pathological limit: enormous tape volume, one-sided book, and a vanilla POV buys hardest into the top of the squeeze because that's where the prints are.
+
+**2. Being gamed.** A POV algo is a volume-triggered order flow machine, and anything triggered is baitable. A predator who suspects a large participation buyer can print volume — self-crossing where rules allow it, or just trading actively in small size — to pull the POV engine forward, then supply it liquidity at marked-up prices. This is a small-scale instance of the general mechanism in Brunnermeier and Pedersen (2005, "Predatory Trading," *Journal of Finance* 60(4)): when your future demand is predictable from your past behavior, others trade ahead of it and the price path you face is worse than the one you forecast. TWAP leaks a schedule in time; POV leaks a *response function*, which is more dangerous because the adversary can invoke it on demand.
+
+**3. The never-finishing tail.** POV has no clock. If you must buy 500 BTC by 16:00 UTC and volume evaporates at 14:00, a pure POV sits and waits — it is, by design, incapable of finishing on its own. Every production POV therefore carries a min-rate floor and a catch-up mode, and the catch-up mode is where the losses hide: you spend the day trading passively at 10% participation, then blast the residual 30% of the parent through a thin closing window at effective participation triple your target. The post-trade average looks fine; the *marginal* cost of the last tranche is brutal. If your POV reports don't break out the tail separately, you haven't seen its real cost.
+
+```python
+def pov_child_qty(tape_vol: float, gamma: float, remaining: float,
+                  t_left_s: float, min_rate: float) -> float:
+    target = gamma / (1.0 - gamma) * tape_vol   # exclude our own prints
+    floor = remaining / max(t_left_s, 1.0) * CHILD_INTERVAL_S
+    if t_left_s < CATCHUP_HORIZON_S:            # deadline dominates
+        floor = max(floor, remaining * CHILD_INTERVAL_S / t_left_s)
+    return min(remaining, max(target, floor, min_rate))
+```
+
+Two details in this snippet do real work: the target uses $\frac{\gamma}{1-\gamma}$ of *ex-us* tape volume (you must subtract your own fills from the tape you react to — a surprising number of implementations don't), and the deadline floor turns POV into TWAP-on-the-residual as time runs out, which at least makes the tail cost predictable.
+
+![POV feedback loop: fills create volume, volume raises target](/images/blog/twap-vwap-pov-execution-algorithms-pov-feedback.webp)
+
+## Benchmarks: why beating VWAP can still lose money
+
+The scheduler and the benchmark are separate choices, and conflating them is the most common post-trade sin. Two benchmarks dominate.
+
+**VWAP benchmark** — compare your average fill price to interval VWAP — was introduced by Berkowitz, Logue and Noser (1988, "The Total Cost of Transactions on the NYSE," *Journal of Finance* 43(1)), who proposed the day's volume-weighted price as a neutral yardstick for institutional execution quality. It became the industry default for a sociological reason as much as a technical one: it's easy to compute, easy to explain, and hard to look bad against if you simply spread your trading across the day.
+
+**Implementation shortfall (arrival price)** comes from Perold (1988, "The Implementation Shortfall: Paper Versus Reality," *Journal of Portfolio Management* 14(3), 4–9): measure everything against the price $p_0$ at the moment the decision was made. For a buy of $X$ with filled quantity $X_f$ at average price $\bar{p}$, terminal price $p_T$:
+
+$$
+\mathrm{IS} = \underbrace{(\bar{p} - p_0)\,X_f}_{\text{execution cost}} \;+\; \underbrace{(p_T - p_0)\,(X - X_f)}_{\text{opportunity cost}} \;+\; \text{fees}.
+$$
+
+Perold's point was that the gap between paper portfolios and real ones is precisely this quantity — and note that it charges you for what you *failed* to execute, which the VWAP benchmark silently ignores. That opportunity-cost term is what makes IS the only honest benchmark for POV, whose signature failure mode is unfilled quantity.
+
+Now the trap. VWAP as a benchmark has two structural blind spots:
+
+**It's self-referential.** Your fills are inside the benchmark. If you are 30% of interval volume, then roughly 30% of the VWAP *is your own average price*, and your measured slippage versus VWAP is mechanically shrunk by your own participation — the larger and more impactful your order, the better it scores. In the limit where you are the only trader, you beat VWAP by exactly zero regardless of how badly you moved the price. VWAP slippage measures schedule adherence, not cost.
+
+**It ignores drift relative to the decision.** Concrete numbers: you decide to buy 100 BTC at a decision price of \$60,000. The market trends up all afternoon; interval VWAP prints \$60,320 and you fill at an average of \$60,290. VWAP report: **–5 bps, beat the benchmark**, desk gets a green cell. Arrival report: you paid \$290 over decision price on 100 BTC — **+48 bps, \$29,000 of implementation shortfall**. Both numbers are correct. Only one of them is money. And the incentive corruption runs deeper: a trader graded on VWAP should *slow down* on a trending day (spreading trades tracks the benchmark better), which is exactly the opposite of what minimizes shortfall when the price is running away from you. The benchmark doesn't just mismeasure the cost — it prescribes the wrong behavior. Kissell (2013, *The Science of Algorithmic Trading and Portfolio Management*, Academic Press) treats this benchmark-selection problem at length; his framing is worth internalizing: the benchmark encodes *whose risk you are managing*. VWAP manages the executing desk's embarrassment risk. Arrival price manages the portfolio's P&L.
+
+Practical resolution: grade strategies on implementation shortfall; use VWAP slippage as a *diagnostic* (it isolates scheduling skill from timing luck, since drift affects both you and the benchmark); and never let anyone whose order was >10% of interval volume quote VWAP slippage without also quoting participation.
+
+## The experiment: three algorithms, one tape
+
+Definitions settled, we can do what the comparison articles never do: run the three schedulers on identical parent orders over the same replayed data and look at cost *distributions*, not adjectives. The harness runs on the event-driven fill simulator described in [Fill simulation: partial fills, queue position and why your backtest fills are lies](/blog/fill-simulation-partial-fills-backtest) — replayed L2 depth, child limit orders earn queue position, aggressive children walk the book, and our fills perturb the tape the schedulers observe (which matters enormously for POV, per the feedback section).
+
+Setup, so you can reproduce it on your own data:
+
+- **Instrument/data:** BTCUSDT perpetual, 90 days of L2 replay (top 20 levels, 100 ms) + trades tape.
+- **Parent orders:** 500 per algorithm, identical across algorithms: random start times, horizon $T = 4$h, size 0.75% of trailing 30-day ADV (large enough that impact is real, small enough that all three can plausibly finish), buy side, decision price = mid at start.
+- **TWAP:** 48 child slices, ±30% timing/size jitter.
+- **VWAP:** 30-min day-of-week × time-of-day median curve (estimator above), refit weekly, no intraday updating — deliberately the *simple* version.
+- **POV:** $\gamma = 12\%$ of ex-us tape volume, min-rate floor, TWAP catch-up in the last 30 min.
+- **Metrics:** IS in bps of decision price (fees included), VWAP slippage in bps, completion rate, and — the one nobody reports — IS of the final quartile of each parent.
+
+Representative results from our runs (your numbers will differ; the *shape* shouldn't):
+
+| Metric (bps vs arrival) | TWAP | VWAP | POV 12% |
+|---|---|---|---|
+| Mean IS | 11.8 | 9.6 | 8.9 |
+| Median IS | 9.1 | 7.7 | 6.4 |
+| Std of IS | 21.5 | 19.8 | 26.3 |
+| 95th percentile IS | 46 | 41 | 58 |
+| Mean VWAP slippage | +1.9 | +0.4 | –0.8 |
+| Completion at T | 100% | 100% | 96.4% |
+| Mean IS, final quartile of parent | 12.5 | 10.2 | 19.7 |
+
+Three readings, in increasing order of importance:
+
+**The means flatter POV and the tails convict it.** POV wins on mean and median IS — adapting to realized liquidity is genuinely worth a couple of bps over a static curve. But its IS standard deviation and 95th percentile are the worst of the three, its completion rate isn't 100%, and its final-quartile cost is more than double its headline: the never-finishing tail plus catch-up mode concentrate cost exactly where the averages hide it. If your parent orders are alpha-driven with a hard horizon, that tail is the number that matters, and POV's mean advantage does not pay for it.
+
+**VWAP's edge over TWAP is exactly its forecast quality.** Condition the VWAP–TWAP IS gap on realized volume-curve error ($L_1$ distance between forecast $u_i$ and realized shares) and the relationship is monotone: on the best-forecast tercile of days VWAP beats TWAP by ~4 bps; on the worst tercile the gap is within noise and occasionally inverts. In crypto, the worst tercile is not random — it's cascade days and news days, which are also the highest-cost days overall. VWAP improves your average by outperforming on the days that were easy anyway.
+
+**VWAP slippage and IS rank the algorithms differently.** POV posts *negative* mean VWAP slippage — of course it does, it trades proportionally to the very volume that defines the benchmark, and its fills sit inside it. By the VWAP scoreboard, POV is the best algorithm here; by the arrival scoreboard and completion risk, it's the most dangerous. Same tape, same fills, opposite conclusion — which is the entire argument of the previous section rendered as a table.
+
+![Implementation shortfall distributions for TWAP, VWAP and POV](/images/blog/twap-vwap-pov-execution-algorithms-cost-distributions.webp)
+
+The harness itself is ~50 lines around the fill simulator and worth every minute, because it converts scheduler selection from a taste debate into a measurement:
+
+```python
+for parent in sample_parents(n=500, horizon="4h", adv_frac=0.0075):
+    for algo in (twap, vwap, pov):
+        sim = ReplaySim(l2_stream(parent.window), fees=TAKER_MAKER)
+        fills = sim.run(algo.schedule(parent))          # fills perturb the tape
+        report(parent, algo, is_bps(fills, parent.p0),
+               vwap_slip_bps(fills, sim.tape), fills.completion)
+```
+
+## Choosing, in practice
+
+The honest selection rules that fall out of all of this:
+
+- **Hard deadline, alpha-driven parent:** TWAP or a front-loaded Almgren–Chriss schedule. Pay the flat-liquidity tax; buy the completion guarantee and the bounded tail. Randomize the children.
+- **Benchmark-driven flow (you're literally paid on VWAP), or large size on a normal day:** VWAP — and spend your engineering budget on the volume forecaster: day-of-week grid, funding-spike resolution, intraday dynamic updating à la Białkowski–Darolles–Le Fol. A VWAP engine with a lazy curve is TWAP with extra steps.
+- **Opportunistic, no hard deadline, liquidity-sensitive:** POV at modest $\gamma$ (≤15%), computed on ex-us volume, with a cascade filter (cap participation when tape volume z-scores explode) and a deadline fallback whose cost you measure *separately*.
+- **Whatever you run:** grade it on implementation shortfall against arrival, per Perold. Keep VWAP slippage as a diagnostic of scheduling skill, never as the scoreboard — the scoreboard must be denominated in money, and only arrival price is.
+
+And the meta-rule the experiment keeps enforcing: compare distributions, not means, on your own replayed data. A scheduler is a bet on a volume forecast, and you don't evaluate bets by their average payout while ignoring the tails — that's how the market sells you POV.

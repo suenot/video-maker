@@ -1,0 +1,913 @@
+MM article statistical-arbitrage-pairs-trading-crypto RU 01ea28ecb77c
+
+---
+title: "Статистический арбитраж и парный трейдинг на крипторынках: от коинтеграции до Калмана"
+date: "2026-03-19"
+tags: ["статарб", "парный-трейдинг", "коинтеграция", "калман", "арбитраж", "алготрейдинг", "крипто"]
+slug: "statistical-arbitrage-pairs-trading-crypto"
+description: "Полный гайд по статистическому арбитражу для крипторынков. Коинтеграция, фильтр Калмана, стратегии на базисе, кросс-биржевой арбитраж. С бэктестами и кодом на Python."
+lang: "ru"
+image: "/images/blog/statistical-arbitrage-pairs-trading-crypto.webp"
+authors: ["suenot"]
+---
+
+# Статистический арбитраж и парный трейдинг на крипторынках: от коинтеграции до Калмана
+
+В 1987 году группа физиков из Morgan Stanley заработала $50 млн за год, торгуя парами акций по алгоритму, который ни один из них не мог до конца объяснить руководству банка. Руководство не возражало. В 2026 году вы можете запустить ту же идею на криптобиржах — с бессрочными фьючерсами, 24/7-рынком и ликвидностью, которой позавидовал бы Нунцио Тартальа. Но есть нюанс: то, что работало с акциями Ford и GM в эпоху до интернета, требует серьёзной адаптации для мира, где BTC может упасть на 20% за ночь, а funding rate — перевернуться за один блок.
+
+Эта статья — полный разбор статистического арбитража и парного трейдинга для крипторынков. От математической теории (коинтеграция, процесс Орнштейна-Уленбека, фильтр Калмана) до рабочего Python-кода, который можно запустить на реальных данных. Стиль — инженерный: формулы объясняем, код показываем, подводные камни не прячем.
+
+## 1. Краткая история: от иезуита к квантам
+
+Статистический арбитраж в современном виде родился на торговом деске Morgan Stanley в середине 1980-х. **Нунцио Тартальа** — бывший иезуитский священник с PhD по физике — собрал команду из математиков, физиков и компьютерщиков. Задача: найти закономерности в ценах акций, которые не видят традиционные трейдеры.
+
+Идея была обезоруживающе простой. Если акции Coca-Cola и Pepsi исторически движутся вместе (логично — они продают одну и ту же сладкую воду разного цвета), то расхождение их цен — временная аномалия. Покупаем отстающую, продаём лидирующую, ждём схождения, фиксируем прибыль. Рыночно-нейтральная стратегия: направление рынка нас не волнует.
+
+В команду Тартальи входили люди, которые потом изменят весь Уолл-стрит:
+
+- **Дэвид Шоу** — позже основал D.E. Shaw & Co., один из крупнейших квантовых фондов
+- **Питер Мюллер** — основал PDT Partners, легендарную группу статарба внутри Morgan Stanley
+- **Роберт Фрей** — позже ушёл в Renaissance Technologies к Джиму Саймонсу
+
+Группа работала как исследовательская лаборатория внутри инвестбанка. Автоматизация была на уровне: VAX-кластеры генерировали сигналы, а исполнение шло через терминалы. В лучшие годы (1987-1988) стратегия зарабатывала десятки миллионов. Потом случились два убыточных года подряд, и в 1989 Morgan Stanley закрыл деск.
+
+Но идея вырвалась на свободу. Выпускники группы разнесли концепцию парного трейдинга по всему Уолл-стриту. Гатев, Гётцман и Рувенхорст в 2006 году опубликовали классическую академическую работу «Pairs Trading: Performance of a Relative-Value Arbitrage Rule», показавшую, что простая стратегия парного трейдинга стабильно приносила ~11% годовых с 1962 по 2002 год на американских акциях. Это был убедительный ответ гипотезе эффективного рынка: мол, рынок в целом эффективен, но **пары** конкретных активов систематически отклоняются от равновесия.
+
+Сегодня статистический арбитраж — это индустрия с сотнями миллиардов долларов AUM, а крипторынки предлагают для него особенно благодатную почву: фрагментированная ликвидность, незрелая микроструктура, круглосуточная торговля и бессрочные фьючерсы с funding rate — инструмент, которого на традиционных рынках просто не существует.
+
+## 2. Математический фундамент: корреляция — это ловушка
+
+### Почему корреляция не работает
+
+Начнём с ошибки, которую совершает каждый второй начинающий квант: «BTC и ETH коррелированы с коэффициентом 0.85, значит, можно торговать пару». Нет. Нельзя. Точнее, можно — но вы потеряете деньги.
+
+**Корреляция** измеряет линейную связь между *доходностями* двух активов. Два актива могут быть прекрасно коррелированы, но при этом их *цены* расходятся навсегда. Классический пример: два случайных блуждания с коррелированными приращениями — они бесконечно расходятся, несмотря на высокую корреляцию. Вы откроете позицию на «схождение», а его не будет.
+
+![Коинтеграция vs корреляция](/images/blog/statarb-cointegration-vs-correlation.webp)
+
+### Коинтеграция: правильный подход
+
+**Коинтеграция** — это свойство *ценовых рядов*, а не доходностей. Два нестационарных ряда X(t) и Y(t) называются коинтегрированными, если существует линейная комбинация:
+
+```
+S(t) = Y(t) - β · X(t)
+```
+
+которая является стационарной — то есть возвращается к среднему значению. Коэффициент β называется **hedge ratio** (коэффициент хеджирования), а S(t) — **спредом**.
+
+Интуиция: BTC и ETH могут уходить на Луну или падать в пропасть, но если их *разница* (с правильным масштабированием) колеблется вокруг фиксированного уровня — это коинтеграция. И это именно то, что нам нужно для торговли.
+
+### Тест Энгла-Грейнджера (1987)
+
+Двухшаговая процедура, за которую Роберт Энгл и Клайв Грейнджер получили Нобелевскую премию по экономике в 2003 году:
+
+**Шаг 1.** Регрессия OLS: Y(t) = α + β · X(t) + ε(t). Получаем hedge ratio β и остатки ε(t).
+
+**Шаг 2.** Тест ADF (Augmented Dickey-Fuller) на остатках ε(t). Нулевая гипотеза: ε(t) — единичный корень (нестационарный). Если p-value < 0.05, отвергаем H₀ — ряды коинтегрированы.
+
+Важно: для теста на коинтеграцию **нельзя** использовать стандартные критические значения ADF. Критические значения Энгла-Грейнджера получены методом Монте-Карло и учитывают зависимость между переменными в OLS-регрессии. В statsmodels это реализовано корректно в функции `coint()`.
+
+### Тест Йохансена
+
+Для систем из более чем двух переменных (например, BTC, ETH и SOL одновременно) используется тест Йохансена. Он находит **все** коинтеграционные соотношения в системе и позволяет строить портфели из нескольких активов. Тест основан на VAR-модели (vector autoregression) и использует два критерия: trace statistic и maximum eigenvalue statistic.
+
+### Процесс Орнштейна-Уленбека
+
+Если спред коинтегрирован, его динамику можно моделировать как процесс Орнштейна-Уленбека (OU):
+
+```
+dS(t) = θ(μ - S(t))dt + σ dW(t)
+```
+
+где:
+- **θ** — скорость возврата к среднему (mean reversion speed)
+- **μ** — долгосрочный средний уровень
+- **σ** — волатильность
+- **W(t)** — винеровский процесс (броуновское движение)
+
+Из параметров OU-процесса вычисляется **полупериод возврата к среднему** (half-life):
+
+```
+t½ = ln(2) / θ
+```
+
+Half-life — критически важная метрика. Если t½ = 5 дней, спред возвращается к среднему примерно за 5 дней. Если t½ = 200 дней, вы будете сидеть в позиции полгода, пока произойдёт схождение. Для крипто-стратегий оптимальный half-life: **1-30 дней**. Меньше — слишком быстро, комиссии съедают прибыль. Больше — слишком медленно, риск структурного сдвига.
+
+На практике θ оценивается через регрессию:
+
+```
+ΔS(t) = a + b · S(t-1) + ε(t)
+```
+
+где θ = -b, и t½ = -ln(2) / b.
+
+### Z-score нормализация
+
+Для генерации торговых сигналов спред нормализуется:
+
+```
+z(t) = (S(t) - μ̂) / σ̂
+```
+
+где μ̂ и σ̂ — скользящие среднее и стандартное отклонение спреда. Z-score показывает, на сколько стандартных отклонений спред отклонился от среднего. Типичные пороги входа: |z| > 2.0; выхода: |z| < 0.5.
+
+## 3. Выбор пар на крипторынке
+
+### BTC-ETH: классика, которая (иногда) работает
+
+BTC и ETH — самая очевидная и самая ликвидная пара. Корреляция доходностей стабильно выше 0.7. Но коинтеграция — дело другое. Она *появляется и исчезает*:
+
+- В боковиках 2023 года BTC/ETH были надёжно коинтегрированы (p-value < 0.01)
+- В период расхождения 2024-2025 (BTC рос за счёт ETF, ETH отставал) коинтеграция разрушилась
+- К началу 2026 года, после запуска ETH-ETF и восстановления ETH/BTC-соотношения, коинтеграция снова стабилизировалась
+
+Вывод: коинтеграцию нужно **постоянно мониторить**. Параметры регрессии пересчитываются на скользящем окне, а стратегия автоматически отключается, если p-value ADF-теста превышает порог.
+
+### Секторные пары
+
+Крипторынок удобно сегментирован по секторам, и внутрисекторные пары часто демонстрируют устойчивую коинтеграцию:
+
+| Сектор | Примеры пар | Характеристика |
+|--------|------------|----------------|
+| L1 блокчейны | SOL/AVAX, NEAR/APT | Высокая ликвидность, half-life 3-10 дней |
+| DeFi протоколы | AAVE/COMP, UNI/SUSHI | Средняя ликвидность, half-life 5-15 дней |
+| L2 решения | ARB/OP, MATIC/MANTA | Высокая волатильность спреда |
+| Мемкоины | DOGE/SHIB | Непредсказуемо, но весело (не рекомендуется) |
+
+Лучшие пары для статарба обладают тремя свойствами: (1) **устойчивая коинтеграция** на историческом окне >6 месяцев, (2) **достаточная ликвидность** — дневной объём >$10M на каждый актив, (3) **адекватный half-life** — от 1 до 30 дней.
+
+### Спот vs бессрочные фьючерсы (базис)
+
+Отдельная категория «пар» — это один и тот же актив на спотовом и фьючерсном рынках. Разница между ценой бессрочного фьючерса и спота (базис) по определению стационарна: механизм funding rate сжимает её обратно к нулю. Это делает basis trading одним из самых надёжных видов статарба в крипте.
+
+## 4. Три варианта торговли
+
+### A. Basis trading: спот-фьючерс и carry на funding rate
+
+Самая «чистая» форма статарба в крипте. Механика:
+
+1. **Купить** актив на споте (например, 1 BTC)
+2. **Открыть шорт** на бессрочном фьючерсе (1 BTC)
+3. Если funding rate положительный (лонги платят шортам) — вы получаете funding каждые 8 часов
+
+При среднем funding rate 0.01% каждые 8 часов это ~0.03% в день или ~11% годовых *без направленного риска*. В периоды бычьего рынка funding rate может вырастать до 0.05-0.1% каждые 8 часов — это уже 55-110% годовых.
+
+Риски: отрицательный funding (рынок разворачивается), ликвидация шорт-позиции при резком росте цены (нужен запас маржи), и комиссии биржи.
+
+По данным на март 2026 года, средний funding rate по BTC стабилизировался на уровне ~0.015% за 8 часов — выше уровней 2024 года примерно на 50%.
+
+### B. Кросс-биржевой арбитраж
+
+Одна и та же монета, две биржи, разные цены. Причина — различия в ликвидности, составе трейдеров и скорости обновления ордербуков.
+
+**Пример:** BTC на Binance: $87,150. BTC на Bybit: $87,175. Спред: $25 (0.029%).
+
+Стратегия: купить на Binance, продать на Bybit. Проблема: к моменту исполнения обоих ордеров спред может исчезнуть. Решение: держать баланс на обеих биржах и исполнять одновременно.
+
+Типичные комиссии:
+- Binance: ~0.075% taker (со скидкой ~0.05%)
+- Bybit: ~0.03% taker (VIP)
+- Суммарно: ~0.08%
+
+Значит, спред должен превышать 0.08% чтобы стратегия была прибыльной. В 2026 году такие спреды возникают:
+- На менее ликвидных парах (альткоины) — регулярно
+- На крупных парах (BTC, ETH) — только в моменты высокой волатильности
+- Между CEX и DEX — чаще, но с риском MEV и проскальзывания
+
+Без колокейшн (co-location) API-задержка составляет 10-100 мс. С оптимизированными сетями — ~1 мс. Большинство розничных трейдеров работают в диапазоне 100-500 мс, чего достаточно для многих арбитражных стратегий, но недостаточно для конкуренции с институционалами.
+
+### C. Парный трейдинг с плечом
+
+Классический pairs trading на двух разных активах с использованием кредитного плеча. Это самая сложная из трёх стратегий — и самая потенциально прибыльная.
+
+Механика на примере пары SOL/AVAX:
+
+1. Рассчитать hedge ratio β (например, β = 1.3)
+2. При z-score > +2: **шорт** SOL, **лонг** AVAX × β
+3. При z-score < -2: **лонг** SOL, **шорт** AVAX × β
+4. Выход: |z-score| < 0.5 или тайм-аут (например, 30 дней)
+
+С плечом 3x на каждую ногу и средним возвратом спреда 2σ → 3σ:
+- Целевая доходность на сделку: ~3-6%
+- Средняя частота: 2-4 сделки в месяц на пару
+- Ожидаемая годовая доходность: 30-60% (до комиссий и проскальзывания)
+
+Главный риск: корреляция может разрушиться в самый неподходящий момент (обычно — во время краха рынка). Об этом подробнее в разделе 8.
+
+## 5. Фильтр Калмана для адаптивного hedge ratio
+
+### Почему статический hedge ratio — это проблема
+
+Классический подход: оценить β через OLS на историческом окне и зафиксировать. Проблема: β меняется во времени. Рынок крипто особенно нестационарен — смена нарратива (DeFi summer → NFT hype → AI tokens) сдвигает фундаментальные соотношения между активами.
+
+Использование скользящего OLS (rolling regression) — полумера. Нужно выбирать длину окна: слишком короткое — шум, слишком длинное — запаздывание. Фильтр Калмана решает эту проблему элегантно.
+
+![Фильтр Калмана](/images/blog/statarb-kalman-filter.webp)
+
+### Модель пространства состояний
+
+Представим связь между Y(t) и X(t) как линейную модель с **изменяющимися во времени** коэффициентами:
+
+**Уравнение наблюдения:**
+```
+Y(t) = α(t) + β(t) · X(t) + ε(t),   ε(t) ~ N(0, R)
+```
+
+**Уравнение состояния:**
+```
+[α(t+1), β(t+1)]ᵀ = [α(t), β(t)]ᵀ + w(t),   w(t) ~ N(0, Q)
+```
+
+Параметры α(t) и β(t) трактуются как **скрытое состояние**, которое медленно дрейфует (случайное блуждание). Фильтр Калмана оптимально оценивает это скрытое состояние по зашумлённым наблюдениям.
+
+- **R** (observation noise) — дисперсия шума наблюдения. Чем больше R, тем медленнее фильтр реагирует на новые данные.
+- **Q** (state noise) — ковариационная матрица шума состояния. Чем больше Q, тем быстрее фильтр адаптируется.
+
+Соотношение Q/R определяет «гладкость» фильтра — аналог выбора длины окна в rolling OLS, но без жёсткого обрезания данных.
+
+### Преимущества перед rolling OLS
+
+Спреды, рассчитанные с помощью фильтра Калмана, значительно **более стационарны и mean-reverting**, чем спреды из скользящей регрессии. Калман использует *все* прошлые наблюдения с экспоненциально убывающими весами, а не обрезает данные окном фиксированной длины. Кроме того, фильтр Калмана не требует настройки параметра «длина окна» — вместо этого он автоматически калибрует баланс между инерцией и адаптивностью через матрицы Q и R.
+
+### Реализация с filterpy
+
+```python
+import numpy as np
+from filterpy.kalman import KalmanFilter
+
+def create_kalman_filter(
+    delta: float = 1e-4,
+    obs_noise: float = 1.0
+) -> KalmanFilter:
+    """
+    Создаёт фильтр Калмана для оценки адаптивного hedge ratio.
+
+    delta: дисперсия шума состояния (Q = delta * I).
+           Больше delta → быстрее адаптация, больше шума.
+    obs_noise: дисперсия шума наблюдения (R).
+    """
+    kf = KalmanFilter(dim_x=2, dim_z=1)
+
+    # Начальное состояние: [alpha, beta] = [0, 0]
+    kf.x = np.zeros((2, 1))
+
+    # Матрица перехода — единичная (случайное блуждание)
+    kf.F = np.eye(2)
+
+    # Начальная ковариация состояния — большая (неуверенность)
+    kf.P = np.eye(2) * 1000
+
+    # Ковариация шума состояния
+    kf.Q = np.eye(2) * delta
+
+    # Шум наблюдения
+    kf.R = np.array([[obs_noise]])
+
+    return kf
+
+def estimate_hedge_ratio(
+    prices_y: np.ndarray,
+    prices_x: np.ndarray,
+    delta: float = 1e-4,
+    obs_noise: float = 1.0
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Оценивает адаптивный hedge ratio фильтром Калмана.
+
+    Возвращает:
+        alphas: массив intercept (α)
+        betas: массив hedge ratio (β)
+        spreads: массив спредов Y - α - β*X
+    """
+    n = len(prices_y)
+    kf = create_kalman_filter(delta, obs_noise)
+
+    alphas = np.zeros(n)
+    betas = np.zeros(n)
+    spreads = np.zeros(n)
+
+    for t in range(n):
+        # Матрица наблюдения: Y(t) = [1, X(t)] @ [alpha, beta]
+        kf.H = np.array([[1.0, prices_x[t]]])
+
+        # Predict
+        kf.predict()
+
+        # Update с наблюдением Y(t)
+        kf.update(np.array([[prices_y[t]]]))
+
+        # Сохраняем результаты
+        alphas[t] = kf.x[0, 0]
+        betas[t] = kf.x[1, 0]
+        spreads[t] = prices_y[t] - kf.x[0, 0] - kf.x[1, 0] * prices_x[t]
+
+    return alphas, betas, spreads
+```
+
+Параметр `delta` — ключевой. Для крипто-пар с высокой волатильностью (мемкоины, мелкие альты) используйте delta = 1e-3. Для стабильных пар (BTC/ETH, SOL/AVAX) — delta = 1e-5.
+
+## 6. Сигналы входа и выхода
+
+### Z-score пороги
+
+Базовая логика сигналов:
+
+```python
+def generate_signals(
+    spreads: np.ndarray,
+    lookback: int = 60,
+    entry_z: float = 2.0,
+    exit_z: float = 0.5,
+    stop_z: float = 4.0
+) -> np.ndarray:
+    """
+    Генерирует торговые сигналы по z-score спреда.
+
+    Возвращает массив: +1 (лонг спред), -1 (шорт спред), 0 (вне позиции)
+    """
+    signals = np.zeros(len(spreads))
+    position = 0
+
+    for t in range(lookback, len(spreads)):
+        window = spreads[t - lookback:t]
+        mu = np.mean(window)
+        sigma = np.std(window)
+
+        if sigma < 1e-10:
+            continue
+
+        z = (spreads[t] - mu) / sigma
+
+        if position == 0:
+            # Вход: спред отклонился достаточно далеко
+            if z > entry_z:
+                position = -1  # Шорт спред (шорт Y, лонг X)
+            elif z < -entry_z:
+                position = 1   # Лонг спред (лонг Y, шорт X)
+        else:
+            # Выход: спред вернулся к среднему
+            if position == 1 and z > -exit_z:
+                position = 0
+            elif position == -1 and z < exit_z:
+                position = 0
+            # Стоп-лосс: спред ушёл слишком далеко
+            elif abs(z) > stop_z:
+                position = 0
+
+        signals[t] = position
+
+    return signals
+```
+
+### Фильтры momentum
+
+Чистый mean-reversion сигнал можно улучшить фильтрами:
+
+1. **Momentum filter:** не открывать позицию, если спред продолжает расходиться. Ждём *разворота* спреда перед входом. Технически: z-score пересёк порог, но текущее изменение спреда уже направлено в сторону среднего.
+
+2. **Volatility filter:** увеличить порог входа в периоды высокой волатильности. Когда рынок паникует, z-score может устойчиво находиться выше 3σ неделями.
+
+3. **Cointegration filter:** перед каждой сделкой проверять, что коинтеграция всё ещё актуальна (rolling ADF test). Если p-value > 0.1 — торговлю приостановить.
+
+### Time-based exits
+
+Если позиция открыта дольше 2× half-life и спред не вернулся — закрывать принудительно. Если спред не возвращается за 2× ожидаемого времени, скорее всего, коинтеграция разрушилась, и ждать нечего.
+
+## 7. Бэктестинг: делаем правильно
+
+### Walk-forward анализ
+
+Стандартный бэктест (train на всех данных → test на всех данных) бесполезен для статарба. Параметры регрессии подогнаны к данным, и результат будет оптимистичным.
+
+**Walk-forward** подход:
+
+1. Разделить данные на периоды: [train₁ → test₁] → [train₂ → test₂] → ...
+2. На каждом train-периоде: оценить коинтеграцию, рассчитать hedge ratio, подобрать z-score пороги
+3. На test-периоде: торговать с фиксированными параметрами
+4. Объединить все test-периоды для итоговой оценки
+
+Типичная конфигурация для крипто: train = 180 дней, test = 30 дней, шаг = 30 дней.
+
+![Бэктест спред-стратегии](/images/blog/statarb-backtest-spread.webp)
+
+### Модель транзакционных издержек
+
+Для крипто нужно учитывать:
+
+| Компонент | Типичное значение | Комментарий |
+|-----------|-------------------|-------------|
+| Maker fee | 0.02% | Лимитные ордера |
+| Taker fee | 0.05-0.075% | Маркет-ордера |
+| Slippage | 0.01-0.1% | Зависит от ликвидности |
+| Funding rate | ±0.01%/8ч | Для фьючерсных позиций |
+| Spread (bid-ask) | 0.01-0.05% | На крупных биржах |
+
+При входе и выходе из парной позиции происходит 4 сделки (2 ноги × вход + выход). Суммарные издержки: ~0.3-0.5% на round trip. Это значит, что средний профит на сделку должен превышать 0.5% для положительного математического ожидания.
+
+### Модель проскальзывания
+
+Линейная модель: slippage = k × (order_size / ADV), где ADV — средний дневной объём. Для крипто k ≈ 0.1 для топ-10 монет и k ≈ 0.3-0.5 для альткоинов.
+
+Более реалистичная модель — square-root impact: slippage = k × sqrt(order_size / ADV). Она лучше отражает реальную рыночную микроструктуру.
+
+### Метрики
+
+```python
+def calculate_metrics(returns: np.ndarray, rf: float = 0.04) -> dict:
+    """
+    Рассчитывает ключевые метрики стратегии.
+    rf: безрисковая ставка (годовая)
+    """
+    daily_rf = rf / 365
+    excess = returns - daily_rf
+
+    ann_return = np.mean(returns) * 365
+    ann_vol = np.std(returns) * np.sqrt(365)
+
+    # Sharpe Ratio
+    sharpe = (ann_return - rf) / ann_vol if ann_vol > 0 else 0
+
+    # Maximum Drawdown
+    cumulative = np.cumprod(1 + returns)
+    running_max = np.maximum.accumulate(cumulative)
+    drawdowns = (cumulative - running_max) / running_max
+    max_dd = np.min(drawdowns)
+
+    # Calmar Ratio
+    calmar = ann_return / abs(max_dd) if max_dd != 0 else 0
+
+    # Win Rate
+    win_rate = np.mean(returns > 0) if len(returns) > 0 else 0
+
+    # Profit Factor
+    gains = returns[returns > 0].sum()
+    losses = abs(returns[returns < 0].sum())
+    profit_factor = gains / losses if losses > 0 else float('inf')
+
+    return {
+        'annual_return': f'{ann_return:.1%}',
+        'annual_volatility': f'{ann_vol:.1%}',
+        'sharpe_ratio': f'{sharpe:.2f}',
+        'max_drawdown': f'{max_dd:.1%}',
+        'calmar_ratio': f'{calmar:.2f}',
+        'win_rate': f'{win_rate:.1%}',
+        'profit_factor': f'{profit_factor:.2f}',
+    }
+```
+
+Ориентиры для крипто-статарба:
+- **Sharpe > 1.5** — хорошая стратегия
+- **Max drawdown < 15%** — приемлемый риск
+- **Calmar > 2.0** — отличное соотношение доходность/просадка
+- **Profit factor > 1.5** — устойчивое преимущество
+
+## 8. Проблемы реального мира
+
+### Проскальзывание и ликвидность
+
+В бэктесте вы входите мгновенно по mid-price. В реальности — нет. На альткоинах с дневным объёмом $5M ордер на $50K может сдвинуть цену на 0.2-0.5%. Для парной стратегии это *удвоенный* слиппедж (две ноги), и он может съесть весь профит.
+
+Решение: использовать лимитные ордера (maker, не taker), разбивать ордера на части (TWAP/VWAP), и строго ограничивать размер позиции относительно ADV (максимум 1-2% дневного объёма).
+
+### Funding rate risk
+
+При basis trading вы получаете funding rate, но он может стать отрицательным. В медвежьем рынке декабря 2022 года funding rate по BTC составлял -0.02% каждые 8 часов — если вы сидели в позиции «лонг спот + шорт перп», вы *платили* $60/день на каждые $100K позиции.
+
+Защита: мониторить funding rate в реальном времени и закрывать позицию при развороте ставки. Более продвинутый подход — арбитраж funding rate между биржами (лонг на бирже с низким funding, шорт на бирже с высоким).
+
+### Breakdown корреляций в кризис
+
+Март 2020, май 2021, ноябрь 2022, август 2024 — в каждом крипто-краше корреляции ломаются. Точнее, корреляции *усиливаются* (всё падает вместе), но коинтеграция разрушается — спред может улететь на 10σ и не вернуться.
+
+Это ахиллесова пята парного трейдинга. Стратегия зарабатывает маленькие суммы стабильно, а потом теряет крупную сумму в один день. Классический профиль «picking up pennies in front of a steamroller».
+
+Защита:
+1. **Жёсткий стоп-лосс:** закрывать позицию при z-score > 4σ
+2. **Ограничение плеча:** максимум 2-3x на каждую ногу
+3. **VIX/волатильность-фильтр:** уменьшать размер позиции при высокой implied volatility
+4. **Диверсификация:** торговать 10-20 пар одновременно, не ставить всё на одну
+
+### Требования к капиталу
+
+Для серьёзного статарба на крипто:
+- Basis trading: от $50K (на одной паре, одной бирже)
+- Cross-exchange arbitrage: от $100K (баланс на двух биржах)
+- Pairs trading portfolio (10 пар): от $200K
+- Институциональный уровень: от $1M
+
+При меньших суммах комиссии и минимальные размеры позиций делают стратегию неэффективной.
+
+## 9. End-to-end реализация на Python
+
+### Получение данных
+
+```python
+import ccxt
+import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
+
+def fetch_ohlcv(
+    exchange_id: str,
+    symbol: str,
+    timeframe: str = '1h',
+    days: int = 365
+) -> pd.DataFrame:
+    """Загрузка OHLCV-данных через ccxt."""
+    exchange = getattr(ccxt, exchange_id)({
+        'enableRateLimit': True,
+    })
+
+    since = int((datetime.now() - timedelta(days=days)).timestamp() * 1000)
+    all_candles = []
+
+    while True:
+        candles = exchange.fetch_ohlcv(
+            symbol, timeframe, since=since, limit=1000
+        )
+        if not candles:
+            break
+        all_candles.extend(candles)
+        since = candles[-1][0] + 1
+        if len(candles) < 1000:
+            break
+
+    df = pd.DataFrame(
+        all_candles,
+        columns=['timestamp', 'open', 'high', 'low', 'close', 'volume']
+    )
+    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+    df.set_index('timestamp', inplace=True)
+    return df
+
+# Пример: загружаем SOL и AVAX
+sol = fetch_ohlcv('binance', 'SOL/USDT', '1h', 365)
+avax = fetch_ohlcv('binance', 'AVAX/USDT', '1h', 365)
+
+# Синхронизация индексов
+prices = pd.DataFrame({
+    'SOL': sol['close'],
+    'AVAX': avax['close']
+}).dropna()
+```
+
+### Тест на коинтеграцию
+
+```python
+from statsmodels.tsa.stattools import coint, adfuller
+from statsmodels.regression.linear_model import OLS
+from statsmodels.tools import add_constant
+
+def test_cointegration(y: np.ndarray, x: np.ndarray) -> dict:
+    """
+    Полный тест на коинтеграцию с диагностикой.
+    """
+    # 1. Тест Энгла-Грейнджера
+    score, pvalue, crit_values = coint(y, x)
+
+    # 2. OLS для hedge ratio
+    x_const = add_constant(x)
+    model = OLS(y, x_const).fit()
+    alpha, beta = model.params
+    spread = y - alpha - beta * x
+
+    # 3. ADF на спреде
+    adf_stat, adf_pvalue, _, _, adf_crit, _ = adfuller(spread, maxlag=20)
+
+    # 4. Half-life
+    spread_lag = spread[:-1]
+    spread_diff = np.diff(spread)
+    spread_lag_const = add_constant(spread_lag)
+    hl_model = OLS(spread_diff, spread_lag_const).fit()
+    theta = -hl_model.params[1]
+    half_life = np.log(2) / theta if theta > 0 else np.inf
+
+    return {
+        'coint_pvalue': pvalue,
+        'cointegrated': pvalue < 0.05,
+        'hedge_ratio': beta,
+        'intercept': alpha,
+        'adf_statistic': adf_stat,
+        'adf_pvalue': adf_pvalue,
+        'half_life_hours': half_life,
+        'half_life_days': half_life / 24,
+        'spread_mean': np.mean(spread),
+        'spread_std': np.std(spread),
+    }
+
+# Запускаем тест
+result = test_cointegration(
+    prices['SOL'].values,
+    prices['AVAX'].values
+)
+print(f"Коинтеграция: {result['cointegrated']} "
+      f"(p-value: {result['coint_pvalue']:.4f})")
+print(f"Hedge ratio: {result['hedge_ratio']:.4f}")
+print(f"Half-life: {result['half_life_days']:.1f} дней")
+```
+
+### Фильтр Калмана + бэктестер
+
+```python
+from filterpy.kalman import KalmanFilter
+
+class PairsBacktester:
+    """
+    Walk-forward бэктестер для парного трейдинга
+    с фильтром Калмана.
+    """
+
+    def __init__(
+        self,
+        prices_y: np.ndarray,
+        prices_x: np.ndarray,
+        kalman_delta: float = 1e-4,
+        obs_noise: float = 1.0,
+        entry_z: float = 2.0,
+        exit_z: float = 0.5,
+        stop_z: float = 4.0,
+        lookback: int = 60,
+        fee_rate: float = 0.001,    # 0.1% round trip на ногу
+        slippage_rate: float = 0.0005,  # 0.05% slippage на ногу
+    ):
+        self.prices_y = prices_y
+        self.prices_x = prices_x
+        self.n = len(prices_y)
+        self.kalman_delta = kalman_delta
+        self.obs_noise = obs_noise
+        self.entry_z = entry_z
+        self.exit_z = exit_z
+        self.stop_z = stop_z
+        self.lookback = lookback
+        self.fee_rate = fee_rate
+        self.slippage_rate = slippage_rate
+
+    def run(self) -> pd.DataFrame:
+        """Запуск бэктеста. Возвращает DataFrame с результатами."""
+        # Шаг 1: Kalman filter для hedge ratio
+        kf = KalmanFilter(dim_x=2, dim_z=1)
+        kf.x = np.zeros((2, 1))
+        kf.F = np.eye(2)
+        kf.P = np.eye(2) * 1000
+        kf.Q = np.eye(2) * self.kalman_delta
+        kf.R = np.array([[self.obs_noise]])
+
+        alphas = np.zeros(self.n)
+        betas = np.zeros(self.n)
+        spreads = np.zeros(self.n)
+
+        for t in range(self.n):
+            kf.H = np.array([[1.0, self.prices_x[t]]])
+            kf.predict()
+            kf.update(np.array([[self.prices_y[t]]]))
+            alphas[t] = kf.x[0, 0]
+            betas[t] = kf.x[1, 0]
+            spreads[t] = (
+                self.prices_y[t] - kf.x[0, 0]
+                - kf.x[1, 0] * self.prices_x[t]
+            )
+
+        # Шаг 2: Z-score и сигналы
+        positions = np.zeros(self.n)
+        z_scores = np.zeros(self.n)
+        position = 0
+
+        for t in range(self.lookback, self.n):
+            window = spreads[t - self.lookback:t]
+            mu = np.mean(window)
+            sigma = np.std(window)
+            if sigma < 1e-10:
+                continue
+
+            z = (spreads[t] - mu) / sigma
+            z_scores[t] = z
+
+            if position == 0:
+                if z > self.entry_z:
+                    position = -1
+                elif z < -self.entry_z:
+                    position = 1
+            else:
+                if position == 1 and z > -self.exit_z:
+                    position = 0
+                elif position == -1 and z < self.exit_z:
+                    position = 0
+                elif abs(z) > self.stop_z:
+                    position = 0
+
+            positions[t] = position
+
+        # Шаг 3: P&L
+        spread_returns = np.diff(spreads) / np.abs(
+            spreads[:-1] + 1e-10
+        )
+        pnl = np.zeros(self.n)
+
+        for t in range(1, self.n):
+            if positions[t - 1] != 0:
+                raw_return = positions[t - 1] * spread_returns[t - 1]
+                pnl[t] = raw_return
+
+                # Вычитаем комиссии при открытии/закрытии
+                if positions[t] != positions[t - 1]:
+                    total_cost = 2 * (self.fee_rate + self.slippage_rate)
+                    pnl[t] -= total_cost
+
+        return pd.DataFrame({
+            'price_y': self.prices_y,
+            'price_x': self.prices_x,
+            'alpha': alphas,
+            'beta': betas,
+            'spread': spreads,
+            'z_score': z_scores,
+            'position': positions,
+            'pnl': pnl,
+            'cumulative_pnl': np.cumsum(pnl),
+        })
+
+# Запуск бэктеста
+bt = PairsBacktester(
+    prices_y=prices['SOL'].values,
+    prices_x=prices['AVAX'].values,
+    kalman_delta=1e-4,
+    entry_z=2.0,
+    exit_z=0.5,
+    stop_z=4.0,
+    lookback=60,
+    fee_rate=0.001,
+    slippage_rate=0.0005,
+)
+results = bt.run()
+
+# Метрики
+daily_pnl = results['pnl'].resample('D').sum() if hasattr(
+    results.index, 'freq'
+) else results['pnl']
+metrics = calculate_metrics(daily_pnl.values)
+for k, v in metrics.items():
+    print(f'{k}: {v}')
+```
+
+### Скелет живой торговли
+
+```python
+import ccxt
+import asyncio
+import logging
+
+logger = logging.getLogger(__name__)
+
+class LivePairsTrader:
+    """
+    Минимальный скелет для живой торговли парами.
+    Для продакшна: добавить retry-логику, мониторинг,
+    алерты, reconciliation балансов.
+    """
+
+    def __init__(
+        self,
+        exchange_id: str,
+        symbol_y: str,
+        symbol_x: str,
+        api_key: str,
+        secret: str,
+        position_size_usd: float = 1000.0,
+        entry_z: float = 2.0,
+        exit_z: float = 0.5,
+    ):
+        self.exchange = getattr(ccxt, exchange_id)({
+            'apiKey': api_key,
+            'secret': secret,
+            'enableRateLimit': True,
+        })
+        self.symbol_y = symbol_y
+        self.symbol_x = symbol_x
+        self.position_size = position_size_usd
+        self.entry_z = entry_z
+        self.exit_z = exit_z
+        self.position = 0  # +1, -1, 0
+
+        # Kalman state (persistent)
+        self.kf = create_kalman_filter(delta=1e-4)
+        self.spread_history = []
+
+    async def update(self):
+        """Один цикл обновления."""
+        # 1. Получить текущие цены
+        ticker_y = self.exchange.fetch_ticker(self.symbol_y)
+        ticker_x = self.exchange.fetch_ticker(self.symbol_x)
+        price_y = ticker_y['last']
+        price_x = ticker_x['last']
+
+        # 2. Обновить Kalman filter
+        self.kf.H = np.array([[1.0, price_x]])
+        self.kf.predict()
+        self.kf.update(np.array([[price_y]]))
+
+        alpha = self.kf.x[0, 0]
+        beta = self.kf.x[1, 0]
+        spread = price_y - alpha - beta * price_x
+        self.spread_history.append(spread)
+
+        # 3. Z-score (нужно минимум lookback наблюдений)
+        if len(self.spread_history) < 60:
+            logger.info(f"Warming up: {len(self.spread_history)}/60")
+            return
+
+        window = np.array(self.spread_history[-60:])
+        z = (spread - np.mean(window)) / np.std(window)
+
+        logger.info(
+            f"β={beta:.4f} spread={spread:.4f} z={z:.2f} "
+            f"pos={self.position}"
+        )
+
+        # 4. Торговая логика
+        new_position = self.position
+
+        if self.position == 0:
+            if z > self.entry_z:
+                new_position = -1
+            elif z < -self.entry_z:
+                new_position = 1
+        else:
+            if self.position == 1 and z > -self.exit_z:
+                new_position = 0
+            elif self.position == -1 and z < self.exit_z:
+                new_position = 0
+
+        # 5. Исполнение
+        if new_position != self.position:
+            await self._execute_trade(
+                new_position, price_y, price_x, beta
+            )
+            self.position = new_position
+
+    async def _execute_trade(
+        self, target: int, price_y: float, price_x: float,
+        beta: float
+    ):
+        """Исполнение парной сделки."""
+        if target == 0:
+            # Закрыть обе ноги
+            logger.info("Closing position")
+            # ... закрытие позиций через exchange API
+        elif target == 1:
+            # Лонг спред: buy Y, sell X
+            size_y = self.position_size / price_y
+            size_x = (self.position_size * beta) / price_x
+            logger.info(
+                f"Long spread: buy {size_y:.4f} {self.symbol_y}, "
+                f"sell {size_x:.4f} {self.symbol_x}"
+            )
+            # self.exchange.create_order(self.symbol_y, 'limit', ...)
+            # self.exchange.create_order(self.symbol_x, 'limit', ...)
+        elif target == -1:
+            # Шорт спред: sell Y, buy X
+            size_y = self.position_size / price_y
+            size_x = (self.position_size * beta) / price_x
+            logger.info(
+                f"Short spread: sell {size_y:.4f} {self.symbol_y}, "
+                f"buy {size_x:.4f} {self.symbol_x}"
+            )
+
+    async def run_loop(self, interval_seconds: int = 60):
+        """Основной цикл."""
+        logger.info(
+            f"Starting live trading: "
+            f"{self.symbol_y}/{self.symbol_x}"
+        )
+        while True:
+            try:
+                await self.update()
+            except Exception as e:
+                logger.error(f"Error in update: {e}")
+            await asyncio.sleep(interval_seconds)
+```
+
+## Вместо заключения
+
+Статистический арбитраж — это не грааль. Это ремесло. Между «я знаю что такое коинтеграция» и «у меня стабильно работающая стратегия» лежит пропасть из инженерных деталей: правильная обработка данных, корректный walk-forward бэктест, реалистичная модель проскальзывания, мониторинг в реальном времени.
+
+Криптовалютные рынки всё ещё предлагают для статарба больше возможностей, чем традиционные — фрагментированная ликвидность, незрелая рыночная инфраструктура и уникальные инструменты вроде бессрочных фьючерсов с funding rate создают неэффективности, которые на NYSE давно арбитрированы до нуля.
+
+Но окно закрывается. Институциональные игроки приходят на крипторынки, арбитражный капитал растёт (по оценкам, в 2025 году объём арбитражного капитала на криптобиржах вырос на 215%), а маржа сжимается. Если вы собираетесь заниматься статарбом в крипте — начинать лучше сейчас.
+
+Весь код из этой статьи доступен как отправная точка. Не запускайте его в продакшн без серьёзного тестирования. И помните: единственная стратегия, которая гарантированно работает — это управление рисками.
+
+---
+
+> **Ключевые академические работы:**
+>
+> - Engle, R.F. & Granger, C.W.J. (1987). «Co-Integration and Error Correction: Representation, Estimation, and Testing». *Econometrica*, 55(2), 251-276.
+> - Gatev, E., Goetzmann, W.N. & Rouwenhorst, K.G. (2006). «Pairs Trading: Performance of a Relative-Value Arbitrage Rule». *The Review of Financial Studies*, 19(3), 797-827.
+> - Vidyamurthy, G. (2004). *Pairs Trading: Quantitative Methods and Analysis*. Wiley.
+> - Avellaneda, M. & Lee, J.H. (2010). «Statistical Arbitrage in the US Equities Market». *Quantitative Finance*, 10(7), 761-782.
+> - Frontiers (2026). «Deep learning-based pairs trading: real-time forecasting of co-integrated cryptocurrency pairs». *Frontiers in Applied Mathematics and Statistics*.
+
+> **Полезные библиотеки:**
+>
+> - [statsmodels](https://www.statsmodels.org/) — коинтеграция, ADF, OLS
+> - [filterpy](https://github.com/rlabbe/filterpy) — фильтр Калмана
+> - [ccxt](https://github.com/ccxt/ccxt) — единый API для 100+ бирж
+> - [arbitragelab](https://hudsonthames.org/arbitragelab/) — специализированная библиотека для парного трейдинга (OU, Kalman, copulas)

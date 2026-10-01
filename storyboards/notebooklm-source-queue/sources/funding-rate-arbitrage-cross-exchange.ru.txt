@@ -1,0 +1,528 @@
+MM article funding-rate-arbitrage-cross-exchange RU 6437d247a17b
+
+---
+title: "Арбитраж funding rates между биржами: как зарабатывать на разнице ставок"
+description: "Как устроен арбитраж funding rates между криптобиржами, почему ставки различаются на Binance, Bybit, OKX и dYdX, и как построить систему мониторинга и исполнения для извлечения прибыли из этих расхождений."
+tags: ["алготрейдинг", "funding rates", "арбитраж", "крипто", "Binance", "Bybit", "маркет-мейкинг"]
+date: "2026-03-05"
+lang: "ru"
+image: "/images/blog/funding-rate-arbitrage-cross-exchange.webp"
+slug: "funding-rate-arbitrage-cross-exchange"
+authors: ["suenot"]
+---
+
+# Арбитраж funding rates между биржами: как зарабатывать на разнице ставок
+
+Funding rate на ETHUSDT — 0.01% на Binance и 0.035% на Bybit. Одна и та же монета, один и тот же момент времени, но ставки отличаются в 3.5 раза. Кто-то платит больше, кто-то меньше. А кто-то зарабатывает на этой разнице.
+
+Арбитраж funding rates — одна из немногих стратегий в крипте, которая не зависит от направления рынка. Вы не прогнозируете цену. Вы извлекаете прибыль из структурного расхождения ставок между площадками.
+
+## Почему funding rates различаются между биржами
+
+Funding rate — это механизм привязки цены бессрочного фьючерса к спотовой цене. Каждая биржа рассчитывает его независимо на основе своих данных:
+
+- **Состав трейдеров.** На Binance доминируют ритейл-трейдеры, склонные к лонгам. На Bybit и OKX — больше профессиональных участников. Разный баланс лонгов и шортов → разный funding.
+- **Формула расчёта.** Каждая биржа использует свою формулу. Binance учитывает premium index и interest rate. Bybit и OKX — аналогично, но с другими весами и периодами усреднения.
+- **Ликвидность.** На менее ликвидных биржах premium (разница между фьючерсом и спотом) более волатилен → funding колеблется сильнее.
+- **Периодичность.** Большинство бирж выплачивают funding каждые 8 часов (00:00, 08:00, 16:00 UTC). Но некоторые (Bybit для отдельных пар, dYdX) — каждый час, что создаёт дополнительные возможности.
+
+### Типичные расхождения
+
+![Funding rate spreads across exchanges](/images/blog/funding-rate-spread-dynamics.webp)
+
+В спокойном рынке funding rates на крупных биржах близки — разница 0.001–0.005%. Но в периоды повышенной волатильности расхождения вырастают:
+
+| Фаза рынка | Binance | Bybit | OKX | dYdX | Спред |
+|------------|---------|-------|-----|------|-------|
+| Спокойный | 0.01% | 0.012% | 0.009% | 0.01% | ~0.003% |
+| Бычий тренд | 0.03% | 0.05% | 0.025% | 0.04% | ~0.025% |
+| Экстремальный бычий | 0.1% | 0.2% | 0.08% | 0.15% | ~0.12% |
+| Медвежий тренд | -0.02% | -0.01% | -0.025% | -0.015% | ~0.015% |
+
+Спред в 0.025% за 8 часов — это 0.075% в день. При размере позиции $100K это $75/день или ~$2250/месяц — без направленного риска.
+
+## Базовая механика арбитража
+
+![Межбиржевой арбитраж funding rate: противоположные позиции на двух биржах](/images/blog/funding-arb-mechanics.webp)
+
+Идея проста: **открыть противоположные позиции на двух биржах** так, чтобы получать funding на одной и платить меньше на другой.
+
+### Пример
+
+Binance: funding rate = +0.01% (лонги платят шортам)
+Bybit: funding rate = +0.04% (лонги платят шортам)
+
+Действия:
+1. Открываем **шорт** на Bybit → получаем 0.04% каждые 8 часов
+2. Открываем **лонг** на Binance → платим 0.01% каждые 8 часов
+3. Позиции зеркальные → ценовой риск нейтрален
+4. Чистая прибыль: 0.04% - 0.01% = **0.03% за 8 часов**
+
+За день (3 выплаты): 0.09%. За месяц: ~2.7%. Без направленного риска.
+
+```python
+def funding_arbitrage_pnl(
+    rate_short_exchange: float,  # ставка на бирже, где шортим
+    rate_long_exchange: float,   # ставка на бирже, где лонгуем
+    position_size: float,        # размер позиции в USD
+    payments_per_day: int = 3,
+    days: int = 30,
+) -> float:
+    """
+    PnL от арбитража funding rates за период.
+
+    При положительном funding: шорт получает, лонг платит.
+    При отрицательном: шорт платит, лонг получает.
+    """
+    # Шорт получает rate_short, лонг платит rate_long
+    spread = rate_short_exchange - rate_long_exchange
+    daily_pnl = spread * payments_per_day * position_size
+    return daily_pnl * days
+
+# Пример: шорт на Bybit (0.04%), лонг на Binance (0.01%)
+pnl = funding_arbitrage_pnl(0.0004, 0.0001, 100_000, days=30)
+# = (0.0004 - 0.0001) * 3 * 100_000 * 30 = $2,700
+```
+
+## Риски и подводные камни
+
+![Риски межбиржевого арбитража: ликвидация, ценовое расхождение, эрозия комиссий](/images/blog/funding-arb-risks.webp)
+
+Стратегия кажется «бесплатными деньгами». Это не так. Есть несколько серьёзных рисков.
+
+### 1. Ценовое расхождение между биржами
+
+Позиции на разных биржах — не одна и та же цена. Спред между Binance и Bybit обычно 0.01–0.05%, но в моменты высокой волатильности может достигать 0.5–1%. Если вы открываете позиции не одновременно, расхождение может превысить прибыль от funding.
+
+**Решение:** одновременное открытие через API с минимальной задержкой. В идеале — collocated серверы вблизи обеих бирж.
+
+### 2. Funding rate меняется
+
+Вы открыли позиции при спреде 0.03%. Через час спред сократился до 0.005% или развернулся. Теперь вы платите на обеих биржах.
+
+**Решение:** мониторинг спреда в реальном времени и автоматическое закрытие при сужении ниже порога.
+
+```python
+def should_close(
+    current_spread: float,
+    entry_spread: float,
+    min_spread: float = 0.0001,     # 0.01%
+    trading_costs: float = 0.0005,  # 0.05% на открытие + закрытие
+) -> bool:
+    """
+    Закрываем позицию, если спред упал ниже порога
+    или если текущий спред не покрывает торговые издержки.
+    """
+    return current_spread < min_spread or current_spread < trading_costs
+```
+
+### 3. Торговые комиссии
+
+Открытие и закрытие позиций на двух биржах — это 4 ордера. При maker fee 0.02% и taker fee 0.05%:
+
+- Оптимистичный сценарий (все maker): $4 \times 0.02\% = 0.08\%$
+- Пессимистичный сценарий (все taker): $4 \times 0.05\% = 0.20\%$
+
+Чтобы комиссии окупились, нужно удержать позицию достаточно долго:
+
+$$\text{Breakeven time} = \frac{\text{Total commissions}}{\text{Spread} \times \text{Payments per day}}$$
+
+```python
+def breakeven_days(
+    total_commissions_pct: float,  # суммарные комиссии в %
+    spread: float,                  # спред funding rate
+    payments_per_day: int = 3,
+) -> float:
+    daily_income = spread * payments_per_day
+    return total_commissions_pct / daily_income if daily_income > 0 else float('inf')
+
+# При maker fees: 0.08% / (0.03% * 3) = 0.89 дня
+# При taker fees: 0.20% / (0.03% * 3) = 2.22 дня
+```
+
+### 4. Маржинальные требования
+
+Позиции на обеих биржах требуют залога. При leverage 5× на каждой бирже и позиции $100K:
+
+- Binance: $20K залога
+- Bybit: $20K залога
+- Итого заморожено: **$40K** для позиции $100K
+
+Доходность на капитал:
+$$\text{ROC} = \frac{\$2700}{\$40000} \times 100\% = 6.75\% \text{ за месяц}$$
+
+При leverage 10× залог снижается до $20K, ROC вырастает до 13.5%. Но растёт и риск ликвидации при ценовых расхождениях.
+
+### 5. Риск ликвидации
+
+Если цена актива резко двигается, одна из позиций генерирует нереализованный убыток. На бирже с убыточной позицией нужно поддерживать маржу. Если маржи недостаточно — ликвидация. При этом прибыль на другой бирже не помогает — она на другом счёте.
+
+**Решение:**
+- Держите запас маржи (как минимум 2× от минимального)
+- Настройте алерты на уровень маржи
+- Автоматическое перебалансирование: при перекосе — перевод средств между биржами
+
+## Система мониторинга funding rates
+
+![Дашборд мониторинга funding rates в реальном времени на нескольких биржах](/images/blog/funding-arb-monitoring.webp)
+
+Первый шаг к арбитражу — сбор данных. Нужно в реальном времени отслеживать funding rates на всех интересующих биржах.
+
+```python
+import asyncio
+import ccxt.pro as ccxt
+from dataclasses import dataclass
+from datetime import datetime
+
+@dataclass
+class FundingSnapshot:
+    exchange: str
+    symbol: str
+    rate: float
+    next_funding_time: datetime
+    timestamp: datetime
+
+class FundingMonitor:
+    """
+    Мониторинг funding rates на нескольких биржах.
+    """
+    def __init__(self, symbols: list[str], exchanges: list[str]):
+        self.symbols = symbols
+        self.exchanges = {
+            name: getattr(ccxt, name)() for name in exchanges
+        }
+        self.latest: dict[str, dict[str, FundingSnapshot]] = {}
+
+    async def fetch_funding(self, exchange_name: str, exchange, symbol: str):
+        """Получить текущий funding rate с биржи."""
+        try:
+            funding = await exchange.fetch_funding_rate(symbol)
+            return FundingSnapshot(
+                exchange=exchange_name,
+                symbol=symbol,
+                rate=funding['fundingRate'],
+                next_funding_time=datetime.fromtimestamp(
+                    funding['fundingTimestamp'] / 1000
+                ),
+                timestamp=datetime.utcnow(),
+            )
+        except Exception as e:
+            print(f"Error fetching {exchange_name} {symbol}: {e}")
+            return None
+
+    async def scan(self) -> list[dict]:
+        """
+        Сканировать все биржи, найти арбитражные возможности.
+        """
+        # Собираем funding rates параллельно
+        tasks = []
+        for ex_name, ex in self.exchanges.items():
+            for symbol in self.symbols:
+                tasks.append(self.fetch_funding(ex_name, ex, symbol))
+
+        snapshots = await asyncio.gather(*tasks)
+        snapshots = [s for s in snapshots if s is not None]
+
+        # Группируем по символу
+        by_symbol: dict[str, list[FundingSnapshot]] = {}
+        for s in snapshots:
+            by_symbol.setdefault(s.symbol, []).append(s)
+
+        # Ищем спреды
+        opportunities = []
+        for symbol, rates in by_symbol.items():
+            rates.sort(key=lambda x: x.rate)
+            lowest = rates[0]   # здесь лонгуем (платим меньше)
+            highest = rates[-1] # здесь шортим (получаем больше)
+            spread = highest.rate - lowest.rate
+
+            opportunities.append({
+                'symbol': symbol,
+                'long_exchange': lowest.exchange,
+                'long_rate': lowest.rate,
+                'short_exchange': highest.exchange,
+                'short_rate': highest.rate,
+                'spread': spread,
+                'annualized': spread * 3 * 365 * 100,  # в % годовых
+            })
+
+        return sorted(opportunities, key=lambda x: -x['spread'])
+```
+
+### Пример вывода
+
+```
+Symbol     | Long @      | Rate    | Short @     | Rate    | Spread  | APR
+-----------+-------------+---------+-------------+---------+---------+--------
+ETHUSDT    | Binance     | 0.010%  | Bybit       | 0.040%  | 0.030%  | 32.9%
+BTCUSDT    | OKX         | 0.008%  | Binance     | 0.020%  | 0.012%  | 13.1%
+SOLUSDT    | Binance     | 0.015%  | dYdX        | 0.055%  | 0.040%  | 43.8%
+ARBUSDT    | Bybit       | 0.005%  | OKX         | 0.030%  | 0.025%  | 27.4%
+```
+
+## Исполнение: одновременное открытие позиций
+
+![Simultaneous arbitrage execution across exchanges](/images/blog/arbitrage-execution-flow.webp)
+
+Критически важно открывать лонг и шорт максимально одновременно, чтобы избежать направленного risk exposure.
+
+```python
+import asyncio
+
+async def execute_arbitrage(
+    long_exchange,
+    short_exchange,
+    symbol: str,
+    size: float,
+    max_slippage_pct: float = 0.05,
+):
+    """
+    Одновременное открытие лонга и шорта на двух биржах.
+    """
+    # Получаем текущие цены
+    long_ticker = await long_exchange.fetch_ticker(symbol)
+    short_ticker = await short_exchange.fetch_ticker(symbol)
+
+    # Проверяем спред между биржами
+    price_spread = abs(
+        long_ticker['ask'] - short_ticker['bid']
+    ) / long_ticker['ask'] * 100
+
+    if price_spread > max_slippage_pct:
+        raise ValueError(
+            f"Price spread {price_spread:.3f}% exceeds max slippage"
+        )
+
+    # Открываем одновременно
+    long_order, short_order = await asyncio.gather(
+        long_exchange.create_market_buy_order(symbol, size),
+        short_exchange.create_market_sell_order(symbol, size),
+    )
+
+    return long_order, short_order
+```
+
+### Управление позициями
+
+После открытия нужно постоянно мониторить:
+
+1. **Спред funding rates.** Если спред сократился ниже порога — закрываем.
+2. **Баланс маржи.** Если на одной бирже маржа падает ниже safe level — перебалансируем или закрываем.
+3. **Ценовое расхождение.** Если нереализованный P&L на одной стороне превышает лимит — закрываем.
+
+```python
+async def monitor_and_manage(
+    long_exchange,
+    short_exchange,
+    symbol: str,
+    size: float,
+    min_spread: float = 0.0001,
+    max_unrealized_loss_pct: float = 2.0,
+    check_interval: int = 60,
+):
+    """
+    Мониторинг открытой арбитражной позиции.
+    """
+    while True:
+        # Проверяем текущий спред
+        long_funding = await long_exchange.fetch_funding_rate(symbol)
+        short_funding = await short_exchange.fetch_funding_rate(symbol)
+        current_spread = (
+            short_funding['fundingRate'] - long_funding['fundingRate']
+        )
+
+        # Проверяем баланс маржи
+        long_balance = await long_exchange.fetch_balance()
+        short_balance = await short_exchange.fetch_balance()
+
+        # Проверяем нереализованный P&L
+        long_positions = await long_exchange.fetch_positions([symbol])
+        short_positions = await short_exchange.fetch_positions([symbol])
+
+        long_upnl = long_positions[0]['unrealizedPnl'] if long_positions else 0
+        short_upnl = short_positions[0]['unrealizedPnl'] if short_positions else 0
+
+        total_upnl_pct = (long_upnl + short_upnl) / size * 100
+
+        # Условия закрытия
+        if current_spread < min_spread:
+            print(f"Spread collapsed: {current_spread:.4%}")
+            await close_both(long_exchange, short_exchange, symbol, size)
+            break
+
+        if abs(total_upnl_pct) > max_unrealized_loss_pct:
+            print(f"Unrealized loss exceeded: {total_upnl_pct:.2f}%")
+            await close_both(long_exchange, short_exchange, symbol, size)
+            break
+
+        await asyncio.sleep(check_interval)
+```
+
+## Продвинутые варианты
+
+### Spot-perp арбитраж
+
+![Carry trade спот-бессрочный фьючерс: спотовые активы и короткая позиция по перпу на одной бирже](/images/blog/funding-arb-spot-perp.webp)
+
+Вместо фьючерсов на двух биржах можно использовать спот + фьючерс на одной бирже:
+
+- **Покупаем спот** (нет funding)
+- **Шортим бессрочный фьючерс** (получаем funding при положительной ставке)
+
+Преимущество: всё на одной бирже, проще управлять маржой. Недостаток: работает только при положительном funding (лонги платят шортам), что наблюдается ~70% времени на бычьем рынке.
+
+```python
+def spot_perp_carry(
+    funding_rate: float,      # текущий funding rate
+    spot_fee: float = 0.001,  # комиссия на споте (0.1%)
+    perp_fee: float = 0.0005, # комиссия на фьючерсе (0.05%)
+    leverage: int = 1,
+) -> dict:
+    """
+    Расчёт доходности spot-perp carry trade.
+    """
+    # Затраты на вход/выход
+    total_fees = (spot_fee + perp_fee) * 2  # открытие + закрытие
+
+    # Дневной доход от funding (при 3 выплатах)
+    daily_income = funding_rate * 3
+
+    # Breakeven
+    breakeven_days = total_fees / daily_income if daily_income > 0 else float('inf')
+
+    return {
+        'daily_income_pct': daily_income * 100,
+        'monthly_income_pct': daily_income * 30 * 100,
+        'annualized_pct': daily_income * 365 * 100,
+        'total_fees_pct': total_fees * 100,
+        'breakeven_days': breakeven_days,
+    }
+
+# Пример: funding rate 0.03%
+result = spot_perp_carry(0.0003)
+# daily: 0.09%, monthly: 2.7%, annualized: 32.9%, breakeven: 3.3 дня
+```
+
+### Мультибиржевой арбитраж
+
+![Сетевой граф мультибиржевого арбитража с дифференциалами funding rates между пятью биржами](/images/blog/funding-arb-multi-exchange.webp)
+
+При мониторинге 5+ бирж одновременно можно находить более выгодные возможности. Алгоритм:
+
+1. Собрать funding rates со всех бирж
+2. Найти пару с максимальным спредом
+3. Проверить ликвидность и глубину стакана на обеих биржах
+4. Если спред > порог → открыть позиции
+5. Постоянно пересканировать: если лучшая пара сменилась → ротация
+
+```python
+def find_best_pair(
+    rates: dict[str, float],  # {"binance": 0.01, "bybit": 0.04, "okx": 0.02}
+    min_spread: float = 0.0002,
+) -> tuple[str, str, float] | None:
+    """
+    Найти пару бирж с максимальным спредом funding rates.
+    Returns: (long_exchange, short_exchange, spread) или None.
+    """
+    exchanges = list(rates.keys())
+    best = None
+
+    for i, ex_long in enumerate(exchanges):
+        for ex_short in exchanges[i+1:]:
+            # Лонг на бирже с меньшим rate, шорт — с большим
+            if rates[ex_long] < rates[ex_short]:
+                spread = rates[ex_short] - rates[ex_long]
+                long_ex, short_ex = ex_long, ex_short
+            else:
+                spread = rates[ex_long] - rates[ex_short]
+                long_ex, short_ex = ex_short, ex_long
+
+            if spread >= min_spread:
+                if best is None or spread > best[2]:
+                    best = (long_ex, short_ex, spread)
+
+    return best
+```
+
+### Предсказание funding rate
+
+![Предсказание funding rate на основе premium index с конусом уверенности](/images/blog/funding-arb-prediction.webp)
+
+Funding rate вычисляется по формуле, которая включает premium index — разницу между ценой фьючерса и спотовой ценой. Premium обновляется чаще, чем funding (каждую минуту vs каждые 8 часов). Это значит, что можно **предсказать** следующий funding rate за минуты или часы до выплаты.
+
+```python
+def predict_next_funding(
+    premium_index: float,
+    interest_rate: float = 0.0001,  # 0.01% per 8h (стандартный)
+    clamp_range: float = 0.0005,    # ±0.05%
+) -> float:
+    """
+    Предсказание следующего funding rate на основе текущего premium index.
+    Формула Binance: FR = clamp(Premium - Interest, -0.05%, 0.05%) + Interest
+    """
+    diff = premium_index - interest_rate
+    clamped = max(-clamp_range, min(clamp_range, diff))
+    return clamped + interest_rate
+```
+
+Зная предсказанный funding rate, можно открывать позиции **до** выплаты, когда спред ещё не привлёк внимание других арбитражёров.
+
+## Инфраструктурные требования
+
+![Низколатентная торговая инфраструктура для межбиржевого арбитража](/images/blog/funding-arb-infrastructure.webp)
+
+Для серьёзного арбитража funding rates нужна инфраструктура:
+
+| Компонент | Минимум | Оптимально |
+|-----------|---------|------------|
+| Сервер | VPS в облаке | Collocated рядом с биржами |
+| Задержка | < 500ms | < 50ms |
+| API ключи | 2 биржи | 5+ бирж |
+| Капитал на бирже | $10K на каждую | $50K+ на каждую |
+| Мониторинг | Логи + алерты | Dashboard + auto-rebalancing |
+| Данные | REST API polling | WebSocket streaming |
+
+### Экономика при разных масштабах
+
+| Капитал | Позиция (5×) | Спред 0.03% | Месячный PnL | ROC |
+|---------|-------------|-------------|-------------|-----|
+| $10K | $25K | 0.03% | ~$675 | ~6.75% |
+| $50K | $125K | 0.03% | ~$3,375 | ~6.75% |
+| $200K | $500K | 0.03% | ~$13,500 | ~6.75% |
+
+ROC не зависит от масштаба (при достаточной ликвидности). Но абсолютная прибыль при $10K капитала может не оправдывать затраты на инфраструктуру и время.
+
+## Заключение
+
+Арбитраж funding rates — это структурная, дельта-нейтральная стратегия. Она не требует предсказания цены, но требует:
+
+1. **Инфраструктуры** — мониторинг rates на нескольких биржах в реальном времени
+2. **Скорости исполнения** — одновременное открытие позиций на разных площадках
+3. **Управления рисками** — контроль маржи, ценовых расхождений и изменений спреда
+4. **Капитала** — прибыль пропорциональна размеру позиции
+
+Спреды funding rates — не постоянны. Они расширяются в периоды волатильности и сужаются в спокойные периоды. Задача — автоматически находить и эксплуатировать расхождения, пока они существуют.
+
+Подробнее о влиянии funding rates на стратегии с плечом — в статье [Funding rates убивают ваш leverage: почему PnL×50x — фикция](/ru/blog/post/funding-rates-kill-leverage).
+
+---
+
+## Полезные ссылки
+
+1. [Binance — Funding Rate History](https://www.binance.com/en/futures/funding-history/quarterly/0)
+2. [Binance — Introduction to Funding Rates](https://www.binance.com/en/support/faq/introduction-to-binance-futures-funding-rates-360033525031)
+3. [Bybit — Understanding Funding Rates](https://learn.bybit.com/trading/what-is-funding-rate/)
+4. [dYdX — Perpetual Funding Rate Mechanism](https://dydx.exchange/)
+5. [Coinglass — Funding Rate Monitor](https://www.coinglass.com/FundingRate)
+
+## Цитирование
+
+```bibtex
+@article{soloviov2026fundingarbitrage,
+  author = {Soloviov, Eugen},
+  title = {Арбитраж funding rates между биржами: как зарабатывать на разнице ставок},
+  year = {2026},
+  url = {https://marketmaker.cc/ru/blog/post/funding-rate-arbitrage-cross-exchange},
+  description = {Как устроен арбитраж funding rates между криптобиржами, почему ставки различаются на Binance, Bybit, OKX и dYdX, и как построить систему мониторинга и исполнения.}
+}
+```

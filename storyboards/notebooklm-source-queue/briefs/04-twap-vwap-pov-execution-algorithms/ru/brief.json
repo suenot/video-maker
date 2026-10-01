@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "slug": "twap-vwap-pov-execution-algorithms",
+  "language": "ru",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/twap-vwap-pov-execution-algorithms.ru.md",
+  "article_sha256": "07296eebb62e7534c124a07e76471fb4d686804d69591c2a66c6ede63702beb7",
+  "notebook_title": "MM sources | twap-vwap-pov-execution-algorithms | RU",
+  "source_title": "MM article twap-vwap-pov-execution-algorithms RU 07296eebb62e",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/twap-vwap-pov-execution-algorithms.ru.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/twap-vwap-pov-execution-algorithms.ru.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/twap-vwap-pov-execution-algorithms.ru.audio.txt",
+  "article_title": "TWAP против VWAP против POV: выбор бенчмарка исполнения (и когда каждый из них вас обманывает)",
+  "article_date": "2026-07-15",
+  "article_draft": false,
+  "article_draft_frontmatter_present": true,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "3496750bd3f0c8bc673bf35b862c40c2d1d59e9d38f3c6f57205fcf58d5e827b",
+  "slides_prompt_sha256": "b50ae29260542c884e54d4bbbd7a2296779c08157c570d306af6fcbbd454b734",
+  "audio_prompt_sha256": "28565b1170b2392e1d3b7897a0b588ae461d47d06422c4efadbb2941b19fafb2"
+}

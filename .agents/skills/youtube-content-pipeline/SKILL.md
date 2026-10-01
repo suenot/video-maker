@@ -8,6 +8,15 @@ description: Build and publish a complete YouTube content package from NotebookL
 Treat this file as the versioned source of truth for the end-to-end video flow.
 Use the stage-specific READMEs only for CLI details.
 
+Browser rule from the user, 2026-10-01: open only the designated saved
+Camoufox session at the full usable display size. Never use a miniature window
+or force a fixed 1280x720 viewport. Verify native-window and page geometry
+before production. The source worker's `normal_camoufox` factory applies
+explicit launch geometry and `no_viewport=True`; use the same policy for
+standalone Gaia helpers. A saved fingerprint can override `window=` and must
+not silently restore small dimensions. Keep the saved profile/fingerprint
+files and account identity; record the measured outer/inner dimensions.
+
 Before producing artifacts, read [artifact-contract.md](references/artifact-contract.md).
 Before rendering or publishing, read [qa-and-publishing.md](references/qa-and-publishing.md).
 

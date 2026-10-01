@@ -2,10 +2,11 @@
 
 User authorization: 2026-09-30. Keep producing videos for Marketmaker articles
 without videos through Google NotebookLM. The production Goal belongs to Codex
-chat `01a0f224-5110-7581-ae55-6d7346a5bada`. The user removed the continuation
-loop on 2026-10-01. Confirm current scheduling before relying on the formerly
-documented heartbeat; any continuation check must not start a second browser
-worker.
+chat `01a0f224-5110-7581-ae55-6d7346a5bada`. After the user removed the old loop,
+the same-chat automation `marketmaker-notebooklm` was created and verified
+ACTIVE on 2026-10-01. It checks the source queue every 15 minutes; any
+continuation check must not start a second browser worker. The Codex app and
+the local Mac must be running for these scheduled passes.
 
 The existing NotebookLM production flow is described in
 [README.md](../README.md) and implemented by
@@ -22,24 +23,30 @@ source provenance, actual progress, QA, approvals, and publication records.
 
 ## Order and completion
 
-1. Finish `algotrading-order-types` EN/RU first. The user rejected its four
-   Blueprint renders on 2026-10-01; they do not complete this task. Original
-   flow discovery is complete, and production must reuse the existing stages.
-   The subsequent replacement Shorts also failed final visual audit; see
-   [the quality report](algotrading-order-types/QUALITY-AUDIT-2026-10-01.md).
-   Their geometry/media pass does not complete the current package. Repair
-   rejected stages before advancing to another article.
-2. Complete the user-requested pipeline audit and justified efficiency
-   improvements. Delegate bounded audit scopes to `gpt-6.1-sol` with `ultra`
-   reasoning; keep the parent chat on its configured model and effort. Audit
-   SOP/DoD, workflow transitions, duplicate prevention, artifact reuse,
-   recovery, and possible Pydantic/pydantic-ai use before choosing changes.
-   Verify and commit/push the changes before starting another article.
-3. Continue with funding-rate arbitrage, statistical arbitrage, order-flow
-   imbalance, and TWAP/VWAP/POV, following the previous priority audit.
-4. Reconcile the remaining candidates against existing videos before choosing
-   the next article. Prefer published articles to drafts. Do not produce a
-   second video merely because an article lacks its YouTube field.
+On 2026-10-01 the user prioritized continuous NotebookLM source drafting:
+separate EN/RU slide PDFs and Deep Dive audio for articles without videos.
+Prepare funding-rate arbitrage, statistical arbitrage, order-flow imbalance,
+then TWAP/VWAP/POV. This source stage runs independently of the rejected
+`algotrading-order-types` Shorts revision and final video acceptance; see
+[the quality report](algotrading-order-types/QUALITY-AUDIT-2026-10-01.md).
+The pipeline audit may proceed separately and must not block source drafting.
+Reconcile further candidates against existing videos, preferring published
+articles to drafts. A missing YouTube field alone never proves video absence.
+
+For source drafting, freeze the complete article bytes and hash in an EN/RU
+brief; generate one NotebookLM slides PDF and one separate Deep Dive audio per
+language. Download both original artifacts exactly, verify file integrity and
+record source/job provenance and hashes. Mark each as an editorial draft pending
+primary fact review, especially mutable financial examples. This stage ends
+before scene design, rendering, final video QA, human acceptance or publication.
+Use [the source queue SOP](notebooklm-source-queue/README.md) for handoffs and
+recovery. Reconcile target-channel duplicates before final render or publish.
+
+For optional montage exploration, the user's
+[33-second vertical reference](references/next-group-9zpOJmEzYQ4.md) records
+alternating focal shots, supporting inserts and sparse large text. Adapt its
+editing structure to the actual selected NotebookLM audio and source-slide
+meaning; it does not replace source drafting or the existing renderer stages.
 
 For this creation Goal, a package is delivered when its requested EN/RU desktop
 and native vertical videos have passed QA, their manifests are complete, and
@@ -57,6 +64,13 @@ Do not label an unfinished render as delivered to advance the queue.
 - Use Gaia at `/Users/suenot/projects/sdvg/gaia` to operate Google NotebookLM.
 - Use only Camoufox with its own existing saved session. Never launch Firefox
   or bootstrap from Firefox cookies.
+- Open Camoufox at the display's full usable work-area size. Use 1920x1080
+  only as a fallback when display geometry cannot be read; on a smaller
+  display use its full work area. Never use a miniature window or a fixed
+  1280x720 viewport. Record and verify actual outer/inner dimensions before
+  work. With a saved Camoufox fingerprint, `window=` alone can be ignored:
+  apply launch geometry explicitly and use `no_viewport=True` so Playwright
+  does not force a conflicting miniature viewport.
 - NotebookLM uses Gaia's `.camoufox_profile/` and `.camoufox_fp.pkl`, with
   the user-designated Google identity recorded in ignored local session
   settings. Do not substitute the YouTube publisher profile. Verify the
@@ -81,11 +95,12 @@ artifacts requiring inspection, 158 unverified candidates, and the active
 order-types article. This is an inventory snapshot, not proof that each
 candidate lacks a published video.
 
-Before creating a notebook, inspect the article frontmatter, source/run and
-production manifests, generated media, upload records, and actual channel
-Studio state. Check EN and RU separately. Reuse verified completed sources and
-renders, and resume only missing stages. An old, rejected, or merely existing
-MP4 does not establish completion. The priority audit found an English
+Before creating a source draft, inspect the article frontmatter, local source/run
+and production manifests, generated media, and upload records. Check EN and RU
+separately. Reconcile the target channel's Studio state before final render or
+publication. Reuse verified completed sources and renders, and resume only
+missing stages. An old, rejected, or merely existing MP4 does not establish
+completion. The priority audit found an English
 Distance Approach video at `https://www.youtube.com/watch?v=ClQn7Xp6F9Q` despite
 its missing article link; reconcile it instead of generating a duplicate.
 

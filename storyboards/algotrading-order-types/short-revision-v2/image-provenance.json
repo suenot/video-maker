@@ -1,0 +1,65 @@
+{
+  "method": "built-in image_gen edits of actual NotebookLM page 4, followed by scale/compositing onto built-in image_gen page-4-derived blank background plates for Shorts controls safe area",
+  "canvas": [
+    1080,
+    1920
+  ],
+  "content_zone": "approximately x80..900, y180..1500",
+  "source_pages": [
+    4
+  ],
+  "languages": {
+    "en": {
+      "edit_target": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_004.png",
+      "background_plate": "output/algotrading-order-types/short-revision-v2/en/background-source-derived.png",
+      "views": {
+        "setup": {
+          "final_asset": "output/algotrading-order-types/short-revision-v2/en/views/setup.png",
+          "final_sha256": "d7aa46a08f28d411dde55ba9b014de33c3636199944008ced6b8dc5ee4fd9e51",
+          "final_prompt_summary": "Source page 4 setup: 100 units requested, 60 immediately available; steel-blue ink on drafting grid."
+        },
+        "ioc": {
+          "final_asset": "output/algotrading-order-types/short-revision-v2/en/views/ioc.png",
+          "final_sha256": "e7f929a97f67948e3b2c2e37c618edce0ba76687d9b2c29f4402bc2ab9a3decc",
+          "final_prompt_summary": "Source page 4 IOC: requested 100, fills 60, cancels 40; IOC may fill zero, some or all and cancels remainder."
+        },
+        "fok": {
+          "final_asset": "output/algotrading-order-types/short-revision-v2/en/views/fok.png",
+          "final_sha256": "f695cdfc1195425ffb3f3708efa75b1413ca71e2db4a287bc401874c225f8b7f",
+          "final_prompt_summary": "Source page 4 FOK: requested 100, only 60 available, fills 0, cancels 100; full quantity immediately or cancel."
+        },
+        "rules": {
+          "final_asset": "output/algotrading-order-types/short-revision-v2/en/views/rules.png",
+          "final_sha256": "9a89f8da713e509bb160d0711c949f7862da605d24dee680173a61d845a2a941",
+          "final_prompt_summary": "Source page 4 general comparison: IOC zero/some/all and remainder cancellation; FOK full immediately or whole cancellation; neither guarantees execution."
+        }
+      }
+    },
+    "ru": {
+      "edit_target": "temp/algotrading-order-types/flow-v4/ru/source-slides/slide_004.png",
+      "background_plate": "output/algotrading-order-types/short-revision-v2/ru/background-source-derived.png",
+      "views": {
+        "setup": {
+          "final_asset": "output/algotrading-order-types/short-revision-v2/ru/views/setup.png",
+          "final_sha256": "12bd98adcf7bf801edca926a8332f51f268a94eed9df5efe0bab490fafff399f",
+          "final_prompt_summary": "Страница 4: запрошено 100 единиц, доступно сейчас 60; светлый чертежный фон источника."
+        },
+        "ioc": {
+          "final_asset": "output/algotrading-order-types/short-revision-v2/ru/views/ioc.png",
+          "final_sha256": "5714ef65b0ae8ba6a92f2d9f68d04162614f4f9be9c439726b9cc619a2258aa0",
+          "final_prompt_summary": "Страница 4: IOC, заявка 100, исполнено 60, отменено 40; остаток отменяется."
+        },
+        "fok": {
+          "final_asset": "output/algotrading-order-types/short-revision-v2/ru/views/fok.png",
+          "final_sha256": "a95f982e03e06c0783bdef61008c09439c70050714bfde4db2faf80457d9f28a",
+          "final_prompt_summary": "Страница 4: FOK, заявка 100, доступно 60, исполнено 0, отменено 100; весь объем сразу или отмена."
+        },
+        "rules": {
+          "final_asset": "output/algotrading-order-types/short-revision-v2/ru/views/rules.png",
+          "final_sha256": "e6717ebc51eaf16faeaf0a854399289c5d24fcbd9556b39a2fbfa146c029e6ff",
+          "final_prompt_summary": "Страница 4: IOC допускает ноль, часть или весь объем с отменой остатка; FOK весь объем сразу или отмена; исполнение не гарантировано."
+        }
+      }
+    }
+  }
+}

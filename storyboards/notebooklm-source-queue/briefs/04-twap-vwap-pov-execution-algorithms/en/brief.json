@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "slug": "twap-vwap-pov-execution-algorithms",
+  "language": "en",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/twap-vwap-pov-execution-algorithms.en.md",
+  "article_sha256": "6a11e40ea5f892df56641d6130e5e1159ad9ff1fa24d5ff552fde6d0e83cb2e4",
+  "notebook_title": "MM sources | twap-vwap-pov-execution-algorithms | EN",
+  "source_title": "MM article twap-vwap-pov-execution-algorithms EN 6a11e40ea5f8",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/twap-vwap-pov-execution-algorithms.en.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/twap-vwap-pov-execution-algorithms.en.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/twap-vwap-pov-execution-algorithms.en.audio.txt",
+  "article_title": "TWAP vs VWAP vs POV: picking an execution benchmark (and knowing when each lies to you)",
+  "article_date": "2026-07-15",
+  "article_draft": false,
+  "article_draft_frontmatter_present": true,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "7452a2734476df308cbe145dc6a516669a6441f3f609fd46ecedcaca72a60001",
+  "slides_prompt_sha256": "fc1652bfa4e082236ba2998f46d0fcad29f2972a2b13e8c1a07c5c0d04b23b1f",
+  "audio_prompt_sha256": "9b4ee294cb2ec97308b861af50297e85c18f2bfbc47a4d534d0c3af992f44194"
+}

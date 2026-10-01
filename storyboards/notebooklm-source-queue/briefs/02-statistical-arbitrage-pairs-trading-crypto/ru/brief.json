@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "slug": "statistical-arbitrage-pairs-trading-crypto",
+  "language": "ru",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/statistical-arbitrage-pairs-trading-crypto.ru.md",
+  "article_sha256": "01ea28ecb77c4d57afcfe88f2fcaf4ded7fd0957fd2cad3dd950111750d9c9d0",
+  "notebook_title": "MM sources | statistical-arbitrage-pairs-trading-crypto | RU",
+  "source_title": "MM article statistical-arbitrage-pairs-trading-crypto RU 01ea28ecb77c",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/statistical-arbitrage-pairs-trading-crypto.ru.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/statistical-arbitrage-pairs-trading-crypto.ru.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/statistical-arbitrage-pairs-trading-crypto.ru.audio.txt",
+  "article_title": "Статистический арбитраж и парный трейдинг на крипторынках: от коинтеграции до Калмана",
+  "article_date": "2026-03-19",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "f453269fb265ceb24c6d8cb6678a3913895f43b33e7d6d9a3be2722f7339a191",
+  "slides_prompt_sha256": "964df0cf5bac44ab4f175658083df9ebe75f33d6fd6a533f6810886d38c25db2",
+  "audio_prompt_sha256": "be8ab6520cb6e8c0b6ecd102401bd2636f5f963f611cd3f334d07c8e54dd6940"
+}

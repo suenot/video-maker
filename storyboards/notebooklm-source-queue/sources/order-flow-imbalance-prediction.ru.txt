@@ -1,0 +1,442 @@
+MM article order-flow-imbalance-prediction RU 386533b46501
+
+---
+title: "Дисбаланс потока заказов: декомпозиция событий Конта-Куканова-Стойкова"
+description: "Превращение необработанных обновлений книги в подписанную величину потока: разложение событий CKS, многоуровневый OFI с сокращением PCA и торговая классификация Lee-Ready, а также честный отчет о том, что на самом деле измеряет R-квадрат заголовка."
+date: "2026-08-17"
+tags: ["microstructure", "order-flow", "imbalance", "prediction", "HFT"]
+slug: "order-flow-imbalance-prediction"
+lang: "ru"
+authors: ["suenot"]
+image: "/images/blog/order-flow-imbalance-prediction-hero.webp"
+---
+
+# Дисбаланс потока заказов: декомпозиция событий Конта-Куканова-Стойкова
+
+Большинство сигналов, полученных из книг в этом блоге, представляют собой *моментальные снимки*: какой объем сейчас находится на каждой стороне. Дисбаланс потока заказов — это другой объект. Это разложение *потока обновлений* между двумя снимками в одно число со знаком, которое учитывает отмену заявки так же, как и рыночную продажу.
+
+Это разложение и является темой данной статьи. В частности: определяющие его индикаторы событий Cont-Kukanov-Stoikov (2014), многоуровневое расширение Xu-Gould-Howison (2019) и его сокращение основных компонентов, а также правила Lee-Ready и Bulk Volume Classification, которые вам нужны, когда ваш канал не обозначает направление торговли.
+
+**Одно общее примечание заранее, потому что оно определяет, как вам следует читать каждое число ниже.** Знаменитый R-квадрат 50-65% из статьи CKS представляет собой *одновременную* регрессию: изменение цены за определенный интервал регрессирует в зависимости от потока заказов за тот же интервал. Это разложение ценовых движений, а не их прогноз. Сравнивая это с дисперсией в 1-2%, которую объясняет модель ежедневной доходности акций, это яблоки и апельсины, и в этом блоге подробно обсуждаются - в [DeepLOB и разрыв между прогнозированием и прибылью](/en/blog/post/deeplob-deep-learning-order-book) и в [честный отрицательный результат](/en/blog/post/honest-negative-no-robust-edge) — объединение этих двух понятий превращает учебные пособия в ловушки. Регрессия OFI со строгим лагом является вполне обоснованным и гораздо меньшим числом. В этой статье не сообщается ни об одном.
+
+<!-- TODO: needs real-data result — fit CKS on real crypto L2 (one symbol, one venue, several days), report contemporaneous R-squared and lagged R-squared separately at several aggregation windows, plus fitted beta in and out of sample -->
+
+## Почему поток ордеров, а не сделок
+
+![Четыре механизма книги заказов, сходящиеся в один знаковый сигнал потока](/images/blog/order-flow-imbalance-prediction-why-order-flow.webp)
+
+Изменение цены в книге непрерывных лимитных ордеров происходит посредством ровно четырех механизмов: рыночная покупка поглощает оставшийся спрос; рыночная продажа поглощает остающиеся заявки; отмена ставки лишает поддержки и позволяет ставке упасть; новый лимитный ордер на аск добавляет сопротивления. Только первые два являются сделками. Последние два невидимы для любого измерения объема — VWAP, балансовый объем, подписанный торговый поток — и на большинстве площадок соотношение заказов к сделкам превышает 10:1, поэтому невидимая часть — это большая часть. Вся претензия OFI на полезность заключается в том, что она оценивает все четыре механизма по одной и той же шкале. (Для книги как структуры данных и стандарта $4L$ вектор объекта моментального снимка, см. [ДипЛОБ](/en/blog/post/deeplob-deep-learning-order-book).)
+
+## Модель OFI Конта-Куканова-Стойкова
+
+![Переходы Bid и Ask в декомпозиции событий CKS](/images/blog/order-flow-imbalance-prediction-cks-model.webp)
+
+Основополагающая модель взята из статьи Конта, Куканова и Стойкова 2014 года "Влияние на цену событий в книге заказов" (*Журнал финансовой эконометрики*).
+
+### Определение дисбаланса потока заказов
+
+Учитывайте лучшую цену предложения $P^b_t$, лучшая цена предложения $P^a_t$и их размеры $Q^b_t$ и $Q^a_t$. Между последовательными наблюдениями в $t_{n-1}$ и $t_n$:
+
+$$
+OFI_n = e_n^B - e_n^S
+$$
+
+где вклады событий со стороны покупателя и продавца составляют:
+
+$$
+e_n^B = \mathbb{1}_{\{P^b_n > P^b_{n-1}\}} Q^b_n - \mathbb{1}_{\{P^b_n < P^b_{n-1}\}} Q^b_{n-1} + \mathbb{1}_{\{P^b_n = P^b_{n-1}\}} (Q^b_n - Q^b_{n-1})
+$$
+
+$$
+e_n^S = \mathbb{1}_{\{P^a_n < P^a_{n-1}\}} Q^a_n - \mathbb{1}_{\{P^a_n > P^a_{n-1}\}} Q^a_{n-1} + \mathbb{1}_{\{P^a_n = P^a_{n-1}\}} (Q^a_n - Q^a_{n-1})
+$$
+
+Говоря простым языком: если лучшая цена предложения выросла, появился новый интерес к покупкам — считайте его полный размер положительным. Если он упадет, интерес к покупке исчез — вычтите старый размер. Если цена не изменилась, учитывайте только изменение размера. Сторона спроса является зеркальным отражением.
+
+Элегантность в том, что эти три ветки индикатора охватывают все возможные переходы начала книги, поэтому каждое обновление соответствует ровно одному числу со знаком. Никакой торговой классификации, боковых меток или ленты сообщений не требуется — достаточно двух последовательных снимков.
+
+### Агрегация по интервалам
+
+На интервал $[T_1, T_2]$ содержащий $N$ обновления книг:
+
+$$
+OFI_{[T_1,T_2]} = \sum_{n=1}^{N} OFI_n = \sum_{n=1}^{N} (e_n^B - e_n^S)
+$$
+
+### Модель линейного воздействия на цену
+
+$$
+\Delta P_{[T_1,T_2]} = \alpha + \beta \cdot OFI_{[T_1,T_2]} + \varepsilon
+$$
+
+где $\Delta P$ это изменение средней цены, $\beta$ – коэффициент влияния на цену, а $\varepsilon$ это остаточный шум. Об акциях США с интервалом от 10 секунд до 1 минуты сообщает CKS. $R^2$ 50-65% на акцию. Опять же: одноинтервальный, а не перспективный.
+
+### Поперечное масштабирование
+
+CKS также показал, что коэффициент воздействия обратно пропорционален глубине:
+
+$$
+\beta \propto \frac{1}{\bar{D}}
+$$
+
+где $\bar{D}$ средний объем покоя при лучшем спросе и предложении. Тот же поток толкает цену дальше в тонкой книге. Это та часть модели, которая передается между площадками без перенастройки уровня, поскольку она предсказывает *отношения*, а не числа — и ее можно напрямую протестировать на криптопарах разной глубины.
+
+<!-- TODO: needs real-data result — test the beta ∝ 1/depth scaling across crypto pairs of differing depth on one venue -->
+
+## Многоуровневый дисбаланс потока заказов (MLOFI)
+
+![Многоуровневая глубина стакана заявок, сжатая в основной сигнал](/images/blog/order-flow-imbalance-prediction-multi-level.webp)
+
+В оригинальной модели используется только верхняя часть книги. Сюй, Гулд и Хоуисон (2019) расширили его до $L$ уровни.
+
+### Определение
+
+$$
+\mathbf{MLOFI}_n = \begin{pmatrix} OFI_n^{(1)} \\ OFI_n^{(2)} \\ \vdots \\ OFI_n^{(L)} \end{pmatrix}
+$$
+
+где $OFI_n^{(\ell)}$ применяет идентичную формулу трех ветвей к $\ell$-я пара бид/аск.
+
+### Многоуровневое влияние на цену
+
+$$
+\Delta P = \alpha + \boldsymbol{\beta}^T \cdot \mathbf{MLOFI} + \varepsilon = \alpha + \sum_{\ell=1}^{L} \beta_\ell \cdot OFI^{(\ell)} + \varepsilon
+$$
+
+Опубликованные данные по акциям Nasdaq показывают, что каждый дополнительный уровень добавляет значения, выходящие за пределы выборки. $R^2$ — примерно 10–15 процентных пунктов при переходе от одного уровня к пятому, при этом незначительный прирост все еще присутствует на уровне десяти. Коэффициенты монотонно затухают: $|\beta_1| > |\beta_2| > \cdots > |\beta_L|$: верхняя часть книги доминирует, но более глубокие уровни несут нетривиальный дополнительный сигнал.
+
+Сохранится ли это в криптокниге — это единственный наиболее интересный открытый вопрос в этой статье. Крипто-книги тоньше и гораздо более запутаны по глубине, и вполне вероятно, что уровни 2-5 ничего не добавляют, когда вы покидаете книгу заказов Nasdaq.
+
+<!-- TODO: needs real-data result — measure incremental out-of-sample R-squared per added level on crypto L2; report honestly if levels 2-5 add nothing -->
+
+### Сокращение основных компонентов
+
+OFI смежных уровней сильно коррелируют (выше 0,8 в опубликованных результатах акций), поэтому разложение по основным компонентам является естественным. Сообщаемый первый компонент охватывает более 89% общей дисперсии и служит единым совокупным сигналом:
+
+$$
+OFI^{PC1} = \mathbf{w}^T \cdot \mathbf{MLOFI}
+$$
+
+с $\mathbf{w}$ ведущий собственный вектор ковариационной матрицы OFI. Практическая привлекательность заключается в том, что он сжимает коллинеарную регрессию в один хорошо обусловленный скаляр — это стоит сделать, даже если доля дисперсии ваших данных окажется ниже.
+
+## Классификация сделок: покупка и продажа.
+
+![Торговые события разделены на потоки инициации покупки и продажи.](/images/blog/order-flow-imbalance-prediction-trade-classification.webp)
+
+OFI сам по себе не нуждается в торговой классификации. Но если вы хотите сравнить его с показателями, основанными на торговле, или у вас есть только агрегированные столбцы, вам необходимо определить направление.
+
+### Правило цитаты
+
+Сравните торговую цену $P_t$ к преобладающей средней точке $M_t = \frac{P^{ask}_t + P^{bid}_t}{2}$:
+
+$$
+\text{side} = \begin{cases} +1 \text{ (buy)} & \text{if } P_t > M_t \\ -1 \text{ (sell)} & \text{if } P_t < M_t \end{cases}
+$$
+
+Сделка выше средней точки, скорее всего, означает, что покупатель снимет предложение; под ним — продавец, сделавший ставку.
+
+**Алгоритм Lee-Ready** (1991 г.) представляет собой правило котировки с откатом по тиковому правилу для сделок точно в средней точке, где правило котировки является неопределенным. Правило тика — признак последнего изменения цены, переносящий предыдущую сторону вперед на нулевой тик — уже выведено и реализовано в [За рамками времени](/en/blog/post/beyond-time-bars-candle-construction), который отправляет рабочий `_tick_sign()`. Заявленная точность классификации Lee-Ready составляет 72–85 % в зависимости от рынка и периода.
+
+### Классификация по объему (BVC)
+
+Когда отдельные сделки не могут быть назначены — агрегированные бары, большинство общедоступных API свечей — Исли, Лопес де Прадо и классификация объемов О'Хары оценивают долю покупок в объеме бара на основе его нормализованного изменения цены:
+
+$$
+V^{buy}_t = V_t \cdot \Phi\left(\frac{\Delta P_t}{\sigma_{\Delta P}}\right)
+$$
+
+с $\Phi$ стандартный нормальный CDF и $\sigma_{\Delta P}$ рассчитано на основе недавних изменений цен. Менее точная, чем классификация на уровне тиков, но она работает для OHLCV.
+
+## Чем OFI не является
+
+![Одновременное разложение не соответствует истинному предсказанию](/images/blog/order-flow-imbalance-prediction-what-not.webp)
+
+Три соседние величины путают с OFI. Каждый из них подробно описан в других разделах этого блога; здесь важны различия.
+
+**Статический дисбаланс в книге заказов (OBI)** — это версия моментального снимка: объем спроса в покое относительно объема спроса, отслеживание событий отсутствует. Видеть [Традиционные бизнес-функции DeepLOB](/en/blog/post/deeplob-deep-learning-order-book) для формулы и ее многоуровневой формы. В контрасте и заключается весь смысл OFI: OBI сообщает вам о состоянии книги, OFI рассказывает вам, как она туда попала.
+
+**Торговый дисбаланс (TI)** и его варианты, взвешенные по объему, представляют собой подписанный торговый поток, определяемый и реализуемый как скользящие характеристики в [моделирование распространения с помощью машинного обучения](/en/blog/post/spread-modeling-machine-learning). Один из опубликованных результатов об этой взаимосвязи здесь имеет решающее значение: когда OFI и TI вводятся вместе в качестве регрессоров изменений средних цен, **TI становится статистически незначимым**. Его содержание включено в категорию. Это эмпирический случай отслеживания книжных событий, а не сделок: события, которые *почти* стали сделками, несут ту же информацию, что и те, которые ею стали.
+
+**Средний показатель, взвешенный по объему**, представляет собой оценку справедливой стоимости, а не показатель дисбаланса, и он рассматривается в разделе [ДипЛОБ](/en/blog/post/deeplob-deep-learning-order-book) - включая оговорку в названии, что это *не* микроцена Стойкова, которая представляет собой корректировку по мартингейлу. $M_t + g(I,S)$ оценщик построен именно потому, что наивная взвешенная середина смещена.
+
+## Реализация Python
+
+![Поток событий книги заказов, проходящий через механизм расчета потока](/images/blog/order-flow-imbalance-prediction-implementation.webp)
+
+Прямая реализация разложения CKS, обобщенная до $L$ уровни.
+
+### Базовый расчет OFI
+
+```python
+import numpy as np
+import pandas as pd
+from dataclasses import dataclass, field
+from typing import Optional
+
+@dataclass
+class OrderBookSnapshot:
+    timestamp: float
+    bid_prices: np.ndarray   # best bid at index 0, descending
+    ask_prices: np.ndarray   # best ask at index 0, ascending
+    bid_sizes: np.ndarray
+    ask_sizes: np.ndarray
+
+@dataclass
+class OFICalculator:
+    """
+    Computes Order Flow Imbalance from consecutive order book snapshots.
+    Supports multi-level OFI (MLOFI) up to `n_levels` deep.
+    """
+    n_levels: int = 5
+    prev_snapshot: Optional[OrderBookSnapshot] = field(default=None, init=False)
+
+    def compute_level_ofi(
+        self,
+        prev_price: float, curr_price: float,
+        prev_size: float, curr_size: float,
+        side: str
+    ) -> float:
+        """Compute single-level OFI contribution for bid or ask side."""
+        if side == "bid":
+            if curr_price > prev_price:
+                return curr_size              # new level appeared above
+            elif curr_price < prev_price:
+                return -prev_size             # old level disappeared
+            else:
+                return curr_size - prev_size  # same level, size changed
+        else:  # ask side
+            if curr_price < prev_price:
+                return curr_size              # new level appeared below
+            elif curr_price > prev_price:
+                return -prev_size             # old level disappeared
+            else:
+                return curr_size - prev_size  # same level, size changed
+
+    def update(self, snapshot: OrderBookSnapshot) -> Optional[np.ndarray]:
+        """
+        Process new snapshot, return MLOFI vector of shape (n_levels,).
+        Returns None on first call (no previous snapshot to compare).
+        """
+        if self.prev_snapshot is None:
+            self.prev_snapshot = snapshot
+            return None
+
+        prev = self.prev_snapshot
+        n = min(self.n_levels, len(snapshot.bid_prices), len(prev.bid_prices))
+        ofi = np.zeros(n)
+
+        for level in range(n):
+            e_buy = self.compute_level_ofi(
+                prev.bid_prices[level], snapshot.bid_prices[level],
+                prev.bid_sizes[level], snapshot.bid_sizes[level],
+                side="bid"
+            )
+            e_sell = self.compute_level_ofi(
+                prev.ask_prices[level], snapshot.ask_prices[level],
+                prev.ask_sizes[level], snapshot.ask_sizes[level],
+                side="ask"
+            )
+            ofi[level] = e_buy - e_sell
+
+        self.prev_snapshot = snapshot
+        return ofi
+```
+
+### Агрегация в Windows
+
+```python
+@dataclass
+class OFIAggregator:
+    """
+    Aggregates raw OFI updates into fixed time windows.
+    Emits the regression inputs (aggregated MLOFI) and target (delta mid).
+    """
+    window_seconds: float = 10.0
+    n_levels: int = 5
+    calculator: OFICalculator = field(init=False)
+    buffer: list = field(default_factory=list, init=False)
+    window_start: float = 0.0
+
+    def __post_init__(self):
+        self.calculator = OFICalculator(n_levels=self.n_levels)
+
+    def on_snapshot(self, snapshot: OrderBookSnapshot) -> Optional[dict]:
+        """
+        Feed a new order book snapshot.
+        Returns aggregated window dict when a window completes, else None.
+        """
+        ofi_vec = self.calculator.update(snapshot)
+        if ofi_vec is None:
+            self.window_start = snapshot.timestamp
+            return None
+
+        if not self.buffer:
+            self.window_start = snapshot.timestamp
+
+        self.buffer.append({
+            "timestamp": snapshot.timestamp,
+            "ofi": ofi_vec.copy(),
+            "mid": (snapshot.bid_prices[0] + snapshot.ask_prices[0]) / 2,
+        })
+
+        elapsed = snapshot.timestamp - self.window_start
+        if elapsed >= self.window_seconds:
+            return self._flush()
+        return None
+
+    def _flush(self) -> dict:
+        """Aggregate buffered OFI updates into a single window record."""
+        ofi_matrix = np.array([b["ofi"] for b in self.buffer])
+        agg_ofi = ofi_matrix.sum(axis=0)  # shape: (n_levels,)
+
+        result = {
+            "window_start": self.window_start,
+            "window_end": self.buffer[-1]["timestamp"],
+            "n_updates": len(self.buffer),
+            "mid_open": self.buffer[0]["mid"],
+            "mid_close": self.buffer[-1]["mid"],
+            "delta_mid": self.buffer[-1]["mid"] - self.buffer[0]["mid"],
+            "ofi_level1": agg_ofi[0],
+            "ofi_total": agg_ofi.sum(),
+            "mlofi": agg_ofi,
+        }
+
+        self.buffer.clear()
+        return result
+```
+
+Обратите внимание, что выдает агрегатор: `mlofi` и `delta_mid` над *то же* окном. Это современный регресс. Чтобы получить прогнозируемое окно, спарьте его $k$'s `mlofi` с окном $k+1$'s `delta_mid` и ожидайте существенно худшего соответствия.
+
+### Торговая классификация (Lee-Ready)
+
+```python
+def classify_trades_lee_ready(
+    trades: pd.DataFrame,
+    quotes: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Classify trades as buy (+1) or sell (-1) using Lee-Ready:
+    quote rule first, tick rule as fallback at the midpoint.
+
+    Parameters
+    ----------
+    trades : DataFrame with columns ['timestamp', 'price', 'size']
+    quotes : DataFrame with columns ['timestamp', 'bid', 'ask']
+
+    Returns
+    -------
+    trades with added 'side' column
+    """
+    trades = trades.sort_values("timestamp").copy()
+    quotes = quotes.sort_values("timestamp")
+
+    # For each trade, find the most recent prevailing quote
+    trades = pd.merge_asof(
+        trades, quotes,
+        on="timestamp",
+        direction="backward"
+    )
+
+    trades["mid"] = (trades["bid"] + trades["ask"]) / 2
+
+    # Quote rule
+    trades["side"] = np.where(
+        trades["price"] > trades["mid"], 1,
+        np.where(trades["price"] < trades["mid"], -1, 0)
+    )
+
+    # Tick rule fallback for midpoint trades
+    trades["price_diff"] = trades["price"].diff()
+    tick_sign = np.sign(trades["price_diff"])
+    tick_sign = tick_sign.replace(0, np.nan).ffill().fillna(1)
+
+    midpoint_mask = trades["side"] == 0
+    trades.loc[midpoint_mask, "side"] = tick_sign[midpoint_mask].astype(int)
+
+    return trades
+```
+
+### Нормализация сигнала
+
+```python
+class OFISignal:
+    """
+    Rolling z-score normalization of aggregated OFI.
+
+    Deliberately does NOT convert OFI into a predicted return: that
+    requires a fitted beta, and beta is venue-, pair- and regime-specific.
+    Fit it on your own data before wiring this into anything.
+    """
+    def __init__(self, window_seconds: float = 10.0, n_levels: int = 5,
+                 lookback: int = 100):
+        self.aggregator = OFIAggregator(
+            window_seconds=window_seconds, n_levels=n_levels,
+        )
+        self.lookback = lookback
+        self.ofi_history: list[float] = []
+
+    def process(self, snapshot: OrderBookSnapshot) -> Optional[dict]:
+        agg = self.aggregator.on_snapshot(snapshot)
+        if agg is None:
+            return None
+
+        ofi = agg["ofi_level1"]
+        self.ofi_history.append(ofi)
+        if len(self.ofi_history) > self.lookback:
+            self.ofi_history.pop(0)
+
+        if len(self.ofi_history) >= 20:
+            arr = np.array(self.ofi_history)
+            mu, sigma = arr.mean(), arr.std()
+            zscore = (ofi - mu) / max(sigma, 1e-10)
+        else:
+            zscore = 0.0
+
+        return {**agg, "ofi_zscore": zscore}
+```
+
+## Где подключается OFI
+
+![Сигнал потока ордеров, подключаемый к модульному торговому конвейеру](/images/blog/order-flow-imbalance-prediction-plugs-in.webp)
+
+**Маркетинг.** OFI вводится как прогнозируемый коэффициент отклонения справедливой стоимости поверх уже полученного и закодированного отклонения запасов. [маркет-мейкер Авельянеда-Стойков](/en/blog/post/market-making-avellaneda-stoikov): $P^{fair} = P^{mid} + \gamma_{flow} \cdot OFI_{z} - \gamma_{inv} \cdot q$. Эти два термина отвечают на разные вопросы: термин потока говорит, куда движется цена, термин запаса говорит, что вы можете себе позволить держать, а опубликованная статья охватывает второй вопрос, в том числе, почему положительные запасы толкают обе котировки вниз. Большой $|OFI_z|$ также является разумным триггером неблагоприятного отбора для защитных реакций (расширение, сжатие, оттягивание одной стороны), перечисленных в [цифровые отпечатки пальцев идентификации трейдера](/en/blog/post/digital-fingerprint-trader-identification) и [обнаружение аномалий](/en/blog/post/anomaly-detection-algotrading).
+
+**Выполнение.** OFI – это входные данные для оценки вероятности заполнения тактического слоя. $p$, а не отдельный контроллер срочности. Решение "пост-крест" представляет собой явную арифметику безубыточности: $p^* = \delta/(\Pi + \delta)$ с $\Pi = s + f_t - f_m$ — и живет в [тактика исполнения дочернего заказа](/en/blog/post/child-order-execution-tactics), в котором также утверждается, что уровень тактики никогда не должен основывать срочность на своем собственном взгляде на рынок, потому что это создает два несогласных контролера.
+
+## Практические соображения
+
+![Устойчивый рыночный сигнал, движущийся по шумной местности с микроструктурами](/images/blog/order-flow-imbalance-prediction-practical.webp)
+
+**Период полураспада сигнала и повторная калибровка.** Это часть, специфичная для OFI. Прогнозируемое содержание OFI затухает во времени от миллисекунд до секунд в ликвидных инструментах, а это означает, что окно агрегации не является свободным параметром — это ставка на горизонт. И $\beta$ не является константой: он перемещается в течение дня, с глубиной и вокруг запланированных событий, поэтому при любом производственном подходе он переоценивается в скользящих окнах, а не закрепляется значение из бэктеста.
+
+Все остальное здесь описано в другом месте. Бюджеты задержки и лестница совместного размещения/FPGA/обхода ядра: [Производственный отдел DeepLOB](/en/blog/post/deeplob-deep-learning-order-book). U-образная модель внутридневной ликвидности и дрейфующая статистика нормализации: [моделирование распространения](/en/blog/post/spread-modeling-machine-learning). Перекалибровка для каждой площадки и почему модель, установленная на Nasdaq, не будет переведена в криптовалютную пару без изменений: [ДипЛОБ](/en/blog/post/deeplob-deep-learning-order-book) опять же, со стороны фрагментации в [интеллектуальная маршрутизация заказов](/en/blog/post/smart-order-routing-crypto).
+
+**Манипуляция.** Одно последствие является специфичным для этой модели, и его стоит сказать прямо: декомпозиция CKS взвешивает каждое событие только по размеру, без понятия намерения или постоянства. Таким образом, спуфер, размещающий и удаляющий размер, по своей конструкции вводит непосредственно в сигнал полный вес. Эвристика обнаружения — коэффициенты отмены, срок действия ордеров, поведение стены при приближении цены — находятся в стадии разработки. [анализ позиции в очереди и стены книги заказов](/en/blog/post/queue-position-order-book-wall-analysis); межплатформенная фантомная ликвидность находится в [интеллектуальная маршрутизация заказов](/en/blog/post/smart-order-routing-crypto).
+
+## Ключевые выводы
+
+![Ключевые сведения о потоке заказов, сходящиеся в один четкий сигнал](/images/blog/order-flow-imbalance-prediction-takeaways.webp)
+
+1. **OFI — это декомпозиция событий, а не снимок.** Формула индикатора с тремя ветвями отображает каждый переход к началу книги — цена вверх, цена вниз, изменение размера — в одно число со знаком, полученное из двух последовательных снимков, и ничего больше.
+
+2. **Заголовок R-квадрата относится к тому времени.** Показатель CKS 50-65% разлагает ценовые движения в одном и том же интервале; это не прогноз, и его не следует сравнивать с прогнозными моделями доходности.
+
+3. **Многоуровневый OFI добавляет уровни, а PCA сворачивает их.** Опубликованный инкрементный$R^2$ и результаты с отклонением 89% получены по акциям Nasdaq. Здесь еще не проверено, помогает ли глубина написанию книги о криптографии.
+
+4. **OFI включает в себя торговый дисбаланс.** При совместном вводе TI становится незначительным — отмены, которые OFI видит, а TI не может, имеют значение.
+
+5. **Модель слепа к намерениям.** Равный вес по размеру — именно то, что делает ее подделываемой.
+
+6. **Ничто в этой статье не измеряется.** Все приведенные цифры взяты из литературы по акциям. Прежде чем этот сигнал коснется капитала, он должен соответствовать вашим собственным балансовым данным, отдельной спецификации, сообщаемой отдельно, и проверке того, выдерживает ли преимущество комиссию и спред.
+
+<!-- TODO: needs real-data result — report whether the measured edge survives taker fees and half-spread; a negative result here is publishable and stronger than the tutorial version -->
+
+## Дальнейшее чтение
+
+![Связанные пути исследования микроструктуры вокруг концепции OFI](/images/blog/order-flow-imbalance-prediction-further-reading.webp)
+
+- Конт Р., Куканов А. и Стойков С. (2014). "Влияние на цену событий в книге заказов". *Журнал финансовой эконометрики*, 12(1), 47-88.
+- Сюй К., Гулд М. и Ховисон С. (2019). "Многоуровневый дисбаланс потоков ордеров в книге лимитных ордеров". *arXiv:1907.06230*.
+- Колм П., Туриэль Дж. и Вестрей Н. (2023). "Глубокий дисбаланс потока ордеров: извлечение альфы на нескольких горизонтах из книги лимитных ордеров". *Математические финансы*, 33(4).
+- Ли, К., и Риди, М. (1991). "Определение направления торговли на основе внутридневных данных". *Журнал финансов*, 46(2), 733-746.
+- Исли Д., Лопес де Прадо М. и О'Хара М. (2012). "Токсичность потоков и ликвидность в мире высоких частот". *Обзор финансовых исследований*, 25(5), 1457-1493.

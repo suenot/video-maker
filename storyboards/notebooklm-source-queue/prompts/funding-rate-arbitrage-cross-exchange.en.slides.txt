@@ -1,0 +1,12 @@
+Create a comprehensive slide deck for this article. Use only the attached source named "MM article funding-rate-arbitrage-cross-exchange EN 45ff3b1d246c". Produce in English. Follow the article in this order:
+1. Why Funding Rates Differ Across Exchanges
+2. Basic Arbitrage Mechanics
+3. Risks and Pitfalls
+4. Funding Rate Monitoring System
+5. Execution: Simultaneous Position Opening
+6. Advanced Variants
+7. Infrastructure Requirements
+8. Conclusion
+
+Preserve the article’s substantive mechanisms, examples, formulas, caveats, execution costs, margin/liquidation and other risks. Keep named exchanges, payment intervals and numbers attributed to the article as examples, not current verified facts. Explain code logic faithfully without treating sample code as production-ready. Do not add claims, external facts, guaranteed returns, or investment advice. If a source claim is uncertain, qualify it as an article claim. Cover the conclusion before ending.
+Use enough slides to cover every major section and key subsection; do not compress away risk details. Make each slide readable, with precise short labels and a clear progression. Include a source-limited closing slide.  Treat article profit and rate calculations only as illustrative gross scenarios before fees, slippage, margin/liquidation, venue-basis and counterparty risks; never describe them as guaranteed, risk-free, or live rates. This is an editorial draft requiring human review.

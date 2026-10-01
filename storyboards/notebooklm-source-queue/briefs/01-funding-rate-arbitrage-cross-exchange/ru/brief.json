@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "slug": "funding-rate-arbitrage-cross-exchange",
+  "language": "ru",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/funding-rate-arbitrage-cross-exchange.ru.md",
+  "article_sha256": "6437d247a17b108cf5373e4eafaa7a0af83b794863ded56bdc806052352856ad",
+  "notebook_title": "MM sources | funding-rate-arbitrage-cross-exchange | RU",
+  "source_title": "MM article funding-rate-arbitrage-cross-exchange RU 6437d247a17b",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/funding-rate-arbitrage-cross-exchange.ru.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/funding-rate-arbitrage-cross-exchange.ru.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/funding-rate-arbitrage-cross-exchange.ru.audio.txt",
+  "article_title": "Арбитраж funding rates между биржами: как зарабатывать на разнице ставок",
+  "article_date": "2026-03-05",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "c7ecec95e9a9c9216ee442ef27d57bb03a9571925d3c844bed00d39d9599a44f",
+  "slides_prompt_sha256": "09d0cd69b452310ca702f5ff63d1ae5043fdd9e10292ceeffffdabe7b1318844",
+  "audio_prompt_sha256": "8134342e6b4e0dbe9702066c3d150d9231bc27b32f8d73559a66464de8afcae4"
+}

@@ -1,0 +1,15 @@
+Create a NotebookLM Deep Dive audio overview from this article in Russian. Use only the attached source named "MM article statistical-arbitrage-pairs-trading-crypto RU 01ea28ecb77c". Produce in Russian. Follow the article sections in this order:
+1. 1. Краткая история: от иезуита к квантам
+2. 2. Математический фундамент: корреляция — это ловушка
+3. 3. Выбор пар на крипторынке
+4. 4. Три варианта торговли
+5. 5. Фильтр Калмана для адаптивного hedge ratio
+6. 6. Сигналы входа и выхода
+7. 7. Бэктестинг: делаем правильно
+8. 8. Проблемы реального мира
+9. 9. End-to-end реализация на Python
+10. Вместо заключения
+
+Объясните отличие коинтеграции от корреляции, тесты Энгла-Грейнджера и Йохансена, процесс Орнштейна-Уленбека и z-score, выбор пар, три торговых подхода, адаптивный hedge ratio с фильтром Калмана, сигналы, walk-forward проверку и издержки, реальные риски, затем реализацию на Python. Исторические и рыночные цифры подавайте как утверждения статьи, требующие проверки.
+Preserve the full substantive coverage, worked examples, equations, data assumptions, caveats and risks from the source. Attribute numerical or time-sensitive claims to the article as illustrative or unverified rather than current facts. Do not add outside facts, guaranteed returns, investment advice or claims absent from the source. Explain sample code as instructional, not production-ready. This source draft needs human editorial and primary-fact review.
+Use clear narration or dialogue, preserving section order and examples. Finish with the limitations and conclusion.

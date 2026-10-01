@@ -1,0 +1,11 @@
+Create a comprehensive NotebookLM slide deck from this article. Use only the attached source named "MM article twap-vwap-pov-execution-algorithms EN 6a11e40ea5f8". Produce in English. Follow the article sections in this order:
+1. Three schedulers, three hidden bets
+2. Estimating volume curves when the market never closes
+3. POV pathologies: the algorithm that chases its own tail
+4. Benchmarks: why beating VWAP can still lose money
+5. The experiment: three algorithms, one tape
+6. Choosing, in practice
+
+Compare TWAP, VWAP and POV in the article’s sequence: scheduler assumptions, 24/7 volume-curve estimation, POV feedback/pathologies, benchmark selection, the shared-tape experiment and practical choice. Preserve each algorithm’s tradeoffs and execution-cost caveats.
+Preserve the full substantive coverage, worked examples, equations, data assumptions, caveats and risks from the source. Attribute numerical or time-sensitive claims to the article as illustrative or unverified rather than current facts. Do not add outside facts, guaranteed returns, investment advice or claims absent from the source. Explain sample code as instructional, not production-ready. This source draft needs human editorial and primary-fact review.
+Use enough slides for every major section and material subsection. Keep visible text precise and readable; preserve technical relationships without compressing away risk details. End with the article’s practical conclusion.

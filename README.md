@@ -22,6 +22,11 @@ logged-in browser sessions (Camoufox) and local media tooling.
 **Flow:** `article → gaia → video-maker → video-metadata → video-publisher → YouTube`
 (the published video is then embedded back into the blog article).
 
+For continuous source preparation, use the [NotebookLM source queue](storyboards/notebooklm-source-queue/README.md).
+It prepares separate slide PDFs and Deep Dive audio through the existing Gaia
+Camoufox session, resumes exact artifact IDs, and preserves reviewed inputs.
+Source drafts can run while final video revisions and quality review continue.
+
 ## What It Does
 
 Given an audio file (narration) and a PDF slide deck, the pipeline:

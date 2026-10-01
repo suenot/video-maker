@@ -1,0 +1,14 @@
+Create a comprehensive NotebookLM slide deck from this article. Use only the attached source named "MM article order-flow-imbalance-prediction EN 07f9a83f81aa". Produce in English. Follow the article sections in this order:
+1. Why Order Flow, Not Trades
+2. The Cont-Kukanov-Stoikov OFI Model
+3. Multi-Level Order Flow Imbalance (MLOFI)
+4. Classifying Trades: Buy vs Sell Initiated
+5. What OFI Is Not
+6. Python Implementation
+7. Where OFI Plugs In
+8. Practical Considerations
+9. Key Takeaways
+
+Explain event-based OFI before trade classification; distinguish Cont-Kukanov-Stoikov top-of-book OFI from multi-level OFI and Lee-Ready/BVC classifications. Preserve equations, aggregation windows, scaling, PCA, implementation assumptions and practical limitations.
+Preserve the full substantive coverage, worked examples, equations, data assumptions, caveats and risks from the source. Attribute numerical or time-sensitive claims to the article as illustrative or unverified rather than current facts. Do not add outside facts, guaranteed returns, investment advice or claims absent from the source. Explain sample code as instructional, not production-ready. This source draft needs human editorial and primary-fact review.
+Use enough slides for every major section and material subsection. Keep visible text precise and readable; preserve technical relationships without compressing away risk details. End with the article’s practical conclusion.

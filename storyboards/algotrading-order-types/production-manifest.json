@@ -6,7 +6,7 @@
     "ru"
   ],
   "scope": "Gaia/NotebookLM audio and slide decks, then video-maker desktop and independent Shorts for both channels",
-  "status": "quality_audit_failed_revision_required",
+  "status": "short_revision_ready_desktop_review_required",
   "sources": {
     "article_en": {
       "path": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md",
@@ -204,6 +204,39 @@
           "audio_channels": 2
         },
         "quality_state": "failed_visual_quality"
+      },
+      "short_revision_v2": {
+        "video": {
+          "path": "output/algotrading-order-types/short-revision-v2/en/algotrading-order-types-en-short-v2.mp4",
+          "sha256": "9c8897460faeb552bb91a9e5ca89e6e6ff71536a4246c398225dab426b307346",
+          "bytes": 18567356
+        },
+        "duration_seconds": 97.2,
+        "body_duration_seconds": 87.2,
+        "source_pages": [
+          4
+        ],
+        "render_frames": "output/algotrading-order-types/short-revision-v2/en/views",
+        "timeline": {
+          "path": "storyboards/algotrading-order-types/short-revision-v2.json",
+          "sha256": "35d5a8c7e337881c973925aa27807b649478d35610908085b61e4c6bbd6365ad",
+          "bytes": 7909
+        },
+        "subtitles": {
+          "path": "output/algotrading-order-types/short-revision-v2/en/algotrading-order-types-en-short-v2.srt",
+          "sha256": "73666b2ecbc759cab37f5ad48a17ffc2a664e7f7ff51148908004b1f7ce35430",
+          "bytes": 2992
+        },
+        "metadata": {
+          "path": "output/algotrading-order-types/short-revision-v2/en/algotrading-order-types-en-short-v2_metadata.json",
+          "sha256": "d17ebc4e624a46f5eff4865fc89e7d352a9c59367f921162aedf5ebb0f8cfed6",
+          "bytes": 1039
+        },
+        "image_provenance": "storyboards/algotrading-order-types/short-revision-v2/image-provenance.json",
+        "render_qa": "storyboards/algotrading-order-types/short-revision-v2/render-qa.json",
+        "quality_state": "ready_for_human_quality_review",
+        "human_quality_approval": null,
+        "supersedes": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/algotrading-order-types-en-short.mp4"
       }
     },
     "ru": {
@@ -306,6 +339,39 @@
           "audio_channels": 2
         },
         "quality_state": "failed_visual_quality"
+      },
+      "short_revision_v2": {
+        "video": {
+          "path": "output/algotrading-order-types/short-revision-v2/ru/algotrading-order-types-ru-short-v2.mp4",
+          "sha256": "71f31b24f882a63dbe3bbadcfb5e5c0ac98811fad3128cb853b7b117a18ef3b7",
+          "bytes": 22070802
+        },
+        "duration_seconds": 122.6,
+        "body_duration_seconds": 112.6,
+        "source_pages": [
+          4
+        ],
+        "render_frames": "output/algotrading-order-types/short-revision-v2/ru/views",
+        "timeline": {
+          "path": "storyboards/algotrading-order-types/short-revision-v2.json",
+          "sha256": "35d5a8c7e337881c973925aa27807b649478d35610908085b61e4c6bbd6365ad",
+          "bytes": 7909
+        },
+        "subtitles": {
+          "path": "output/algotrading-order-types/short-revision-v2/ru/algotrading-order-types-ru-short-v2.srt",
+          "sha256": "acc1818eab81d3035ded8aff632c64e02bc9284bc50936923e080a2fc1a93cae",
+          "bytes": 4229
+        },
+        "metadata": {
+          "path": "output/algotrading-order-types/short-revision-v2/ru/algotrading-order-types-ru-short-v2_metadata.json",
+          "sha256": "d4d4aa28fda7e1ae758b115301c868c88d285caf1e6056fbeb684d1efe7fc501",
+          "bytes": 1408
+        },
+        "image_provenance": "storyboards/algotrading-order-types/short-revision-v2/image-provenance.json",
+        "render_qa": "storyboards/algotrading-order-types/short-revision-v2/render-qa.json",
+        "quality_state": "ready_for_human_quality_review",
+        "human_quality_approval": null,
+        "supersedes": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/algotrading-order-types-ru-short.mp4"
       }
     }
   },
@@ -376,13 +442,14 @@
         ],
         "evidence": "temp/algotrading-order-types/flow-v4/ru/audio-production-v2/final-desktop-contact.jpg"
       }
-    }
+    },
+    "short_revision_v2": "storyboards/algotrading-order-types/short-revision-v2/render-qa.json"
   },
   "next_steps": [
-    "Revise native portrait composition and pacing of both IOC/FOK Shorts while retaining original NotebookLM diagram meaning.",
-    "Review incidental Panel labels, desktop viewing-size legibility, narrative opening and actual article coverage; listen to edited joins.",
-    "Rerender only affected stages, pass separate visual/semantic/safe-zone/media gates, commit/push, then return to human quality review.",
-    "Complete deferred renderer/recovery fixes and next article only after the revised current-package delivery."
+    "Review the new EN/RU Shorts v2 at intended playback size; preserve rejected previous versions and their audit.",
+    "Review desktop Panel placeholders, viewing-size legibility, opening narration and full article coverage; listen to edited joins.",
+    "Keep human quality acceptance and publication separate from technical/visual checks.",
+    "Continue NotebookLM slides/audio source drafting independently of final-video acceptance."
   ],
   "style": {
     "style_id": "ink-theater-v2",
@@ -391,7 +458,7 @@
     "source_contract_state": "Listed external Ink Theater contract is missing; historical selected reference reused.",
     "human_quality_approval": null
   },
-  "updated_at": "2026-10-01T14:20:12.381930+00:00",
+  "updated_at": "2026-10-01T20:02:20.583332+00:00",
   "flow_recovery": {
     "status": "existing_flow_located_and_studied",
     "description": "README.md:11-34,94-126",

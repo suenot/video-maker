@@ -1,0 +1,14 @@
+Create a NotebookLM Deep Dive audio overview from this article in Russian. Use only the attached source named "MM article order-flow-imbalance-prediction RU 386533b46501". Produce in Russian. Follow the article sections in this order:
+1. Почему поток ордеров, а не сделок
+2. Модель OFI Конта-Куканова-Стойкова
+3. Многоуровневый дисбаланс потока заказов (MLOFI)
+4. Классификация сделок: покупка и продажа.
+5. Чем OFI не является
+6. Реализация Python
+7. Где подключается OFI
+8. Практические соображения
+9. Ключевые выводы
+
+Объясните OFI на событиях книги заявок до классификации сделок; различайте OFI верхнего уровня по Конту-Куканову-Стойкову, многоуровневый OFI и классификации Lee-Ready/BVC. Сохраните уравнения, интервалы агрегации, нормализацию, PCA, допущения реализации и практические ограничения.
+Preserve the full substantive coverage, worked examples, equations, data assumptions, caveats and risks from the source. Attribute numerical or time-sensitive claims to the article as illustrative or unverified rather than current facts. Do not add outside facts, guaranteed returns, investment advice or claims absent from the source. Explain sample code as instructional, not production-ready. This source draft needs human editorial and primary-fact review.
+Use clear narration or dialogue, preserving section order and examples. Finish with the limitations and conclusion.

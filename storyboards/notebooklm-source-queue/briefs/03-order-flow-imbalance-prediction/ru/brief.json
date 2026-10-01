@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "slug": "order-flow-imbalance-prediction",
+  "language": "ru",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/order-flow-imbalance-prediction.ru.md",
+  "article_sha256": "386533b4650170489425511b675f7e78960ef54b01e5ff0639c8ad97094961ae",
+  "notebook_title": "MM sources | order-flow-imbalance-prediction | RU",
+  "source_title": "MM article order-flow-imbalance-prediction RU 386533b46501",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/order-flow-imbalance-prediction.ru.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/order-flow-imbalance-prediction.ru.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/order-flow-imbalance-prediction.ru.audio.txt",
+  "article_title": "Дисбаланс потока заказов: декомпозиция событий Конта-Куканова-Стойкова",
+  "article_date": "2026-08-17",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "5e605216f42b203f744e3dbf1fa643a5de30f33fb2d6e7103de2821f04ab3d8c",
+  "slides_prompt_sha256": "2f8346fa5a6d7147bdfa8d5969f10c0a0ade855f981c61fc12ffb2607ee259a8",
+  "audio_prompt_sha256": "31651241715d7218242da003abb8f70feed567f6eaae1033f90888e5bd241b8f"
+}

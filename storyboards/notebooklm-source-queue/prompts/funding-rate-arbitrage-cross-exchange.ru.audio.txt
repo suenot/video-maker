@@ -1,0 +1,12 @@
+Create a Deep Dive audio overview for this article in Russian. Use only the attached source named "MM article funding-rate-arbitrage-cross-exchange RU 6437d247a17b". Produce in Russian. Follow the article in this order:
+1. Почему funding rates различаются между биржами
+2. Базовая механика арбитража
+3. Риски и подводные камни
+4. Система мониторинга funding rates
+5. Исполнение: одновременное открытие позиций
+6. Продвинутые варианты
+7. Инфраструктурные требования
+8. Заключение
+
+Preserve the article’s substantive mechanisms, examples, formulas, caveats, execution costs, margin/liquidation and other risks. Keep named exchanges, payment intervals and numbers attributed to the article as examples, not current verified facts. Explain code logic faithfully without treating sample code as production-ready. Do not add claims, external facts, guaranteed returns, or investment advice. If a source claim is uncertain, qualify it as an article claim. Cover the conclusion before ending.
+Use a coherent dialogue or narration with smooth transitions. Explain the worked arbitrage example and risk calculations as conditional illustrations, including fees and changing funding rates. Avoid unsupported claims and finish with the article’s practical limitations.  Treat article profit and rate calculations only as illustrative gross scenarios before fees, slippage, margin/liquidation, venue-basis and counterparty risks; never describe them as guaranteed, risk-free, or live rates. This is an editorial draft requiring human review.

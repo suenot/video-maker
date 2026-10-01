@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "project": "marketmaker",
-  "mode": "continuous_notebooklm_production",
-  "updated_at": "2026-10-01T14:20:12.381930+00:00",
+  "mode": "continuous_notebooklm_source_drafts_with_independent_video_qa",
+  "updated_at": "2026-10-01T19:15:47+00:00",
   "current_slug": "algotrading-order-types",
   "priority_order": [
     "algotrading-order-types",
@@ -13,39 +13,51 @@
   ],
   "production_policy": "storyboards/article-video-workflow.md",
   "authoritative_per_video_state": "storyboards/<slug>/production-manifest.json",
-  "deduplication": "No youtube frontmatter is only a candidate signal. Before generation check existing artifacts, manifests, upload records, and actual target-channel Studio state; resume missing stages instead of rebuilding completed ones.",
+  "deduplication": "No YouTube frontmatter is only a local candidate signal. Check article, source/render artifacts and records before source creation; reconcile actual target-channel Studio before final render or publication. Reuse existing stages rather than duplicating them.",
   "ordered_work": [
     {
+      "task": "notebooklm-source-queue",
+      "state": "active_source_drafting",
+      "priority_slugs": [
+        "funding-rate-arbitrage-cross-exchange",
+        "statistical-arbitrage-pairs-trading-crypto",
+        "order-flow-imbalance-prediction",
+        "twap-vwap-pov-execution-algorithms"
+      ],
+      "languages": [
+        "en",
+        "ru"
+      ],
+      "independent_of": "algotrading-order-types final-video acceptance and Shorts remediation",
+      "done_when": "Each source draft has a full frozen article snapshot, generated NotebookLM slide PDF and separate Deep Dive audio with local hashes/provenance and editorial review pending. This does not imply final video acceptance or publication."
+    },
+    {
       "task": "algotrading-order-types",
-      "state": "quality_audit_failed_revision_required",
+      "state": "short_revision_ready_desktop_review_required",
+      "independent_of": "notebooklm-source-queue",
       "done_when": "EN/RU desktop and native vertical package passes QA, sources/manifests are recorded, and reusable changes are committed and pushed; publication approval may remain pending."
     },
     {
       "task": "pipeline-audit-and-improvement",
       "state": "queued",
-      "depends_on": "algotrading-order-types",
-      "delegation": {
-        "model": "gpt-6.1-sol",
-        "reasoning_effort": "ultra"
-      },
       "scope": [
-        "SOP with trigger, inputs, owner, steps, failure handling",
-        "Verifiable per-stage Definition of Done",
-        "Explicit workflow states and valid handoffs",
-        "Deduplication, idempotency, retries and quota-aware recovery",
-        "Reuse of validated artifacts and reduced repeated work",
-        "Evaluate Pydantic for state/input validation and pydantic-ai only if it solves an identified orchestration problem"
+        "SOP, stage definitions and handoffs",
+        "Deduplication, idempotency and quota recovery",
+        "Reuse of validated artifacts",
+        "Evaluate validation/orchestration dependencies only against identified needs"
       ],
-      "done_when": "Evidence-backed audit, smallest justified changes, proportionate checks, commit and default-branch push, documented deployment and smoke checks only if a deployed product is affected."
+      "done_when": "Evidence-backed audit, smallest justified changes and proportionate checks."
     },
     {
       "task": "continue-article-video-queue",
       "state": "queued",
-      "depends_on": "pipeline-audit-and-improvement"
+      "depends_on": "local candidate and target-channel duplicate reconciliation before final render or publish"
     }
   ],
+  "source_queue": "storyboards/notebooklm-source-queue",
+  "authoritative_source_state": "storyboards/notebooklm-source-queue/state.json",
   "items": [
-    {"slug": "algotrading-order-types", "languages": {"en": {"article": "marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md", "youtube": null, "draft": false, "date": "2026-03-23"}, "ru": {"article": "marketmaker-cc-landing/src/content/blog/algotrading-order-types.ru.md", "youtube": null, "draft": false, "date": "2026-03-23"}}, "local_mp4": ["output/algotrading-order-types/flow-v3/en/algotrading-order-types-en-desktop.mp4", "output/algotrading-order-types/flow-v4/ru/algotrading-order-types-ru-desktop.mp4", "output/algotrading-order-types/flow-v3/en/ioc-fok-short/algotrading-order-types-en-short.mp4", "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/algotrading-order-types-ru-short.mp4"], "manifest": "storyboards/algotrading-order-types/production-manifest.json", "languages_without_article_video_link": ["en", "ru"], "state": "quality_audit_failed_revision_required"},
+    {"slug": "algotrading-order-types", "languages": {"en": {"article": "marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md", "youtube": null, "draft": false, "date": "2026-03-23"}, "ru": {"article": "marketmaker-cc-landing/src/content/blog/algotrading-order-types.ru.md", "youtube": null, "draft": false, "date": "2026-03-23"}}, "local_mp4": ["output/algotrading-order-types/flow-v3/en/algotrading-order-types-en-desktop.mp4", "output/algotrading-order-types/flow-v4/ru/algotrading-order-types-ru-desktop.mp4", "output/algotrading-order-types/flow-v3/en/ioc-fok-short/algotrading-order-types-en-short.mp4", "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/algotrading-order-types-ru-short.mp4"], "manifest": "storyboards/algotrading-order-types/production-manifest.json", "languages_without_article_video_link": ["en", "ru"], "state": "short_revision_ready_desktop_review_required"},
     {"slug": "funding-rate-arbitrage-cross-exchange","languages": {"en": {"article": "marketmaker-cc-landing/src/content/blog/funding-rate-arbitrage-cross-exchange.en.md","youtube": null,"draft": false,"date": "2026-03-05"},"ru": {"article": "marketmaker-cc-landing/src/content/blog/funding-rate-arbitrage-cross-exchange.ru.md","youtube": null,"draft": false,"date": "2026-03-05"}},"local_mp4": [],"manifest": null,"languages_without_article_video_link": ["en","ru"],"state": "verify_video_absence_before_generation"},
     {"slug": "statistical-arbitrage-pairs-trading-crypto","languages": {"en": {"article": "marketmaker-cc-landing/src/content/blog/statistical-arbitrage-pairs-trading-crypto.en.md","youtube": null,"draft": false,"date": "2026-03-19"},"ru": {"article": "marketmaker-cc-landing/src/content/blog/statistical-arbitrage-pairs-trading-crypto.ru.md","youtube": null,"draft": false,"date": "2026-03-19"}},"local_mp4": [],"manifest": null,"languages_without_article_video_link": ["en","ru"],"state": "verify_video_absence_before_generation"},
     {"slug": "order-flow-imbalance-prediction","languages": {"en": {"article": "marketmaker-cc-landing/src/content/blog/order-flow-imbalance-prediction.en.md","youtube": null,"draft": false,"date": "2026-08-17"},"ru": {"article": "marketmaker-cc-landing/src/content/blog/order-flow-imbalance-prediction.ru.md","youtube": null,"draft": false,"date": "2026-08-17"}},"local_mp4": [],"manifest": null,"languages_without_article_video_link": ["en","ru"],"state": "verify_video_absence_before_generation"},

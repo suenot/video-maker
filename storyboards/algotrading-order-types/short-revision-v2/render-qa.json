@@ -1,0 +1,54 @@
+{
+  "method": "actual final MP4 samples from every scene plus end card visually inspected at 270x480 contact-sheet size; full decode; ffprobe exact 30fps frame and A/V durations; source WAV SHA256; audio RMS tail and silent end card",
+  "source_page": 4,
+  "checks": {
+    "en": {
+      "final_video": "output/algotrading-order-types/short-revision-v2/en/algotrading-order-types-en-short-v2.mp4",
+      "final_sha256": "9c8897460faeb552bb91a9e5ca89e6e6ff71536a4246c398225dab426b307346",
+      "source_audio_sha256": "44b64a2cfeb4ff348c2904288eb2bdbbd5fba7b82a45791d1caf41fb8aefa7ad",
+      "full_decode": "passed",
+      "geometry": "1080x1920",
+      "fps": "30/1",
+      "frames": 2916,
+      "audio_video_duration_seconds": 97.2,
+      "narration_tail_rms": 0.038985,
+      "endcard_rms": 0,
+      "phone_contact_sheet": "temp/algotrading-order-types/short-revision-v2/en/qa-final/actual-mp4-phone-sheet.png",
+      "semantic": "page-4 requested/available and IOC/FOK outcomes visible; general rule and no-execution-guarantee text visible",
+      "safe_zone": "core content placed left of right control strip and above bottom control area",
+      "lead_review": {
+        "actual_mp4_phone_frames": "passed",
+        "frozen_audio_and_view_hashes": "passed",
+        "contiguous_frame_timeline": "passed",
+        "subtitle_cues_within_unchanged_audio": "passed",
+        "human_listening": null,
+        "human_quality_approval": null,
+        "maximum_body_hold_seconds": 11.833333333333334
+      }
+    },
+    "ru": {
+      "final_video": "output/algotrading-order-types/short-revision-v2/ru/algotrading-order-types-ru-short-v2.mp4",
+      "final_sha256": "71f31b24f882a63dbe3bbadcfb5e5c0ac98811fad3128cb853b7b117a18ef3b7",
+      "source_audio_sha256": "b384e715a814498cb178fc18d9e6e0ff48b15e36c6c62c4af0869299a65393e5",
+      "full_decode": "passed",
+      "geometry": "1080x1920",
+      "fps": "30/1",
+      "frames": 3678,
+      "audio_video_duration_seconds": 122.6,
+      "narration_tail_rms": 0.057044,
+      "endcard_rms": 0,
+      "phone_contact_sheet": "temp/algotrading-order-types/short-revision-v2/ru/qa-final/actual-mp4-phone-sheet.png",
+      "semantic": "page-4 requested/available and IOC/FOK outcomes visible; general rule and no-execution-guarantee text visible",
+      "safe_zone": "core content placed left of right control strip and above bottom control area",
+      "lead_review": {
+        "actual_mp4_phone_frames": "passed",
+        "frozen_audio_and_view_hashes": "passed",
+        "contiguous_frame_timeline": "passed",
+        "subtitle_cues_within_unchanged_audio": "passed",
+        "human_listening": null,
+        "human_quality_approval": null,
+        "maximum_body_hold_seconds": 20.3
+      }
+    }
+  }
+}
