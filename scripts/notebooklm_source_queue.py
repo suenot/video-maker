@@ -500,6 +500,16 @@ class Runner:
         self.save()
 
     async def run(self):
+        if self.quota_active():
+            verified = 0
+            for job in self.state["jobs"].values():
+                for artifact in job.get("artifacts", {}).values():
+                    if artifact.get("state") == "downloaded_pending_editorial_review":
+                        if sha(ROOT / artifact["path"]) != artifact["sha256"]:
+                            raise RuntimeError("Downloaded source hash changed")
+                        verified += 1
+            print(json.dumps({"state": "quota_wait", "not_before": self.state["quota"]["not_before"], "browser_opened": False, "local_originals_verified": verified}), flush=True)
+            return
         self.settings = json.loads(self.args.settings.read_text())
         sys.path[:0] = [self.settings["gaia_path"], str(ROOT.parent / "video_youtube_publish")]
         import gemini_common as common

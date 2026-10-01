@@ -75,11 +75,14 @@ prepared request once. Validate the submission control before writing a
 submission intent. After any Generate click, poll for the new artifact ID
 without repeating the click; a direct scheduled request must not be clicked
 a second time during reconciliation.
-If NotebookLM reports that **all features** are unavailable, stop new notebook
-creation and source uploads. Record the exact displayed reset and browser time
-zone as `quota.not_before` in state; keep downloading/reconciling existing bound
-jobs. A processing source's saved insertion intent can still be reconciled.
-After the reset, use the same notebook and frozen inputs. Source-helper calls
+If NotebookLM reports that **all features** are unavailable, record the exact
+displayed reset and browser time zone as `quota.not_before` in state. Until
+that time, every pass checks downloaded originals locally and returns before
+loading browser helpers, reading profile settings or opening Camoufox. Do not
+open the browser merely to poll `scheduled` jobs or refresh the quota notice.
+Preserve all notebook/source/artifact IDs and pending insertion intents.
+After the reset, reconcile existing bound jobs, download ready originals and
+resume missing stages using the same notebook and frozen inputs. Source-helper calls
 have a 120-second deadline; a timeout preserves the insertion intent for review.
 
 | State | Next action |
