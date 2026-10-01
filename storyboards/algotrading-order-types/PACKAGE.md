@@ -1,32 +1,48 @@
 # Order types video package
 
-The user rejected all four local Blueprint videos because the existing
-NotebookLM slide-and-audio flow was replaced with agent-authored diagrams.
-They are retained as rejected artifacts, not as an accepted production package.
-The production manifest is authoritative; publication is blocked.
-English narration is the previously accepted NotebookLM source, with
-its original account provenance retained. Both new PDFs and the Russian source
-were generated through the designated Gaia Camoufox account.
+The replacement package reuses the existing NotebookLM audio/PDF and video-maker
+flow recovered from the August sessions. The four previous Blueprint videos
+remain rejected. Publication is blocked pending replacement QA and human review.
+
+## Current replacement progress
+
+- Reviewed NotebookLM decks: EN v3 and RU v4, eleven pages each. Corrections were
+  made through NotebookLM native per-page revision; unchanged pages were reused
+  with exact PNG hash comparisons.
+- Both desktop sets contain all eleven actual NotebookLM pages restyled through
+  image edits. Source/output hashes and per-page visual/OCR reviews are recorded
+  in [EN desktop edits](notebooklm-image-edits.en-desktop.json) and
+  [RU desktop edits](notebooklm-image-edits.ru-desktop.json). EN page 1 reuses the
+  separately reviewed style proof.
+- EN native vertical page 1 passes exact-text, relationship and safe-zone review.
+  The remaining EN vertical pages are being generated; RU vertical pages remain
+  pending. The [vertical proof record](notebooklm-image-edits.json) preserves all
+  attempted prompts and identifies the accepted v4 proof.
+- New designated-account NotebookLM audio was downloaded for both languages,
+  transcribed completely and rejected during narration review. EN needs an
+  unambiguous acceptance/execution negation and qualified post-only wording; RU
+  omits the TWAP/VWAP distinction and full final checklist. Corrected concise
+  eleven-paragraph source scripts are being ingested. These audio attempts are
+  preserved and are not final-production selections.
+- No replacement MP4 has been rendered. Human listening and quality approval
+  remain pending.
+
+See [production-manifest.json](production-manifest.json), specifically
+`flow_progress`, for selected PDFs, hashes, source IDs, rejected narration IDs
+and current stage. The older `artifacts`, `style` and `qa` records describe the
+rejected Blueprint package and do not approve the replacement.
+
+## Rejected Blueprint package evidence
 
 | Language | Desktop | Native Short | Narrated body | Silent contacts card |
 | --- | --- | --- | --- | --- |
 | EN | 1920x1080 | 1080x1920 | 92.16 s | 10 s |
 | RU | 1920x1080 | 1080x1920 | 133.588912 s | 10 s |
 
-See [production-manifest.json](production-manifest.json),
-[artifact-inventory.json](artifact-inventory.json), and
-[render-validation.json](render-validation.json) for concrete files and hashes.
-The final EN cuts run 102.166667 seconds; the RU cuts run 143.6 seconds. All are
-H.264, constant 30 fps, with AAC 48 kHz stereo. All scene boundaries and both
-end-card edges were matched to accepted frames; full decode, subtitle timing,
-native geometry, safe-zone masks and independent factual/frame review passed.
-
-The original Russian narration remains intact. A separate production audio
-removes the unsupported universal queue-priority-loss clause. The
-[audio edit](audio-edit.ru.json) records source timing, crossfade, the 3.85-second
-duration change, source/production hashes and repeated transcription. Human
-review should include pronunciation and the audio join. Captions use written
-order-type acronyms; caption normalization is not an audio correction.
+[artifact-inventory.json](artifact-inventory.json),
+[render-validation.json](render-validation.json), and [audio-edit.ru.json](audio-edit.ru.json)
+preserve the rejected package's historical files and checks. Those checks do not
+supersede the user's rejection of its flow and visual content.
 
 ## Historical reproduction of the rejected native frames
 

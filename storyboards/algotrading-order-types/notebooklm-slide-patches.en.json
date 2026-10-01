@@ -1,0 +1,14 @@
+{
+  "source_artifact_id": "f7ab0595-597a-4188-86f9-e564e8489a39",
+  "method": "NotebookLM native Revise, individual slide instructions",
+  "patches": [
+    {
+      "slide": 8,
+      "instructions": "Make only these factual corrections on this slide; retain the existing two-panel layout, original diagrams, arrows, style and other content. Replace 'two linked resting orders' with 'two linked orders'. Replace the right-panel heading 'OTOCO / Bracket' with 'Binance Spot OTOCO (venue-specific)'. In the right diagram replace 'Entry Condition' with 'Working entry order' and label its activation connection 'Fully filled'. Replace the right-panel explanatory sentence with: 'The working entry order must be fully filled before the pending OCO pair is activated.' Replace the bottom comparison with: 'Plain OCO links two orders. Binance Spot OTOCO activates its pending OCO pair only after the working entry order is fully filled.' Do not imply that partial entry execution activates this pending OCO pair, or that every bracket implementation follows the same rule. Keep all text English, readable and complete."
+    },
+    {
+      "slide": 11,
+      "instructions": "Change only the Time in Force checklist question to: 'Time in Force: What may fill immediately, and when is the unfilled remainder canceled?' Keep its qualifier 'Time in force does not guarantee execution'. Retain all other checklist questions, checkboxes, their order, layout and final conclusion. Keep all English text readable and complete; do not reduce time in force to how long an order rests."
+    }
+  ]
+}

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Record corrected eleven-page NotebookLM decks, actual-page desktop image edits, native vertical proof, and rejected narration attempts without promoting the previous rejected videos.
 - Resume the bilingual order-types package through Gaia/NotebookLM with primary-source factual guardrails and recorded source provenance.
 - Record the reviewed English scene timing, corrected transcript provenance, and verified bilingual article URLs for the order-types package.
 - Bind NotebookLM production to the designated Gaia Camoufox account and record account verification before source generation.

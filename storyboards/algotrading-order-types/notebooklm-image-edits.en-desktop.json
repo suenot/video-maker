@@ -1,0 +1,277 @@
+{
+  "schema_version": 1,
+  "slug": "algotrading-order-types",
+  "language": "en",
+  "aspect": "desktop-16x9",
+  "method": "built-in Codex image_gen image-to-image, one call per source slide",
+  "prompts_frozen_before_generation": true,
+  "source_pdf": "input/algotrading-order-types/revisions/slides_en-v3.pdf",
+  "source_pdf_sha256": "d1e933420bd26f74339ab43d3a83e093117c6ac0022cfcfe0296ffa1ab5b8db5",
+  "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+  "style_reference_sha256": "b9d7489339887e7e813d770e588fa8e382526536beeff477d06581e671d99258",
+  "frames": [
+    {
+      "page": 2,
+      "source": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_002.png",
+      "source_sha256": "7f9cb422fd35d3242690fc6f59b33f9ebd7cb0ba962c317505a8975fc57edb91",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+      "style_reference_sha256": "b9d7489339887e7e813d770e588fa8e382526536beeff477d06581e671d99258",
+      "output": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_002.png",
+      "prompt": "Use case: style-transfer. Asset type: 16:9 narrated educational desktop slide. Image 1 is the EDIT TARGET and the sole authority for this page\u2019s wording, figures, diagrams, arrows, causal relationships, and reading order. Image 2 is a STYLE-ONLY reference; borrow its dense black print engraving on warm ivory, cobalt and vermilion accents, legible serif hierarchy, and restrained decorative border. Do not borrow Image 2\u2019s subject, three-layer geometry, wording, labels, or objects. Perform a genuine image-to-image restyling of Image 1; retain all its educational content, readable at presentation size. Remove the small Gemini Notebook watermark as part of the restyling. Keep 16:9 landscape framing; do not crop source content. No landscape, characters, new financial claims, added diagrams, invented prices or numbers, QR codes, or filler text. All technical copy must be spelled exactly as listed below, with every clause preserved, and all source relationships intact. PAGE 2 REQUIRED TEXT (verbatim, pipe marks separate text blocks rather than appearing on the slide): Market & Limit Orders: Intent vs. Constraints | Market Order | Seeks immediate execution against available liquidity. | Execution price and complete fill are not guaranteed; liquidity and exchange price bands limit the fill. | Buy Limit | Caps the acceptable purchase price. | (Sets a maximum boundary) | Sell Limit | Sets a price floor. | (Sets a minimum boundary) | Limit orders strictly impose price constraints, but a completed fill is never guaranteed. RELATIONSHIPS: Keep three equal columns in this order: Market Order, Buy Limit, Sell Limit. Market flow enters available liquidity; buy-limit arrow points DOWN to the maximum price ceiling; sell-limit arrow points UP from the minimum price floor. Retain the bottom conclusion.",
+      "output_sha256": "c6c4fca125e55bc5e5272bc84fc27b5e348a84e1491bc8c1484cbdb57643e746",
+      "qa": {
+        "status": "passed_with_specific_visual_override",
+        "dimensions": [
+          1920,
+          1080
+        ],
+        "visual_comparison": "All three market/buy-limit/sell-limit columns, down/up bound arrows, both explanatory paragraphs, and the bottom no-fill-guarantee conclusion match the source.",
+        "ocr_engine": "macOS Vision accurate en-US",
+        "ocr_text_blocks_expected": 11,
+        "ocr_text_blocks_matched": 10,
+        "ocr_missing": [
+          "Market & Limit Orders: Intent vs. Constraints"
+        ],
+        "visual_override": [
+          {
+            "text": "Market & Limit Orders: Intent vs. Constraints",
+            "reason": "Vision missed the decorative headline after normalization; full-resolution visual check confirms exact title at top: Market & Limit Orders: Intent vs. Constraints."
+          }
+        ],
+        "watermark": "not present by full-frame visual review or OCR"
+      }
+    },
+    {
+      "page": 3,
+      "source": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_003.png",
+      "source_sha256": "f4b5739fa7c8fc16acef905acc8e6d6050ad0282b996a3f30b36abe13fc460a1",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+      "style_reference_sha256": "b9d7489339887e7e813d770e588fa8e382526536beeff477d06581e671d99258",
+      "output": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_003.png",
+      "prompt": "Use case: style-transfer. Asset type: 16:9 narrated educational desktop slide. Image 1 is the EDIT TARGET and the sole authority for this page\u2019s wording, figures, diagrams, arrows, causal relationships, and reading order. Image 2 is a STYLE-ONLY reference; borrow its dense black print engraving on warm ivory, cobalt and vermilion accents, legible serif hierarchy, and restrained decorative border. Do not borrow Image 2\u2019s subject, three-layer geometry, wording, labels, or objects. Perform a genuine image-to-image restyling of Image 1; retain all its educational content, readable at presentation size. Remove the small Gemini Notebook watermark as part of the restyling. Keep 16:9 landscape framing; do not crop source content. No landscape, characters, new financial claims, added diagrams, invented prices or numbers, QR codes, or filler text. All technical copy must be spelled exactly as listed below, with every clause preserved, and all source relationships intact. PAGE 3 REQUIRED TEXT (verbatim, pipe marks separate text blocks rather than appearing on the slide): Inside the Order Book | Illustrative Only | [ASKs] | $100.02 | $100.01 | $100.00 (Best Ask - Lowest) | Spread | $99.99 (Best Bid - Highest) | $99.98 | $99.97 | [BIDS] | Crossing Limit | Takes available liquidity immediately upon crossing the spread. | A crossing limit can fill immediately; whether an unfilled remainder rests passively depends strictly on Time-in-Force (TIF) and specific venue rules. RELATIONSHIPS: Keep the vertical price ladder strictly sorted: asks $100.02, $100.01, $100.00 descending toward the spread, then bids $99.99, $99.98, $99.97 descending below it. Crossing Limit arrow points from left into the spread. Keep best-ask and best-bid labels and the qualified remainder rule.",
+      "output_sha256": "8ea9aafd7835f421f37177dd53a271170c94f9b12d95d453b0ae15f30199cb68",
+      "qa": {
+        "status": "passed",
+        "dimensions": [
+          1920,
+          1080
+        ],
+        "visual_comparison": "Illustrative ascending-to-spread asks 100.02/100.01/100.00 and descending bids 99.99/99.98/99.97, crossing arrow, spread, TIF-dependent remainder rule match the source.",
+        "ocr_engine": "macOS Vision accurate en-US",
+        "ocr_text_blocks_expected": 14,
+        "ocr_text_blocks_matched": 14,
+        "ocr_missing": [],
+        "visual_override": [],
+        "watermark": "not present by full-frame visual review or OCR"
+      }
+    },
+    {
+      "page": 4,
+      "source": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_004.png",
+      "source_sha256": "61109f9401f0e0472070ac6a42d5d2e2a975ddc5e958e71728db7dee7dd3332c",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+      "style_reference_sha256": "b9d7489339887e7e813d770e588fa8e382526536beeff477d06581e671d99258",
+      "output": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_004.png",
+      "prompt": "Use case: style-transfer. Asset type: 16:9 narrated educational desktop slide. Image 1 is the EDIT TARGET and the sole authority for this page\u2019s wording, figures, diagrams, arrows, causal relationships, and reading order. Image 2 is a STYLE-ONLY reference; borrow its dense black print engraving on warm ivory, cobalt and vermilion accents, legible serif hierarchy, and restrained decorative border. Do not borrow Image 2\u2019s subject, three-layer geometry, wording, labels, or objects. Perform a genuine image-to-image restyling of Image 1; retain all its educational content, readable at presentation size. Remove the small Gemini Notebook watermark as part of the restyling. Keep 16:9 landscape framing; do not crop source content. No landscape, characters, new financial claims, added diagrams, invented prices or numbers, QR codes, or filler text. All technical copy must be spelled exactly as listed below, with every clause preserved, and all source relationships intact. PAGE 4 REQUIRED TEXT (verbatim, pipe marks separate text blocks rather than appearing on the slide): Time in Force: IOC vs. FOK | Requested: 100 units | Immediately Available: 60 units | IOC (Immediate or Cancel) | Fills: 60 | Cancels: 40 | IOC executes the available portion now. It can fill zero, some, or all. | FOK (Fill or Kill) | Fills: 0 | Cancels: 100 | FOK executes the full quantity immediately or cancels. It fills all only when the full amount is immediately available. | Illustrative Numbers: IOC takes what is available; FOK demands the full quantity or nothing at all. RELATIONSHIPS: One request of 100 and available 60 branches into two comparisons: IOC fills 60/cancels 40, FOK fills 0/cancels 100. Do not swap amounts, imply FOK partial fill, or imply IOC always gets a fill.",
+      "output_sha256": "6d454f58cbd380052cbf78a59270851fed1216ca27ab4f623a2bbe91b3df9a3f",
+      "qa": {
+        "status": "passed_with_specific_visual_override",
+        "dimensions": [
+          1920,
+          1080
+        ],
+        "visual_comparison": "100 requested / 60 available branches to IOC 60 fill + 40 cancel and FOK 0 fill + 100 cancel; the zero/some/all caveat and full-or-nothing rule match the source.",
+        "ocr_engine": "macOS Vision accurate en-US",
+        "ocr_text_blocks_expected": 12,
+        "ocr_text_blocks_matched": 11,
+        "ocr_missing": [
+          "Fills: 0"
+        ],
+        "visual_override": [
+          {
+            "text": "Fills: 0",
+            "reason": "Vision missed the right-hand numeric cell; full-resolution visual check confirms FOK Fills: 0 and Cancels: 100 in separate rows."
+          }
+        ],
+        "watermark": "not present by full-frame visual review or OCR"
+      }
+    },
+    {
+      "page": 5,
+      "source": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_005.png",
+      "source_sha256": "744bd9c2b93ec816922164048fa00788f18e773c84b8f19bdd2030c9cf234d0b",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+      "style_reference_sha256": "b9d7489339887e7e813d770e588fa8e382526536beeff477d06581e671d99258",
+      "output": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_005.png",
+      "prompt": "Use case: style-transfer. Asset type: 16:9 narrated educational desktop slide. Image 1 is the EDIT TARGET and the sole authority for this page\u2019s wording, figures, diagrams, arrows, causal relationships, and reading order. Image 2 is a STYLE-ONLY reference; borrow its dense black print engraving on warm ivory, cobalt and vermilion accents, legible serif hierarchy, and restrained decorative border. Do not borrow Image 2\u2019s subject, three-layer geometry, wording, labels, or objects. Perform a genuine image-to-image restyling of Image 1; retain all its educational content, readable at presentation size. Remove the small Gemini Notebook watermark as part of the restyling. Keep 16:9 landscape framing; do not crop source content. No landscape, characters, new financial claims, added diagrams, invented prices or numbers, QR codes, or filler text. All technical copy must be spelled exactly as listed below, with every clause preserved, and all source relationships intact. PAGE 5 REQUIRED TEXT (verbatim, pipe marks separate text blocks rather than appearing on the slide): Post-Only: Acceptance vs. Execution | Illustrative Only | Post-Only Submission | Exchange Matching Engine | Path A (Top branch) | Passive Route | Order price does not cross the book | Accepted and rests passively under venue rules. | Path B (Bottom branch) | Crossing Route | Order price crosses existing liquidity | Submission is rejected or canceled (venue dependent). | Acceptance and execution are distinct events. Post-only keeps an accepted order passive under the venue\u2019s rules. RELATIONSHIPS: Preserve the submission-to-exchange split into exactly two alternative routes. Upper path is not crossing and can rest; lower path crosses and is rejected or canceled. Do not turn the two paths into a sequence or claim all submissions are accepted.",
+      "output_sha256": "3321f1256cebd24a691d117556eb71bd2d19ff3779d5f35815bb31a2476ae8f5",
+      "qa": {
+        "status": "passed",
+        "dimensions": [
+          1920,
+          1080
+        ],
+        "visual_comparison": "Submission enters exchange matching engine and splits into upper passive accepted route and lower crossing rejected-or-canceled route; bottom acceptance/execution distinction matches.",
+        "ocr_engine": "macOS Vision accurate en-US",
+        "ocr_text_blocks_expected": 13,
+        "ocr_text_blocks_matched": 13,
+        "ocr_missing": [],
+        "visual_override": [],
+        "watermark": "not present by full-frame visual review or OCR"
+      }
+    },
+    {
+      "page": 6,
+      "source": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_006.png",
+      "source_sha256": "0ee480bf0a515d2b24d7f639792b2f00835caf825d559f675a6ce11e884a48cd",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+      "style_reference_sha256": "b9d7489339887e7e813d770e588fa8e382526536beeff477d06581e671d99258",
+      "output": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_006.png",
+      "prompt": "Use case: style-transfer. Asset type: 16:9 narrated educational desktop slide. Image 1 is the EDIT TARGET and the sole authority for this page\u2019s wording, figures, diagrams, arrows, causal relationships, and reading order. Image 2 is a STYLE-ONLY reference; borrow its dense black print engraving on warm ivory, cobalt and vermilion accents, legible serif hierarchy, and restrained decorative border. Do not borrow Image 2\u2019s subject, three-layer geometry, wording, labels, or objects. Perform a genuine image-to-image restyling of Image 1; retain all its educational content, readable at presentation size. Remove the small Gemini Notebook watermark as part of the restyling. Keep 16:9 landscape framing; do not crop source content. No landscape, characters, new financial claims, added diagrams, invented prices or numbers, QR codes, or filler text. All technical copy must be spelled exactly as listed below, with every clause preserved, and all source relationships intact. PAGE 6 REQUIRED TEXT (verbatim, pipe marks separate text blocks rather than appearing on the slide): Stop Orders: Triggers, Not Prices | A stop price is a trigger, not a promised execution price. | Trigger Threshold | Unpromised Execution Zone | Price | Stop-Market | Submits a market order once triggered. It can execute at a worse price, partially fill, or fail to fill under venue liquidity restrictions. | Stop-Limit | Submits a limit order once triggered. It can remain unfilled after a price gap. | Neither type guarantees a completed exit. RELATIONSHIPS: Preserve one trigger threshold and the two outward branches. Do not depict the threshold as the execution price. Stop-Market and Stop-Limit must have distinct outcomes and the complete-exit warning.",
+      "output_sha256": "cb32a8f50170762b01c853d7e249e6e53f9097e47bb91ff6d3a1d535fa43e765",
+      "qa": {
+        "status": "passed",
+        "dimensions": [
+          1920,
+          1080
+        ],
+        "visual_comparison": "Trigger threshold stays separate from execution zone and fans out into distinct Stop-Market/Stop-Limit outcomes; complete-exit warning matches.",
+        "ocr_engine": "macOS Vision accurate en-US",
+        "ocr_text_blocks_expected": 10,
+        "ocr_text_blocks_matched": 10,
+        "ocr_missing": [],
+        "visual_override": [],
+        "watermark": "not present by full-frame visual review or OCR"
+      }
+    },
+    {
+      "page": 7,
+      "source": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_007.png",
+      "source_sha256": "2ad624a0edccd33f0e3fa37eb228c504ec8e57138333d1a54a6798d6d7ced84a",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+      "style_reference_sha256": "b9d7489339887e7e813d770e588fa8e382526536beeff477d06581e671d99258",
+      "output": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_007.png",
+      "prompt": "Use case: style-transfer. Asset type: 16:9 narrated educational desktop slide. Image 1 is the EDIT TARGET and the sole authority for this page\u2019s wording, figures, diagrams, arrows, causal relationships, and reading order. Image 2 is a STYLE-ONLY reference; borrow its dense black print engraving on warm ivory, cobalt and vermilion accents, legible serif hierarchy, and restrained decorative border. Do not borrow Image 2\u2019s subject, three-layer geometry, wording, labels, or objects. Perform a genuine image-to-image restyling of Image 1; retain all its educational content, readable at presentation size. Remove the small Gemini Notebook watermark as part of the restyling. Keep 16:9 landscape framing; do not crop source content. No landscape, characters, new financial claims, added diagrams, invented prices or numbers, QR codes, or filler text. All technical copy must be spelled exactly as listed below, with every clause preserved, and all source relationships intact. PAGE 7 REQUIRED TEXT (verbatim, pipe marks separate text blocks rather than appearing on the slide): Execution Algorithms | TWAP | Spreads execution over time. Controls a schedule or benchmark without promising a better price. | VWAP | Uses traded volume as an execution reference. Controls a benchmark without promising a better price. | Chasing Limits | Automatically amends price to follow the market. Must have an acceptable-price bound. | Chasing may lose queue priority depending on specific venue and amendment rules. RELATIONSHIPS: Keep three independent columns: time/clock for TWAP, volume-weighted bars for VWAP, changing limit path for Chasing Limits. The queue-priority qualifier is conditional and venue-specific, never universal. No stop-order prerequisite.",
+      "output_sha256": "f3be8f6f5e8392d06e4901c30714a7066bd4f46035795ad621af5fe82aa8d57b",
+      "qa": {
+        "status": "passed",
+        "dimensions": [
+          1920,
+          1080
+        ],
+        "visual_comparison": "TWAP, VWAP, and Chasing Limits remain independent columns; time, volume, price-path visuals and conditional venue-specific priority caveat match.",
+        "ocr_engine": "macOS Vision accurate en-US",
+        "ocr_text_blocks_expected": 8,
+        "ocr_text_blocks_matched": 8,
+        "ocr_missing": [],
+        "visual_override": [],
+        "watermark": "not present by full-frame visual review or OCR"
+      }
+    },
+    {
+      "page": 8,
+      "source": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_008.png",
+      "source_sha256": "e9940998311ad156047709e6090b3a03f75e783944a1e1dd6c1031ae48cfff9b",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+      "style_reference_sha256": "b9d7489339887e7e813d770e588fa8e382526536beeff477d06581e671d99258",
+      "output": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_008.png",
+      "prompt": "Use case: style-transfer. Asset type: 16:9 narrated educational desktop slide. Image 1 is the EDIT TARGET and the sole authority for this page\u2019s wording, figures, diagrams, arrows, causal relationships, and reading order. Image 2 is a STYLE-ONLY reference; borrow its dense black print engraving on warm ivory, cobalt and vermilion accents, legible serif hierarchy, and restrained decorative border. Do not borrow Image 2\u2019s subject, three-layer geometry, wording, labels, or objects. Perform a genuine image-to-image restyling of Image 1; retain all its educational content, readable at presentation size. Remove the small Gemini Notebook watermark as part of the restyling. Keep 16:9 landscape framing; do not crop source content. No landscape, characters, new financial claims, added diagrams, invented prices or numbers, QR codes, or filler text. All technical copy must be spelled exactly as listed below, with every clause preserved, and all source relationships intact. PAGE 8 REQUIRED TEXT (verbatim, pipe marks separate text blocks rather than appearing on the slide): Linked Orders: Defining Relationships | Plain OCO (One-Cancels-the-Other) | Order A | Order B | Links two orders. The execution of one actively cancels the other under venue rules. | Binance Spot OTOCO (venue-specific) | Working entry order | Fully filled | Exit 1 | Exit 2 | The working entry order must be fully filled before the pending OCO pair is activated. | Plain OCO links two orders. Binance Spot OTOCO activates its pending OCO pair only after the working entry order is fully filled. RELATIONSHIPS: Keep plain OCO on the left as two mutually linked orders. Keep Binance Spot OTOCO on the right as working entry order -> fully filled -> pending linked Exit 1/Exit 2 pair. Do not claim all venues have OTOCO or activate exits on partial entry fill.",
+      "output_sha256": "644fa4271ac3ab741178c9e6f49366c08edb78cbd54d2c1205270d03f161be3d",
+      "qa": {
+        "status": "passed",
+        "dimensions": [
+          1920,
+          1080
+        ],
+        "visual_comparison": "Plain OCO two-order link stays separate from venue-specific Binance Spot OTOCO; working entry must be fully filled before linked exits activate.",
+        "ocr_engine": "macOS Vision accurate en-US",
+        "ocr_text_blocks_expected": 12,
+        "ocr_text_blocks_matched": 12,
+        "ocr_missing": [],
+        "visual_override": [],
+        "watermark": "not present by full-frame visual review or OCR"
+      }
+    },
+    {
+      "page": 9,
+      "source": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_009.png",
+      "source_sha256": "8c3139fa84f9769554faaec1c4c60084760382464d2c9e5f06be803ef3977797",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+      "style_reference_sha256": "b9d7489339887e7e813d770e588fa8e382526536beeff477d06581e671d99258",
+      "output": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_009.png",
+      "prompt": "Use case: style-transfer. Asset type: 16:9 narrated educational desktop slide. Image 1 is the EDIT TARGET and the sole authority for this page\u2019s wording, figures, diagrams, arrows, causal relationships, and reading order. Image 2 is a STYLE-ONLY reference; borrow its dense black print engraving on warm ivory, cobalt and vermilion accents, legible serif hierarchy, and restrained decorative border. Do not borrow Image 2\u2019s subject, three-layer geometry, wording, labels, or objects. Perform a genuine image-to-image restyling of Image 1; retain all its educational content, readable at presentation size. Remove the small Gemini Notebook watermark as part of the restyling. Keep 16:9 landscape framing; do not crop source content. No landscape, characters, new financial claims, added diagrams, invented prices or numbers, QR codes, or filler text. All technical copy must be spelled exactly as listed below, with every clause preserved, and all source relationships intact. PAGE 9 REQUIRED TEXT (verbatim, pipe marks separate text blocks rather than appearing on the slide): Where Do Conditions Live? | Exchange-Hosted | OCOs and condition lists managed natively by the venue. | (Hosting does not guarantee execution) | Locally Managed | Virtual conditions depend on your strategy process and connectivity until they submit a real order. | API Connections | Stopping the local bot prevents a local condition from submitting; it does not automatically cancel a linked order already accepted and hosted by the exchange. RELATIONSHIPS: Preserve the exchange server and local bot as two distinct hosting locations connected by API; show local bot interruption only affects unsubmitted local conditions. Do not imply a venue-hosted accepted order is automatically canceled by bot stop.",
+      "output_sha256": "a1574e073e2d93331ab1f8841877f50df04cbfa4f80d28363782f1e1500e8363",
+      "qa": {
+        "status": "passed",
+        "dimensions": [
+          1920,
+          1080
+        ],
+        "visual_comparison": "Exchange-hosted and local strategy conditions remain distinct; API link and bot-stop/accepted-order distinction match.",
+        "ocr_engine": "macOS Vision accurate en-US",
+        "ocr_text_blocks_expected": 8,
+        "ocr_text_blocks_matched": 8,
+        "ocr_missing": [],
+        "visual_override": [],
+        "watermark": "not present by full-frame visual review or OCR"
+      }
+    },
+    {
+      "page": 10,
+      "source": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_010.png",
+      "source_sha256": "06a108787e0168e6175fcd3b7fc1666e9a1d9f511cce5a8210436a7f8354d984",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+      "style_reference_sha256": "b9d7489339887e7e813d770e588fa8e382526536beeff477d06581e671d99258",
+      "output": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_010.png",
+      "prompt": "Use case: style-transfer. Asset type: 16:9 narrated educational desktop slide. Image 1 is the EDIT TARGET and the sole authority for this page\u2019s wording, figures, diagrams, arrows, causal relationships, and reading order. Image 2 is a STYLE-ONLY reference; borrow its dense black print engraving on warm ivory, cobalt and vermilion accents, legible serif hierarchy, and restrained decorative border. Do not borrow Image 2\u2019s subject, three-layer geometry, wording, labels, or objects. Perform a genuine image-to-image restyling of Image 1; retain all its educational content, readable at presentation size. Remove the small Gemini Notebook watermark as part of the restyling. Keep 16:9 landscape framing; do not crop source content. No landscape, characters, new financial claims, added diagrams, invented prices or numbers, QR codes, or filler text. All technical copy must be spelled exactly as listed below, with every clause preserved, and all source relationships intact. PAGE 10 REQUIRED TEXT (verbatim, pipe marks separate text blocks rather than appearing on the slide): Designing for the Failure Case | Failure States | Trigger Failure | Local connectivity drops. | Venue rejects submission before it reaches the book. | Price Failure | Market price bounds prevent execution. | Limit price is gapped and left behind. | Fill Failure | Insufficient liquidity. | Partial fills leave residual, unhedged exposure. | A robust strategy is defined not by expected execution, but by how it handles process dependencies and specific layer failures. RELATIONSHIPS: Keep three equal failure-state columns, with exactly two bullet causes in each. Do not merge trigger, price, and fill failures or omit the bottom conclusion.",
+      "output_sha256": "c169df0f999407ab5c7249a777d7a656a7772ea731ac4c8c72ee82a21d9d1251",
+      "qa": {
+        "status": "passed",
+        "dimensions": [
+          1920,
+          1080
+        ],
+        "visual_comparison": "Three failure-state columns each retain their two bullet causes and bottom process-dependency conclusion.",
+        "ocr_engine": "macOS Vision accurate en-US",
+        "ocr_text_blocks_expected": 12,
+        "ocr_text_blocks_matched": 12,
+        "ocr_missing": [],
+        "visual_override": [],
+        "watermark": "not present by full-frame visual review or OCR"
+      }
+    },
+    {
+      "page": 11,
+      "source": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_011.png",
+      "source_sha256": "43d2d8ba93a82ef0d25142e8b8d4731ec7822da205fde98344e7c40e9402d135",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+      "style_reference_sha256": "b9d7489339887e7e813d770e588fa8e382526536beeff477d06581e671d99258",
+      "output": "output/algotrading-order-types/flow-v3/en/slides-desktop/slide_011.png",
+      "prompt": "Use case: style-transfer. Asset type: 16:9 narrated educational desktop slide. Image 1 is the EDIT TARGET and the sole authority for this page\u2019s wording, figures, diagrams, arrows, causal relationships, and reading order. Image 2 is a STYLE-ONLY reference; borrow its dense black print engraving on warm ivory, cobalt and vermilion accents, legible serif hierarchy, and restrained decorative border. Do not borrow Image 2\u2019s subject, three-layer geometry, wording, labels, or objects. Perform a genuine image-to-image restyling of Image 1; retain all its educational content, readable at presentation size. Remove the small Gemini Notebook watermark as part of the restyling. Keep 16:9 landscape framing; do not crop source content. No landscape, characters, new financial claims, added diagrams, invented prices or numbers, QR codes, or filler text. All technical copy must be spelled exactly as listed below, with every clause preserved, and all source relationships intact. PAGE 11 REQUIRED TEXT (verbatim, pipe marks separate text blocks rather than appearing on the slide): Order Selection Checklist | Trigger: What activates this order? | Price Bound: What is the maximum/minimum acceptable price? | Partial Fill: How does the strategy handle incomplete execution? | Time in Force: What may fill immediately, and when is the unfilled remainder canceled? (Time in force does not guarantee execution) | Venue Support: Are these parameters natively accepted by the exchange? | Strategy Process: What happens to this order if the local system disconnects? | There is no promise of profit, a better price, or guaranteed execution. RELATIONSHIPS: Keep all six checkbox rows, in source order, with their complete questions. Keep Partial Fill separate from Time in Force. Retain the parenthetical no-guarantee caveat and the complete bottom disclaimer.",
+      "output_sha256": "bf26351c2b7bef27c8ec7426a0a5b472a53742b982e976b7cfc62da37a3bd475",
+      "qa": {
+        "status": "passed",
+        "dimensions": [
+          1920,
+          1080
+        ],
+        "visual_comparison": "All six checkbox rows remain in source order, with Partial Fill distinct from Time in Force and the final no-guarantee statement intact.",
+        "ocr_engine": "macOS Vision accurate en-US",
+        "ocr_text_blocks_expected": 8,
+        "ocr_text_blocks_matched": 8,
+        "ocr_missing": [],
+        "visual_override": [],
+        "watermark": "not present by full-frame visual review or OCR"
+      }
+    }
+  ],
+  "post_generation_size_normalization": "Built-in image_gen produced near-16:9 PNGs of slightly varying pixel dimensions; final project PNGs were losslessly encoded after Lanczos scaling to exactly 1920x1080. No graphic content was drawn or substituted.",
+  "qa_summary": {
+    "status": "10_frames_qa_passed_with_2_specific_visual_overrides",
+    "automatic_ocr_blocks_failed_on_pages": [
+      2,
+      4
+    ],
+    "human_quality_approval": null
+  }
+}

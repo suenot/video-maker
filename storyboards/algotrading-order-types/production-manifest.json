@@ -6,7 +6,7 @@
     "ru"
   ],
   "scope": "Gaia/NotebookLM audio and slide decks, then video-maker desktop and independent Shorts for both channels",
-  "status": "rejected_wrong_flow",
+  "status": "rebuilding_existing_notebooklm_flow",
   "sources": {
     "article_en": {
       "path": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md",
@@ -355,7 +355,7 @@
   },
   "workflow_constraints": {
     "browser": "Camoufox only; never operate Firefox or bootstrap from its cookies",
-    "publication": "blocked_rejected_package",
+    "publication": "blocked_pending_replacement_quality_review",
     "discarded_previous_build": "b613f8b reverted by 5d0caa8; selfmade renders are not accepted NotebookLM artifacts"
   },
   "qa": {
@@ -536,9 +536,10 @@
     }
   },
   "next_steps": [
-    "Reuse the existing documented Gaia/NotebookLM audio + PDF and video-maker stages; do not run the rejected native-frame generators.",
-    "Apply the historical instruction to restyle the actual NotebookLM slides through Codex GPT Image with their content retained.",
-    "Complete the current package before pipeline implementation or another article. Publish only after human quality approval."
+    "Finish and verify the corrected eleven-page narration without rebuilding the approved NotebookLM PDFs or desktop frames.",
+    "Finish native vertical image edits of the actual NotebookLM pages; retain all source content and verify every safe zone.",
+    "Use existing Whisper, slide sync and video renderer stages with reviewed explicit boundaries; validate all four replacement MP4s.",
+    "Commit and push completed source/prompt/evidence records; obtain human quality approval before publication. Complete this package before the queued pipeline implementation or another article."
   ],
   "style": {
     "status": "rejected_by_user",
@@ -553,7 +554,7 @@
       "output/algotrading-order-types/style-proof/ioc-fok-native-short.png"
     ]
   },
-  "updated_at": "2026-09-30T22:12:08.452866+00:00",
+  "updated_at": "2026-10-01T00:31:44.575995+00:00",
   "flow_recovery": {
     "status": "existing_flow_located_and_studied",
     "description": "README.md:11-34,94-126",
@@ -574,5 +575,89 @@
     },
     "reuse_required": true,
     "new_pipeline_required": false
+  },
+  "flow_progress": {
+    "stage": "replacement_narration_review_and_native_vertical_generation",
+    "uses_existing_runner_stages": true,
+    "pipeline_rewritten": false,
+    "rejected_previous_artifacts_preserved": true,
+    "browser": "Gaia saved Camoufox profile only",
+    "account": "poebyte@gmail.com",
+    "sources_and_desktop": {
+      "en": {
+        "source_pdf": "input/algotrading-order-types/revisions/slides_en-v3.pdf",
+        "source_pdf_sha256": "d1e933420bd26f74339ab43d3a83e093117c6ac0022cfcfe0296ffa1ab5b8db5",
+        "page_count": 11,
+        "source_fact_review": "passed",
+        "desktop_frames": "output/algotrading-order-types/flow-v3/en/slides-desktop",
+        "desktop_page_count": 11,
+        "desktop_review": "passed_visual_and_ocr_with_specific_false_negative_records",
+        "desktop_edit_manifest": "storyboards/algotrading-order-types/notebooklm-image-edits.en-desktop.json",
+        "desktop_edit_manifest_sha256": "5998f76af8d911883699d6ca61691003078f0860e06a0275c27bf8cac52733d5",
+        "source_review_evidence": "temp/algotrading-order-types/flow-v3/en/source-qa.json"
+      },
+      "ru": {
+        "source_pdf": "input/algotrading-order-types/revisions/slides_ru-v4.pdf",
+        "source_pdf_sha256": "9b729771012a354683f7fe29c55fce13e68a7da95acc0f0064287e93f35cc728",
+        "page_count": 11,
+        "source_fact_review": "passed",
+        "desktop_frames": "output/algotrading-order-types/flow-v4/ru/slides-desktop",
+        "desktop_page_count": 11,
+        "desktop_review": "passed_visual_and_ocr_with_specific_false_negative_records",
+        "desktop_edit_manifest": "storyboards/algotrading-order-types/notebooklm-image-edits.ru-desktop.json",
+        "desktop_edit_manifest_sha256": "033db9a1a5bbcffa2eb148af75c9cf8a48604a01413517496a785f33aa6d1a59",
+        "source_review_evidence": "temp/algotrading-order-types/flow-v4/ru/source-qa.json"
+      }
+    },
+    "desktop_integration_evidence": "temp/algotrading-order-types/desktop-integration-qa.json",
+    "native_short": {
+      "en_page_1": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-short-v4.png",
+      "en_page_1_sha256": "6f1cd36c96b199468db82605b85ef1b434648b94d2a92572a58537c470bd64be",
+      "en_page_1_review": "passed_content_and_exact_safe_zone_overlay",
+      "en_page_1_evidence": "temp/algotrading-order-types/flow-v3/en/short-proof-v4-qa.json",
+      "remaining_en_pages": "in_progress",
+      "ru_pages": "pending",
+      "prompt_manifest": "storyboards/algotrading-order-types/notebooklm-image-edits.json"
+    },
+    "downloaded_narration_review": {
+      "en": {
+        "artifact_id": "80fc561a-6e84-47dc-a48b-521f725a0227",
+        "notebook": "https://notebook.google.com/notebook/b991882e-33a5-43e5-86d2-bb92a18b1328",
+        "source_id": "648383f4-f391-4acb-b6bc-15470372d55b",
+        "audio": "input/algotrading-order-types/revisions/audio_en-v3.m4a",
+        "audio_sha256": "3961bcc895fe26545bd75b6b93521089223bb608bc44a8984dcb686f165f7556",
+        "duration_seconds": 119.838186,
+        "state": "rejected_narration_review",
+        "review": "Repeated full and clipped ASR makes the acceptance/execution negation ambiguous; post-only crossing is stated as unconditional. This source is preserved and not selected for final production.",
+        "transcript": "temp/algotrading-order-types/flow-v3/en/subtitles.json",
+        "human_listening": "pending"
+      },
+      "ru": {
+        "artifact_id": "cacfea38-c9af-4f18-8177-e798d90b8271",
+        "notebook": "https://notebook.google.com/notebook/110d2424-6b00-4862-8136-73733595d8c1",
+        "source_id": "3c1532e5-1ba5-426a-83a7-f2fad932fbc1",
+        "audio": "input/algotrading-order-types/revisions/audio_ru-v4.m4a",
+        "audio_sha256": "57bdc265c071d5dd0555a6bc942e374046ac90d7a766b09b9bad448cf60b4baf",
+        "duration_seconds": 113.777778,
+        "state": "rejected_narration_review",
+        "review": "Narration reorders pages, omits the TWAP/VWAP distinction and full six-question checklist, and simplifies remainder/post-only rules. This source is preserved and not selected for final production.",
+        "transcript": "temp/algotrading-order-types/flow-v4/ru/subtitles.json",
+        "human_listening": "pending"
+      }
+    },
+    "replacement_narration": {
+      "state": "source_preparation_and_ingestion",
+      "source_scripts": {
+        "en": "storyboards/algotrading-order-types/notebooklm-audio-source.en-complete.md",
+        "ru": "storyboards/algotrading-order-types/notebooklm-audio-source.ru-complete.md"
+      },
+      "source_journal": "temp/algotrading-order-types/gaia/audio-complete-state.json",
+      "generation_policy": "One corrected-script submission per language; reconcile source/artifact IDs before any retry."
+    },
+    "replacement_mp4": "not_rendered",
+    "replacement_package_qa": "pending",
+    "human_quality_approval": null,
+    "publication": "blocked",
+    "updated_at": "2026-10-01T00:31:44.575995+00:00"
   }
 }

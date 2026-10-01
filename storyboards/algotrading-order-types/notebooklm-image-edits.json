@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "method": "Built-in Codex image_gen image-to-image editing of actual NotebookLM PDF pages",
+  "source_pdf": "input/algotrading-order-types/revisions/slides_en-v3.pdf",
+  "source_pdf_sha256": "d1e933420bd26f74339ab43d3a83e093117c6ac0022cfcfe0296ffa1ab5b8db5",
+  "edits": [
+    {
+      "id": "en-slide-001-native-short-proof-v1",
+      "target": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_001.png",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+      "style_reference_role": "Style only; source text, diagram, labels and arrow relationships are authoritative",
+      "prompt": "Edit target: the FIRST reference image is the actual NotebookLM slide. Preserve its complete educational content, labels, layer relationships and explanatory structure. The SECOND reference is STYLE ONLY: use its dense Ink Theater engraved black linework, warm ivory paper, cobalt blue and vermilion accents, confident serif lettering and restrained ornamental border. Do not copy its landscape layout. Create an independently composed native PORTRAIT 9:16 slide, ideally 1080x1920, for a YouTube Short. Do not crop, pad, blur, letterbox or shrink the landscape slide into a portrait canvas.\n\nKeep every following English text exactly once, verbatim (line breaks may change):\nThree Layers of Order Execution\nNavigating triggers, price constraints, and execution realities in market microstructure.\n1. The Trigger\n2. The Execution Price\n3. The Completed Fill\nAn order trigger, an execution price, and a completed fill are three fundamentally different mechanical events.\n\nRetain the source diagram: exactly three hollow square layers in perspective stacked vertically. Top layer vermilion, middle layer cobalt, bottom layer ivory with black engraving. Each layer has its own unambiguous arrow to the correct numbered label: 1 top, 2 middle, 3 bottom. Keep the diagram large and readable. Reflow the original title at the top, subtitle beneath it, diagram and labels in the middle, and the complete original explanatory sentence beneath them. Never convert this slide into a poster or replace its diagram with a new metaphor.\n\nFor the 1080x1920 coordinate model, place ALL essential title, subtitle, diagram, arrows, numbered labels and explanatory text inside x=80..850 and y=180..1430. Reserve x=900..1080 and y=1500..1920 as quiet ivory paper, with only subtle texture; no words, icons, labels, footer or semantic content there. The rest of the canvas remains native portrait paper, not inserted bands. Readable typography and dense useful content within the safe zone. No clouds, scenery, people, mascots, new objects, formulas, extra words, invented claims, QR codes, logos, watermark or NotebookLM mark. Output just the final slide image.",
+      "status": "rejected_safe_zone",
+      "output": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-short-v1.png",
+      "output_sha256": "14eca8af72d54ee3fb756ad68ebbbc0cc99d44524a1421aec09542d0ba24d2ac",
+      "dimensions": [
+        940,
+        1672
+      ],
+      "reason": "Content retained, but title begins above y=180, long labels overlap the right control zone, and bottom explanation extends below y=1430 in normalized 1080x1920 coordinates. Targeted native layout correction required."
+    },
+    {
+      "id": "en-slide-001-native-short-proof-v2",
+      "target": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-short-v1.png",
+      "content_reference": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_001.png",
+      "prompt": "Make ONE targeted native portrait layout correction to the first image. Preserve all six original educational text blocks VERBATIM, the three hollow stacked layers, and all three numbered layer-to-label arrow relationships. Use the second image only to double-check the original NotebookLM educational content. Keep the Ink Theater ivory paper, black engraving, cobalt middle layer, vermilion top layer and serif type. No semantic redesign.\n\nThe current portrait layout violates the YouTube controls safe zone. Recompose the educational content itself into a narrower, shorter block; do not add a landscape inset, padding bands or letterboxing. On a 1080x1920 portrait coordinate model, ALL essential text and every semantic diagram feature must fit inside x=90..840, y=200..1400. The title must START below y=200 and wrap into three or four lines as needed. Full subtitle beneath it. Compact the large diagram and put its labels in a readable narrower arrangement; labels may wrap between words, but arrows must still clearly join layer 1 to '1. The Trigger', layer 2 to '2. The Execution Price', layer 3 to '3. The Completed Fill'. The complete bottom explanatory sentence must END ABOVE y=1400. Preserve every word. Leave x=900..1080 and y=1500..1920 quiet ivory paper with subtle texture only; remove heavy ornaments from those control zones if necessary. A restrained border may remain outside the critical content, but no labels or explanation can extend into controls.\n\nExact text to preserve, each once:\nThree Layers of Order Execution\nNavigating triggers, price constraints, and execution realities in market microstructure.\n1. The Trigger\n2. The Execution Price\n3. The Completed Fill\nAn order trigger, an execution price, and a completed fill are three fundamentally different mechanical events.\n\nNative 9:16 portrait. No clouds, scenery, characters, mascots, added claims, new words, logos, QR codes, watermark, cropped text or invented diagrams. Output only the corrected portrait slide.",
+      "status": "rejected_safe_zone",
+      "output": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-short-v2.png",
+      "output_sha256": "34ad7b554eafb05ca5241ff252a3bb5ca40ce59b1e5558edb7474fd526625a63",
+      "dimensions": [
+        941,
+        1672
+      ],
+      "reason": "Content retained; normalized 1080x1920 footer still extends below y=1430 and long labels extend right of x=850. Not accepted for Short rendering."
+    },
+    {
+      "id": "en-slide-001-native-short-proof-v3",
+      "target": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_001.png",
+      "style_reference": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-v2.png",
+      "prompt": "Restyle the FIRST reference image, an actual NotebookLM educational slide, into an independently composed native 9:16 portrait. The SECOND image supplies STYLE ONLY: ivory engraved paper, black ink, cobalt blue and vermilion, serif type and restrained ornament. Preserve the first image's complete content and diagram. Do not use a previous portrait layout.\n\nMANDATORY COMPOSITION: The portrait is 1080x1920. This is a compact editorial teaching block in the upper-left three quarters of the native page, with quiet native ivory paper for platform controls. Educational content must occupy ONLY x=100..820, y=240..1360. Right edge of every WORD and every DIAGRAM LABEL is BEFORE x=820. Bottom of the complete explanatory sentence is BEFORE y=1360. Do not put the explanation at the bottom of the portrait. No headline above y=240. Leave the rightmost 24 percent of the page and bottom 27 percent as quiet paper, no semantic text or pictures, no heavy ornament.\n\nUse moderate headline type, at most about 60 pixels in 1080 coordinates, and arrange title in exactly three lines: 'Three Layers' / 'of Order' / 'Execution'. Full subtitle in three or four smaller readable lines immediately below. Diagram occupies x=110..490, y=700..1080: three perspective hollow square layers stacked vertically, vermilion top, cobalt middle, ivory/black bottom. Labels to the right occupy x=530..815 and wrap to fit; three arrows unambiguously connect each layer to its correct label. Complete explanation in four or five readable lines beneath the diagram at x=110..815, y=1150..1350. Use the native portrait paper as the entire canvas, no landscape inset, cropping, padding, bands or letterboxing.\n\nExact text, each once, nothing omitted or rewritten:\nThree Layers of Order Execution\nNavigating triggers, price constraints, and execution realities in market microstructure.\n1. The Trigger\n2. The Execution Price\n3. The Completed Fill\nAn order trigger, an execution price, and a completed fill are three fundamentally different mechanical events.\n\nRetain all three diagram layer relationships and source explanatory structure. No clouds, landscape, people, mascots, new objects, new semantic links, formulas, extra text, logos, watermark, QR codes, commands or invented claims. Do not decorate empty control zones with content. Output only the portrait slide.",
+      "status": "rejected_minor_safe_zone_overflow",
+      "output": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-short-v3.png",
+      "output_sha256": "6d5d67db11d931f5ffcdedaf72f24b2586682f5f863f35309fd895fcfbb7a1e0",
+      "dimensions": [
+        941,
+        1672
+      ],
+      "reason": "Direct safe-zone overlay confirms diagram left edge crosses x=80; last explanatory line reaches y=1434.26. Exact source content retained; targeted position correction requested."
+    },
+    {
+      "id": "en-slide-001-native-short-proof-v4",
+      "target": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-short-v3.png",
+      "content_reference": "temp/algotrading-order-types/flow-v3/en/source-slides/slide_001.png",
+      "prompt": "Apply ONLY two small layout adjustments to the FIRST reference image. Keep every word, every letter, every color, all three hollow stacked layers and all three correct arrow-to-label relationships exactly as shown. The SECOND reference is the original NotebookLM content for verification only. Retain this independently composed native 9:16 portrait and its existing Ink Theater style.\n\n1. Shift ALL EDUCATIONAL CONTENT 25 pixels to the RIGHT, measured on a 1080x1920 canvas. This includes headline, subtitle, the three-layer diagram, the three arrows and all their labels. Do not shift the decorative outer border. This creates a little more left margin: the leftmost meaningful feature must be at x>=100; the rightmost label must remain at x<=845. Keep the title and subtitle at their present vertical positions.\n2. Move ONLY the bottom explanatory paragraph and its rectangular outline 30 pixels UP, measured on the same 1080x1920 canvas. Its entire last line must end at y<=1410. It must still sit beneath the diagram with a clear gap. Keep its COMPLETE exact sentence: 'An order trigger, an execution price, and a completed fill are three fundamentally different mechanical events.' Do not change its words or omit any part.\n\nThese are small positioning corrections, not a redesign. All essential content must fit x=80..850,y=180..1430. Keep right x=900..1080 and bottom y=1500..1920 quiet paper. Do not add text, new objects, claims, decoration in the control zones, watermark, logos, cropping, landscape inset, padding bands or letterboxing. Output the corrected native portrait only.",
+      "status": "passed",
+      "output": "output/algotrading-order-types/style-proof/notebooklm-en-slide01-short-v4.png",
+      "output_sha256": "6f1cd36c96b199468db82605b85ef1b434648b94d2a92572a58537c470bd64be",
+      "dimensions": [
+        941,
+        1672
+      ],
+      "qa": "temp/algotrading-order-types/flow-v3/en/short-proof-v4-qa.json",
+      "qa_sha256": "b1a7f0953b77423919ede11054a665fd5485bf589679ffc24123f5f858218501",
+      "review_scope": "One native Short source-page proof only; not full frame set or video acceptance."
+    }
+  ]
+}
