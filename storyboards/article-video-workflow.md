@@ -1,10 +1,11 @@
 # Continuous article video production
 
 User authorization: 2026-09-30. Keep producing videos for Marketmaker articles
-without videos through Google NotebookLM. The active Goal belongs to Codex chat
-`01a0f224-5110-7581-ae55-6d7346a5bada`. Heartbeat automation `marketmaker`
-checks this same chat every 30 minutes; it is a continuation check, not a second
-browser worker.
+without videos through Google NotebookLM. The production Goal belongs to Codex
+chat `01a0f224-5110-7581-ae55-6d7346a5bada`. The user removed the continuation
+loop on 2026-10-01. Confirm current scheduling before relying on the formerly
+documented heartbeat; any continuation check must not start a second browser
+worker.
 
 The existing NotebookLM production flow is described in
 [README.md](../README.md) and implemented by
@@ -24,6 +25,10 @@ source provenance, actual progress, QA, approvals, and publication records.
 1. Finish `algotrading-order-types` EN/RU first. The user rejected its four
    Blueprint renders on 2026-10-01; they do not complete this task. Original
    flow discovery is complete, and production must reuse the existing stages.
+   The subsequent replacement Shorts also failed final visual audit; see
+   [the quality report](algotrading-order-types/QUALITY-AUDIT-2026-10-01.md).
+   Their geometry/media pass does not complete the current package. Repair
+   rejected stages before advancing to another article.
 2. Complete the user-requested pipeline audit and justified efficiency
    improvements. Delegate bounded audit scopes to `gpt-6.1-sol` with `ultra`
    reasoning; keep the parent chat on its configured model and effort. Audit
@@ -39,6 +44,9 @@ source provenance, actual progress, QA, approvals, and publication records.
 For this creation Goal, a package is delivered when its requested EN/RU desktop
 and native vertical videos have passed QA, their manifests are complete, and
 the reusable documents/prompts/code have been committed and pushed. Preserve
+separate semantic, safe-zone, media and intended-viewing-size visual gates.
+Readable composition and narration pacing must pass; a user quality rejection
+supersedes an earlier general pass. Preserve
 the quality-review gate before YouTube publication. Place a delivered package
 awaiting review in `ready_for_quality_review`, then continue to the next
 article. Publication and embedding remain separate approval-dependent stages.

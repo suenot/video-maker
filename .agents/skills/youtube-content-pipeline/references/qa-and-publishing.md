@@ -18,6 +18,11 @@ names, and the last sentence. Compare the SRT to the approved written copy.
 When pronunciation guidance is required, keep the correct spelling in
 `narration` and put phonetic wording only in `spoken_narration`.
 
+Compare the chosen script's coverage with the article brief, not only with
+itself. Review the opening as a standalone sentence after any audio edit and
+listen to the edit joins. Full ASR and complete audio duration do not establish
+natural delivery or a good opening.
+
 If a claim can change, verify it against a current primary source and record the
 date. Do not convert approximate, conditional, self-hosted, or additional-cost
 claims into absolutes.
@@ -37,6 +42,30 @@ Check for:
 - tiny qualifiers, status notices, cost caveats, and contact URLs;
 - extra image-model text;
 - inconsistent character, palette, or visual metaphor.
+
+### Visual acceptance
+
+Keep semantic/OCR, safe-zone, media-integrity and visual-quality results
+separate. A frame can pass the first three and still fail visual acceptance.
+
+Inspect extracted final MP4 frames at their intended viewing size: Shorts at
+360x640 without zoom, desktops at an ordinary player size as well as full
+resolution. Require comfortably readable explanatory copy, clear hierarchy,
+balanced use of the available canvas and a consistent selected style. Inspect
+the full sequence against narration; an unchanged dense poster for a long
+explanation needs a pacing review. Reserving controls space does not justify
+shrinking the whole source diagram into a narrow panel.
+
+Before freezing exact copy, identify incidental source labels such as Panel
+1/2/3. Reject or revise unsuitable source copy through the source-review stage;
+do not silently delete a factual label from a frozen contract or blindly
+promote every source placeholder to production copy.
+
+Record the frame evidence, preview size, specific findings and actual result.
+The lead and independent reviewer must challenge the composition contract as
+well as inspect compliance with it. A user quality rejection supersedes prior
+general visual-pass claims; keep successful technical checks as separate
+evidence and mark revision required before publication or queue advancement.
 
 Generate Shorts safe-zone overlays:
 

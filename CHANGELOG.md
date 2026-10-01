@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Supersede the order-types visual-pass claims after final-frame quality audit; require separate phone-size composition/legibility, narration pacing and source-placeholder review before queue advancement.
 - Deliver four corrected order-types MP4s through the existing NotebookLM PDF/audio flow; record selected Deep Dive and standalone IOC/FOK sources, source-fragment audio edits, current artifact hashes, complete narration timing, actual-frame safe-zone checks and pending human quality review.
 - Record corrected eleven-page NotebookLM decks, actual-page desktop image edits, native vertical proof, and rejected narration attempts without promoting the previous rejected videos.
 - Resume the bilingual order-types package through Gaia/NotebookLM with primary-source factual guardrails and recorded source provenance.

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "slug": "algotrading-order-types",
-  "updated_at": "2026-10-01T07:27:03.331395+00:00",
-  "status": "passed_local_technical_fact_scene_and_safe_zone_QA_human_review_pending",
+  "updated_at": "2026-10-01T14:20:12.381930+00:00",
+  "status": "technical_media_checks_retained_visual_acceptance_failed",
   "artifacts": {
     "en_desktop": {
       "timeline": "passed_zero_start_contiguous_all_selected_pages_exact_WAV_end",
@@ -54,7 +54,17 @@
         "endcard_duration_seconds": 10,
         "final_duration_seconds": 252.8,
         "audio_video_tail_difference_seconds": 0.0
-      }
+      },
+      "visual_quality": {
+        "status": "pending_revision_review",
+        "findings": [
+          "Dense qualifiers/checklist need viewing-size review",
+          "Edited opening begins because our mission today",
+          "Article coverage differs from complete article scope"
+        ],
+        "evidence": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/contact-sheet.png"
+      },
+      "previous_scene_review_scope": "Complete text/relationships and safe-zone containment only; previous general visual pass is superseded."
     },
     "ru_desktop": {
       "timeline": "passed_zero_start_contiguous_all_selected_pages_exact_WAV_end",
@@ -106,7 +116,18 @@
         "endcard_duration_seconds": 10,
         "final_duration_seconds": 268.066667,
         "audio_video_tail_difference_seconds": 0.0
-      }
+      },
+      "visual_quality": {
+        "status": "pending_revision_review",
+        "findings": [
+          "Incidental Panel labels on pages2/3/4/5",
+          "Dense explanations need viewing-size review",
+          "Intro bots-fail-with-perfect-prediction claim absent from selected script",
+          "Complete article coverage not established"
+        ],
+        "evidence": "temp/algotrading-order-types/flow-v4/ru/audio-production-v2/final-desktop-contact.jpg"
+      },
+      "previous_scene_review_scope": "Complete text/relationships and safe-zone containment only; previous general visual pass is superseded."
     },
     "en_short": {
       "timeline": "passed_zero_start_contiguous_all_selected_pages_exact_WAV_end",
@@ -157,7 +178,18 @@
         "endcard_duration_seconds": 10,
         "final_duration_seconds": 97.133333,
         "audio_video_tail_difference_seconds": 0.0
-      }
+      },
+      "visual_quality": {
+        "status": "failed",
+        "findings": [
+          "Dense small copy at360x640",
+          "Large unused right/bottom area",
+          "One image for87.121271s"
+        ],
+        "evidence": "temp/algotrading-order-types/quality-audit-2026-10-01/en_short-actual-5s.png",
+        "phone_preview": "temp/algotrading-order-types/quality-audit-2026-10-01/shorts-phone-preview.png"
+      },
+      "previous_scene_review_scope": "Complete text/relationships and safe-zone containment only; previous general visual pass is superseded."
     },
     "ru_short": {
       "timeline": "passed_zero_start_contiguous_all_selected_pages_exact_WAV_end",
@@ -208,7 +240,19 @@
         "endcard_duration_seconds": 10,
         "final_duration_seconds": 122.533333,
         "audio_video_tail_difference_seconds": 0.0
-      }
+      },
+      "visual_quality": {
+        "status": "failed",
+        "findings": [
+          "Narrow left poster uses approximately35.7% canvas bounding area",
+          "Explanatory glyphs about5..10px at360-wide preview",
+          "Incidental Panel1/2/3 source labels retained",
+          "One image for112.523917s"
+        ],
+        "evidence": "temp/algotrading-order-types/quality-audit-2026-10-01/ru_short-actual-5s.png",
+        "phone_preview": "temp/algotrading-order-types/quality-audit-2026-10-01/shorts-phone-preview.png"
+      },
+      "previous_scene_review_scope": "Complete text/relationships and safe-zone containment only; previous general visual pass is superseded."
     }
   },
   "independent_review": {
@@ -222,5 +266,7 @@
     "shorts": "Actual final body and card frames retain all critical glyphs and relationships inside x80..850/y180..1430; controls at x900+ and y1500+ remain clear."
   },
   "human_listening": null,
-  "human_quality_approval": null
+  "human_quality_approval": null,
+  "previous_status": "passed_local_technical_fact_scene_and_safe_zone_QA_human_review_pending",
+  "quality_audit": "storyboards/algotrading-order-types/quality-audit.flow.json"
 }

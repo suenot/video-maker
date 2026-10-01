@@ -1,0 +1,54 @@
+{
+  "audited_at": "2026-10-01T14:20:12.381930+00:00",
+  "status": "quality_audit_failed_revision_required",
+  "report": "storyboards/algotrading-order-types/QUALITY-AUDIT-2026-10-01.md",
+  "user_rejection": "Attached RU Short screenshot and request for audit on2026-10-01",
+  "source_screenshot": "temp/algotrading-order-types/quality-audit-2026-10-01/user-rejected-ru-short.png",
+  "phone_preview": "temp/algotrading-order-types/quality-audit-2026-10-01/shorts-phone-preview.png",
+  "phone_measurements": "temp/algotrading-order-types/quality-audit-2026-10-01/phone-text-measurements.json",
+  "artifacts": {
+    "en_short": {
+      "status": "failed",
+      "findings": [
+        "Dense small copy at360x640",
+        "Large unused right/bottom area",
+        "One image for87.121271s"
+      ],
+      "evidence": "temp/algotrading-order-types/quality-audit-2026-10-01/en_short-actual-5s.png",
+      "phone_preview": "temp/algotrading-order-types/quality-audit-2026-10-01/shorts-phone-preview.png"
+    },
+    "ru_short": {
+      "status": "failed",
+      "findings": [
+        "Narrow left poster uses approximately35.7% canvas bounding area",
+        "Explanatory glyphs about5..10px at360-wide preview",
+        "Incidental Panel1/2/3 source labels retained",
+        "One image for112.523917s"
+      ],
+      "evidence": "temp/algotrading-order-types/quality-audit-2026-10-01/ru_short-actual-5s.png",
+      "phone_preview": "temp/algotrading-order-types/quality-audit-2026-10-01/shorts-phone-preview.png"
+    },
+    "en_desktop": {
+      "status": "pending_revision_review",
+      "findings": [
+        "Dense qualifiers/checklist need viewing-size review",
+        "Edited opening begins because our mission today",
+        "Article coverage differs from complete article scope"
+      ],
+      "evidence": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/contact-sheet.png"
+    },
+    "ru_desktop": {
+      "status": "pending_revision_review",
+      "findings": [
+        "Incidental Panel labels on pages2/3/4/5",
+        "Dense explanations need viewing-size review",
+        "Intro bots-fail-with-perfect-prediction claim absent from selected script",
+        "Complete article coverage not established"
+      ],
+      "evidence": "temp/algotrading-order-types/flow-v4/ru/audio-production-v2/final-desktop-contact.jpg"
+    }
+  },
+  "human_listening": null,
+  "human_quality_approval": null,
+  "production_correction": "pending_not_performed_during_this_audit"
+}

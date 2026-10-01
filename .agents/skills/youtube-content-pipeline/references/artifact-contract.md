@@ -125,6 +125,14 @@ Use status values that reflect real progress, for example `sources_frozen`,
 `style_approved`, `frames_approved`, `render_approved`, and `published`. Do not
 mark an approval or published state based only on a command's exit code.
 
+Track semantic/OCR, safe-zone, technical-media and visual-quality gates
+separately. Use `pending`, `passed` or `failed` for each gate, with evidence and
+specific findings. `ready_for_quality_review` requires a passed visual gate
+at the intended viewing size, including narration pacing; it still does not
+grant human or publication approval. If a user rejects quality, record
+`quality_audit_failed_revision_required`, retain technical evidence, and resume
+the affected stage. Never advance the article queue on a superseded visual pass.
+
 ## Scene and aspect invariants
 
 - `cover.png` is a cover/thumbnail by default and does not consume narration.

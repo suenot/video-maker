@@ -6,7 +6,7 @@
     "ru"
   ],
   "scope": "Gaia/NotebookLM audio and slide decks, then video-maker desktop and independent Shorts for both channels",
-  "status": "replacement_ready_for_quality_review",
+  "status": "quality_audit_failed_revision_required",
   "sources": {
     "article_en": {
       "path": "../marketmaker-cc-landing/src/content/blog/algotrading-order-types.en.md",
@@ -158,7 +158,7 @@
           "audio_sample_rate_hz": 48000,
           "audio_channels": 2
         },
-        "quality_state": "human_review_pending"
+        "quality_state": "revision_review_required"
       },
       "short": {
         "video": {
@@ -203,7 +203,7 @@
           "audio_sample_rate_hz": 48000,
           "audio_channels": 2
         },
-        "quality_state": "human_review_pending"
+        "quality_state": "failed_visual_quality"
       }
     },
     "ru": {
@@ -260,7 +260,7 @@
           "audio_sample_rate_hz": 48000,
           "audio_channels": 2
         },
-        "quality_state": "human_review_pending"
+        "quality_state": "revision_review_required"
       },
       "short": {
         "video": {
@@ -305,7 +305,7 @@
           "audio_sample_rate_hz": 48000,
           "audio_channels": 2
         },
-        "quality_state": "human_review_pending"
+        "quality_state": "failed_visual_quality"
       }
     }
   },
@@ -328,16 +328,61 @@
     "discarded_previous_build": "b613f8b reverted by 5d0caa8; selfmade renders are not accepted NotebookLM artifacts"
   },
   "qa": {
-    "status": "passed_local_technical_fact_scene_and_safe_zone_QA_human_review_pending",
+    "status": "technical_media_checks_retained_visual_acceptance_failed",
     "validation_manifest": "storyboards/algotrading-order-types/render-validation.flow.json",
     "inventory": "storyboards/algotrading-order-types/artifact-inventory.flow.json",
     "human_listening": null,
-    "human_quality_approval": null
+    "human_quality_approval": null,
+    "previous_status": "passed_local_technical_fact_scene_and_safe_zone_QA_human_review_pending",
+    "quality_audit": "storyboards/algotrading-order-types/quality-audit.flow.json",
+    "visual_quality": {
+      "en_short": {
+        "status": "failed",
+        "findings": [
+          "Dense small copy at360x640",
+          "Large unused right/bottom area",
+          "One image for87.121271s"
+        ],
+        "evidence": "temp/algotrading-order-types/quality-audit-2026-10-01/en_short-actual-5s.png",
+        "phone_preview": "temp/algotrading-order-types/quality-audit-2026-10-01/shorts-phone-preview.png"
+      },
+      "ru_short": {
+        "status": "failed",
+        "findings": [
+          "Narrow left poster uses approximately35.7% canvas bounding area",
+          "Explanatory glyphs about5..10px at360-wide preview",
+          "Incidental Panel1/2/3 source labels retained",
+          "One image for112.523917s"
+        ],
+        "evidence": "temp/algotrading-order-types/quality-audit-2026-10-01/ru_short-actual-5s.png",
+        "phone_preview": "temp/algotrading-order-types/quality-audit-2026-10-01/shorts-phone-preview.png"
+      },
+      "en_desktop": {
+        "status": "pending_revision_review",
+        "findings": [
+          "Dense qualifiers/checklist need viewing-size review",
+          "Edited opening begins because our mission today",
+          "Article coverage differs from complete article scope"
+        ],
+        "evidence": "temp/algotrading-order-types/flow-v3/en/audio-deep-dive/contact-sheet.png"
+      },
+      "ru_desktop": {
+        "status": "pending_revision_review",
+        "findings": [
+          "Incidental Panel labels on pages2/3/4/5",
+          "Dense explanations need viewing-size review",
+          "Intro bots-fail-with-perfect-prediction claim absent from selected script",
+          "Complete article coverage not established"
+        ],
+        "evidence": "temp/algotrading-order-types/flow-v4/ru/audio-production-v2/final-desktop-contact.jpg"
+      }
+    }
   },
   "next_steps": [
-    "Human listening and quality review of all four current MP4s.",
-    "Prepare new thumbnails, verify target channels, then perform quality-approved Private uploads and Studio checks; no current YouTube URLs exist.",
-    "Resume the existing blocked native goal for automatic continuation; pipeline audit and next articles remain in the recorded task order."
+    "Revise native portrait composition and pacing of both IOC/FOK Shorts while retaining original NotebookLM diagram meaning.",
+    "Review incidental Panel labels, desktop viewing-size legibility, narrative opening and actual article coverage; listen to edited joins.",
+    "Rerender only affected stages, pass separate visual/semantic/safe-zone/media gates, commit/push, then return to human quality review.",
+    "Complete deferred renderer/recovery fixes and next article only after the revised current-package delivery."
   ],
   "style": {
     "style_id": "ink-theater-v2",
@@ -346,7 +391,7 @@
     "source_contract_state": "Listed external Ink Theater contract is missing; historical selected reference reused.",
     "human_quality_approval": null
   },
-  "updated_at": "2026-10-01T07:27:03.331395+00:00",
+  "updated_at": "2026-10-01T14:20:12.381930+00:00",
   "flow_recovery": {
     "status": "existing_flow_located_and_studied",
     "description": "README.md:11-34,94-126",
@@ -369,7 +414,7 @@
     "new_pipeline_required": false
   },
   "flow_progress": {
-    "stage": "four_current_MP4s_delivered_for_human_quality_review",
+    "stage": "quality_audit_completed_revision_required",
     "uses_existing_runner_stages": true,
     "pipeline_rewritten": false,
     "rejected_previous_artifacts_preserved": true,
@@ -411,8 +456,8 @@
       "en_edit_manifest": "storyboards/algotrading-order-types/notebooklm-image-edits.en-short.json",
       "ru_edit_manifest": "storyboards/algotrading-order-types/notebooklm-image-edits.ru-short.json",
       "input_PNG_geometry": "Both native portrait inputs require exact placement during video assembly; no desktop conversion.",
-      "en_final_MP4_geometry": "passed_root_and_independent",
-      "ru_final_MP4_geometry": "passed_root_and_independent",
+      "en_final_MP4_geometry": "passed_geometry_only_visual_quality_failed",
+      "ru_final_MP4_geometry": "passed_geometry_only_visual_quality_failed",
       "other_source_pages": "not_in_current_short_scope",
       "page1_proofs": "Retained as reviewed reusable portrait style proofs; not selected IOC/FOK scenes."
     },
@@ -471,40 +516,41 @@
     },
     "replacement_mp4": {
       "en_desktop": {
-        "status": "rendered_checked_human_review_pending",
+        "status": "revision_review_required",
         "video": "output/algotrading-order-types/flow-v3/en/algotrading-order-types-en-desktop.mp4",
         "sha256": "7f4fa7a0df1dab19e4e67b00bad332b5a4f7f47dce8044d899cb43334fd9c9b0",
         "duration_seconds": 252.8
       },
       "ru_desktop": {
-        "status": "rendered_checked_human_review_pending",
+        "status": "revision_review_required",
         "video": "output/algotrading-order-types/flow-v4/ru/algotrading-order-types-ru-desktop.mp4",
         "sha256": "b46adc7b72f6d5983818b28990e9d73cd2f0675201c73578e2b3c84ff74b3e39",
         "duration_seconds": 268.066667
       },
       "en_short": {
-        "status": "rendered_checked_human_review_pending",
+        "status": "failed_visual_quality",
         "video": "output/algotrading-order-types/flow-v3/en/ioc-fok-short/algotrading-order-types-en-short.mp4",
         "sha256": "6fb02e8af9e1f83df20008de7432dc5620e3b20a01522344d5df41f6b74f7c53",
         "duration_seconds": 97.133333
       },
       "ru_short": {
-        "status": "rendered_checked_human_review_pending",
+        "status": "failed_visual_quality",
         "video": "output/algotrading-order-types/flow-v4/ru/ioc-fok-short/algotrading-order-types-ru-short.mp4",
         "sha256": "d5f50cd3129b9ef50539e8241200190fcca806d9c303b64d7aa923c17505cfde",
         "duration_seconds": 122.533333
       }
     },
-    "replacement_package_qa": "storyboards/algotrading-order-types/render-validation.flow.json",
+    "replacement_package_qa": "Technical evidence retained; current visual acceptance superseded by quality-audit.flow.json",
     "human_quality_approval": null,
     "publication": "blocked",
-    "updated_at": "2026-10-01T07:27:03.331395+00:00",
+    "updated_at": "2026-10-01T14:20:12.381930+00:00",
     "render_workarounds": {
       "en_desktop": "Normalize only the 1672x941 original page 1 to 1920x1080 in temporary render input; retain original image edits and use render_frames directory to prevent lost first scene.",
       "audio_tail": "Preserve complete production WAV; pad video/audio to the next 30-fps body boundary before appending the silent 10-second contacts card; final CFR 30.",
       "en_short": "pad=1100:1920:20:0:color=0xF4E8D2,crop=1080:1920:0:0; independent native portrait remains native portrait; no desktop conversion",
       "ru_short": "scale=908:1614,pad=1080:1920:90:70:color=0xF4E8D2; independent native portrait remains native portrait; no desktop conversion"
-    }
+    },
+    "quality_audit": "storyboards/algotrading-order-types/quality-audit.flow.json"
   },
   "rejected_blueprint_package": {
     "sources": {

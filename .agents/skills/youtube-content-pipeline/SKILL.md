@@ -96,6 +96,9 @@ For every frame, define:
 
 Use one contract for meaning and separate layout prompts for 16:9 and 9:16.
 Never ask an image model to rediscover technical meaning from a screenshot.
+Review incidental source labels and placeholders before freezing exact copy.
+If they are unsuitable, revise the source contract instead of requiring them
+merely because they appeared in a NotebookLM page.
 
 Use this role mapping by default:
 
@@ -128,6 +131,11 @@ Shorts end card:
 Keep critical Shorts content inside `x=80..850, y=180..1430`. Leave
 `x=900..1080` and `y=1500..1920` visually quiet for YouTube controls and
 captions.
+
+Use the available safe width with a readable native composition. Do not reuse
+a sparse proof's narrow upper-left panel for a dense page or shrink a whole
+poster until it fits. Verify the extracted final Short at 360x640 without zoom;
+semantic and safe-zone checks do not establish visual quality.
 
 ## 7. Build an exact timeline
 
@@ -189,6 +197,7 @@ Follow [qa-and-publishing.md](references/qa-and-publishing.md). Required gates:
 - OCR comparison against exact visible text;
 - watermark, invented-copy, and prohibited-claim scan;
 - Shorts safe-zone overlay review;
+- separate viewing-size legibility/composition and narration pacing review;
 - timeline count/order/coverage checks;
 - Whisper spot checks of technical scenes and the final sentence;
 - full decode plus `ffprobe` validation of resolution, codecs, duration, and A/V tail.

@@ -2,8 +2,15 @@
 
 The replacement package reuses the existing NotebookLM audio/PDF and video-maker
 flow recovered from the August sessions. The four previous Blueprint videos
-remain rejected. All four replacement MP4s pass local technical, factual and
-frame checks. Human listening and quality approval remain pending.
+remain rejected. The 2026-10-01 final-frame audit supersedes the replacement
+package's general visual-pass claims: both Shorts fail composition, phone-size
+legibility and pacing. Desktop source labels and editorial checks need review.
+Technical media checks remain valid. The package requires revision.
+
+See [the quality audit](QUALITY-AUDIT-2026-10-01.md) and
+[current quality state](quality-audit.flow.json). Human listening and quality
+approval remain pending; these files are current audit evidence, not accepted
+final production.
 
 ## Current replacement delivery
 
@@ -41,10 +48,10 @@ Each duration includes a silent ten-second contacts card. Desktop output is
   [RU portrait edits](notebooklm-image-edits.ru-short.json). All other deck pages
   are outside the current Short scope; page 1 portrait proofs remain reusable
   style evidence.
-- Final MP4 frames retain the complete diagrams, numbers and footnotes inside
-  the hard Short safe zone, including the contacts card. Root and independent
-  review checked the actual rendered frames. Native input PNG placement
-  failures and the exact final placement transforms remain recorded.
+- Final MP4 geometry checks found diagrams, numbers and footnotes inside the
+  hard Short safe zone. That narrow check failed to establish visual quality:
+  the current audit rejects the small left poster and static pacing. Native
+  input PNG placement failures and exact placement transforms remain recorded.
 - Earlier Brief attempts are preserved as rejected narration. They are not
   current production selections.
 
@@ -52,10 +59,11 @@ Each duration includes a silent ten-second contacts card. Desktop output is
 paths, hashes, source pages, original and render frames, media properties and
 metadata. [render-validation.flow.json](render-validation.flow.json) records
 zero-start contiguous timelines, complete WAV coverage, subtitle bounds, all
-desktop scene transitions, Short safe zones and final audio tails. All four
+desktop scene transitions, Short safe zones and final audio tails, with the
+new visual failure recorded separately. All four
 files fully decode, begin at video PTS zero and retain the full production WAV
-before their contacts cards. Human listening and quality approval are separate
-pending checks; local checks do not grant publication approval.
+before their contacts cards. Technical success does not pass composition or
+legibility. Human listening and quality approval remain pending.
 
 The existing renderer needed temporary input normalization for EN desktop
 page 1, whose original dimensions differ from the remaining pages. Use the
