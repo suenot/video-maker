@@ -709,7 +709,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "ready",
           "baseline_ids": [],
           "prompt_sha256": "ea5668b7f58ad70e1926aa57e62ac9d980395213b829777d95d27cabdf90e99e",
           "requested_at": "2026-10-02T00:26:11.428521+00:00",
@@ -719,8 +719,8 @@
           "source_id": "3364fa13-5b39-4682-a7a5-b9edbb7ab163",
           "submission_mode": "now",
           "artifact_id": "a6d4369e-3386-435c-96c0-ef2e0751c578",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T00:26:17.557819+00:00"
+          "card_text": "tablet\nUnread\nThe Agentic Investment Revolution\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-02T04:53:03.320644+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -765,7 +765,18 @@
       "source_display_name": "MM article agentic-ai-investment-revolution EN 09…",
       "selected_source_ids": [
         "3364fa13-5b39-4682-a7a5-b9edbb7ab163"
-      ]
+      ],
+      "last_error": {
+        "type": "TimeoutError",
+        "message": "Bound slide PDF download timed out after 180 seconds while materializing the browser download.",
+        "at": "2026-10-02T05:13:00.477851+00:00",
+        "stage": "download_original",
+        "artifact_id": "a6d4369e-3386-435c-96c0-ef2e0751c578",
+        "evidence_path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T045145Z.log",
+        "evidence_sha256": "e034a66b2c5d6aa7aa55ad35bc8daf0862d702bfe6f97c4dca3d0a7cee919d07",
+        "retry_not_before": "2026-10-02T05:21:45.769000+00:00",
+        "next_safe_step": "Retry downloading this exact ready PDF on the next heartbeat; preserve the scheduled audio and existing RU notebook; do not repeat generation."
+      }
     },
     "agentic-ai-investment-revolution:ru": {
       "slug": "agentic-ai-investment-revolution",
@@ -791,7 +802,7 @@
       "state": "quota_wait"
     }
   },
-  "checked_at": "2026-10-02T00:26:45.475588+00:00",
+  "checked_at": "2026-10-02T05:13:00.477851+00:00",
   "browser_geometry_requested": {
     "width": 1983,
     "height": 1290,

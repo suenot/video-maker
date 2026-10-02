@@ -579,7 +579,7 @@ class Runner:
                             await self.download(page, brief, artifact, kind)
                     job.pop("last_error", None)
                 except Exception as error:
-                    job["last_error"] = {"type": type(error).__name__, "message": str(error).splitlines()[0][:240], "at": now()}
+                    job["last_error"] = {"type": type(error).__name__, "message": (str(error).splitlines() or [type(error).__name__])[0][:240], "at": now()}
                     self.save()
                     print(json.dumps({"job": key, "error": job["last_error"]}), flush=True)
                     try:
