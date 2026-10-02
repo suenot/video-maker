@@ -385,6 +385,9 @@ class Runner:
         if job["input_hashes"] != self.input_hashes(brief):
             raise RuntimeError("Frozen generation inputs changed before submission")
         baseline = await self.cards(page)
+        recovery = artifact.get("pre_click_recovery")
+        if recovery and {c["id"] for c in baseline} != set(recovery["baseline_ids"]):
+            raise RuntimeError("Artifact cards changed after the recorded pre-click failure; reconcile before submission")
         label = "Customize Audio Overview" if kind == "audio" else "Customize Slide Deck"
         tile = "Audio Overview" if kind == "audio" else "Slide Deck"
         button = page.locator(f"button[aria-label='{label}']")
@@ -437,7 +440,9 @@ class Runner:
         artifact.update(state="submitting", baseline_ids=[c["id"] for c in baseline], prompt_sha256=sha(prompt_path), requested_at=now(), language_selection=values, source_id=job["source_id"])
         artifact["submission_mode"] = mode
         self.save()
-        await generate.click()
+        # Dispatch once after guards; native animation must not delay the action
+        # or trigger a second click after an uncertain dispatch.
+        await generate.evaluate("e=>{if(!e.isConnected || !e.getClientRects().length || e.disabled || e.getAttribute('aria-disabled')==='true')throw new Error('Generation control unavailable before dispatch');e.click()}")
         artifact["state"] = "submission_unknown"
         self.save()
         await page.wait_for_timeout(3500)

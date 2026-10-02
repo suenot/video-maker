@@ -75,6 +75,11 @@ prepared request once. Validate the submission control before writing a
 submission intent. After any Generate click, poll for the new artifact ID
 without repeating the click; a direct scheduled request must not be clicked
 a second time during reconciliation.
+Dispatch the verified Generate control once without waiting for native button
+animation. A pre-click failure may be resumed only with retained evidence that
+no action was dispatched and no artifact appeared; require the current card
+IDs to match that saved baseline before submitting. A changed baseline or an
+uncertain dispatch still requires identity reconciliation.
 If NotebookLM reports that **all features** are unavailable, record the exact
 displayed reset and browser time zone as `quota.not_before` in state. Until
 that time, every pass checks downloaded originals locally and returns before

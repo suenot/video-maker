@@ -1036,7 +1036,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "3e3cdd5002919ec3573a5465208ba7ea9d293549f72f204bca2d552e5f1d6c59",
           "requested_at": "2026-10-02T05:41:11.632631+00:00",
@@ -1046,11 +1046,18 @@
           "source_id": "734e90cc-9c3a-42c0-a0fa-7222fe63200f",
           "submission_mode": "now",
           "artifact_id": "a86de191-9e6a-4cd6-9996-da68d60c25ba",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T05:41:17.544619+00:00"
+          "card_text": "tablet\nUnread\nAI4Finance Ecosystem Architecture\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-02T09:57:05.749349+00:00",
+          "pages": 12,
+          "path": "input/notebooklm-sources/ai4finance-foundation-guide/en/slides.pdf",
+          "sha256": "da7aeba32759142c2690876347cabd13b362d4d3a3315d77af328d34b4200b1e",
+          "bytes": 11150275,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T09:57:16.508121+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "a86de191-9e6a-4cd6-9996-da68d60c25ba"
           ],
@@ -1062,8 +1069,15 @@
           "source_id": "734e90cc-9c3a-42c0-a0fa-7222fe63200f",
           "submission_mode": "now",
           "artifact_id": "45b4259e-20e3-4f34-9f71-285c4c5c853f",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T05:41:30.296991+00:00"
+          "card_text": "audio_spark\nUnread\nBuilding an Open Source AI Hedge Fund\n22:20 · Deep Dive · 1 source · 4h ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T09:57:17.536767+00:00",
+          "duration_seconds": 1340.371882,
+          "path": "input/notebooklm-sources/ai4finance-foundation-guide/en/audio.m4a",
+          "sha256": "053ea3e745f3517fd00c240d48794ec2eb0f914f5497aed145e9d50917a2fbad",
+          "bytes": 43139231,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T09:57:51.293734+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -1119,7 +1133,7 @@
           "submission_mode": "later",
           "artifact_id": "f3fe2594-ca8b-4047-be24-3f0a8bf44c73",
           "card_text": "tablet\nAI4Finance Foundation: FinGPT, FinRL, and FinRobot Ecosystem\nScheduled for after 2pm\nmore_vert",
-          "observed_at": "2026-10-02T05:42:03.858062+00:00"
+          "observed_at": "2026-10-02T09:57:57.979938+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -1140,7 +1154,7 @@
           "submission_mode": "later",
           "artifact_id": "64f253bb-d2bb-41d9-a9e6-3084b2b668a9",
           "card_text": "audio_spark\nAI4Finance Foundation: FinGPT, FinRL, and FinRobot Ecosystem\nScheduled for after 2pm\nmore_vert",
-          "observed_at": "2026-10-02T05:42:21.740334+00:00"
+          "observed_at": "2026-10-02T09:57:59.001152+00:00"
         }
       },
       "notebook_intent": {
@@ -1167,21 +1181,186 @@
       "selected_source_ids": [
         "63e2759c-dd95-4ff6-839a-8ecbaa02093b"
       ]
+    },
+    "algo-investor-skills:en": {
+      "slug": "algo-investor-skills",
+      "language": "en",
+      "article_sha256": "c5f7b84a0090322c8beda765a133a8873bd78474c9fabd31c9c5de3d624a03f4",
+      "input_hashes": {
+        "article": "c5f7b84a0090322c8beda765a133a8873bd78474c9fabd31c9c5de3d624a03f4",
+        "source_text": "f23a0d037efde8d5654fcc8bece878d711cb42a88c9171a5d1ef90d5d6560e32",
+        "slides_prompt": "76fbef666d3e76462a175927af314ecc7a5cd44bb5569d5079e4a9a6696e87f0",
+        "audio_prompt": "f1313b6951ab11114985de1bc23cd61eee1f27dfc36c9bbe21ac2e9648bc48c3"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "76fbef666d3e76462a175927af314ecc7a5cd44bb5569d5079e4a9a6696e87f0",
+          "requested_at": "2026-10-02T09:58:23.061532+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "a2b4e108-7b80-4903-bc15-d886de3bf908",
+          "submission_mode": "now",
+          "artifact_id": "58a1ddfe-da00-4e14-b0e9-5a57567dfcd4",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T09:58:28.950757+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "58a1ddfe-da00-4e14-b0e9-5a57567dfcd4"
+          ],
+          "prompt_sha256": "f1313b6951ab11114985de1bc23cd61eee1f27dfc36c9bbe21ac2e9648bc48c3",
+          "requested_at": "2026-10-02T09:58:35.670012+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "a2b4e108-7b80-4903-bc15-d886de3bf908",
+          "submission_mode": "now",
+          "artifact_id": "a232e02f-8132-407a-b484-5adb6933b2b4",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-02T09:58:41.451197+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-02T09:58:06.042709+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/algo-investor-skills-en-notebook-baseline.json",
+        "baseline_sha256": "2e91b6e04bc82f492d900fefc5f3b5b945f042c7d1ec10fac70adcf45f502004",
+        "baseline_count": 271,
+        "resolved_at": "2026-10-02T09:58:08.414511+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/4e8fd907-5f80-4e02-8243-d1500a27b851",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T09:58:12.416509+00:00",
+        "sha256": "f23a0d037efde8d5654fcc8bece878d711cb42a88c9171a5d1ef90d5d6560e32",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "a2b4e108-7b80-4903-bc15-d886de3bf908",
+      "source_title": "MM article algo-investor-skills EN c5f7b84a0090",
+      "source_sha256": "f23a0d037efde8d5654fcc8bece878d711cb42a88c9171a5d1ef90d5d6560e32",
+      "state": "source_ready",
+      "source_display_name": "MM article algo-investor-skills EN c5f7b84a0090",
+      "selected_source_ids": [
+        "a2b4e108-7b80-4903-bc15-d886de3bf908"
+      ]
+    },
+    "algo-investor-skills:ru": {
+      "slug": "algo-investor-skills",
+      "language": "ru",
+      "article_sha256": "8f80e51658cea08f9adab9bca1a91609acaeddee646375c4e1c7f493f7984bb0",
+      "input_hashes": {
+        "article": "8f80e51658cea08f9adab9bca1a91609acaeddee646375c4e1c7f493f7984bb0",
+        "source_text": "b6af1883c714c0d004406a3ab98541a2ccf6aba44e36c9413f43e4bbfb1d8245",
+        "slides_prompt": "3b61c6bc9b0a2d020fd05ffe2798627baa2d684725082e48478e150e5ba4f55f",
+        "audio_prompt": "0ecb5da142011eca7737a00761f33eaa09c9df020e37485becb1cfdb0439be83"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "not_submitted",
+          "baseline_ids": [],
+          "prompt_sha256": "3b61c6bc9b0a2d020fd05ffe2798627baa2d684725082e48478e150e5ba4f55f",
+          "requested_at": "2026-10-02T09:59:18.162591+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "6739c6a4-8aee-4fa4-8292-1100afba40b5",
+          "submission_mode": "now",
+          "prior_submission_attempts": [
+            {
+              "state": "submitting",
+              "baseline_ids": [],
+              "prompt_sha256": "3b61c6bc9b0a2d020fd05ffe2798627baa2d684725082e48478e150e5ba4f55f",
+              "requested_at": "2026-10-02T09:59:18.162591+00:00",
+              "language_selection": [
+                "русский"
+              ],
+              "source_id": "6739c6a4-8aee-4fa4-8292-1100afba40b5",
+              "submission_mode": "now",
+              "error": {
+                "type": "TimeoutError",
+                "message": "Locator.click: Timeout 30000ms exceeded.",
+                "at": "2026-10-02T09:59:48.167416+00:00"
+              },
+              "recovery_review": {
+                "verified_at": "2026-10-02T10:05:21.398463+00:00",
+                "action_trace": "The timeout call log stopped at stability checks; no performing-click action was logged.",
+                "screenshot_review": "Bound RU source visible, Studio empty and customize dialog absent at failure.",
+                "baseline_ids": [],
+                "evidence_sha256": {
+                  "temp/notebooklm-source-queue/heartbeat-2026-10-02T095556Z.log": "fab7565a62cd461472eacf5e2301b6056888dc78135d26c4a21b701296ffa960",
+                  "temp/notebooklm-source-queue/algo-investor-skills-ru-controls.json": "87188b8411917a70eadfb8e3c43852e1493dd8aab2a9072a5b584ef4d82b4d03",
+                  "temp/notebooklm-source-queue/algo-investor-skills-ru-error.png": "011d21cade696220c449ed406ad87a3caa45f5d3df010aa24061f1a2c81afc4f"
+                }
+              }
+            }
+          ],
+          "pre_click_recovery": {
+            "verified_at": "2026-10-02T10:05:21.398463+00:00",
+            "action_trace": "The timeout call log stopped at stability checks; no performing-click action was logged.",
+            "screenshot_review": "Bound RU source visible, Studio empty and customize dialog absent at failure.",
+            "baseline_ids": [],
+            "evidence_sha256": {
+              "temp/notebooklm-source-queue/heartbeat-2026-10-02T095556Z.log": "fab7565a62cd461472eacf5e2301b6056888dc78135d26c4a21b701296ffa960",
+              "temp/notebooklm-source-queue/algo-investor-skills-ru-controls.json": "87188b8411917a70eadfb8e3c43852e1493dd8aab2a9072a5b584ef4d82b4d03",
+              "temp/notebooklm-source-queue/algo-investor-skills-ru-error.png": "011d21cade696220c449ed406ad87a3caa45f5d3df010aa24061f1a2c81afc4f"
+            }
+          }
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-02T09:58:48.549061+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/algo-investor-skills-ru-notebook-baseline.json",
+        "baseline_sha256": "f932a7e8d9fdca99a19bccb9ee8b2f01f866916473c82a1febd451a90d968e6b",
+        "baseline_count": 272,
+        "resolved_at": "2026-10-02T09:58:50.875799+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/3191e85c-ab1f-4a6d-8191-4d9e9e22ba95",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T09:58:54.870514+00:00",
+        "sha256": "b6af1883c714c0d004406a3ab98541a2ccf6aba44e36c9413f43e4bbfb1d8245",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "6739c6a4-8aee-4fa4-8292-1100afba40b5",
+      "source_title": "MM article algo-investor-skills RU 8f80e51658ce",
+      "source_sha256": "b6af1883c714c0d004406a3ab98541a2ccf6aba44e36c9413f43e4bbfb1d8245",
+      "state": "source_ready",
+      "source_display_name": "MM article algo-investor-skills RU 8f80e51658ce",
+      "selected_source_ids": [
+        "6739c6a4-8aee-4fa4-8292-1100afba40b5"
+      ],
+      "last_error": {
+        "type": "TimeoutError",
+        "message": "Locator.click: Timeout 30000ms exceeded.",
+        "at": "2026-10-02T09:59:48.167416+00:00",
+        "stage": "submit_slides",
+        "retry_not_before": "2026-10-02T10:10:56.533000+00:00",
+        "evidence_path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T095556Z.log",
+        "evidence_sha256": "fab7565a62cd461472eacf5e2301b6056888dc78135d26c4a21b701296ffa960",
+        "next_safe_step": "Resume this existing RU notebook after the retry deadline. Verify that artifact IDs still match the empty saved baseline before dispatching the guarded generation control once. If IDs changed, reconcile and do not generate."
+      }
     }
   },
-  "checked_at": "2026-10-02T05:53:07.155110+00:00",
+  "checked_at": "2026-10-02T10:05:21.398727+00:00",
   "browser_geometry_requested": {
-    "width": 1985,
+    "width": 1991,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 71,
+    "x": 65,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1985,
+    "outer_width": 1991,
     "outer_height": 1290,
-    "inner_width": 1945,
+    "inner_width": 1951,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
