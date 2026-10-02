@@ -1,0 +1,16 @@
+Create a NotebookLM Deep Dive audio overview from this article. Use only the attached source named "MM article agentic-ai-investment-revolution EN 09bae4253f8d". Produce in English. Follow the article sections in this order:
+1. Agentic AI: Smart Assistants of the New Generation
+2. Why Traditional Investment Approaches Are Becoming Obsolete
+3. How an Agentic AI-Based Investment System Works
+4. AI Agent Competition: A New Investment Paradigm
+5. Economic Autonomy of AI Agents
+6. Economy of Interaction Between Agents
+7. Real Benefits of Agentic AI in Investments
+8. The Future Has Already Arrived
+9. What This Means for the Industry
+10. Conclusion
+11. Citation
+
+Cover the article's four claimed agent traits, data overload and cognitive bias rationale, scout/analyst/strategy/coordinator roles, vector search and the proposed learning loop. Continue through competitive agent portfolios, the Olas/Predict and token-reward examples, agent-to-agent payments, the four benefit categories, human oversight, industry effects and conclusion. Treat the article's Gartner, Olas, Deloitte, ChainChatcher, adoption, speed and yield figures as dated, unverified article claims; never state the OLAS yield or investment outcomes as current or guaranteed. Explain that model learning, absence of bias and autonomous execution are claims or design goals rather than demonstrated performance.
+Preserve the source's substantive detail, examples, stated caveats and risks in section order. Attribute every numerical, company-specific, return or time-sensitive assertion to the article as an unverified claim. Do not add outside facts, guaranteed returns, investment advice or claims absent from the source. This source draft requires human editorial and primary-fact review.
+Use clear narration or dialogue, keeping the examples and limitations. Finish with the article's conclusion.

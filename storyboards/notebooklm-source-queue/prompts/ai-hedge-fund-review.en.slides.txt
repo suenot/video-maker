@@ -1,0 +1,12 @@
+Create a comprehensive NotebookLM slide deck from this article. Use only the attached source named "MM article ai-hedge-fund-review EN c1251990f04a". Produce in English. Follow the article sections in this order:
+1. Core Idea: Not One Guru, but a Committee
+2. Why "Risk First, Action Second" Is Right
+3. What This Gives in Practice
+4. How to Read Results Without Self-Deception
+5. Limitations and Honest Assessment
+6. Links
+7. Conclusion
+
+Preserve the article's distinction between an experimental open-source architecture and a real-money trading system. Explain the six listed analyst/risk/portfolio roles, sequential buy/sell/hold assessments, the risk budget, position-size filter and aggregation of conflicting opinions. Cover the practical benefits as the article's assessment, then its evaluation checklist: market regimes, stress tests, overfitting, data costs and reproducibility. Retain the stated limits around execution, liquidity, model dependence, historical backtests and nondeterminism, and close with the proposed production safeguards. Treat star counts, license, repository capabilities and model-version comparisons as dated article claims requiring primary-source review; do not invent current GitHub or project facts.
+Preserve the source's substantive detail, examples, stated caveats and risks in section order. Attribute every numerical, company-specific, return or time-sensitive assertion to the article as an unverified claim. Do not add outside facts, guaranteed returns, investment advice or claims absent from the source. This source draft requires human editorial and primary-fact review.
+Use enough slides for each major section and material subsection; keep text readable and technical relationships clear. End with the article's conclusion.

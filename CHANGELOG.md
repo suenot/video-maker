@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Freeze the next EN/RU source briefs for agentic AI investments and AI Hedge Fund, retaining full articles, section-specific slide/audio prompts, input hashes and explicit external duplicate-check uncertainty.
+
 ### Changed
 
 - Prepare subsequent frozen source briefs while already-bound generations run, retaining the active-artifact cap and the documented browser-free quota wait.

@@ -1,0 +1,95 @@
+MM article ai-hedge-fund-review EN c1251990f04a
+
+---
+title: "AI Hedge Fund: A Multi-Agent Fund Where AI Analysts Vote on Trades"
+description: "A deep dive into AI Hedge Fund by virattt — an open-source system where multiple LLM agents with different analysis styles build a portfolio through a risk filter. Architecture, agents, limitations, and lessons for real systems."
+tags: ["LLM", "multi-agent", "risk management", "portfolio", "review", "github", "open-source"]
+date: "2026-04-19"
+lang: "en"
+slug: "ai-hedge-fund-review"
+image: "/images/blog/ai-hedge-fund-review.png"
+authors: ["suenot"]
+---
+
+# AI Hedge Fund: A Multi-Agent Fund Where AI Analysts Vote on Trades
+
+![AI Hedge Fund — multi-agent architecture](/images/blog/ai-hedge-fund-review.png)
+
+[AI Hedge Fund](https://github.com/virattt/ai-hedge-fund) is one of the most discussed open-source projects at the intersection of LLMs and trading. 12,000+ GitHub stars, hundreds of forks, enthusiastic Twitter posts. But strip away the hype and look soberly: the value isn't in "a neural network that makes money," but in an **architectural pattern** — how to organize a team of AI analysts so each contributes expertise without any single one blowing up the portfolio.
+
+> **Disclaimer from the project author:** This is not a system for real money — it's a sandbox for experiments.
+
+## Core Idea: Not One Guru, but a Committee
+
+Most AI trading bots are simple: one LLM gets data → produces a signal → trade. AI Hedge Fund works fundamentally differently: it uses a **team of agents with different thinking styles**.
+
+Each agent is a specialized LLM with its own prompt and data sources:
+
+| Agent | Analysis Style | What It Examines |
+|---|---|---|
+| **Value Analyst** | Valuation | P/E, P/B, DCF, margins |
+| **Technical Analyst** | Technical analysis | RSI, MACD, moving averages, levels |
+| **Sentiment Analyst** | Market sentiment | News, social media, tone |
+| **Fundamentals Analyst** | Fundamental analysis | Revenue, profit, debt, growth |
+| **Risk Manager** | Risk control | Volatility, correlations, limits |
+| **Portfolio Manager** | Final decision | Aggregates opinions, creates orders |
+
+Agents work **sequentially**: first each analyst issues their assessment (buy/sell/hold with reasoning), then the risk manager checks permissibility, and only then does the portfolio manager form a specific action.
+
+## Why "Risk First, Action Second" Is Right
+
+![Risk filter: from signals to portfolio](/images/blog/ai-hedge-fund-risk-filter.png)
+
+The strongest part of the project isn't "LLM magic" — it's the **decision-making sequence**.
+
+The classic mistake in AI trading systems is giving the model complete freedom: "here's \$100K, do whatever you want." AI Hedge Fund works differently:
+
+1. **Risk budget assessment.** Before any agent proposes a trade, the system evaluates how much risk the portfolio can absorb — considering volatility, current positions, and asset correlations.
+
+2. **Size filtering.** An agent can't "fantasize" a position for the entire deposit. If the limit allows only 5% — then only 5%, no matter how convincing the signal.
+
+3. **Opinion aggregation.** The portfolio manager sees not just "buy/sell" but **detailed arguments** from each analyst. Diverging opinions aren't a bug — they're a feature: if the value analyst says "cheap" but the technical analyst says "downtrend," position size decreases.
+
+In investing, **what matters isn't just the signal, but the right to position size**. This is the foundation-first approach: first a solid constraint framework, then "intelligence."
+
+## What This Gives in Practice
+
+- Fewer chances for impulsive portfolio skews.
+- Clear logic for why a trade size is what it is.
+- More adequate backtesting experiments.
+- Convenient ground for iterations: you can improve analysts without breaking the risk framework.
+
+## How to Read Results Without Self-Deception
+
+Any project like this is easy to "overhype" if you only look at a pretty run. Here's an honest evaluation checklist:
+
+1. **Stability across markets.** Does it work in ranging markets as well as trending ones?
+2. **Stress tests.** What happens during panics, gaps, sharp reversals?
+3. **Overfitting.** Is the prompt logic tuned to specific tickers and periods?
+4. **Data quality.** Are commissions, slippage, and splits accounted for?
+5. **Reproducibility.** Will the same prompts give the same result in a week (LLMs are non-deterministic)?
+
+## Limitations and Honest Assessment
+
+It's important to understand what AI Hedge Fund **is not**:
+
+- **Not a production system.** No real execution, no liquidity modeling.
+- **LLM dependency.** Decision quality is entirely determined by model quality. GPT-4 and GPT-3.5 will give different results.
+- **No historical backtest.** You can't run the system on 5 years of data and get an equity curve.
+- **Determinism.** LLMs with temperature > 0 will give different answers to identical inputs.
+
+## Links
+
+- 💻 **GitHub:** [virattt/ai-hedge-fund](https://github.com/virattt/ai-hedge-fund)
+- 📄 **License:** MIT
+
+## Conclusion
+
+AI Hedge Fund is useful not as a "money-making machine" but as a **thinking framework**:
+
+- Separate analyst roles.
+- Separate idea generation from risk control.
+- Make decisions explainable.
+- Test hypotheses, but don't confuse backtesting with profit guarantees.
+
+For learning and prototyping — solid work. For production, you need the next layer: realistic execution, data validation, model drift control, and a proper risk committee at the rules level, not just prompts.

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "slug": "ai-hedge-fund-review",
+  "language": "en",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/ai-hedge-fund-review.en.md",
+  "article_sha256": "c1251990f04ad1ca6b08e76b0115b342b5dd9ef2b37df20bd5f7ff4127d4be43",
+  "notebook_title": "MM sources | ai-hedge-fund-review | EN",
+  "source_title": "MM article ai-hedge-fund-review EN c1251990f04a",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/ai-hedge-fund-review.en.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/ai-hedge-fund-review.en.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/ai-hedge-fund-review.en.audio.txt",
+  "article_title": "AI Hedge Fund: A Multi-Agent Fund Where AI Analysts Vote on Trades",
+  "article_date": "2026-04-19",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "notebooklm_library": "not_checked; external source/notebook duplicate reconciliation pending before submission",
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "85198e8b31e0aa988646e4255d5816259afb7336a16cb096f525b88ed374f895",
+  "slides_prompt_sha256": "9b8b5ddc79304ab6ffd3ee0c256043f161bc5c4215e664c9ecfafd7222e7b686",
+  "audio_prompt_sha256": "3b85bcfca09e95b7c94da0f87d2390f850940fcc9494876c5369bc70914c58e9"
+}

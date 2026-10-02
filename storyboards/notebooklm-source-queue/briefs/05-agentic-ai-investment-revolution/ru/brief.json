@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "slug": "agentic-ai-investment-revolution",
+  "language": "ru",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/agentic-ai-investment-revolution.ru.md",
+  "article_sha256": "221dc0af95570a0c91d3117267c7f43b487ccd517d41a742b212b525fb899c24",
+  "notebook_title": "MM sources | agentic-ai-investment-revolution | RU",
+  "source_title": "MM article agentic-ai-investment-revolution RU 221dc0af9557",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/agentic-ai-investment-revolution.ru.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/agentic-ai-investment-revolution.ru.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/agentic-ai-investment-revolution.ru.audio.txt",
+  "article_title": "Революция в управлении инвестиционными портфелями с помощью агентного ИИ",
+  "article_date": "2025-05-15",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "notebooklm_library": "not_checked; external source/notebook duplicate reconciliation pending before submission",
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "125a3a82169a180d9b8d28a768befad86b30c1bc73475b443d00392a1df5cc1f",
+  "slides_prompt_sha256": "b98355636aa4dd273605d9043061912907704f4ec8d1a465395df0fad5cb07e1",
+  "audio_prompt_sha256": "1f73e4cf77d3d4e4e57088d5440d2ab779936afd28604bf42de7d861dabfaf45"
+}
