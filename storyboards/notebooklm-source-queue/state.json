@@ -1117,7 +1117,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 13:51."
@@ -1132,8 +1132,15 @@
           "source_id": "63e2759c-dd95-4ff6-839a-8ecbaa02093b",
           "submission_mode": "later",
           "artifact_id": "f3fe2594-ca8b-4047-be24-3f0a8bf44c73",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T10:11:47.259683+00:00"
+          "card_text": "tablet\nUnread\nЭкосистема AI4Finance\n1 source · 15m ago\nmore_vert",
+          "observed_at": "2026-10-02T10:33:53.114103+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/ai4finance-foundation-guide/ru/slides.pdf",
+          "sha256": "537f3926e291b3a09ddf472e97379ee6cbea7fce7463ae7a837dc38af69dbaf7",
+          "bytes": 13652171,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T10:34:06.606850+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -1282,7 +1289,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "3b61c6bc9b0a2d020fd05ffe2798627baa2d684725082e48478e150e5ba4f55f",
           "requested_at": "2026-10-02T10:13:43.043572+00:00",
@@ -1332,11 +1339,18 @@
             }
           },
           "artifact_id": "5719504a-e57d-4d07-b780-c88658373e90",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T10:13:47.594067+00:00"
+          "card_text": "tablet\nUnread\nalgo-investor-skills\n1 source · 7m ago\nmore_vert",
+          "observed_at": "2026-10-02T10:34:13.263306+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/algo-investor-skills/ru/slides.pdf",
+          "sha256": "28824281404fbc2322e3519a1d934ce3bff5b3a5071bf61c7ef75a7fdf1e6d7e",
+          "bytes": 15481197,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T10:34:23.571280+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "5719504a-e57d-4d07-b780-c88658373e90"
           ],
@@ -1348,8 +1362,15 @@
           "source_id": "6739c6a4-8aee-4fa4-8292-1100afba40b5",
           "submission_mode": "now",
           "artifact_id": "8ea55762-f570-4bd9-9d7a-5fc1055510d6",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T10:14:02.900290+00:00"
+          "card_text": "audio_spark\nUnread\nМатематически честные инвестпредложения в Claude Code\n24:19 · Deep Dive · 1 source · 11m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T10:34:24.596770+00:00",
+          "duration_seconds": 1460.001088,
+          "path": "input/notebooklm-sources/algo-investor-skills/ru/audio.m4a",
+          "sha256": "3f02d23ff496ead5be5e055421508338d27f5bbe4ce34b217b72e4412f4fee54",
+          "bytes": 46989365,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T10:34:59.658220+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -1376,9 +1397,148 @@
       "selected_source_ids": [
         "6739c6a4-8aee-4fa4-8292-1100afba40b5"
       ]
+    },
+    "almgren-chriss-optimal-execution:en": {
+      "slug": "almgren-chriss-optimal-execution",
+      "language": "en",
+      "article_sha256": "a5c016b06aa1fd4868b2307eb872693e970ade605edd53c1f8b0c8785306d450",
+      "input_hashes": {
+        "article": "a5c016b06aa1fd4868b2307eb872693e970ade605edd53c1f8b0c8785306d450",
+        "source_text": "79ea539f4d1100daee6cf58b8c44c76664558e984497117b23e39ed8539da8e5",
+        "slides_prompt": "5e8566855569bb80cc32af6fd7553f62529562d6836a3b49b39b011235cb2fe7",
+        "audio_prompt": "22d79307d58eb2f84706362075aa850165495f691c685b7a50dfe79466a5c6d3"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "5e8566855569bb80cc32af6fd7553f62529562d6836a3b49b39b011235cb2fe7",
+          "requested_at": "2026-10-02T10:35:23.920116+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "a623203b-26f8-47e8-84f9-5d478d314863",
+          "submission_mode": "now",
+          "artifact_id": "42713098-45d0-4832-b966-6b90b10da773",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T10:35:28.462498+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "42713098-45d0-4832-b966-6b90b10da773"
+          ],
+          "prompt_sha256": "22d79307d58eb2f84706362075aa850165495f691c685b7a50dfe79466a5c6d3",
+          "requested_at": "2026-10-02T10:35:34.937526+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "a623203b-26f8-47e8-84f9-5d478d314863",
+          "submission_mode": "now",
+          "artifact_id": "f7e259ac-6538-4bb2-b4b6-4639f5ec1298",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-02T10:35:39.500270+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-02T10:35:06.903115+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/almgren-chriss-optimal-execution-en-notebook-baseline.json",
+        "baseline_sha256": "92acb84310f9588c5d4de798ec9ca4a73df34d97c7b1e401825e92c500c6f451",
+        "baseline_count": 273,
+        "resolved_at": "2026-10-02T10:35:09.262164+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/0fdf1e1d-211c-4077-af10-b48c6994113d",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T10:35:13.277379+00:00",
+        "sha256": "79ea539f4d1100daee6cf58b8c44c76664558e984497117b23e39ed8539da8e5",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "a623203b-26f8-47e8-84f9-5d478d314863",
+      "source_title": "MM article almgren-chriss-optimal-execution EN a5c016b06aa1",
+      "source_sha256": "79ea539f4d1100daee6cf58b8c44c76664558e984497117b23e39ed8539da8e5",
+      "state": "source_ready",
+      "source_display_name": "MM article almgren-chriss-optimal-execution EN a5…",
+      "selected_source_ids": [
+        "a623203b-26f8-47e8-84f9-5d478d314863"
+      ]
+    },
+    "almgren-chriss-optimal-execution:ru": {
+      "slug": "almgren-chriss-optimal-execution",
+      "language": "ru",
+      "article_sha256": "c7c7511ecf3febf0772614ba8b7a5e29811ee1c57282260d6330546da458d978",
+      "input_hashes": {
+        "article": "c7c7511ecf3febf0772614ba8b7a5e29811ee1c57282260d6330546da458d978",
+        "source_text": "9832c17a0272211696d2c58b873c84b609547c29390d7fc367e8baabf7107916",
+        "slides_prompt": "505c0a11b19a99bdfd3d2844f475f7f4b1c946f1405d108b64983ce6665bcbeb",
+        "audio_prompt": "74f434ffe2550dbdaa778ea4d10ac2fc65d3be9122f4adf43e743e63a0952109"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 18:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "505c0a11b19a99bdfd3d2844f475f7f4b1c946f1405d108b64983ce6665bcbeb",
+          "requested_at": "2026-10-02T10:36:06.885250+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "7b0ed6f3-6797-42b2-98ef-cf7e3d4c292d",
+          "submission_mode": "later",
+          "artifact_id": "2069c930-fbed-423f-b697-2cc70e2c95e4",
+          "card_text": "tablet\nOptimal Execution: Almgren-Chriss Model Implementation Guide\nScheduled for after 8pm\nmore_vert",
+          "observed_at": "2026-10-02T10:36:11.435503+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "2069c930-fbed-423f-b697-2cc70e2c95e4"
+          ],
+          "prompt_sha256": "74f434ffe2550dbdaa778ea4d10ac2fc65d3be9122f4adf43e743e63a0952109",
+          "requested_at": "2026-10-02T10:36:23.263282+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "7b0ed6f3-6797-42b2-98ef-cf7e3d4c292d",
+          "submission_mode": "now",
+          "artifact_id": "5e622494-56d0-4c48-8c39-202c4e7ed012",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-02T10:36:27.818891+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-02T10:35:46.670995+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/almgren-chriss-optimal-execution-ru-notebook-baseline.json",
+        "baseline_sha256": "6463d5751479bb4747fe5d69b877f74787b15f8e462ddfe0a519b484a4ce9b84",
+        "baseline_count": 274,
+        "resolved_at": "2026-10-02T10:35:49.053283+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/53906311-eb25-4a4f-8c0c-b007c0fd4f03",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T10:35:53.122529+00:00",
+        "sha256": "9832c17a0272211696d2c58b873c84b609547c29390d7fc367e8baabf7107916",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "7b0ed6f3-6797-42b2-98ef-cf7e3d4c292d",
+      "source_title": "MM article almgren-chriss-optimal-execution RU c7c7511ecf3f",
+      "source_sha256": "9832c17a0272211696d2c58b873c84b609547c29390d7fc367e8baabf7107916",
+      "state": "source_ready",
+      "source_display_name": "MM article almgren-chriss-optimal-execution RU c7…",
+      "selected_source_ids": [
+        "7b0ed6f3-6797-42b2-98ef-cf7e3d4c292d"
+      ]
     }
   },
-  "checked_at": "2026-10-02T10:14:02.902042+00:00",
+  "checked_at": "2026-10-02T10:36:27.828398+00:00",
   "browser_geometry_requested": {
     "width": 1991,
     "height": 1290,
@@ -1395,9 +1555,9 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 13:51.",
+    "notice": "AI usage limit reached. All features will be available after 18:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-02T05:42:15.833164+00:00",
-    "not_before": "2026-10-02T09:51:00+00:00"
+    "observed_at": "2026-10-02T10:36:27.828388+00:00",
+    "not_before": "2026-10-02T14:51:00+00:00"
   }
 }
