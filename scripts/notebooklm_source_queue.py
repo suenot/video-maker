@@ -138,9 +138,11 @@ class Runner:
         until = self.state.get("quota", {}).get("not_before")
         return bool(until and datetime.now(timezone.utc) < datetime.fromisoformat(until))
 
-    async def source_quota(self, page):
+    async def source_quota(self, page, *, scheduled=False):
         text = await page.locator("body").inner_text()
         notice = re.search(r"AI usage limit reached\.[^\n]*", text, re.I)
+        if not notice and scheduled:
+            notice = re.search(r"You're almost at your AI usage limit\.[^\n]*Limit resets at \d{2}:\d{2}\.[^\n]*", text, re.I)
         if not notice:
             return False
         zone = await page.evaluate("Intl.DateTimeFormat().resolvedOptions().timeZone")
@@ -597,6 +599,8 @@ class Runner:
                     raise
                 self.save()
                 print(json.dumps({"job": key, "notebook": job["notebook"], "artifacts": {k: {"state": a["state"], "artifact_id": a.get("artifact_id")} for k, a in job["artifacts"].items()}}, ensure_ascii=False), flush=True)
+                if any(a.get("state") == "scheduled" for a in job["artifacts"].values()) and await self.source_quota(page, scheduled=True):
+                    break
 
 
 def main():

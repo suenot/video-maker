@@ -709,7 +709,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "ready",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "ea5668b7f58ad70e1926aa57e62ac9d980395213b829777d95d27cabdf90e99e",
           "requested_at": "2026-10-02T00:26:11.428521+00:00",
@@ -719,11 +719,18 @@
           "source_id": "3364fa13-5b39-4682-a7a5-b9edbb7ab163",
           "submission_mode": "now",
           "artifact_id": "a6d4369e-3386-435c-96c0-ef2e0751c578",
-          "card_text": "tablet\nUnread\nThe Agentic Investment Revolution\n1 source · 4h ago\nmore_vert",
-          "observed_at": "2026-10-02T04:53:03.320644+00:00"
+          "card_text": "tablet\nUnread\nThe Agentic Investment Revolution\n1 source · 5h ago\nmore_vert",
+          "observed_at": "2026-10-02T05:37:53.488739+00:00",
+          "pages": 13,
+          "path": "input/notebooklm-sources/agentic-ai-investment-revolution/en/slides.pdf",
+          "sha256": "dc880e4b6355eabcae4cea8724a290d8c575a797030659de6ce03eeb350ebcb8",
+          "bytes": 11970191,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T05:38:03.692691+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nEnglish\nLength\nShort\nDefault\nLong\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Technical Workflow\n+ Beginner Guide\n+ Future Outlook\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -738,8 +745,15 @@
           "source_id": "3364fa13-5b39-4682-a7a5-b9edbb7ab163",
           "submission_mode": "later",
           "artifact_id": "f13f76d1-cb9c-42e7-9740-52648e5b490b",
-          "card_text": "audio_spark\nAgentic AI Investment Revolution\nScheduled for after 9am\nmore_vert",
-          "observed_at": "2026-10-02T00:26:31.500815+00:00"
+          "card_text": "audio_spark\nUnread\nHow Agentic AI Runs Investment Portfolios\n24:48 · Deep Dive · 1 source · 19m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T05:38:04.724644+00:00",
+          "duration_seconds": 1489.002812,
+          "path": "input/notebooklm-sources/agentic-ai-investment-revolution/en/audio.m4a",
+          "sha256": "22d67d7a57564b64d8828d3b5ab14b8afc5236170678b084ecd3a7084632d06f",
+          "bytes": 47922764,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T05:38:43.357738+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -765,18 +779,7 @@
       "source_display_name": "MM article agentic-ai-investment-revolution EN 09…",
       "selected_source_ids": [
         "3364fa13-5b39-4682-a7a5-b9edbb7ab163"
-      ],
-      "last_error": {
-        "type": "TimeoutError",
-        "message": "Bound slide PDF download timed out after 180 seconds while materializing the browser download.",
-        "at": "2026-10-02T05:13:00.477851+00:00",
-        "stage": "download_original",
-        "artifact_id": "a6d4369e-3386-435c-96c0-ef2e0751c578",
-        "evidence_path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T045145Z.log",
-        "evidence_sha256": "e034a66b2c5d6aa7aa55ad35bc8daf0862d702bfe6f97c4dca3d0a7cee919d07",
-        "retry_not_before": "2026-10-02T05:21:45.769000+00:00",
-        "next_safe_step": "Retry downloading this exact ready PDF on the next heartbeat; preserve the scheduled audio and existing RU notebook; do not repeat generation."
-      }
+      ]
     },
     "agentic-ai-investment-revolution:ru": {
       "slug": "agentic-ai-investment-revolution",
@@ -790,7 +793,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "b98355636aa4dd273605d9043061912907704f4ec8d1a465395df0fad5cb07e1",
           "requested_at": "2026-10-02T05:18:30.938304+00:00",
@@ -800,11 +803,18 @@
           "source_id": "71d488f5-45a6-4ad6-88c4-49719fee5acc",
           "submission_mode": "now",
           "artifact_id": "1b4c753b-26cc-43cd-92a8-165b9d94ba6c",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T05:18:36.888888+00:00"
+          "card_text": "tablet\nUnread\nАрхитектура агентного ИИ в инвестиционном менеджменте\n1 source · 12m ago\nmore_vert",
+          "observed_at": "2026-10-02T05:38:50.041830+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/agentic-ai-investment-revolution/ru/slides.pdf",
+          "sha256": "d9e2fdd65c6aa28a118a8e4fd9e90675778f07f4936d81925d167632faeafcf6",
+          "bytes": 17615238,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T05:39:02.177511+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "1b4c753b-26cc-43cd-92a8-165b9d94ba6c"
           ],
@@ -816,8 +826,15 @@
           "source_id": "71d488f5-45a6-4ad6-88c4-49719fee5acc",
           "submission_mode": "now",
           "artifact_id": "a139b45d-cb7b-4d03-a0f7-778be60a533b",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T05:18:53.590990+00:00"
+          "card_text": "audio_spark\nUnread\nАгентный ИИ в управлении инвестиционными портфелями\n23:06 · Deep Dive · 1 source · 11m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T05:39:03.211241+00:00",
+          "duration_seconds": 1386.927891,
+          "path": "input/notebooklm-sources/agentic-ai-investment-revolution/ru/audio.m4a",
+          "sha256": "f0e26edaab4dfd0d58cd28dc2c239305d03acd0b1e7feb65cacbfd2088e09ac4",
+          "bytes": 44637507,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T05:39:29.985402+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -857,7 +874,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "9b8b5ddc79304ab6ffd3ee0c256043f161bc5c4215e664c9ecfafd7222e7b686",
           "requested_at": "2026-10-02T05:19:18.105340+00:00",
@@ -867,11 +884,18 @@
           "source_id": "e2f7f467-6342-44d4-b2cb-9648800db85a",
           "submission_mode": "now",
           "artifact_id": "4bec9ba9-995f-4138-ae9c-3d90c5034337",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T05:19:24.008979+00:00"
+          "card_text": "tablet\nUnread\nArchitectural Reality of AI Hedge Funds\n1 source · 13m ago\nmore_vert",
+          "observed_at": "2026-10-02T05:39:36.597198+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/ai-hedge-fund-review/en/slides.pdf",
+          "sha256": "20a9198e6df8cba00e7ea792139a7c0e9589ad3fcff613443c2bbf0a7f4db7a6",
+          "bytes": 18456561,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T05:39:47.579898+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "4bec9ba9-995f-4138-ae9c-3d90c5034337"
           ],
@@ -883,8 +907,15 @@
           "source_id": "e2f7f467-6342-44d4-b2cb-9648800db85a",
           "submission_mode": "now",
           "artifact_id": "257b4861-95e7-449c-8326-eaa58753b2e8",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T05:19:36.580164+00:00"
+          "card_text": "audio_spark\nUnread\nHow Multi-Agent AI Hedge Funds Work\n23:17 · Deep Dive · 1 source · 12m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T05:39:48.608691+00:00",
+          "duration_seconds": 1397.88771,
+          "path": "input/notebooklm-sources/ai-hedge-fund-review/en/audio.m4a",
+          "sha256": "83347ff22406f5375509614ba636d2a699378aebc0f91d1c269462fbbd4727b3",
+          "bytes": 44990337,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T05:40:15.838847+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -924,7 +955,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "9c6372f478952bdc0a8158639a4bc4f04e43150707486d95c7059176f1015e21",
           "requested_at": "2026-10-02T05:20:05.314018+00:00",
@@ -934,11 +965,18 @@
           "source_id": "f0ef6047-48b2-4863-8c5f-43f3628e5aed",
           "submission_mode": "now",
           "artifact_id": "4609042f-d3f0-4726-a63a-e68a958d88bd",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T05:20:11.180227+00:00"
+          "card_text": "tablet\nUnread\nАрхитектура AI Hedge Fund\n1 source · 12m ago\nmore_vert",
+          "observed_at": "2026-10-02T05:40:22.469461+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/ai-hedge-fund-review/ru/slides.pdf",
+          "sha256": "0970ab71637194358ac4c9460ebe5a415071964393b491cdc59b43a3a31e0b4f",
+          "bytes": 11482243,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T05:40:31.445193+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "4609042f-d3f0-4726-a63a-e68a958d88bd"
           ],
@@ -950,8 +988,15 @@
           "source_id": "f0ef6047-48b2-4863-8c5f-43f3628e5aed",
           "submission_mode": "now",
           "artifact_id": "0dc35933-52a9-432d-90da-f92248484a3f",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T05:20:28.691650+00:00"
+          "card_text": "audio_spark\nUnread\nШесть нейросетей вместо одного ИИ трейдера\n12:46 · Deep Dive · 1 source · 12m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T05:40:32.475577+00:00",
+          "duration_seconds": 766.095964,
+          "path": "input/notebooklm-sources/ai-hedge-fund-review/ru/audio.m4a",
+          "sha256": "c614ec3fe46cab6da6b1c2d79f09836b65c34454be7d5e830fc86e16e8467dd8",
+          "bytes": 24656745,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T05:40:47.269052+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -978,28 +1023,172 @@
       "selected_source_ids": [
         "f0ef6047-48b2-4863-8c5f-43f3628e5aed"
       ]
+    },
+    "ai4finance-foundation-guide:en": {
+      "slug": "ai4finance-foundation-guide",
+      "language": "en",
+      "article_sha256": "77d9e3bb540855a0df1299dea6c20c79e5cd7364db500c6230f12930e8c4761b",
+      "input_hashes": {
+        "article": "77d9e3bb540855a0df1299dea6c20c79e5cd7364db500c6230f12930e8c4761b",
+        "source_text": "cf065389e2e06b687b10eafaee9bd03a4fa6b7a96507985daeb425e6b964287a",
+        "slides_prompt": "3e3cdd5002919ec3573a5465208ba7ea9d293549f72f204bca2d552e5f1d6c59",
+        "audio_prompt": "046bd94bb5d8394e860b840bdd6c2c6194f5f68e8c0ca10ecc29cb6ee7eb4bcd"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "3e3cdd5002919ec3573a5465208ba7ea9d293549f72f204bca2d552e5f1d6c59",
+          "requested_at": "2026-10-02T05:41:11.632631+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "734e90cc-9c3a-42c0-a0fa-7222fe63200f",
+          "submission_mode": "now",
+          "artifact_id": "a86de191-9e6a-4cd6-9996-da68d60c25ba",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T05:41:17.544619+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "a86de191-9e6a-4cd6-9996-da68d60c25ba"
+          ],
+          "prompt_sha256": "046bd94bb5d8394e860b840bdd6c2c6194f5f68e8c0ca10ecc29cb6ee7eb4bcd",
+          "requested_at": "2026-10-02T05:41:24.443940+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "734e90cc-9c3a-42c0-a0fa-7222fe63200f",
+          "submission_mode": "now",
+          "artifact_id": "45b4259e-20e3-4f34-9f71-285c4c5c853f",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-02T05:41:30.296991+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-02T05:40:54.377590+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/ai4finance-foundation-guide-en-notebook-baseline.json",
+        "baseline_sha256": "ea1f6fee74824b4e56fc0a765bf730843ef23729db3583830959257e7341f4cb",
+        "baseline_count": 269,
+        "resolved_at": "2026-10-02T05:40:56.823077+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/20c9b22a-f195-4763-905f-1f208039f0a8",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T05:41:00.846962+00:00",
+        "sha256": "cf065389e2e06b687b10eafaee9bd03a4fa6b7a96507985daeb425e6b964287a",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "734e90cc-9c3a-42c0-a0fa-7222fe63200f",
+      "source_title": "MM article ai4finance-foundation-guide EN 77d9e3bb5408",
+      "source_sha256": "cf065389e2e06b687b10eafaee9bd03a4fa6b7a96507985daeb425e6b964287a",
+      "state": "source_ready",
+      "source_display_name": "MM article ai4finance-foundation-guide EN 77d9e3b…",
+      "selected_source_ids": [
+        "734e90cc-9c3a-42c0-a0fa-7222fe63200f"
+      ]
+    },
+    "ai4finance-foundation-guide:ru": {
+      "slug": "ai4finance-foundation-guide",
+      "language": "ru",
+      "article_sha256": "26c3968c8aa90945cfc4dc193beab28ef512d9d3c10b5cb0fe54cbef3e527ad5",
+      "input_hashes": {
+        "article": "26c3968c8aa90945cfc4dc193beab28ef512d9d3c10b5cb0fe54cbef3e527ad5",
+        "source_text": "35dd2a739a75e9dee6fe430794ca1fb79f228d4a64841d3c3d3718887f0b16fb",
+        "slides_prompt": "9566008524e1361ae10e0df7e1d3edbee9bdbd4093c6523b1b14664acded1867",
+        "audio_prompt": "b5adb2ea267ecbff3fcf080d1c181b6ed5291ab41776ac219478e5dba82e97f7"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 13:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "9566008524e1361ae10e0df7e1d3edbee9bdbd4093c6523b1b14664acded1867",
+          "requested_at": "2026-10-02T05:41:57.945742+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "63e2759c-dd95-4ff6-839a-8ecbaa02093b",
+          "submission_mode": "later",
+          "artifact_id": "f3fe2594-ca8b-4047-be24-3f0a8bf44c73",
+          "card_text": "tablet\nAI4Finance Foundation: FinGPT, FinRL, and FinRobot Ecosystem\nScheduled for after 2pm\nmore_vert",
+          "observed_at": "2026-10-02T05:42:03.858062+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Technical Deep Dive\n+ Beginner Overview\n+ Strategic Workflow\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 13:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "f3fe2594-ca8b-4047-be24-3f0a8bf44c73"
+          ],
+          "prompt_sha256": "b5adb2ea267ecbff3fcf080d1c181b6ed5291ab41776ac219478e5dba82e97f7",
+          "requested_at": "2026-10-02T05:42:15.833164+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "63e2759c-dd95-4ff6-839a-8ecbaa02093b",
+          "submission_mode": "later",
+          "artifact_id": "64f253bb-d2bb-41d9-a9e6-3084b2b668a9",
+          "card_text": "audio_spark\nAI4Finance Foundation: FinGPT, FinRL, and FinRobot Ecosystem\nScheduled for after 2pm\nmore_vert",
+          "observed_at": "2026-10-02T05:42:21.740334+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-02T05:41:37.630917+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/ai4finance-foundation-guide-ru-notebook-baseline.json",
+        "baseline_sha256": "d1a8558a005f1fd79de4440169e2988d5b3ee20816d3489fdd56d50bb26a6802",
+        "baseline_count": 270,
+        "resolved_at": "2026-10-02T05:41:40.006820+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/5276f2e5-f515-4cbb-81a8-110594f37347",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T05:41:44.015438+00:00",
+        "sha256": "35dd2a739a75e9dee6fe430794ca1fb79f228d4a64841d3c3d3718887f0b16fb",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "63e2759c-dd95-4ff6-839a-8ecbaa02093b",
+      "source_title": "MM article ai4finance-foundation-guide RU 26c3968c8aa9",
+      "source_sha256": "35dd2a739a75e9dee6fe430794ca1fb79f228d4a64841d3c3d3718887f0b16fb",
+      "state": "source_ready",
+      "source_display_name": "MM article ai4finance-foundation-guide RU 26c3968…",
+      "selected_source_ids": [
+        "63e2759c-dd95-4ff6-839a-8ecbaa02093b"
+      ]
     }
   },
-  "checked_at": "2026-10-02T05:20:28.693554+00:00",
+  "checked_at": "2026-10-02T05:53:07.155110+00:00",
   "browser_geometry_requested": {
-    "width": 1983,
+    "width": 1985,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 73,
+    "x": 71,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1983,
+    "outer_width": 1985,
     "outer_height": 1290,
-    "inner_width": 1943,
+    "inner_width": 1945,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "AI usage limit reached. All features will be available after 08:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 13:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-02T00:26:45.473815+00:00",
-    "not_before": "2026-10-02T04:51:00+00:00"
+    "observed_at": "2026-10-02T05:42:15.833164+00:00",
+    "not_before": "2026-10-02T09:51:00+00:00"
   }
 }
