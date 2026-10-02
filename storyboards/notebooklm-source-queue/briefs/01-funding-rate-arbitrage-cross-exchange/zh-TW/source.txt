@@ -1,0 +1,528 @@
+MM article funding-rate-arbitrage-cross-exchange ZH-TW 829f5f0551cc
+
+---
+title: "跨交易所資金費率套利：如何從費率差異中獲利"
+description: "加密交易所之間的資金費率套利如何運作，為什麼 Binance、Bybit、OKX 和 dYdX 上的費率不同，以及如何構建監控和執行系統來從這些差異中提取利潤。"
+tags: ["演算法交易", "資金費率", "套利", "加密貨幣", "Binance", "Bybit", "做市"]
+date: "2026-03-05"
+lang: "zh-Hant"
+image: "/images/blog/funding-rate-arbitrage-cross-exchange.webp"
+slug: "funding-rate-arbitrage-cross-exchange"
+authors: ["suenot"]
+---
+
+# 跨交易所資金費率套利：如何從費率差異中獲利
+
+ETHUSDT 的資金費率在 Binance 上為 0.01%，在 Bybit 上為 0.035%。同一枚代幣，同一時刻，但費率相差 3.5 倍。有人多付，有人少付。而有人從這個差異中獲利。
+
+資金費率套利是加密貨幣中為數不多的不依賴於市場方向的策略之一。你不預測價格。你從平臺之間費率的結構性差異中提取利潤。
+
+## 為什麼不同交易所的資金費率不同
+
+資金費率是將永續合約價格錨定於現貨價格的機制。每個交易所根據自己的資料獨立計算：
+
+- **交易者構成。**Binance 以傾向做多的散戶交易者為主。Bybit 和 OKX 有更多專業參與者。不同的多空比例導致不同的資金費率。
+- **計算公式。**每個交易所使用自己的公式。Binance 考慮溢價指數和利率。Bybit 和 OKX 類似，但權重和平均週期不同。
+- **流動性。**在流動性較低的交易所，溢價（期貨與現貨之間的差異）波動性更大，導致資金費率波動更劇烈。
+- **支付頻率。**大多數交易所每 8 小時支付一次資金費率（00:00、08:00、16:00 UTC）。但有些（Bybit 的某些交易對、dYdX）每小時支付一次，創造了額外的機會。
+
+### 典型差異
+
+![Funding rate spreads across exchanges](/images/blog/funding-rate-spread-dynamics.webp)
+
+在平靜的市場中，主要交易所的資金費率接近——差異為 0.001-0.005%。但在波動性增加的時期，差異會擴大：
+
+| 市場階段 | Binance | Bybit | OKX | dYdX | 價差 |
+|------------|---------|-------|-----|------|-------|
+| 平靜 | 0.01% | 0.012% | 0.009% | 0.01% | ~0.003% |
+| 牛市趨勢 | 0.03% | 0.05% | 0.025% | 0.04% | ~0.025% |
+| 極端牛市 | 0.1% | 0.2% | 0.08% | 0.15% | ~0.12% |
+| 熊市趨勢 | -0.02% | -0.01% | -0.025% | -0.015% | ~0.015% |
+
+每 8 小時 0.025% 的價差意味著每天 0.075%。以 $100K 的仓位计算，这是每天 $75 或每月約 $2,250——沒有方向性風險。
+
+## 基本套利機制
+
+![跨交易所資金費率套利：在兩個交易所建立相反倉位](/images/blog/funding-arb-mechanics.webp)
+
+思路很簡單：**在兩個交易所開設相反的倉位**，這樣你在一個交易所收取資金費率，在另一個交易所支付更少。
+
+### 示例
+
+Binance：資金費率 = +0.01%（多頭向空頭支付）
+Bybit：資金費率 = +0.04%（多頭向空頭支付）
+
+操作：
+1. 在 Bybit 開設**空頭**——每 8 小時收取 0.04%
+2. 在 Binance 開設**多頭**——每 8 小時支付 0.01%
+3. 倉位互為映象——價格風險中性
+4. 淨利潤：0.04% - 0.01% = **每 8 小時 0.03%**
+
+每天（3 次支付）：0.09%。每月：約 2.7%。沒有方向性風險。
+
+```python
+def funding_arbitrage_pnl(
+    rate_short_exchange: float,  # 做空交易所的费率
+    rate_long_exchange: float,   # 做多交易所的费率
+    position_size: float,        # 仓位大小（美元）
+    payments_per_day: int = 3,
+    days: int = 30,
+) -> float:
+    """
+    一段时间内资金费率套利的 PnL。
+
+    正资金费率时：空头收取，多头支付。
+    负资金费率时：空头支付，多头收取。
+    """
+    # 空头收取 rate_short，多头支付 rate_long
+    spread = rate_short_exchange - rate_long_exchange
+    daily_pnl = spread * payments_per_day * position_size
+    return daily_pnl * days
+
+# 示例：在 Bybit 做空（0.04%），在 Binance 做多（0.01%）
+pnl = funding_arbitrage_pnl(0.0004, 0.0001, 100_000, days=30)
+# = (0.0004 - 0.0001) * 3 * 100_000 * 30 = $2,700
+```
+
+## 風險和陷阱
+
+![跨交易所套利風險：清算、價格差異、手續費侵蝕](/images/blog/funding-arb-risks.webp)
+
+這個策略看起來像"免費的錢"。實際並非如此。存在幾個嚴重的風險。
+
+### 1. 交易所之間的價格差異
+
+不同交易所的倉位價格不同。Binance 和 Bybit 之間的價差通常為 0.01-0.05%，但在高波動時刻可能達到 0.5-1%。如果你不同時開倉，價格差異可能超過資金費率利潤。
+
+**解決方案：**通過 API 同時開倉，延遲最小化。理想情況下——在兩個交易所附近部署共址伺服器。
+
+### 2. 資金費率變化
+
+你在價差 0.03% 時開倉。一小時後價差縮小到 0.005% 或反轉。現在你在兩個交易所都在支付。
+
+**解決方案：**即時價差監控，當價差低於閾值時自動平倉。
+
+```python
+def should_close(
+    current_spread: float,
+    entry_spread: float,
+    min_spread: float = 0.0001,     # 0.01%
+    trading_costs: float = 0.0005,  # 0.05% 开仓 + 平仓
+) -> bool:
+    """
+    如果价差低于阈值或当前价差不足以覆盖交易成本，
+    则平仓。
+    """
+    return current_spread < min_spread or current_spread < trading_costs
+```
+
+### 3. 交易手續費
+
+在兩個交易所開倉和平倉意味著 4 個訂單。在 maker 費率 0.02% 和 taker 費率 0.05% 下：
+
+- 樂觀場景（全部 maker）：$4 \times 0.02\% = 0.08\%$
+- 悲觀場景（全部 taker）：$4 \times 0.05\% = 0.20\%$
+
+為了使手續費回本，需要持倉足夠長的時間：
+
+$$\text{Breakeven time} = \frac{\text{Total commissions}}{\text{Spread} \times \text{Payments per day}}$$
+
+```python
+def breakeven_days(
+    total_commissions_pct: float,  # 总手续费百分比
+    spread: float,                  # 资金费率价差
+    payments_per_day: int = 3,
+) -> float:
+    daily_income = spread * payments_per_day
+    return total_commissions_pct / daily_income if daily_income > 0 else float('inf')
+
+# maker 费率时：0.08% / (0.03% * 3) = 0.89 天
+# taker 费率时：0.20% / (0.03% * 3) = 2.22 天
+```
+
+### 4. 保證金要求
+
+兩個交易所的倉位都需要抵押品。在每個交易所 5 倍槓桿和 $100K 倉位下：
+
+- Binance：$20K 抵押品
+- Bybit：$20K 抵押品
+- 總鎖定資金：**$40K** 对应 $100K 倉位
+
+資本回報率：
+$$\text{ROC} = \frac{\$2700}{\$40000} \times 100\% = 6.75\% \text{ 每月}$$
+
+在 10 倍槓桿下，抵押品降至 $20K，ROC 上升至 13.5%。但價格差異導致的清算風險也會增加。
+
+### 5. 清算風險
+
+如果資產價格劇烈波動，其中一個倉位產生未實現虧損。在虧損倉位所在的交易所需要維持保證金。如果保證金不足——清算。而另一個交易所的利潤無濟於事——它在不同的賬戶中。
+
+**解決方案：**
+- 保持保證金儲備（至少為最低要求的 2 倍）
+- 設定保證金水平警報
+- 自動再平衡：當失衡發生時——在交易所之間轉移資金
+
+## 資金費率監控系統
+
+![多交易所即時資金費率監控儀表板](/images/blog/funding-arb-monitoring.webp)
+
+套利的第一步是資料收集。你需要即時追蹤所有感興趣交易所的資金費率。
+
+```python
+import asyncio
+import ccxt.pro as ccxt
+from dataclasses import dataclass
+from datetime import datetime
+
+@dataclass
+class FundingSnapshot:
+    exchange: str
+    symbol: str
+    rate: float
+    next_funding_time: datetime
+    timestamp: datetime
+
+class FundingMonitor:
+    """
+    监控多个交易所的资金费率。
+    """
+    def __init__(self, symbols: list[str], exchanges: list[str]):
+        self.symbols = symbols
+        self.exchanges = {
+            name: getattr(ccxt, name)() for name in exchanges
+        }
+        self.latest: dict[str, dict[str, FundingSnapshot]] = {}
+
+    async def fetch_funding(self, exchange_name: str, exchange, symbol: str):
+        """从交易所获取当前资金费率。"""
+        try:
+            funding = await exchange.fetch_funding_rate(symbol)
+            return FundingSnapshot(
+                exchange=exchange_name,
+                symbol=symbol,
+                rate=funding['fundingRate'],
+                next_funding_time=datetime.fromtimestamp(
+                    funding['fundingTimestamp'] / 1000
+                ),
+                timestamp=datetime.utcnow(),
+            )
+        except Exception as e:
+            print(f"Error fetching {exchange_name} {symbol}: {e}")
+            return None
+
+    async def scan(self) -> list[dict]:
+        """
+        扫描所有交易所，寻找套利机会。
+        """
+        # 并行收集资金费率
+        tasks = []
+        for ex_name, ex in self.exchanges.items():
+            for symbol in self.symbols:
+                tasks.append(self.fetch_funding(ex_name, ex, symbol))
+
+        snapshots = await asyncio.gather(*tasks)
+        snapshots = [s for s in snapshots if s is not None]
+
+        # 按交易对分组
+        by_symbol: dict[str, list[FundingSnapshot]] = {}
+        for s in snapshots:
+            by_symbol.setdefault(s.symbol, []).append(s)
+
+        # 寻找价差
+        opportunities = []
+        for symbol, rates in by_symbol.items():
+            rates.sort(key=lambda x: x.rate)
+            lowest = rates[0]   # 在这里做多（支付更少）
+            highest = rates[-1] # 在这里做空（收取更多）
+            spread = highest.rate - lowest.rate
+
+            opportunities.append({
+                'symbol': symbol,
+                'long_exchange': lowest.exchange,
+                'long_rate': lowest.rate,
+                'short_exchange': highest.exchange,
+                'short_rate': highest.rate,
+                'spread': spread,
+                'annualized': spread * 3 * 365 * 100,  # 年化百分比
+            })
+
+        return sorted(opportunities, key=lambda x: -x['spread'])
+```
+
+### 示例輸出
+
+```
+Symbol     | Long @      | Rate    | Short @     | Rate    | Spread  | APR
+-----------+-------------+---------+-------------+---------+---------+--------
+ETHUSDT    | Binance     | 0.010%  | Bybit       | 0.040%  | 0.030%  | 32.9%
+BTCUSDT    | OKX         | 0.008%  | Binance     | 0.020%  | 0.012%  | 13.1%
+SOLUSDT    | Binance     | 0.015%  | dYdX        | 0.055%  | 0.040%  | 43.8%
+ARBUSDT    | Bybit       | 0.005%  | OKX         | 0.030%  | 0.025%  | 27.4%
+```
+
+## 執行：同時開倉
+
+![Simultaneous arbitrage execution across exchanges](/images/blog/arbitrage-execution-flow.webp)
+
+儘可能同時開設多頭和空頭至關重要，以避免方向性風險敞口。
+
+```python
+import asyncio
+
+async def execute_arbitrage(
+    long_exchange,
+    short_exchange,
+    symbol: str,
+    size: float,
+    max_slippage_pct: float = 0.05,
+):
+    """
+    在两个交易所同时开设多头和空头。
+    """
+    # 获取当前价格
+    long_ticker = await long_exchange.fetch_ticker(symbol)
+    short_ticker = await short_exchange.fetch_ticker(symbol)
+
+    # 检查交易所间价差
+    price_spread = abs(
+        long_ticker['ask'] - short_ticker['bid']
+    ) / long_ticker['ask'] * 100
+
+    if price_spread > max_slippage_pct:
+        raise ValueError(
+            f"Price spread {price_spread:.3f}% exceeds max slippage"
+        )
+
+    # 同时开仓
+    long_order, short_order = await asyncio.gather(
+        long_exchange.create_market_buy_order(symbol, size),
+        short_exchange.create_market_sell_order(symbol, size),
+    )
+
+    return long_order, short_order
+```
+
+### 倉位管理
+
+開倉後需要持續監控：
+
+1. **資金費率價差。**如果價差縮小到閾值以下——平倉。
+2. **保證金餘額。**如果一個交易所的保證金降到安全水平以下——再平衡或平倉。
+3. **價格差異。**如果一側的未實現損益超過限額——平倉。
+
+```python
+async def monitor_and_manage(
+    long_exchange,
+    short_exchange,
+    symbol: str,
+    size: float,
+    min_spread: float = 0.0001,
+    max_unrealized_loss_pct: float = 2.0,
+    check_interval: int = 60,
+):
+    """
+    监控已开设的套利仓位。
+    """
+    while True:
+        # 检查当前价差
+        long_funding = await long_exchange.fetch_funding_rate(symbol)
+        short_funding = await short_exchange.fetch_funding_rate(symbol)
+        current_spread = (
+            short_funding['fundingRate'] - long_funding['fundingRate']
+        )
+
+        # 检查保证金余额
+        long_balance = await long_exchange.fetch_balance()
+        short_balance = await short_exchange.fetch_balance()
+
+        # 检查未实现损益
+        long_positions = await long_exchange.fetch_positions([symbol])
+        short_positions = await short_exchange.fetch_positions([symbol])
+
+        long_upnl = long_positions[0]['unrealizedPnl'] if long_positions else 0
+        short_upnl = short_positions[0]['unrealizedPnl'] if short_positions else 0
+
+        total_upnl_pct = (long_upnl + short_upnl) / size * 100
+
+        # 平仓条件
+        if current_spread < min_spread:
+            print(f"Spread collapsed: {current_spread:.4%}")
+            await close_both(long_exchange, short_exchange, symbol, size)
+            break
+
+        if abs(total_upnl_pct) > max_unrealized_loss_pct:
+            print(f"Unrealized loss exceeded: {total_upnl_pct:.2f}%")
+            await close_both(long_exchange, short_exchange, symbol, size)
+            break
+
+        await asyncio.sleep(check_interval)
+```
+
+## 進階方案
+
+### 現貨-永續套利
+
+![現貨-永續合約套利交易：同一交易所的現貨持倉和永續合約空頭](/images/blog/funding-arb-spot-perp.webp)
+
+不在兩個交易所使用期貨，而是在同一個交易所使用現貨+期貨：
+
+- **買入現貨**（無資金費率）
+- **做空永續合約**（正費率時收取資金費率）
+
+優勢：全部在一個交易所，保證金管理更簡單。劣勢：僅在正資金費率時有效（多頭向空頭支付），這在牛市中約 70% 的時間出現。
+
+```python
+def spot_perp_carry(
+    funding_rate: float,      # 当前资金费率
+    spot_fee: float = 0.001,  # 现货手续费（0.1%）
+    perp_fee: float = 0.0005, # 期货手续费（0.05%）
+    leverage: int = 1,
+) -> dict:
+    """
+    计算现货-永续 carry trade 的收益率。
+    """
+    # 进出场成本
+    total_fees = (spot_fee + perp_fee) * 2  # 开仓 + 平仓
+
+    # 每日资金费率收入（3 次支付）
+    daily_income = funding_rate * 3
+
+    # 盈亏平衡
+    breakeven_days = total_fees / daily_income if daily_income > 0 else float('inf')
+
+    return {
+        'daily_income_pct': daily_income * 100,
+        'monthly_income_pct': daily_income * 30 * 100,
+        'annualized_pct': daily_income * 365 * 100,
+        'total_fees_pct': total_fees * 100,
+        'breakeven_days': breakeven_days,
+    }
+
+# 示例：资金费率 0.03%
+result = spot_perp_carry(0.0003)
+# 日收益：0.09%，月收益：2.7%，年化：32.9%，盈亏平衡：3.3 天
+```
+
+### 多交易所套利
+
+![多交易所網路圖顯示五個交易所之間的資金費率差異](/images/blog/funding-arb-multi-exchange.webp)
+
+同時監控 5 個以上交易所時，可以發現更有利的機會。演算法：
+
+1. 從所有交易所收集資金費率
+2. 找到價差最大的交易對
+3. 檢查兩個交易所的流動性和訂單簿深度
+4. 如果價差 > 閾值——開倉
+5. 持續重新掃描：如果最佳交易對變化——輪換
+
+```python
+def find_best_pair(
+    rates: dict[str, float],  # {"binance": 0.01, "bybit": 0.04, "okx": 0.02}
+    min_spread: float = 0.0002,
+) -> tuple[str, str, float] | None:
+    """
+    找到资金费率价差最大的交易所配对。
+    Returns: (long_exchange, short_exchange, spread) 或 None。
+    """
+    exchanges = list(rates.keys())
+    best = None
+
+    for i, ex_long in enumerate(exchanges):
+        for ex_short in exchanges[i+1:]:
+            # 在费率较低的交易所做多，在费率较高的交易所做空
+            if rates[ex_long] < rates[ex_short]:
+                spread = rates[ex_short] - rates[ex_long]
+                long_ex, short_ex = ex_long, ex_short
+            else:
+                spread = rates[ex_long] - rates[ex_short]
+                long_ex, short_ex = ex_short, ex_long
+
+            if spread >= min_spread:
+                if best is None or spread > best[2]:
+                    best = (long_ex, short_ex, spread)
+
+    return best
+```
+
+### 預測資金費率
+
+![基於溢價指數資料預測資金費率，帶置信錐](/images/blog/funding-arb-prediction.webp)
+
+資金費率通過包含溢價指數（期貨價格與現貨價格之間的差異）的公式計算。溢價比資金費率更新更頻繁（每分鐘 vs 每 8 小時）。這意味著你可以在支付前幾分鐘或幾小時**預測**下一個資金費率。
+
+```python
+def predict_next_funding(
+    premium_index: float,
+    interest_rate: float = 0.0001,  # 每 8 小时 0.01%（标准）
+    clamp_range: float = 0.0005,    # ±0.05%
+) -> float:
+    """
+    基于当前溢价指数预测下一个资金费率。
+    Binance 公式：FR = clamp(Premium - Interest, -0.05%, 0.05%) + Interest
+    """
+    diff = premium_index - interest_rate
+    clamped = max(-clamp_range, min(clamp_range, diff))
+    return clamped + interest_rate
+```
+
+知道預測的資金費率後，你可以在支付**之前**開倉，此時價差尚未引起其他套利者的注意。
+
+## 基礎設施要求
+
+![跨交易所套利的低延遲交易基礎設施](/images/blog/funding-arb-infrastructure.webp)
+
+對於嚴肅的資金費率套利，你需要基礎設施：
+
+| 元件 | 最低要求 | 最優配置 |
+|-----------|---------|------------|
+| 伺服器 | 雲端 VPS | 交易所附近的共址伺服器 |
+| 延遲 | < 500ms | < 50ms |
+| API 金鑰 | 2 個交易所 | 5 個以上交易所 |
+| 每個交易所的資金 | 各 $10K | 各 $50K+ |
+| 監控 | 日誌 + 警報 | 儀表板 + 自動再平衡 |
+| 資料 | REST API 輪詢 | WebSocket 流式傳輸 |
+
+### 不同規模下的經濟效益
+
+| 資金 | 倉位（5 倍） | 價差 0.03% | 月 PnL | ROC |
+|---------|-------------|-------------|-------------|-----|
+| $10K | $25K | 0.03% | ~$675 | ~6.75% |
+| $50K | $125K | 0.03% | ~$3,375 | ~6.75% |
+| $200K | $500K | 0.03% | ~$13,500 | ~6.75% |
+
+ROC 不依賴於規模（在流動性充足的情況下）。但 $10K 資金的絕對利潤可能無法證明基礎設施成本和時間投入的合理性。
+
+## 結論
+
+資金費率套利是一種結構性的、Delta 中性的策略。它不需要預測價格，但需要：
+
+1. **基礎設施**——即時監控多個交易所的費率
+2. **執行速度**——在不同平臺上同時開倉
+3. **風險管理**——控制保證金、價格差異和價差變化
+4. **資金**——利潤與倉位大小成正比
+
+資金費率價差不是恆定的。它們在波動期擴大，在平靜期縮小。任務是自動發現並利用差異，趁它們還存在的時候。
+
+關於資金費率如何影響槓桿策略的更多內容——請參閱文章[資金費率扼殺你的槓桿：為什麼 PnL×50x 是虛構的](/ru/blog/post/funding-rates-kill-leverage)。
+
+---
+
+## 有用連結
+
+1. [Binance — Funding Rate History](https://www.binance.com/en/futures/funding-history/quarterly/0)
+2. [Binance — Introduction to Funding Rates](https://www.binance.com/en/support/faq/introduction-to-binance-futures-funding-rates-360033525031)
+3. [Bybit — Understanding Funding Rates](https://learn.bybit.com/trading/what-is-funding-rate/)
+4. [dYdX — Perpetual Funding Rate Mechanism](https://dydx.exchange/)
+5. [Coinglass — Funding Rate Monitor](https://www.coinglass.com/FundingRate)
+
+## 引用
+
+```bibtex
+@article{soloviov2026fundingarbitrage,
+  author = {Soloviov, Eugen},
+  title = {Funding Rate Arbitrage Across Exchanges: How to Profit from Rate Differences},
+  year = {2026},
+  url = {https://marketmaker.cc/ru/blog/post/funding-rate-arbitrage-cross-exchange},
+  description = {加密交易所之间的资金费率套利如何运作，为什么 Binance、Bybit、OKX 和 dYdX 上的费率不同，以及如何构建监控和执行系统。}
+}
+```

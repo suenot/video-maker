@@ -1,0 +1,45 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article statistical-arbitrage-pairs-trading-crypto ZH-TW 474543828931". This source is the complete published zh-Hant article snapshot; do not merge another language edition or outside information. The final output must be Traditional Chinese for Taiwan (zh-TW), not generic Chinese and not English. Use Taiwan financial terminology such as 資金費率, 滑價, 避險, 委託簿 and 資料 where appropriate. Keep proper names, tickers, equations, code identifiers, citations and units in their exact source form when necessary. Translate explanatory labels naturally. Preserve all article H2 and H3 sections in this exact sequence, including nested subsection order:
+1. H2 — 1. 簡史：從耶穌會士到量化交易員
+2. H2 — 2. 數學基礎：相關性是一個陷阱
+3. H3 — 為什麼相關性不起作用
+4. H3 — 協整：正確的方法
+5. H3 — Engle-Granger檢驗（1987）
+6. H3 — Johansen檢驗
+7. H3 — Ornstein-Uhlenbeck過程
+8. H3 — Z-score標準化
+9. H2 — 3. 加密貨幣市場的配對選擇
+10. H3 — BTC-ETH：有時有效的經典組合
+11. H3 — 行業配對
+12. H3 — 現貨 vs 永續合約（基差）
+13. H2 — 4. 三種交易方式
+14. H3 — A. 基差交易：現貨-期貨與資金費率套利
+15. H3 — B. 跨交易所套利
+16. H3 — C. 槓桿配對交易
+17. H2 — 5. 卡爾曼濾波實現自適應對沖比率
+18. H3 — 為什麼靜態對沖比率有問題
+19. H3 — 狀態空間模型
+20. H3 — 相比滾動OLS的優勢
+21. H3 — 使用filterpy實現
+22. H2 — 6. 入場和出場訊號
+23. H3 — Z-Score閾值
+24. H3 — 動量過濾器
+25. H3 — 基於時間的出場
+26. H2 — 7. 回測：正確的方法
+27. H3 — 前推分析
+28. H3 — 交易成本模型
+29. H3 — 滑點模型
+30. H3 — 指標
+31. H2 — 8. 現實世界的問題
+32. H3 — 滑點與流動性
+33. H3 — 資金費率風險
+34. H3 — 危機中的相關性崩潰
+35. H3 — 資金要求
+36. H2 — 9. 端到端Python實現
+37. H3 — 資料獲取
+38. H3 — 協整檢驗
+39. H3 — 卡爾曼濾波 + 回測器
+40. H3 — 實盤交易骨架
+41. H2 — 結語
+
+Cover only details actually present in this attached article. Preserve its examples, formulas, numerical values, code logic, caveats, risk points, links and citations accurately. Distinguish correlation from cointegration, Engle-Granger and Johansen tests, Ornstein-Uhlenbeck and z-scores, pair selection, basis/cross-exchange/leveraged variants, Kalman hedge ratios, walk-forward testing, transaction costs and real-world failure modes. Explain code as instructional, not production-ready. Attribute financial, numerical, research, company-specific and time-sensitive statements to the article as unverified claims; do not add external facts, guaranteed returns, investment advice or newly inferred certainty. This is a source draft: human editorial, terminology/translation, mathematical and primary-source review remain pending. The existence of this published Chinese article does not establish factual approval. NotebookLM library and target-channel duplicates have not been checked externally; do not imply clearance.
+Use enough legible slides for every major section and material subsection. Present formulas, units, tables and any code excerpt only where supported by the source; distinguish article claims from independently verified facts. Keep on-slide words and captions in the requested Chinese script, apart from necessary technical identifiers. End with the article conclusion and links/references if the source has them.

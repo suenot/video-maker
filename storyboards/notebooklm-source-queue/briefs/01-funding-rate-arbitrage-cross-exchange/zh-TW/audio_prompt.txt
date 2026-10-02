@@ -1,0 +1,27 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article funding-rate-arbitrage-cross-exchange ZH-TW 829f5f0551cc". This source is the complete published zh-Hant article snapshot; do not merge another language edition or outside information. The final output must be Traditional Chinese for Taiwan (zh-TW), not generic Chinese and not English. Use Taiwan financial terminology such as 資金費率, 滑價, 避險, 委託簿 and 資料 where appropriate. Keep proper names, tickers, equations, code identifiers, citations and units in their exact source form when necessary. Translate explanatory labels naturally. Preserve all article H2 and H3 sections in this exact sequence, including nested subsection order:
+1. H2 — 為什麼不同交易所的資金費率不同
+2. H3 — 典型差異
+3. H2 — 基本套利機制
+4. H3 — 示例
+5. H2 — 風險和陷阱
+6. H3 — 1. 交易所之間的價格差異
+7. H3 — 2. 資金費率變化
+8. H3 — 3. 交易手續費
+9. H3 — 4. 保證金要求
+10. H3 — 5. 清算風險
+11. H2 — 資金費率監控系統
+12. H3 — 示例輸出
+13. H2 — 執行：同時開倉
+14. H3 — 倉位管理
+15. H2 — 進階方案
+16. H3 — 現貨-永續套利
+17. H3 — 多交易所套利
+18. H3 — 預測資金費率
+19. H2 — 基礎設施要求
+20. H3 — 不同規模下的經濟效益
+21. H2 — 結論
+22. H2 — 有用連結
+23. H2 — 引用
+
+Cover only details actually present in this attached article. Preserve its examples, formulas, numerical values, code logic, caveats, risk points, links and citations accurately. Keep funding-rate direction, payment intervals, gross spread arithmetic, execution sequence, exchange-basis exposure, fees, slippage, changing rates, margin, liquidation and counterparty risk distinct. Any profit or live-rate figure is an illustrative article claim, not a guaranteed or current return. Attribute financial, numerical, research, company-specific and time-sensitive statements to the article as unverified claims; do not add external facts, guaranteed returns, investment advice or newly inferred certainty. This is a source draft: human editorial, terminology/translation, mathematical and primary-source review remain pending. The existence of this published Chinese article does not establish factual approval. NotebookLM library and target-channel duplicates have not been checked externally; do not imply clearance.
+Speak in Taiwan Mandarin (Guoyu), not Taiwanese Hokkien throughout. Use natural spoken Chinese narration or dialogue and explain formulas, units, tables, charts and code in words; do not request drawings, displayed text or on-screen tables. Preserve technical identifiers only when needed for comprehension. End with the article conclusion and mention source references when present.

@@ -1,0 +1,19 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article algo-investor-skills ZH-CN 2c948f9f6d41". This source is the complete published zh article snapshot; do not merge another language edition or outside information. The final output must be Simplified Chinese for Mainland China (zh-CN), not generic Chinese and not English. Use Mainland Chinese financial terminology such as 资金费率, 滑点, 对冲, 订单簿 and 数据 where appropriate. Keep proper names, tickers, equations, code identifiers, citations and units in their exact source form when necessary. Translate explanatory labels naturally. Preserve all article H2 and H3 sections in this exact sequence, including nested subsection order:
+1. H2 — 为什么这是一套技能，而不是一个模板
+2. H2 — 六个技能
+3. H2 — 端到端的流水线
+4. H3 — 1. Intake —— 唯一的真相来源
+5. H3 — 2. algo-financial-models —— 诚实的数字
+6. H3 — 3. investor-proof-pack —— 让诚实变得可核查
+7. H3 — 4. investor-proposal-build —— 14 个章节的叙事弧线
+8. H3 — 5. investor-doc-localize —— 不漂移的翻译
+9. H3 — 6. investor-proposal-audit —— 强制性关卡
+10. H2 — 设计原则（以及它们为何对资金配置者重要）
+11. H2 — 一个算法投资人实际如何使用它
+12. H2 — 它在 Marketmaker / AI 代理生态中的定位
+13. H2 — 诚实的注意事项
+14. H2 — 链接
+15. H2 — 结语
+
+Cover only details actually present in this attached article. Preserve its examples, formulas, numerical values, code logic, caveats, risk points, links and citations accurately. Preserve the six-skill order, intake-to-audit pipeline, measured evidence versus forward assumptions, investor proof pack, independent exchange reconciliation, read-only access, custody and explicit caveats where present. Treat the title's scam-proof framing as a question to test, never as a promise of fraud-free status, legal protection or returns. Attribute financial, numerical, research, company-specific and time-sensitive statements to the article as unverified claims; do not add external facts, guaranteed returns, investment advice or newly inferred certainty. This is a source draft: human editorial, terminology/translation, mathematical and primary-source review remain pending. The existence of this published Chinese article does not establish factual approval. NotebookLM library and target-channel duplicates have not been checked externally; do not imply clearance.
+Speak in Standard Mandarin (Putonghua) as used in Mainland China throughout. Use natural spoken Chinese narration or dialogue and explain formulas, units, tables, charts and code in words; do not request drawings, displayed text or on-screen tables. Preserve technical identifiers only when needed for comprehension. End with the article conclusion and mention source references when present.

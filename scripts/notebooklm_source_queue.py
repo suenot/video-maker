@@ -24,6 +24,18 @@ QUEUE = ROOT / "storyboards/notebooklm-source-queue"
 RUNTIME = ROOT / "temp/notebooklm-source-queue"
 ACTIVE = {"submitting", "submission_unknown", "generating", "scheduled", "requires_manual_binding", "ambiguous", "unknown", "wrong_artifact_kind"}
 UNRESOLVED = {"requires_manual_binding", "ambiguous", "unknown", "wrong_artifact_kind", "submission_unknown", "submitting"}
+OUTPUT_LANGUAGES = {
+    "en": "English",
+    "ru": "Russian",
+    "zh-CN": "Chinese (Simplified)",
+    "zh-TW": "Chinese (Traditional)",
+}
+# A generic "Chinese"/"中文" label cannot establish which writing system was
+# selected. Require an explicit variant before submitting either Chinese job.
+CHINESE_LANGUAGE_ALIASES = {
+    "Chinese (Simplified)": ("中文（简体）", "中文(简体)", "简体中文", "Chinese (Simplified)"),
+    "Chinese (Traditional)": ("中文（繁體）", "中文(繁體)", "繁體中文", "中文（繁体）", "中文(繁体)", "繁体中文", "Chinese (Traditional)"),
+}
 
 
 def now():
@@ -172,7 +184,7 @@ class Runner:
 
     def identity(self, brief):
         slug, lang = brief["slug"], brief["language"]
-        if not re.fullmatch(r"[a-z0-9-]+", slug) or lang not in ("en", "ru"):
+        if not re.fullmatch(r"[a-z0-9-]+", slug) or lang not in OUTPUT_LANGUAGES:
             raise RuntimeError("Invalid article/language identity")
         return f"{slug}:{lang}"
 
@@ -350,7 +362,7 @@ class Runner:
         return True
 
     async def set_language(self, page, dialog, language):
-        names = self.nlm.LANG_ALIASES[language.casefold()]
+        names = CHINESE_LANGUAGE_ALIASES[language] if language in CHINESE_LANGUAGE_ALIASES else self.nlm.LANG_ALIASES[language.casefold()]
         allowed = {name.casefold() for name in names}
         trigger = dialog.locator("mat-select")
         if await trigger.count() != 1:
@@ -403,7 +415,7 @@ class Runner:
         dialog = page.get_by_role("dialog").filter(has=textbox)
         if await dialog.count() != 1:
             raise RuntimeError("Unique customize dialog unavailable")
-        language = "English" if brief["language"] == "en" else "Russian"
+        language = OUTPUT_LANGUAGES[brief["language"]]
         values = await self.set_language(page, dialog, language)
         if kind == "audio":
             if not await self.nlm._select_format_tile(page, "Deep Dive"):

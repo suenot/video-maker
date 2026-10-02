@@ -1,0 +1,27 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article order-flow-imbalance-prediction ZH-TW be3546cf73e4". This source is the complete published zh-Hant article snapshot; do not merge another language edition or outside information. The final output must be Traditional Chinese for Taiwan (zh-TW), not generic Chinese and not English. Use Taiwan financial terminology such as 資金費率, 滑價, 避險, 委託簿 and 資料 where appropriate. Keep proper names, tickers, equations, code identifiers, citations and units in their exact source form when necessary. Translate explanatory labels naturally. Preserve all article H2 and H3 sections in this exact sequence, including nested subsection order:
+1. H2 — 為什麼是訂單流，而不是交易
+2. H2 — Cont-Kukanov-Stoikov OFI 模型
+3. H3 — 定義訂單流不平衡
+4. H3 — 區間聚合
+5. H3 — 線性價格影響模型
+6. H3 — 橫截面縮放
+7. H2 — 多級訂單流不平衡（MLOFI）
+8. H3 — 定義
+9. H3 — 多級價格影響
+10. H3 — 主成分縮減
+11. H2 — 交易分類：買入與賣出發起
+12. H3 — 報價規則
+13. H3 — 批次成交量分類（BVC）
+14. H2 — OFI 不是什麼
+15. H2 — Python 實現
+16. H3 — OFI 核心計算
+17. H3 — 聚合到時間視窗
+18. H3 — 交易分類（Lee-Ready）
+19. H3 — 訊號歸一化
+20. H2 — OFI 接入的位置
+21. H2 — 實務注意事項
+22. H2 — 要點
+23. H2 — 延伸閱讀
+
+Cover only details actually present in this attached article. Preserve its examples, formulas, numerical values, code logic, caveats, risk points, links and citations accurately. Distinguish event-based OFI from static order-book imbalance and trade classification; preserve bid/ask event signs, interval aggregation, depth scaling, MLOFI, quote rule/BVC/Lee-Ready, normalisation, assumptions and limits. Do not turn an association or backtest into a causal or guaranteed forecast. Attribute financial, numerical, research, company-specific and time-sensitive statements to the article as unverified claims; do not add external facts, guaranteed returns, investment advice or newly inferred certainty. This is a source draft: human editorial, terminology/translation, mathematical and primary-source review remain pending. The existence of this published Chinese article does not establish factual approval. NotebookLM library and target-channel duplicates have not been checked externally; do not imply clearance.
+Speak in Taiwan Mandarin (Guoyu), not Taiwanese Hokkien throughout. Use natural spoken Chinese narration or dialogue and explain formulas, units, tables, charts and code in words; do not request drawings, displayed text or on-screen tables. Preserve technical identifiers only when needed for comprehension. End with the article conclusion and mention source references when present.

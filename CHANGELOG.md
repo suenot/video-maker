@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Freeze separate Mainland Simplified and Taiwan Traditional Chinese source briefs for the ten prepared articles, preserving published localized article bytes, regional terminology, section order and pending editorial review.
 - Freeze EN/RU source briefs for Almgren-Chriss execution and DEX trader behavior predictions, preserving full articles, section order, separate spoken-audio prompts and pending unit/evidence review.
 - Freeze EN/RU source briefs for AI4Finance Foundation and algo-investor-skills, preserving full articles, section-specific prompts, original exposure notation and pending external/editorial checks.
 - Freeze the next EN/RU source briefs for agentic AI investments and AI Hedge Fund, retaining full articles, section-specific slide/audio prompts, input hashes and explicit external duplicate-check uncertainty.
@@ -26,6 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bind NotebookLM production to the designated Gaia Camoufox account and record account verification before source generation.
 - Preserve the rejected bilingual order-types Blueprint package for provenance; record the user's quality rejection and the recovered existing NotebookLM PDF/audio flow before further production.
 - Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
+
+## [1.2.0] - 2026-10-02
+
+### Added
+
+- Support separate Mainland Simplified (`zh-CN`) and Taiwan Traditional (`zh-TW`) NotebookLM slide/audio drafts, requiring an explicit language variant in the generation dialog.
 
 ## [1.1.5] - 2026-10-02
 

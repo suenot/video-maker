@@ -1,0 +1,16 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article analysis-trader-prediction-dex ZH-TW a4b2a3b1124d". This source is the complete published zh-Hant article snapshot; do not merge another language edition or outside information. The final output must be Traditional Chinese for Taiwan (zh-TW), not generic Chinese and not English. Use Taiwan financial terminology such as 資金費率, 滑價, 避險, 委託簿 and 資料 where appropriate. Keep proper names, tickers, equations, code identifiers, citations and units in their exact source form when necessary. Translate explanatory labels naturally. Preserve all article H2 and H3 sections in this exact sequence, including nested subsection order:
+1. H2 — DEX中的交易者識別
+2. H2 — 行為預測與"意願訂單簿"概念
+3. H3 — 預測模型的組成部分：
+4. H2 — 活躍交易者數量作為市場資產
+5. H2 — DEX操縱行為的檢測
+6. H3 — 1. 自我交易
+7. H3 — 2. 價格操縱
+8. H3 — 3. 拉高出貨（Pump-and-Dump）
+9. H2 — 技術實現方案
+10. H2 — 侷限性與倫理考量
+11. H2 — 結論
+12. H2 — 引文
+
+Cover only details actually present in this attached article. Preserve its examples, formulas, numerical values, code logic, caveats, risk points, links and citations accurately. Distinguish a wallet address from a verified person, observed on-chain activity from inferred intentions, and the proposed desire orderbook from executable orders. Treat embedding/recognition figures as article claims pending source review. Include Sybil/address clustering, false positives, privacy and the limits of manipulation signals; do not accuse identifiable users. Attribute financial, numerical, research, company-specific and time-sensitive statements to the article as unverified claims; do not add external facts, guaranteed returns, investment advice or newly inferred certainty. This is a source draft: human editorial, terminology/translation, mathematical and primary-source review remain pending. The existence of this published Chinese article does not establish factual approval. NotebookLM library and target-channel duplicates have not been checked externally; do not imply clearance.
+Speak in Taiwan Mandarin (Guoyu), not Taiwanese Hokkien throughout. Use natural spoken Chinese narration or dialogue and explain formulas, units, tables, charts and code in words; do not request drawings, displayed text or on-screen tables. Preserve technical identifiers only when needed for comprehension. End with the article conclusion and mention source references when present.

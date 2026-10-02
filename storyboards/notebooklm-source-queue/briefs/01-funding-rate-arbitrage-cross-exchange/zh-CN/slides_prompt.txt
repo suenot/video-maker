@@ -1,0 +1,27 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article funding-rate-arbitrage-cross-exchange ZH-CN a16c5ad5d21d". This source is the complete published zh article snapshot; do not merge another language edition or outside information. The final output must be Simplified Chinese for Mainland China (zh-CN), not generic Chinese and not English. Use Mainland Chinese financial terminology such as 资金费率, 滑点, 对冲, 订单簿 and 数据 where appropriate. Keep proper names, tickers, equations, code identifiers, citations and units in their exact source form when necessary. Translate explanatory labels naturally. Preserve all article H2 and H3 sections in this exact sequence, including nested subsection order:
+1. H2 — 为什么不同交易所的资金费率不同
+2. H3 — 典型差异
+3. H2 — 基本套利机制
+4. H3 — 示例
+5. H2 — 风险和陷阱
+6. H3 — 1. 交易所之间的价格差异
+7. H3 — 2. 资金费率变化
+8. H3 — 3. 交易手续费
+9. H3 — 4. 保证金要求
+10. H3 — 5. 清算风险
+11. H2 — 资金费率监控系统
+12. H3 — 示例输出
+13. H2 — 执行：同时开仓
+14. H3 — 仓位管理
+15. H2 — 进阶方案
+16. H3 — 现货-永续套利
+17. H3 — 多交易所套利
+18. H3 — 预测资金费率
+19. H2 — 基础设施要求
+20. H3 — 不同规模下的经济效益
+21. H2 — 结论
+22. H2 — 有用链接
+23. H2 — 引用
+
+Cover only details actually present in this attached article. Preserve its examples, formulas, numerical values, code logic, caveats, risk points, links and citations accurately. Keep funding-rate direction, payment intervals, gross spread arithmetic, execution sequence, exchange-basis exposure, fees, slippage, changing rates, margin, liquidation and counterparty risk distinct. Any profit or live-rate figure is an illustrative article claim, not a guaranteed or current return. Attribute financial, numerical, research, company-specific and time-sensitive statements to the article as unverified claims; do not add external facts, guaranteed returns, investment advice or newly inferred certainty. This is a source draft: human editorial, terminology/translation, mathematical and primary-source review remain pending. The existence of this published Chinese article does not establish factual approval. NotebookLM library and target-channel duplicates have not been checked externally; do not imply clearance.
+Use enough legible slides for every major section and material subsection. Present formulas, units, tables and any code excerpt only where supported by the source; distinguish article claims from independently verified facts. Keep on-slide words and captions in the requested Chinese script, apart from necessary technical identifiers. End with the article conclusion and links/references if the source has them.

@@ -1,0 +1,17 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article almgren-chriss-optimal-execution ZH-TW 47fa116a8414". This source is the complete published zh-Hant article snapshot; do not merge another language edition or outside information. The final output must be Traditional Chinese for Taiwan (zh-TW), not generic Chinese and not English. Use Taiwan financial terminology such as 資金費率, 滑價, 避險, 委託簿 and 資料 where appropriate. Keep proper names, tickers, equations, code identifiers, citations and units in their exact source form when necessary. Translate explanatory labels naturally. Preserve all article H2 and H3 sections in this exact sequence, including nested subsection order:
+1. H2 — 模型設定:這個模型到底假設了什麼
+2. H3 — 交易軌跡的成本與方差
+3. H2 — 閉式解:sinh、cosh 與緊迫性參數
+4. H3 — 風險中性極限就是 TWAP——這正是 TWAP 存在的原因
+5. H2 — 執行的有效前沿
+6. H2 — 校準:從 Binance 資料估計 $\eta$、$\gamma$、$\sigma$
+7. H3 — $\sigma$:最容易的一個
+8. H3 — $\eta$:從訂單簿和成交資料估計臨時衝擊
+9. H3 — $\gamma$:透過 Kyle 式迴歸估計永久衝擊
+10. H3 — 為什麼加密貨幣的校準會這麼嘈雜,以及該怎麼辦
+11. H2 — 模型在哪裡會失效,以及修補它的論文
+12. H2 — 總結
+13. H2 — 參考文獻
+
+Cover only details actually present in this attached article. Preserve its examples, formulas, numerical values, code logic, caveats, risk points, links and citations accurately. Preserve the conditional liquidation setting, expected cost versus inventory-weighted variance, impact assumptions, equations, symbols, horizons and units, lambda-to-zero TWAP limit, efficient frontier, calibration routes and model limitations. Attribute the numerical example and Binance/paper claims to the article pending independent recalculation and primary-source review; flag unit ambiguities. Attribute financial, numerical, research, company-specific and time-sensitive statements to the article as unverified claims; do not add external facts, guaranteed returns, investment advice or newly inferred certainty. This is a source draft: human editorial, terminology/translation, mathematical and primary-source review remain pending. The existence of this published Chinese article does not establish factual approval. NotebookLM library and target-channel duplicates have not been checked externally; do not imply clearance.
+Use enough legible slides for every major section and material subsection. Present formulas, units, tables and any code excerpt only where supported by the source; distinguish article claims from independently verified facts. Keep on-slide words and captions in the requested Chinese script, apart from necessary technical identifiers. End with the article conclusion and links/references if the source has them.

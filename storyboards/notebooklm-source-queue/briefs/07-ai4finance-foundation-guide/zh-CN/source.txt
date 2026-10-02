@@ -1,0 +1,43 @@
+MM article ai4finance-foundation-guide ZH-CN 61981223c1ce
+
+---
+title: "AI4Finance Foundation：FinGPT、FinRL和FinRobot量化交易生态系统"
+description: "AI4Finance Foundation生态系统完整指南：FinGPT（金融LLM + LoRA）、FinRL（交易强化学习）、FinRobot（多智能体编排）。"
+tags: ["AI4Finance", "FinGPT", "FinRL", "FinRobot", "LoRA", "强化学习", "LLM", "开源"]
+date: "2026-04-13"
+lang: "zh"
+slug: "ai4finance-foundation-guide"
+image: "/images/blog/ai4finance-foundation-guide.png"
+authors: ["suenot"]
+---
+
+# AI4Finance Foundation：FinGPT、FinRL和FinRobot量化交易生态系统
+
+![AI4Finance — 金融AI生态系统](/images/blog/ai4finance-foundation-guide.png)
+
+**AI4Finance Foundation**在[ai4finance.org](https://ai4finance.org/)汇集了数十个金融AI开源项目。三大支柱：
+
+| 支柱 | 用途 | 核心技术 |
+|---|---|---|
+| **FinGPT** | 金融LLM | LoRA、微调、情感分析 |
+| **FinRL** | 交易强化学习 | Gymnasium、DRL智能体 |
+| **FinRobot** | 多智能体编排 | AutoGen、角色、工具包 |
+
+## 1. FinGPT — 通过LoRA实现金融LLM
+
+![LoRA概念](/images/blog/ai4finance-lora-concept.png)
+
+**LoRA**在选定层添加小型可训练矩阵，而非重新训练所有参数。
+
+## 2. FinRL — 交易强化学习
+
+连接市场数据、Gymnasium环境和DRL库。内置通过`turbulence_threshold`的风险管理。
+
+## 3. FinRobot — AI智能体编排
+
+在FinGPT/FinRL之上的**用户体验和场景**层。
+
+## 链接
+
+- 🌐 **网站:** [ai4finance.org](https://ai4finance.org/)
+- 💻 **GitHub:** [AI4Finance-Foundation](https://github.com/AI4Finance-Foundation)

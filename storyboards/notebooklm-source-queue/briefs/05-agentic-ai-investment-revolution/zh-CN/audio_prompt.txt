@@ -1,0 +1,22 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article agentic-ai-investment-revolution ZH-CN bca80a83c3be". This source is the complete published zh article snapshot; do not merge another language edition or outside information. The final output must be Simplified Chinese for Mainland China (zh-CN), not generic Chinese and not English. Use Mainland Chinese financial terminology such as 资金费率, 滑点, 对冲, 订单簿 and 数据 where appropriate. Keep proper names, tickers, equations, code identifiers, citations and units in their exact source form when necessary. Translate explanatory labels naturally. Preserve all article H2 and H3 sections in this exact sequence, including nested subsection order:
+1. H2 — 代理型AI：新一代智能助手
+2. H2 — 为什么传统投资方法正在过时
+3. H2 — 代理型AI投资系统如何运作
+4. H3 — 多层级智能体架构
+5. H3 — 向量数据库——秘密武器
+6. H3 — 持续学习循环
+7. H2 — 智能体竞赛：投资新范式
+8. H2 — AI智能体的经济自主性
+9. H2 — 智能体间的经济互动
+10. H2 — 代理型AI在投资中的真实优势
+11. H3 — 1. 超越人类的反应速度
+12. H3 — 2. 处理海量数据
+13. H3 — 3. 摆脱认知偏差
+14. H3 — 4. 个性化新高度
+15. H2 — 未来已来
+16. H2 — 对行业的意义
+17. H2 — 结论
+18. H2 — 引文
+
+Cover only details actually present in this attached article. Preserve its examples, formulas, numerical values, code logic, caveats, risk points, links and citations accurately. Keep the article's proposed agent roles, vector-search/learning loop, competition and agent-economy examples in their source order. Attribute Gartner, Olas, Deloitte and other company, speed, adoption or yield statements to the article pending primary-source review. Autonomous performance and absence of bias are claims, not verified outcomes. Attribute financial, numerical, research, company-specific and time-sensitive statements to the article as unverified claims; do not add external facts, guaranteed returns, investment advice or newly inferred certainty. This is a source draft: human editorial, terminology/translation, mathematical and primary-source review remain pending. The existence of this published Chinese article does not establish factual approval. NotebookLM library and target-channel duplicates have not been checked externally; do not imply clearance.
+Speak in Standard Mandarin (Putonghua) as used in Mainland China throughout. Use natural spoken Chinese narration or dialogue and explain formulas, units, tables, charts and code in words; do not request drawings, displayed text or on-screen tables. Preserve technical identifiers only when needed for comprehension. End with the article conclusion and mention source references when present.

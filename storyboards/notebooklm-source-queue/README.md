@@ -1,10 +1,22 @@
 # NotebookLM article source queue
 
-Trigger: a published EN/RU article lacks a linked video and local source,
+Trigger: a published article lacks a linked video and local source,
 render, manifest, and upload records show no completed package for that
 language. The 2026-10-01 priority order is funding-rate arbitrage, statistical
 arbitrage, order-flow imbalance, then TWAP/VWAP/POV. Source drafting proceeds
 while the separate order-types Shorts revision awaits visual acceptance.
+
+The 2026-10-02 language scope is EN, RU, Mainland Chinese (`zh-CN`, Simplified)
+and Taiwan Chinese (`zh-TW`, Traditional). Each locale has its own notebook,
+frozen brief, PDF and Deep Dive audio. Use the full published `.zh.md` article
+for `zh-CN` and `.zh-Hant.md` for `zh-TW`, recording the article language
+separately from the output locale. Preserve regional financial terminology;
+audio is Mandarin with Mainland or Taiwan usage, with pronunciation and
+regional consistency pending editorial listening review. An existing legacy
+`zh` source or publication needs variant reconciliation before another Chinese
+generation. Chinese is not an automatic relabeling of an EN/RU source draft.
+For a later article without a published localized text, freeze the full EN
+article with explicit source-language/translation provenance before generation.
 
 Each `briefs/<priority>-<slug>/<lang>/brief.json` fixes the article path,
 SHA-256, title, source text, and separate slide and audio prompts, including
@@ -63,6 +75,8 @@ placeholder that can briefly overlap its replacement; preserve the insertion
 intent and reconcile the sole permanent addition without uploading again.
 Wait for the expected customize dialog's prompt to become visible, then
 verify its language, selected source and audio format/length before Generate.
+Chinese selection must explicitly identify Simplified or Traditional; a generic
+"Chinese" or "中文" label does not establish the variant and blocks submission.
 Bind a new
 artifact only immediately after the observed Generate click. An interrupted
 submission without a saved artifact ID, ambiguous cards, an unknown account,

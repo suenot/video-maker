@@ -1,0 +1,256 @@
+MM article almgren-chriss-optimal-execution ZH-CN c8ca2a276e8b
+
+---
+title: "去掉玄乎其辞的 Almgren-Chriss：一个下午就能实现的最优执行模型"
+description: "Almgren-Chriss 最优执行模型的完整推导：线性冲击、sinh/cosh 交易轨迹、有效前沿，以及从 Binance L2 和成交数据校准 eta、gamma、sigma 的可运行 Python 代码。"
+tags: ["执行", "Almgren-Chriss", "市场冲击", "最优执行", "TWAP", "quant", "python", "加密货币"]
+date: "2026-07-14"
+draft: false
+lang: "zh"
+image: "/images/blog/almgren-chriss-optimal-execution.webp"
+slug: "almgren-chriss-optimal-execution"
+authors: ["suenot"]
+---
+
+# 去掉玄乎其辞的 Almgren-Chriss：一个下午就能实现的最优执行模型
+
+Almgren 和 Chriss(2001)的论文《Optimal execution of portfolio transactions》(《Journal of Risk》3(2),5–39)大概是执行研究领域被引用最多、同时也是被最不正确地实现的论文。市面上大多数所谓的"Almgren-Chriss"代码,不过是加了一段注释的 TWAP 调度器。大多数介绍它的博客文章都跳过推导过程,对着一个 sinh 函数挥挥手就算讲完了,从不触碰生产环境中真正重要的部分——参数到底从哪里来。
+
+本文把整件事从头到尾讲透。模型假设,老老实实地列出来。闭式交易轨迹,是推导出来的,不是断言出来的。有效前沿,以及如何选择风险厌恶参数。还有三个输入参数——临时冲击 $\eta$、永久冲击 $\gamma$、波动率 $\sigma$——从 Binance 订单簿和成交数据校准的方法,配有可运行的 Python 代码,以及为什么拟合结果会很嘈杂的坦诚讨论。这是执行领域其他一切内容的思想脊梁:TWAP、VWAP 和 POV 都是它的特例或启发式近亲(参见[TWAP、VWAP、POV:人人都在跑的执行算法](/blog/twap-vwap-pov-execution-algorithms)),而现代机器学习方法——强化学习调度器和神经网络冲击模型——正是试图放松我们即将写下的这些假设。
+
+## 模型设定:这个模型到底假设了什么
+
+你持有 $X$ 单位的某资产(比如 100 个 BTC),必须在时间 $T$ 之前全部清仓。把 $[0, T]$ 划分成 $N$ 个长度为 $\tau = T/N$ 的区间。你的决策变量是持仓轨迹 $x_0 = X, x_1, \dots, x_N = 0$,在区间 $k$ 中执行的交易量为 $n_k = x_{k-1} - x_k$。
+
+三条假设撑起了整个模型:
+
+**1. 算术随机游走。** 未受扰动的价格遵循
+
+$$
+S_k = S_{k-1} + \sigma \sqrt{\tau}\, \xi_k - \tau\, g\!\left(\frac{n_k}{\tau}\right),
+$$
+
+其中 $\xi_k$ 是独立同分布的标准正态变量,$\sigma$ 是*绝对*波动率(单位是美元每单位时间的 $1/2$ 次方,不是百分比)。是算术游走,不是几何游走——在几小时的尺度上二者的差异可以忽略,而算术游走能让代数运算保持线性二次形式。没有漂移项:Almgren 和 Chriss 讨论过漂移项,但对日内清仓而言,你对未来 4 小时 alpha 的估计几乎总是噪声,把它设为零才是老实的默认做法。
+
+**2. 线性永久冲击。** $g(v) = \gamma v$:以速率 $v$ 交易会永久地、成比例地推动价格,且这种推动永不衰减。你卖出的每一单位都会把中间价永远压低 $\gamma$。这看起来很粗糙,但保持线性有一个深刻的理由:Huberman 和 Stanzl(2004)证明了,如果*永久*冲击相对于交易规模是非线性的,就会存在期望利润为正的来回交易策略——即价格操纵。线性永久冲击不是为图方便而做的简化;在这一类模型中,它是唯一无套利的选择。
+
+**3. 线性临时冲击。** 你在区间 $k$ 实际拿到的价格是
+
+$$
+\tilde{S}_k = S_{k-1} - h\!\left(\frac{n_k}{\tau}\right), \qquad h(v) = \epsilon\, \mathrm{sgn}(v) + \eta v.
+$$
+
+$\epsilon$ 代表买卖价差的一半再加上手续费;$\eta$ 是以速率 $v$ 索取流动性的边际成本斜率。临时冲击只影响你自己的成交,并且瞬间消失——在你的下一个子订单到来之前,订单簿会完全补充回来。"线性"、"瞬间"、"完全"这三个词,在真实市场里没有一个是对的,最后一节会讨论到底错到什么程度。但首先,接受这些假设能换来什么回报。
+
+### 交易轨迹的成本与方差
+
+把各笔成交加总,再减去初始估值 $X S_0$,就得到了执行落差(implementation shortfall)。它在噪声 $\xi_k$ 上的期望和方差分别是:
+
+$$
+E[C] = \underbrace{\tfrac{1}{2}\gamma X^2}_{\text{永久冲击}} + \underbrace{\epsilon X}_{\text{价差}} + \underbrace{\frac{\tilde{\eta}}{\tau} \sum_{k=1}^{N} n_k^2}_{\text{临时冲击}},
+\qquad
+V[C] = \sigma^2 \tau \sum_{k=1}^{N} x_k^2,
+$$
+
+其中 $\tilde{\eta} = \eta - \tfrac{1}{2}\gamma\tau$(一个离散化修正项,当 $\tau \to 0$ 时消失)。
+
+大多数实现都会漏掉的两个观察点:
+
+- **永久成本 $\tfrac{1}{2}\gamma X^2$ 不依赖于交易轨迹。** 在线性且不衰减的永久冲击下,无论你怎么排期,付出的永久性代价都是一样的。整个优化完全是临时成本项(希望交易缓慢均匀——由 $n_k = X/N$,即 TWAP,使其最小化)与方差项(希望你的库存昨天就清空——由立即清仓使其最小化)之间的博弈。
+- **方差项是按库存加权的,不是按交易量加权的。** 风险累积在你*仍然持有*的部分 $x_k$ 上,而不是你交易的部分。这就是为什么紧迫性会让排期前置。
+
+## 闭式解:sinh、cosh 与紧迫性参数
+
+Almgren-Chriss 最小化均值-方差目标函数
+
+$$
+U(x) = E[C] + \lambda V[C],
+$$
+
+其中 $\lambda \geq 0$ 是以 1/美元为单位的风险厌恶系数。对内部点令 $\partial U / \partial x_j = 0$。临时成本项贡献 $x$ 的二阶差分,方差项贡献 $x_j$ 本身,由此得到一个线性二阶差分方程:
+
+$$
+\frac{x_{j-1} - 2x_j + x_{j+1}}{\tau^2} = \tilde{\kappa}^2 x_j,
+\qquad
+\tilde{\kappa}^2 = \frac{\lambda \sigma^2}{\tilde{\eta}}.
+$$
+
+这是 $x'' = \kappa^2 x$ 的离散类比,在边界条件 $x_0 = X$、$x_N = 0$ 下,解是双曲函数形式:
+
+$$
+\boxed{\;x_j = X\, \frac{\sinh\!\big(\kappa\,(T - t_j)\big)}{\sinh(\kappa T)}\;}
+\qquad
+n_j = \frac{2\sinh(\kappa\tau/2)}{\sinh(\kappa T)}\, \cosh\!\big(\kappa (T - t_{j-1/2})\big)\, X,
+$$
+
+其中 $\kappa$ 满足 $\tfrac{2}{\tau^2}\left(\cosh(\kappa\tau) - 1\right) = \tilde{\kappa}^2$,当 $\tau$ 很小时,这近似等于 $\kappa \approx \tilde{\kappa} = \sqrt{\lambda\sigma^2/\eta}$。
+
+![不同 kappa 值下的最优持仓轨迹,从 TWAP 直线到激进的前置曲线](/images/blog/almgren-chriss-optimal-execution-trajectories.webp)
+
+关于该策略的一切都被压缩进了一个数字:
+
+$$
+\kappa = \sqrt{\frac{\lambda \sigma^2}{\eta}} \qquad [\text{单位:} 1/\text{时间}].
+$$
+
+$\kappa$ 就是**紧迫性**。它的倒数 $\theta = 1/\kappa$ 是这笔交易的特征时间:在这个时间尺度上,承担库存风险以换取冲击成本节约才是值得的。请注意 $\kappa$ *不*依赖于订单规模 $X$ 和截止时间 $T$。你这笔交易的内在时间尺度是 20 分钟还是 6 小时,完全由风险厌恶程度、波动率和流动性决定。如果 $\theta \ll T$,你的截止时间就无关紧要了——模型会按自己的节奏清仓,horizon 的尾部根本用不上。如果 $\theta \gg T$,截止时间就成了约束,你实际上是在做 TWAP。
+
+### 风险中性极限就是 TWAP——这正是 TWAP 存在的原因
+
+取 $\lambda \to 0$,于是 $\kappa \to 0$。此时 $\sinh(z) \to z$,于是
+
+$$
+x(t) = X\,\frac{\sinh(\kappa(T-t))}{\sinh(\kappa T)} \;\longrightarrow\; X\,\frac{T-t}{T}.
+$$
+
+最优轨迹退化为一条直线:在相等的时间间隔内交易相等的数量。**TWAP 不是一个碰巧管用的启发式方法;它是线性冲击下风险中性交易者在 Almgren-Chriss 模型中的精确最优解。** 每次有人跑 TWAP,他们实际上都在隐含地断言 $\lambda = 0$:"我不在乎执行落差的方差,只在乎它的均值。"对于小额订单和短时间窗口,这是站得住脚的立场。但如果是在一个日波动率 4% 的资产上,用 8 小时清掉日成交量 5% 的仓位,这个立场就很奇怪了——而人们恰恰经常在这种场景下用它。相反的极限 $\lambda \to \infty$ 给出 $x_j \to 0$(对所有 $j > 0$ 成立):在第一个区间就全部倾倒出去,不惜代价。在这两个极端之间,$\kappa T$ 起插值作用:$\kappa T \lesssim 0.5$ 几乎与 TWAP 无法区分,$\kappa T \gtrsim 3$ 则是激进的前置排期。
+
+## 执行的有效前沿
+
+对每一个 $\lambda$,你都会得到一条交易轨迹、一个期望成本 $E(\lambda)$ 和一个方差 $V(\lambda)$。让 $\lambda \in [0, \infty)$ 扫描一遍,就会在 $(V, E)$ 平面上画出一条曲线——这就是**执行的有效前沿**,与 Markowitz 的有效前沿直接类比。它是凸的且递减的:更小的方差总是要以更高的期望执行落差为代价,且收益递减得很快。在给定 $\lambda$ 所选中的前沿点上,风险厌恶系数就是切线的(负)斜率:$\lambda = -\partial E / \partial V$。
+
+![执行成本相对于方差的有效前沿,切线展示了 lambda 作为斜率](/images/blog/almgren-chriss-optimal-execution-frontier.webp)
+
+有效前沿把"$\lambda$ 到底是多少?"这个没人能凭内省回答的问题,重新表述成了"我想要哪种成本/风险权衡?"——这是一个交易台真正能回答的问题。挑选前沿上的点,有三种实用方法:
+
+1. **边际成本推理。** 沿着前沿走,问自己:"从这个点移动到下一个点,我要多付出 $\Delta E$ 美元的期望成本,来消除 $\Delta\text{std}$ 美元的执行落差标准差——这笔交易我做不做?"前沿的拐点通常在 2 倍误差范围内是显而易见的,而在这个分辨率下轨迹对 $\lambda$ 并不敏感。
+2. **风险预算。** 固定一个可接受的最大执行落差标准差(例如"剩余仓位的单日 1-sigma 必须保持在名义金额的 15 个基点以下"),取满足该约束的最便宜轨迹。这是一个约束优化问题,其拉格朗日乘子*就是* $\lambda$。
+3. **特征时间锚定。** 直接选定 $\theta = 1/\kappa$(比如"这笔订单应该有 90 分钟的半衰期"),再反推出 $\lambda = \eta/(\sigma^2\theta^2)$。这正是大多数从业者在设置"紧迫性"滑块时隐含在做的事情。
+
+下面用一个数值例子来演示,其中的数字会在校准一节中给出依据。卖出 $X = 100$ BTC,$S_0 = \$100{,}000$,horizon $T = 4$ 小时,$\sigma = \$600$ 每 BTC 每 $\sqrt{\text{小时}}$(约合日波动率 3%),$\eta = 1.0\ \$\cdot\text{h}/\text{BTC}$,$\lambda = 10^{-6}\ \$^{-1}$。则
+
+$$
+\kappa = \sqrt{\frac{10^{-6} \times 3.6\times 10^{5}}{1.0}} = 0.6\ \text{h}^{-1}, \qquad \kappa T = 2.4, \qquad \theta \approx 1.7\ \text{h}.
+$$
+
+最优排期在第一个小时卖出 46.2 BTC(TWAP 则是 25)。临时成本:$\eta \int_0^T v(t)^2 dt \approx \$3{,}290$,而 TWAP 是 $\$2{,}500$。执行落差标准差:$\$53{,}000$,而 TWAP 是 $\$69{,}300$。也就是说,在 1000 万美元名义本金上多付出 0.8 个基点的期望成本,就能把执行落差风险降低 23%。这一句话就是这个模型的全部内容:它给保险定价,然后让你自己决定要不要买。
+
+交易轨迹本身用十行 Python 就能写出来:
+
+```python
+import numpy as np
+
+def almgren_chriss(X, T, N, sigma, eta, gamma, lam):
+    """Optimal liquidation trajectory (discrete AC 2001)."""
+    tau = T / N
+    eta_t = eta - 0.5 * gamma * tau          # tilde-eta
+    kappa_t2 = lam * sigma**2 / eta_t        # tilde-kappa^2
+    kappa = np.arccosh(0.5 * kappa_t2 * tau**2 + 1) / tau
+    t = np.arange(N + 1) * tau
+    x = X * np.sinh(kappa * (T - t)) / np.sinh(kappa * T)
+    n = x[:-1] - x[1:]                       # child order sizes
+    E = 0.5 * gamma * X**2 + (eta_t / tau) * np.sum(n**2)
+    V = sigma**2 * tau * np.sum(x[1:]**2)
+    return x, n, E, V
+
+x, n, E, V = almgren_chriss(X=100, T=4, N=48, sigma=600,
+                            eta=1.0, gamma=0.3, lam=1e-6)
+print(f"first-hour qty: {n[:12].sum():.1f} BTC, "
+      f"E=${E:,.0f}, std=${np.sqrt(V):,.0f}")
+```
+
+让 `lam` 在 `np.logspace(-8, -4, 50)` 上扫描,再把 $E$ 对 $\sqrt{V}$ 作图——这就是你的有效前沿,而整个决策面就浓缩在一张可以直接交给风险委员会的图表上。
+
+## 校准:从 Binance 数据估计 $\eta$、$\gamma$、$\sigma$
+
+这正是 90% 的实现悄悄崩溃的地方。交易轨迹公式很简单,参数却不简单。三个量,三个不同的估计问题。
+
+![来自 Binance 数据的滑点相对参与率、以及价格变动相对净订单流的校准散点图](/images/blog/almgren-chriss-optimal-execution-calibration.webp)
+
+### $\sigma$:最容易的一个
+
+从中间价收益率得到每 $\sqrt{\text{小时}}$ 的绝对波动率。使用 1 分钟 K 线并做尺度换算;在更细的采样频率下,微观结构噪声(买卖价差跳动)会使已实现方差向上偏。这个估计很扎实——波动率是你唯一能估准的参数。
+
+### $\eta$:从订单簿和成交数据估计临时冲击
+
+有两条互补的路线。**路线 A——扫订单簿。** 从深度快照出发,计算一笔假想的、规模为 $q$ 的可成交扫单的成本:被消耗档位的 VWAP 减去中间价。用 $\text{cost}(q) \approx \epsilon + \eta_{\text{inst}}\, q$ 拟合,就能得到每 BTC 的瞬时冲击。要把它转换成模型中基于速率的 $\eta$,你必须假设一个订单簿补充时间 $\Delta t_r$(对 BTCUSDT 而言量级在 10–60 秒左右):以速率 $v$ 交易,每个刷新周期消耗 $v \Delta t_r$,所以 $\eta \approx \eta_{\text{inst}} \Delta t_r$。这个假设——按固定时钟瞬间、完全补充——正是 Obizhaeva-Wang 模型切入的裂缝,详见下文。**路线 B——用参与率回归已实现滑点。** 把主动方(taker)流量按 1 分钟分桶;对每个桶,把 taker 一侧的 VWAP 减开盘中间价,对 taker 成交量速率做回归。路线 B 衡量的是市场实际向主动方收取了什么;路线 A 衡量的是挂单簿此刻会收取什么。当二者相差达到 3 倍时,水平层面相信 B,日内形状层面相信 A。
+
+### $\gamma$:通过 Kyle 式回归估计永久冲击
+
+在 5 分钟窗口上,把中间价变动对带符号的净 taker 流量做回归:
+
+$$
+\Delta S_{5m} = \gamma\, Q_{\text{net}} + \text{noise}, \qquad Q_{\text{net}} = \text{taker 买入} - \text{taker 卖出}.
+$$
+
+然后检验这个冲击在一个窗口之后是否没有回撤——在你的交易时间尺度上,没有回撤的那部分才是"永久"的。这是三者中噪声最大的一个,而且差距不小。
+
+只使用公开的 Binance REST 接口的可运行代码:
+
+```python
+import requests, numpy as np, pandas as pd
+
+B = "https://api.binance.com/api/v3"
+sym = "BTCUSDT"
+
+# --- sigma: absolute vol per sqrt(hour), from 1m klines ---
+kl = requests.get(f"{B}/klines", params=dict(
+    symbol=sym, interval="1m", limit=1000)).json()
+close = np.array([float(k[4]) for k in kl])
+sigma = np.diff(close).std() * np.sqrt(60)       # $/sqrt(h)
+
+# --- eta (route A): sweep cost curve from L2 depth ---
+d = requests.get(f"{B}/depth",
+                 params=dict(symbol=sym, limit=5000)).json()
+bids = np.array(d["bids"], dtype=float)          # [price, qty]
+mid = (bids[0, 0] + float(d["asks"][0][0])) / 2
+cq = np.cumsum(bids[:, 1])                       # cum qty
+cn = np.cumsum(bids[:, 0] * bids[:, 1])          # cum notional
+sizes = np.linspace(0.5, 50, 40)                 # BTC probes
+cost = [mid - np.interp(q, cq, cn) / q for q in sizes]
+eps, eta_inst = np.polyfit(sizes, cost, 1)[::-1] # cost ~ eps + k*q
+eta = eta_inst * (30 / 3600)                     # 30s refresh -> $*h/BTC
+
+# --- gamma: 5-min mid change vs net taker flow (aggTrades) ---
+tr = requests.get(f"{B}/aggTrades",
+                  params=dict(symbol=sym, limit=1000)).json()
+df = pd.DataFrame(dict(
+    t=[t["T"] for t in tr],
+    p=[float(t["p"]) for t in tr],
+    q=[float(t["q"]) * (-1 if t["m"] else 1) for t in tr]))
+df["bin"] = df.t // 300_000                      # 5-min bins
+g = df.groupby("bin").agg(dp=("p", lambda s: s.iloc[-1] - s.iloc[0]),
+                          qn=("q", "sum"))
+gamma = np.polyfit(g.qn, g.dp, 1)[0]             # $/BTC
+print(f"sigma={sigma:.0f} $/sqrt(h)  eta={eta:.2f} $*h/BTC  "
+      f"gamma={gamma:.3f} $/BTC")
+```
+
+要用于生产环境,应把单页 `aggTrades` 换成 [历史数据转储](https://data.binance.vision)中好几天的数据,在成千上万个分桶上跑 $\gamma$ 回归,而不是寥寥几个。
+
+### 为什么加密货币的校准会这么嘈杂,以及该怎么办
+
+在真实数据上跑一遍 $\gamma$ 回归,你会得到只有百分之几的 $R^2$,而且系数在不同日子之间会移动 2–5 倍。这不是你代码里的 bug。原因是结构性的:
+
+- **内生性。** 订单流对价格的反应,不亚于价格对订单流的反应。动量交易者买入*正是因为*价格上涨了;对收益率相对订单流做一个朴素的 OLS 回归,会把他们的反应也算进去,并错误地归因为冲击。干净的解法是使用你*自己*的成交记录(在构造上是外生的)——但这需要你已经交易了一段时间才能拿到。
+- **凹性。** 真实冲击相对于交易规模是凹函数——经验上接近平方根形式(Almgren、Thum、Hauptmann 和 Li,2005,《Direct estimation of equity market impact》,发现指数接近 0.6;同样的凹性在加密货币市场中也很稳健)。用直线去拟合一个凹函数,意味着你的 $\eta$ 和 $\gamma$ 会依赖于样本中的规模区间。要在你实际会交易的参与率水平上做校准。
+- **碎片化与衍生品的价格发现主导权。** Binance 上的 BTCUSDT 现货只是众多交易场所之一,价格发现常常发生在永续合约上。你看不到的订单流会推动你正在回归的这个价格,从而放大噪声项。
+- **状态依赖性。** 在亚洲时段测得的 $\eta$ 描述不了美国开盘时段的情况;波动率翻倍时,冲击大致也会翻倍。要按交易时段分别校准,并且至少每周重新拟合一次。
+
+值得庆幸的是:*交易轨迹*本身是宽容的。$\kappa \propto \sqrt{1/\eta}$,所以 $\eta$ 上 2 倍的误差只会让 $\kappa$ 移动 $\sqrt{2}$ 倍,而成本函数在最优点附近是平坦的。把 $\eta$ 估准到 2 倍误差以内,把 $\lambda$ 估准到一个数量级以内,就已经能捕获相对 TWAP 大部分可获得的改进了。精度对*事前成本估计*很重要;而对*排期调度*而言,稳健性就足够了。
+
+## 模型在哪里会失效,以及修补它的论文
+
+Almgren-Chriss 是一个脚手架,搞清楚哪根梁是承重的,就知道该往哪个方向延伸。
+
+**非线性冲击——Almgren(2003)。** 《Optimal execution with nonlinear impact functions and trading-enhanced risk》(《Applied Mathematical Finance》10,1–18)用幂律形式的临时冲击 $h(v) = \eta v^\alpha$ 重新做了一遍这套流程。对于经验上更受支持的 $\alpha \approx 1/2$——即平方根定律——最优交易轨迹的性质会发生变化:凹性冲击对突发交易的惩罚比线性冲击要轻,所以在相同的 $\lambda$ 下,最优排期会变得更加前置。定性结构(紧迫性参数、有效前沿)得以保留;但 sinh 公式不再成立。
+
+**弹性与限价订单簿——Obizhaeva 和 Wang(2013)。** 《Optimal trading strategy and supply/demand dynamics》(《Journal of Financial Markets》16(1),1–32;工作论文自 2005 年起流传)用一个具有有限深度、冲击*按指数衰减*的限价订单簿,取代了临时/永久二分法:你的交易会吃掉订单簿,订单簿以弹性速率 $\rho$ 重新填充。AC 模型"临时冲击瞬间消失"的假设,正是 $\rho \to \infty$ 的极限情形。最优策略的形态会发生剧烈变化:开头一笔大单,结尾一笔大单,中间以恒定速率交易——这些大单是在利用订单簿的恢复能力。如果你的子订单间隔与交易场所的补充时间相当(在加密货币市场,这个时间是几秒到一分钟——通常确实如此),那么你所处的就是 Obizhaeva-Wang 的地盘,而不是 Almgren-Chriss 的地盘,上文校准部分中的 $\Delta t_r$ 权宜之计正是这一警示信号。
+
+**无动态套利——Gatheral(2010)。** 《No-dynamic-arbitrage and market impact》(《Quantitative Finance》10(7),749–759)探讨了瞬时冲击函数 $f(v)$ 与衰减核 $G(t)$ 的哪些组合是内在一致的,即不存在期望成本为负的来回交易策略。结论很鲜明:指数衰减*只*与线性冲击兼容——把指数衰减与平方根冲击组合起来,模型就可能被一个振荡的交易序列榨取利润;非线性冲击则要求幂律衰减,并且两个指数之间存在一个不等式约束(对冲击 $\sim v^\delta$ 和衰减 $\sim t^{-\gamma_d}$,大致要求 $\gamma_d + \delta \geq 1$)。在你打算给自己的冲击模型装上一个花哨的衰减核之前,应该先读这篇论文:大多数临时拼凑的组合都暗藏套利机会,而在实践中,这意味着你的优化器会发现这个套利机会,并给出荒谬的振荡排期。如果你的"最优"轨迹在一次纯粹的清仓过程中交替买入和卖出,那你违反的是 Gatheral 的结论,而不是发现了 alpha。
+
+**机器学习续篇。** 本系列中有两条脉络直接建立在这个脚手架之上。第一是强化学习执行:一旦你承认冲击是非线性的、状态依赖的、部分可观测的,闭式解就不存在了,而强化学习(从 Nevmyvaka、Feng 和 Kearns 2006 年的 Q-learning 论文开始)是搜索交易轨迹空间的一种自然方式——但每一个严肃的强化学习执行智能体,都会以 AC 解作为基准进行对比,并且往往就是从 AC 解初始化的。第二是[神经网络价格冲击模型](/blog/price-impact-modeling-neural-networks):用订单簿状态的一个学习到的函数,取代 $h(v) = \eta v$,同时在上层保留均值-方差调度逻辑。如果不清楚线性-高斯基准模型到底是什么、以及它为什么会是这个形式,这两条续篇都无从谈起。
+
+## 总结
+
+这个模型是三条假设、一个差分方程、一个数字。线性永久冲击(由无操纵性所迫),线性临时冲击(一个你围绕它做校准的近似),算术布朗噪声。最优解在库存方差和冲击成本之间做权衡,整个策略被压缩成紧迫性 $\kappa = \sqrt{\lambda\sigma^2/\eta}$,而 TWAP 作为 $\lambda = 0$ 的退化情形自然而然地浮现出来——这是这个模型中最有用的一个事实,因为它把"我们该不该用 TWAP?"从一个习惯问题,变成了一个关于风险厌恶程度的、可核验的论断。校准才是真正的工作:$\sigma$ 很容易,$\eta$ 是个 2 倍误差的游戏,$\gamma$ 是个研究项目,而交易轨迹对这三者都很宽容。用一个下午实现它;把这个月剩下的时间都花在回归诊断上。
+
+## 参考文献
+
+- Almgren, R., Chriss, N. (2001). "Optimal execution of portfolio transactions." *Journal of Risk*, 3(2), 5–39.
+- Almgren, R. (2003). "Optimal execution with nonlinear impact functions and trading-enhanced risk." *Applied Mathematical Finance*, 10(1), 1–18.
+- Almgren, R., Thum, C., Hauptmann, E., Li, H. (2005). "Direct estimation of equity market impact." *Risk*, 18(7), 58–62.
+- Huberman, G., Stanzl, W. (2004). "Price manipulation and quasi-arbitrage." *Econometrica*, 72(4), 1247–1275.
+- Obizhaeva, A., Wang, J. (2013). "Optimal trading strategy and supply/demand dynamics." *Journal of Financial Markets*, 16(1), 1–32.
+- Gatheral, J. (2010). "No-dynamic-arbitrage and market impact." *Quantitative Finance*, 10(7), 749–759.
+- Nevmyvaka, Y., Feng, Y., Kearns, M. (2006). "Reinforcement learning for optimized trade execution." *ICML 2006*.

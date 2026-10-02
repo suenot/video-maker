@@ -1,0 +1,913 @@
+MM article statistical-arbitrage-pairs-trading-crypto ZH-TW 474543828931
+
+---
+title: "加密貨幣市場的統計套利與配對交易：從協整到卡爾曼濾波"
+date: "2026-03-19"
+tags: ["統計套利", "配對交易", "協整", "卡爾曼", "套利", "演算法交易", "加密貨幣"]
+slug: "statistical-arbitrage-pairs-trading-crypto"
+description: "加密貨幣市場統計套利完全指南。協整分析、卡爾曼濾波、基差策略、跨交易所套利。包含回測與Python程式碼。"
+lang: "zh-Hant"
+image: "/images/blog/statistical-arbitrage-pairs-trading-crypto.webp"
+originalSlug: "statistical-arbitrage-pairs-trading-crypto"
+authors: ["suenot"]
+---
+
+# 加密貨幣市場的統計套利與配對交易：從協整到卡爾曼濾波
+
+1987年，摩根士丹利的一群物理學家通過一種他們誰也無法向銀行管理層完全解釋清楚的演算法進行股票配對交易，一年賺了5000萬美元。管理層沒有反對。2026年，你可以在加密貨幣交易所上運行同樣的策略——永續合約、7×24小時市場，以及令Nunzio Tartaglia都羨慕的流動性。但有個問題：在網際網路時代之前對福特和通用汽車股票有效的方法，在BTC可能一夜暴跌20%、資金費率可能在一個區塊內反轉的世界裡，需要嚴肅的調整。
+
+本文是加密貨幣市場統計套利和配對交易的全面解析。從數學理論（協整、Ornstein-Uhlenbeck過程、卡爾曼濾波）到可在真實資料上執行的Python程式碼。風格偏工程化：公式要講明白，程式碼要展示出來，陷阱也不會隱藏。
+
+## 1. 簡史：從耶穌會士到量化交易員
+
+現代形式的統計套利誕生於1980年代中期摩根士丹利的交易臺。**Nunzio Tartaglia**——一位擁有物理學博士學位的前耶穌會神父——組建了一支由數學家、物理學家和電腦科學家組成的團隊。目標：發現傳統交易員看不到的股價規律。
+
+這個想法簡單得令人驚訝。如果可口可樂和百事可樂的股票歷史上一起波動（這合乎邏輯——它們賣的是不同顏色的同一種甜水），那麼它們價格的偏離就是暫時的異常。買入落後的，賣出領先的，等待迴歸，鎖定利潤。這是一種市場中性策略：市場方向與我們無關。
+
+Tartaglia的團隊中包括後來改變了整個華爾街的人物：
+
+- **David Shaw**——後來創立了D.E. Shaw & Co.，最大的量化對沖基金之一
+- **Peter Muller**——創立了PDT Partners，摩根士丹利內部的傳奇統計套利團隊
+- **Robert Frey**——後來加入了Jim Simons的Renaissance Technologies
+
+該團隊像投資銀行內部的研究實驗室一樣運作。自動化程度很高：VAX叢集生成訊號，通過終端執行交易。在最好的年份（1987-1988），該策略賺了數千萬美元。然後連續兩年虧損，1989年摩根士丹利關閉了該交易臺。
+
+但這個想法已經傳播開來。團隊的畢業生將配對交易的概念傳遍了整個華爾街。Gatev、Goetzmann和Rouwenhorst在2006年發表了經典學術論文"Pairs Trading: Performance of a Relative-Value Arbitrage Rule"，表明一個簡單的配對交易策略在1962年至2002年間美國股票市場上穩定產生了約11%的年回報率。這是對有效市場假說的有力回應：市場整體上可能是有效的，但特定資產的**配對**會系統性地偏離均衡。
+
+如今，統計套利是一個管理資產達數千億美元的行業，而加密貨幣市場為其提供了特別肥沃的土壤：碎片化的流動性、不成熟的微觀結構、全天候交易，以及帶有資金費率的永續合約——這是傳統市場中根本不存在的工具。
+
+## 2. 數學基礎：相關性是一個陷阱
+
+### 為什麼相關性不起作用
+
+讓我們從每個初學者量化交易員都會犯的錯誤開始："BTC和ETH的相關係數為0.85，所以可以交易這個配對。"不對。不行。準確地說，可以——但你會虧錢。
+
+**相關性**衡量的是兩個資產*收益率*之間的線性關係。兩個資產可以完美相關，但它們的*價格*卻永遠發散。經典例子：兩個具有相關增量的隨機遊走——儘管相關性很高，它們卻無限發散。你會開倉等待永遠不會到來的"收斂"。
+
+![協整vs相關性](/images/blog/statarb-cointegration-vs-correlation.webp)
+
+### 協整：正確的方法
+
+**協整**是*價格序列*的屬性，而非收益率的屬性。兩個非平穩序列X(t)和Y(t)如果存在線性組合：
+
+```
+S(t) = Y(t) - β · X(t)
+```
+
+是平穩的——即迴歸到均值，則稱它們是協整的。係數β稱為**對沖比率**（hedge ratio），S(t)稱為**價差**。
+
+直覺：BTC和ETH可以漲到天上或跌到深淵，但如果它們的*差值*（經過正確縮放）圍繞固定水平波動——這就是協整。而這正是我們交易所需要的。
+
+### Engle-Granger檢驗（1987）
+
+兩步程式，Robert Engle和Clive Granger因此獲得了2003年諾貝爾經濟學獎：
+
+**第一步。** OLS迴歸：Y(t) = α + β · X(t) + ε(t)。獲得對沖比率β和殘差ε(t)。
+
+**第二步。** 對殘差ε(t)進行ADF（Augmented Dickey-Fuller）檢驗。零假設：ε(t)具有單位根（非平穩）。如果p值 < 0.05，則拒絕H₀——序列是協整的。
+
+重要提示：對於協整檢驗，**不能**使用標準的ADF臨界值。Engle-Granger臨界值是通過蒙特卡羅模擬得到的，考慮了OLS迴歸中變數之間的依賴性。在statsmodels中，`coint()`函數正確實現了這一點。
+
+### Johansen檢驗
+
+對於兩個以上變數的系統（例如，同時考慮BTC、ETH和SOL），使用Johansen檢驗。它可以找到系統中的**所有**協整關係，並允許構建多資產組合。該檢驗基於VAR（向量自迴歸）模型，使用兩個統計量：跡統計量和最大特徵值統計量。
+
+### Ornstein-Uhlenbeck過程
+
+如果價差是協整的，其動態可以用Ornstein-Uhlenbeck（OU）過程建模：
+
+```
+dS(t) = θ(μ - S(t))dt + σ dW(t)
+```
+
+其中：
+- **θ** — 均值迴歸速度
+- **μ** — 長期均值水平
+- **σ** — 波動率
+- **W(t)** — 維納過程（布朗運動）
+
+從OU過程參數可以計算**均值迴歸半衰期**：
+
+```
+t½ = ln(2) / θ
+```
+
+半衰期是一個至關重要的指標。如果t½ = 5天，價差大約在5天內迴歸均值。如果t½ = 200天，你需要持倉半年才能等到收斂。對於加密貨幣策略，最佳半衰期為**1-30天**。更短——太快，手續費吞噬利潤。更長——太慢，存在結構性轉變的風險。
+
+在實踐中，θ通過迴歸估計：
+
+```
+ΔS(t) = a + b · S(t-1) + ε(t)
+```
+
+其中θ = -b，t½ = -ln(2) / b。
+
+### Z-score標準化
+
+為了生成交易訊號，對價差進行標準化：
+
+```
+z(t) = (S(t) - μ̂) / σ̂
+```
+
+其中μ̂和σ̂是價差的滾動均值和標準差。Z-score表示價差偏離均值多少個標準差。典型的入場閾值：|z| > 2.0；出場閾值：|z| < 0.5。
+
+## 3. 加密貨幣市場的配對選擇
+
+### BTC-ETH：有時有效的經典組合
+
+BTC和ETH是最明顯、流動性最好的配對。收益率相關性穩定在0.7以上。但協整是另一回事。它會*出現和消失*：
+
+- 在2023年的橫盤行情中，BTC/ETH可靠地協整（p值 < 0.01）
+- 在2024-2025年的分化期間（BTC因ETF而上漲，ETH落後），協整被打破
+- 到2026年初，在ETH ETF推出和ETH/BTC比率恢復後，協整再次穩定
+
+結論：必須**持續監測**協整。迴歸參數在滾動視窗上重新計算，如果ADF檢驗的p值超過閾值，策略會自動關閉。
+
+### 行業配對
+
+加密貨幣市場按行業劃分非常方便，行業內的配對通常表現出穩定的協整：
+
+| 行業 | 配對示例 | 特徵 |
+|------|---------|------|
+| L1區塊鏈 | SOL/AVAX, NEAR/APT | 高流動性，半衰期3-10天 |
+| DeFi協議 | AAVE/COMP, UNI/SUSHI | 中等流動性，半衰期5-15天 |
+| L2解決方案 | ARB/OP, MATIC/MANTA | 價差波動性高 |
+| Meme幣 | DOGE/SHIB | 不可預測但有趣（不推薦） |
+
+統計套利最佳配對具有三個特性：(1) 在超過6個月的歷史視窗上**穩定的協整**，(2) **足夠的流動性**——每個資產日交易量 > 1000萬美元，(3) **合理的半衰期**——1到30天。
+
+### 現貨 vs 永續合約（基差）
+
+另一類"配對"是同一資產在現貨和期貨市場上的價格。永續合約價格與現貨價格之間的差異（基差）從定義上來說是平穩的：資金費率機制將其壓回零附近。這使得基差交易成為加密貨幣中最可靠的統計套利形式之一。
+
+## 4. 三種交易方式
+
+### A. 基差交易：現貨-期貨與資金費率套利
+
+加密貨幣中最"純粹"的統計套利形式。機制：
+
+1. 在現貨市場**買入**資產（例如，1 BTC）
+2. 在永續合約上**開空**（1 BTC）
+3. 如果資金費率為正（多頭向空頭支付）——你每8小時收取一次資金費
+
+平均資金費率為每8小時0.01%時，約為每天0.03%或年化約11%——*沒有方向性風險*。在牛市期間，資金費率可以升至每8小時0.05-0.1%——這已經是年化55-110%了。
+
+風險：負資金費率（市場反轉）、價格急劇上漲時空頭倉位被清算（需要保證金緩衝），以及交易所手續費。
+
+截至2026年3月，BTC平均資金費率穩定在每8小時約0.015%——比2024年水平高出約50%。
+
+### B. 跨交易所套利
+
+同一幣種，兩個交易所，不同價格。原因——流動性差異、交易者構成和訂單簿更新速度不同。
+
+**示例：** Binance上BTC：$87,150。Bybit上BTC：$87,175。價差：$25（0.029%）。
+
+策略：在Binance買入，在Bybit賣出。問題：到兩個訂單都執行時，價差可能已經消失。解決方案：在兩個交易所都保持餘額並同時執行。
+
+典型手續費：
+- Binance：~0.075% taker（折扣後~0.05%）
+- Bybit：~0.03% taker（VIP）
+- 總計：~0.08%
+
+這意味著價差必須超過0.08%策略才能盈利。2026年，這樣的價差出現在：
+- 流動性較低的交易對（山寨幣）——經常出現
+- 主要交易對（BTC、ETH）——僅在高波動性時刻
+- CEX和DEX之間——更頻繁，但有MEV風險和滑點
+
+沒有託管（co-location），API延遲為10-100毫秒。最佳化網路下約1毫秒。大多數散戶交易者在100-500毫秒範圍內操作，這對許多套利策略來說足夠，但不足以與機構競爭。
+
+### C. 槓桿配對交易
+
+在兩種不同資產上使用槓桿的經典配對交易。這是三種策略中最複雜的——也是潛在利潤最高的。
+
+以SOL/AVAX配對為例的機制：
+
+1. 計算對沖比率β（例如，β = 1.3）
+2. 當z-score > +2時：**做空** SOL，**做多** AVAX × β
+3. 當z-score < -2時：**做多** SOL，**做空** AVAX × β
+4. 出場：|z-score| < 0.5 或超時（例如，30天）
+
+每條腿3倍槓桿，平均價差迴歸2σ → 3σ：
+- 每筆交易目標收益：~3-6%
+- 平均頻率：每對每月2-4筆交易
+- 預期年化收益：30-60%（扣除手續費和滑點前）
+
+主要風險：相關性可能在最不合適的時候崩潰（通常在市場崩盤時）。更多內容見第8節。
+
+## 5. 卡爾曼濾波實現自適應對沖比率
+
+### 為什麼靜態對沖比率有問題
+
+經典方法：在歷史視窗上通過OLS估計β並固定。問題：β隨時間變化。加密市場特別非平穩——敘事轉變（DeFi Summer → NFT熱潮 → AI代幣）改變了資產之間的基本關係。
+
+使用滾動OLS（滾動迴歸）只是權宜之計。你必須選擇視窗長度：太短——噪聲；太長——滯後。卡爾曼濾波優雅地解決了這個問題。
+
+![卡爾曼濾波](/images/blog/statarb-kalman-filter.webp)
+
+### 狀態空間模型
+
+我們將Y(t)和X(t)之間的關係表示為具有**時變**係數的線性模型：
+
+**觀測方程：**
+```
+Y(t) = α(t) + β(t) · X(t) + ε(t),   ε(t) ~ N(0, R)
+```
+
+**狀態方程：**
+```
+[α(t+1), β(t+1)]ᵀ = [α(t), β(t)]ᵀ + w(t),   w(t) ~ N(0, Q)
+```
+
+參數α(t)和β(t)被視為緩慢漂移（隨機遊走）的**隱藏狀態**。卡爾曼濾波從含噪觀測中最優地估計這個隱藏狀態。
+
+- **R**（觀測噪聲）——觀測噪聲的方差。R越大，濾波器對新資料的響應越慢。
+- **Q**（狀態噪聲）——狀態噪聲的協方差矩陣。Q越大，濾波器適應越快。
+
+Q/R比率決定了濾波器的"平滑度"——類似於在滾動OLS中選擇視窗長度，但不會硬截斷資料。
+
+### 相比滾動OLS的優勢
+
+使用卡爾曼濾波計算的價差顯著**更加平穩和均值迴歸**，優於滾動迴歸的價差。卡爾曼濾波使用*所有*過去的觀測值，並以指數衰減的權重，而不是在固定視窗長度處截斷資料。此外，卡爾曼濾波不需要調整"視窗長度"參數——它通過Q和R矩陣自動校準慣性和自適應性之間的平衡。
+
+### 使用filterpy實現
+
+```python
+import numpy as np
+from filterpy.kalman import KalmanFilter
+
+def create_kalman_filter(
+    delta: float = 1e-4,
+    obs_noise: float = 1.0
+) -> KalmanFilter:
+    """
+    创建用于估计自适应对冲比率的卡尔曼滤波器。
+
+    delta: 状态噪声方差 (Q = delta * I)。
+           delta越大 → 适应越快，噪声越多。
+    obs_noise: 观测噪声方差 (R)。
+    """
+    kf = KalmanFilter(dim_x=2, dim_z=1)
+
+    # 初始状态: [alpha, beta] = [0, 0]
+    kf.x = np.zeros((2, 1))
+
+    # 转移矩阵 — 单位矩阵（随机游走）
+    kf.F = np.eye(2)
+
+    # 初始状态协方差 — 大值（高不确定性）
+    kf.P = np.eye(2) * 1000
+
+    # 状态噪声协方差
+    kf.Q = np.eye(2) * delta
+
+    # 观测噪声
+    kf.R = np.array([[obs_noise]])
+
+    return kf
+
+def estimate_hedge_ratio(
+    prices_y: np.ndarray,
+    prices_x: np.ndarray,
+    delta: float = 1e-4,
+    obs_noise: float = 1.0
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """
+    使用卡尔曼滤波估计自适应对冲比率。
+
+    返回:
+        alphas: 截距数组 (α)
+        betas: 对冲比率数组 (β)
+        spreads: 价差数组 Y - α - β*X
+    """
+    n = len(prices_y)
+    kf = create_kalman_filter(delta, obs_noise)
+
+    alphas = np.zeros(n)
+    betas = np.zeros(n)
+    spreads = np.zeros(n)
+
+    for t in range(n):
+        # 观测矩阵: Y(t) = [1, X(t)] @ [alpha, beta]
+        kf.H = np.array([[1.0, prices_x[t]]])
+
+        # Predict
+        kf.predict()
+
+        # Update with observation Y(t)
+        kf.update(np.array([[prices_y[t]]]))
+
+        # 保存结果
+        alphas[t] = kf.x[0, 0]
+        betas[t] = kf.x[1, 0]
+        spreads[t] = prices_y[t] - kf.x[0, 0] - kf.x[1, 0] * prices_x[t]
+
+    return alphas, betas, spreads
+```
+
+`delta`參數是關鍵。對於高波動性的加密貨幣配對（meme幣、小市值山寨幣），使用delta = 1e-3。對於穩定配對（BTC/ETH、SOL/AVAX）——delta = 1e-5。
+
+## 6. 入場和出場訊號
+
+### Z-Score閾值
+
+基本訊號邏輯：
+
+```python
+def generate_signals(
+    spreads: np.ndarray,
+    lookback: int = 60,
+    entry_z: float = 2.0,
+    exit_z: float = 0.5,
+    stop_z: float = 4.0
+) -> np.ndarray:
+    """
+    根据价差z-score生成交易信号。
+
+    返回数组: +1（做多价差）, -1（做空价差）, 0（空仓）
+    """
+    signals = np.zeros(len(spreads))
+    position = 0
+
+    for t in range(lookback, len(spreads)):
+        window = spreads[t - lookback:t]
+        mu = np.mean(window)
+        sigma = np.std(window)
+
+        if sigma < 1e-10:
+            continue
+
+        z = (spreads[t] - mu) / sigma
+
+        if position == 0:
+            # 入场：价差偏离足够远
+            if z > entry_z:
+                position = -1  # 做空价差（做空Y，做多X）
+            elif z < -entry_z:
+                position = 1   # 做多价差（做多Y，做空X）
+        else:
+            # 出场：价差回归均值
+            if position == 1 and z > -exit_z:
+                position = 0
+            elif position == -1 and z < exit_z:
+                position = 0
+            # 止损：价差偏离太远
+            elif abs(z) > stop_z:
+                position = 0
+
+        signals[t] = position
+
+    return signals
+```
+
+### 動量過濾器
+
+純均值迴歸訊號可以通過過濾器改進：
+
+1. **動量過濾器：** 如果價差繼續發散，不要開倉。等待價差*反轉*後再入場。技術上：z-score已穿越閾值，但當前價差變化已經朝均值方向運動。
+
+2. **波動率過濾器：** 在高波動性期間提高入場閾值。當市場恐慌時，z-score可能持續數週保持在3σ以上。
+
+3. **協整過濾器：** 在每次交易前驗證協整是否仍然有效（滾動ADF檢驗）。如果p值 > 0.1——暫停交易。
+
+### 基於時間的出場
+
+如果持倉時間超過2倍半衰期且價差未迴歸——強制平倉。如果價差在2倍預期時間內未迴歸，協整很可能已經破裂，沒有繼續等待的意義。
+
+## 7. 回測：正確的方法
+
+### 前推分析
+
+標準回測（在所有資料上訓練 → 在所有資料上測試）對統計套利來說沒有用處。迴歸參數過擬合了資料，結果將過於樂觀。
+
+**前推**方法：
+
+1. 將資料分為若干期間：[訓練₁ → 測試₁] → [訓練₂ → 測試₂] → ...
+2. 在每個訓練期間：估計協整、計算對沖比率、選擇z-score閾值
+3. 在測試期間：使用固定參數進行交易
+4. 合併所有測試期間進行最終評估
+
+加密貨幣的典型配置：訓練 = 180天，測試 = 30天，步長 = 30天。
+
+![價差策略回測](/images/blog/statarb-backtest-spread.webp)
+
+### 交易成本模型
+
+對於加密貨幣需要考慮：
+
+| 組成部分 | 典型值 | 備註 |
+|---------|--------|------|
+| Maker手續費 | 0.02% | 限價單 |
+| Taker手續費 | 0.05-0.075% | 市價單 |
+| 滑點 | 0.01-0.1% | 取決於流動性 |
+| 資金費率 | ±0.01%/8小時 | 期貨倉位 |
+| 價差（買賣差價） | 0.01-0.05% | 主要交易所 |
+
+進出配對倉位涉及4筆交易（2條腿 × 入場 + 出場）。總成本：每個往返約0.3-0.5%。這意味著每筆交易的平均利潤必須超過0.5%才能有正的期望值。
+
+### 滑點模型
+
+線性模型：slippage = k × (order_size / ADV)，其中ADV是平均日交易量。對於加密貨幣，前10大幣種k ≈ 0.1，山寨幣k ≈ 0.3-0.5。
+
+更現實的模型是平方根衝擊：slippage = k × sqrt(order_size / ADV)。它更好地反映了真實的市場微觀結構。
+
+### 指標
+
+```python
+def calculate_metrics(returns: np.ndarray, rf: float = 0.04) -> dict:
+    """
+    计算策略关键指标。
+    rf: 无风险利率（年化）
+    """
+    daily_rf = rf / 365
+    excess = returns - daily_rf
+
+    ann_return = np.mean(returns) * 365
+    ann_vol = np.std(returns) * np.sqrt(365)
+
+    # Sharpe Ratio
+    sharpe = (ann_return - rf) / ann_vol if ann_vol > 0 else 0
+
+    # Maximum Drawdown
+    cumulative = np.cumprod(1 + returns)
+    running_max = np.maximum.accumulate(cumulative)
+    drawdowns = (cumulative - running_max) / running_max
+    max_dd = np.min(drawdowns)
+
+    # Calmar Ratio
+    calmar = ann_return / abs(max_dd) if max_dd != 0 else 0
+
+    # Win Rate
+    win_rate = np.mean(returns > 0) if len(returns) > 0 else 0
+
+    # Profit Factor
+    gains = returns[returns > 0].sum()
+    losses = abs(returns[returns < 0].sum())
+    profit_factor = gains / losses if losses > 0 else float('inf')
+
+    return {
+        'annual_return': f'{ann_return:.1%}',
+        'annual_volatility': f'{ann_vol:.1%}',
+        'sharpe_ratio': f'{sharpe:.2f}',
+        'max_drawdown': f'{max_dd:.1%}',
+        'calmar_ratio': f'{calmar:.2f}',
+        'win_rate': f'{win_rate:.1%}',
+        'profit_factor': f'{profit_factor:.2f}',
+    }
+```
+
+加密統計套利的基準：
+- **Sharpe > 1.5** — 好策略
+- **最大回撤 < 15%** — 可接受的風險
+- **Calmar > 2.0** — 優秀的收益/回撤比
+- **盈利因子 > 1.5** — 持續的優勢
+
+## 8. 現實世界的問題
+
+### 滑點與流動性
+
+在回測中，你以中間價即時入場。現實中——不是這樣。在日交易量500萬美元的山寨幣上，5萬美元的訂單可能推動價格0.2-0.5%。對於配對策略，這是*雙倍*滑點（兩條腿），可能吃掉所有利潤。
+
+解決方案：使用限價單（maker，而非taker），將訂單分割成部分（TWAP/VWAP），嚴格限制倉位大小相對於ADV的比例（最多日交易量的1-2%）。
+
+### 資金費率風險
+
+在基差交易中，你收取資金費率，但它可能變為負數。在2022年12月的熊市中，BTC的資金費率為每8小時-0.02%——如果你持有"多頭現貨 + 空頭永續"倉位，每10萬美元倉位你每天要*支付*60美元。
+
+保護措施：即時監控資金費率，在費率反轉時平倉。更高階的方法是交易所間資金費率套利（在低費率交易所做多，在高費率交易所做空）。
+
+### 危機中的相關性崩潰
+
+2020年3月、2021年5月、2022年11月、2024年8月——在每次加密貨幣崩盤中，相關性都會被打破。更準確地說，相關性*增強*（一切同時下跌），但協整被破壞——價差可能飛到10σ而不再回歸。
+
+這是配對交易的致命弱點。策略穩定地賺取小額利潤，然後在一天內損失大筆資金。經典的"在蒸汽壓路機前撿硬幣"模式。
+
+保護措施：
+1. **嚴格止損：** 當z-score > 4σ時平倉
+2. **槓桿限制：** 每條腿最多2-3倍
+3. **VIX/波動率過濾器：** 在隱含波動率高時減少倉位
+4. **分散化：** 同時交易10-20個配對，不要把一切押在一個上
+
+### 資金要求
+
+對於嚴肅的加密統計套利：
+- 基差交易：5萬美元起（單一配對，單一交易所）
+- 跨交易所套利：10萬美元起（兩個交易所餘額）
+- 配對交易組合（10個配對）：20萬美元起
+- 機構級別：100萬美元起
+
+金額更少時，手續費和最小倉位限制使策略變得無效。
+
+## 9. 端到端Python實現
+
+### 資料獲取
+
+```python
+import ccxt
+import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
+
+def fetch_ohlcv(
+    exchange_id: str,
+    symbol: str,
+    timeframe: str = '1h',
+    days: int = 365
+) -> pd.DataFrame:
+    """通过ccxt获取OHLCV数据。"""
+    exchange = getattr(ccxt, exchange_id)({
+        'enableRateLimit': True,
+    })
+
+    since = int((datetime.now() - timedelta(days=days)).timestamp() * 1000)
+    all_candles = []
+
+    while True:
+        candles = exchange.fetch_ohlcv(
+            symbol, timeframe, since=since, limit=1000
+        )
+        if not candles:
+            break
+        all_candles.extend(candles)
+        since = candles[-1][0] + 1
+        if len(candles) < 1000:
+            break
+
+    df = pd.DataFrame(
+        all_candles,
+        columns=['timestamp', 'open', 'high', 'low', 'close', 'volume']
+    )
+    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='ms')
+    df.set_index('timestamp', inplace=True)
+    return df
+
+# 示例：获取SOL和AVAX数据
+sol = fetch_ohlcv('binance', 'SOL/USDT', '1h', 365)
+avax = fetch_ohlcv('binance', 'AVAX/USDT', '1h', 365)
+
+# 同步索引
+prices = pd.DataFrame({
+    'SOL': sol['close'],
+    'AVAX': avax['close']
+}).dropna()
+```
+
+### 協整檢驗
+
+```python
+from statsmodels.tsa.stattools import coint, adfuller
+from statsmodels.regression.linear_model import OLS
+from statsmodels.tools import add_constant
+
+def test_cointegration(y: np.ndarray, x: np.ndarray) -> dict:
+    """
+    完整的协整检验及诊断。
+    """
+    # 1. Engle-Granger检验
+    score, pvalue, crit_values = coint(y, x)
+
+    # 2. OLS计算对冲比率
+    x_const = add_constant(x)
+    model = OLS(y, x_const).fit()
+    alpha, beta = model.params
+    spread = y - alpha - beta * x
+
+    # 3. 对价差进行ADF检验
+    adf_stat, adf_pvalue, _, _, adf_crit, _ = adfuller(spread, maxlag=20)
+
+    # 4. 半衰期
+    spread_lag = spread[:-1]
+    spread_diff = np.diff(spread)
+    spread_lag_const = add_constant(spread_lag)
+    hl_model = OLS(spread_diff, spread_lag_const).fit()
+    theta = -hl_model.params[1]
+    half_life = np.log(2) / theta if theta > 0 else np.inf
+
+    return {
+        'coint_pvalue': pvalue,
+        'cointegrated': pvalue < 0.05,
+        'hedge_ratio': beta,
+        'intercept': alpha,
+        'adf_statistic': adf_stat,
+        'adf_pvalue': adf_pvalue,
+        'half_life_hours': half_life,
+        'half_life_days': half_life / 24,
+        'spread_mean': np.mean(spread),
+        'spread_std': np.std(spread),
+    }
+
+# 运行检验
+result = test_cointegration(
+    prices['SOL'].values,
+    prices['AVAX'].values
+)
+print(f"协整: {result['cointegrated']} "
+      f"(p值: {result['coint_pvalue']:.4f})")
+print(f"对冲比率: {result['hedge_ratio']:.4f}")
+print(f"半衰期: {result['half_life_days']:.1f} 天")
+```
+
+### 卡爾曼濾波 + 回測器
+
+```python
+from filterpy.kalman import KalmanFilter
+
+class PairsBacktester:
+    """
+    使用卡尔曼滤波的配对交易前推回测器。
+    """
+
+    def __init__(
+        self,
+        prices_y: np.ndarray,
+        prices_x: np.ndarray,
+        kalman_delta: float = 1e-4,
+        obs_noise: float = 1.0,
+        entry_z: float = 2.0,
+        exit_z: float = 0.5,
+        stop_z: float = 4.0,
+        lookback: int = 60,
+        fee_rate: float = 0.001,    # 每条腿0.1%往返
+        slippage_rate: float = 0.0005,  # 每条腿0.05%滑点
+    ):
+        self.prices_y = prices_y
+        self.prices_x = prices_x
+        self.n = len(prices_y)
+        self.kalman_delta = kalman_delta
+        self.obs_noise = obs_noise
+        self.entry_z = entry_z
+        self.exit_z = exit_z
+        self.stop_z = stop_z
+        self.lookback = lookback
+        self.fee_rate = fee_rate
+        self.slippage_rate = slippage_rate
+
+    def run(self) -> pd.DataFrame:
+        """运行回测。返回包含结果的DataFrame。"""
+        # 第1步：卡尔曼滤波计算对冲比率
+        kf = KalmanFilter(dim_x=2, dim_z=1)
+        kf.x = np.zeros((2, 1))
+        kf.F = np.eye(2)
+        kf.P = np.eye(2) * 1000
+        kf.Q = np.eye(2) * self.kalman_delta
+        kf.R = np.array([[self.obs_noise]])
+
+        alphas = np.zeros(self.n)
+        betas = np.zeros(self.n)
+        spreads = np.zeros(self.n)
+
+        for t in range(self.n):
+            kf.H = np.array([[1.0, self.prices_x[t]]])
+            kf.predict()
+            kf.update(np.array([[self.prices_y[t]]]))
+            alphas[t] = kf.x[0, 0]
+            betas[t] = kf.x[1, 0]
+            spreads[t] = (
+                self.prices_y[t] - kf.x[0, 0]
+                - kf.x[1, 0] * self.prices_x[t]
+            )
+
+        # 第2步：Z-score和信号
+        positions = np.zeros(self.n)
+        z_scores = np.zeros(self.n)
+        position = 0
+
+        for t in range(self.lookback, self.n):
+            window = spreads[t - self.lookback:t]
+            mu = np.mean(window)
+            sigma = np.std(window)
+            if sigma < 1e-10:
+                continue
+
+            z = (spreads[t] - mu) / sigma
+            z_scores[t] = z
+
+            if position == 0:
+                if z > self.entry_z:
+                    position = -1
+                elif z < -self.entry_z:
+                    position = 1
+            else:
+                if position == 1 and z > -self.exit_z:
+                    position = 0
+                elif position == -1 and z < self.exit_z:
+                    position = 0
+                elif abs(z) > self.stop_z:
+                    position = 0
+
+            positions[t] = position
+
+        # 第3步：盈亏计算
+        spread_returns = np.diff(spreads) / np.abs(
+            spreads[:-1] + 1e-10
+        )
+        pnl = np.zeros(self.n)
+
+        for t in range(1, self.n):
+            if positions[t - 1] != 0:
+                raw_return = positions[t - 1] * spread_returns[t - 1]
+                pnl[t] = raw_return
+
+                # 开仓/平仓时扣除手续费
+                if positions[t] != positions[t - 1]:
+                    total_cost = 2 * (self.fee_rate + self.slippage_rate)
+                    pnl[t] -= total_cost
+
+        return pd.DataFrame({
+            'price_y': self.prices_y,
+            'price_x': self.prices_x,
+            'alpha': alphas,
+            'beta': betas,
+            'spread': spreads,
+            'z_score': z_scores,
+            'position': positions,
+            'pnl': pnl,
+            'cumulative_pnl': np.cumsum(pnl),
+        })
+
+# 运行回测
+bt = PairsBacktester(
+    prices_y=prices['SOL'].values,
+    prices_x=prices['AVAX'].values,
+    kalman_delta=1e-4,
+    entry_z=2.0,
+    exit_z=0.5,
+    stop_z=4.0,
+    lookback=60,
+    fee_rate=0.001,
+    slippage_rate=0.0005,
+)
+results = bt.run()
+
+# 指标
+daily_pnl = results['pnl'].resample('D').sum() if hasattr(
+    results.index, 'freq'
+) else results['pnl']
+metrics = calculate_metrics(daily_pnl.values)
+for k, v in metrics.items():
+    print(f'{k}: {v}')
+```
+
+### 實盤交易骨架
+
+```python
+import ccxt
+import asyncio
+import logging
+
+logger = logging.getLogger(__name__)
+
+class LivePairsTrader:
+    """
+    实盘配对交易的最小骨架。
+    生产环境需要：添加重试逻辑、监控、
+    告警、余额对账。
+    """
+
+    def __init__(
+        self,
+        exchange_id: str,
+        symbol_y: str,
+        symbol_x: str,
+        api_key: str,
+        secret: str,
+        position_size_usd: float = 1000.0,
+        entry_z: float = 2.0,
+        exit_z: float = 0.5,
+    ):
+        self.exchange = getattr(ccxt, exchange_id)({
+            'apiKey': api_key,
+            'secret': secret,
+            'enableRateLimit': True,
+        })
+        self.symbol_y = symbol_y
+        self.symbol_x = symbol_x
+        self.position_size = position_size_usd
+        self.entry_z = entry_z
+        self.exit_z = exit_z
+        self.position = 0  # +1, -1, 0
+
+        # 卡尔曼状态（持久化）
+        self.kf = create_kalman_filter(delta=1e-4)
+        self.spread_history = []
+
+    async def update(self):
+        """一个更新周期。"""
+        # 1. 获取当前价格
+        ticker_y = self.exchange.fetch_ticker(self.symbol_y)
+        ticker_x = self.exchange.fetch_ticker(self.symbol_x)
+        price_y = ticker_y['last']
+        price_x = ticker_x['last']
+
+        # 2. 更新卡尔曼滤波
+        self.kf.H = np.array([[1.0, price_x]])
+        self.kf.predict()
+        self.kf.update(np.array([[price_y]]))
+
+        alpha = self.kf.x[0, 0]
+        beta = self.kf.x[1, 0]
+        spread = price_y - alpha - beta * price_x
+        self.spread_history.append(spread)
+
+        # 3. Z-score（需要至少lookback个观测值）
+        if len(self.spread_history) < 60:
+            logger.info(f"Warming up: {len(self.spread_history)}/60")
+            return
+
+        window = np.array(self.spread_history[-60:])
+        z = (spread - np.mean(window)) / np.std(window)
+
+        logger.info(
+            f"β={beta:.4f} spread={spread:.4f} z={z:.2f} "
+            f"pos={self.position}"
+        )
+
+        # 4. 交易逻辑
+        new_position = self.position
+
+        if self.position == 0:
+            if z > self.entry_z:
+                new_position = -1
+            elif z < -self.entry_z:
+                new_position = 1
+        else:
+            if self.position == 1 and z > -self.exit_z:
+                new_position = 0
+            elif self.position == -1 and z < self.exit_z:
+                new_position = 0
+
+        # 5. 执行
+        if new_position != self.position:
+            await self._execute_trade(
+                new_position, price_y, price_x, beta
+            )
+            self.position = new_position
+
+    async def _execute_trade(
+        self, target: int, price_y: float, price_x: float,
+        beta: float
+    ):
+        """执行配对交易。"""
+        if target == 0:
+            # 平掉两条腿
+            logger.info("Closing position")
+            # ... 通过交易所API平仓
+        elif target == 1:
+            # 做多价差：买入Y，卖出X
+            size_y = self.position_size / price_y
+            size_x = (self.position_size * beta) / price_x
+            logger.info(
+                f"Long spread: buy {size_y:.4f} {self.symbol_y}, "
+                f"sell {size_x:.4f} {self.symbol_x}"
+            )
+            # self.exchange.create_order(self.symbol_y, 'limit', ...)
+            # self.exchange.create_order(self.symbol_x, 'limit', ...)
+        elif target == -1:
+            # 做空价差：卖出Y，买入X
+            size_y = self.position_size / price_y
+            size_x = (self.position_size * beta) / price_x
+            logger.info(
+                f"Short spread: sell {size_y:.4f} {self.symbol_y}, "
+                f"buy {size_x:.4f} {self.symbol_x}"
+            )
+
+    async def run_loop(self, interval_seconds: int = 60):
+        """主循环。"""
+        logger.info(
+            f"Starting live trading: "
+            f"{self.symbol_y}/{self.symbol_x}"
+        )
+        while True:
+            try:
+                await self.update()
+            except Exception as e:
+                logger.error(f"Error in update: {e}")
+            await asyncio.sleep(interval_seconds)
+```
+
+## 結語
+
+統計套利不是聖盃。它是一門手藝。在"我知道什麼是協整"和"我有一個穩定執行的策略"之間，隔著一道工程細節的鴻溝：正確的資料處理、正確的前推回測、現實的滑點模型、即時監控。
+
+加密貨幣市場仍然為統計套利提供了比傳統市場更多的機會——碎片化的流動性、不成熟的市場基礎設施，以及永續合約與資金費率等獨特工具，創造了在紐約證券交易所早已被套利到零的低效率。
+
+但視窗正在關閉。機構玩家正在進入加密市場，套利資本在增長（據估計，2025年加密交易所上的套利資本增長了215%），利潤空間在壓縮。如果你打算在加密貨幣中進行統計套利——最好現在就開始。
+
+本文中的所有程式碼都可以作為起點。不要在沒有認真測試的情況下將其投入生產。請記住：唯一保證有效的策略是風險管理。
+
+---
+
+> **關鍵學術文獻：**
+>
+> - Engle, R.F. & Granger, C.W.J. (1987). "Co-Integration and Error Correction: Representation, Estimation, and Testing". *Econometrica*, 55(2), 251-276.
+> - Gatev, E., Goetzmann, W.N. & Rouwenhorst, K.G. (2006). "Pairs Trading: Performance of a Relative-Value Arbitrage Rule". *The Review of Financial Studies*, 19(3), 797-827.
+> - Vidyamurthy, G. (2004). *Pairs Trading: Quantitative Methods and Analysis*. Wiley.
+> - Avellaneda, M. & Lee, J.H. (2010). "Statistical Arbitrage in the US Equities Market". *Quantitative Finance*, 10(7), 761-782.
+> - Frontiers (2026). "Deep learning-based pairs trading: real-time forecasting of co-integrated cryptocurrency pairs". *Frontiers in Applied Mathematics and Statistics*.
+
+> **實用庫：**
+>
+> - [statsmodels](https://www.statsmodels.org/) — 協整、ADF、OLS
+> - [filterpy](https://github.com/rlabbe/filterpy) — 卡爾曼濾波
+> - [ccxt](https://github.com/ccxt/ccxt) — 100+交易所統一API
+> - [arbitragelab](https://hudsonthames.org/arbitragelab/) — 配對交易專用庫（OU、Kalman、copulas）

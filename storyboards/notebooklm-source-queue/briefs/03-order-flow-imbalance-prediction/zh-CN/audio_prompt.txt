@@ -1,0 +1,27 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article order-flow-imbalance-prediction ZH-CN 587a8362cd09". This source is the complete published zh article snapshot; do not merge another language edition or outside information. The final output must be Simplified Chinese for Mainland China (zh-CN), not generic Chinese and not English. Use Mainland Chinese financial terminology such as 资金费率, 滑点, 对冲, 订单簿 and 数据 where appropriate. Keep proper names, tickers, equations, code identifiers, citations and units in their exact source form when necessary. Translate explanatory labels naturally. Preserve all article H2 and H3 sections in this exact sequence, including nested subsection order:
+1. H2 — 为什么是订单流，而不是交易
+2. H2 — Cont-Kukanov-Stoikov OFI 模型
+3. H3 — 定义订单流不平衡
+4. H3 — 区间聚合
+5. H3 — 线性价格影响模型
+6. H3 — 横截面缩放
+7. H2 — 多级订单流不平衡（MLOFI）
+8. H3 — 定义
+9. H3 — 多级价格影响
+10. H3 — 主成分缩减
+11. H2 — 交易分类：买入与卖出发起
+12. H3 — 报价规则
+13. H3 — 批量成交量分类（BVC）
+14. H2 — OFI 不是什么
+15. H2 — Python 实现
+16. H3 — OFI 核心计算
+17. H3 — 聚合到时间窗口
+18. H3 — 交易分类（Lee-Ready）
+19. H3 — 信号归一化
+20. H2 — OFI 接入的位置
+21. H2 — 实务注意事项
+22. H2 — 要点
+23. H2 — 延伸阅读
+
+Cover only details actually present in this attached article. Preserve its examples, formulas, numerical values, code logic, caveats, risk points, links and citations accurately. Distinguish event-based OFI from static order-book imbalance and trade classification; preserve bid/ask event signs, interval aggregation, depth scaling, MLOFI, quote rule/BVC/Lee-Ready, normalisation, assumptions and limits. Do not turn an association or backtest into a causal or guaranteed forecast. Attribute financial, numerical, research, company-specific and time-sensitive statements to the article as unverified claims; do not add external facts, guaranteed returns, investment advice or newly inferred certainty. This is a source draft: human editorial, terminology/translation, mathematical and primary-source review remain pending. The existence of this published Chinese article does not establish factual approval. NotebookLM library and target-channel duplicates have not been checked externally; do not imply clearance.
+Speak in Standard Mandarin (Putonghua) as used in Mainland China throughout. Use natural spoken Chinese narration or dialogue and explain formulas, units, tables, charts and code in words; do not request drawings, displayed text or on-screen tables. Preserve technical identifiers only when needed for comprehension. End with the article conclusion and mention source references when present.

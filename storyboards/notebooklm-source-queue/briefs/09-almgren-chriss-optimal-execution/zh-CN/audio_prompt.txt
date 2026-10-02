@@ -1,0 +1,17 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article almgren-chriss-optimal-execution ZH-CN c8ca2a276e8b". This source is the complete published zh article snapshot; do not merge another language edition or outside information. The final output must be Simplified Chinese for Mainland China (zh-CN), not generic Chinese and not English. Use Mainland Chinese financial terminology such as 资金费率, 滑点, 对冲, 订单簿 and 数据 where appropriate. Keep proper names, tickers, equations, code identifiers, citations and units in their exact source form when necessary. Translate explanatory labels naturally. Preserve all article H2 and H3 sections in this exact sequence, including nested subsection order:
+1. H2 — 模型设定:这个模型到底假设了什么
+2. H3 — 交易轨迹的成本与方差
+3. H2 — 闭式解:sinh、cosh 与紧迫性参数
+4. H3 — 风险中性极限就是 TWAP——这正是 TWAP 存在的原因
+5. H2 — 执行的有效前沿
+6. H2 — 校准:从 Binance 数据估计 $\eta$、$\gamma$、$\sigma$
+7. H3 — $\sigma$:最容易的一个
+8. H3 — $\eta$:从订单簿和成交数据估计临时冲击
+9. H3 — $\gamma$:通过 Kyle 式回归估计永久冲击
+10. H3 — 为什么加密货币的校准会这么嘈杂,以及该怎么办
+11. H2 — 模型在哪里会失效,以及修补它的论文
+12. H2 — 总结
+13. H2 — 参考文献
+
+Cover only details actually present in this attached article. Preserve its examples, formulas, numerical values, code logic, caveats, risk points, links and citations accurately. Preserve the conditional liquidation setting, expected cost versus inventory-weighted variance, impact assumptions, equations, symbols, horizons and units, lambda-to-zero TWAP limit, efficient frontier, calibration routes and model limitations. Attribute the numerical example and Binance/paper claims to the article pending independent recalculation and primary-source review; flag unit ambiguities. Attribute financial, numerical, research, company-specific and time-sensitive statements to the article as unverified claims; do not add external facts, guaranteed returns, investment advice or newly inferred certainty. This is a source draft: human editorial, terminology/translation, mathematical and primary-source review remain pending. The existence of this published Chinese article does not establish factual approval. NotebookLM library and target-channel duplicates have not been checked externally; do not imply clearance.
+Speak in Standard Mandarin (Putonghua) as used in Mainland China throughout. Use natural spoken Chinese narration or dialogue and explain formulas, units, tables, charts and code in words; do not request drawings, displayed text or on-screen tables. Preserve technical identifiers only when needed for comprehension. End with the article conclusion and mention source references when present.

@@ -1,0 +1,22 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article agentic-ai-investment-revolution ZH-TW 860be4918813". This source is the complete published zh-Hant article snapshot; do not merge another language edition or outside information. The final output must be Traditional Chinese for Taiwan (zh-TW), not generic Chinese and not English. Use Taiwan financial terminology such as 資金費率, 滑價, 避險, 委託簿 and 資料 where appropriate. Keep proper names, tickers, equations, code identifiers, citations and units in their exact source form when necessary. Translate explanatory labels naturally. Preserve all article H2 and H3 sections in this exact sequence, including nested subsection order:
+1. H2 — 代理型AI：新一代智慧助手
+2. H2 — 為什麼傳統投資方法正在過時
+3. H2 — 代理型AI投資系統如何運作
+4. H3 — 多層級智慧體架構
+5. H3 — 向量資料庫——秘密武器
+6. H3 — 持續學習迴圈
+7. H2 — 智慧體競賽：投資新範式
+8. H2 — AI智慧體的經濟自主性
+9. H2 — 智慧體間的經濟互動
+10. H2 — 代理型AI在投資中的真實優勢
+11. H3 — 1. 超越人類的反應速度
+12. H3 — 2. 處理海量資料
+13. H3 — 3. 擺脫認知偏差
+14. H3 — 4. 個性化新高度
+15. H2 — 未來已來
+16. H2 — 對行業的意義
+17. H2 — 結論
+18. H2 — 引文
+
+Cover only details actually present in this attached article. Preserve its examples, formulas, numerical values, code logic, caveats, risk points, links and citations accurately. Keep the article's proposed agent roles, vector-search/learning loop, competition and agent-economy examples in their source order. Attribute Gartner, Olas, Deloitte and other company, speed, adoption or yield statements to the article pending primary-source review. Autonomous performance and absence of bias are claims, not verified outcomes. Attribute financial, numerical, research, company-specific and time-sensitive statements to the article as unverified claims; do not add external facts, guaranteed returns, investment advice or newly inferred certainty. This is a source draft: human editorial, terminology/translation, mathematical and primary-source review remain pending. The existence of this published Chinese article does not establish factual approval. NotebookLM library and target-channel duplicates have not been checked externally; do not imply clearance.
+Speak in Taiwan Mandarin (Guoyu), not Taiwanese Hokkien throughout. Use natural spoken Chinese narration or dialogue and explain formulas, units, tables, charts and code in words; do not request drawings, displayed text or on-screen tables. Preserve technical identifiers only when needed for comprehension. End with the article conclusion and mention source references when present.

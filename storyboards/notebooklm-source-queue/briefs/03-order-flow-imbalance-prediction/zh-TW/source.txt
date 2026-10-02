@@ -1,0 +1,427 @@
+MM article order-flow-imbalance-prediction ZH-TW be3546cf73e4
+
+---
+title: "Order Flow Imbalance: The Cont-Kukanov-Stoikov Event Decomposition"
+description: "Turning raw book updates into a signed flow quantity: the CKS event decomposition, multi-level OFI with PCA reduction, and Lee-Ready trade classification — plus an honest accounting of what the headline R-squared actually measures."
+date: "2026-08-17"
+tags: ["microstructure", "order-flow", "imbalance", "prediction", "HFT"]
+slug: "order-flow-imbalance-prediction"
+lang: "zh-Hant"
+authors: ["suenot"]
+image: "/images/blog/order-flow-imbalance-prediction-hero.webp"
+---
+# 訂單流不平衡：Cont-Kukanov-Stoikov 事件分解
+
+本部落格大多數從訂單簿得到的訊號都是*快照*：此刻每一側有多少掛單量。訂單流不平衡是另一種物件。它把兩個快照之間的*更新流*分解成一個帶符號的數量 - 對買方取消的計數方式，與對市場賣出的計數方式相同。
+
+本文討論的正是這種分解。具體包括：定義它的 Cont-Kukanov-Stoikov (2014) 事件指標、Xu-Gould-Howison (2019) 多級擴充套件及其主成分縮減，以及當資料流沒有標記交易方向時所需的 Lee-Ready 和 Bulk Volume Classification 規則。
+
+**先說明一個框架，因為它決定了你應該如何閱讀下面的每個數字。** CKS 論文中著名的 50-65% R 平方是*同期*迴歸：用同一時間區間內的訂單流回歸該區間的價格變化。它是價格變動的分解，不是對價格變動的預測。把它與每日股票收益模型解釋的 1-2% 方差相比，就像比較蘋果和橘子。本部落格已在 [DeepLOB 與預測和利潤的差距](/en/blog/post/deeplob-deep-learning-order-book)以及[誠實的負面結果](/en/blog/post/honest-negative-no-robust-edge)中詳細說明，把兩者混為一談會讓教程變成陷阱。嚴格滯後的 OFI 迴歸是合法且小得多的數字，本文不報告它。<!-- TODO: 需要真實資料結果 - 在真實加密貨幣 L2 上擬合 CKS（一個交易對、一個場所、數天資料），在多個聚合視窗中分別報告同期 R 平方和滯後 R 平方，並報告樣本內外擬合的 beta。 -->
+
+## 為什麼是訂單流，而不是交易
+
+![四種訂單簿機制匯聚成一個帶符號的流訊號](/images/blog/order-flow-imbalance-prediction-why-order-flow.webp)
+
+連續限價訂單簿中的價格變化恰好通過四種機制發生：市價買單消耗掛出的賣單；市價賣單消耗掛出的買單；買方取消單移除支撐，使買價下跌；賣方新增限價單增加阻力。只有前兩項是交易。後兩項對任何基於成交量的指標都不可見 - VWAP、能量潮、帶符號的交易流 - 而在大多數場所，訂單與交易的比例超過 10:1，因此不可見部分才是主要部分。OFI 的全部價值主張在於，它把四種機制放到同一個價格尺度上。（關於訂單簿作為資料結構，以及標準的 $4L$ 快照特徵向量，請參閱[DeepLOB](/en/blog/post/deeplob-deep-learning-order-book)。）
+
+## Cont-Kukanov-Stoikov OFI 模型
+
+![CKS 事件分解中的買價和賣價變化](/images/blog/order-flow-imbalance-prediction-cks-model.webp)
+
+基礎模型來自 Cont、Kukanov 和 Stoikov 2014 年的論文《訂單簿事件的價格影響》（*Journal of Financial Econometrics*）。
+
+### 定義訂單流不平衡
+
+考慮最佳買價 $P^b_t$、最佳賣價 $P^a_t$ 及其數量 $Q^b_t$ 和 $Q^a_t$。在 $t_{n-1}$ 與 $t_n$ 的連續觀測之間：
+
+$$
+OFI_n = e_n^B - e_n^S
+$$
+
+其中買方和賣方事件貢獻為：
+
+$$
+e_n^B = \mathbb{1}_{\{P^b_n > P^b_{n-1}\}} Q^b_n - \mathbb{1}_{\{P^b_n < P^b_{n-1}\}} Q^b_{n-1} + \mathbb{1}_{\{P^b_n = P^b_{n-1}\}} (Q^b_n - Q^b_{n-1})
+$$
+
+$$
+e_n^S = \mathbb{1}_{\{P^a_n < P^a_{n-1}\}} Q^a_n - \mathbb{1}_{\{P^a_n > P^a_{n-1}\}} Q^a_{n-1} + \mathbb{1}_{\{P^a_n = P^a_{n-1}\}} (Q^a_n - Q^a_{n-1})
+$$
+換句話說：如果最佳買價上升，說明出現了新的買入興趣，將其全部數量計為正數；如果價格下跌，買入興趣消失，減去舊數量；如果價格不變，只計算數量變化。賣方是映象情況。
+
+這種方法的優雅之處在於，三個指示函式分支覆蓋了盤口頂部的每一種可能變化，因此每次更新都精確對映到一個帶符號的數字。不需要交易分類、不需要買賣方向標籤，也不需要訊息級資料流 - 兩個連續快照就足夠了。
+
+### 區間聚合
+
+對於區間 $[T_1, T_2]$，其中包含 $N$ 次訂單簿更新：
+
+$$
+OFI_{[T_1,T_2]} = \sum_{n=1}^{N} OFI_n = \sum_{n=1}^{N} (e_n^B - e_n^S)
+$$
+
+### 線性價格影響模型
+
+$$
+\Delta P_{[T_1,T_2]} = \alpha + \beta \cdot OFI_{[T_1,T_2]} + \varepsilon
+$$
+其中 $\Delta P$ 是中間價的變化，$\beta$ 是價格影響係數，$\varepsilon$ 是殘差噪聲。對於 10 秒到 1 分鐘的美國股票區間，CKS 報告每隻股票的同期 $R^2$ 為 50-65%。再次強調：這是同一區間，不是前瞻預測。
+
+### 橫截面縮放
+
+CKS 還顯示影響係數與深度成反比：
+
+$$
+\beta \propto \frac{1}{\bar{D}}
+$$
+
+其中 $\bar{D}$ 是最佳買價和賣價的平均掛單量。同樣的流量在薄訂單簿上會把價格推得更遠。這是模型中無需重新擬合水平就能跨場所遷移的部分，因為它預測的是一種*關係*而不是一個數值，也可以直接在深度不同的加密貨幣對上測試。<!-- TODO: 需要真實資料結果 - 在同一場所測試不同深度加密貨幣對之間 beta ∝ 1/深度 的縮放關係 -->
+
+## 多級訂單流不平衡（MLOFI）
+
+![多級訂單簿深度壓縮為主訊號](/images/blog/order-flow-imbalance-prediction-multi-level.webp)
+
+原始模型只使用訂單簿頂部。Xu、Gould 和 Howison（2019）將其擴充套件到 $L$ 個價位。
+
+### 定義
+
+$$
+\mathbf{MLOFI}_n = \begin{pmatrix} OFI_n^{(1)} \\ OFI_n^{(2)} \\ \vdots \\ OFI_n^{(L)} \end{pmatrix}
+$$
+
+其中 $OFI_n^{(\ell)}$ 將同一個三分支公式應用於第 $\ell$ 個買賣價對。
+
+### 多級價格影響
+
+$$
+\Delta P = \alpha + \boldsymbol{\beta}^T \cdot \mathbf{MLOFI} + \varepsilon = \alpha + \sum_{\ell=1}^{L} \beta_\ell \cdot OFI^{(\ell)} + \varepsilon
+$$
+
+在納斯達克股票上的已發表結果顯示，每增加一個價位，樣本外 $R^2$ 都會增加：從 1 級到 5 級大約增加 10-15 個百分點，到 10 級仍有邊際收益。係數單調衰減，$|\beta_1| > |\beta_2| > \cdots > |\beta_L|$：訂單簿頂部佔主導地位，但更深價位仍攜帶不可忽略的增量訊號。
+
+這在加密貨幣訂單簿上是否成立，是本文最有趣的開放問題。加密貨幣訂單簿更薄，深層掛單的變化也更頻繁；離開納斯達克訂單簿後，2-5 級完全不增加資訊是很合理的。<!-- TODO: 需要真實資料結果 - 在加密貨幣 L2 上測量每增加一個價位帶來的樣本外 R 平方增量；如果 2-5 級沒有貢獻，請如實報告。 -->
+
+### 主成分縮減
+
+相鄰價位的 OFI 高度相關（已發表的股票結果中相關性超過 0.8），因此主成分分解是自然選擇。報告中的第一主成分捕獲超過 89% 的總方差，可作為單一聚合訊號：
+
+$$
+OFI^{PC1} = \mathbf{w}^T \cdot \mathbf{MLOFI}
+$$
+
+其中 $\mathbf{w}$ 是 OFI 協方差矩陣的主特徵向量。實際吸引力在於，它把共線迴歸壓縮成一個條件良好的標量；即使你的資料中方差佔比更低，這仍然值得做。
+
+## 交易分類：買入與賣出發起
+
+![交易事件分為買入和賣出發起流](/images/blog/order-flow-imbalance-prediction-trade-classification.webp)
+
+OFI 本身不需要交易分類。但如果你想把它與基於交易的指標比較，或者手裡只有聚合柱線，就需要推斷交易方向。
+
+### 報價規則
+
+將交易價格 $P_t$ 與當前中間價 $M_t = \frac{P^{ask}_t + P^{bid}_t}{2}$ 比較：
+
+$$
+\text{side} = \begin{cases} +1 \text{ (buy)} & \text{if } P_t > M_t \\ -1 \text{ (sell)} & \text{if } P_t < M_t \end{cases}
+$$
+
+高於中間價的交易很可能是買方主動成交賣價；低於中間價的交易很可能是賣方主動成交買價。
+
+**Lee-Ready 演算法**（1991）是在中間價處交易方向無法確定時，以 tick 規則作為後備的報價規則。tick 規則取最後一次價格變化的符號；如果 tick 為零，則沿用前一個方向。該規則已經在[超越時間柱線](/en/blog/post/beyond-time-bars-candle-construction)中推導並實現，其中提供了可執行的 `_tick_sign()`。據報道，Lee-Ready 的分類準確率為 72-85%，取決於市場和時期。
+
+### 批次成交量分類（BVC）
+
+當無法給單筆交易分配方向時（聚合柱線、大多數公共蠟燭 API），Easley、Lopez de Prado 和 O'Hara 的批次成交量分類會根據柱線的標準化價格變化估計其成交量中的買入比例：
+
+$$
+V^{buy}_t = V_t \cdot \Phi\left(\frac{\Delta P_t}{\sigma_{\Delta P}}\right)
+$$
+
+其中 $\Phi$ 是標準正態 CDF，$\sigma_{\Delta P}$ 根據近期價格變化估計。它不如 tick 級分類準確，但適用於 OHLCV。
+
+## OFI 不是什麼
+
+![同期分解與真實預測不同](/images/blog/order-flow-imbalance-prediction-what-not.webp)
+
+OFI 經常與三個相鄰概念混淆。本部落格其他文章分別充分討論了它們；這裡重要的是區別。
+
+**靜態訂單簿不平衡（OBI）**是快照版本 - 比較掛單買量和掛單賣量，不跟蹤事件。公式及多級形式見[DeepLOB 的傳統 LOB 特徵](/en/blog/post/deeplob-deep-learning-order-book)。這正是 OFI 的核心區別：OBI 告訴你訂單簿處於什麼狀態，OFI 告訴你它是如何到達這個狀態的。
+
+**交易不平衡（TI）**及其成交量加權變體是帶符號的交易流，在[使用機器學習進行價差建模](/en/blog/post/spread-modeling-machine-learning)中作為滾動特徵定義和實現。這裡有一個關鍵的已發表結果：當 OFI 和 TI 一起作為中間價變化的迴歸量時，**TI 在統計上變得不顯著**，其資訊被 OFI 吸收。這就是跟蹤訂單簿事件而非交易的實證理由 - 那些*差一點*成為交易的事件，攜帶著與真正成交事件相同的資訊。
+
+**成交量加權中間價**是公允價值估計量，不是不平衡指標，[DeepLOB](/en/blog/post/deeplob-deep-learning-order-book)中有介紹。還要注意命名區別：它*不是* Stoikov 的 micro-price，後者是鞅調整後的 $M_t + g(I,S)$ 估計量，正是因為樸素的加權中間價存在偏差才被構造出來。
+
+## Python 實現
+
+![訂單簿事件流通過流量計算引擎](/images/blog/order-flow-imbalance-prediction-implementation.webp)
+
+下面是 CKS 分解的直接實現，並推廣到 $L$ 個價位。
+
+### OFI 核心計算
+
+```python
+import numpy as np
+import pandas as pd
+from dataclasses import dataclass, field
+from typing import Optional
+
+@dataclass
+class OrderBookSnapshot:
+    timestamp: float
+    bid_prices: np.ndarray   # best bid at index 0, descending
+    ask_prices: np.ndarray   # best ask at index 0, ascending
+    bid_sizes: np.ndarray
+    ask_sizes: np.ndarray
+
+@dataclass
+class OFICalculator:
+    """
+    Computes Order Flow Imbalance from consecutive order book snapshots.
+    Supports multi-level OFI (MLOFI) up to `n_levels` deep.
+    """
+    n_levels: int = 5
+    prev_snapshot: Optional[OrderBookSnapshot] = field(default=None, init=False)
+
+    def compute_level_ofi(
+        self,
+        prev_price: float, curr_price: float,
+        prev_size: float, curr_size: float,
+        side: str
+    ) -> float:
+        """Compute single-level OFI contribution for bid or ask side."""
+        if side == "bid":
+            if curr_price > prev_price:
+                return curr_size              # new level appeared above
+            elif curr_price < prev_price:
+                return -prev_size             # old level disappeared
+            else:
+                return curr_size - prev_size  # same level, size changed
+        else:  # ask side
+            if curr_price < prev_price:
+                return curr_size              # new level appeared below
+            elif curr_price > prev_price:
+                return -prev_size             # old level disappeared
+            else:
+                return curr_size - prev_size  # same level, size changed
+
+    def update(self, snapshot: OrderBookSnapshot) -> Optional[np.ndarray]:
+        """
+        Process new snapshot, return MLOFI vector of shape (n_levels,).
+        Returns None on first call (no previous snapshot to compare).
+        """
+        if self.prev_snapshot is None:
+            self.prev_snapshot = snapshot
+            return None
+
+        prev = self.prev_snapshot
+        n = min(self.n_levels, len(snapshot.bid_prices), len(prev.bid_prices))
+        ofi = np.zeros(n)
+
+        for level in range(n):
+            e_buy = self.compute_level_ofi(
+                prev.bid_prices[level], snapshot.bid_prices[level],
+                prev.bid_sizes[level], snapshot.bid_sizes[level],
+                side="bid"
+            )
+            e_sell = self.compute_level_ofi(
+                prev.ask_prices[level], snapshot.ask_prices[level],
+                prev.ask_sizes[level], snapshot.ask_sizes[level],
+                side="ask"
+            )
+            ofi[level] = e_buy - e_sell
+
+        self.prev_snapshot = snapshot
+        return ofi
+```
+### 聚合到時間視窗
+
+```python
+@dataclass
+class OFIAggregator:
+    """
+    Aggregates raw OFI updates into fixed time windows.
+    Emits the regression inputs (aggregated MLOFI) and target (delta mid).
+    """
+    window_seconds: float = 10.0
+    n_levels: int = 5
+    calculator: OFICalculator = field(init=False)
+    buffer: list = field(default_factory=list, init=False)
+    window_start: float = 0.0
+
+    def __post_init__(self):
+        self.calculator = OFICalculator(n_levels=self.n_levels)
+
+    def on_snapshot(self, snapshot: OrderBookSnapshot) -> Optional[dict]:
+        """
+        Feed a new order book snapshot.
+        Returns aggregated window dict when a window completes, else None.
+        """
+        ofi_vec = self.calculator.update(snapshot)
+        if ofi_vec is None:
+            self.window_start = snapshot.timestamp
+            return None
+
+        if not self.buffer:
+            self.window_start = snapshot.timestamp
+
+        self.buffer.append({
+            "timestamp": snapshot.timestamp,
+            "ofi": ofi_vec.copy(),
+            "mid": (snapshot.bid_prices[0] + snapshot.ask_prices[0]) / 2,
+        })
+
+        elapsed = snapshot.timestamp - self.window_start
+        if elapsed >= self.window_seconds:
+            return self._flush()
+        return None
+
+    def _flush(self) -> dict:
+        """Aggregate buffered OFI updates into a single window record."""
+        ofi_matrix = np.array([b["ofi"] for b in self.buffer])
+        agg_ofi = ofi_matrix.sum(axis=0)  # shape: (n_levels,)
+
+        result = {
+            "window_start": self.window_start,
+            "window_end": self.buffer[-1]["timestamp"],
+            "n_updates": len(self.buffer),
+            "mid_open": self.buffer[0]["mid"],
+            "mid_close": self.buffer[-1]["mid"],
+            "delta_mid": self.buffer[-1]["mid"] - self.buffer[0]["mid"],
+            "ofi_level1": agg_ofi[0],
+            "ofi_total": agg_ofi.sum(),
+            "mlofi": agg_ofi,
+        }
+
+        self.buffer.clear()
+        return result
+```
+注意聚合器輸出的是同一視窗內的 `mlofi` 和 `delta_mid`。這就是同期迴歸。若要得到預測迴歸，應將視窗 $k$ 的 `mlofi` 與視窗 $k+1$ 的 `delta_mid` 配對，並預期擬合效果會顯著變差。
+
+### 交易分類（Lee-Ready）
+
+```python
+def classify_trades_lee_ready(
+    trades: pd.DataFrame,
+    quotes: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Classify trades as buy (+1) or sell (-1) using Lee-Ready:
+    quote rule first, tick rule as fallback at the midpoint.
+
+    Parameters
+    ----------
+    trades : DataFrame with columns ['timestamp', 'price', 'size']
+    quotes : DataFrame with columns ['timestamp', 'bid', 'ask']
+
+    Returns
+    -------
+    trades with added 'side' column
+    """
+    trades = trades.sort_values("timestamp").copy()
+    quotes = quotes.sort_values("timestamp")
+
+    # For each trade, find the most recent prevailing quote
+    trades = pd.merge_asof(
+        trades, quotes,
+        on="timestamp",
+        direction="backward"
+    )
+
+    trades["mid"] = (trades["bid"] + trades["ask"]) / 2
+
+    # Quote rule
+    trades["side"] = np.where(
+        trades["price"] > trades["mid"], 1,
+        np.where(trades["price"] < trades["mid"], -1, 0)
+    )
+
+    # Tick rule fallback for midpoint trades
+    trades["price_diff"] = trades["price"].diff()
+    tick_sign = np.sign(trades["price_diff"])
+    tick_sign = tick_sign.replace(0, np.nan).ffill().fillna(1)
+
+    midpoint_mask = trades["side"] == 0
+    trades.loc[midpoint_mask, "side"] = tick_sign[midpoint_mask].astype(int)
+
+    return trades
+```
+### 訊號歸一化
+
+```python
+class OFISignal:
+    """
+    Rolling z-score normalization of aggregated OFI.
+
+    Deliberately does NOT convert OFI into a predicted return: that
+    requires a fitted beta, and beta is venue-, pair- and regime-specific.
+    Fit it on your own data before wiring this into anything.
+    """
+    def __init__(self, window_seconds: float = 10.0, n_levels: int = 5,
+                 lookback: int = 100):
+        self.aggregator = OFIAggregator(
+            window_seconds=window_seconds, n_levels=n_levels,
+        )
+        self.lookback = lookback
+        self.ofi_history: list[float] = []
+
+    def process(self, snapshot: OrderBookSnapshot) -> Optional[dict]:
+        agg = self.aggregator.on_snapshot(snapshot)
+        if agg is None:
+            return None
+
+        ofi = agg["ofi_level1"]
+        self.ofi_history.append(ofi)
+        if len(self.ofi_history) > self.lookback:
+            self.ofi_history.pop(0)
+
+        if len(self.ofi_history) >= 20:
+            arr = np.array(self.ofi_history)
+            mu, sigma = arr.mean(), arr.std()
+            zscore = (ofi - mu) / max(sigma, 1e-10)
+        else:
+            zscore = 0.0
+
+        return {**agg, "ofi_zscore": zscore}
+```
+## OFI 接入的位置
+
+![訂單流訊號接入模組化交易流水線](/images/blog/order-flow-imbalance-prediction-plugs-in.webp)
+
+**做市。** OFI 作為公允價值的預測性偏移項，疊加在[Avellaneda-Stoikov 做市商](/en/blog/post/market-making-avellaneda-stoikov)中已經推導並實現的庫存偏移之上：$P^{fair} = P^{mid} + \gamma_{flow} \cdot OFI_{z} - \gamma_{inv} \cdot q$。兩個項回答不同問題 - 流量項說明價格將往哪裡走，庫存項說明你能承受持有多少 - 已發表文章討論的是後者，包括為什麼正庫存會同時壓低兩邊報價。較大的 $|OFI_z|$ 也可以作為合理的逆向選擇觸發器，啟動[交易者識別的數字指紋](/en/blog/post/digital-fingerprint-trader-identification)和[異常檢測](/en/blog/post/anomaly-detection-algotrading)中列出的防禦動作（加寬、縮小、撤掉一側）。
+
+**執行。** OFI 是策略層成交機率估計 $p$ 的輸入，不是獨立的緊迫性控制器。掛單還是吃單的決策基於明確的盈虧平衡計算 - $p^* = \delta/(\Pi + \delta)$，其中 $\Pi = s + f_t - f_m$ - 具體邏輯位於[子訂單執行策略](/en/blog/post/child-order-execution-tactics)。該文也說明策略層不應根據自己對市場的看法重新推導緊迫性，否則會產生兩個互相沖突的控制器。
+
+## 實務注意事項
+
+![堅韌的市場訊號穿過嘈雜的微觀結構地形](/images/blog/order-flow-imbalance-prediction-practical.webp)
+
+**訊號半衰期和滾動重校準。** 這是 OFI 特有的部分。在流動性較高的標的中，OFI 的預測資訊會在毫秒到秒的時間尺度上衰減，因此聚合視窗不是自由引數，而是對預測週期的下注。而且 $\beta$ 不是常數：它會隨日內時段、深度和計劃事件變化，所以生產環境中的擬合應在滾動視窗上重新估計，而不是固定使用回測中的數值。
+
+這裡的其他內容在別處都有介紹。延遲預算以及共址/FPGA/核心旁路階梯見：[DeepLOB 的生產部分](/en/blog/post/deeplob-deep-learning-order-book)。U 形日內流動性模式和漂移中的歸一化統計見：[價差建模](/en/blog/post/spread-modeling-machine-learning)。各場所的重校準，以及為什麼在納斯達克擬合的模型不會自動遷移到未經調整的加密貨幣對，再見[DeepLOB](/en/blog/post/deeplob-deep-learning-order-book)；碎片化部分位於[智慧訂單路由](/en/blog/post/smart-order-routing-crypto)。
+
+**操縱。** 有一個後果是該模型特有的，值得直說：CKS 分解只按數量為每個事件加權，不考慮意圖或持續性。因此，誘騙者掛出並取消大額訂單，會按構造以完整權重直接注入訊號。檢測啟發式 - 取消率、訂單存續時間、價格接近時的掛單牆行為 - 見[佇列位置和訂單簿掛單牆分析](/en/blog/post/queue-position-order-book-wall-analysis)；跨場所的虛假流動性見[智慧訂單路由](/en/blog/post/smart-order-routing-crypto)。
+
+## 要點
+
+![關鍵訂單流洞察匯聚成一個清晰訊號](/images/blog/order-flow-imbalance-prediction-takeaways.webp)
+
+1. **OFI 是事件分解，不是快照。** 三分支指標公式把訂單簿頂部的每次變化（價格上升、價格下降、數量變化）對映成一個帶符號的數字，只需要兩個連續快照。
+
+2. **標題中的 R 平方是同期的。** CKS 的 50-65% 分解的是同一區間的價格變化；它不是預測，不應與前瞻收益模型比較。
+
+3. **多級 OFI 增加價位，PCA 將其壓縮。** 已發表的增量 $R^2$ 和 89% 方差結果來自納斯達克股票。深度是否仍然有助於加密貨幣訂單簿，尚未測試。
+
+4. **OFI 吸收了交易不平衡。** 聯合輸入時 TI 變得不顯著 - OFI 能看到、而 TI 看不到的取消事件，正是差異所在。
+
+5. **該模型看不到意圖。** 按數量等權正是它容易被欺騙的原因。
+
+6. **本文沒有任何內容經過實際測量。** 引用的每個數字都來自股票文獻。在這個訊號接觸資金之前，需要在你自己的訂單簿資料上擬合模型，單獨報告滯後設定，並檢查優勢是否經得住費用和半價差。<!-- TODO: 需要真實資料結果 - 報告測得的優勢能否經受吃單費和半價差；這裡的負面結果同樣可以發表，而且比教程式版本更有價值。 -->
+
+## 延伸閱讀
+
+![圍繞 OFI 概念的互聯微觀結構研究路徑](/images/blog/order-flow-imbalance-prediction-further-reading.webp)
+
+- Cont, R.、Kukanov, A. 和 Stoikov, S. (2014)。《訂單簿事件的價格影響》。*Journal of Financial Econometrics*，12(1)，47-88。
+- Xu, K.、Gould, M. 和 Howison, S. (2019)。 “限價訂單簿中的多級訂單流不平衡。” *arXiv：1907.06230*。
+- Kolm, P.、Turiel, J. 和 Westray, N. (2023)。 “深度訂單流不平衡：從限價訂單簿中提取多個層面的阿爾法。” *數學金融*，33(4)。
+- Lee, C. 和 Ready, M. (1991)。 “從盤中資料推斷交易方向。” *《金融雜誌》*，46(2), 733-746。
+- Easley, D.、Lopez de Prado, M. 和 O'Hara, M. (2012)。 “高頻世界中的流動毒性和流動性。” *金融研究評論*，25(5), 1457-1493。

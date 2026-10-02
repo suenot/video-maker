@@ -2,7 +2,7 @@
   "schema_version": 1,
   "project": "marketmaker",
   "mode": "continuous_notebooklm_source_drafts_with_independent_video_qa",
-  "updated_at": "2026-10-01T19:15:47+00:00",
+  "updated_at": "2026-10-02T13:08:16.188044+00:00",
   "current_slug": "algotrading-order-types",
   "priority_order": [
     "algotrading-order-types",
@@ -26,10 +26,18 @@
       ],
       "languages": [
         "en",
-        "ru"
+        "ru",
+        "zh-CN",
+        "zh-TW"
       ],
       "independent_of": "algotrading-order-types final-video acceptance and Shorts remediation",
-      "done_when": "Each source draft has a full frozen article snapshot, generated NotebookLM slide PDF and separate Deep Dive audio with local hashes/provenance and editorial review pending. This does not imply final video acceptance or publication."
+      "done_when": "Each requested output locale has a full frozen article snapshot, generated NotebookLM slide PDF and separate Deep Dive audio with local hashes/provenance and editorial review pending. Preserve Mainland Simplified and Taiwan Traditional Chinese as distinct variants. This does not imply final video acceptance or publication.",
+      "article_language_mapping": {
+        "en": "en",
+        "ru": "ru",
+        "zh-CN": "zh",
+        "zh-TW": "zh-Hant"
+      }
     },
     {
       "task": "algotrading-order-types",
