@@ -85,6 +85,11 @@ placeholder that can briefly overlap its replacement; preserve the insertion
 intent and reconcile the sole permanent addition without uploading again.
 Wait for the expected customize dialog's prompt to become visible, then
 verify its language, selected source and audio format/length before Generate.
+An evidenced source failure before dispatch may resume only after binding its
+permanent notebook ID and verifying the exact current URL, unchanged source-ID
+baseline, frozen input hash and saved diagnostic hashes. Save an uncertain
+dispatch state before the one insertion attempt; unknown or processing intents
+still prohibit another insertion.
 Chinese selection must explicitly identify Simplified or Traditional; a generic
 "Chinese" or "中文" label does not establish the variant and blocks submission.
 Bind a new

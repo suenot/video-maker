@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Save the complete Mainland Chinese Order Flow Imbalance PDF/audio pair and reconcile its interrupted Taiwan notebook creation against the hash-matched ID baseline, preserving evidence of the source failure before dispatch.
 - Save separate Simplified/Traditional Chinese Statistical Arbitrage PDF/audio originals and Mainland Chinese Order Flow Imbalance audio with hashes, integrity evidence and pending editorial review.
 - Save the first complete Mainland Simplified and Taiwan Traditional Chinese Funding Rate Arbitrage PDF/audio drafts with original artifact IDs, integrity results and pending editorial review.
 - Save integrity-checked Almgren-Chriss EN slides/audio and RU audio originals, retain the existing scheduled RU deck, and bind separate Simplified/Traditional Chinese Funding Rate Arbitrage requests without repeating submissions.
@@ -30,6 +31,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bind NotebookLM production to the designated Gaia Camoufox account and record account verification before source generation.
 - Preserve the rejected bilingual order-types Blueprint package for provenance; record the user's quality rejection and the recovered existing NotebookLM PDF/audio flow before further production.
 - Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
+
+## [1.2.5] - 2026-10-03
+
+### Fixed
+
+- Resume a source failure explicitly verified before dispatch only in the exact permanent notebook with unchanged input/source-ID baselines and hash-matched failure evidence; retain uncertain and processing source intents without another insertion.
 
 ## [1.2.4] - 2026-10-03
 

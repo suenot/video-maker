@@ -312,7 +312,8 @@ class Runner:
         if job["input_hashes"] != self.input_hashes(brief):
             raise RuntimeError("Frozen source inputs changed before insertion")
         await self.panel(page, "Sources")
-        if not job.get("source_id") and not job.get("source_intent") and (self.quota_active() or await self.source_quota(page)):
+        needs_first_insertion = not job.get("source_intent") or job["source_intent"].get("dispatch_state") == "not_dispatched"
+        if not job.get("source_id") and needs_first_insertion and (self.quota_active() or await self.source_quota(page)):
             job["state"] = "quota_wait"
             job.pop("last_error", None)
             self.save()
@@ -326,10 +327,27 @@ class Runner:
             self.save()
         async def source_ids():
             return await page.locator("button[id^='source-item-more-button-']").evaluate_all('els=>els.map(e=>e.id.replace("source-item-more-button-",""))')
+        insert = False
         if not job.get("source_id") and not job.get("source_intent"):
             source = ROOT / brief["source_text_path"]
             baseline = await source_ids()
             job["source_intent"] = {"at": now(), "sha256": sha(source), "baseline_ids": baseline}
+            insert = True
+        elif not job.get("source_id") and job.get("source_intent", {}).get("dispatch_state") == "not_dispatched":
+            intent = job["source_intent"]
+            evidence = intent.get("pre_dispatch_evidence", {})
+            if not evidence or any(sha(ROOT / e["path"]) != e["sha256"] for e in evidence.values()):
+                raise RuntimeError("Source pre-dispatch evidence unavailable or changed; no insertion")
+            notebook = permanent_notebook_url(job.get("notebook", ""))
+            if not notebook or permanent_notebook_url(page.url) != notebook or job["artifacts"]:
+                raise RuntimeError("Source pre-dispatch recovery lacks the exact empty bound notebook")
+            if intent["sha256"] != brief["source_text_sha256"] or set(await source_ids()) != set(intent["baseline_ids"]):
+                raise RuntimeError("Source pre-dispatch baseline changed; inspect before insertion")
+            intent["pre_dispatch_recovery_verified_at"] = now()
+            insert = True
+        if insert:
+            source = ROOT / brief["source_text_path"]
+            job["source_intent"]["dispatch_state"] = "dispatch_unknown"
             self.save()
             if not await asyncio.wait_for(self.nlm.add_source_text(page, source.read_text(), False), timeout=120):
                 raise RuntimeError("Source submission unconfirmed")
