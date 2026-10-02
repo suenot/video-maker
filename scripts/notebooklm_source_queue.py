@@ -544,6 +544,10 @@ class Runner:
                         if sha(ROOT / artifact["path"]) != artifact["sha256"]:
                             raise RuntimeError("Downloaded source hash changed")
                     continue
+                retry_after = ((completed or {}).get("last_error") or {}).get("retry_not_before")
+                if retry_after and datetime.now(timezone.utc) < datetime.fromisoformat(retry_after):
+                    print(json.dumps({"job": key, "state": "retry_wait", "not_before": retry_after}), flush=True)
+                    continue
                 # A later article/video update must not block finished drafts.
                 self.validate(brief)
                 active = sum(a.get("state") in ACTIVE for j in self.state["jobs"].values() for a in j.get("artifacts", {}).values())

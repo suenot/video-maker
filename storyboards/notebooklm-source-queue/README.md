@@ -84,6 +84,9 @@ Preserve all notebook/source/artifact IDs and pending insertion intents.
 After the reset, reconcile existing bound jobs, download ready originals and
 resume missing stages using the same notebook and frozen inputs. Source-helper calls
 have a 120-second deadline; a timeout preserves the insertion intent for review.
+If a job's saved failure includes `retry_not_before`, skip that job until its
+deadline while allowing other eligible source jobs to proceed. Preserve its
+failure evidence and all bound identities during this wait.
 
 | State | Next action |
 | --- | --- |

@@ -25,6 +25,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Preserve the rejected bilingual order-types Blueprint package for provenance; record the user's quality rejection and the recovered existing NotebookLM PDF/audio flow before further production.
 - Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
 
+## [1.1.3] - 2026-10-02
+
+### Fixed
+
+- Respect a saved source-job retry deadline without reopening its notebook or repeating its download early; continue other eligible drafts while retaining failure evidence and bound identities.
+
 ## [1.1.2] - 2026-10-02
 
 ### Fixed
@@ -72,7 +78,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Document private-first uploads and retained Studio/public-state verification.
 - Document that generated videos and audio must never be committed.
 
-[Unreleased]: https://github.com/suenot/video-maker/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/suenot/video-maker/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/suenot/video-maker/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/suenot/video-maker/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/suenot/video-maker/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/suenot/video-maker/compare/v1.0.0...v1.1.0
