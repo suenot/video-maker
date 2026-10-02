@@ -1491,7 +1491,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "generating",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 18:51."
@@ -1506,8 +1506,8 @@
           "source_id": "7b0ed6f3-6797-42b2-98ef-cf7e3d4c292d",
           "submission_mode": "later",
           "artifact_id": "2069c930-fbed-423f-b697-2cc70e2c95e4",
-          "card_text": "tablet\nOptimal Execution: Almgren-Chriss Model Implementation Guide\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-02T15:36:42.422135+00:00"
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T20:23:30.254134+00:00"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -1732,7 +1732,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "ready",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "af1fe30b885c573b7b2bf4e2521b63e96177bbe7729266c1ede7874a3a8e4cf4",
           "requested_at": "2026-10-02T15:36:14.918474+00:00",
@@ -1743,10 +1743,17 @@
           "submission_mode": "now",
           "artifact_id": "a5cbb1c7-2769-4dbe-ac9b-3501ce1eddcb",
           "card_text": "tablet\nUnread\n加密货币市场的统计套利与配对交易完全指南\n1 source · 4h ago\nmore_vert",
-          "observed_at": "2026-10-02T20:06:17.434643+00:00"
+          "observed_at": "2026-10-02T20:21:27.966575+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/statistical-arbitrage-pairs-trading-crypto/zh-CN/slides.pdf",
+          "sha256": "7d4931a4ee1e4e98022732590fe8e5875313dcbaf7b55e3662a216a96ecd9650",
+          "bytes": 12637048,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T20:21:36.096690+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "a5cbb1c7-2769-4dbe-ac9b-3501ce1eddcb"
           ],
@@ -1758,8 +1765,15 @@
           "source_id": "327e67f1-8d0f-42eb-ad3a-c0661a3fbf0a",
           "submission_mode": "now",
           "artifact_id": "e223426e-0bbf-4c10-9242-780ba36ac6ca",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T15:36:35.311520+00:00"
+          "card_text": "audio_spark\nUnread\n币圈统计套利陷阱\n15:45 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T20:21:37.123311+00:00",
+          "duration_seconds": 945.237914,
+          "path": "input/notebooklm-sources/statistical-arbitrage-pairs-trading-crypto/zh-CN/audio.m4a",
+          "sha256": "7eeed69408eb4d89363984e71056beee5bb087623279c8286d24078e4ce43199",
+          "bytes": 30422236,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T20:22:03.093349+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -1795,31 +1809,7 @@
       "source_display_name": "MM article statistical-arbitrage-pairs-trading-cr…",
       "selected_source_ids": [
         "327e67f1-8d0f-42eb-ad3a-c0661a3fbf0a"
-      ],
-      "last_error": {
-        "type": "TimeoutError",
-        "message": "Locator.click: Timeout 30000ms exceeded.",
-        "at": "2026-10-02T20:06:47.485557+00:00",
-        "stage": "download_bound_slides",
-        "cause": "Studio Data Table hover tooltip intercepted the bound artifact More button pointer click before its menu opened.",
-        "retry_not_before": "2026-10-02T20:19:00+00:00",
-        "next_safe_step": "Reconcile the same notebook/source/artifact IDs, then download the existing ready slides and audio using the guarded bound-artifact menu; do not generate or upload again.",
-        "artifact_id": "a5cbb1c7-2769-4dbe-ac9b-3501ce1eddcb",
-        "evidence": {
-          "log": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T200458Z.log",
-            "sha256": "4bbbbbefc36a6bb856fc20a014504acb78af32cf520dac23988ea1cac0b75074"
-          },
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/2026-10-02T200458Z-statistical-arbitrage-pairs-trading-crypto-zh-CN-error.png",
-            "sha256": "f2e192b96d098821493fabf50ab974f432f2d46f2d1744ca4dc112ba45351bc2"
-          },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/2026-10-02T200458Z-statistical-arbitrage-pairs-trading-crypto-zh-CN-controls.json",
-            "sha256": "283fa7799ddd65b5444404ed824395360596e1d672b4c8425e5ef7d7b58a3b47"
-          }
-        }
-      }
+      ]
     },
     "statistical-arbitrage-pairs-trading-crypto:zh-TW": {
       "slug": "statistical-arbitrage-pairs-trading-crypto",
@@ -1833,7 +1823,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "11db2628178d6817def4192de800210a332689117ad42efdef0325ef22049081",
           "requested_at": "2026-10-02T15:37:09.249945+00:00",
@@ -1843,11 +1833,18 @@
           "source_id": "f5e6772b-4c23-4092-ad1b-adb210cfabc1",
           "submission_mode": "now",
           "artifact_id": "6a793e9c-d6a6-4aa9-b317-f194b036ef28",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T15:37:13.794214+00:00"
+          "card_text": "tablet\nUnread\n加密貨幣統計套利與配對交易實戰指南\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-02T20:22:09.933011+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/statistical-arbitrage-pairs-trading-crypto/zh-TW/slides.pdf",
+          "sha256": "cd5e4cd574c57d6d17f8f60391fb3065a4a9c3cbeeb874017be04d48cb5d2194",
+          "bytes": 16835852,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T20:22:19.403566+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "6a793e9c-d6a6-4aa9-b317-f194b036ef28"
           ],
@@ -1859,8 +1856,15 @@
           "source_id": "f5e6772b-4c23-4092-ad1b-adb210cfabc1",
           "submission_mode": "now",
           "artifact_id": "77abbf27-6619-4e3b-9269-90a64151f2ce",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T15:37:29.758559+00:00"
+          "card_text": "audio_spark\nUnread\n加密貨幣統計套利\n20:33 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T20:22:20.441573+00:00",
+          "duration_seconds": 1233.118912,
+          "path": "input/notebooklm-sources/statistical-arbitrage-pairs-trading-crypto/zh-TW/audio.m4a",
+          "sha256": "a23bcfb20be6900111fd9aa42127aa53dd148d989c271f29bc3f79be87ca5577",
+          "bytes": 39687384,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T20:22:51.460481+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -1901,7 +1905,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "generating",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 23:51."
@@ -1916,11 +1920,11 @@
           "source_id": "b80e9f79-cec8-46e2-bffd-ada16ca76037",
           "submission_mode": "later",
           "artifact_id": "3c92f2b1-79c0-4230-926f-660c50077fc1",
-          "card_text": "tablet\nOrder Flow Imbalance: The Event Decomposition Model\nScheduled for after 12am\nmore_vert",
-          "observed_at": "2026-10-02T15:38:01.507915+00:00"
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T20:22:58.439943+00:00"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Core Mechanism\n+ Practical Application\n+ Quantitative Perspective\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 23:51."
@@ -1937,8 +1941,15 @@
           "source_id": "b80e9f79-cec8-46e2-bffd-ada16ca76037",
           "submission_mode": "later",
           "artifact_id": "0c32593e-768c-4ee9-b0e9-e85caa68e669",
-          "card_text": "audio_spark\nOrder Flow Imbalance: The Event Decomposition Model\nScheduled for after 11pm\nmore_vert",
-          "observed_at": "2026-10-02T15:38:17.213054+00:00"
+          "card_text": "audio_spark\nUnread\nCKS订单流不平衡\n15:52 · Deep Dive · 1 source · 21m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T20:22:59.461786+00:00",
+          "duration_seconds": 952.52898,
+          "path": "input/notebooklm-sources/order-flow-imbalance-prediction/zh-CN/audio.m4a",
+          "sha256": "015f2c104be10fed45503f493fc351da658e70ee394bb5c44e44132289fc8539",
+          "bytes": 30656922,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T20:23:23.131819+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -1966,9 +1977,86 @@
       "selected_source_ids": [
         "b80e9f79-cec8-46e2-bffd-ada16ca76037"
       ]
+    },
+    "order-flow-imbalance-prediction:zh-TW": {
+      "slug": "order-flow-imbalance-prediction",
+      "language": "zh-TW",
+      "article_sha256": "be3546cf73e420cc5a1d6ef28625d424641f33484448d5ad7905a674f1c0a47c",
+      "input_hashes": {
+        "article": "be3546cf73e420cc5a1d6ef28625d424641f33484448d5ad7905a674f1c0a47c",
+        "source_text": "1be52d0a5c49921dbc55474be6e397d86b5108d77f2d214c1d2d691c7e749fe8",
+        "slides_prompt": "a9fa067eb887a1dfd2a442b18cf6a8ae5c27211ffa9c961cb251867f30e5769a",
+        "audio_prompt": "ac1695233525d26d2f3ae5009a01023122b67b53d27a16c8c060f9b2c14a1705"
+      },
+      "artifacts": {},
+      "notebook_intent": {
+        "at": "2026-10-02T20:23:37.205544+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/order-flow-imbalance-prediction-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "b81463d31a6bfe693b2ddde58fa96dfb57bb4334b3c600135f519cc84462a2ef",
+        "baseline_count": 280,
+        "dispatch_state": "dispatched",
+        "temporary_route": "https://notebook.google.com/notebook/creating",
+        "temporary_route_observed_at": "2026-10-02T20:23:38.290850+00:00",
+        "reconciliation_required": "Creation was dispatched once, but only the temporary creating route was observed. Inspect the hash-matched notebook-ID baseline and exact new candidates before binding; do not create another notebook."
+      },
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T20:23:42.347064+00:00",
+        "sha256": "1be52d0a5c49921dbc55474be6e397d86b5108d77f2d214c1d2d691c7e749fe8",
+        "baseline_ids": [],
+        "dispatch_state": "not_dispatched",
+        "pre_dispatch_evidence": {
+          "log": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T201958Z.log",
+            "sha256": "bd3b300274ff4a6bb49e46bc67b852eb21b11b70702cf2c6d92207de32e32aeb"
+          },
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/2026-10-02T201958Z-order-flow-imbalance-prediction-zh-TW-error.png",
+            "sha256": "e565da761577d09b681d1a0b09d30aca6660598fbab60d9da54e6bb064c8ccfe"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/2026-10-02T201958Z-order-flow-imbalance-prediction-zh-TW-controls.json",
+            "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          },
+          "source_helper": {
+            "path": "/Users/suenot/projects/sdvg/gaia/notebooklm_gen.py",
+            "sha256": "f12e73a22a44ee99623ccf90eedb9dbc9eb8e2ce135bae749f813d0c17a8e7be",
+            "guard": "add_source_text returned False after ensure_add_source_dialog failed; Copied text, paste and Insert were not reached."
+          }
+        }
+      },
+      "last_error": {
+        "type": "RuntimeError",
+        "message": "Source submission unconfirmed",
+        "at": "2026-10-02T20:23:42.355160+00:00",
+        "stage": "notebook_creation_identity",
+        "cause": "The worker bound the temporary /notebook/creating route before a permanent UUID existed. The source helper returned at its add-source-dialog guard before Copied text, paste or Insert.",
+        "retry_not_before": "2026-10-02T20:34:00+00:00",
+        "next_safe_step": "Read the NotebookLM homepage once using the saved account and reconcile added permanent notebook IDs against the 280-ID hash-matched baseline. Preserve the source intent; no new notebook or source submission until identity is resolved.",
+        "evidence": {
+          "log": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T201958Z.log",
+            "sha256": "bd3b300274ff4a6bb49e46bc67b852eb21b11b70702cf2c6d92207de32e32aeb"
+          },
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/2026-10-02T201958Z-order-flow-imbalance-prediction-zh-TW-error.png",
+            "sha256": "e565da761577d09b681d1a0b09d30aca6660598fbab60d9da54e6bb064c8ccfe"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/2026-10-02T201958Z-order-flow-imbalance-prediction-zh-TW-controls.json",
+            "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+          },
+          "source_helper": {
+            "path": "/Users/suenot/projects/sdvg/gaia/notebooklm_gen.py",
+            "sha256": "f12e73a22a44ee99623ccf90eedb9dbc9eb8e2ce135bae749f813d0c17a8e7be",
+            "guard": "add_source_text returned False after ensure_add_source_dialog failed; Copied text, paste and Insert were not reached."
+          }
+        }
+      }
     }
   },
-  "checked_at": "2026-10-02T20:08:19.129071+00:00",
+  "checked_at": "2026-10-02T20:26:35.518114+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,

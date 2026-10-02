@@ -46,6 +46,15 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def permanent_notebook_url(url):
+    parsed = urlparse(url)
+    if parsed.scheme != "https" or parsed.hostname not in ("notebook.google.com", "notebooklm.google.com"):
+        return None
+    if not re.fullmatch(r"/notebook/[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}", parsed.path, re.I):
+        return None
+    return parsed._replace(query="", fragment="").geturl()
+
+
 def normal_browser_geometry():
     """Use the real macOS work area, not the old laptop fingerprint dimensions."""
     fallback = {"width": 1920, "height": 1080, "screen_width": 1920, "screen_height": 1080, "x": 0, "y": 0}
@@ -239,6 +248,8 @@ class Runner:
 
     async def notebook(self, page, brief, job):
         if job.get("notebook"):
+            if not permanent_notebook_url(job["notebook"]):
+                raise RuntimeError("Saved notebook has no permanent ID; reconcile its creation intent before navigation")
             await page.bring_to_front()
             await self.nlm.goto_retry(page, job["notebook"])
             await page.wait_for_timeout(4000)
@@ -279,12 +290,15 @@ class Runner:
         job["notebook_intent"]["dispatch_state"] = "dispatched"
         self.save()
         for _ in range(25):
-            if "/notebook/" in page.url:
+            if permanent_notebook_url(page.url):
                 break
             await page.wait_for_timeout(1000)
-        if "/notebook/" not in page.url:
-            raise RuntimeError("New notebook URL unavailable; intent retained")
-        job["notebook"] = page.url.split("?")[0]
+        notebook = permanent_notebook_url(page.url)
+        if not notebook:
+            job["notebook_intent"].update(last_observed_url=page.url, last_observed_at=now())
+            self.save()
+            raise RuntimeError("Permanent new-notebook ID unavailable; creation intent retained")
+        job["notebook"] = notebook
         if job.get("notebook_intent"):
             job["notebook_intent"]["resolved_at"] = now()
         self.save()

@@ -73,6 +73,9 @@ Notebook creation records its dispatch state before the single action. A saved
 failure before dispatch can resume only when the hash-matched notebook-ID
 baseline is unchanged; an uncertain dispatch or changed baseline still blocks
 creation and retains candidates for reconciliation.
+The `/notebook/creating` route is temporary. Require a permanent notebook UUID
+before binding, navigation or source insertion; an unfinished creation retains
+its dispatch intent and must be reconciled against the saved notebook-ID baseline.
 
 Before a submission, save the source-ID and artifact-ID baselines. Source
 names may be shortened by NotebookLM: bind a uniquely added source ID and
