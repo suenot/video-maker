@@ -105,12 +105,16 @@ On later passes, verify completed artifact hashes and skip their generation
 checks. A subsequent article edit or attached video must not block unfinished
 jobs elsewhere in the queue; completed jobs retain their frozen input evidence.
 
-When these eight briefs are exhausted, select the next small batch from
-`article-video-queue.json`: published language, absent article video link,
-no matching local completed package. Check existing NotebookLM notebooks and
-source jobs before creating one. Freeze the exact current article bytes,
-section order and input hashes in the same brief format; keep unresolved
-external duplicates and factual review pending before final production.
+When every prepared brief has both artifact IDs bound or both originals
+downloaded, freeze the next small batch from `../article-video-queue.json`:
+published language, absent article video link, no matching local completed
+package or source draft. Existing generation may continue while the next
+briefs are prepared locally; admission still respects the active-artifact cap.
+Do not extend the batch while a source or submission identity is unresolved.
+Check existing NotebookLM notebooks and source jobs before creating one.
+Freeze the exact current article bytes, section order and input hashes in the
+same brief format; record unverified external notebook/channel duplicates and
+factual review as pending before submission or final production respectively.
 
 Source completion means both original artifacts and their evidence are present
 and editorial review is pending. Final scene design, rendering, video QA,

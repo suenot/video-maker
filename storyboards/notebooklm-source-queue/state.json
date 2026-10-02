@@ -369,7 +369,7 @@
           "submission_mode": "later",
           "artifact_id": "36a9b7d0-dd13-4099-9a71-f38229e2f3fa",
           "card_text": "tablet\nOrder Flow Imbalance Analysis\nScheduled for after 4am\nmore_vert",
-          "observed_at": "2026-10-01T20:31:37.187057+00:00"
+          "observed_at": "2026-10-02T00:00:36.525129+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -390,7 +390,7 @@
           "submission_mode": "later",
           "artifact_id": "d2e0cdf5-b377-431d-9b33-70cb3395fa32",
           "card_text": "audio_spark\nOrder Flow Imbalance Analysis\nScheduled for after 4am\nmore_vert",
-          "observed_at": "2026-10-01T20:31:38.214125+00:00"
+          "observed_at": "2026-10-02T00:00:37.555200+00:00"
         }
       },
       "notebook_intent": {
@@ -444,7 +444,7 @@
           "submission_mode": "later",
           "artifact_id": "e2490438-e57d-41a6-b147-edd8271812a1",
           "card_text": "tablet\nOrder-Flow Imbalance Decomposition and Prediction Models\nScheduled for after 4am\nmore_vert",
-          "observed_at": "2026-10-01T20:31:44.986764+00:00"
+          "observed_at": "2026-10-02T00:00:44.169645+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -463,7 +463,7 @@
           "submission_mode": "later",
           "artifact_id": "37cb0d92-8098-43cd-930a-7d4fdc6f64b7",
           "card_text": "audio_spark\nOrder-Flow Imbalance Decomposition and Prediction Models\nScheduled for after 4am\nmore_vert",
-          "observed_at": "2026-10-01T20:31:46.015878+00:00"
+          "observed_at": "2026-10-02T00:00:45.198564+00:00"
         }
       },
       "notebook_intent": {
@@ -503,7 +503,38 @@
         "slides_prompt": "fc1652bfa4e082236ba2998f46d0fcad29f2972a2b13e8c1a07c5c0d04b23b1f",
         "audio_prompt": "9b4ee294cb2ec97308b861af50297e85c18f2bfbc47a4d534d0c3af992f44194"
       },
-      "artifacts": {},
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "fc1652bfa4e082236ba2998f46d0fcad29f2972a2b13e8c1a07c5c0d04b23b1f",
+          "requested_at": "2026-10-02T00:01:02.026336+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "0d0afa06-90fd-4be0-b515-3c3aee26b228",
+          "submission_mode": "now",
+          "artifact_id": "5efc5750-716b-4760-90d5-d227bdcf0f7b",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T00:01:08.084282+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "5efc5750-716b-4760-90d5-d227bdcf0f7b"
+          ],
+          "prompt_sha256": "9b4ee294cb2ec97308b861af50297e85c18f2bfbc47a4d534d0c3af992f44194",
+          "requested_at": "2026-10-02T00:01:15.703050+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "0d0afa06-90fd-4be0-b515-3c3aee26b228",
+          "submission_mode": "now",
+          "artifact_id": "f0e32ee7-74be-4f4f-95af-4b2c6ce569c6",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-02T00:01:21.923707+00:00"
+        }
+      },
       "notebook_intent": {
         "at": "2026-10-01T20:16:58.504526+00:00",
         "baseline_path": "temp/notebooklm-source-queue/twap-vwap-pov-execution-algorithms-en-notebook-baseline.json",
@@ -529,22 +560,101 @@
           "evidence_sha256": "14c3e0888df1078376f7163478fcc1d5fcfb461173dd910792134a1b19f1bd29"
         }
       ],
-      "state": "quota_wait"
+      "state": "source_ready",
+      "source_intent": {
+        "at": "2026-10-02T00:00:50.724046+00:00",
+        "sha256": "7452a2734476df308cbe145dc6a516669a6441f3f609fd46ecedcaca72a60001",
+        "baseline_ids": []
+      },
+      "source_id": "0d0afa06-90fd-4be0-b515-3c3aee26b228",
+      "source_title": "MM article twap-vwap-pov-execution-algorithms EN 6a11e40ea5f8",
+      "source_sha256": "7452a2734476df308cbe145dc6a516669a6441f3f609fd46ecedcaca72a60001",
+      "source_display_name": "MM article twap-vwap-pov-execution-algorithms EN …",
+      "selected_source_ids": [
+        "0d0afa06-90fd-4be0-b515-3c3aee26b228"
+      ]
+    },
+    "twap-vwap-pov-execution-algorithms:ru": {
+      "slug": "twap-vwap-pov-execution-algorithms",
+      "language": "ru",
+      "article_sha256": "07296eebb62e7534c124a07e76471fb4d686804d69591c2a66c6ede63702beb7",
+      "input_hashes": {
+        "article": "07296eebb62e7534c124a07e76471fb4d686804d69591c2a66c6ede63702beb7",
+        "source_text": "3496750bd3f0c8bc673bf35b862c40c2d1d59e9d38f3c6f57205fcf58d5e827b",
+        "slides_prompt": "b50ae29260542c884e54d4bbbd7a2296779c08157c570d306af6fcbbd454b734",
+        "audio_prompt": "28565b1170b2392e1d3b7897a0b588ae461d47d06422c4efadbb2941b19fafb2"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "b50ae29260542c884e54d4bbbd7a2296779c08157c570d306af6fcbbd454b734",
+          "requested_at": "2026-10-02T00:01:50.834390+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "2836383f-42a0-4103-ac5c-335013d56278",
+          "submission_mode": "now",
+          "artifact_id": "256295f9-a3bb-41d8-9505-9e4a4f235023",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T00:01:56.971476+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "256295f9-a3bb-41d8-9505-9e4a4f235023"
+          ],
+          "prompt_sha256": "28565b1170b2392e1d3b7897a0b588ae461d47d06422c4efadbb2941b19fafb2",
+          "requested_at": "2026-10-02T00:02:09.566631+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "2836383f-42a0-4103-ac5c-335013d56278",
+          "submission_mode": "now",
+          "artifact_id": "1976b7f1-5935-4f6b-8172-6e2d510aba86",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-02T00:02:15.791038+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-02T00:01:29.293119+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/twap-vwap-pov-execution-algorithms-ru-notebook-baseline.json",
+        "baseline_sha256": "f964eb98fad10ee96fe2a6fa0a6e4de229deac955010533ceccb6bf8ddbf53ee",
+        "baseline_count": 264,
+        "resolved_at": "2026-10-02T00:01:31.868248+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/5ae420b3-4993-406a-93cd-e5073bbacf11",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T00:01:35.898705+00:00",
+        "sha256": "3496750bd3f0c8bc673bf35b862c40c2d1d59e9d38f3c6f57205fcf58d5e827b",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "2836383f-42a0-4103-ac5c-335013d56278",
+      "source_title": "MM article twap-vwap-pov-execution-algorithms RU 07296eebb62e",
+      "source_sha256": "3496750bd3f0c8bc673bf35b862c40c2d1d59e9d38f3c6f57205fcf58d5e827b",
+      "state": "source_ready",
+      "source_display_name": "MM article twap-vwap-pov-execution-algorithms RU …",
+      "selected_source_ids": [
+        "2836383f-42a0-4103-ac5c-335013d56278"
+      ]
     }
   },
-  "checked_at": "2026-10-01T20:31:51.593710+00:00",
+  "checked_at": "2026-10-02T00:02:15.793027+00:00",
   "browser_geometry_requested": {
-    "width": 1979,
+    "width": 1983,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 77,
+    "x": 73,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1979,
+    "outer_width": 1983,
     "outer_height": 1290,
-    "inner_width": 1939,
+    "inner_width": 1943,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
