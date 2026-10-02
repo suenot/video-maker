@@ -1507,7 +1507,7 @@
           "submission_mode": "later",
           "artifact_id": "2069c930-fbed-423f-b697-2cc70e2c95e4",
           "card_text": "tablet\nOptimal Execution: Almgren-Chriss Model Implementation Guide\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-02T15:22:07.091901+00:00"
+          "observed_at": "2026-10-02T15:36:42.422135+00:00"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -1730,13 +1730,44 @@
         "slides_prompt": "af1fe30b885c573b7b2bf4e2521b63e96177bbe7729266c1ede7874a3a8e4cf4",
         "audio_prompt": "7614adcdd1243aaee344b6aa011575fb7655d66b656dbb9e2f4b74f78414a5f0"
       },
-      "artifacts": {},
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "af1fe30b885c573b7b2bf4e2521b63e96177bbe7729266c1ede7874a3a8e4cf4",
+          "requested_at": "2026-10-02T15:36:14.918474+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "327e67f1-8d0f-42eb-ad3a-c0661a3fbf0a",
+          "submission_mode": "now",
+          "artifact_id": "a5cbb1c7-2769-4dbe-ac9b-3501ce1eddcb",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T15:36:19.473715+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "a5cbb1c7-2769-4dbe-ac9b-3501ce1eddcb"
+          ],
+          "prompt_sha256": "7614adcdd1243aaee344b6aa011575fb7655d66b656dbb9e2f4b74f78414a5f0",
+          "requested_at": "2026-10-02T15:36:30.760107+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "327e67f1-8d0f-42eb-ad3a-c0661a3fbf0a",
+          "submission_mode": "now",
+          "artifact_id": "e223426e-0bbf-4c10-9242-780ba36ac6ca",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-02T15:36:35.311520+00:00"
+        }
+      },
       "notebook_intent": {
         "at": "2026-10-02T15:22:14.836341+00:00",
         "baseline_path": "temp/notebooklm-source-queue/statistical-arbitrage-pairs-trading-crypto-zh-CN-notebook-baseline.json",
         "baseline_sha256": "ad07f73682aefc231f963f27e0f95880a8159ff847dc700a1e298d2b862acff0",
         "baseline_count": 277,
-        "dispatch_state": "not_dispatched",
+        "dispatch_state": "dispatched",
         "pre_click_failure_evidence": {
           "log_path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T151958Z.log",
           "log_sha256": "08513fae85209e9f0e785fce80c27529e76bff23ce9b4568199144a3b6e2fc13",
@@ -1744,39 +1775,195 @@
           "screenshot_path": "temp/notebooklm-source-queue/statistical-arbitrage-pairs-trading-crypto-zh-CN-error.png",
           "observed_page": "NotebookLM homepage",
           "recorded_at": "2026-10-02T15:26:05.824630+00:00"
+        },
+        "pre_click_recovery_verified_at": "2026-10-02T15:35:55.660335+00:00",
+        "resolved_at": "2026-10-02T15:35:56.741905+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/39c44f49-cdf6-48d8-8dfc-b3e1661b8ed9",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T15:36:00.850121+00:00",
+        "sha256": "a9dee744ca3d1451dfa3c098aa463003a781088b3805b5dba7578f085ab5fb6f",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "327e67f1-8d0f-42eb-ad3a-c0661a3fbf0a",
+      "source_title": "MM article statistical-arbitrage-pairs-trading-crypto ZH-CN 9eb0403b6627",
+      "source_sha256": "a9dee744ca3d1451dfa3c098aa463003a781088b3805b5dba7578f085ab5fb6f",
+      "state": "source_ready",
+      "source_display_name": "MM article statistical-arbitrage-pairs-trading-cr…",
+      "selected_source_ids": [
+        "327e67f1-8d0f-42eb-ad3a-c0661a3fbf0a"
+      ]
+    },
+    "statistical-arbitrage-pairs-trading-crypto:zh-TW": {
+      "slug": "statistical-arbitrage-pairs-trading-crypto",
+      "language": "zh-TW",
+      "article_sha256": "47454382893153b09057fe46bc58f5e59012e1753b89254c53beecc0971e7253",
+      "input_hashes": {
+        "article": "47454382893153b09057fe46bc58f5e59012e1753b89254c53beecc0971e7253",
+        "source_text": "3cfa4cc8d43dfd0e8ee74612a11175e08e582ba91851f7134c16e844654605a4",
+        "slides_prompt": "11db2628178d6817def4192de800210a332689117ad42efdef0325ef22049081",
+        "audio_prompt": "43b0e4b5d4f5b57d26b0d7d1053e9f7659ff50fda4b5fe793c56e0ca39394518"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "11db2628178d6817def4192de800210a332689117ad42efdef0325ef22049081",
+          "requested_at": "2026-10-02T15:37:09.249945+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "f5e6772b-4c23-4092-ad1b-adb210cfabc1",
+          "submission_mode": "now",
+          "artifact_id": "6a793e9c-d6a6-4aa9-b317-f194b036ef28",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T15:37:13.794214+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "6a793e9c-d6a6-4aa9-b317-f194b036ef28"
+          ],
+          "prompt_sha256": "43b0e4b5d4f5b57d26b0d7d1053e9f7659ff50fda4b5fe793c56e0ca39394518",
+          "requested_at": "2026-10-02T15:37:25.207254+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "f5e6772b-4c23-4092-ad1b-adb210cfabc1",
+          "submission_mode": "now",
+          "artifact_id": "77abbf27-6619-4e3b-9269-90a64151f2ce",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-02T15:37:29.758559+00:00"
         }
       },
-      "last_error": {
-        "type": "TimeoutError",
-        "message": "Locator.click: Timeout 6000ms exceeded.",
-        "at": "2026-10-02T15:22:20.863239+00:00",
-        "stage": "notebook_creation",
-        "reason": "Native New notebook actionability wait timed out before click dispatch.",
-        "retry_not_before": "2026-10-02T15:32:20.863239+00:00",
-        "next_safe_step": "On the next bounded pass, verify the hash-matched saved 277 notebook IDs are unchanged; dispatch creation once only after that check. Preserve any candidates and stop if IDs changed or dispatch is uncertain."
-      }
+      "notebook_intent": {
+        "at": "2026-10-02T15:36:49.421155+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/statistical-arbitrage-pairs-trading-crypto-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "8ce03531b40f0709480989f3ad4dab2aa050eee881c367e5918b7274e0ca3e60",
+        "baseline_count": 278,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-02T15:36:50.499560+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/c3202f2b-4628-4266-bc29-2c9de303f263",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T15:36:54.549818+00:00",
+        "sha256": "3cfa4cc8d43dfd0e8ee74612a11175e08e582ba91851f7134c16e844654605a4",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "f5e6772b-4c23-4092-ad1b-adb210cfabc1",
+      "source_title": "MM article statistical-arbitrage-pairs-trading-crypto ZH-TW 474543828931",
+      "source_sha256": "3cfa4cc8d43dfd0e8ee74612a11175e08e582ba91851f7134c16e844654605a4",
+      "state": "source_ready",
+      "source_display_name": "MM article statistical-arbitrage-pairs-trading-cr…",
+      "selected_source_ids": [
+        "f5e6772b-4c23-4092-ad1b-adb210cfabc1"
+      ]
+    },
+    "order-flow-imbalance-prediction:zh-CN": {
+      "slug": "order-flow-imbalance-prediction",
+      "language": "zh-CN",
+      "article_sha256": "587a8362cd0931cb33a0d0536c81455a7e20055210fdd4cce57140b2f20ef574",
+      "input_hashes": {
+        "article": "587a8362cd0931cb33a0d0536c81455a7e20055210fdd4cce57140b2f20ef574",
+        "source_text": "9288f6312e820eacc413d429ba0ccc22ace3a8adb377845c5b6694969395e837",
+        "slides_prompt": "208e4b1bdd851ae646f47998a6bc5c7d4d2daacfc8ea48ed1ec0447c513b6306",
+        "audio_prompt": "e374ee2e7fe80a1e9b6e9a7e09824021113ea640c14d426ccf157d2db3cc3f3c"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 23:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "208e4b1bdd851ae646f47998a6bc5c7d4d2daacfc8ea48ed1ec0447c513b6306",
+          "requested_at": "2026-10-02T15:37:56.963527+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "b80e9f79-cec8-46e2-bffd-ada16ca76037",
+          "submission_mode": "later",
+          "artifact_id": "3c92f2b1-79c0-4230-926f-660c50077fc1",
+          "card_text": "tablet\nOrder Flow Imbalance: The Event Decomposition Model\nScheduled for after 12am\nmore_vert",
+          "observed_at": "2026-10-02T15:38:01.507915+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Core Mechanism\n+ Practical Application\n+ Quantitative Perspective\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 23:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "3c92f2b1-79c0-4230-926f-660c50077fc1"
+          ],
+          "prompt_sha256": "e374ee2e7fe80a1e9b6e9a7e09824021113ea640c14d426ccf157d2db3cc3f3c",
+          "requested_at": "2026-10-02T15:38:12.665735+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "b80e9f79-cec8-46e2-bffd-ada16ca76037",
+          "submission_mode": "later",
+          "artifact_id": "0c32593e-768c-4ee9-b0e9-e85caa68e669",
+          "card_text": "audio_spark\nOrder Flow Imbalance: The Event Decomposition Model\nScheduled for after 11pm\nmore_vert",
+          "observed_at": "2026-10-02T15:38:17.213054+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-02T15:37:37.060178+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/order-flow-imbalance-prediction-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "3f24e51541f914968068040d7cb94c089551e644373c0d71ec58eba775f0d650",
+        "baseline_count": 279,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-02T15:37:38.142464+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/e924eb05-37de-4cd0-83e4-e55daaa747e9",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T15:37:42.160986+00:00",
+        "sha256": "9288f6312e820eacc413d429ba0ccc22ace3a8adb377845c5b6694969395e837",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "b80e9f79-cec8-46e2-bffd-ada16ca76037",
+      "source_title": "MM article order-flow-imbalance-prediction ZH-CN 587a8362cd09",
+      "source_sha256": "9288f6312e820eacc413d429ba0ccc22ace3a8adb377845c5b6694969395e837",
+      "state": "source_ready",
+      "source_display_name": "MM article order-flow-imbalance-prediction ZH-CN …",
+      "selected_source_ids": [
+        "b80e9f79-cec8-46e2-bffd-ada16ca76037"
+      ]
     }
   },
-  "checked_at": "2026-10-02T15:22:20.863281+00:00",
+  "checked_at": "2026-10-02T15:38:17.223435+00:00",
   "browser_geometry_requested": {
-    "width": 1991,
+    "width": 1992,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 65,
+    "x": 64,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1991,
+    "outer_width": 1992,
     "outer_height": 1290,
-    "inner_width": 1951,
+    "inner_width": 1952,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "AI usage limit reached. All features will be available after 18:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 23:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-02T10:36:27.828388+00:00",
-    "not_before": "2026-10-02T14:51:00+00:00"
+    "observed_at": "2026-10-02T15:38:17.223423+00:00",
+    "not_before": "2026-10-02T19:51:00+00:00"
   }
 }
