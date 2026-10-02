@@ -69,6 +69,11 @@ article priority within each group.
 NotebookLM server generation continues between local checks. Local scheduled
 checks require the Codex app and this Mac to be running.
 
+Notebook creation records its dispatch state before the single action. A saved
+failure before dispatch can resume only when the hash-matched notebook-ID
+baseline is unchanged; an uncertain dispatch or changed baseline still blocks
+creation and retains candidates for reconciliation.
+
 Before a submission, save the source-ID and artifact-ID baselines. Source
 names may be shortened by NotebookLM: bind a uniquely added source ID and
 select that exact ID, rather than relying on its displayed title. Bind a new

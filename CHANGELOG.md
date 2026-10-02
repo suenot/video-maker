@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Save the first complete Mainland Simplified and Taiwan Traditional Chinese Funding Rate Arbitrage PDF/audio drafts with original artifact IDs, integrity results and pending editorial review.
 - Save integrity-checked Almgren-Chriss EN slides/audio and RU audio originals, retain the existing scheduled RU deck, and bind separate Simplified/Traditional Chinese Funding Rate Arbitrage requests without repeating submissions.
 - Freeze separate Mainland Simplified and Taiwan Traditional Chinese source briefs for the ten prepared articles, preserving published localized article bytes, regional terminology, section order and pending editorial review.
 - Freeze EN/RU source briefs for Almgren-Chriss execution and DEX trader behavior predictions, preserving full articles, section order, separate spoken-audio prompts and pending unit/evidence review.
@@ -28,6 +29,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bind NotebookLM production to the designated Gaia Camoufox account and record account verification before source generation.
 - Preserve the rejected bilingual order-types Blueprint package for provenance; record the user's quality rejection and the recovered existing NotebookLM PDF/audio flow before further production.
 - Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
+
+## [1.2.2] - 2026-10-02
+
+### Fixed
+
+- Dispatch notebook creation once after control checks without waiting for native button animation; resume a recorded failure before dispatch only after verifying the unchanged, hash-matched notebook-ID baseline.
 
 ## [1.2.1] - 2026-10-02
 

@@ -1507,7 +1507,7 @@
           "submission_mode": "later",
           "artifact_id": "2069c930-fbed-423f-b697-2cc70e2c95e4",
           "card_text": "tablet\nOptimal Execution: Almgren-Chriss Model Implementation Guide\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-02T15:09:04.225703+00:00"
+          "observed_at": "2026-10-02T15:22:07.091901+00:00"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -1570,7 +1570,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "c5541e0aad0d4d3d992d4a2387f01e37489021f901ae1ac59226bf50b7293823",
           "requested_at": "2026-10-02T15:09:48.141225+00:00",
@@ -1580,11 +1580,18 @@
           "source_id": "eb215e7f-ee5b-452d-9a7f-745712711240",
           "submission_mode": "now",
           "artifact_id": "8f8a9b73-6185-4b68-8eca-3c4e9c3e59e9",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T15:09:52.711720+00:00"
+          "card_text": "tablet\nUnread\n跨交易所资金费率套利策略与系统实现\n1 source · 3m ago\nmore_vert",
+          "observed_at": "2026-10-02T15:20:37.260792+00:00",
+          "pages": 12,
+          "path": "input/notebooklm-sources/funding-rate-arbitrage-cross-exchange/zh-CN/slides.pdf",
+          "sha256": "6a383ac6355cdc3ece4a3cab950b74b68d3edc5497f6bdb9e82aa970d41a6470",
+          "bytes": 10691083,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T15:20:46.598952+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "8f8a9b73-6185-4b68-8eca-3c4e9c3e59e9"
           ],
@@ -1596,8 +1603,15 @@
           "source_id": "eb215e7f-ee5b-452d-9a7f-745712711240",
           "submission_mode": "now",
           "artifact_id": "f0205f5d-5871-46d6-87c3-a314ca3a2947",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T15:10:08.642292+00:00"
+          "card_text": "audio_spark\nUnread\n跨交易所资金费率套利\n21:16 · Deep Dive · 1 source · 1m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T15:20:47.621887+00:00",
+          "duration_seconds": 1276.377687,
+          "path": "input/notebooklm-sources/funding-rate-arbitrage-cross-exchange/zh-CN/audio.m4a",
+          "sha256": "ae644341fb2c2ac3d903d37e9df04507b1a99eee69b2af08dbaf0d074a2d5538",
+          "bytes": 41079580,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T15:21:19.389291+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -1637,7 +1651,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "3370dcad517a8ebdee11ee8533986e8b322b696c548f93f4b2b935da06d54e1c",
           "requested_at": "2026-10-02T15:10:36.609898+00:00",
@@ -1647,11 +1661,18 @@
           "source_id": "b4a96723-35ae-4aeb-91c6-998735a0110f",
           "submission_mode": "now",
           "artifact_id": "c95a83da-9749-46fc-b8c1-4b80d649d20a",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T15:10:41.161224+00:00"
+          "card_text": "tablet\nUnread\n跨交易所資金費率套利解析\n1 source · 2m ago\nmore_vert",
+          "observed_at": "2026-10-02T15:21:26.049910+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/funding-rate-arbitrage-cross-exchange/zh-TW/slides.pdf",
+          "sha256": "e45618e59fa143d16c8605a9c1187637e438cf0c0c327654f4f113726a8d6d30",
+          "bytes": 14746333,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T15:21:35.672071+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "c95a83da-9749-46fc-b8c1-4b80d649d20a"
           ],
@@ -1663,8 +1684,15 @@
           "source_id": "b4a96723-35ae-4aeb-91c6-998735a0110f",
           "submission_mode": "now",
           "artifact_id": "eb2e315c-70d5-4639-8613-f7a98b376b63",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T15:10:57.038675+00:00"
+          "card_text": "audio_spark\nUnread\n跨交易所資金費率套利\n18:58 · Deep Dive · 1 source · 1m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T15:21:36.699096+00:00",
+          "duration_seconds": 1138.520816,
+          "path": "input/notebooklm-sources/funding-rate-arbitrage-cross-exchange/zh-TW/audio.m4a",
+          "sha256": "57359f475b71cf1c19f537a5b20f58794bda37c8742596f08e5ab97440b48dac",
+          "bytes": 36642905,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T15:21:59.561988+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -1691,9 +1719,45 @@
       "selected_source_ids": [
         "b4a96723-35ae-4aeb-91c6-998735a0110f"
       ]
+    },
+    "statistical-arbitrage-pairs-trading-crypto:zh-CN": {
+      "slug": "statistical-arbitrage-pairs-trading-crypto",
+      "language": "zh-CN",
+      "article_sha256": "9eb0403b66274d45ef74e36b61459711fad21742431f4b237b4b4909bf675f8c",
+      "input_hashes": {
+        "article": "9eb0403b66274d45ef74e36b61459711fad21742431f4b237b4b4909bf675f8c",
+        "source_text": "a9dee744ca3d1451dfa3c098aa463003a781088b3805b5dba7578f085ab5fb6f",
+        "slides_prompt": "af1fe30b885c573b7b2bf4e2521b63e96177bbe7729266c1ede7874a3a8e4cf4",
+        "audio_prompt": "7614adcdd1243aaee344b6aa011575fb7655d66b656dbb9e2f4b74f78414a5f0"
+      },
+      "artifacts": {},
+      "notebook_intent": {
+        "at": "2026-10-02T15:22:14.836341+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/statistical-arbitrage-pairs-trading-crypto-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "ad07f73682aefc231f963f27e0f95880a8159ff847dc700a1e298d2b862acff0",
+        "baseline_count": 277,
+        "dispatch_state": "not_dispatched",
+        "pre_click_failure_evidence": {
+          "log_path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T151958Z.log",
+          "log_sha256": "08513fae85209e9f0e785fce80c27529e76bff23ce9b4568199144a3b6e2fc13",
+          "call_log": "Call log:\n  - waiting for get_by_role(\"button\", name=\"New notebook\", exact=True)\n    - locator resolved to <button type=\"button\" matbadgeposition=\"after\" aria-label=\"New notebook\" _ngcontent-ng-c1567313636=\"\" mat-ripple-loader-uninitialized=\"\" mat-ripple-loader-class-name=\"mat-mdc-button-ripple\" class=\"mdc-button mat-mdc-button-base mat-badge mdc-button--unelevated mat-mdc-unelevated-button mat-unthemed mat-badge-overlap mat-badge-above mat-badge-after mat-badge-small mat-badge-hidden\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable",
+          "screenshot_path": "temp/notebooklm-source-queue/statistical-arbitrage-pairs-trading-crypto-zh-CN-error.png",
+          "observed_page": "NotebookLM homepage",
+          "recorded_at": "2026-10-02T15:26:05.824630+00:00"
+        }
+      },
+      "last_error": {
+        "type": "TimeoutError",
+        "message": "Locator.click: Timeout 6000ms exceeded.",
+        "at": "2026-10-02T15:22:20.863239+00:00",
+        "stage": "notebook_creation",
+        "reason": "Native New notebook actionability wait timed out before click dispatch.",
+        "retry_not_before": "2026-10-02T15:32:20.863239+00:00",
+        "next_safe_step": "On the next bounded pass, verify the hash-matched saved 277 notebook IDs are unchanged; dispatch creation once only after that check. Preserve any candidates and stop if IDs changed or dispatch is uncertain."
+      }
     }
   },
-  "checked_at": "2026-10-02T15:10:57.040588+00:00",
+  "checked_at": "2026-10-02T15:22:20.863281+00:00",
   "browser_geometry_requested": {
     "width": 1991,
     "height": 1290,

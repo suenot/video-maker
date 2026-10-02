@@ -253,28 +253,38 @@ class Runner:
             self.save()
             raise RuntimeError("Title-only notebook match requires identity verification before binding")
         elif job.get("notebook_intent"):
-            baseline = json.loads((ROOT / job["notebook_intent"]["baseline_path"]).read_text())
+            intent = job["notebook_intent"]
+            baseline_path = ROOT / intent["baseline_path"]
+            if sha(baseline_path) != intent["baseline_sha256"]:
+                raise RuntimeError("Notebook baseline changed; reconcile before creation")
+            baseline = json.loads(baseline_path.read_text())
             new = [n for n in notebooks if n["href"] not in baseline]
-            job["unbound_notebook_candidates"] = new
-            self.save()
-            raise RuntimeError("Interrupted notebook creation requires binding its saved candidate; no duplicate creation")
+            if intent.get("dispatch_state") != "not_dispatched" or {n["href"] for n in notebooks} != set(baseline):
+                job["unbound_notebook_candidates"] = new
+                self.save()
+                raise RuntimeError("Interrupted notebook creation requires binding its saved candidate; no duplicate creation")
+            intent["pre_click_recovery_verified_at"] = now()
         else:
             baseline_path = RUNTIME / (brief["slug"] + "-" + brief["language"] + "-notebook-baseline.json")
             save_json(baseline_path, [n["href"] for n in notebooks])
             baseline_path.chmod(0o600)
-            job["notebook_intent"] = {"at": now(), "baseline_path": str(baseline_path.relative_to(ROOT)), "baseline_sha256": sha(baseline_path), "baseline_count": len(notebooks)}
-            self.save()
-            create = page.get_by_role("button", name="New notebook", exact=True)
-            if await create.count() != 1:
-                raise RuntimeError("Unique new-notebook control unavailable")
-            await create.click(timeout=6000)
-            for _ in range(25):
-                if "/notebook/" in page.url:
-                    break
-                await page.wait_for_timeout(1000)
-            if "/notebook/" not in page.url:
-                raise RuntimeError("New notebook URL unavailable; intent retained")
-            job["notebook"] = page.url.split("?")[0]
+            job["notebook_intent"] = {"at": now(), "baseline_path": str(baseline_path.relative_to(ROOT)), "baseline_sha256": sha(baseline_path), "baseline_count": len(notebooks), "dispatch_state": "not_dispatched"}
+        self.save()
+        create = page.get_by_role("button", name="New notebook", exact=True)
+        if await create.count() != 1:
+            raise RuntimeError("Unique new-notebook control unavailable")
+        job["notebook_intent"]["dispatch_state"] = "dispatch_unknown"
+        self.save()
+        await create.evaluate("e=>{if(!e.isConnected || !e.getClientRects().length || e.disabled || e.getAttribute('aria-disabled')==='true')throw new Error('New-notebook control unavailable before dispatch');e.click()}")
+        job["notebook_intent"]["dispatch_state"] = "dispatched"
+        self.save()
+        for _ in range(25):
+            if "/notebook/" in page.url:
+                break
+            await page.wait_for_timeout(1000)
+        if "/notebook/" not in page.url:
+            raise RuntimeError("New notebook URL unavailable; intent retained")
+        job["notebook"] = page.url.split("?")[0]
         if job.get("notebook_intent"):
             job["notebook_intent"]["resolved_at"] = now()
         self.save()
