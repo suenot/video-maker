@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "slug": "ai4finance-foundation-guide",
+  "language": "ru",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/ai4finance-foundation-guide.ru.md",
+  "article_sha256": "26c3968c8aa90945cfc4dc193beab28ef512d9d3c10b5cb0fe54cbef3e527ad5",
+  "notebook_title": "MM sources | ai4finance-foundation-guide | RU",
+  "source_title": "MM article ai4finance-foundation-guide RU 26c3968c8aa9",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/ai4finance-foundation-guide.ru.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/ai4finance-foundation-guide.ru.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/ai4finance-foundation-guide.ru.audio.txt",
+  "article_title": "AI4Finance Foundation: экосистема FinGPT, FinRL и FinRobot для алготрейдинга",
+  "article_date": "2026-04-13",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "notebooklm_library": "not_checked; external source/notebook duplicate reconciliation pending before submission",
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "35dd2a739a75e9dee6fe430794ca1fb79f228d4a64841d3c3d3718887f0b16fb",
+  "slides_prompt_sha256": "9566008524e1361ae10e0df7e1d3edbee9bdbd4093c6523b1b14664acded1867",
+  "audio_prompt_sha256": "b5adb2ea267ecbff3fcf080d1c181b6ed5291ab41776ac219478e5dba82e97f7"
+}

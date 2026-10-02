@@ -1,0 +1,9 @@
+Create a comprehensive NotebookLM slide deck from this article. Use only the attached source named "MM article ai4finance-foundation-guide EN 77d9e3bb5408". Produce in English. Follow the article sections in this order:
+1. 1. FinGPT — Financial LLMs via LoRA
+2. 2. FinRL — Reinforcement Learning for Trading
+3. 3. FinRobot — AI Agent Orchestration
+4. Links
+
+Cover the three-pillar table; FinGPT/LoRA, FinNLP and FinRAG; FinRL data, Gymnasium/DRL, turbulence-threshold cash mode and all four listed satellites; FinRobot roles, links and research-code disclaimer. Keep the shorter English scope; do not import details from the Russian edition. Project capabilities are dated article descriptions pending primary-source review.
+Preserve all substantive details, examples, code, caveats and risks in source order. Attribute numerical, financial, company-specific and mutable facts to the article as unverified claims. Do not add outside facts, guaranteed returns or investment advice. This draft requires human editorial and primary-fact review.
+Use enough readable slides for every major section and material subsection; end with the article conclusion.

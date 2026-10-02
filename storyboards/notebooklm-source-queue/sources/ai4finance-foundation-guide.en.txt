@@ -1,0 +1,61 @@
+MM article ai4finance-foundation-guide EN 77d9e3bb5408
+
+---
+title: "AI4Finance Foundation: The FinGPT, FinRL, and FinRobot Ecosystem for Algo-Trading"
+description: "Complete guide to the AI4Finance Foundation ecosystem: FinGPT (LLM + LoRA for finance), FinRL (reinforcement learning for trading), FinRobot (multi-agent orchestration). Satellites, pipelines, and practical usage."
+tags: ["AI4Finance", "FinGPT", "FinRL", "FinRobot", "LoRA", "reinforcement learning", "LLM", "open-source"]
+date: "2026-04-13"
+lang: "en"
+slug: "ai4finance-foundation-guide"
+image: "/images/blog/ai4finance-foundation-guide.png"
+authors: ["suenot"]
+---
+
+# AI4Finance Foundation: The FinGPT, FinRL, and FinRobot Ecosystem for Algo-Trading
+
+![AI4Finance — AI ecosystem for finance](/images/blog/ai4finance-foundation-guide.png)
+
+The **AI4Finance Foundation** at [ai4finance.org](https://ai4finance.org/) unites dozens of open-source projects for applying AI in finance. Three pillars form the framework:
+
+| Pillar | Purpose | Key Technology |
+|---|---|---|
+| **[FinGPT](https://github.com/AI4Finance-Foundation/FinGPT)** | Financial LLMs | LoRA, fine-tuning, sentiment |
+| **[FinRL](https://github.com/AI4Finance-Foundation/FinRL)** | RL for trading | Gymnasium, DRL agents |
+| **[FinRobot](https://github.com/AI4Finance-Foundation/FinRobot)** | Multi-agent orchestration | AutoGen, roles, toolkits |
+
+## 1. FinGPT — Financial LLMs via LoRA
+
+![LoRA — adapting without retraining the whole model](/images/blog/ai4finance-lora-concept.png)
+
+**LoRA** (Low-Rank Adaptation) adds small trainable matrices to selected layers instead of retraining all billions of parameters. Cheaper, more comparable, compact storage.
+
+### Satellites: FinNLP and FinRAG
+
+- **FinNLP** — ETL for financial NLP: news, social media, SEC filings.
+- **FinRAG** — RAG pipeline: PDF/Word → chunks → vector store → LLM answers.
+
+## 2. FinRL — Reinforcement Learning for Trading
+
+FinRL connects **market data**, **Gymnasium environments**, and **DRL libraries** (ElegantRL, RLlib, Stable-Baselines3).
+
+Built-in risk management via `turbulence_threshold` — the agent switches to "cash mode" when volatility is too high.
+
+### FinRL Satellites
+
+| Project | Purpose |
+|---|---|
+| **FinRL-Meta** | Extended environments and datasets |
+| **FinRL_Crypto** | 24/7 crypto via CCXT |
+| **FinRL_DeepSeek** | NLP features → PPO/CPPO |
+| **FinRL_Market_Simulator** | LOB simulation, ABIDES, TWAP |
+
+## 3. FinRobot — AI Agent Orchestration
+
+FinRobot is **UX and scenarios** on top of FinGPT/FinRL. Agent roles include equity research, risk analysis, portfolio management.
+
+## Links
+
+- 🌐 **Website:** [ai4finance.org](https://ai4finance.org/)
+- 💻 **GitHub:** [AI4Finance-Foundation](https://github.com/AI4Finance-Foundation)
+
+> All above is open research code; this is **not** personal investment advice.

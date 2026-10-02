@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "slug": "ai4finance-foundation-guide",
+  "language": "en",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/ai4finance-foundation-guide.en.md",
+  "article_sha256": "77d9e3bb540855a0df1299dea6c20c79e5cd7364db500c6230f12930e8c4761b",
+  "notebook_title": "MM sources | ai4finance-foundation-guide | EN",
+  "source_title": "MM article ai4finance-foundation-guide EN 77d9e3bb5408",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/ai4finance-foundation-guide.en.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/ai4finance-foundation-guide.en.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/ai4finance-foundation-guide.en.audio.txt",
+  "article_title": "AI4Finance Foundation: The FinGPT, FinRL, and FinRobot Ecosystem for Algo-Trading",
+  "article_date": "2026-04-13",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "notebooklm_library": "not_checked; external source/notebook duplicate reconciliation pending before submission",
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "cf065389e2e06b687b10eafaee9bd03a4fa6b7a96507985daeb425e6b964287a",
+  "slides_prompt_sha256": "3e3cdd5002919ec3573a5465208ba7ea9d293549f72f204bca2d552e5f1d6c59",
+  "audio_prompt_sha256": "046bd94bb5d8394e860b840bdd6c2c6194f5f68e8c0ca10ecc29cb6ee7eb4bcd"
+}

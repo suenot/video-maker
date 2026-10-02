@@ -1,0 +1,161 @@
+MM article ai4finance-foundation-guide RU 26c3968c8aa9
+
+---
+title: "AI4Finance Foundation: экосистема FinGPT, FinRL и FinRobot для алготрейдинга"
+description: "Полный гайд по экосистеме AI4Finance Foundation: FinGPT (LLM + LoRA для финансов), FinRL (reinforcement learning для трейдинга), FinRobot (мультиагентная оркестрация). Спутники, пайплайны и практическое применение."
+tags: ["AI4Finance", "FinGPT", "FinRL", "FinRobot", "LoRA", "reinforcement learning", "LLM", "open-source"]
+date: "2026-04-13"
+lang: "ru"
+slug: "ai4finance-foundation-guide"
+image: "/images/blog/ai4finance-foundation-guide.png"
+authors: ["suenot"]
+---
+
+# AI4Finance Foundation: экосистема FinGPT, FinRL и FinRobot для алготрейдинга
+
+![AI4Finance — экосистема AI для финансов](/images/blog/ai4finance-foundation-guide.png)
+
+На [ai4finance.org](https://ai4finance.org/) фонд **AI4Finance Foundation** объединяет десятки open-source проектов для применения AI в финансах. Если смотреть на карту целиком, три столпа формируют каркас:
+
+| Столп | Назначение | Ключевая технология |
+|---|---|---|
+| **[FinGPT](https://github.com/AI4Finance-Foundation/FinGPT)** | Финансовые LLM | LoRA, fine-tuning, сентимент |
+| **[FinRL](https://github.com/AI4Finance-Foundation/FinRL)** | Reinforcement learning для трейдинга | Gymnasium, DRL-агенты |
+| **[FinRobot](https://github.com/AI4Finance-Foundation/FinRobot)** | Мультиагентная оркестрация | AutoGen, роли, toolkits |
+
+Вокруг каждого столпа — «спутники»: сборщики данных, симуляторы, специализированные среды. Ниже — разбор того, что внутри и как это использовать.
+
+---
+
+## 1. FinGPT — финансовые LLM через LoRA
+
+FinGPT — это не одна модель, а **пайплайн**: данные → дообучение → приложения. Идея: не обучать LLM с нуля (дорого), а **адаптировать** существующую модель под финансовые задачи.
+
+### Зачем LoRA?
+
+![LoRA — адаптация без переобучения всей модели](/images/blog/ai4finance-lora-concept.png)
+
+**LoRA** (Low-Rank Adaptation) — ключевая техника FinGPT. Вместо переобучения всех миллиардов параметров базовой модели, LoRA добавляет к выбранным слоям **маленькие обучаемые матрицы** низкого ранга:
+
+- **Дешевле по GPU** — обучается адаптер, а не вся модель
+- **Проще сравнивать** — разные адаптеры к одной базе
+- **Компактное хранение** — только `adapter_model.bin` вместо гигабайтов
+
+Типичный рецепт в `train_lora.py`:
+
+```python
+from peft import LoraConfig, get_peft_model
+
+peft_config = LoraConfig(
+    task_type=TaskType.CAUSAL_LM,
+    r=8,                           # ранг адаптера
+    lora_alpha=32,                 # масштаб
+    lora_dropout=0.1,
+    target_modules=['query_key_value'],  # какие слои оборачиваем
+)
+model = get_peft_model(model, peft_config)
+```
+
+**Ранг `r`:** больше → больше ёмкость, но и риск переобучения на шумных заголовках. Типичные значения: 4–16.
+
+### Спутники: FinNLP и FinRAG
+
+- **[FinNLP](https://github.com/AI4Finance-Foundation/FinNLP)** — ETL для финансового NLP: новости, соцсети, SEC-отчёты, earning calls. Базовый класс управляет прокси, ретраями, rate-limiting — без чего публичные источники быстро банят.
+
+- **[FinRAG](https://github.com/AI4Finance-Foundation/FinRAG)** — RAG-пайплайн: PDF/Word → чанки → векторное хранилище (Milvus) → LLM отвечает с опорой на документы. Дополняет FinGPT, но **не заменяет** его.
+
+---
+
+## 2. FinRL — reinforcement learning для трейдинга
+
+FinRL связывает **рыночные данные**, **Gymnasium-среду** и **готовые DRL-библиотеки** (ElegantRL, RLlib, Stable-Baselines3).
+
+### Как работает торговая среда
+
+`StockTradingEnv` наследует `gym.Env`. Агент принимает решения:
+
+```python
+# Действие: вектор от -1 до 1 для каждого актива
+# -1 = продать максимум, +1 = купить максимум
+action_space = spaces.Box(low=-1, high=1, shape=(stock_dim,))
+
+# Состояние: кэш + позиции + цены + техиндикаторы + турбулентность
+observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(state_dim,))
+```
+
+Встроенный **риск-менеджмент**: параметр `turbulence_threshold` переводит агента в режим «рынок слишком волатилен — выходим в кэш». Это попытка встроить управление рисками **в MDP**, а не только максимизацию PnL.
+
+### Пайплайн обучения
+
+```
+DataProcessor → clean → add_indicators → [optional VIX] → df_to_array → env → DRL agent
+```
+
+`train.py` маршрутизирует на разные бэкенды:
+
+| Бэкенд | Особенности |
+|---|---|
+| **ElegantRL** | Мульти-GPU, буфер опыта пачками |
+| **Stable-Baselines3** | Самый простой старт |
+| **RLlib** | Масштабирование, Ray |
+
+### Спутники FinRL
+
+| Проект | Что делает |
+|---|---|
+| **[FinRL-Meta](https://github.com/AI4Finance-Foundation/FinRL-Meta)** | Расширенные среды и датасеты |
+| **[FinRL_Crypto](https://github.com/AI4Finance-Foundation/FinRL_Crypto)** | Среда для 24/7 крипто через CCXT |
+| **[FinRL_DeepSeek](https://github.com/AI4Finance-Foundation/FinRL_DeepSeek)** | NLP-признаки (сентимент) → PPO/CPPO |
+| **[FinRL_Market_Simulator](https://github.com/AI4Finance-Foundation/FinRL_Market_Simulator)** | LOB-симуляция, ABIDES, TWAP |
+| **[FinML](https://github.com/AI4Finance-Foundation/FinML)** | Классический ML: walk-forward, sklearn, LSTM |
+
+> **Важно:** качество RL-стратегии определяется постановкой задачи, а не алгоритмом. Утечка будущего в фичах, неверные комиссии, нереалистичное исполнение «по close» уничтожат любой агент.
+
+---
+
+## 3. FinRobot — оркестрация AI-агентов
+
+FinRobot — **UX и сценарии** поверх FinGPT/FinRL. Вместо одного промпта — коллектив агентов с ролями, toolkits и RAG.
+
+### Библиотека ролей
+
+Класс `FinRobot` наследует `AssistantAgent` из AutoGen. Если передать строку — роль ищется в `library`:
+
+```python
+class FinRobot(AssistantAgent):
+    def __init__(self, agent_config: str | Dict):
+        if isinstance(agent_config, str):
+            name = agent_config.replace("_Shadow", "")
+            agent_config = library[name]  # profile, responsibilities, system_message
+        super().__init__(name, system_message, ...)
+```
+
+Доступные роли включают equity research, risk analysis, portfolio management — каждая со своим набором инструментов и промптом.
+
+### Equity Research: единый промпт данных
+
+`EquityResearchAgentManager` строит отчёт по секциям (tagline, overview, valuation, risks). Ключевой паттерн: `_prepare_financial_data_prompt` формирует **один markdown** с метриками и новостями для всех секций — меньше рассинхрона между «рисками» и «оценкой».
+
+### Где заканчивается FinRobot
+
+Оркестрация не заменяет валидацию данных, бэктест и комплаенс. FinRobot — это **слой представления**, а не торговый движок.
+
+---
+
+## Сводка по экосистеме
+
+| Продукт | Что запомнить разработчику |
+|---|---|
+| **FinGPT** | LoRA + Trainer + collator; FinNLP — сырьё; FinRAG — документы |
+| **FinRL** | `StockTradingEnv` + `DataProcessor` + выбор DRL-бэкенда; спутники для крипто, симулятора, NLP |
+| **FinRobot** | Роли AutoGen + equity-менеджер + единый промпт данных |
+
+## Ссылки
+
+- 🌐 **Сайт:** [ai4finance.org](https://ai4finance.org/)
+- 💻 **GitHub:** [AI4Finance-Foundation](https://github.com/AI4Finance-Foundation)
+- 📚 **Индекс:** [Awesome_AI4Finance](https://github.com/AI4Finance-Foundation/Awesome_AI4Finance)
+
+---
+
+> Всё выше — открытый исследовательский код; это **не** персональная инвестиционная рекомендация. Перед реальными сделками проверяйте допущения симулятора, издержки, проскальзывание и регуляторные ограничения.

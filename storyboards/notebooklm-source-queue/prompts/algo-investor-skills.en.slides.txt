@@ -1,0 +1,14 @@
+Create a comprehensive NotebookLM slide deck from this article. Use only the attached source named "MM article algo-investor-skills EN c5f7b84a0090". Produce in English. Follow the article sections in this order:
+1. Why this is a skill set and not a template
+2. The six skills
+3. The pipeline, end to end
+4. The design principles (and why they matter to an allocator)
+5. How an algo investor actually uses it
+6. Where it fits in the Marketmaker / AI-agent ecosystem
+7. Honest caveats
+8. Links
+9. Conclusion
+
+Cover all six skills and their ordered pipeline; measured [real] inputs versus forward assumptions and TODO slots; Kelly / L÷N sizing, capacity-adjusted return bridge, high-water mark, pass-through ratios, GBM Monte Carlo, alpha decay and Wilson intervals. Preserve the proof pack: all trades, two independent exchange reconciliations, investor-created read-only Step 0 key, synthetic versus real charts and limits of proof. Keep the 14-section proposal, investor custody, separate top-level accounts, downside table, optional localization, audit rubric and claimed completion gate. Treat the title phrase "scam-proof" as the article's framing, never as a promise of legal protection, fraud-free status or returns. Keep Honest caveats as its own block: early stage, anonymized examples, model-limited audit and forward pilot. Repository behavior and figures require primary review.
+Preserve all substantive details, examples, code, caveats and risks in source order. Attribute numerical, financial, company-specific and mutable facts to the article as unverified claims. Do not add outside facts, guaranteed returns or investment advice. This draft requires human editorial and primary-fact review.
+Use enough readable slides for every major section and material subsection; end with the article conclusion.

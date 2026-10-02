@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "slug": "algo-investor-skills",
+  "language": "ru",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/algo-investor-skills.ru.md",
+  "article_sha256": "8f80e51658cea08f9adab9bca1a91609acaeddee646375c4e1c7f493f7984bb0",
+  "notebook_title": "MM sources | algo-investor-skills | RU",
+  "source_title": "MM article algo-investor-skills RU 8f80e51658ce",
+  "source_text_path": "storyboards/notebooklm-source-queue/sources/algo-investor-skills.ru.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/prompts/algo-investor-skills.ru.slides.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/prompts/algo-investor-skills.ru.audio.txt",
+  "article_title": "algo-investor-skills: навыки Claude Code, которые собирают защищенное от обвинений в мошенничестве предложение для инвестора",
+  "article_date": "2026-06-24",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "notebooklm_library": "not_checked; external source/notebook duplicate reconciliation pending before submission",
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "b6af1883c714c0d004406a3ab98541a2ccf6aba44e36c9413f43e4bbfb1d8245",
+  "slides_prompt_sha256": "3b61c6bc9b0a2d020fd05ffe2798627baa2d684725082e48478e150e5ba4f55f",
+  "audio_prompt_sha256": "0ecb5da142011eca7737a00761f33eaa09c9df020e37485becb1cfdb0439be83"
+}

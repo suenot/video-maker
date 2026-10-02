@@ -1,0 +1,196 @@
+MM article algo-investor-skills EN c5f7b84a0090
+
+---
+title: "algo-investor-skills: Claude Code Skills That Build a Scam-Proof Investor Proposal"
+description: "A deep look at algo-investor-skills — a set of Claude Code skills that take an algotrading strategy from raw measured facts to an audited, honesty-forward investor proposal. Six composable skills, a financial-models engine, an independent-verification proof pack, and a mandatory skeptical-investor audit gate that never fabricates a number."
+tags: ["algotrading", "claude code", "skills", "investor relations", "risk management", "due diligence", "open-source", "AI"]
+date: "2026-06-24"
+lang: "en"
+image: "/images/blog/algo-investor-skills.webp"
+slug: "algo-investor-skills"
+authors: ["suenot"]
+---
+
+# algo-investor-skills: Claude Code Skills That Build a Scam-Proof Investor Proposal
+
+
+Every algotrader who has ever tried to raise outside capital knows the wall. You have a strategy that works, a live track record on your own accounts, and a clean equity curve. Then you sit down to write the investor document — and you discover that the hardest part is not the strategy. It is convincing a numerate, skeptical professional that you are not a scam. They will not take your word for it. In 2026, what they actually do is paste your commercial offer into an LLM with no other context and ask: *"is this real, or is this a fraud?"*
+
+[algo-investor-skills](https://github.com/suenot/algo-investor-skills) is a ready-made set of [Claude Code](https://claude.com/claude-code) **skills** built precisely for that moment. It takes you from raw strategy facts to a finished, audited, multi-language investor proposal — the kind of credible, honesty-forward document that survives that hostile LLM paste-test. The whole design rests on one non-negotiable rule: **it never fabricates a number.**
+
+> A note up front, the same one the repo leads with: everything in the kit's `reference/` directory is an *anonymized* worked example. Names, venues, and metrics are placeholders, not real figures. The skills generate documents **from your own measured track** — they do not ship anyone's real numbers, and they will not invent yours.
+
+## Why this is a skill set and not a template
+
+![Why this is a skill set and not a template](/images/blog/algo-investor-skills-skill-vs-template.webp)
+
+You could write an investor proposal from a Word template. People do, and it shows. A static template cannot recompute your Sharpe when you add forty trades, cannot stress-test your edge with the top winners removed, and cannot impersonate a hostile allocator to find the soft spots in your own pitch. That is the gap algo-investor-skills fills.
+
+These are plain Claude Code skills that live under `.claude/skills/`. Open the repo in Claude Code and they auto-load. Because they are ordinary skills, you can also lift them into any other project — copy the folders into a project-local `.claude/skills/`, or into your user-global `~/.claude/skills/` to have them everywhere:
+
+```bash
+# project-local (only that project)
+cp -r .claude/skills/* /path/to/your/project/.claude/skills/
+
+# or user-global (all your projects)
+cp -r .claude/skills/* ~/.claude/skills/
+```
+
+The financial-models engine even runs standalone, with no dependencies, as a sanity check:
+
+```bash
+node .claude/skills/algo-financial-models/models.mjs   # prints a worked demo
+```
+
+## The six skills
+
+![The six skills](/images/blog/algo-investor-skills-six-skills.webp)
+
+The kit ships six composable skills. One is the orchestrator; the other five each own a stage of the pipeline.
+
+| Skill | What it does |
+|---|---|
+| `investor-docs` | The **front door / orchestrator**. Sequences the whole pipeline and enforces the cross-cutting honesty rules. Start here. |
+| `algo-financial-models` | Computes the honest numbers — Kelly / `L÷N` sizing, Sharpe / Sortino / Calmar, the capacity-adjusted return bridge, the N-tranche split, Monte-Carlo, alpha decay, Wilson confidence intervals. Ships a runnable `models.mjs`. |
+| `investor-proof-pack` | Builds the transparency / verification layer — disclosed-trades table, independent reconciliation methodology, a read-only "Step 0" verification offer, and clearly-labeled synthetic plus real charts. |
+| `investor-proposal-build` | Assembles the full **14-section** proposal in Markdown, wiring in the numbers and the proof. |
+| `investor-doc-localize` | Faithful localization into en / ru / zh / ko plus market-specific variants — without drifting a single number, term, or caveat. |
+| `investor-proposal-audit` | The **mandatory gate**. A skeptical AI-investor scores the document 0–100 and drives honest revisions in a review→revise loop. Ships a runnable `audit-workflow.js`. |
+
+## The pipeline, end to end
+
+![The pipeline, end to end](/images/blog/algo-investor-skills-pipeline.webp)
+
+The skills are not a menu you pick from at random — they form an ordered pipeline, and `investor-docs` runs them in sequence because each stage depends on the one before it:
+
+```
+intake/intake-template.md   ← you fill in measured facts + labeled assumptions
+        │
+        ▼
+algo-financial-models   →   honest numbers / tables
+        │
+        ▼
+investor-proof-pack     →   transparency + verification package
+        │
+        ▼
+investor-proposal-build →   full 14-section Markdown proposal
+        │
+        ▼
+investor-doc-localize   →   language / market variants   (optional)
+        │
+        ▼
+investor-proposal-audit →   skeptical-investor loop until it passes  (REQUIRED)
+```
+
+### 1. Intake — the single source of truth
+
+It starts with `intake/intake-template.md`. You fill in your strategy thesis, your **measured** track (sample size, win rate, average trade, Sharpe, Sortino, max drawdown, date range), your venues and account architecture, and your commercial terms. Crucially, you mark every figure as either `[real]` (measured) or a clearly-labeled **forward assumption** (leverage, tranche count, assumed depth, slippage, alpha decay).
+
+The rule that makes the whole kit trustworthy lives here: **anything you leave blank becomes an explicit `TODO` slot in the draft, never an invented number.** If you cannot back a figure with your exchange exports, you leave it empty, and the kit refuses to paper over the gap.
+
+### 2. algo-financial-models — the honest numbers
+
+This skill turns your measured inputs into six quantitative models, emitted as drop-in Markdown tables, each with an honest one- or two-line caption:
+
+- **Expectancy and sizing** — expected value, per-trade sigma, payoff ratio, capacity, net edge, and the Kelly fraction.
+- **The return bridge** — four rungs from the raw per-event edge to the capacity-adjusted, after-fee, after-decay figure. It always shows *both* the raw edge and the capacity-adjusted edge, because the raw per-event number is not a fund-realizable return and pretending otherwise is exactly the kind of dishonesty the kit exists to prevent.
+- **High-water-mark fee schedule** — performance fee only, charged on new equity highs.
+- **Quant metrics** — back-solves sigma and downside deviation so your *measured* Sharpe and Sortino reproduce exactly. They are pass-throughs; the kit will not override or flatter them.
+- **Monte-Carlo (GBM)** — P5 / P50 / P95 paths plus probability of ruin, with alpha decay folded in.
+- **Alpha durability + Wilson CI** — a decaying-edge schedule and a small-sample win-rate confidence interval, so a 62%-of-80-trades figure is never presented as if it were a law of nature.
+
+A detail I find genuinely sharp: effective per-event exposure is computed as `leverage / tranches` (`L / N`), and the exposure-sweep table is color-coded against Kelly — green at or below half-Kelly, amber up to full Kelly, red above it. That turns "how much should I bet?" from a vibe into a table you can defend.
+
+### 3. investor-proof-pack — honesty made checkable
+
+This is the part skeptics actually care about. The proof pack assembles a transparency package that proves your live track is **real** without leaking the secret sauce and without inventing anything:
+
+- A **disclosed-trades table** with fixed columns (`# | Venue | Pair | Date | Side | PnL % | Hold time | Status`) listing *all* trades in the window — winners *and* losers. Cherry-picking is explicitly forbidden. Percentages and dates are shown; dollar amounts are deliberately withheld, and the kit states that boundary in plain words.
+- An **independent reconciliation methodology** with two paths that must agree: order-id reconciliation via the exchange's REST API (recomputing realized P&L from the fills exactly), and statement reconciliation against the exchange's official transaction-history export (matched on symbol + time + sign within a stated tolerance). Two independent reconciliations that agree are much harder to fake than one.
+- A **read-only "Step 0" verification offer**: a script the investor runs themselves against a read-only API key *they* generate, reconciling the disclosed trades against the exchange's own data — *before* granting any trade-permission key.
+- **Charts** — synthetic illustrations (clearly labeled, to teach trade mechanics) alongside real candle-by-candle charts with entry/exit markers tied to the reconciled fills.
+
+And the part that separates this from a pitch deck: the proof pack states its own **boundary** out loud. The reconciliation proves the *authenticity and magnitude of past live trades*. It does **not** prove future returns, it does **not** prove the edge holds at large size, and it is **not** a complete audit. The strongest proof, the kit says plainly, is a forward pilot on the investor's own account.
+
+### 4. investor-proposal-build — the 14-section arc
+
+This skill assembles a single, self-contained Markdown document a hostile investor can paste whole into an LLM and pick apart. The structure is a deliberate 14-section arc that **leads with risk and custody, not returns**:
+
+1. Thesis — with the custody anchor as a one-liner in the very first paragraph.
+2. Where the edge comes from — the structural inefficiency, with an honest caveat that external studies are not presented as the operator's own results.
+3. Headline metrics — Sharpe / Sortino / max drawdown, noted as leverage-invariant ratios, Sortino-led, with the small-sample caveat attached.
+4. Custody and operating model — trade-only API keys, no withdrawal rights, one-click revocation as the "emergency brake," stated as the *only* model offered.
+5. Real-trades transparency — the proof pack from step 3.
+6. Capital stages — pilot (~$50k, fee in escrow, 0% until the high-water mark recovers), scale, then target.
+7. Fee model — a concrete performance fee as a percentage of *net* profit, with a high-water mark and *no* management fee.
+8. The two named risks — not-tested-at-scale (exit-liquidity) and the ultra-short holding window, stated without hedging.
+9. A quantified failure-scenarios table — what the *investor* loses in each scenario, tied to the N-tranche math.
+10. Liability and risk allocation — including the honest no-legal-entity / limited-recourse caveat.
+11. Capital split across N *separate top-level* accounts (not subaccounts, which can cascade on a freeze), with a per-venue cap.
+12. Alpha durability — the explicit decay assumption and capacity ceiling, framed as a forward assumption.
+13. Operator — one person, one throat to choke, stated as both an alignment feature and a key-person risk.
+14. Roadmap — explicitly labeled "not promises."
+
+The whole thing is low-hype by construction. If a sentence sounds like a pitch deck, the skill cuts it. Custody and the emergency brake come before any return figure, and every section that could read as a brag is balanced by the corresponding risk in the same breath.
+
+### 5. investor-doc-localize — translation without drift
+
+Optional, but well-designed. It localizes the *finished* master into en / ru / zh / ko (extensible), and even produces market-specific *variants* — for example, an isolated-market variant that surfaces the structural edge for an audience that understands the venue firsthand, versus a sanitized public variant. The cardinal sin it guards against: letting a number drift or a caveat soften because it "reads better" in another language. Every fee percentage, every custody term, every failure scenario is rendered identically across languages, with a back-translation spot-check on the custody, fee, and liability sections.
+
+### 6. investor-proposal-audit — the mandatory gate
+
+This is the skill that makes the kit more than a document generator. It simulates the exact check a serious investor performs: a fresh, document-only AI-investor — no code, no track record, no benefit of the doubt — reads the proposal and returns a structured verdict: `satisfaction` (0–100), `wouldInvest`, `scamRisk` (low / medium / high), top concerns, missing info, red flags, and strengths. Then a reviser agent fixes what the skeptic flagged — **honestly** — and the loop repeats.
+
+The rubric defaults to skepticism. It rewards honest limitations, concrete verification mechanisms, explicit fee and custody terms, and quantified downside. It penalizes *hard*: marketing adjectives, "trust us" with hidden numbers, vagueness on money, unverifiable claims, and internal contradictions — the classic one being asking for a large sum while admitting per-event capacity is tiny.
+
+The reviser's rules are the moral core of the whole kit. It never inflates a metric, never deletes a caveat, never fabricates a track record. The way to fix "unverifiable" is to *add offerable proof* — read-only API access, exchange-exported statements, a small paid pilot, performance-fee escrow — not to overclaim. A document is "done" only when `satisfaction >= 88` and `scamRisk` is not `high`, after at least two iterations. A proposal that has not passed this audit is, by definition, a draft and not a deliverable.
+
+## The design principles (and why they matter to an allocator)
+
+![The design principles (and why they matter to an allocator)](/images/blog/algo-investor-skills-principles.webp)
+
+The repo states four non-negotiable principles, and they are worth reading as a manifesto for honest fundraising:
+
+- **Never fabricate.** Every number traces to measured data or a clearly-labeled forward assumption. Missing facts become visible `TODO` slots, not invented figures.
+- **Honesty-forward, low-hype.** Lead with risk and custody. Name limitations. Offer verification instead of asking for trust.
+- **Custody is structural, not promised.** Trade-only API keys on investor-owned accounts, no withdrawal rights, revocable in one click.
+- **The audit gate is mandatory.** A document is not done until the skeptical-investor loop passes.
+
+If you have ever read an algotrading pitch and felt your skepticism rise with every superlative, you understand why this inversion works. Trust is not built by claiming more; it is built by claiming *exactly* what you can prove, and by handing the reader the tools to check it themselves.
+
+## How an algo investor actually uses it
+
+![How an algo investor actually uses it](/images/blog/algo-investor-skills-investor-use.webp)
+
+In practice the workflow is short:
+
+1. Open the repo in Claude Code so the skills auto-load.
+2. Copy the intake template and fill it with your *measured* track and *explicitly-labeled* forward assumptions, leaving blanks where you have no data.
+3. Ask Claude: *"Prepare an investor document for my strategy."* That triggers the `investor-docs` orchestrator, which runs the pipeline end to end.
+4. The audit gate runs last and loops until satisfaction is high enough and scam-risk is no longer high.
+
+What you get out is a single Markdown file: portable, self-contained, and built to survive the LLM paste-test that a real allocator will subject it to anyway.
+
+## Where it fits in the Marketmaker / AI-agent ecosystem
+
+![Where it fits in the Marketmaker / AI-agent ecosystem](/images/blog/algo-investor-skills-ecosystem.webp)
+
+We have written a lot on this blog about AI agents *making* trading decisions — multi-agent funds, LLM analyst committees, reinforcement-learning ecosystems. algo-investor-skills sits one layer further out, on a problem those projects mostly ignore: once an automated strategy works, **how do you communicate it credibly to capital?** It is the agentic-AI pattern pointed at investor relations and due diligence rather than at signal generation. The orchestrator-plus-specialists shape — one skill that sequences, several that each own a stage — is the same composable-agent architecture we keep seeing win, applied here to a documentation and verification pipeline instead of an order book.
+
+For a serious algotrader, that is a meaningful piece of infrastructure. The strategy is your edge; the audited, honesty-forward proposal is what lets that edge attract capital without you having to become a marketer or compromise your credibility. The kit's stance — verification over trust, risk before returns, no fabricated numbers ever — is exactly the stance that survives contact with a professional allocator.
+
+## Honest caveats
+
+This is an early-stage, single-maintainer project, and the repo says as much. The reference proposal and models are anonymized illustrative examples, not real figures — the kit's value is in the *process and the discipline*, not in any shipped numbers. The audit loop is only as good as the model running it, and a passing score on paper is still a paper score: as the kit itself insists, the strongest proof is always a forward pilot on the investor's own account. The kit produces documents; it does not give financial, legal, or tax advice, and past or backtested results do not guarantee future ones.
+
+None of that undercuts the core idea. The hard, honest work of preparing investor documents — computing reproducible numbers, building a checkable proof pack, leading with risk, and surviving a hostile review — is exactly the work this kit systematizes.
+
+## Links
+
+- **GitHub:** [suenot/algo-investor-skills](https://github.com/suenot/algo-investor-skills)
+
+## Conclusion
+
+algo-investor-skills is a small repo with an unusually disciplined thesis: the way to raise capital for an algotrading strategy is not to pitch harder but to be *checkably honest*. Six Claude Code skills turn that thesis into a pipeline — measured facts in, reproducible numbers, a verifiable proof pack, a 14-section risk-first proposal, optional faithful localization, and a mandatory skeptical-investor audit that fixes weaknesses by adding proof rather than by overclaiming.
+
+If you run a real strategy and have ever stalled at the investor-document wall, this is worth an afternoon. Fill in the intake, run the orchestrator, let the skeptic tear into your draft, and ship a document that says exactly what you can prove — and hands the reader the tools to confirm it.
