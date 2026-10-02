@@ -28,6 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Preserve the rejected bilingual order-types Blueprint package for provenance; record the user's quality rejection and the recovered existing NotebookLM PDF/audio flow before further production.
 - Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
 
+## [1.2.1] - 2026-10-02
+
+### Fixed
+
+- Reconcile existing NotebookLM source jobs before admitting new locales, preserving article priority within both groups after Chinese briefs are added.
+
 ## [1.2.0] - 2026-10-02
 
 ### Added

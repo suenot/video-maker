@@ -64,6 +64,8 @@ The active same-chat automation `marketmaker-notebooklm` runs every 15 minutes.
 It performs a bounded pass, downloads completed jobs, then admits up to two
 new article/language jobs with at most eight unresolved or server-active
 artifacts. A file lock prevents another pass from opening a second browser.
+Every pass reconciles saved jobs before admitting new locales, preserving
+article priority within each group.
 NotebookLM server generation continues between local checks. Local scheduled
 checks require the Codex app and this Mac to be running.
 

@@ -171,7 +171,8 @@ class Runner:
         paths = set(QUEUE.glob("briefs/*.json")) | set(QUEUE.glob("**/brief.json"))
         briefs = [json.loads(p.read_text()) for p in paths]
         priorities = json.loads((ROOT / "storyboards/article-video-queue.json").read_text())["priority_order"]
-        return sorted(briefs, key=lambda b: (priorities.index(b["slug"]) if b["slug"] in priorities else len(priorities), b["slug"], b["language"]))
+        # Reconcile saved requests before admitting newly prepared locales.
+        return sorted(briefs, key=lambda b: (self.identity(b) not in self.state["jobs"], priorities.index(b["slug"]) if b["slug"] in priorities else len(priorities), b["slug"], b["language"]))
 
     def input_hashes(self, brief):
         hashes = {"article": brief["article_sha256"]}
