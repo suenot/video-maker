@@ -1410,7 +1410,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "5e8566855569bb80cc32af6fd7553f62529562d6836a3b49b39b011235cb2fe7",
           "requested_at": "2026-10-02T10:35:23.920116+00:00",
@@ -1420,11 +1420,18 @@
           "source_id": "a623203b-26f8-47e8-84f9-5d478d314863",
           "submission_mode": "now",
           "artifact_id": "42713098-45d0-4832-b966-6b90b10da773",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T10:35:28.462498+00:00"
+          "card_text": "tablet\nUnread\nAlmgren Chriss Without the Hand Waving\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-02T15:08:12.048047+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/almgren-chriss-optimal-execution/en/slides.pdf",
+          "sha256": "4c3c05bc49c049082adf68b93c468e3bedab48764ab5bcd447f901715d1ff108",
+          "bytes": 14502607,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T15:08:23.615104+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "42713098-45d0-4832-b966-6b90b10da773"
           ],
@@ -1436,8 +1443,15 @@
           "source_id": "a623203b-26f8-47e8-84f9-5d478d314863",
           "submission_mode": "now",
           "artifact_id": "f7e259ac-6538-4bb2-b4b6-4639f5ec1298",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T10:35:39.500270+00:00"
+          "card_text": "audio_spark\nUnread\nHow Whales Execute Massive Trades\n26:08 · Deep Dive · 1 source · 4h ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T15:08:24.642509+00:00",
+          "duration_seconds": 1568.322177,
+          "path": "input/notebooklm-sources/almgren-chriss-optimal-execution/en/audio.m4a",
+          "sha256": "6a8c68f4d873a167b1d3a3a010a206b6fe9212572222d2b33ecdc3680a6f0d5f",
+          "bytes": 50475576,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T15:08:57.588882+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -1493,10 +1507,10 @@
           "submission_mode": "later",
           "artifact_id": "2069c930-fbed-423f-b697-2cc70e2c95e4",
           "card_text": "tablet\nOptimal Execution: Almgren-Chriss Model Implementation Guide\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-02T10:36:11.435503+00:00"
+          "observed_at": "2026-10-02T15:09:04.225703+00:00"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "2069c930-fbed-423f-b697-2cc70e2c95e4"
           ],
@@ -1508,8 +1522,15 @@
           "source_id": "7b0ed6f3-6797-42b2-98ef-cf7e3d4c292d",
           "submission_mode": "now",
           "artifact_id": "5e622494-56d0-4c48-8c39-202c4e7ed012",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T10:36:27.818891+00:00"
+          "card_text": "audio_spark\nUnread\nПочему стратегия TWAP означает игнорирование риска\n13:44 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T15:09:05.246530+00:00",
+          "duration_seconds": 824.44771,
+          "path": "input/notebooklm-sources/almgren-chriss-optimal-execution/ru/audio.m4a",
+          "sha256": "da3e9a4e638c9376ce5bdc3f834b3e74d14419bef7d9601804ecb48002f6a5ed",
+          "bytes": 26534749,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T15:09:20.967772+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -1536,9 +1557,143 @@
       "selected_source_ids": [
         "7b0ed6f3-6797-42b2-98ef-cf7e3d4c292d"
       ]
+    },
+    "funding-rate-arbitrage-cross-exchange:zh-CN": {
+      "slug": "funding-rate-arbitrage-cross-exchange",
+      "language": "zh-CN",
+      "article_sha256": "a16c5ad5d21d3971d2e2bba3223463053b4b6e5284cb7ed5ae4d5028357bbb87",
+      "input_hashes": {
+        "article": "a16c5ad5d21d3971d2e2bba3223463053b4b6e5284cb7ed5ae4d5028357bbb87",
+        "source_text": "4a5733c9c80d8d7958228600c39d258cdb5456bb66bc69979f6b591d974d06dd",
+        "slides_prompt": "c5541e0aad0d4d3d992d4a2387f01e37489021f901ae1ac59226bf50b7293823",
+        "audio_prompt": "aef3668638b7327c0e280d7ca77b32f8e04501d3eddb0a0a85bc13c67b3fc7e7"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "c5541e0aad0d4d3d992d4a2387f01e37489021f901ae1ac59226bf50b7293823",
+          "requested_at": "2026-10-02T15:09:48.141225+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "eb215e7f-ee5b-452d-9a7f-745712711240",
+          "submission_mode": "now",
+          "artifact_id": "8f8a9b73-6185-4b68-8eca-3c4e9c3e59e9",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T15:09:52.711720+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "8f8a9b73-6185-4b68-8eca-3c4e9c3e59e9"
+          ],
+          "prompt_sha256": "aef3668638b7327c0e280d7ca77b32f8e04501d3eddb0a0a85bc13c67b3fc7e7",
+          "requested_at": "2026-10-02T15:10:04.095190+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "eb215e7f-ee5b-452d-9a7f-745712711240",
+          "submission_mode": "now",
+          "artifact_id": "f0205f5d-5871-46d6-87c3-a314ca3a2947",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-02T15:10:08.642292+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-02T15:09:28.014306+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/funding-rate-arbitrage-cross-exchange-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "080fee0e59a708728b60351bbc78933e61947a4a280e2f1142db855c3013b521",
+        "baseline_count": 275,
+        "resolved_at": "2026-10-02T15:09:30.391613+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/3425c4d1-6f85-462f-a8c1-cb49c319f2a8",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T15:09:34.428788+00:00",
+        "sha256": "4a5733c9c80d8d7958228600c39d258cdb5456bb66bc69979f6b591d974d06dd",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "eb215e7f-ee5b-452d-9a7f-745712711240",
+      "source_title": "MM article funding-rate-arbitrage-cross-exchange ZH-CN a16c5ad5d21d",
+      "source_sha256": "4a5733c9c80d8d7958228600c39d258cdb5456bb66bc69979f6b591d974d06dd",
+      "state": "source_ready",
+      "source_display_name": "MM article funding-rate-arbitrage-cross-exchange …",
+      "selected_source_ids": [
+        "eb215e7f-ee5b-452d-9a7f-745712711240"
+      ]
+    },
+    "funding-rate-arbitrage-cross-exchange:zh-TW": {
+      "slug": "funding-rate-arbitrage-cross-exchange",
+      "language": "zh-TW",
+      "article_sha256": "829f5f0551cc43f44853b519908b9bb4212638a37c540721a74df744892b87bc",
+      "input_hashes": {
+        "article": "829f5f0551cc43f44853b519908b9bb4212638a37c540721a74df744892b87bc",
+        "source_text": "31de78575e0f812b546d4ee3bf036485b4b3f2b57ced20215235b2ae26e28e7f",
+        "slides_prompt": "3370dcad517a8ebdee11ee8533986e8b322b696c548f93f4b2b935da06d54e1c",
+        "audio_prompt": "f428de8e3fc5e21cd1363a6c9b72e2968bbfe79ddd633c3227818f6f9bc6a45f"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "3370dcad517a8ebdee11ee8533986e8b322b696c548f93f4b2b935da06d54e1c",
+          "requested_at": "2026-10-02T15:10:36.609898+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "b4a96723-35ae-4aeb-91c6-998735a0110f",
+          "submission_mode": "now",
+          "artifact_id": "c95a83da-9749-46fc-b8c1-4b80d649d20a",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T15:10:41.161224+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "c95a83da-9749-46fc-b8c1-4b80d649d20a"
+          ],
+          "prompt_sha256": "f428de8e3fc5e21cd1363a6c9b72e2968bbfe79ddd633c3227818f6f9bc6a45f",
+          "requested_at": "2026-10-02T15:10:52.496906+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "b4a96723-35ae-4aeb-91c6-998735a0110f",
+          "submission_mode": "now",
+          "artifact_id": "eb2e315c-70d5-4639-8613-f7a98b376b63",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-02T15:10:57.038675+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-02T15:10:15.763957+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/funding-rate-arbitrage-cross-exchange-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "cd64a945310798907b0a0c6d9a5325d7a96d296996f4a327be560b32e9c8efaa",
+        "baseline_count": 276,
+        "resolved_at": "2026-10-02T15:10:18.161754+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/5a62c56d-2436-4087-bf89-868adb9a46bf",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T15:10:22.165840+00:00",
+        "sha256": "31de78575e0f812b546d4ee3bf036485b4b3f2b57ced20215235b2ae26e28e7f",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "b4a96723-35ae-4aeb-91c6-998735a0110f",
+      "source_title": "MM article funding-rate-arbitrage-cross-exchange ZH-TW 829f5f0551cc",
+      "source_sha256": "31de78575e0f812b546d4ee3bf036485b4b3f2b57ced20215235b2ae26e28e7f",
+      "state": "source_ready",
+      "source_display_name": "MM article funding-rate-arbitrage-cross-exchange …",
+      "selected_source_ids": [
+        "b4a96723-35ae-4aeb-91c6-998735a0110f"
+      ]
     }
   },
-  "checked_at": "2026-10-02T10:36:27.828398+00:00",
+  "checked_at": "2026-10-02T15:10:57.040588+00:00",
   "browser_geometry_requested": {
     "width": 1991,
     "height": 1290,
