@@ -343,7 +343,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "d4dbc92ca069f345df90315d1de0c174ed172074be7a2ec6a92ceaf1deae3cef",
           "requested_at": "2026-10-01T20:16:01.512297+00:00",
@@ -368,11 +368,18 @@
           "browser_timezone": "Asia/Tbilisi",
           "submission_mode": "later",
           "artifact_id": "36a9b7d0-dd13-4099-9a71-f38229e2f3fa",
-          "card_text": "tablet\nOrder Flow Imbalance Analysis\nScheduled for after 4am\nmore_vert",
-          "observed_at": "2026-10-02T00:00:36.525129+00:00"
+          "card_text": "tablet\nUnread\nOrder Flow Imbalance Mechanics\n1 source · 9m ago\nmore_vert",
+          "observed_at": "2026-10-02T00:22:37.701697+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/order-flow-imbalance-prediction/en/slides.pdf",
+          "sha256": "96c4d47e32a09bd9a70fd1fb554ed105bac9d51e26d2cbdfcf409354b0be2947",
+          "bytes": 12144612,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T00:22:48.152902+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nEnglish\nLength\nShort\nDefault\nLong\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Core Mechanics\n+ Practical Application\n+ Model Comparison\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 03:51."
@@ -389,8 +396,15 @@
           "source_id": "d4761b93-2067-4d00-92f2-1f19bfd9df32",
           "submission_mode": "later",
           "artifact_id": "d2e0cdf5-b377-431d-9b33-70cb3395fa32",
-          "card_text": "audio_spark\nOrder Flow Imbalance Analysis\nScheduled for after 4am\nmore_vert",
-          "observed_at": "2026-10-02T00:00:37.555200+00:00"
+          "card_text": "audio_spark\nUnread\nHow Order Flow Imbalance Moves Markets\n24:33 · Deep Dive · 1 source · 12m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T00:22:49.180366+00:00",
+          "duration_seconds": 1473.213243,
+          "path": "input/notebooklm-sources/order-flow-imbalance-prediction/en/audio.m4a",
+          "sha256": "6322507ac7821330b9fff6f059938a5fb213166da29da7ff17e2ec1c5a10e272",
+          "bytes": 47414546,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T00:23:32.631699+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -430,7 +444,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -443,11 +457,18 @@
           "source_id": "2cc80eaf-db29-4f7b-b72d-07ff4c0730bf",
           "submission_mode": "later",
           "artifact_id": "e2490438-e57d-41a6-b147-edd8271812a1",
-          "card_text": "tablet\nOrder-Flow Imbalance Decomposition and Prediction Models\nScheduled for after 4am\nmore_vert",
-          "observed_at": "2026-10-02T00:00:44.169645+00:00"
+          "card_text": "tablet\nUnread\nДекомпозиция потока заказов\n1 source · 9m ago\nmore_vert",
+          "observed_at": "2026-10-02T00:23:39.329742+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/order-flow-imbalance-prediction/ru/slides.pdf",
+          "sha256": "4769d95314b7949ce7d3a08a9269b938c748483b22f8e5cb9ea0a782eb392530",
+          "bytes": 12971680,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T00:23:49.362684+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Core Mechanics\n+ Practical Application\n+ Strategic Narrative\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -462,8 +483,15 @@
           "source_id": "2cc80eaf-db29-4f7b-b72d-07ff4c0730bf",
           "submission_mode": "later",
           "artifact_id": "37cb0d92-8098-43cd-930a-7d4fdc6f64b7",
-          "card_text": "audio_spark\nOrder-Flow Imbalance Decomposition and Prediction Models\nScheduled for after 4am\nmore_vert",
-          "observed_at": "2026-10-02T00:00:45.198564+00:00"
+          "card_text": "audio_spark\nUnread\nДисбаланс потока ордеров и движение цены\n24:40 · Deep Dive · 1 source · 14m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T00:23:50.394788+00:00",
+          "duration_seconds": 1480.086349,
+          "path": "input/notebooklm-sources/order-flow-imbalance-prediction/ru/audio.m4a",
+          "sha256": "c3f985313285e4ef80468403a3dd2734b653110266fb925a8ce36a95077077eb",
+          "bytes": 47635786,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T00:24:23.639730+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -505,7 +533,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "fc1652bfa4e082236ba2998f46d0fcad29f2972a2b13e8c1a07c5c0d04b23b1f",
           "requested_at": "2026-10-02T00:01:02.026336+00:00",
@@ -515,11 +543,18 @@
           "source_id": "0d0afa06-90fd-4be0-b515-3c3aee26b228",
           "submission_mode": "now",
           "artifact_id": "5efc5750-716b-4760-90d5-d227bdcf0f7b",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T00:01:08.084282+00:00"
+          "card_text": "tablet\nUnread\nDeconstructing Execution Benchmarks\n1 source · 14m ago\nmore_vert",
+          "observed_at": "2026-10-02T00:24:30.285834+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/twap-vwap-pov-execution-algorithms/en/slides.pdf",
+          "sha256": "7df0012d673d2926b31b4fc5d41dbc97125b3131d2166e5171d82614ed39bb4a",
+          "bytes": 11828248,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T00:24:38.391022+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "5efc5750-716b-4760-90d5-d227bdcf0f7b"
           ],
@@ -531,8 +566,15 @@
           "source_id": "0d0afa06-90fd-4be0-b515-3c3aee26b228",
           "submission_mode": "now",
           "artifact_id": "f0e32ee7-74be-4f4f-95af-4b2c6ce569c6",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T00:01:21.923707+00:00"
+          "card_text": "audio_spark\nUnread\nThe Math Behind TWAP VWAP and POV\n21:09 · Deep Dive · 1 source · 14m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T00:24:39.424192+00:00",
+          "duration_seconds": 1269.411701,
+          "path": "input/notebooklm-sources/twap-vwap-pov-execution-algorithms/en/audio.m4a",
+          "sha256": "f0c96e7d5e3778e864c4f7e6378980bd1372af4ebcdc36fecc5bc946653d41fb",
+          "bytes": 40855469,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T00:25:08.745934+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -586,7 +628,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "b50ae29260542c884e54d4bbbd7a2296779c08157c570d306af6fcbbd454b734",
           "requested_at": "2026-10-02T00:01:50.834390+00:00",
@@ -596,11 +638,18 @@
           "source_id": "2836383f-42a0-4103-ac5c-335013d56278",
           "submission_mode": "now",
           "artifact_id": "256295f9-a3bb-41d8-9505-9e4a4f235023",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T00:01:56.971476+00:00"
+          "card_text": "tablet\nUnread\nАрхитектура алгоритмов исполнения\n1 source · 14m ago\nmore_vert",
+          "observed_at": "2026-10-02T00:25:15.580062+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/twap-vwap-pov-execution-algorithms/ru/slides.pdf",
+          "sha256": "632d00a25cedb0795543bbca97eeba8f164efb9e48c0fa2c4ed047392011461f",
+          "bytes": 14345900,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T00:25:25.015512+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "256295f9-a3bb-41d8-9505-9e4a4f235023"
           ],
@@ -612,8 +661,15 @@
           "source_id": "2836383f-42a0-4103-ac5c-335013d56278",
           "submission_mode": "now",
           "artifact_id": "1976b7f1-5935-4f6b-8172-6e2d510aba86",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T00:02:15.791038+00:00"
+          "card_text": "audio_spark\nUnread\nПочему ломаются алгоритмы TWAP, VWAP и POV\n14:16 · Deep Dive · 1 source · 15m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T00:25:26.046975+00:00",
+          "duration_seconds": 856.537687,
+          "path": "input/notebooklm-sources/twap-vwap-pov-execution-algorithms/ru/audio.m4a",
+          "sha256": "21e977f6be332860277e3196164e1b8ad68b8a0d90706e08063159def9f5a2ed",
+          "bytes": 27567504,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T00:25:45.952642+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -640,9 +696,102 @@
       "selected_source_ids": [
         "2836383f-42a0-4103-ac5c-335013d56278"
       ]
+    },
+    "agentic-ai-investment-revolution:en": {
+      "slug": "agentic-ai-investment-revolution",
+      "language": "en",
+      "article_sha256": "09bae4253f8ddb1009f21b09303e52cd9823d9bc38a01e8a55c2cdfda8abdc89",
+      "input_hashes": {
+        "article": "09bae4253f8ddb1009f21b09303e52cd9823d9bc38a01e8a55c2cdfda8abdc89",
+        "source_text": "af31766361f53d66d23d88cc6381e96fec2be5951a231bae454f58fead9cbf1f",
+        "slides_prompt": "ea5668b7f58ad70e1926aa57e62ac9d980395213b829777d95d27cabdf90e99e",
+        "audio_prompt": "b3c2dc4e669474b913dd98068496eb17f0a6accdb510b5c536760f447b1f2c54"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "ea5668b7f58ad70e1926aa57e62ac9d980395213b829777d95d27cabdf90e99e",
+          "requested_at": "2026-10-02T00:26:11.428521+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "3364fa13-5b39-4682-a7a5-b9edbb7ab163",
+          "submission_mode": "now",
+          "artifact_id": "a6d4369e-3386-435c-96c0-ef2e0751c578",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T00:26:17.557819+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nEnglish\nLength\nShort\nDefault\nLong\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Technical Workflow\n+ Beginner Guide\n+ Future Outlook\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "a6d4369e-3386-435c-96c0-ef2e0751c578"
+          ],
+          "prompt_sha256": "b3c2dc4e669474b913dd98068496eb17f0a6accdb510b5c536760f447b1f2c54",
+          "requested_at": "2026-10-02T00:26:25.356997+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "3364fa13-5b39-4682-a7a5-b9edbb7ab163",
+          "submission_mode": "later",
+          "artifact_id": "f13f76d1-cb9c-42e7-9740-52648e5b490b",
+          "card_text": "audio_spark\nAgentic AI Investment Revolution\nScheduled for after 9am\nmore_vert",
+          "observed_at": "2026-10-02T00:26:31.500815+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-02T00:25:53.350177+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/agentic-ai-investment-revolution-en-notebook-baseline.json",
+        "baseline_sha256": "c4d554dc023b2ddc4f43be7f5ad76f16aeacfc5595e4b8382caf593735746243",
+        "baseline_count": 265,
+        "resolved_at": "2026-10-02T00:25:55.949628+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/68c1dd2e-0ee3-48ce-a8af-3a7ea29805a7",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-02T00:25:59.979297+00:00",
+        "sha256": "af31766361f53d66d23d88cc6381e96fec2be5951a231bae454f58fead9cbf1f",
+        "baseline_ids": []
+      },
+      "temporary_source_ids": [],
+      "source_id": "3364fa13-5b39-4682-a7a5-b9edbb7ab163",
+      "source_title": "MM article agentic-ai-investment-revolution EN 09bae4253f8d",
+      "source_sha256": "af31766361f53d66d23d88cc6381e96fec2be5951a231bae454f58fead9cbf1f",
+      "state": "source_ready",
+      "source_display_name": "MM article agentic-ai-investment-revolution EN 09…",
+      "selected_source_ids": [
+        "3364fa13-5b39-4682-a7a5-b9edbb7ab163"
+      ]
+    },
+    "agentic-ai-investment-revolution:ru": {
+      "slug": "agentic-ai-investment-revolution",
+      "language": "ru",
+      "article_sha256": "221dc0af95570a0c91d3117267c7f43b487ccd517d41a742b212b525fb899c24",
+      "input_hashes": {
+        "article": "221dc0af95570a0c91d3117267c7f43b487ccd517d41a742b212b525fb899c24",
+        "source_text": "125a3a82169a180d9b8d28a768befad86b30c1bc73475b443d00392a1df5cc1f",
+        "slides_prompt": "b98355636aa4dd273605d9043061912907704f4ec8d1a465395df0fad5cb07e1",
+        "audio_prompt": "1f73e4cf77d3d4e4e57088d5440d2ab779936afd28604bf42de7d861dabfaf45"
+      },
+      "artifacts": {},
+      "notebook_intent": {
+        "at": "2026-10-02T00:26:38.794422+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/agentic-ai-investment-revolution-ru-notebook-baseline.json",
+        "baseline_sha256": "2b07122c2df132eeaf7540c6a8961ea81f85878394e4196b92454a0ca9e9ca70",
+        "baseline_count": 266,
+        "resolved_at": "2026-10-02T00:26:41.434593+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/d65badca-68f2-4ccc-9e4b-3d00037006e3",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "state": "quota_wait"
     }
   },
-  "checked_at": "2026-10-02T00:02:15.793027+00:00",
+  "checked_at": "2026-10-02T00:26:45.475588+00:00",
   "browser_geometry_requested": {
     "width": 1983,
     "height": 1290,
@@ -659,9 +808,9 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "AI usage limit reached. All features will be available after 03:51.",
+    "notice": "AI usage limit reached. All features will be available after 08:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-01T20:31:51.592748+00:00",
-    "not_before": "2026-10-01T23:51:00+00:00"
+    "observed_at": "2026-10-02T00:26:45.473815+00:00",
+    "not_before": "2026-10-02T04:51:00+00:00"
   }
 }
