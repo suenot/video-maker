@@ -1,0 +1,22 @@
+Create a comprehensive NotebookLM slide deck from this article. Use only the attached source named "MM article almgren-chriss-optimal-execution EN a5c016b06aa1". Produce in English. Follow every article section and subsection in this exact order:
+1. The setup: what the model actually assumes
+2. Cost and variance of a trajectory
+3. The closed form: sinh, cosh, and the urgency parameter
+4. The risk-neutral limit is TWAP — this is why TWAP exists
+5. The efficient frontier of execution
+6. Calibration: $\eta$, $\gamma$, $\sigma$ from Binance data
+7. $\sigma$: the easy one
+8. $\eta$: temporary impact from the book and from trades
+9. $\gamma$: permanent impact via Kyle-style regression
+10. Why crypto calibration is noisy, and what to do about it
+11. Where the model breaks, and the papers that fix it
+12. What to take away
+13. References
+
+Show the model as a conditional liquidation calculation, not a return forecast. Define X in BTC, T and tau in hours, N, remaining inventory x_k, child size n_k, price S in dollars per BTC, absolute sigma in dollars per BTC per square-root hour, epsilon in dollars per BTC, eta in dollar-hours per BTC squared as implied by the rate convention, gamma in dollars per BTC squared as implied by permanent price impact, and lambda in inverse dollars. Preserve the article's own unit labels where they differ and flag any dimensional ambiguity for review.
+Explain the arithmetic zero-drift walk, iid normal shocks, linear non-decaying permanent impact, linear instantaneous temporary impact, half-spread/fees, and the full-replenishment assumption. Derive expected implementation shortfall, inventory-weighted variance, tilde-eta = eta - gamma*tau/2, and why permanent impact is schedule-independent under these assumptions. Show U=E[C]+lambda V[C], the second-difference equation, boundary conditions, sinh/cosh holdings and child trades, discrete kappa relation, small-tau approximation, theta=1/kappa, and the lambda-to-zero TWAP limit. Explain the high-risk-aversion limit and when the deadline binds.
+Plot or tabulate the efficient frontier using E versus V, state lambda as the negative dE/dV slope (do not silently replace variance with standard deviation), and retain all three ways to select risk: marginal cost, risk budget, and characteristic time. Walk through the article's 100 BTC, $100,000/BTC, 4-hour, sigma=$600 per square-root hour, eta=1.0, lambda=1e-6 example. Attribute the 46.2 versus 25 BTC first-hour trades, $3,290 versus $2,500 temporary cost, $53,000 versus $69,300 shortfall standard deviation, 0.8 bps and 23% claims to the article pending independent recalculation.
+Show the Python trajectory inputs/outputs and the lambda sweep. For calibration, distinguish one-minute price differences for absolute sigma; L2 sweep cost and its assumed 10-60-second replenishment conversion for eta; realized taker slippage as a second route; and five-minute signed taker flow regression plus non-reversion check for gamma. Preserve units, sampling horizon, Binance REST example and the warning that a single aggTrades page is insufficient. Explain endogeneity, concave impact, venue fragmentation/perp leadership, regime dependence, weak R-squared and day-to-day coefficient drift as article claims; do not present OLS gamma as causal. End with nonlinear-impact, finite-resilience and no-dynamic-arbitrage extensions (Almgren 2003, Obizhaeva-Wang, Gatheral), RL/neural sequels, takeaways and references. Keep mathematical and empirical assertions pending primary-paper/data/code review.
+
+Preserve all substantive details, examples, code, caveats, risk points, references and the source order. Attribute numerical, financial, research, company-specific and mutable facts to the article as unverified claims. Do not add outside facts, guaranteed returns or investment advice. This draft requires human editorial and primary-source review. External NotebookLM source/notebook and target-channel duplicates remain unverified; do not imply clearance.
+Use enough readable slides for each major section and material subsection; preserve equations and unit labels legibly, and end with the article conclusion and references.

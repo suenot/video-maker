@@ -1,0 +1,256 @@
+MM article almgren-chriss-optimal-execution EN a5c016b06aa1
+
+---
+title: "Almgren-Chriss Without the Hand-Waving: Optimal Execution You Can Implement in an Afternoon"
+description: "Full derivation of the Almgren-Chriss optimal execution model: linear impact, the sinh/cosh trajectory, the efficient frontier, and working Python for calibrating eta, gamma, and sigma from Binance L2 and trade data."
+tags: ["execution", "almgren-chriss", "market impact", "optimal execution", "twap", "quant", "python", "crypto"]
+date: "2026-07-14"
+draft: false
+lang: "en"
+image: "/images/blog/almgren-chriss-optimal-execution.webp"
+slug: "almgren-chriss-optimal-execution"
+authors: ["suenot"]
+---
+
+# Almgren-Chriss Without the Hand-Waving: Optimal Execution You Can Implement in an Afternoon
+
+Almgren and Chriss (2001), "Optimal execution of portfolio transactions" (Journal of Risk 3(2), 5–39), is probably the most cited paper in execution research and one of the least correctly implemented. Most "Almgren-Chriss" code in the wild is a TWAP scheduler with a comment block. Most blog posts about it skip the derivation, wave at a sinh function, and never touch the part that actually matters in production: where the parameters come from.
+
+This article does the whole thing. The model assumptions, stated honestly. The closed-form trajectory, derived, not asserted. The efficient frontier and how to pick the risk-aversion parameter. And calibration of the three inputs — temporary impact $\eta$, permanent impact $\gamma$, volatility $\sigma$ — from Binance order book and trade data, with working Python and an honest discussion of why the fit is noisy. This is the intellectual spine of everything else in execution: TWAP, VWAP, and POV are special cases or heuristic cousins (see [TWAP, VWAP, POV: the execution algorithms everyone runs](/blog/twap-vwap-pov-execution-algorithms)), and the modern ML approaches — reinforcement learning schedulers and neural impact models — are attempts to relax exactly the assumptions we are about to write down.
+
+## The setup: what the model actually assumes
+
+You hold $X$ units of an asset (say, 100 BTC) and must fully liquidate by time $T$. Divide $[0, T]$ into $N$ intervals of length $\tau = T/N$. Your decision variable is the holdings trajectory $x_0 = X, x_1, \dots, x_N = 0$, with trades $n_k = x_{k-1} - x_k$ executed in interval $k$.
+
+Three assumptions carry the entire model:
+
+**1. Arithmetic random walk.** The unperturbed price follows
+
+$$
+S_k = S_{k-1} + \sigma \sqrt{\tau}\, \xi_k - \tau\, g\!\left(\frac{n_k}{\tau}\right),
+$$
+
+where $\xi_k$ are i.i.d. standard normals and $\sigma$ is *absolute* volatility (dollars per unit time$^{1/2}$, not percent). Arithmetic, not geometric — over a few hours the difference is negligible and the arithmetic walk keeps the algebra linear-quadratic. No drift: Almgren and Chriss discuss the drift term, but for an intraday liquidation your alpha estimate over 4 hours is almost always noise, and setting it to zero is the honest default.
+
+**2. Linear permanent impact.** $g(v) = \gamma v$: trading at rate $v$ shifts the price permanently, proportionally, and the shift never decays. Every unit you sell pushes the mid down by $\gamma$ forever. This looks crude, but there is a deep reason to keep it linear: Huberman and Stanzl (2004) proved that *permanent* impact that is nonlinear in trade size admits round-trip strategies with positive expected profit — price manipulation. Linear permanent impact is not a simplification of convenience; it is the only arbitrage-free choice in this class of models.
+
+**3. Linear temporary impact.** The price you actually receive in interval $k$ is
+
+$$
+\tilde{S}_k = S_{k-1} - h\!\left(\frac{n_k}{\tau}\right), \qquad h(v) = \epsilon\, \mathrm{sgn}(v) + \eta v.
+$$
+
+$\epsilon$ captures half the bid-ask spread plus fees; $\eta$ is the slope of the marginal cost of demanding liquidity at rate $v$. Temporary impact affects only your own fill and vanishes instantly — the book fully replenishes before your next child order. Every one of the three words "linear", "instantly", "fully" is wrong in real markets, and the last section is about how wrong. But first, the payoff for accepting them.
+
+### Cost and variance of a trajectory
+
+Sum the fills, subtract from the initial mark $X S_0$, and you get the implementation shortfall. Its expectation and variance over the noise $\xi_k$ are:
+
+$$
+E[C] = \underbrace{\tfrac{1}{2}\gamma X^2}_{\text{permanent}} + \underbrace{\epsilon X}_{\text{spread}} + \underbrace{\frac{\tilde{\eta}}{\tau} \sum_{k=1}^{N} n_k^2}_{\text{temporary}},
+\qquad
+V[C] = \sigma^2 \tau \sum_{k=1}^{N} x_k^2,
+$$
+
+with $\tilde{\eta} = \eta - \tfrac{1}{2}\gamma\tau$ (a discretization correction that vanishes as $\tau \to 0$).
+
+Two observations that most implementations miss:
+
+- **The permanent cost $\tfrac{1}{2}\gamma X^2$ does not depend on the trajectory.** With linear, non-decaying permanent impact, you pay the same permanent toll no matter how you schedule. The optimization is entirely a fight between the temporary-cost term (which wants slow, even trading — it is minimized by $n_k = X/N$, i.e. TWAP) and the variance term (which wants your inventory gone yesterday — it is minimized by immediate liquidation).
+- **The variance term is inventory-weighted, not trade-weighted.** Risk accrues on what you still hold, $x_k$, not on what you trade. This is why urgency front-loads the schedule.
+
+## The closed form: sinh, cosh, and the urgency parameter
+
+Almgren-Chriss minimize the mean-variance objective
+
+$$
+U(x) = E[C] + \lambda V[C],
+$$
+
+where $\lambda \geq 0$ is risk aversion in units of 1/dollars. Set $\partial U / \partial x_j = 0$ for the interior points. The temporary term contributes second differences of $x$, the variance term contributes $x_j$ itself, and you get a linear second-order difference equation:
+
+$$
+\frac{x_{j-1} - 2x_j + x_{j+1}}{\tau^2} = \tilde{\kappa}^2 x_j,
+\qquad
+\tilde{\kappa}^2 = \frac{\lambda \sigma^2}{\tilde{\eta}}.
+$$
+
+This is the discrete analogue of $x'' = \kappa^2 x$, and with boundary conditions $x_0 = X$, $x_N = 0$ the solution is hyperbolic:
+
+$$
+\boxed{\;x_j = X\, \frac{\sinh\!\big(\kappa\,(T - t_j)\big)}{\sinh(\kappa T)}\;}
+\qquad
+n_j = \frac{2\sinh(\kappa\tau/2)}{\sinh(\kappa T)}\, \cosh\!\big(\kappa (T - t_{j-1/2})\big)\, X,
+$$
+
+where $\kappa$ solves $\tfrac{2}{\tau^2}\left(\cosh(\kappa\tau) - 1\right) = \tilde{\kappa}^2$, which for small $\tau$ is just $\kappa \approx \tilde{\kappa} = \sqrt{\lambda\sigma^2/\eta}$.
+
+![Optimal holdings trajectories for different kappa values, from TWAP straight line to aggressive front-loaded curves](/images/blog/almgren-chriss-optimal-execution-trajectories.webp)
+
+Everything about the strategy is compressed into one number:
+
+$$
+\kappa = \sqrt{\frac{\lambda \sigma^2}{\eta}} \qquad [\text{units: } 1/\text{time}].
+$$
+
+$\kappa$ is the **urgency**. Its reciprocal $\theta = 1/\kappa$ is the trade's characteristic time: the timescale over which it is worth holding inventory risk to save impact cost. Note what $\kappa$ does *not* depend on: the order size $X$ and the deadline $T$. Whether the intrinsic timescale of your trade is 20 minutes or 6 hours is set by risk aversion, volatility, and liquidity alone. If $\theta \ll T$, your deadline is irrelevant — the model liquidates on its own schedule and the tail of the horizon is unused. If $\theta \gg T$, the deadline binds and you are effectively doing TWAP.
+
+### The risk-neutral limit is TWAP — this is why TWAP exists
+
+Take $\lambda \to 0$, so $\kappa \to 0$. Then $\sinh(z) \to z$ and
+
+$$
+x(t) = X\,\frac{\sinh(\kappa(T-t))}{\sinh(\kappa T)} \;\longrightarrow\; X\,\frac{T-t}{T}.
+$$
+
+The optimal trajectory degenerates to the straight line: equal quantities in equal time intervals. **TWAP is not a heuristic that happens to work; it is the exact optimum of the Almgren-Chriss model for a risk-neutral trader with linear impact.** Every time someone runs TWAP, they are implicitly asserting $\lambda = 0$: "I don't care about the variance of my shortfall, only its mean." That is a defensible position for small orders and short horizons. It is a strange position for liquidating 5% of daily volume over 8 hours in an asset doing 4% daily vol, which is exactly where people run it anyway. The opposite limit $\lambda \to \infty$ gives $x_j \to 0$ for all $j > 0$: dump everything in the first interval, pay whatever it costs. Between these extremes, $\kappa T$ interpolates: $\kappa T \lesssim 0.5$ is barely distinguishable from TWAP, $\kappa T \gtrsim 3$ is aggressively front-loaded.
+
+## The efficient frontier of execution
+
+For each $\lambda$ you get one trajectory, one expected cost $E(\lambda)$, and one variance $V(\lambda)$. Sweeping $\lambda \in [0, \infty)$ traces a curve in the $(V, E)$ plane — the **efficient frontier of execution**, in direct analogy to Markowitz. It is convex and decreasing: less variance always costs more expected shortfall, with steeply diminishing returns. At the frontier point selected by a given $\lambda$, the risk aversion is the (negative) slope of the tangent: $\lambda = -\partial E / \partial V$.
+
+![Efficient frontier of execution cost versus variance with tangent line showing lambda as the slope](/images/blog/almgren-chriss-optimal-execution-frontier.webp)
+
+The frontier reframes the question "what is $\lambda$?" — which nobody can answer introspectively — into "which cost/risk trade-off do I want?", which a desk can actually answer. Three practical ways to pick the point:
+
+1. **Marginal-cost reasoning.** Walk the frontier and ask: "moving from this point to the next, I pay $\Delta E$ dollars of expected cost to remove $\Delta\text{std}$ dollars of shortfall standard deviation — do I take that trade?" The knee of the frontier is usually obvious within a factor of 2, and the trajectory is insensitive to $\lambda$ at that resolution.
+2. **Risk budget.** Fix a maximum acceptable shortfall std (e.g. "one-day 1-sigma of the residual position must stay under 15 bps of notional") and take the cheapest trajectory satisfying it. This is a constrained problem whose Lagrange multiplier *is* $\lambda$.
+3. **Characteristic-time targeting.** Pick $\theta = 1/\kappa$ directly ("this order should have a 90-minute half-life") and back out $\lambda = \eta/(\sigma^2\theta^2)$. This is what most practitioners implicitly do when they set an "urgency" slider.
+
+A worked example with numbers we will justify in the calibration section. Sell $X = 100$ BTC at $S_0 = \$100{,}000$, horizon $T = 4$ h, $\sigma = \$600$ per BTC per $\sqrt{\text{h}}$ (about 3% daily vol), $\eta = 1.0\ \$\cdot\text{h}/\text{BTC}$, $\lambda = 10^{-6}\ \$^{-1}$. Then
+
+$$
+\kappa = \sqrt{\frac{10^{-6} \times 3.6\times 10^{5}}{1.0}} = 0.6\ \text{h}^{-1}, \qquad \kappa T = 2.4, \qquad \theta \approx 1.7\ \text{h}.
+$$
+
+The optimal schedule sells 46.2 BTC in the first hour (TWAP: 25). Temporary cost: $\eta \int_0^T v(t)^2 dt \approx \$3{,}290$ versus $\$2{,}500$ for TWAP. Shortfall std: $\$53{,}000$ versus $\$69{,}300$ for TWAP. So for an extra 0.8 bps of expected cost on the \$10M notional you cut shortfall risk by 23%. That is the entire content of the model in one sentence: it prices the insurance, and lets you decide whether to buy it.
+
+The trajectory itself is ten lines of Python:
+
+```python
+import numpy as np
+
+def almgren_chriss(X, T, N, sigma, eta, gamma, lam):
+    """Optimal liquidation trajectory (discrete AC 2001)."""
+    tau = T / N
+    eta_t = eta - 0.5 * gamma * tau          # tilde-eta
+    kappa_t2 = lam * sigma**2 / eta_t        # tilde-kappa^2
+    kappa = np.arccosh(0.5 * kappa_t2 * tau**2 + 1) / tau
+    t = np.arange(N + 1) * tau
+    x = X * np.sinh(kappa * (T - t)) / np.sinh(kappa * T)
+    n = x[:-1] - x[1:]                       # child order sizes
+    E = 0.5 * gamma * X**2 + (eta_t / tau) * np.sum(n**2)
+    V = sigma**2 * tau * np.sum(x[1:]**2)
+    return x, n, E, V
+
+x, n, E, V = almgren_chriss(X=100, T=4, N=48, sigma=600,
+                            eta=1.0, gamma=0.3, lam=1e-6)
+print(f"first-hour qty: {n[:12].sum():.1f} BTC, "
+      f"E=${E:,.0f}, std=${np.sqrt(V):,.0f}")
+```
+
+Sweep `lam` over `np.logspace(-8, -4, 50)` and plot $E$ against $\sqrt{V}$ — that is your frontier, and the whole decision surface fits on one chart you can hand to a risk committee.
+
+## Calibration: $\eta$, $\gamma$, $\sigma$ from Binance data
+
+Here is where 90% of implementations quietly die. The trajectory formula is trivial; the parameters are not. Three quantities, three different estimation problems.
+
+![Calibration scatter plots of slippage versus participation rate and price change versus net order flow from Binance data](/images/blog/almgren-chriss-optimal-execution-calibration.webp)
+
+### $\sigma$: the easy one
+
+Absolute volatility per root-hour, from mid-price returns. Use 1-minute bars and scale; at finer sampling, microstructure noise (bid-ask bounce) biases realized variance upward. This estimate is solid — vol is the one parameter you will get right.
+
+### $\eta$: temporary impact from the book and from trades
+
+Two complementary routes. **Route A — walk the L2 book.** From depth snapshots, compute the cost of a hypothetical marketable sweep of size $q$: the VWAP of consumed levels minus the mid. Fitting $\text{cost}(q) \approx \epsilon + \eta_{\text{inst}}\, q$ gives instantaneous impact per BTC. To convert into the rate-based $\eta$ of the model you must assume a book replenishment time $\Delta t_r$ (order of 10–60 s for BTCUSDT): trading at rate $v$ consumes $v \Delta t_r$ per refresh cycle, so $\eta \approx \eta_{\text{inst}} \Delta t_r$. That assumption — instant, full replenishment on a fixed clock — is exactly the crack through which Obizhaeva-Wang enters; more below. **Route B — regress realized slippage on participation.** Bucket aggressive (taker) flow into 1-minute bins; for each bin, regress the taker-side VWAP-minus-open-mid against the taker volume rate. Route B measures what the market actually charged aggressors; Route A measures what the resting book would charge right now. When they disagree by a factor of 3, believe B for the level and A for the intraday shape.
+
+### $\gamma$: permanent impact via Kyle-style regression
+
+Regress mid-price changes on signed net taker flow over 5-minute windows:
+
+$$
+\Delta S_{5m} = \gamma\, Q_{\text{net}} + \text{noise}, \qquad Q_{\text{net}} = \text{taker buys} - \text{taker sells}.
+$$
+
+Then check that the impact has not reverted one window later — the non-reverting component is "permanent" at your trading timescale. This is the noisiest of the three by a wide margin.
+
+Working code, using only public Binance REST endpoints:
+
+```python
+import requests, numpy as np, pandas as pd
+
+B = "https://api.binance.com/api/v3"
+sym = "BTCUSDT"
+
+# --- sigma: absolute vol per sqrt(hour), from 1m klines ---
+kl = requests.get(f"{B}/klines", params=dict(
+    symbol=sym, interval="1m", limit=1000)).json()
+close = np.array([float(k[4]) for k in kl])
+sigma = np.diff(close).std() * np.sqrt(60)       # $/sqrt(h)
+
+# --- eta (route A): sweep cost curve from L2 depth ---
+d = requests.get(f"{B}/depth",
+                 params=dict(symbol=sym, limit=5000)).json()
+bids = np.array(d["bids"], dtype=float)          # [price, qty]
+mid = (bids[0, 0] + float(d["asks"][0][0])) / 2
+cq = np.cumsum(bids[:, 1])                       # cum qty
+cn = np.cumsum(bids[:, 0] * bids[:, 1])          # cum notional
+sizes = np.linspace(0.5, 50, 40)                 # BTC probes
+cost = [mid - np.interp(q, cq, cn) / q for q in sizes]
+eps, eta_inst = np.polyfit(sizes, cost, 1)[::-1] # cost ~ eps + k*q
+eta = eta_inst * (30 / 3600)                     # 30s refresh -> $*h/BTC
+
+# --- gamma: 5-min mid change vs net taker flow (aggTrades) ---
+tr = requests.get(f"{B}/aggTrades",
+                  params=dict(symbol=sym, limit=1000)).json()
+df = pd.DataFrame(dict(
+    t=[t["T"] for t in tr],
+    p=[float(t["p"]) for t in tr],
+    q=[float(t["q"]) * (-1 if t["m"] else 1) for t in tr]))
+df["bin"] = df.t // 300_000                      # 5-min bins
+g = df.groupby("bin").agg(dp=("p", lambda s: s.iloc[-1] - s.iloc[0]),
+                          qn=("q", "sum"))
+gamma = np.polyfit(g.qn, g.dp, 1)[0]             # $/BTC
+print(f"sigma={sigma:.0f} $/sqrt(h)  eta={eta:.2f} $*h/BTC  "
+      f"gamma={gamma:.3f} $/BTC")
+```
+
+For production, replace the single `aggTrades` page with a few days of the [historical dumps](https://data.binance.vision) and run the $\gamma$ regression on thousands of bins, not a handful.
+
+### Why crypto calibration is noisy, and what to do about it
+
+Run the $\gamma$ regression on real data and you will get an $R^2$ of a few percent and a coefficient that moves by a factor of 2–5 between days. This is not a bug in your code. The reasons are structural:
+
+- **Endogeneity.** Flow responds to price as much as price responds to flow. Momentum traders buy *because* the price rose; a naive OLS of returns on flow picks up their reaction and attributes it to impact. The clean fix is using your *own* fills (exogenous by construction) — which you only have after trading for a while.
+- **Concavity.** Real impact is concave in size — empirically close to square-root (Almgren, Thum, Hauptmann and Li, 2005, "Direct estimation of equity market impact", found an exponent near 0.6; the same concavity is robust in crypto). Fitting a line to a concave function means your $\eta$ and $\gamma$ depend on the size range in the sample. Calibrate at the participation rates you will actually trade.
+- **Fragmentation and derivative leadership.** BTCUSDT spot on Binance is one venue of many, and price discovery frequently happens on perps. Flow you never see moves the price you regress on, inflating the noise term.
+- **Regime dependence.** $\eta$ measured in the Asia session does not describe the US open; impact roughly doubles when volatility doubles. Calibrate per session, and re-fit at least weekly.
+
+The saving grace: the *trajectory* is forgiving. $\kappa \propto \sqrt{1/\eta}$, so a factor-of-2 error in $\eta$ moves $\kappa$ by only $\sqrt{2}$, and the cost function is flat near the optimum. Getting $\eta$ right to within a factor of 2 and $\lambda$ right to within an order of magnitude already captures most of the available improvement over TWAP. Precision matters for *pre-trade cost estimates*; robustness suffices for *scheduling*.
+
+## Where the model breaks, and the papers that fix it
+
+Almgren-Chriss is a scaffold, and knowing exactly which beam is load-bearing tells you which extension to reach for.
+
+**Nonlinear impact — Almgren (2003).** "Optimal execution with nonlinear impact functions and trading-enhanced risk" (Applied Mathematical Finance 10, 1–18) redoes the program with power-law temporary impact $h(v) = \eta v^\alpha$. For the empirically favored $\alpha \approx 1/2$ — the square-root law — the optimal trajectories change character: concave impact punishes bursts less than linear impact does, so optimal schedules become more front-loaded at the same $\lambda$. The qualitative structure (urgency parameter, efficient frontier) survives; the sinh formula does not.
+
+**Resilience and the LOB — Obizhaeva and Wang (2013).** "Optimal trading strategy and supply/demand dynamics" (Journal of Financial Markets 16(1), 1–32; the working paper circulated from 2005) replaces the temporary/permanent dichotomy with a limit order book that has finite depth and *exponentially decaying* impact: your trade eats the book, and the book refills at resilience rate $\rho$. The AC "temporary impact vanishes instantly" assumption is the $\rho \to \infty$ limit. The optimal strategy changes shape dramatically: a block trade at the start, a block at the end, and a constant trading rate in between — the blocks exploit the book's recovery. If your child-order interval is comparable to the venue's replenishment time (on crypto, seconds to a minute — it often is), you are in Obizhaeva-Wang territory, not Almgren-Chriss territory, and the $\Delta t_r$ fudge in the calibration above is your warning sign.
+
+**No-dynamic-arbitrage — Gatheral (2010).** "No-dynamic-arbitrage and market impact" (Quantitative Finance 10(7), 749–759) asks which combinations of instantaneous impact function $f(v)$ and decay kernel $G(t)$ are internally consistent, i.e. admit no round-trip strategy with negative expected cost. The results are sharp: exponential decay is compatible *only* with linear impact — combine exponential decay with square-root impact and the model can be pumped for money by an oscillating trade sequence; nonlinear impact requires power-law decay, with an inequality linking the two exponents (for impact $\sim v^\delta$ and decay $\sim t^{-\gamma_d}$, roughly $\gamma_d + \delta \geq 1$). This is the paper to read before you bolt a fancy decay kernel onto your impact model: most ad-hoc combinations are secretly arbitrageable, which in practice means your optimizer will discover the arbitrage and produce absurd oscillating schedules. If your "optimal" trajectory alternates buys and sells during a pure liquidation, you have violated Gatheral, not discovered alpha.
+
+**The ML sequels.** Two threads in this series build directly on this scaffold. First, reinforcement-learning execution: once you admit that impact is nonlinear, state-dependent, and partially observable, the closed form is gone, and RL (from Nevmyvaka, Feng and Kearns' 2006 Q-learning paper onward) is a natural way to search trajectory space — but every serious RL execution agent is benchmarked against, and often initialized from, the AC solution. Second, [neural price-impact models](/blog/price-impact-modeling-neural-networks): replacing $h(v) = \eta v$ with a learned functional of the order book state, while keeping the mean-variance scheduling logic on top. Neither sequel makes sense without knowing exactly what the linear-Gaussian baseline is and why it has the form it does.
+
+## What to take away
+
+The model is three assumptions, one difference equation, and one number. Linear permanent impact (forced by no-manipulation), linear temporary impact (an approximation you calibrate around), arithmetic Brownian noise. The optimum trades off inventory variance against impact cost, the entire strategy collapses into the urgency $\kappa = \sqrt{\lambda\sigma^2/\eta}$, and TWAP falls out as the $\lambda = 0$ degenerate case — which is the single most useful fact in the model, because it turns "should we TWAP this?" from a matter of habit into a checkable claim about risk aversion. Calibration is the real work: $\sigma$ is easy, $\eta$ is a factor-of-2 game, $\gamma$ is a research project, and the trajectory forgives all three. Implement it in an afternoon; spend the rest of the month on the regression diagnostics.
+
+## References
+
+- Almgren, R., Chriss, N. (2001). "Optimal execution of portfolio transactions." *Journal of Risk*, 3(2), 5–39.
+- Almgren, R. (2003). "Optimal execution with nonlinear impact functions and trading-enhanced risk." *Applied Mathematical Finance*, 10(1), 1–18.
+- Almgren, R., Thum, C., Hauptmann, E., Li, H. (2005). "Direct estimation of equity market impact." *Risk*, 18(7), 58–62.
+- Huberman, G., Stanzl, W. (2004). "Price manipulation and quasi-arbitrage." *Econometrica*, 72(4), 1247–1275.
+- Obizhaeva, A., Wang, J. (2013). "Optimal trading strategy and supply/demand dynamics." *Journal of Financial Markets*, 16(1), 1–32.
+- Gatheral, J. (2010). "No-dynamic-arbitrage and market impact." *Quantitative Finance*, 10(7), 749–759.
+- Nevmyvaka, Y., Feng, Y., Kearns, M. (2006). "Reinforcement learning for optimized trade execution." *ICML 2006*.

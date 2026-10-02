@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "slug": "almgren-chriss-optimal-execution",
+  "language": "ru",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/almgren-chriss-optimal-execution.ru.md",
+  "article_sha256": "c7c7511ecf3febf0772614ba8b7a5e29811ee1c57282260d6330546da458d978",
+  "notebook_title": "MM sources | almgren-chriss-optimal-execution | RU",
+  "source_title": "MM article almgren-chriss-optimal-execution RU c7c7511ecf3f",
+  "source_text_path": "storyboards/notebooklm-source-queue/briefs/09-almgren-chriss-optimal-execution/ru/source.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/briefs/09-almgren-chriss-optimal-execution/ru/slides_prompt.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/briefs/09-almgren-chriss-optimal-execution/ru/audio_prompt.txt",
+  "article_title": "Алмгрен-Чрисс без размахивания руками: оптимальное исполнение, которое можно реализовать за один вечер",
+  "article_date": "2026-07-14",
+  "article_draft": false,
+  "article_draft_frontmatter_present": true,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "notebooklm_library": "not_checked; external source/notebook duplicate reconciliation pending before submission",
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "9832c17a0272211696d2c58b873c84b609547c29390d7fc367e8baabf7107916",
+  "slides_prompt_sha256": "505c0a11b19a99bdfd3d2844f475f7f4b1c946f1405d108b64983ce6665bcbeb",
+  "audio_prompt_sha256": "74f434ffe2550dbdaa778ea4d10ac2fc65d3be9122f4adf43e743e63a0952109"
+}

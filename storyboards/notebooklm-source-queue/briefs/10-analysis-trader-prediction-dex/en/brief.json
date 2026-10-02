@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "slug": "analysis-trader-prediction-dex",
+  "language": "en",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/analysis-trader-prediction-dex.en.md",
+  "article_sha256": "ee6f054e932c7b13b5314c6c250576a067b982aa228ae49c83c78c7094681f60",
+  "notebook_title": "MM sources | analysis-trader-prediction-dex | EN",
+  "source_title": "MM article analysis-trader-prediction-dex EN ee6f054e932c",
+  "source_text_path": "storyboards/notebooklm-source-queue/briefs/10-analysis-trader-prediction-dex/en/source.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/briefs/10-analysis-trader-prediction-dex/en/slides_prompt.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/briefs/10-analysis-trader-prediction-dex/en/audio_prompt.txt",
+  "article_title": "Analysis of Trader Behavior Prediction Capabilities in DEX Based on Identification and Modeling",
+  "article_date": "2025-05-18",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "notebooklm_library": "not_checked; external source/notebook duplicate reconciliation pending before submission",
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "d9c6ff91cd9e4d5aab3d18e04fc3330792204ac640c7bc04b3d68d3c6b6648df",
+  "slides_prompt_sha256": "6b9dae658313c3920a75f7db6d36496eefdfb12cb38d6059343fefb8609f2923",
+  "audio_prompt_sha256": "5217f17447c058812711aef0bff29f6f54f435267b53d5148f7c701a168eed99"
+}

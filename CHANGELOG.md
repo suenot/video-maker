@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Freeze EN/RU source briefs for Almgren-Chriss execution and DEX trader behavior predictions, preserving full articles, section order, separate spoken-audio prompts and pending unit/evidence review.
 - Freeze EN/RU source briefs for AI4Finance Foundation and algo-investor-skills, preserving full articles, section-specific prompts, original exposure notation and pending external/editorial checks.
 - Freeze the next EN/RU source briefs for agentic AI investments and AI Hedge Fund, retaining full articles, section-specific slide/audio prompts, input hashes and explicit external duplicate-check uncertainty.
 

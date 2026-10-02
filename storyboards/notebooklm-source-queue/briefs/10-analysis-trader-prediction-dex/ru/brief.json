@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "slug": "analysis-trader-prediction-dex",
+  "language": "ru",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/analysis-trader-prediction-dex.ru.md",
+  "article_sha256": "91816105cc36c365f57d089c4fd1586ace280617e638c1e9f028e6f57ab2375f",
+  "notebook_title": "MM sources | analysis-trader-prediction-dex | RU",
+  "source_title": "MM article analysis-trader-prediction-dex RU 91816105cc36",
+  "source_text_path": "storyboards/notebooklm-source-queue/briefs/10-analysis-trader-prediction-dex/ru/source.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/briefs/10-analysis-trader-prediction-dex/ru/slides_prompt.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/briefs/10-analysis-trader-prediction-dex/ru/audio_prompt.txt",
+  "article_title": "Анализ возможностей прогнозирования поведения трейдеров в DEX на основе идентификации и моделирования",
+  "article_date": "2025-05-18",
+  "article_draft": false,
+  "article_draft_frontmatter_present": false,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "notebooklm_library": "not_checked; external source/notebook duplicate reconciliation pending before submission",
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "618d887dd21d5d4e790c355db21f36531a883b35dd16cb27e2f1d14f5f5cb8f1",
+  "slides_prompt_sha256": "cd7bb2c3f58113d00864ecef3f4fa3374deb8e9f230913415164d62d49b288d0",
+  "audio_prompt_sha256": "ba721faa7c001ca621b8c19f07a8d5c336e18c90472c628708fdd3f58fdd09fe"
+}

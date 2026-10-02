@@ -1,0 +1,21 @@
+Create a separate NotebookLM Deep Dive audio overview from this article. Use only the attached source named "MM article analysis-trader-prediction-dex EN ee6f054e932c". Produce in English. Follow every article section and subsection in this exact order:
+1. Trader Identification in DEX
+2. Behavior Prediction and the "Desire Orderbook" Concept
+3. Components of the prediction model:
+4. Number of Active Traders as a Market Asset
+5. Detection of Manipulations on DEX
+6. 1. Self-Trading
+7. 2. Price-Setting
+8. 3. Pump-and-Dump
+9. Technical Solutions for Implementation
+10. Limitations and Ethical Considerations
+11. Conclusion
+12. Citation
+
+Keep the proposal and the evidence clearly separate. Explain the article's wallet-level tracking and trader embeddings, including its attributed claim of approximately 100 transactions and up to 84% recognition among 100,000 candidates; the source study, sample, metric and generalization require primary-source review. Do not turn wallet identification into verified real-person identity or assert that one address is one independent trader.
+Describe the proposed "desire orderbook" as a probabilistic projection of possible future orders, not a live order book or demonstrated liquidity. Cover its four inputs in order: historical patterns, current portfolio balances, temporal/market context, and behavioral triggers; distinguish observable onchain state from inferred intentions. Explain unique active traders as a proposed market-health, manipulation-resistance and future-liquidity signal, and flag address clustering, sybils and causality as unresolved assumptions rather than validated conclusions.
+Cover the article's three manipulation sections in order: self-trading with DEFIRANGER/Cash Flow Tree and related-address, overlapping-order and cycle signals; price-setting via order curves, fair-market simulations and irregularity; pump-and-dump with pre-launch, launch, pump and dump plus accumulation/pump/dump signs. State that order-book order placement applies to order-book DEXs and cannot be assumed for every liquidity-pool DEX. Avoid actionable manipulation instructions or accusations against specific users; signals need corroboration.
+Retain all four proposed implementation components: ML embeddings/prediction, transaction graphs, market simulation baselines, and real-time monitoring. Finish with privacy expectations, false positives, adversarial adaptation, high volatility and uncertainty, then the article conclusion, footnoted sources and citation. Keep claims about greater fairness, transparency, efficiency and prediction capability as the author's hypotheses pending editorial and primary-source review.
+
+Preserve all substantive details, examples, code, caveats, risk points, references and the source order. Attribute numerical, financial, research, company-specific and mutable facts to the article as unverified claims. Do not add outside facts, guaranteed returns or investment advice. This draft requires human editorial and primary-source review. External NotebookLM source/notebook and target-channel duplicates remain unverified; do not imply clearance.
+Use clear narration or dialogue, explain equations and units in spoken language, retain limitations and source citations, and end with the article conclusion.

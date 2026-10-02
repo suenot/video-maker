@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "slug": "almgren-chriss-optimal-execution",
+  "language": "en",
+  "article_path": "../marketmaker-cc-landing/src/content/blog/almgren-chriss-optimal-execution.en.md",
+  "article_sha256": "a5c016b06aa1fd4868b2307eb872693e970ade605edd53c1f8b0c8785306d450",
+  "notebook_title": "MM sources | almgren-chriss-optimal-execution | EN",
+  "source_title": "MM article almgren-chriss-optimal-execution EN a5c016b06aa1",
+  "source_text_path": "storyboards/notebooklm-source-queue/briefs/09-almgren-chriss-optimal-execution/en/source.txt",
+  "slides_prompt_path": "storyboards/notebooklm-source-queue/briefs/09-almgren-chriss-optimal-execution/en/slides_prompt.txt",
+  "audio_prompt_path": "storyboards/notebooklm-source-queue/briefs/09-almgren-chriss-optimal-execution/en/audio_prompt.txt",
+  "article_title": "Almgren-Chriss Without the Hand-Waving: Optimal Execution You Can Implement in an Afternoon",
+  "article_date": "2026-07-14",
+  "article_draft": false,
+  "article_draft_frontmatter_present": true,
+  "article_queue_state": "published_article_without_video_link",
+  "video_evidence": {
+    "article_youtube_frontmatter": null,
+    "queue_local_mp4": [],
+    "queue_manifest": null,
+    "local_slug_artifacts": [],
+    "notebooklm_library": "not_checked; external source/notebook duplicate reconciliation pending before submission",
+    "target_channel_studio": "not_checked; external duplicate reconciliation pending before final render or publish"
+  },
+  "editorial_status": "source_draft_requires_review",
+  "source_text_sha256": "79ea539f4d1100daee6cf58b8c44c76664558e984497117b23e39ed8539da8e5",
+  "slides_prompt_sha256": "5e8566855569bb80cc32af6fd7553f62529562d6836a3b49b39b011235cb2fe7",
+  "audio_prompt_sha256": "22d79307d58eb2f84706362075aa850165495f691c685b7a50dfe79466a5c6d3"
+}
