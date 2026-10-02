@@ -488,7 +488,12 @@ class Runner:
         card = page.locator("artifact-library-item").filter(has=page.locator("#artifact-labels-" + artifact["artifact_id"]))
         if await card.count() != 1:
             raise RuntimeError("Bound artifact unavailable")
-        await card.get_by_role("button", name="More", exact=True).click()
+        more = card.get_by_role("button", name="More", exact=True)
+        if await more.count() != 1:
+            raise RuntimeError("Unique bound-artifact menu control unavailable")
+        # Studio hover tooltips can intercept native pointer clicks. Open only
+        # this verified artifact's menu once, without hitting another control.
+        await more.evaluate("e=>{if(!e.isConnected || !e.getClientRects().length || e.disabled || e.getAttribute('aria-disabled')==='true')throw new Error('Bound-artifact menu control unavailable before dispatch');e.click()}")
         label = re.compile(r"Download PDF Document") if kind == "slides" else re.compile(r"\bDownload$")
         item = page.get_by_role("menuitem", name=label)
         if await item.count() != 1:

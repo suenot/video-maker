@@ -1732,7 +1732,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "ready",
           "baseline_ids": [],
           "prompt_sha256": "af1fe30b885c573b7b2bf4e2521b63e96177bbe7729266c1ede7874a3a8e4cf4",
           "requested_at": "2026-10-02T15:36:14.918474+00:00",
@@ -1742,8 +1742,8 @@
           "source_id": "327e67f1-8d0f-42eb-ad3a-c0661a3fbf0a",
           "submission_mode": "now",
           "artifact_id": "a5cbb1c7-2769-4dbe-ac9b-3501ce1eddcb",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T15:36:19.473715+00:00"
+          "card_text": "tablet\nUnread\n加密货币市场的统计套利与配对交易完全指南\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-02T20:06:17.434643+00:00"
         },
         "audio": {
           "state": "generating",
@@ -1795,7 +1795,31 @@
       "source_display_name": "MM article statistical-arbitrage-pairs-trading-cr…",
       "selected_source_ids": [
         "327e67f1-8d0f-42eb-ad3a-c0661a3fbf0a"
-      ]
+      ],
+      "last_error": {
+        "type": "TimeoutError",
+        "message": "Locator.click: Timeout 30000ms exceeded.",
+        "at": "2026-10-02T20:06:47.485557+00:00",
+        "stage": "download_bound_slides",
+        "cause": "Studio Data Table hover tooltip intercepted the bound artifact More button pointer click before its menu opened.",
+        "retry_not_before": "2026-10-02T20:19:00+00:00",
+        "next_safe_step": "Reconcile the same notebook/source/artifact IDs, then download the existing ready slides and audio using the guarded bound-artifact menu; do not generate or upload again.",
+        "artifact_id": "a5cbb1c7-2769-4dbe-ac9b-3501ce1eddcb",
+        "evidence": {
+          "log": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T200458Z.log",
+            "sha256": "4bbbbbefc36a6bb856fc20a014504acb78af32cf520dac23988ea1cac0b75074"
+          },
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/2026-10-02T200458Z-statistical-arbitrage-pairs-trading-crypto-zh-CN-error.png",
+            "sha256": "f2e192b96d098821493fabf50ab974f432f2d46f2d1744ca4dc112ba45351bc2"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/2026-10-02T200458Z-statistical-arbitrage-pairs-trading-crypto-zh-CN-controls.json",
+            "sha256": "283fa7799ddd65b5444404ed824395360596e1d672b4c8425e5ef7d7b58a3b47"
+          }
+        }
+      }
     },
     "statistical-arbitrage-pairs-trading-crypto:zh-TW": {
       "slug": "statistical-arbitrage-pairs-trading-crypto",
@@ -1944,19 +1968,19 @@
       ]
     }
   },
-  "checked_at": "2026-10-02T15:38:17.223435+00:00",
+  "checked_at": "2026-10-02T20:08:19.129071+00:00",
   "browser_geometry_requested": {
-    "width": 1992,
+    "width": 1997,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 64,
+    "x": 59,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1992,
+    "outer_width": 1997,
     "outer_height": 1290,
-    "inner_width": 1952,
+    "inner_width": 1957,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },

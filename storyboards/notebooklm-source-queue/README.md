@@ -134,6 +134,9 @@ Validate downloaded bytes in a temporary file before promoting them to the
 source directory. `pdfinfo` must confirm at least one page; audio must contain
 an audio stream, positive duration and a passing full FFmpeg decode. Save
 original artifact ID, source ID, bytes, SHA-256, page count or audio duration.
+Open only the exact bound artifact's unique, visible and enabled menu control;
+dispatch it once without native pointer interception by Studio hover tooltips.
+Continue to require the matching PDF/audio download menu item before saving bytes.
 On later passes, verify completed artifact hashes and skip their generation
 checks. A subsequent article edit or attached video must not block unfinished
 jobs elsewhere in the queue; completed jobs retain their frozen input evidence.

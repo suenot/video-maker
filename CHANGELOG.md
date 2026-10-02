@@ -30,6 +30,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Preserve the rejected bilingual order-types Blueprint package for provenance; record the user's quality rejection and the recovered existing NotebookLM PDF/audio flow before further production.
 - Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
 
+## [1.2.3] - 2026-10-03
+
+### Fixed
+
+- Open the uniquely bound artifact's verified download menu once without native pointer interception by a Studio hover tooltip; retain exact PDF/audio menu matching and original-byte integrity checks.
+
 ## [1.2.2] - 2026-10-02
 
 ### Fixed
