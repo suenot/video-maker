@@ -1117,7 +1117,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "generating",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 13:51."
@@ -1132,11 +1132,11 @@
           "source_id": "63e2759c-dd95-4ff6-839a-8ecbaa02093b",
           "submission_mode": "later",
           "artifact_id": "f3fe2594-ca8b-4047-be24-3f0a8bf44c73",
-          "card_text": "tablet\nAI4Finance Foundation: FinGPT, FinRL, and FinRobot Ecosystem\nScheduled for after 2pm\nmore_vert",
-          "observed_at": "2026-10-02T09:57:57.979938+00:00"
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T10:11:47.259683+00:00"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Technical Deep Dive\n+ Beginner Overview\n+ Strategic Workflow\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 13:51."
@@ -1153,8 +1153,15 @@
           "source_id": "63e2759c-dd95-4ff6-839a-8ecbaa02093b",
           "submission_mode": "later",
           "artifact_id": "64f253bb-d2bb-41d9-a9e6-3084b2b668a9",
-          "card_text": "audio_spark\nAI4Finance Foundation: FinGPT, FinRL, and FinRobot Ecosystem\nScheduled for after 2pm\nmore_vert",
-          "observed_at": "2026-10-02T09:57:59.001152+00:00"
+          "card_text": "audio_spark\nUnread\nЭкосистема AI4Finance для алгоритмического трейдинга\n16:19 · Deep Dive · 1 source · 3m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T10:11:48.284511+00:00",
+          "duration_seconds": 979.858866,
+          "path": "input/notebooklm-sources/ai4finance-foundation-guide/ru/audio.m4a",
+          "sha256": "67a085dec813e8d72aa7afd7785564e6beea71f9a090e3027afa2feb0fbfa98d",
+          "bytes": 31536534,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T10:12:31.198376+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -1194,7 +1201,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "76fbef666d3e76462a175927af314ecc7a5cd44bb5569d5079e4a9a6696e87f0",
           "requested_at": "2026-10-02T09:58:23.061532+00:00",
@@ -1204,11 +1211,18 @@
           "source_id": "a2b4e108-7b80-4903-bc15-d886de3bf908",
           "submission_mode": "now",
           "artifact_id": "58a1ddfe-da00-4e14-b0e9-5a57567dfcd4",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T09:58:28.950757+00:00"
+          "card_text": "tablet\nUnread\nScam-Proof Investor Proposals with Claude Code\n1 source · 4m ago\nmore_vert",
+          "observed_at": "2026-10-02T10:12:37.926374+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/algo-investor-skills/en/slides.pdf",
+          "sha256": "10bd31e2a3c11f247561b7e40cc46c7b5df8a4650c109e09f1f2019776309f24",
+          "bytes": 15080533,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T10:12:56.419013+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "58a1ddfe-da00-4e14-b0e9-5a57567dfcd4"
           ],
@@ -1220,8 +1234,15 @@
           "source_id": "a2b4e108-7b80-4903-bc15-d886de3bf908",
           "submission_mode": "now",
           "artifact_id": "a232e02f-8132-407a-b484-5adb6933b2b4",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-02T09:58:41.451197+00:00"
+          "card_text": "audio_spark\nUnread\nScam Proofing Algorithmic Trading Proposals\n24:59 · Deep Dive · 1 source · 5m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-02T10:12:57.446045+00:00",
+          "duration_seconds": 1499.637551,
+          "path": "input/notebooklm-sources/algo-investor-skills/en/audio.m4a",
+          "sha256": "6b84ebac75c38cadf310e2286069d9e2dca6262aadfaee85e9777fc20e297917",
+          "bytes": 48265024,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-02T10:13:29.446347+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -1261,10 +1282,10 @@
       },
       "artifacts": {
         "slides": {
-          "state": "not_submitted",
+          "state": "generating",
           "baseline_ids": [],
           "prompt_sha256": "3b61c6bc9b0a2d020fd05ffe2798627baa2d684725082e48478e150e5ba4f55f",
-          "requested_at": "2026-10-02T09:59:18.162591+00:00",
+          "requested_at": "2026-10-02T10:13:43.043572+00:00",
           "language_selection": [
             "русский"
           ],
@@ -1309,7 +1330,26 @@
               "temp/notebooklm-source-queue/algo-investor-skills-ru-controls.json": "87188b8411917a70eadfb8e3c43852e1493dd8aab2a9072a5b584ef4d82b4d03",
               "temp/notebooklm-source-queue/algo-investor-skills-ru-error.png": "011d21cade696220c449ed406ad87a3caa45f5d3df010aa24061f1a2c81afc4f"
             }
-          }
+          },
+          "artifact_id": "5719504a-e57d-4d07-b780-c88658373e90",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-02T10:13:47.594067+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "5719504a-e57d-4d07-b780-c88658373e90"
+          ],
+          "prompt_sha256": "0ecb5da142011eca7737a00761f33eaa09c9df020e37485becb1cfdb0439be83",
+          "requested_at": "2026-10-02T10:13:58.352093+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "6739c6a4-8aee-4fa4-8292-1100afba40b5",
+          "submission_mode": "now",
+          "artifact_id": "8ea55762-f570-4bd9-9d7a-5fc1055510d6",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-02T10:14:02.900290+00:00"
         }
       },
       "notebook_intent": {
@@ -1335,20 +1375,10 @@
       "source_display_name": "MM article algo-investor-skills RU 8f80e51658ce",
       "selected_source_ids": [
         "6739c6a4-8aee-4fa4-8292-1100afba40b5"
-      ],
-      "last_error": {
-        "type": "TimeoutError",
-        "message": "Locator.click: Timeout 30000ms exceeded.",
-        "at": "2026-10-02T09:59:48.167416+00:00",
-        "stage": "submit_slides",
-        "retry_not_before": "2026-10-02T10:10:56.533000+00:00",
-        "evidence_path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T095556Z.log",
-        "evidence_sha256": "fab7565a62cd461472eacf5e2301b6056888dc78135d26c4a21b701296ffa960",
-        "next_safe_step": "Resume this existing RU notebook after the retry deadline. Verify that artifact IDs still match the empty saved baseline before dispatching the guarded generation control once. If IDs changed, reconcile and do not generate."
-      }
+      ]
     }
   },
-  "checked_at": "2026-10-02T10:05:21.398727+00:00",
+  "checked_at": "2026-10-02T10:14:02.902042+00:00",
   "browser_geometry_requested": {
     "width": 1991,
     "height": 1290,
