@@ -159,6 +159,33 @@ class Runner:
         until = self.state.get("quota", {}).get("not_before")
         return bool(until and datetime.now(timezone.utc) < datetime.fromisoformat(until))
 
+    def verify_downloaded(self, jobs=None):
+        verified = 0
+        for job in self.state["jobs"].values() if jobs is None else jobs:
+            for artifact in job.get("artifacts", {}).values():
+                if artifact.get("state") == "downloaded_pending_editorial_review":
+                    if sha(ROOT / artifact["path"]) != artifact["sha256"]:
+                        raise RuntimeError("Downloaded source hash changed")
+                    verified += 1
+        return verified
+
+    def deferred_jobs(self, briefs):
+        current = datetime.now(timezone.utc)
+        deferred = {}
+        for brief in briefs:
+            key = self.identity(brief)
+            job = self.state["jobs"].get(key)
+            if not job:
+                return None
+            artifacts = job.get("artifacts", {})
+            if len(artifacts) == 2 and all(a.get("state") == "downloaded_pending_editorial_review" for a in artifacts.values()):
+                continue
+            retry_after = (job.get("last_error") or {}).get("retry_not_before")
+            if not retry_after or current >= datetime.fromisoformat(retry_after):
+                return None
+            deferred[key] = retry_after
+        return deferred
+
     async def source_quota(self, page, *, scheduled=False):
         text = await page.locator("body").inner_text()
         notice = re.search(r"AI usage limit reached\.[^\n]*", text, re.I)
@@ -571,14 +598,16 @@ class Runner:
 
     async def run(self):
         if self.quota_active():
-            verified = 0
-            for job in self.state["jobs"].values():
-                for artifact in job.get("artifacts", {}).values():
-                    if artifact.get("state") == "downloaded_pending_editorial_review":
-                        if sha(ROOT / artifact["path"]) != artifact["sha256"]:
-                            raise RuntimeError("Downloaded source hash changed")
-                        verified += 1
+            verified = self.verify_downloaded()
             print(json.dumps({"state": "quota_wait", "not_before": self.state["quota"]["not_before"], "browser_opened": False, "local_originals_verified": verified}), flush=True)
+            return
+        briefs = self.briefs()
+        if not briefs:
+            raise RuntimeError("No frozen source briefs")
+        deferred = self.deferred_jobs(briefs)
+        if deferred is not None:
+            verified = self.verify_downloaded()
+            print(json.dumps({"state": "retry_wait" if deferred else "source_queue_complete", "deferred_jobs": deferred, "browser_opened": False, "local_originals_verified": verified}), flush=True)
             return
         self.settings = json.loads(self.args.settings.read_text())
         sys.path[:0] = [self.settings["gaia_path"], str(ROOT.parent / "video_youtube_publish")]
@@ -590,9 +619,6 @@ class Runner:
         if not common.CAMOUFOX_PROFILE_DIR.is_dir() or not common.FINGERPRINT_FILE.is_file():
             raise RuntimeError("Saved Camoufox profile/fingerprint unavailable; no bootstrap")
         nlm.OUTPUT_DIR = RUNTIME
-        briefs = self.briefs()
-        if not briefs:
-            raise RuntimeError("No frozen source briefs")
         new_jobs = 0
         geometry = normal_browser_geometry()
         self.state["browser_geometry_requested"] = geometry
@@ -610,9 +636,7 @@ class Runner:
                 key = self.identity(brief)
                 completed = self.state["jobs"].get(key)
                 if completed and len(completed["artifacts"]) == 2 and all(a.get("state") == "downloaded_pending_editorial_review" for a in completed["artifacts"].values()):
-                    for artifact in completed["artifacts"].values():
-                        if sha(ROOT / artifact["path"]) != artifact["sha256"]:
-                            raise RuntimeError("Downloaded source hash changed")
+                    self.verify_downloaded([completed])
                     continue
                 retry_after = ((completed or {}).get("last_error") or {}).get("retry_not_before")
                 if retry_after and datetime.now(timezone.utc) < datetime.fromisoformat(retry_after):

@@ -126,6 +126,11 @@ have a 120-second deadline; a timeout preserves the insertion intent for review.
 If a job's saved failure includes `retry_not_before`, skip that job until its
 deadline while allowing other eligible source jobs to proceed. Preserve its
 failure evidence and all bound identities during this wait.
+If every prepared brief is complete or deferred until a future retry deadline,
+verify downloaded originals locally and return before reading profile settings
+or opening Camoufox. A new brief, unfinished artifact or expired retry deadline
+still follows the normal reconciliation pass. Keep the state and pending intents
+unchanged during this local wait.
 
 | State | Next action |
 | --- | --- |
