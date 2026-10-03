@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Preserve the Taiwan Order Flow Imbalance source intent after low-battery Mac hibernation interrupted insertion confirmation; retain power/log evidence and reconcile the existing source IDs before any further insertion or generation.
 - Prepare subsequent frozen source briefs while already-bound generations run, retaining the active-artifact cap and the documented browser-free quota wait.
 - Record the separate continuous NotebookLM source-draft SOP and acceptance conditions, full-size Camoufox launch policy, and the user's vertical montage reference.
 - Record the page-4-derived EN/RU Shorts v2 correction and independent final-frame checks; retain rejected artifacts and pending desktop/human review without blocking source drafting.

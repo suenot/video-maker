@@ -2035,7 +2035,7 @@
         "at": "2026-10-02T20:23:42.347064+00:00",
         "sha256": "1be52d0a5c49921dbc55474be6e397d86b5108d77f2d214c1d2d691c7e749fe8",
         "baseline_ids": [],
-        "dispatch_state": "not_dispatched",
+        "dispatch_state": "dispatch_unknown",
         "pre_dispatch_evidence": {
           "log": {
             "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T201958Z.log",
@@ -2054,29 +2054,32 @@
             "sha256": "f12e73a22a44ee99623ccf90eedb9dbc9eb8e2ce135bae749f813d0c17a8e7be",
             "guard": "add_source_text returned False after ensure_add_source_dialog failed; Copied text, paste and Insert were not reached."
           }
-        }
+        },
+        "pre_dispatch_recovery_verified_at": "2026-10-02T20:51:13.328722+00:00"
       },
       "last_error": {
-        "type": "RuntimeError",
-        "message": "Interrupted notebook creation requires binding its saved candidate; no duplicate creation",
-        "at": "2026-10-02T20:37:35.808830+00:00",
-        "stage": "source_pre_dispatch_recovery",
-        "cause": "The sole new permanent notebook UUID is reconciled. The earlier source helper failed before Copied text, paste or Insert; first insertion is pending guarded recovery.",
-        "retry_not_before": "2026-10-02T20:49:00+00:00",
-        "next_safe_step": "Navigate only to the reconciled permanent notebook, verify the unchanged source-ID baseline and failure evidence hashes, then perform the first full-article insertion once; never repeat an unknown/processing insertion.",
+        "type": "TimeoutError",
+        "message": "TimeoutError",
+        "at": "2026-10-03T05:27:11.841379+00:00",
+        "stage": "source_insertion_confirmation",
+        "cause": "The Mac entered Low Power Sleep at 2026-10-03 00:51:17 Asia/Tbilisi with 1% charge, two seconds after pasting the full source, and woke from Hibernate on AC attach at 09:25:21. Source confirmation and its diagnostic screenshot timed out after resume. Insert path was reached, but the permanent source-ID outcome remains unknown.",
+        "retry_not_before": "2026-10-03T05:45:00+00:00",
+        "next_safe_step": "After the retry deadline, load only the same permanent notebook and reconcile source IDs against the retained empty baseline. Bind a sole permanent addition or wait for pending_upload_doc_id_; retain an unresolved intent if no/ambiguous IDs appear. Never insert again or generate before the source ID is bound.",
         "evidence": {
           "log": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T203458Z.log",
-            "sha256": "7d72c071cd5443aaf6b9d11257da5ab72afa6448da6d5fa32a7e0a1cdf29dc5f"
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T204958Z.log",
+            "sha256": "14f82bbe44ebe21188c98bf9d649d9a8e3dc86ede6a5816dfd1cf0cd9b6ad27f"
           },
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/2026-10-02T203458Z-order-flow-imbalance-prediction-zh-TW-error.png",
-            "sha256": "54127f52e0755092bd31a79e7dac43df367159c5082baccdc1e37272355f30fe"
-          },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/2026-10-02T203458Z-order-flow-imbalance-prediction-zh-TW-controls.json",
-            "sha256": "c41924685fa15b847bf9175b8e07d2947cd2a2c61abc553920e25fb82720f758"
+          "power_log": {
+            "path": "temp/notebooklm-source-queue/power-evidence-2026-10-03T052808Z.txt",
+            "sha256": "6542dc5dff679b4f2fd5c58058e7331c573837a8f42d377e96fc6c60798511e1"
           }
+        },
+        "observed_clock_gap": {
+          "pasted_at_local": "2026-10-03 00:51:15 Asia/Tbilisi",
+          "source_wait_timeout_local": "2026-10-03 09:25:22 Asia/Tbilisi",
+          "duration_seconds": 30847,
+          "sleep_cause": "confirmed macOS Low Power Sleep; 30844-second sleep interval"
         }
       },
       "notebook": "https://notebook.google.com/notebook/c0dcc0d9-0bc9-4ac1-a0d5-12c5cc879ecc",
@@ -2085,10 +2088,11 @@
           "title": "Untitled notebook",
           "href": "/notebook/c0dcc0d9-0bc9-4ac1-a0d5-12c5cc879ecc"
         }
-      ]
+      ],
+      "diagnostic_error": "TimeoutError"
     }
   },
-  "checked_at": "2026-10-02T20:40:02.229893+00:00",
+  "checked_at": "2026-10-03T05:31:33.132674+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
