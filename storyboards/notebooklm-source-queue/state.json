@@ -1491,7 +1491,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 18:51."
@@ -1506,8 +1506,15 @@
           "source_id": "7b0ed6f3-6797-42b2-98ef-cf7e3d4c292d",
           "submission_mode": "later",
           "artifact_id": "2069c930-fbed-423f-b697-2cc70e2c95e4",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-02T20:23:30.254134+00:00"
+          "card_text": "tablet\nUnread\nАлгоритмы Алмгрена и Крисса\n1 source · 9h ago\nmore_vert",
+          "observed_at": "2026-10-03T05:35:46.041815+00:00",
+          "pages": 13,
+          "path": "input/notebooklm-sources/almgren-chriss-optimal-execution/ru/slides.pdf",
+          "sha256": "f9cd7bc5a8f915aec91a58f2df87acc726fae603b05cecfd49ce612b0edb1090",
+          "bytes": 11579420,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T05:36:10.436196+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -2090,21 +2097,159 @@
         }
       ],
       "diagnostic_error": "TimeoutError"
+    },
+    "twap-vwap-pov-execution-algorithms:zh-CN": {
+      "slug": "twap-vwap-pov-execution-algorithms",
+      "language": "zh-CN",
+      "article_sha256": "1074161dfda44ea4c7e6dd5e458da1ce1c5b6b3516b9a8a1a2edfd81b602624a",
+      "input_hashes": {
+        "article": "1074161dfda44ea4c7e6dd5e458da1ce1c5b6b3516b9a8a1a2edfd81b602624a",
+        "source_text": "2b3da09a1bc24d2ebf8f2f479e56967ad63604e007dbeb29f386aeb1e342014e",
+        "slides_prompt": "db80bff2a4d008849bb4d7830c604bba89abe434368a4fa0137dfb3e0cbca251",
+        "audio_prompt": "c0c112a6d8e8ed191660bddd77f6ebf4a90ca7ac2a60d4b2682c04060e6febb7"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "db80bff2a4d008849bb4d7830c604bba89abe434368a4fa0137dfb3e0cbca251",
+          "requested_at": "2026-10-03T05:36:51.325975+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "68078c1d-71df-4b21-9772-18ec5ddcfc8f",
+          "submission_mode": "now",
+          "artifact_id": "eacf95dc-88b2-4b29-8ed4-e69cf87dd2b7",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T05:36:55.880131+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "eacf95dc-88b2-4b29-8ed4-e69cf87dd2b7"
+          ],
+          "prompt_sha256": "c0c112a6d8e8ed191660bddd77f6ebf4a90ca7ac2a60d4b2682c04060e6febb7",
+          "requested_at": "2026-10-03T05:37:21.458643+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "68078c1d-71df-4b21-9772-18ec5ddcfc8f",
+          "submission_mode": "now",
+          "artifact_id": "fada5037-9759-4e73-b249-18b5594c1179",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T05:37:26.015909+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T05:36:18.285349+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/twap-vwap-pov-execution-algorithms-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "a7cd670c75228325ccecbce7ae12fe93c665b50df409d7e62ae156959d9c3e84",
+        "baseline_count": 281,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T05:36:20.382289+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/76922920-9392-4ae9-ae25-6d3874bbc47f",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T05:36:24.444126+00:00",
+        "sha256": "2b3da09a1bc24d2ebf8f2f479e56967ad63604e007dbeb29f386aeb1e342014e",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "68078c1d-71df-4b21-9772-18ec5ddcfc8f",
+      "source_title": "MM article twap-vwap-pov-execution-algorithms ZH-CN 1074161dfda4",
+      "source_sha256": "2b3da09a1bc24d2ebf8f2f479e56967ad63604e007dbeb29f386aeb1e342014e",
+      "state": "source_ready",
+      "source_display_name": "MM article twap-vwap-pov-execution-algorithms ZH-…",
+      "selected_source_ids": [
+        "68078c1d-71df-4b21-9772-18ec5ddcfc8f"
+      ]
+    },
+    "twap-vwap-pov-execution-algorithms:zh-TW": {
+      "slug": "twap-vwap-pov-execution-algorithms",
+      "language": "zh-TW",
+      "article_sha256": "b1df9ff1db170335f25f74d373bf16d932c5cc23178a23d2885306ec18881307",
+      "input_hashes": {
+        "article": "b1df9ff1db170335f25f74d373bf16d932c5cc23178a23d2885306ec18881307",
+        "source_text": "396d6454a5620293da708803f3524054e64e376fa0d1d58570e66044eae63a38",
+        "slides_prompt": "b927afc44c42cd4b9c1fa67b91dc8fb5a9aae527b188e9e26c109a93d33fbc78",
+        "audio_prompt": "0a7ebf9aadd0a273f02bd817a34a19d12e9d42f3876c17cd03c3fda1104266db"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "b927afc44c42cd4b9c1fa67b91dc8fb5a9aae527b188e9e26c109a93d33fbc78",
+          "requested_at": "2026-10-03T05:38:06.814175+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "ab16a081-b5f2-4525-b3f5-a4300656917d",
+          "submission_mode": "now",
+          "artifact_id": "52c967dd-19a0-4d6b-93cd-ee0645bf45b1",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T05:38:11.369415+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "52c967dd-19a0-4d6b-93cd-ee0645bf45b1"
+          ],
+          "prompt_sha256": "0a7ebf9aadd0a273f02bd817a34a19d12e9d42f3876c17cd03c3fda1104266db",
+          "requested_at": "2026-10-03T05:38:36.941798+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "ab16a081-b5f2-4525-b3f5-a4300656917d",
+          "submission_mode": "now",
+          "artifact_id": "f480130e-2a2d-40d5-b775-c822266027dc",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T05:38:41.501709+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T05:37:33.773179+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/twap-vwap-pov-execution-algorithms-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "0984c7c50aaed4f7eafd9a59d39ceb534df874519c8b9cca89d00e3817b2ad3e",
+        "baseline_count": 282,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T05:37:35.876849+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/bd4a870c-b3bc-4c92-b46a-968441122146",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T05:37:39.969976+00:00",
+        "sha256": "396d6454a5620293da708803f3524054e64e376fa0d1d58570e66044eae63a38",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "ab16a081-b5f2-4525-b3f5-a4300656917d",
+      "source_title": "MM article twap-vwap-pov-execution-algorithms ZH-TW b1df9ff1db17",
+      "source_sha256": "396d6454a5620293da708803f3524054e64e376fa0d1d58570e66044eae63a38",
+      "state": "source_ready",
+      "source_display_name": "MM article twap-vwap-pov-execution-algorithms ZH-…",
+      "selected_source_ids": [
+        "ab16a081-b5f2-4525-b3f5-a4300656917d"
+      ]
     }
   },
-  "checked_at": "2026-10-03T05:31:33.132674+00:00",
+  "checked_at": "2026-10-03T05:38:41.503910+00:00",
   "browser_geometry_requested": {
-    "width": 1997,
+    "width": 1998,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 59,
+    "x": 58,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1997,
+    "outer_width": 1998,
     "outer_height": 1290,
-    "inner_width": 1957,
+    "inner_width": 1958,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
