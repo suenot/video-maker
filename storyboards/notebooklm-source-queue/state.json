@@ -3472,7 +3472,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "86455315e96638305abdcc305625d2a19b7be301a4f49ad8138bf4027341e349",
           "requested_at": "2026-10-03T16:38:12.788666+00:00",
@@ -3482,11 +3482,18 @@
           "source_id": "0cfa2458-ac4e-4018-a4a1-204f5f98adda",
           "submission_mode": "now",
           "artifact_id": "4e12da69-0882-45be-b0ad-6b9b5c6dc13b",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T16:38:17.341280+00:00"
+          "card_text": "tablet\nUnread\nDEX 交易者行為預測與操縱檢測\n1 source · 5m ago\nmore_vert",
+          "observed_at": "2026-10-03T16:51:54.494259+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/analysis-trader-prediction-dex/zh-TW/slides.pdf",
+          "sha256": "754ee1484a3375f986bf8f95ecaf0336421d68eae6a3ca02a6db80f21736464f",
+          "bytes": 15229755,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T16:52:07.279572+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "4e12da69-0882-45be-b0ad-6b9b5c6dc13b"
           ],
@@ -3498,8 +3505,15 @@
           "source_id": "0cfa2458-ac4e-4018-a4a1-204f5f98adda",
           "submission_mode": "now",
           "artifact_id": "5b3d7908-bd18-4d75-b872-da84e0051e84",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T16:38:34.737795+00:00"
+          "card_text": "audio_spark\nUnread\nAI預測DEX交易意圖\n16:17 · Deep Dive · 1 source · 5m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T16:52:08.309597+00:00",
+          "duration_seconds": 977.211791,
+          "path": "input/notebooklm-sources/analysis-trader-prediction-dex/zh-TW/audio.m4a",
+          "sha256": "1fcb8c47a8b2ad1af1a5bb72727adc1a86f25c93721c6e4f7b482708f6042ceb",
+          "bytes": 31451256,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T16:52:37.712932+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -3530,7 +3544,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-03T16:38:34.740914+00:00",
+  "checked_at": "2026-10-03T16:52:37.716179+00:00",
   "browser_geometry_requested": {
     "width": 2000,
     "height": 1290,
