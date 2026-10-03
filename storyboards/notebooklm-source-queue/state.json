@@ -3306,7 +3306,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "cd7bb2c3f58113d00864ecef3f4fa3374deb8e9f230913415164d62d49b288d0",
           "requested_at": "2026-10-03T16:23:32.387150+00:00",
@@ -3316,11 +3316,18 @@
           "source_id": "18ba2564-2236-47db-b2ad-1497739fbdf4",
           "submission_mode": "now",
           "artifact_id": "f4fa2b01-6005-4358-8cea-48c30be57d1d",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T16:23:36.938624+00:00"
+          "card_text": "tablet\nUnread\nМоделирование поведения трейдеров в DEX\n1 source · 2m ago\nmore_vert",
+          "observed_at": "2026-10-03T16:36:22.837469+00:00",
+          "pages": 13,
+          "path": "input/notebooklm-sources/analysis-trader-prediction-dex/ru/slides.pdf",
+          "sha256": "92d0dfc9858fb128a33ba963f89f9af107cef4500706390edadd7d33fc9e56e6",
+          "bytes": 14208944,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T16:36:36.439869+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "f4fa2b01-6005-4358-8cea-48c30be57d1d"
           ],
@@ -3332,8 +3339,15 @@
           "source_id": "18ba2564-2236-47db-b2ad-1497739fbdf4",
           "submission_mode": "now",
           "artifact_id": "14caf8cd-f115-4b48-aabf-80544a77afb1",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T16:23:54.113583+00:00"
+          "card_text": "audio_spark\nUnread\nКак ИИ предсказывает поведение трейдеров DEX\n15:13 · Deep Dive · 1 source · 4m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T16:36:37.468814+00:00",
+          "duration_seconds": 913.403356,
+          "path": "input/notebooklm-sources/analysis-trader-prediction-dex/ru/audio.m4a",
+          "sha256": "46582453f2f7d6c0e302e9602b44e6695a13e8b887c4eed1084be245996e01b6",
+          "bytes": 29397698,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T16:37:04.702022+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -3375,7 +3389,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "2f9600b9730f95848b72b817c0de48a7c7b308d7827d83e2b59fab0a9bad17db",
           "requested_at": "2026-10-03T16:24:22.809881+00:00",
@@ -3385,11 +3399,18 @@
           "source_id": "3bb76086-fec4-4d87-ba6c-d79f78c53609",
           "submission_mode": "now",
           "artifact_id": "cb99d1d2-50cd-4da2-b7da-09429ab078c3",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T16:24:27.364030+00:00"
+          "card_text": "tablet\nUnread\nDEX Trader Behavior Analytics\n1 source · 5m ago\nmore_vert",
+          "observed_at": "2026-10-03T16:37:11.358480+00:00",
+          "pages": 13,
+          "path": "input/notebooklm-sources/analysis-trader-prediction-dex/zh-CN/slides.pdf",
+          "sha256": "fb622d7658d96add4661075a5819f2638e0f2bcefdfd7748913367b34cd7e5b8",
+          "bytes": 12939214,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T16:37:18.942443+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "cb99d1d2-50cd-4da2-b7da-09429ab078c3"
           ],
@@ -3401,8 +3422,15 @@
           "source_id": "3bb76086-fec4-4d87-ba6c-d79f78c53609",
           "submission_mode": "now",
           "artifact_id": "2649999f-d85a-4e4a-999c-c5a74f7500ac",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T16:24:44.440500+00:00"
+          "card_text": "audio_spark\nUnread\nAI看透DEX交易底牌\n13:58 · Deep Dive · 1 source · 1m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T16:37:19.972037+00:00",
+          "duration_seconds": 839.006621,
+          "path": "input/notebooklm-sources/analysis-trader-prediction-dex/zh-CN/audio.m4a",
+          "sha256": "67d5b114a4c6fd5cb5a0fa8c40a37e10d396948e0a5e549e2580760fe4d94859",
+          "bytes": 27003326,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T16:37:44.360314+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -3431,9 +3459,78 @@
       "selected_source_ids": [
         "3bb76086-fec4-4d87-ba6c-d79f78c53609"
       ]
+    },
+    "analysis-trader-prediction-dex:zh-TW": {
+      "slug": "analysis-trader-prediction-dex",
+      "language": "zh-TW",
+      "article_sha256": "a4b2a3b1124df69cb6af4fbdb09ca442d5dca1c0d9c1e4279aff88ebe65ea906",
+      "input_hashes": {
+        "article": "a4b2a3b1124df69cb6af4fbdb09ca442d5dca1c0d9c1e4279aff88ebe65ea906",
+        "source_text": "735d593be585e8c9c839f6b2aa0f19c8bd2149f86b1dd9926b8366016958c013",
+        "slides_prompt": "86455315e96638305abdcc305625d2a19b7be301a4f49ad8138bf4027341e349",
+        "audio_prompt": "5bd3e0deeab1087c8e0bc81e95bf95eec2f39058ada49808715567a581475823"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "86455315e96638305abdcc305625d2a19b7be301a4f49ad8138bf4027341e349",
+          "requested_at": "2026-10-03T16:38:12.788666+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "0cfa2458-ac4e-4018-a4a1-204f5f98adda",
+          "submission_mode": "now",
+          "artifact_id": "4e12da69-0882-45be-b0ad-6b9b5c6dc13b",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T16:38:17.341280+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "4e12da69-0882-45be-b0ad-6b9b5c6dc13b"
+          ],
+          "prompt_sha256": "5bd3e0deeab1087c8e0bc81e95bf95eec2f39058ada49808715567a581475823",
+          "requested_at": "2026-10-03T16:38:30.166925+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "0cfa2458-ac4e-4018-a4a1-204f5f98adda",
+          "submission_mode": "now",
+          "artifact_id": "5b3d7908-bd18-4d75-b872-da84e0051e84",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T16:38:34.737795+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T16:37:51.215951+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/analysis-trader-prediction-dex-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "653da1b706ab1dc2e4d5bd588eecfea9924419b1280f928e8b419b0c2f03d3a6",
+        "baseline_count": 296,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T16:37:53.299438+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/92ecf5d9-bcb2-4d1a-a9f8-cbb95b7a3717",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T16:37:57.289007+00:00",
+        "sha256": "735d593be585e8c9c839f6b2aa0f19c8bd2149f86b1dd9926b8366016958c013",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "0cfa2458-ac4e-4018-a4a1-204f5f98adda",
+      "source_title": "MM article analysis-trader-prediction-dex ZH-TW a4b2a3b1124d",
+      "source_sha256": "735d593be585e8c9c839f6b2aa0f19c8bd2149f86b1dd9926b8366016958c013",
+      "state": "source_ready",
+      "source_display_name": "MM article analysis-trader-prediction-dex ZH-TW a…",
+      "selected_source_ids": [
+        "0cfa2458-ac4e-4018-a4a1-204f5f98adda"
+      ]
     }
   },
-  "checked_at": "2026-10-03T16:24:44.443588+00:00",
+  "checked_at": "2026-10-03T16:38:34.740914+00:00",
   "browser_geometry_requested": {
     "width": 2000,
     "height": 1290,
