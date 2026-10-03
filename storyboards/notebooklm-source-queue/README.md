@@ -144,7 +144,10 @@ an audio stream, positive duration and a passing full FFmpeg decode. Save
 original artifact ID, source ID, bytes, SHA-256, page count or audio duration.
 Open only the exact bound artifact's unique, visible and enabled menu control;
 dispatch it once without native pointer interception by Studio hover tooltips.
-Continue to require the matching PDF/audio download menu item before saving bytes.
+Continue to require the unique matching PDF/audio download menu item, wait for
+its visibility and verify it is still connected and enabled before dispatching
+it once without native pointer-click waits. Retain the download-event wait and
+original-byte integrity checks before saving bytes.
 On later passes, verify completed artifact hashes and skip their generation
 checks. A subsequent article edit or attached video must not block unfinished
 jobs elsewhere in the queue; completed jobs retain their frozen input evidence.

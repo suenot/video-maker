@@ -2325,7 +2325,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "3f518da425af4ce110199780a93199287ee41be192b4b781e6c92e56c35c0137",
           "requested_at": "2026-10-03T06:08:05.434424+00:00",
@@ -2335,11 +2335,18 @@
           "source_id": "19236bf5-473e-4adf-b99d-91ce677dee7c",
           "submission_mode": "now",
           "artifact_id": "daa985bc-c74f-48e8-a530-76efc009b977",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T06:08:09.982034+00:00"
+          "card_text": "tablet\nUnread\n代理型AI投资革命\n1 source · 4m ago\nmore_vert",
+          "observed_at": "2026-10-03T06:21:17.133385+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/agentic-ai-investment-revolution/zh-CN/slides.pdf",
+          "sha256": "85483115787f9f0ca99e8fcad4b9f91237ca6ffa2e817d01cb6f8d18692766f2",
+          "bytes": 20042711,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T06:21:37.044901+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "daa985bc-c74f-48e8-a530-76efc009b977"
           ],
@@ -2351,8 +2358,15 @@
           "source_id": "19236bf5-473e-4adf-b99d-91ce677dee7c",
           "submission_mode": "now",
           "artifact_id": "319123cf-53be-43bf-9d02-038e2e2faf85",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T06:08:26.136301+00:00"
+          "card_text": "audio_spark\nUnread\n自己赚网费的AI交易员\n22:00 · Deep Dive · 1 source · 3m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T06:21:38.075843+00:00",
+          "duration_seconds": 1320.79746,
+          "path": "input/notebooklm-sources/agentic-ai-investment-revolution/zh-CN/audio.m4a",
+          "sha256": "d9e0a527419b2cf782edad396d5f6d1a74808bcc46260aa41afc30523a24501d",
+          "bytes": 42509245,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T06:22:14.551609+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -2405,10 +2419,10 @@
           "submission_mode": "now",
           "artifact_id": "83d24ddd-fde7-4916-aa8b-468391dc8897",
           "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T06:08:58.082790+00:00"
+          "observed_at": "2026-10-03T06:22:21.272895+00:00"
         },
         "audio": {
-          "state": "generating",
+          "state": "ready",
           "baseline_ids": [
             "83d24ddd-fde7-4916-aa8b-468391dc8897"
           ],
@@ -2420,8 +2434,8 @@
           "source_id": "4dea0833-1754-4d22-81a5-0a4ee4e196fa",
           "submission_mode": "now",
           "artifact_id": "b07533ef-506f-443a-8119-2cf9343cb185",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T06:09:14.173458+00:00"
+          "card_text": "audio_spark\nUnread\nAI操盤手自己賺電費\n28:41 · Deep Dive · 1 source · 2m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T06:22:22.293900+00:00"
         }
       },
       "notebook_intent": {
@@ -2449,10 +2463,40 @@
       "source_display_name": "MM article agentic-ai-investment-revolution ZH-TW…",
       "selected_source_ids": [
         "4dea0833-1754-4d22-81a5-0a4ee4e196fa"
-      ]
+      ],
+      "last_error": {
+        "type": "TimeoutError",
+        "message": "Locator.click: Timeout 30000ms exceeded.",
+        "at": "2026-10-03T06:22:52.332888+00:00",
+        "stage": "bound_audio_download_menu",
+        "cause": "The exact ready audio artifact menu was opened, but native Playwright pointer dispatch on its visible, enabled and stable Download item timed out. The diagnostic snapshot still shows the Download menu; no original file was promoted. The generation is ready and its identity remains bound.",
+        "retry_not_before": "2026-10-03T06:33:37.996114+00:00",
+        "next_safe_step": "After the retry deadline, reconcile the same saved slide/audio IDs and download the existing ready audio using the verified menu-item dispatch in v1.2.6. Do not submit another audio or slide generation. Verify the download event, bytes, audio stream, full decode and hash before promoting an original.",
+        "artifact_kind": "audio",
+        "artifact_id": "b07533ef-506f-443a-8119-2cf9343cb185",
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/2026-10-03T062011Z-agentic-ai-investment-revolution-zh-TW-screenshot.png",
+            "sha256": "d084ef7ffee4d8d271f62a0ba7e6f923d90ef6b541ba1712900d9d11b0b0a9d0"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/2026-10-03T062011Z-agentic-ai-investment-revolution-zh-TW-controls.json",
+            "sha256": "56247e9459f26326276779fd71b177d7b370bc57199b4c6ea13a6a1dea363c88"
+          },
+          "log": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-03T062011Z.log",
+            "sha256": "9a5d8ece06cc74c0c585f4937277cc8eb559dc023ec6ff5d13368e6b4cdf63ff"
+          }
+        },
+        "download_fix": {
+          "version": "1.2.6",
+          "offline_checks": 21,
+          "live_verification": "pending next bounded pass"
+        }
+      }
     }
   },
-  "checked_at": "2026-10-03T06:09:14.175930+00:00",
+  "checked_at": "2026-10-03T06:28:37.996312+00:00",
   "browser_geometry_requested": {
     "width": 1998,
     "height": 1290,

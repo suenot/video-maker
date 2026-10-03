@@ -530,8 +530,11 @@ class Runner:
         item = page.get_by_role("menuitem", name=label)
         if await item.count() != 1:
             raise RuntimeError("Exact artifact download menu unavailable")
+        await item.wait_for(state="visible", timeout=30000)
         async with page.expect_download(timeout=60000) as info:
-            await item.click()
+            # Native pointer dispatch can stall even on a visible menu item.
+            # Keep the exact bound menu match and dispatch its enabled item once.
+            await item.evaluate("e=>{if(!e.isConnected || !e.getClientRects().length || e.disabled || e.getAttribute('aria-disabled')==='true' || e.getAttribute('role')!=='menuitem')throw new Error('Bound-artifact download item unavailable before dispatch');e.click()}")
         data, ext = await asyncio.wait_for(self.nlm._grab_download(page, await info.value, kind), timeout=180)
         if not data or len(data) <= self.nlm.MIN_BYTES or (kind == "slides" and (ext != "pdf" or not data.startswith(b"%PDF-"))):
             raise RuntimeError("Artifact bytes invalid")

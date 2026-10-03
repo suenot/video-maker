@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Save the complete Mainland Chinese Agentic AI PDF/audio pair with original hashes and integrity evidence; preserve its Taiwan audio download failure and existing slide generation without repeating either generation.
 - Save the complete Mainland Chinese Order Flow Imbalance PDF/audio pair and reconcile its interrupted Taiwan notebook creation against the hash-matched ID baseline, preserving evidence of the source failure before dispatch.
 - Save separate Simplified/Traditional Chinese Statistical Arbitrage PDF/audio originals and Mainland Chinese Order Flow Imbalance audio with hashes, integrity evidence and pending editorial review.
 - Save the first complete Mainland Simplified and Taiwan Traditional Chinese Funding Rate Arbitrage PDF/audio drafts with original artifact IDs, integrity results and pending editorial review.
@@ -32,6 +33,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bind NotebookLM production to the designated Gaia Camoufox account and record account verification before source generation.
 - Preserve the rejected bilingual order-types Blueprint package for provenance; record the user's quality rejection and the recovered existing NotebookLM PDF/audio flow before further production.
 - Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
+
+## [1.2.6] - 2026-10-03
+
+### Fixed
+
+- Dispatch the exact bound PDF/audio download menu item once after visibility and enabled-control checks, avoiding a native pointer-click timeout while retaining download-event and original-byte integrity verification.
 
 ## [1.2.5] - 2026-10-03
 
