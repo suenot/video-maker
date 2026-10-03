@@ -2065,28 +2065,51 @@
         "pre_dispatch_recovery_verified_at": "2026-10-02T20:51:13.328722+00:00"
       },
       "last_error": {
-        "type": "TimeoutError",
-        "message": "TimeoutError",
-        "at": "2026-10-03T05:27:11.841379+00:00",
-        "stage": "source_insertion_confirmation",
-        "cause": "The Mac entered Low Power Sleep at 2026-10-03 00:51:17 Asia/Tbilisi with 1% charge, two seconds after pasting the full source, and woke from Hibernate on AC attach at 09:25:21. Source confirmation and its diagnostic screenshot timed out after resume. Insert path was reached, but the permanent source-ID outcome remains unknown.",
-        "retry_not_before": "2026-10-03T05:45:00+00:00",
-        "next_safe_step": "After the retry deadline, load only the same permanent notebook and reconcile source IDs against the retained empty baseline. Bind a sole permanent addition or wait for pending_upload_doc_id_; retain an unresolved intent if no/ambiguous IDs appear. Never insert again or generate before the source ID is bound.",
+        "type": "RuntimeError",
+        "message": "Source insertion unconfirmed or ambiguous; inspect before retry",
+        "at": "2026-10-03T05:51:18.613132+00:00",
+        "stage": "source_identity_reconciliation",
+        "cause": "The same permanent notebook still displays 0 sources after the low-battery hibernation incident. No permanent source ID can be bound. This pass only reconciled identities; the original insertion outcome remains unknown.",
+        "retry_not_before": "2026-10-03T06:50:00+00:00",
+        "next_safe_step": "After the retry deadline, reconcile source IDs in the same permanent notebook against the retained empty baseline. Bind only a sole permanent addition, or retain a processing intent for pending_upload_doc_id_. If no source is present, retain dispatch_unknown and back off this job while other source jobs continue. Never repeat insertion or generation without source-identity evidence.",
         "evidence": {
-          "log": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T204958Z.log",
-            "sha256": "14f82bbe44ebe21188c98bf9d649d9a8e3dc86ede6a5816dfd1cf0cd9b6ad27f"
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/2026-10-03T055011Z-order-flow-imbalance-prediction-zh-TW-screenshot.png",
+            "sha256": "ccf03e942b3c7af5af011c29bdfeb56482c9bd96a9a594ebc0e117250784fe27"
           },
-          "power_log": {
-            "path": "temp/notebooklm-source-queue/power-evidence-2026-10-03T052808Z.txt",
-            "sha256": "6542dc5dff679b4f2fd5c58058e7331c573837a8f42d377e96fc6c60798511e1"
+          "controls": {
+            "path": "temp/notebooklm-source-queue/2026-10-03T055011Z-order-flow-imbalance-prediction-zh-TW-controls.json",
+            "sha256": "96c00be0404ef909a781d3a73f6e5f3d7beb206acb5c7a0b3753d9cf3c95b688"
+          },
+          "log": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-03T055011Z.log",
+            "sha256": "f6f100ccf2b25d9192a1464d098efa6ea414a8ce84f7e9b82d8a667a3240738f"
           }
         },
-        "observed_clock_gap": {
-          "pasted_at_local": "2026-10-03 00:51:15 Asia/Tbilisi",
-          "source_wait_timeout_local": "2026-10-03 09:25:22 Asia/Tbilisi",
-          "duration_seconds": 30847,
-          "sleep_cause": "confirmed macOS Low Power Sleep; 30844-second sleep interval"
+        "previous_error": {
+          "type": "TimeoutError",
+          "message": "TimeoutError",
+          "at": "2026-10-03T05:27:11.841379+00:00",
+          "stage": "source_insertion_confirmation",
+          "cause": "The Mac entered Low Power Sleep at 2026-10-03 00:51:17 Asia/Tbilisi with 1% charge, two seconds after pasting the full source, and woke from Hibernate on AC attach at 09:25:21. Source confirmation and its diagnostic screenshot timed out after resume. Insert path was reached, but the permanent source-ID outcome remains unknown.",
+          "retry_not_before": "2026-10-03T05:45:00+00:00",
+          "next_safe_step": "After the retry deadline, load only the same permanent notebook and reconcile source IDs against the retained empty baseline. Bind a sole permanent addition or wait for pending_upload_doc_id_; retain an unresolved intent if no/ambiguous IDs appear. Never insert again or generate before the source ID is bound.",
+          "evidence": {
+            "log": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T204958Z.log",
+              "sha256": "14f82bbe44ebe21188c98bf9d649d9a8e3dc86ede6a5816dfd1cf0cd9b6ad27f"
+            },
+            "power_log": {
+              "path": "temp/notebooklm-source-queue/power-evidence-2026-10-03T052808Z.txt",
+              "sha256": "6542dc5dff679b4f2fd5c58058e7331c573837a8f42d377e96fc6c60798511e1"
+            }
+          },
+          "observed_clock_gap": {
+            "pasted_at_local": "2026-10-03 00:51:15 Asia/Tbilisi",
+            "source_wait_timeout_local": "2026-10-03 09:25:22 Asia/Tbilisi",
+            "duration_seconds": 30847,
+            "sleep_cause": "confirmed macOS Low Power Sleep; 30844-second sleep interval"
+          }
         }
       },
       "notebook": "https://notebook.google.com/notebook/c0dcc0d9-0bc9-4ac1-a0d5-12c5cc879ecc",
@@ -2096,7 +2119,33 @@
           "href": "/notebook/c0dcc0d9-0bc9-4ac1-a0d5-12c5cc879ecc"
         }
       ],
-      "diagnostic_error": "TimeoutError"
+      "diagnostic_error": "TimeoutError",
+      "temporary_source_ids": [],
+      "state": "source_identity_unresolved",
+      "source_reconciliation_observation": {
+        "at": "2026-10-03T05:51:18.613132+00:00",
+        "notebook": "https://notebook.google.com/notebook/c0dcc0d9-0bc9-4ac1-a0d5-12c5cc879ecc",
+        "visible_source_count": 0,
+        "bound_source_id": null,
+        "source_id_binding": "unresolved",
+        "new_insertion_dispatched": false,
+        "notebook_creation_dispatched": false,
+        "artifact_submission_dispatched": false,
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/2026-10-03T055011Z-order-flow-imbalance-prediction-zh-TW-screenshot.png",
+            "sha256": "ccf03e942b3c7af5af011c29bdfeb56482c9bd96a9a594ebc0e117250784fe27"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/2026-10-03T055011Z-order-flow-imbalance-prediction-zh-TW-controls.json",
+            "sha256": "96c00be0404ef909a781d3a73f6e5f3d7beb206acb5c7a0b3753d9cf3c95b688"
+          },
+          "log": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-03T055011Z.log",
+            "sha256": "f6f100ccf2b25d9192a1464d098efa6ea414a8ce84f7e9b82d8a667a3240738f"
+          }
+        }
+      }
     },
     "twap-vwap-pov-execution-algorithms:zh-CN": {
       "slug": "twap-vwap-pov-execution-algorithms",
@@ -2237,7 +2286,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-03T05:38:41.503910+00:00",
+  "checked_at": "2026-10-03T05:52:59.502950+00:00",
   "browser_geometry_requested": {
     "width": 1998,
     "height": 1290,
