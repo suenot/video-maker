@@ -2020,7 +2020,7 @@
           "submission_mode": "later",
           "artifact_id": "9682ce68-0a58-41b4-8d23-783f779ad468",
           "card_text": "tablet\nOrder Flow Imbalance Event Decomposition\nScheduled for after 1am\nmore_vert",
-          "observed_at": "2026-10-03T20:10:20.814722+00:00"
+          "observed_at": "2026-10-03T20:54:06.388424+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -2041,7 +2041,7 @@
           "submission_mode": "later",
           "artifact_id": "9c50e9c7-5a64-41f2-8f39-664838b45aa5",
           "card_text": "audio_spark\nOrder Flow Imbalance Event Decomposition\nScheduled for after 1am\nmore_vert",
-          "observed_at": "2026-10-03T20:10:36.163042+00:00"
+          "observed_at": "2026-10-03T20:54:07.411652+00:00"
         }
       },
       "notebook_intent": {
@@ -3621,9 +3621,79 @@
       "selected_source_ids": [
         "0cfa2458-ac4e-4018-a4a1-204f5f98adda"
       ]
+    },
+    "anomaly-detection-algotrading:en": {
+      "slug": "anomaly-detection-algotrading",
+      "language": "en",
+      "article_sha256": "2aef0a30a661bed9c017faffa8059e6a925dc0f53cd85e62d957113d77ebfd26",
+      "input_hashes": {
+        "article": "2aef0a30a661bed9c017faffa8059e6a925dc0f53cd85e62d957113d77ebfd26",
+        "source_text": "488d43e765624539e8d9107913433851c809ac3df8777b328eea2296417a5c60",
+        "slides_prompt": "9c4af2ff2bf97a599678acfada85cb31102d494a94bb771e2de37d7604b8bd96",
+        "audio_prompt": "87bb7a862cdd35b6d4ae6b726e0785cbb20345303d600def4dec049825816082"
+      },
+      "artifacts": {},
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-03T20:54:08.369241+00:00",
+      "notebook_intent": {
+        "at": "2026-10-03T20:54:16.540147+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/anomaly-detection-algotrading-en-notebook-baseline.json",
+        "baseline_sha256": "f56e5eb00b2338e4d0ebd6b3156f33725961d74190c2a87c9bd8ff0084d574f1",
+        "baseline_count": 297,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T20:54:23.636072+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/6b6a4d61-30b7-420d-93c8-7bb81f9b8cd2",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T20:54:30.920048+00:00",
+        "sha256": "488d43e765624539e8d9107913433851c809ac3df8777b328eea2296417a5c60",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [
+        "pending_upload_doc_id_89252107-FF2F-4732-AD3A-0ECA3052AE2E"
+      ],
+      "state": "source_processing"
+    },
+    "anomaly-detection-algotrading:ru": {
+      "slug": "anomaly-detection-algotrading",
+      "language": "ru",
+      "article_sha256": "0e53c96448035b98a1e5fee3ae94c9394b7176f64f082e24cc0378fe04a7e07b",
+      "input_hashes": {
+        "article": "0e53c96448035b98a1e5fee3ae94c9394b7176f64f082e24cc0378fe04a7e07b",
+        "source_text": "b35fb8215437da3b9e83892641ba9a00d0066af9e6e276de895cb77ae7417109",
+        "slides_prompt": "991c8abcc26325f9fbd6f22ee01336568f777d30391e480daade787fd92a57d0",
+        "audio_prompt": "35b5bae59113a68bc85ef5873f3087bd30a531a79601e94cfa41a3ba5253678b"
+      },
+      "artifacts": {},
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-03T20:54:38.759094+00:00",
+      "notebook_intent": {
+        "at": "2026-10-03T20:54:47.601489+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/anomaly-detection-algotrading-ru-notebook-baseline.json",
+        "baseline_sha256": "d6a12505ccfeed2d26ba947e3be3cc1ee419b1bb4eae009e0b90d3d8d36060d5",
+        "baseline_count": 298,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T20:54:52.701598+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/f5f1fb8d-4b4f-4c02-bafc-314398e7ec10",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T20:54:57.091170+00:00",
+        "sha256": "b35fb8215437da3b9e83892641ba9a00d0066af9e6e276de895cb77ae7417109",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [
+        "pending_upload_doc_id_ED11EC3B-4E83-4478-A7CB-4E81C106C156"
+      ],
+      "state": "source_processing"
     }
   },
-  "checked_at": "2026-10-03T20:20:41.433334+00:00",
+  "checked_at": "2026-10-03T20:55:04.946287+00:00",
   "browser_geometry_requested": {
     "width": 2000,
     "height": 1290,

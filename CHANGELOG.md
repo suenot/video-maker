@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Admit separate English and Russian anomaly-detection sources in permanent NotebookLM notebooks, preserving their processing placeholders and insertion intents until permanent source IDs are available without another upload.
 - Recover the Taiwan Traditional Chinese Order Flow source in its existing notebook and bind separate scheduled PDF/audio requests, preserving the original uncertain insertion and the displayed quota reset.
 - Freeze eight separate EN/RU/Mainland Simplified/Taiwan Traditional source briefs for anomaly detection and asymmetric GARCH, retaining full published articles, section-specific prompts, hashes and pending external/editorial checks.
 - Complete the Taiwan Traditional Chinese DEX trader-prediction PDF/audio pair with verified original hashes and integrity evidence, bringing the prepared ten-article batch to 39 complete locale pairs while retaining the unresolved Taiwan Order Flow source intent.
