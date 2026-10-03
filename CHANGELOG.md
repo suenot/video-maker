@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Save complete Taiwan Traditional Chinese Almgren-Chriss and English DEX trader-prediction PDF/audio originals with hashes and integrity evidence; bind separate Russian and Mainland Simplified Chinese DEX requests using full frozen articles and verified language selections.
 - Complete the Mainland Simplified Chinese AI4Finance and Almgren-Chriss and Taiwan Traditional Chinese algo-investor-skills PDF/audio pairs with verified original hashes and integrity evidence; bind separate Taiwan Almgren-Chriss and English DEX trader-prediction requests after reconciling existing jobs.
 - Save complete Taiwan Traditional Chinese AI4Finance and Mainland Simplified Chinese algo-investor-skills PDF/audio originals with hashes and integrity evidence; bind separate Taiwan algo-investor-skills and Mainland Almgren-Chriss requests without repeating existing generations.
 - Bind separate Taiwan Traditional Chinese AI4Finance and Mainland Simplified Chinese algo-investor-skills slide/audio requests with frozen full articles and explicit variants; save the existing AI4Finance Simplified deck while retaining its scheduled audio identity.
