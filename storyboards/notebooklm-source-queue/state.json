@@ -2159,7 +2159,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "db80bff2a4d008849bb4d7830c604bba89abe434368a4fa0137dfb3e0cbca251",
           "requested_at": "2026-10-03T05:36:51.325975+00:00",
@@ -2169,11 +2169,18 @@
           "source_id": "68078c1d-71df-4b21-9772-18ec5ddcfc8f",
           "submission_mode": "now",
           "artifact_id": "eacf95dc-88b2-4b29-8ed4-e69cf87dd2b7",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T05:36:55.880131+00:00"
+          "card_text": "tablet\nUnread\n算法执行：TWAP、VWAP与POV的隐藏赌注与失效模式\n1 source · 21m ago\nmore_vert",
+          "observed_at": "2026-10-03T06:06:20.458808+00:00",
+          "pages": 13,
+          "path": "input/notebooklm-sources/twap-vwap-pov-execution-algorithms/zh-CN/slides.pdf",
+          "sha256": "31dac281fad3bea2056cf99b4867eca2b89089462b8ac729b02099dca62bdd2e",
+          "bytes": 11579264,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T06:06:35.819839+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "eacf95dc-88b2-4b29-8ed4-e69cf87dd2b7"
           ],
@@ -2185,8 +2192,15 @@
           "source_id": "68078c1d-71df-4b21-9772-18ec5ddcfc8f",
           "submission_mode": "now",
           "artifact_id": "fada5037-9759-4e73-b249-18b5594c1179",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T05:37:26.015909+00:00"
+          "card_text": "audio_spark\nUnread\n跑赢VWAP为何亏钱\n19:00 · Deep Dive · 1 source · 20m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T06:06:36.846445+00:00",
+          "duration_seconds": 1140.285533,
+          "path": "input/notebooklm-sources/twap-vwap-pov-execution-algorithms/zh-CN/audio.m4a",
+          "sha256": "c735979fd15bae5a9e240b18531dabf2f2b4cdad3ea95e17e25661335f416dc7",
+          "bytes": 36699680,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T06:07:02.606883+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -2228,7 +2242,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "b927afc44c42cd4b9c1fa67b91dc8fb5a9aae527b188e9e26c109a93d33fbc78",
           "requested_at": "2026-10-03T05:38:06.814175+00:00",
@@ -2238,11 +2252,18 @@
           "source_id": "ab16a081-b5f2-4525-b3f5-a4300656917d",
           "submission_mode": "now",
           "artifact_id": "52c967dd-19a0-4d6b-93cd-ee0645bf45b1",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T05:38:11.369415+00:00"
+          "card_text": "tablet\nUnread\nTWAP、VWAP與POV執行基準選擇指南\n1 source · 19m ago\nmore_vert",
+          "observed_at": "2026-10-03T06:07:09.273988+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/twap-vwap-pov-execution-algorithms/zh-TW/slides.pdf",
+          "sha256": "f0aed38db01e16cff265b7a8aedadab2fe13d42982fb2e4d2220f6874d6719e0",
+          "bytes": 14064231,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T06:07:17.623900+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "52c967dd-19a0-4d6b-93cd-ee0645bf45b1"
           ],
@@ -2254,8 +2275,15 @@
           "source_id": "ab16a081-b5f2-4525-b3f5-a4300656917d",
           "submission_mode": "now",
           "artifact_id": "f480130e-2a2d-40d5-b775-c822266027dc",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T05:38:41.501709+00:00"
+          "card_text": "audio_spark\nUnread\n加密大單交易的謊言\n17:42 · Deep Dive · 1 source · 20m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T06:07:18.648535+00:00",
+          "duration_seconds": 1062.498685,
+          "path": "input/notebooklm-sources/twap-vwap-pov-execution-algorithms/zh-TW/audio.m4a",
+          "sha256": "a83c64d6c1307b9baf9c2ac3cb24deab1cffa2bb7b922d8a5f8bfe69ceada808",
+          "bytes": 34196172,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T06:07:37.608777+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -2284,9 +2312,147 @@
       "selected_source_ids": [
         "ab16a081-b5f2-4525-b3f5-a4300656917d"
       ]
+    },
+    "agentic-ai-investment-revolution:zh-CN": {
+      "slug": "agentic-ai-investment-revolution",
+      "language": "zh-CN",
+      "article_sha256": "bca80a83c3be6865143401ec7c2d829675a6b891459030d7a233b848713214dc",
+      "input_hashes": {
+        "article": "bca80a83c3be6865143401ec7c2d829675a6b891459030d7a233b848713214dc",
+        "source_text": "7646ac586f71ccb7b07e3a44ce6c793089d706f6477cc4cbbfdc8da8ced3b7c4",
+        "slides_prompt": "3f518da425af4ce110199780a93199287ee41be192b4b781e6c92e56c35c0137",
+        "audio_prompt": "fadd3aae240bb39f9f78bfc1c5bba57d674941d2cae285df34f309de68608e35"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "3f518da425af4ce110199780a93199287ee41be192b4b781e6c92e56c35c0137",
+          "requested_at": "2026-10-03T06:08:05.434424+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "19236bf5-473e-4adf-b99d-91ce677dee7c",
+          "submission_mode": "now",
+          "artifact_id": "daa985bc-c74f-48e8-a530-76efc009b977",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T06:08:09.982034+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "daa985bc-c74f-48e8-a530-76efc009b977"
+          ],
+          "prompt_sha256": "fadd3aae240bb39f9f78bfc1c5bba57d674941d2cae285df34f309de68608e35",
+          "requested_at": "2026-10-03T06:08:21.587197+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "19236bf5-473e-4adf-b99d-91ce677dee7c",
+          "submission_mode": "now",
+          "artifact_id": "319123cf-53be-43bf-9d02-038e2e2faf85",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T06:08:26.136301+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T06:07:45.214545+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/agentic-ai-investment-revolution-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "7708a8785bc6a5958d5729a13a56ac906593bc78e03746157ea550ff4d4e0f20",
+        "baseline_count": 283,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T06:07:46.297267+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/edc46b87-42b6-4c6b-968f-c3def336d102",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T06:07:50.506284+00:00",
+        "sha256": "7646ac586f71ccb7b07e3a44ce6c793089d706f6477cc4cbbfdc8da8ced3b7c4",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "19236bf5-473e-4adf-b99d-91ce677dee7c",
+      "source_title": "MM article agentic-ai-investment-revolution ZH-CN bca80a83c3be",
+      "source_sha256": "7646ac586f71ccb7b07e3a44ce6c793089d706f6477cc4cbbfdc8da8ced3b7c4",
+      "state": "source_ready",
+      "source_display_name": "MM article agentic-ai-investment-revolution ZH-CN…",
+      "selected_source_ids": [
+        "19236bf5-473e-4adf-b99d-91ce677dee7c"
+      ]
+    },
+    "agentic-ai-investment-revolution:zh-TW": {
+      "slug": "agentic-ai-investment-revolution",
+      "language": "zh-TW",
+      "article_sha256": "860be4918813128d70f989e02fc153fa4aa6a653eb347dc9a166fd0c16d9c852",
+      "input_hashes": {
+        "article": "860be4918813128d70f989e02fc153fa4aa6a653eb347dc9a166fd0c16d9c852",
+        "source_text": "60ff26b02a650b85d85701806f94f92b984bb0f3df3cb67f54e68a098ad7f07e",
+        "slides_prompt": "f821451542c357da4188f5ca7dab671231ce9684bec4b4755c4ea3f24cbaa865",
+        "audio_prompt": "46f46a24a5598d63178d6b1fa30a6a79f90a3e7e1753110f81b775a03c09d5df"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "f821451542c357da4188f5ca7dab671231ce9684bec4b4755c4ea3f24cbaa865",
+          "requested_at": "2026-10-03T06:08:53.526522+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "4dea0833-1754-4d22-81a5-0a4ee4e196fa",
+          "submission_mode": "now",
+          "artifact_id": "83d24ddd-fde7-4916-aa8b-468391dc8897",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T06:08:58.082790+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "83d24ddd-fde7-4916-aa8b-468391dc8897"
+          ],
+          "prompt_sha256": "46f46a24a5598d63178d6b1fa30a6a79f90a3e7e1753110f81b775a03c09d5df",
+          "requested_at": "2026-10-03T06:09:09.614287+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "4dea0833-1754-4d22-81a5-0a4ee4e196fa",
+          "submission_mode": "now",
+          "artifact_id": "b07533ef-506f-443a-8119-2cf9343cb185",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T06:09:14.173458+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T06:08:33.411632+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/agentic-ai-investment-revolution-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "1df3b8175b64645cb53e10f026c796ed24d5df4b838523796020e4b6a9d8452b",
+        "baseline_count": 284,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T06:08:34.512224+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/ae0723ba-b6ec-4c13-8ebe-ccff1e22f7a5",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T06:08:38.699153+00:00",
+        "sha256": "60ff26b02a650b85d85701806f94f92b984bb0f3df3cb67f54e68a098ad7f07e",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "4dea0833-1754-4d22-81a5-0a4ee4e196fa",
+      "source_title": "MM article agentic-ai-investment-revolution ZH-TW 860be4918813",
+      "source_sha256": "60ff26b02a650b85d85701806f94f92b984bb0f3df3cb67f54e68a098ad7f07e",
+      "state": "source_ready",
+      "source_display_name": "MM article agentic-ai-investment-revolution ZH-TW…",
+      "selected_source_ids": [
+        "4dea0833-1754-4d22-81a5-0a4ee4e196fa"
+      ]
     }
   },
-  "checked_at": "2026-10-03T05:52:59.502950+00:00",
+  "checked_at": "2026-10-03T06:09:14.175930+00:00",
   "browser_geometry_requested": {
     "width": 1998,
     "height": 1290,
