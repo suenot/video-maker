@@ -1,0 +1,36 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article asymmetric-garch-crypto-leverage EN 761d601d5b34". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English. Use English throughout.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — The Leverage Effect, and Why Crypto Is Messier
+2. H2 — Testing for Asymmetry Before You Model It
+3. H2 — GJR-GARCH: Asymmetry via a Threshold Term
+4. H3 — Positivity and Stationarity
+5. H2 — EGARCH: Modeling log-Variance, No Positivity Constraints
+6. H3 — The News Impact Curve
+7. H2 — Heavy Tails: Student-t and Skewed-t Innovations
+8. H3 — Standardized Student-t
+9. H3 — Hansen's Skewed-t
+10. H2 — Python Implementation
+11. H3 — Setup and Data
+12. H3 — Fitting Four Models
+13. H3 — Reading the GJR Fit
+14. H3 — Comparing Models by Information Criteria
+15. H3 — Plotting the News Impact Curve
+16. H3 — A Side-by-Side Comparison of the Four Models
+17. H2 — Risk Application: VaR and Expected Shortfall
+18. H3 — From Conditional Distribution to VaR
+19. H3 — Expected Shortfall
+20. H3 — Computing VaR and ES from a Fitted arch Model
+21. H3 — One Step vs Multi-Step: A Caveat
+22. H3 — Backtesting VaR: Kupiec and Christoffersen
+23. H3 — Ranking Models by Tail Loss, Not Just Pass/Fail
+24. H2 — Practical Considerations
+25. H3 — When the Extra Parameters Do Not Pay Off
+26. H3 — These Are the Marginals Everyone Else Builds On
+27. H3 — A Distribution-Free Alternative
+28. H3 — Numerical and Workflow Hygiene
+29. H2 — Summary
+
+Preserve the source's distinction between a symmetric Gaussian GARCH baseline, asymmetric GJR-GARCH and EGARCH, and heavy-tailed Student-t and Hansen skew-t innovations. Keep crypto-specific caveats: the equity leverage story is not a crypto balance-sheet mechanism, and asymmetry can reverse by asset/regime. Retain all displayed equations, variable definitions, sign conventions and constraints: GJR gamma > 0 for downside asymmetry, alpha + gamma >= 0 and persistence; EGARCH gamma < 0 for leverage in its convention and |beta| < 1; standardized t nu > 2, skew-t lambda, and news-impact curves. Explain the illustrative GJR parameter table as illustrative, not empirical results. Preserve the four fitted model variants, Python setup and logic, daily returns scaled by 100, 365-day annualization, AIC/BIC and out-of-sample selection. Retain the source's 99% one-step VaR and Expected Shortfall formulas, sign and percent units, quantile and tail integration, 1-step versus multi-step caveat, and simulation requirement for longer horizons. Cover Kupiec rate, Christoffersen independence, conditional coverage, walk-forward validation, pinball quantile loss, joint VaR/ES evaluation, and the article's Basel traffic-light claim as an attributed claim requiring review. Include short/illiquid samples, convergence, persistence, model complexity, frequency changes, distribution-free conformal alternative and marginal/joint risk links. Preserve the closing summary and all bibliography references.
+
+Preserve every substantive section, example, formula, mathematical symbol, percent sign, unit, table, code logic, caveat, risk, link and reference from the source. Never silently change an article number or claim. Attribute numerical, research, financial, company-specific and mutable statements to the article; they await human editorial and primary-source verification. Do not add guaranteed returns or investment advice. This draft requires mathematical, factual and terminology review. Exact external NotebookLM notebook/source/artifact identities remain unchecked before submission; target-channel duplicates remain unchecked before final render or publication. Do not imply clearance.
+Use natural spoken narration or dialogue in the requested locale. Explain formulas, variables, units, tables, plots and code behavior in words; do not request on-screen drawings or text. Distinguish article claims from independently verified facts when speaking. End with the article summary/conclusion and mention references.

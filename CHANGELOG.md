@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Recover the Taiwan Traditional Chinese Order Flow source in its existing notebook and bind separate scheduled PDF/audio requests, preserving the original uncertain insertion and the displayed quota reset.
+- Freeze eight separate EN/RU/Mainland Simplified/Taiwan Traditional source briefs for anomaly detection and asymmetric GARCH, retaining full published articles, section-specific prompts, hashes and pending external/editorial checks.
 - Complete the Taiwan Traditional Chinese DEX trader-prediction PDF/audio pair with verified original hashes and integrity evidence, bringing the prepared ten-article batch to 39 complete locale pairs while retaining the unresolved Taiwan Order Flow source intent.
 - Save complete Russian and Mainland Simplified Chinese DEX trader-prediction PDF/audio originals with hashes and integrity evidence; bind its separate Taiwan Traditional Chinese pair from the full published localized article while preserving the unresolved Order Flow source intent.
 - Save complete Taiwan Traditional Chinese Almgren-Chriss and English DEX trader-prediction PDF/audio originals with hashes and integrity evidence; bind separate Russian and Mainland Simplified Chinese DEX requests using full frozen articles and verified language selections.
@@ -28,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Record the user's automatic source-recovery authorization after sleep and allow independent source batches to proceed while an individual identity is unresolved or deferred.
 - Verify the live "getting close to your AI usage limit" guard against an existing scheduled Chinese audio request, preserving all identities and the displayed reset before returning to local-only checks.
 - Defer Taiwan Order Flow Imbalance after repeated empty-notebook source reconciliation, retaining the uncertain insertion intent and all failure evidence while other source jobs proceed.
 - Preserve the Taiwan Order Flow Imbalance source intent after low-battery Mac hibernation interrupted insertion confirmation; retain power/log evidence and reconcile the existing source IDs before any further insertion or generation.
@@ -42,6 +45,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bind NotebookLM production to the designated Gaia Camoufox account and record account verification before source generation.
 - Preserve the rejected bilingual order-types Blueprint package for provenance; record the user's quality rejection and the recovered existing NotebookLM PDF/audio flow before further production.
 - Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
+
+## [1.2.9] - 2026-10-04
+
+### Fixed
+
+- Recover an authorized failed source upload in its exact verified empty notebook while preserving the previous intent; bind existing permanent sources and wait for processing placeholders before considering another insertion.
+- Defer individual job failures with timestamped evidence and a finite retry deadline, then continue independent jobs in a clean tab within the same Camoufox session, retaining account, global quota and uncertain-Generate guards.
 
 ## [1.2.8] - 2026-10-03
 

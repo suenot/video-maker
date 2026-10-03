@@ -1,0 +1,23 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article anomaly-detection-algotrading ZH-TW 129364549397". It is the complete published zh-Hant article snapshot. Do not merge another language edition or outside facts. Output language: Traditional Chinese for Taiwan. Use Traditional Chinese for Taiwan (zh-TW), not generic Chinese. Use Taiwan financial and statistical terminology such as 波動率, 委託簿, 風險值, 預期短缺 and 資料 when appropriate. Keep formulas, code identifiers, units, citations and proper names exact. Speak Taiwan Mandarin (Guoyu) for audio, not Taiwanese Hokkien; pronunciation and regional terminology need editorial review.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 加密貨幣交易中什麼是異常
+2. H3 — 噪聲 vs. 異常：上下文的挑戰
+3. H2 — 解決80%問題的簡單方法
+4. H3 — Z-Score：快速極值過濾器
+5. H3 — 水平漂移檢測器（Level Shift Detector）：市場切換機制時
+6. H3 — 波動率漂移檢測器（Volatility Shift Detector）：感知風暴前兆
+7. H3 — HBOS：快速多維分析
+8. H2 — 機器學習：當統計方法不夠用時
+9. H3 — 孤立森林（Isolation Forest）：生產環境最佳平衡
+10. H3 — LOF：多交易所監控的最佳選擇
+11. H3 — 自動編碼器（Autoencoders）：訂單簿深度分析
+12. H2 — 級聯架構：將一切整合在一起
+13. H2 — 實踐建議
+14. H2 — 下一步
+15. H2 — 相關資料
+16. H2 — 引文
+
+Preserve the three anomaly types (point, collective, contextual) and the difference between noise, drift and anomaly. Explain the source's Z-Score, level shift, volatility shift and HBOS mechanisms and limitations, then Isolation Forest, LOF and autoencoders in the same order. Keep examples and all quantified claims with their exact values and units, including 50x volume, 0.5% spread, 100:1 orders to trades, Z-Score above 3, and the four cascade latencies: under 1 ms, 1–100 ms, 1–60 seconds, hourly/daily. Cover the four independent protection layers, their triggers, responses, fault tolerance and graceful degradation. Retain the 0.01–0.05 contamination range, adaptive EWMA thresholds, logging, incident tests, Transformer/OC-SVM, GAN and change-point research claims, with their cited performance numbers and latency/throughput. Distinguish proposed detectors and article examples from validated production outcomes. Treat spoofing and manipulation indicators as signals needing corroboration; avoid identifying or accusing specific actors. State fat tails, false positives, computational cost, regime drift and data/API errors as practical limitations. Preserve references and citation.
+
+Preserve every substantive section, example, formula, mathematical symbol, percent sign, unit, table, code logic, caveat, risk, link and reference from the source. Never silently change an article number or claim. Attribute numerical, research, financial, company-specific and mutable statements to the article; they await human editorial and primary-source verification. Do not add guaranteed returns or investment advice. This draft requires mathematical, factual and terminology review. Exact external NotebookLM notebook/source/artifact identities remain unchecked before submission; target-channel duplicates remain unchecked before final render or publication. Do not imply clearance.
+Use natural spoken narration or dialogue in the requested locale. Explain formulas, variables, units, tables, plots and code behavior in words; do not request on-screen drawings or text. Distinguish article claims from independently verified facts when speaking. End with the article summary/conclusion and mention references.

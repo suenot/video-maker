@@ -1,0 +1,605 @@
+MM article asymmetric-garch-crypto-leverage ZH-TW 0ff71e4eaf93
+
+---
+title: "非對稱與厚尾GARCH：EGARCH、GJR與Student-t"
+description: "普通GARCH(1,1)對好訊息和壞訊息一視同仁，並假設衝擊服從高斯分佈。EGARCH、GJR-GARCH以及Student-t/偏態-t新息修正了這兩個缺陷，為加密資產提供更真實的VaR和預期損失估計。"
+tags: ["volatility", "GARCH", "EGARCH", "risk", "VaR", "crypto", "algorithmic-trading"]
+date: "2026-07-11"
+slug: "asymmetric-garch-crypto-leverage"
+lang: "zh-Hant"
+image: "/images/blog/asymmetric-garch-crypto-leverage.webp"
+---
+
+# 非對稱與厚尾GARCH：EGARCH、GJR與Student-t
+
+在[本系列第一部分](/en/blog/post/garch-volatility-forecasting-crypto)中，我們從零開始構建了GARCH(1,1)：波動率聚集的直覺、條件方差的遞推關係、最大似然估計、預測，以及使用`arch`庫進行標準殘差診斷。如果你還沒有讀過那篇文章，建議先從那裡開始——本文假設你已經能夠擬合併解讀一個普通的GARCH(1,1)，不會重新推導基礎內容。
+
+普通GARCH(1,1)是一個不錯的基線模型，但絕不是最終答案。它有兩個結構性缺陷，在回測中容易被忽視，但用真金白銀交易時代價高昂。第一，它是**對稱的**：模型對$+5\%$的一天和$-5\%$的一天反應完全一致，因為衝擊只通過其平方項$\varepsilon_{t-1}^2$進入方差遞推式，平方運算抹去了符號資訊。第二，它假設**高斯新息**：即使GARCH已經吸收了波動率聚集效應，BTC和ETH的標準化殘差依然明顯厚尾，而高斯似然函數系統性地低估了尾部風險。一個GARCH(1,1)-Normal模型的99% VaR會被突破的次數遠超1%。
+
+本文修正這兩個缺陷。我們用GJR-GARCH和EGARCH引入**非對稱性**，用Student-$t$和Hansen偏態-$t$新息引入**厚尾**。然後我們做真正有實際意義的事情：把擬合出的條件分佈轉化為一步風險價值（VaR）和預期損失（Expected Shortfall）預測，並用Kupiec檢驗和Christoffersen檢驗誠實地回測這些預測。一個從未經過風險檢驗的波動率模型只是擺設。
+
+## 槓桿效應，以及加密市場為何更加混亂
+
+![Asymmetric news-impact curves: negative shocks raise volatility more than positive ones](/images/blog/asymmetric-garch-crypto-leverage-news-impact.webp)
+
+在股票市場中，這種非對稱性有一個名字和一套解釋。**槓桿效應**（Black, 1976）：當一家公司的股價下跌時，其債務權益比上升，股權在機制上變得更具風險，波動率隨之上升。壞訊息推高未來波動率的幅度大於同等規模的好訊息。從實證角度看，這是股票波動率文獻中最穩健的典型事實之一。
+
+加密資產沒有股權，在公司層面上也沒有資產負債表槓桿，但類似槓桿效應的非對稱性大多數時候依然存在——其驅動力是強制去槓桿，而非會計因素。當BTC大幅下跌時，超額抵押貸款被清算，永續合約多頭被強制平倉，資金費率翻轉，連鎖反應進一步推高波動率。所以機制不同，但符號方向往往與股票市場一致：下跌行情更容易引發波動率飆升。
+
+需要強調的重要前提是：加密市場**更加混亂**，你應當把非對稱性視為一個需要實證檢驗的問題，而非一條鐵律。劇烈的*上漲*行情——空頭擠壓、槓桿驅動的暴漲、ETF獲批帶來的跳空——同樣可能推高已實現波動率。根據資產和樣本視窗的不同，估計出的非對稱性可能很強、很弱，甚至偶爾出現"錯誤"的符號。本文堅持的原則是：擬合非對稱模型，檢查非對稱參數是否在統計上顯著且方向符合預期，只有當額外參數確實發揮作用時才保留它。不要假設股票市場的故事可以直接照搬過來，要去檢驗它。
+
+## 建模之前先檢驗非對稱性
+
+上文的原則是"把非對稱性當作實證問題"——所以在擬合非對稱模型之前，先做一個低成本的正式檢驗，判斷非對稱性是否真的存在。**Engle-Ng符號偏差檢驗**（1993）正是為此而設計。先擬合一個對稱的GARCH(1,1)，取其標準化殘差的平方$z_t^2$，然後對上一期衝擊的符號和大小指標進行迴歸：
+
+$$z_t^2 = a_0 + a_1 S_{t-1}^- + a_2 S_{t-1}^- \varepsilon_{t-1} + a_3 S_{t-1}^+ \varepsilon_{t-1} + u_t$$
+
+其中$S_{t-1}^- = \mathbf{1}\{\varepsilon_{t-1} < 0\}$，$S_{t-1}^+ = 1 - S_{t-1}^-$。邏輯是：如果對稱模型已經捕捉了所有資訊，那麼昨天衝擊的符號和大小就不應該能預測今天的平方殘差，也就是說$a_1 = a_2 = a_3 = 0$。單獨的$t$檢驗分別稱為**符號偏差**檢驗（$a_1$）、**負向規模偏差**檢驗（$a_2$）和**正向規模偏差**檢驗（$a_3$）；對三者的聯合$F$檢驗稱為綜合檢驗。顯著的$a_1$或$a_2$說明對稱模型系統性地錯誤定價了負向衝擊——這是GJR或EGARCH會有幫助的訊號。
+
+```python
+import statsmodels.api as sm
+
+def sign_bias_test(symmetric_res):
+    """Engle-Ng sign-bias tests on a fitted symmetric GARCH result."""
+    z = symmetric_res.std_resid.dropna()
+    z2 = (z ** 2).values[1:]
+    eps_lag = z.values[:-1]                      # standardized shock proxy
+    neg = (eps_lag < 0).astype(float)
+    X = np.column_stack([
+        np.ones_like(eps_lag),                   # intercept
+        neg,                                     # sign bias
+        neg * eps_lag,                           # negative size bias
+        (1 - neg) * eps_lag,                     # positive size bias
+    ])
+    ols = sm.OLS(z2, X).fit()
+    names = ["const", "sign_bias", "neg_size_bias", "pos_size_bias"]
+    for nm, coef, t, p in zip(names, ols.params, ols.tvalues, ols.pvalues):
+        print(f"{nm:16s} coef={coef:+.4f}  t={t:+.2f}  p={p:.3f}")
+    print(f"Joint F p-value: {ols.f_pvalue:.4f}")
+    return ols
+
+sign_bias_test(models["GARCH-N"])
+```
+
+如果聯合$F$檢驗不顯著，你就獲得了在實證上保持對稱、省下兩個參數的許可。如果它顯著——對BTC/ETH而言這是常見結果——那麼可以放心地轉向GJR/EGARCH，因為你確實在建模一個真實的特徵，而非追逐噪聲。這正是前文所要求的實證紀律：不要假設股票市場的槓桿效應故事，要去檢驗它。
+
+## GJR-GARCH：通過閾值項引入非對稱性
+
+Glosten-Jagannathan-Runkle模型（1993）——有時也稱為TGARCH或閾值GARCH——是對GARCH(1,1)最小幅度的修改，使壞訊息和好訊息能產生不同的影響。回顧第一部分中對稱的條件方差遞推式：
+
+$$\sigma_t^2 = \omega + \alpha\,\varepsilon_{t-1}^2 + \beta\,\sigma_{t-1}^2$$
+
+GJR添加了一個閾值項：只有在負向衝擊之後才會啟動的額外方差量。
+
+$$\sigma_t^2 = \omega + \alpha\,\varepsilon_{t-1}^2 + \gamma\,I_{t-1}\,\varepsilon_{t-1}^2 + \beta\,\sigma_{t-1}^2$$
+
+其中$I_{t-1}$是指示函數
+
+$$I_{t-1} = \begin{cases} 1 & \text{if } \varepsilon_{t-1} < 0 \\ 0 & \text{if } \varepsilon_{t-1} \geq 0 \end{cases}$$
+
+按情形解讀這個遞推式。在**正向**衝擊後（$\varepsilon_{t-1} \geq 0$），指示函數為零，平方衝擊對下一期方差的影響就是$\alpha$。在**負向**衝擊後，指示函數為一，影響變為$\alpha + \gamma$。參數$\gamma$用一個數字概括了整個非對稱性的故事：
+
+- $\gamma > 0$：負向衝擊比同等幅度的正向衝擊更能推高波動率。這就是槓桿效應，也是你在大多數情況下預期在BTC/ETH中發現的模式。
+- $\gamma = 0$：模型退化回對稱的GARCH(1,1)。因此對$\gamma$的似然比檢驗或$t$檢驗直接檢驗*非對稱性是否存在*。
+- $\gamma < 0$：正向衝擊更能推高波動率——這是偶爾出現的加密市場暴漲行情。較為罕見，但不應先驗地排除。
+
+### 正定性與平穩性
+
+由於$\sigma_t^2$依然是加法構建的，我們需要每一項都保持非負。充分的正定條件是
+
+$$\omega > 0, \quad \alpha \geq 0, \quad \alpha + \gamma \geq 0, \quad \beta \geq 0.$$
+
+注意$\gamma$本身可以為負，只要$\alpha + \gamma \geq 0$即可，這樣壞訊息之後的影響就不會變成負數。
+
+對於協方差平穩性，假設新息$z_t = \varepsilon_t/\sigma_t$是圍繞零點對稱分佈的標準化變數，因此$P(\varepsilon_{t-1} < 0) = 1/2$，指示函數平均貢獻$\gamma/2$。平穩性條件變為
+
+$$\alpha + \beta + \tfrac{1}{2}\gamma < 1.$$
+
+無條件（長期）方差則為
+
+$$\bar{\sigma}^2 = \frac{\omega}{1 - \alpha - \beta - \tfrac{1}{2}\gamma}.$$
+
+這是第一部分結果$\bar{\sigma}^2 = \omega/(1-\alpha-\beta)$在GJR中的對應版本，多出的$\tfrac{1}{2}\gamma$項體現了槓桿半衰期的平均貢獻。如果你的新息分佈是偏態的（下文的Hansen偏態-$t$），$1/2$會被$z_t < 0$的實際機率所替代，但$1/2$是用於報告持續性時的標準參照值。
+
+## EGARCH：對數方差建模，無正定性約束
+
+GJR始終把你限制在方差非負的緊箍咒裡：每一組參數組合都需要檢驗是否滿足不等式約束，這在最佳化過程中令人煩惱，在滾動重估計時更是麻煩，因為某個視窗偶爾會漂移到不可行域。Nelson的指數GARCH（EGARCH，1991）通過對條件方差的**對數**建模，完全繞開了這個問題。因為$\log \sigma_t^2$可以是任意實數，$\sigma_t^2 = \exp(\log \sigma_t^2)$無論參數取何值都自動為正，無需施加任何約束。
+
+用標準化新息$z_{t-1} = \varepsilon_{t-1}/\sigma_{t-1}$寫出遞推式：
+
+$$\log \sigma_t^2 = \omega + \beta \log \sigma_{t-1}^2 + \alpha\bigl(|z_{t-1}| - \mathbb{E}|z_{t-1}|\bigr) + \gamma\, z_{t-1}$$
+
+有兩個項承載了衝擊資訊，把它們分開正是整個思路的核心：
+
+- **幅度**項$\alpha(|z_{t-1}| - \mathbb{E}|z_{t-1}|)$對沖擊的*大小*作出反應，符號被剔除。減去$\mathbb{E}|z_{t-1}|$使其居中，這樣一個平均幅度的衝擊貢獻為零。對標準正態分佈，$\mathbb{E}|z| = \sqrt{2/\pi} \approx 0.7979$；對標準化的Student-$t$分佈，期望絕對值更小且依賴於$\nu$，但`arch`會在內部處理這一點。
+- **符號**項$\gamma\, z_{t-1}$就是非對稱性所在。它對帶符號的新息是線性的，所以負的$z_{t-1}$會把$\log\sigma_t^2$推向與正值相反的方向。
+
+符號約定容易讓人搞混。在這種參數化方式下，槓桿效應（壞訊息推高波動率）對應$\gamma < 0$：負向衝擊$z_{t-1} < 0$使得$\gamma z_{t-1} > 0$，從而增加對數方差。這與GJR中$\gamma > 0$的符號正好相反。請始終查閱模型自身的文件以確認約定，而不要憑記憶假設；`arch`按其自身的符號約定報告EGARCH結果，我們在下文通過新聞衝擊曲線來核實，而不是依賴記憶。
+
+由於對數形式下一切都是可加的，EGARCH(1,1)的持續性完全由$\log\sigma_{t-1}^2$上的單一自迴歸係數$\beta$決定；平穩性只需要$|\beta| < 1$。這比GJR的不等式條件簡潔得多，在滾動視窗重新擬合時具有真正的實踐優勢。
+
+值得指出的一個微妙之處：EGARCH對沖擊的響應在指數意義上是**指數式**的（最後要取指數），而GJR是二次的。因此EGARCH對大幅衝擊的反應更加劇烈——在加密市場中，尾部事件才是真正重要的，這是一個優點，但也是EGARCH偶爾在一個異常日之後產生不切實際地過大方差預測的原因。兩者都不是普遍更優的，你應當根據樣本外擬合效果和風險回測來選擇，這正是本系列文章的核心目的。
+
+### 新聞衝擊曲線
+
+觀察對稱GARCH、GJR和EGARCH之間差異的最清晰方式是**新聞衝擊曲線**（Engle and Ng, 1993）：將$\sigma_{t-1}$固定在其長期水平，畫出下一期條件方差$\sigma_t^2$作為上一期衝擊$\varepsilon_{t-1}$的函數。它回答的問題是"給定這樣大小和符號的一個衝擊，模型會把明天的波動率抬高多少？"
+
+- **對稱GARCH**產生一條以零為中心的*對稱拋物線*。$-5\%$和$+5\%$的衝擊落在相同的高度上。這正是我們要修正的缺陷。
+- **GJR**產生一條*在零點有拐折的拋物線*——當$\gamma > 0$時，左側（負向衝擊）比右側更陡。兩側的曲率分別為$\alpha+\gamma$和$\alpha$。
+- **EGARCH**產生一條*非對稱的指數V形曲線*：由於$\gamma z$項的存在，兩側的斜率不同，並且由於最後的指數運算，整條曲線的上升速度比拋物線更快。
+
+我們將在後面的實現部分，用擬合出的參數把三者一併畫出——這是傳達非對稱性帶來的價值時最有用的單一診斷圖。
+
+## 厚尾：Student-t與偏態-t新息
+
+![Gaussian vs heavy-tailed return distributions](/images/blog/asymmetric-garch-crypto-leverage-fat-tails.webp)
+
+非對稱性修正的是模型對沖擊*符號*的反應。它對沖擊本身的*分佈*無能為力。普通GARCH假設$z_t \sim \mathcal{N}(0,1)$，而這一假設對加密資產幾乎總是錯誤的。即使GARCH消除了波動率聚集效應，標準化殘差$z_t = \varepsilon_t / \sigma_t$依然保留超額峰度——它們是厚尾的。高斯似然函數擬合的是分佈的肩部，低估了標準化後4-sigma、5-sigma、6-sigma的極端日實際發生的頻率。
+
+這對風險管理的後果是直接的。高斯99% VaR使用分位數$\Phi^{-1}(0.01) \approx -2.326$，因此預測$\text{VaR}_{0.99} \approx 2.326\,\sigma_t$。如果真實的標準化分佈是自由度$\nu = 5$的Student-$t$分佈，真實的1%分位數接近$-3.36$——高斯VaR在這個置信水平上樂觀了大約$44\%$。你會遇到遠超1%頻率的突破，並被"不可能"的日子系統性地驚到。這不是加密市場的特殊現象；Bollerslev（1987）正是因為觀察到股票和外匯殘差存在同樣的厚尾現象而提出了$t$-GARCH。加密市場只是同一問題的更極端版本。
+
+### 標準化Student-t
+
+Student-$t$密度有一個自由度參數$\nu > 2$，控制尾部厚度：$\nu$越小尾部越厚，當$\nu \to \infty$時$t$分佈收斂到高斯分佈。需要注意的是，原始$t_\nu$分佈的方差是$\nu/(\nu-2) \neq 1$，所以在把它用作新息之前必須先將其**標準化**為單位方差——否則GARCH遞推式中的"$\sigma_t$"就不再真正是條件標準差。
+
+單位方差的標準化Student-$t$新息的密度為
+
+$$f(z;\nu) = \frac{\Gamma\!\left(\frac{\nu+1}{2}\right)}{\sqrt{\pi(\nu-2)}\;\Gamma\!\left(\frac{\nu}{2}\right)}\left(1 + \frac{z^2}{\nu-2}\right)^{-\frac{\nu+1}{2}}, \qquad \nu > 2.$$
+
+注意內部的$(\nu-2)$——那正是標準化項，用於確保$\mathrm{Var}(z)=1$。給定GARCH條件方差$\sigma_t^2$以及$z_t = \varepsilon_t/\sigma_t$，單個觀測值的對數似然貢獻為
+
+$$\ell_t = \log\Gamma\!\left(\tfrac{\nu+1}{2}\right) - \log\Gamma\!\left(\tfrac{\nu}{2}\right) - \tfrac{1}{2}\log\bigl(\pi(\nu-2)\bigr) - \tfrac{1}{2}\log\sigma_t^2 - \frac{\nu+1}{2}\log\!\left(1 + \frac{z_t^2}{\nu-2}\right).$$
+
+$-\tfrac{1}{2}\log\sigma_t^2$這一項是從$\varepsilon_t$到$z_t$變換的雅可比行列式——你在第一部分的高斯GARCH似然函數中已經見過這一項。只有形狀部分發生了變化。對GARCH參數和$\nu$聯合最大化$\sum_t \ell_t$，正是當你傳入`dist='t'`時`arch`所做的事情。
+
+估計出的$\nu$本身就具有資訊價值。對於BTC/ETH的日度收益率，你通常會得到$\nu \approx 3\text{–}6$的範圍——厚尾，但方差仍然有限（需要$\nu > 2$），峰度通常也有限（需要$\nu > 4$）。如果擬合出的$\nu$低於4，需要注意在該模型中樣本峰度在理論上是無限的，某些估計量會變得不穩定；這是一個提示你應仔細審視異常值和資料質量的訊號。
+
+### Hansen偏態-t
+
+Student-$t$雖然厚尾，但依然是**對稱的**——左右兩側尾部同樣厚。加密資產收益率殘差往往*同時*表現出偏態：左尾（暴跌）比右尾更厚。Hansen偏態-$t$分佈（1994）在標準化$t$分佈的基礎上，除$\nu$外再引入一個偏度參數$\lambda \in (-1, 1)$，加以推廣：
+
+$$f(z;\nu,\lambda) = \begin{cases} b\,c\left(1 + \dfrac{1}{\nu-2}\left(\dfrac{bz+a}{1-\lambda}\right)^2\right)^{-\frac{\nu+1}{2}} & z < -a/b \\[2mm] b\,c\left(1 + \dfrac{1}{\nu-2}\left(\dfrac{bz+a}{1+\lambda}\right)^2\right)^{-\frac{\nu+1}{2}} & z \geq -a/b \end{cases}$$
+
+其中常數$a = 4\lambda c\,\frac{\nu-2}{\nu-1}$、$b^2 = 1 + 3\lambda^2 - a^2$、$c = \frac{\Gamma(\frac{\nu+1}{2})}{\sqrt{\pi(\nu-2)}\,\Gamma(\frac{\nu}{2})}$的選取使得對任意合法的$(\nu,\lambda)$，$z$的均值為零、方差為一。該分佈在$z = -a/b$處分段，兩段各自使用不同的縮放，將更多的機率質量彎向其中一側尾部。
+
+解讀：$\lambda < 0$給出左偏分佈（下行尾部更重），這是加密資產的常見結果，也與槓桿效應相互印證。$\lambda = 0$則退化為對稱的Student-$t$分佈，因此對$\lambda = 0$的檢驗能告訴你偏度項是否真正有用。在`arch`中這對應`dist='skewt'`，同時估計$\nu$和$\lambda$。其收益是得到一個左尾分位數確實比右尾分位數更重的VaR——這正是當你試圖承受的損失本身是非對稱的時候所需要的。這與[虧損與盈利之間的非對稱性](/en/blog/post/loss-profit-asymmetry)在持倉結果中的體現直接相關：跌幅$x\%$需要超過$x\%$才能收復，所以左尾建模失誤的代價高於右尾建模失誤。
+
+## Python實現
+
+![Volatility model selection across GARCH variants](/images/blog/asymmetric-garch-crypto-leverage-model-selection.webp)
+
+現在我們用`arch`庫來擬合這一切。設定方式與第一部分相同：抓取日度收益率，乘以100進行數值調節（當收益率量級為$O(0.01)$時，GARCH最佳化器表現不佳），並用常數均值擬合。如果你需要日內資料或不同的均值模型，機制是完全一樣的。
+
+### 設定與資料
+
+```python
+import numpy as np
+import pandas as pd
+from arch import arch_model
+from arch.univariate import GARCH, EGARCH, ConstantMean, StudentsT, SkewStudent
+from scipy import stats
+
+def fetch_returns(symbol="BTC-USD", start="2019-01-01", end="2025-12-31"):
+    """Daily log returns, in percent (scaled x100 for the optimizer)."""
+    import yfinance as yf
+    px = yf.download(symbol, start=start, end=end)["Close"].dropna()
+    ret = 100.0 * np.log(px / px.shift(1)).dropna()
+    ret.name = symbol
+    return ret
+
+r = fetch_returns("BTC-USD")
+print(f"{len(r)} daily observations, "
+      f"annualized vol ~ {r.std() * np.sqrt(365):.0f}%")
+```
+
+加密市場是7x24小時交易的，所以我們用365而不是252來年化——這是一個不大但反覆出現的困擾來源，當你把加密資產的Sharpe比率或波動率與股票交易臺的數字對比時容易搞混。
+
+### 擬合四個模型
+
+`arch`中的模式是：`vol='Garch'`配合`p=1, q=1`得到對稱GARCH；加上`o=1`會啟用GJR閾值項；`vol='EGARCH'`則切換到對數方差模型。新息分佈通過`dist`設定：`'normal'`、`'t'`、`'skewt'`。
+
+```python
+def fit(returns, vol="Garch", p=1, o=0, q=1, dist="normal"):
+    am = arch_model(returns, mean="Constant",
+                    vol=vol, p=p, o=o, q=q, dist=dist)
+    res = am.fit(disp="off")
+    return res
+
+models = {
+    "GARCH-N":    fit(r, vol="Garch",  o=0, dist="normal"),  # Part 1 baseline
+    "GJR-t":      fit(r, vol="Garch",  o=1, dist="t"),        # asymmetry + fat tails
+    "EGARCH-t":   fit(r, vol="EGARCH", o=1, dist="t"),        # log-variance asymmetry
+    "GJR-skewt":  fit(r, vol="Garch",  o=1, dist="skewt"),    # + skew
+}
+
+for name, res in models.items():
+    print(f"\n===== {name} =====")
+    print(res.summary().tables[1])   # parameter table
+```
+
+對`vol='EGARCH'`而言，`o`參數控制非對稱（$\gamma z$）項，`p`/`q`控制幅度項和滯後項；`o=1, p=1, q=1`即標準的EGARCH(1,1)。有一個陷阱需要留意：EGARCH在`arch`中的參數名字雖然一樣，但非對稱項的*符號約定*遵循Nelson的定義，所以負的估計值才對應槓桿效應。我們通過新聞衝擊曲線來核實這一點，而不是憑記憶判斷。
+
+### 解讀GJR擬合結果
+
+一個GJR-$t$參數列大致如下（示例性數值，並非某次真實實驗的報告結果——請用你自己的資料重新擬合）：
+
+```
+                  coef    std err       t      P>|t|
+omega           0.0480     0.017     2.82     0.005
+alpha[1]        0.0620     0.018     3.44     0.001
+gamma[1]        0.0910     0.028     3.25     0.001
+beta[1]         0.8850     0.021    42.1      0.000
+nu              4.30       0.55      7.82     0.000
+```
+
+如何解讀：
+
+- `gamma[1] = 0.091`且$t$統計量超過3，是一個統計上顯著的槓桿效應。負向衝擊之後，平方衝擊的影響為$\alpha + \gamma = 0.062 + 0.091 = 0.153$；正向衝擊之後僅為$\alpha = 0.062$。同等幅度下，壞訊息使該模型的波動率變化幅度大約是好訊息的$2.5$倍。
+- `nu = 4.3`證實了厚尾特徵——遠離高斯分佈（$\nu \to \infty$），且低到四階矩幾乎不再有限的程度。在這條序列上使用高斯VaR會嚴重偏樂觀。
+- 持續性為$\alpha + \beta + \tfrac{1}{2}\gamma = 0.062 + 0.885 + 0.0455 \approx 0.993$——非常高，這在日度加密資產資料中很常見：衝擊衰減緩慢，波動率高度聚集。
+
+最需要檢查的一行是$\gamma$那一行。如果它的$p$值較大，說明非對稱項在這個資產和這個視窗上沒有發揮作用，應當選擇更簡單的對稱模型。這是模型選擇的紀律，不是裝飾——下文還會詳述。
+
+### 用資訊準則比較模型
+
+對數似然在你新增參數時總會改善，所以不能僅憑對數似然來選擇模型。應使用懲罰參數數量的AIC/BIC（BIC的懲罰更嚴厲）：
+
+```python
+def compare(models: dict) -> pd.DataFrame:
+    rows = []
+    for name, res in models.items():
+        rows.append({
+            "model": name,
+            "n_params": len(res.params),
+            "loglik": res.loglikelihood,
+            "AIC": res.aic,
+            "BIC": res.bic,
+        })
+    df = pd.DataFrame(rows).set_index("model")
+    return df.sort_values("BIC")
+
+print(compare(models))
+```
+
+經驗判斷規則：相對基線模型BIC改善超過約6分是額外結構真實存在的有力證據；1-2分的差異屬於噪聲。如果`GJR-t`相對`GARCH-N`改善了30分以上BIC，但`GJR-skewt`相對`GJR-t`只改善了1分，那就保留$t$分佈、捨棄偏度——偏度參數在這份資料上沒有回本。不要把AIC/BIC當作樣本外驗證的替代品；它們獎勵調整了複雜度之後的樣本內擬合優度，這是必要條件但不充分。真正的檢驗是VaR回測，以及最終的[前向滾動評估](/en/blog/post/walk-forward-optimization)。
+
+### 繪製新聞衝擊曲線
+
+這是收益最直接的一張圖——它讓非對稱性變得可見，並驗證了EGARCH的符號約定。
+
+```python
+import matplotlib.pyplot as plt
+
+def news_impact_curve(res, shock_grid):
+    """
+    Next-period conditional variance as a function of the last shock,
+    holding sigma_{t-1} at the model's unconditional level.
+    Works for symmetric GARCH, GJR (o=1), and EGARCH.
+    """
+    p = res.params
+    vol_name = res.model.volatility.__class__.__name__
+    # Unconditional variance anchor from the fitted conditional vols.
+    sigma2_bar = np.mean(res.conditional_volatility ** 2)
+
+    omega = p["omega"]
+    alpha = p.get("alpha[1]", 0.0)
+    gamma = p.get("gamma[1]", 0.0)
+    beta  = p.get("beta[1]", 0.0)
+
+    if vol_name == "EGARCH":
+        # z = eps / sigma; anchor sigma at sqrt(sigma2_bar).
+        sig_prev = np.sqrt(sigma2_bar)
+        z = shock_grid / sig_prev
+        E_abs = np.sqrt(2 / np.pi)   # approx; arch uses the fitted dist's E|z|
+        log_s2 = (omega + beta * np.log(sigma2_bar)
+                  + alpha * (np.abs(z) - E_abs) + gamma * z)
+        return np.exp(log_s2)
+    else:
+        # GARCH / GJR in levels.
+        ind = (shock_grid < 0).astype(float)
+        return omega + (alpha + gamma * ind) * shock_grid**2 + beta * sigma2_bar
+
+shocks = np.linspace(-8, 8, 401)   # daily % shocks
+plt.figure(figsize=(8, 5))
+for name in ["GARCH-N", "GJR-t", "EGARCH-t"]:
+    nic = news_impact_curve(models[name], shocks)
+    plt.plot(shocks, nic, label=name, lw=2)
+plt.axvline(0, color="gray", lw=0.8, ls="--")
+plt.xlabel("Last shock  $\\varepsilon_{t-1}$  (daily %)")
+plt.ylabel("Next-period conditional variance  $\\sigma_t^2$")
+plt.title("News impact curve: symmetric vs GJR vs EGARCH (BTC)")
+plt.legend()
+plt.tight_layout()
+```
+
+執行這段程式碼後，對稱的`GARCH-N`曲線是一條以零為中心的乾淨拋物線——$-6\%$和$+6\%$的衝擊給出完全相同的方差。`GJR-t`是一條在原點處有拐折的拋物線，左側臂更高。`EGARCH-t`則呈現指數V形，如果它的左側臂位於右側臂之上，你就在一瞥之間確認了槓桿效應和符號約定。如果EGARCH的左側臂反而*低於*右側，要麼$\gamma$估計為正（上行波動率機制），要麼你把符號弄反了——這張圖無需任何猜測就能告訴你答案。
+
+### 四個模型的橫向對比
+
+在轉向風險話題之前，把這四個模型並排放在一起會有幫助。每一行是一個建模決策，各列展示這個決策的代價與收益。
+
+| 屬性 | GARCH-N | GJR-t | EGARCH-t | GJR-skewt |
+| --- | --- | --- | --- | --- |
+| 非對稱性（衝擊符號） | 無 | 閾值 $\gamma I\varepsilon^2$ | 帶符號 $\gamma z$ | 閾值 $\gamma I\varepsilon^2$ |
+| 新息尾部形態 | 高斯 | Student-$t$ | Student-$t$ | 偏態-$t$ |
+| 新息偏度 | 無 | 無 | 無 | 有（$\lambda$） |
+| 正定性約束 | 有 | 有（$\alpha+\gamma\ge0$） | 無（對數形式） | 有 |
+| 平穩性條件 | $\alpha+\beta<1$ | $\alpha+\beta+\tfrac12\gamma<1$ | $\lvert\beta\rvert<1$ | $\alpha+\beta+P(z<0)\gamma<1$ |
+| 相對基線的額外參數 | 0 | $\gamma,\nu$ | $\gamma,\nu$ | $\gamma,\nu,\lambda$ |
+| 加密市場典型結論 | VaR回測失敗 | 穩健有效 | 穩健有效 | 相對GJR-t邊際改善 |
+
+需要內化的模式是：從第一列到第二列的跳躍——同時引入非對稱性和厚尾——是幾乎所有風險校準改善所在之處。後續的精細化（EGARCH的函數形式、偏度項）確實真實存在，但屬於二階效應，在很多加密資產序列上它們已經落入噪聲範圍之內。把建模精力花在第一次跳躍上，對其餘部分保持懷疑。
+
+## 風險應用：VaR與預期損失
+
+![VaR threshold, expected shortfall, and breach coverage](/images/blog/asymmetric-garch-crypto-leverage-var-es.webp)
+
+擬合更復雜的波動率模型只有在能改善某個決策時才有價值。最容易改善的決策就是一步尾部風險預測：明天最壞能壞到什麼程度？我們直接從擬合的GARCH-$t$/偏態-$t$預測中，生成一日前瞻的**風險價值**（Value-at-Risk）和**預期損失**（Expected Shortfall，又稱條件VaR，[HRP/CVaR投資組合流程](/en/blog/post/portfolio-pipeline-hrp-cvar)將其用作最佳化目標）。
+
+### 從條件分佈到VaR
+
+GARCH機制給出條件均值$\mu_{t+1}$和條件標準差$\sigma_{t+1}$的一步預測。收益率被建模為$r_{t+1} = \mu_{t+1} + \sigma_{t+1} z_{t+1}$，其中$z_{t+1}$取自擬合的標準化分佈（高斯、$t$或偏態-$t$）。所以*收益率*的$\alpha$分位數正是*標準化分佈*的$\alpha$分位數的仿射變換：
+
+$$\text{VaR}_{\alpha}(t+1) = -\Bigl(\mu_{t+1} + \sigma_{t+1}\, F_z^{-1}(1-\alpha)\Bigr)$$
+
+其中$F_z^{-1}$是標準化新息的分位數（逆累積分佈函數），前面的負號遵循VaR作為正數損失量的約定。對99% VaR而言，$\alpha = 0.99$，代入$F_z^{-1}(0.01)$。$t$/偏態-$t$分佈的全部好處正體現在這裡：$F_z^{-1}(0.01)$比高斯分佈的$-2.326$更負，所以VaR是誠實地更大。
+
+### 預期損失
+
+VaR只告訴你閾值；它沒有說明一旦突破閾值時情況有多糟。預期損失——即*在超過VaR的條件下*的平均損失——彌補了這一點，而且它是一致的（次可加性），這正是它成為CVaR最佳化背後的風險度量、也是巴塞爾協議轉向使用它的原因。對於位置-尺度模型，
+
+$$\text{ES}_{\alpha}(t+1) = -\Bigl(\mu_{t+1} + \sigma_{t+1}\, \mathbb{E}\!\left[z \mid z \leq F_z^{-1}(1-\alpha)\right]\Bigr).$$
+
+條件尾部期望項$\mathbb{E}[z \mid z \le q]$對標準分佈有閉式解。對**高斯分佈**而言，取$q = \Phi^{-1}(1-\alpha)$，
+
+$$\mathbb{E}[z \mid z \le q] = -\frac{\phi(q)}{1-\alpha},$$
+
+其中$\phi$是標準正態密度函數。對自由度為$\nu$的**標準化Student-$t$分佈**，取$q = t_\nu^{-1}(1-\alpha)$（標準化尺度上），尾部期望為
+
+$$\mathbb{E}[z \mid z \le q] = -\frac{\nu + q^2}{\nu - 1}\cdot\frac{g_\nu(q)}{1-\alpha},$$
+
+其中$g_\nu$是標準化$t$密度函數。$t$分佈的預期損失超出高斯分佈的幅度，比VaR超出的幅度更大，因為$t$分佈的尾部不僅更遠——它還*更厚*，所以超出閾值之後的平均損失會不成比例地大。這多出來的差距，正是高斯模型悄悄向你隱藏的部分。
+
+### 從擬合的arch模型計算VaR與ES
+
+`arch`的分佈物件暴露了`ppf`（分位數）方法，因此我們可以直接獲取標準化分位數，而無需重新推導任何東西。對於ES我們採用數值積分，這種方式穩健，且在`normal`/`t`/`skewt`之間通用一致。
+
+```python
+from scipy import integrate
+
+def var_es_forecast(res, alpha=0.99):
+    """
+    One-step-ahead VaR and ES at level alpha, on the same (x100) scale
+    as the returns fed to the model. Divide by 100 for fractional units.
+    """
+    fc = res.forecast(horizon=1, reindex=False)
+    mu = fc.mean.iloc[-1, 0]
+    sigma = np.sqrt(fc.variance.iloc[-1, 0])
+
+    dist = res.model.distribution          # StudentsT / SkewStudent / Normal
+    # Distribution shape params (nu, or [nu, lambda]) come from the fit.
+    dp = [res.params[k] for k in res.params.index
+          if k in ("nu", "eta", "lambda", "lam")]
+
+    # Standardized lower-tail quantile z_q = F^{-1}(1 - alpha).
+    z_q = dist.ppf(1 - alpha, dp) if dp else dist.ppf(1 - alpha)
+    z_q = float(np.atleast_1d(z_q)[0])
+
+    # ES on the standardized scale: E[z | z <= z_q] via numerical integration
+    # of the fitted standardized pdf.
+    def pdf(z):
+        arr = np.atleast_1d(z).astype(float)
+        lp = dist.loglikelihood(dp, arr, np.ones_like(arr), individual=True) \
+             if dp else dist.loglikelihood([], arr, np.ones_like(arr),
+                                           individual=True)
+        return np.exp(lp)
+
+    num, _ = integrate.quad(lambda z: z * pdf(z), -30, z_q, limit=200)
+    es_z = num / (1 - alpha)               # E[z | z <= z_q]
+
+    var = -(mu + sigma * z_q)
+    es  = -(mu + sigma * es_z)
+    return {"mu": mu, "sigma": sigma, "z_q": z_q,
+            "VaR": var, "ES": es}
+
+for name in ["GARCH-N", "GJR-t", "GJR-skewt"]:
+    out = var_es_forecast(models[name], alpha=0.99)
+    print(f"{name:11s}  sigma={out['sigma']:.2f}%  "
+          f"z_q={out['z_q']:+.2f}  "
+          f"VaR99={out['VaR']:.2f}%  ES99={out['ES']:.2f}%")
+```
+
+`z_q`這一列就是整個故事的濃縮。高斯模型使用$z_q \approx -2.33$；$\nu \approx 4.3$的$t$分佈使用接近$-3.3$的值；偏態-$t$把*左側*分位數進一步推遠，同時把右側分位數收窄。相同的$\sigma_{t+1}$，明顯更大的VaR。如果你一直在加密資產上執行高斯VaR，這正是你一直在默默承受的差距。
+
+### 一步預測與多步預測：一個警示
+
+以上所有內容都是**一日前瞻**預測，這也是GARCH VaR最乾淨的場景。有兩點會使更長的預測期變得複雜，在你外推之前應當瞭解它們。
+
+第一，方差預測會均值迴歸。平穩GARCH模型的$h$步前瞻條件方差會隨著$h$增大而收斂到無條件水平$\bar\sigma^2$，而累積的$h$日方差是各期預測值之和——除非波動率處於其長期均值，否則它*不等於*$h\times\sigma_{t+1}^2$。樸素的"時間平方根"縮放$\text{VaR}(h) = \sqrt{h}\,\text{VaR}(1)$忽略了這種均值迴歸，恰恰在衝擊之後——也就是你最需要這個數字的時候——是錯的。應當使用模型自身的多步方差路徑。
+
+第二，多日收益率的*分佈*形狀與單日新息並不相同。將多個服從$t$分佈的日度衝擊（通過非線性的GARCH遞推式）相加，並不會在$h$日尺度上得到$t$分佈；不存在簡潔的閉式解。對於多日VaR，誠實的做法是**模擬**：從擬合的標準化分佈中抽取新息路徑，讓它們通過GARCH遞推式生成模擬的收益率路徑，聚合為$h$日收益率，再讀取經驗分位數。這也自然地處理了偏態-$t$的情形——在那種情形下根本不存在解析的多期分位數。本文中的一步解析公式是精確的；應把任何多步的簡化處理視為需要驗證的近似方法。
+
+### VaR回測：Kupiec檢驗與Christoffersen檢驗
+
+VaR預測是一個機率性的主張："損失只有$(1-\alpha)$的天數會超過這個閾值。"你需要通過在前向滾動評估中統計**突破次數**（實際損失超過預測VaR的天數），並檢驗兩件事來驗證它。第一，突破*頻率*是否正確？第二，突破是否*獨立*，還是會聚集出現（這意味著模型恰恰在最要緊的波動率飆升時失效）？
+
+設$I_t = \mathbf{1}\{\text{loss}_t > \text{VaR}_t\}$為突破指示序列，$N = \sum I_t$為$T$天內的突破次數，$\hat{\pi} = N/T$為觀測到的頻率。目標頻率$p = 1-\alpha$。
+
+**Kupiec無條件覆蓋檢驗（1995）**通過似然比檢驗$\hat\pi \approx p$：
+
+$$LR_{uc} = -2\log\!\left[\frac{p^{N}(1-p)^{T-N}}{\hat\pi^{N}(1-\hat\pi)^{T-N}}\right] \;\sim\; \chi^2_1.$$
+
+**Christoffersen獨立性檢驗（1998）**檢驗今天的突破不能被昨天的突破所預測。設$n_{ij}$為突破序列中從狀態$i$到狀態$j$的轉移次數，$\pi_{01} = n_{01}/(n_{00}+n_{01})$，$\pi_{11} = n_{11}/(n_{10}+n_{11})$，$\pi = (n_{01}+n_{11})/T$。則
+
+$$LR_{ind} = -2\log\!\left[\frac{(1-\pi)^{n_{00}+n_{10}}\,\pi^{\,n_{01}+n_{11}}}{(1-\pi_{01})^{n_{00}}\pi_{01}^{n_{01}}(1-\pi_{11})^{n_{10}}\pi_{11}^{n_{11}}}\right] \;\sim\; \chi^2_1.$$
+
+兩者合併為**條件覆蓋**檢驗$LR_{cc} = LR_{uc} + LR_{ind} \sim \chi^2_2$，同時檢驗正確的頻率*和*獨立性。一個模型可能通過了Kupiec檢驗（突破次數正確）卻未通過Christoffersen檢驗（所有突破都扎堆出現在同一個暴跌周）——這正是你最想抓住的失效模式，因為聚集出現的突破正是那些會讓賬戶爆倉的突破。
+
+```python
+from scipy.stats import chi2
+
+def var_backtest(losses, var, p):
+    """
+    losses, var: 1D arrays, same length; loss>0 is a loss, var>0 threshold.
+    p = 1 - alpha (target violation rate, e.g. 0.01 for 99% VaR).
+    Returns Kupiec, Christoffersen-independence, and conditional-coverage LR.
+    """
+    losses = np.asarray(losses)
+    var = np.asarray(var)
+    I = (losses > var).astype(int)          # violation indicators
+    T = len(I)
+    N = int(I.sum())
+    pi_hat = N / T
+
+    # --- Kupiec unconditional coverage ---
+    eps = 1e-12
+    ll_null = N * np.log(p + eps) + (T - N) * np.log(1 - p + eps)
+    ll_alt  = N * np.log(pi_hat + eps) + (T - N) * np.log(1 - pi_hat + eps)
+    LR_uc = -2 * (ll_null - ll_alt)
+    p_uc = 1 - chi2.cdf(LR_uc, df=1)
+
+    # --- Christoffersen independence (Markov transition counts) ---
+    n00 = np.sum((I[:-1] == 0) & (I[1:] == 0))
+    n01 = np.sum((I[:-1] == 0) & (I[1:] == 1))
+    n10 = np.sum((I[:-1] == 1) & (I[1:] == 0))
+    n11 = np.sum((I[:-1] == 1) & (I[1:] == 1))
+    pi01 = n01 / (n00 + n01) if (n00 + n01) else 0.0
+    pi11 = n11 / (n10 + n11) if (n10 + n11) else 0.0
+    pi   = (n01 + n11) / (n00 + n01 + n10 + n11)
+
+    def _ll(pi01, pi11, pi_pooled, use_pooled):
+        if use_pooled:
+            a = (n00 + n10) * np.log(1 - pi_pooled + eps)
+            b = (n01 + n11) * np.log(pi_pooled + eps)
+            return a + b
+        return (n00 * np.log(1 - pi01 + eps) + n01 * np.log(pi01 + eps)
+                + n10 * np.log(1 - pi11 + eps) + n11 * np.log(pi11 + eps))
+
+    LR_ind = -2 * (_ll(pi01, pi11, pi, True) - _ll(pi01, pi11, pi, False))
+    p_ind = 1 - chi2.cdf(LR_ind, df=1)
+
+    # --- Conditional coverage (joint) ---
+    LR_cc = LR_uc + LR_ind
+    p_cc = 1 - chi2.cdf(LR_cc, df=2)
+
+    return {
+        "T": T, "violations": N,
+        "obs_rate": pi_hat, "target_rate": p,
+        "LR_uc": LR_uc, "p_uc": p_uc,
+        "LR_ind": LR_ind, "p_ind": p_ind,
+        "LR_cc": LR_cc, "p_cc": p_cc,
+    }
+```
+
+為了誠實地生成`losses`/`var`輸入，你需要在擴充視窗或滾動視窗上重新擬合（或至少重新預測），為每個樣本外的日子記錄*一步前瞻*VaR，然後與該天的實際損失進行比較。絕不要在樣本內回測VaR——在同一次崩盤資料上擬合的模型，在被要求預測這次崩盤時會顯得比實際表現好得多。這與[回測-實盤一致性](/en/blog/post/backtest-live-parity)遵循同樣的紀律：評估只能使用決策時刻可獲得的資訊。
+
+```python
+def walk_forward_var(returns, alpha=0.99, start=750, refit_every=25,
+                     vol="Garch", o=1, dist="t"):
+    """
+    Expanding-window one-step VaR. Refit every `refit_every` days
+    (refitting daily is correct but slow; every ~25 days is a common
+    compromise -- validate the shortcut on your data).
+    """
+    losses, vars_ = [], []
+    res = None
+    for t in range(start, len(returns)):
+        if res is None or (t - start) % refit_every == 0:
+            am = arch_model(returns.iloc[:t], mean="Constant",
+                            vol=vol, p=1, o=o, q=1, dist=dist)
+            res = am.fit(disp="off")
+        fc = res.forecast(horizon=1, reindex=False)
+        mu = fc.mean.iloc[-1, 0]
+        sig = np.sqrt(fc.variance.iloc[-1, 0])
+        dp = [res.params[k] for k in res.params.index
+              if k in ("nu", "eta", "lambda", "lam")]
+        z_q = float(np.atleast_1d(
+            res.model.distribution.ppf(1 - alpha, dp) if dp
+            else res.model.distribution.ppf(1 - alpha))[0])
+        var_t = -(mu + sig * z_q)
+        vars_.append(var_t)
+        losses.append(-returns.iloc[t])     # realized loss for that day
+    return np.array(losses), np.array(vars_)
+
+losses, vars_ = walk_forward_var(r, alpha=0.99, dist="t")
+print(var_backtest(losses, vars_, p=0.01))
+```
+
+解讀方式：一個校準良好的99% VaR應顯示接近1%的觀測頻率、不顯著的Kupiec檢驗（較大的`p_uc`）以及不顯著的Christoffersen檢驗（較大的`p_ind`）——沒有聚集現象。實踐中，在加密資產上誠實的結果通常是**GARCH-Normal未通過Kupiec檢驗**（突破次數過多，`p_uc`極小），而**GJR-$t$或EGARCH-$t$通過或接近通過**。這一對比正是本文整個論證以假設檢驗形式呈現的結果。如果即便是$t$模型也顯示出聚集的突破（`p_ind`較小），說明你的波動率動態依然設定錯誤——這往往提示你需要更長的記憶（成分GARCH/FIGARCH）或一個機制層，這與[基於HMM的機制檢測](/en/blog/post/regime-detection-hmm-adaptive-trading)相關聯。
+
+### 按尾部損失而非僅按通過/未通過來排序模型
+
+Kupiec檢驗和Christoffersen檢驗給出的是二元判決——模型被拒絕或未被拒絕。這是必要的，但過於粗糙：兩個模型可能都"通過"，而其中一個明顯更精準。要*排序*相互競爭的VaR預測，應使用對分位數嚴格一致的損失函數——**pinball（分位數）損失**：
+
+$$L_\tau(r, q) = \bigl(\tau - \mathbf{1}\{r < q\}\bigr)\,(r - q), \qquad \tau = 1-\alpha,$$
+
+其中$q$是（帶符號的）VaR分位數，$r$是實際收益率。在樣本外的日子上取平均，更低的平均pinball損失意味著更好校準*且*更精準的分位數；因為該損失函數對$\tau$分位數是一致的，最小化它不會因模型給出懶惰的寬區間而給予獎勵。要正式比較兩個模型，可將它們逐日的損失差異輸入**Diebold-Mariano檢驗**。
+
+```python
+def pinball_loss(returns, var, alpha=0.99):
+    tau = 1 - alpha
+    q = -np.asarray(var)               # VaR is a positive loss; quantile is negative
+    r = np.asarray(returns)
+    hit = (r < q).astype(float)
+    return np.mean((tau - hit) * (r - q))
+```
+
+對於預期損失而言，需要特別指出的是ES本身*不*具備可誘導性（elicitable）（不存在一個損失函數其最小化點恰好是ES本身），這是一個真實存在的理論上的難點：你需要用Fissler-Ziggel評分規則將ES與VaR*聯合*評估，或者退而求其次，檢查平均突破幅度是否與模型預測的ES相符這一更簡單的做法。一個粗糙但實用的ES檢驗：在VaR被突破的那些天中，比較實際損失的均值與模型預測ES的均值——兩者應當接近。
+
+監管層面採用的是**巴塞爾交通燈**方法：在250個交易日內，99% VaR出現0-4次突破為"綠燈"（可接受），5-9次為"黃燈"（需加強審查），10次以上為"紅燈"（模型被拒絕，資本乘數上調）。這是Kupiec檢驗的一個更粗糙的表親，但卻是風險委員會實際使用的語言，值得與LR統計量一併報告。
+
+## 實踐考量
+
+### 額外參數何時不划算
+
+誠實的預設立場是對複雜度保持懷疑。你新增的每一個參數都是最佳化器可能過擬合的一個旋鈕，而非對稱厚尾GARCH有好幾個這樣的旋鈕。具體的指導原則：
+
+- **流動性差或樣本較短的情況。** 只有幾百個日度觀測值時，$\gamma$和$\lambda$的標準誤會很大，你會"檢測到"實際上只是抽樣噪聲的非對稱性。在一個新上線或交易稀薄的山寨幣上，對稱的GARCH-$t$往往是資料能夠支撐的最複雜模型。用200天的資料擬合偏態-$t$的EGARCH是在自欺欺人。
+- **偏度項往往回不了本。** 在實踐中，從Normal轉向$t$分佈通常是一個顯著且可靠的改善（厚尾是真實且強烈的）。從$t$轉向偏態-$t$往往是邊際的——BIC增益只有1或2分，有時甚至為負。只有在資料明確要求時才新增偏度。
+- **在日度資料上，EGARCH與GJR通常沒有明顯高下之分。** 它們用不同的函數形式編碼了相同的定性故事。應通過樣本外VaR回測來選擇，而不是看誰的樣本內對數似然更好看。
+- **更高的頻率會改變答案。** 在小時線或分鐘線上，日內季節性和微觀結構效應占主導地位，普通的日度風格GARCH無論是否引入非對稱性都是設定錯誤的。這是另一個問題，需要不同的工具。
+
+這與[沒有穩健優勢時的誠實評估](/en/blog/post/honest-negative-no-robust-edge)是同一條教訓：一個無法通過樣本外測試的更復雜模型，比它所取代的簡單模型更糟，因為它帶有精確性的假象。把負面結果——"偏度在ETH上沒有幫助"——作為一個真實的發現來報告，並用[前向滾動最佳化](/en/blog/post/walk-forward-optimization)作為最終裁判，而不是樣本內AIC。
+
+### 這些是其他一切的基礎邊際分佈
+
+本文中的模型不是終點；它們是聯合風險體系的單變數構建模組。[加密資產聯合風險的Copula模型](/en/blog/post/copula-models-joint-risk-crypto)一文**恰好**使用EGARCH/GJR-$t$作為擬合藤Copula之前的GARCH-EVT邊際分佈——你對每個資產擬合一個非對稱厚尾GARCH，提取標準化殘差，然後才對跨資產依賴關係建模。如果你的邊際分佈是一個對稱的高斯GARCH，無論依賴模型多好，Copula都會繼承其尾部誤差。垃圾邊際分佈，垃圾聯合VaR。
+
+對於多變數波動率問題——隨時間變化的*相關性*而非各資產的方差——參見[第三部分，DCC-GARCH](/en/blog/post/dcc-garch-dynamic-correlation-crypto)，它在這些單變數擬合結果之上疊加了一個動態相關模型。而對於把波動率預測轉化為倉位規模和交易回測，[第四部分：波動率目標化](/en/blog/post/volatility-targeting-garch-strategy)使用了這些模型給出的$\sigma_{t+1}$預測，按預測風險的反比來調整敞口。
+
+### 一個不依賴分佈假設的替代方案
+
+風險部分的一切都建立在一個參數化假設之上：標準化殘差服從$t$或偏態-$t$分佈。這個假設是可檢驗的，通常也是合理的，但它可能失效。如果你不願意對尾部形態做出任何承諾，[保形預測（conformal prediction）](/en/blog/post/conformal-prediction-trading)提供了具有有限樣本覆蓋保證的、不依賴分佈假設的預測區間——這是一種真正不同的思路，對新息分佈不作任何假設。這兩種方法是互補的：參數化的GARCH-$t$給你一個完整的條件密度（因此能給出ES，而保形區間無法直接提供這一點），而保形方法給你即使密度設定錯誤也依然成立的覆蓋保證。在生產環境中，把兩者一起用作交叉驗證是一種廉價的保險。
+
+### 數值與工作流衛生
+
+- **將收益率放大100倍。** GARCH最佳化器在百分比收益率上比在原始小數收益率上收斂得可靠得多。如果你以小數單位報告結果，記得把VaR/ES還原縮放。
+- **留意持續性。** 如果$\alpha + \beta + \tfrac12\gamma$的估計值高於約0.999，模型接近單位根（類似IGARCH）；預測的均值迴歸會非常緩慢，長期方差預測變得不可靠。這不一定是錯誤，但應當標記出來。
+- **滾動視窗上的收斂失敗。** EGARCH的對數形式避免了正定性約束，但在病態視窗上仍可能無法收斂。將`fit()`包裹在try/except中，收斂失敗時回退到上一個視窗的參數，而不是讓實盤迴測崩潰。
+- **均值模型。** 我們全程使用了常數均值。對於大多數日度加密資料，條件均值接近零，且被波動率所淹沒；除非有充分理由，否則不要把建模精力花在預測均值上。
+
+## 小結
+
+- **普通GARCH(1,1)有兩個結構性缺陷**：它是對稱的（因為衝擊以$\varepsilon^2$的形式進入，對$+x\%$和$-x\%$的反應相同），且它假設高斯新息（低估了加密資產的厚尾）。兩者都會通過過於樂觀的VaR造成真金白銀的損失。
+- **GJR-GARCH**添加了一個閾值項$\gamma\,I(\varepsilon_{t-1}<0)\,\varepsilon_{t-1}^2$。顯著的$\gamma > 0$即槓桿效應：壞訊息比好訊息更能推高波動率。正定性需要$\alpha+\gamma\ge0$；持續性為$\alpha+\beta+\tfrac12\gamma$。
+- **EGARCH**對$\log\sigma_t^2$建模，因此沒有正定性約束，平穩性條件只是$|\beta|<1$。非對稱性通過帶符號項$\gamma z_{t-1}$（在這一約定下槓桿效應對應$\gamma<0$）引入，與幅度項$|z_{t-1}|$分離開。
+- **新聞衝擊曲線**——下一期方差相對於上一期衝擊的函數——讓非對稱性一目瞭然，並能快速驗證EGARCH的符號約定。
+- **Student-$t$新息**（`dist='t'`）通過自由度$\nu$（加密資產通常為3-6）修正尾部；**Hansen偏態-$t$**（`dist='skewt'`）新增偏度參數$\lambda$以得到更厚的左尾。從Normal轉向$t$分佈通常是顯著可靠的改善；從$t$轉向偏態-$t$往往是邊際改善。
+- **VaR和ES**由擬合的條件分佈匯出：$\text{VaR}_\alpha = -(\mu_{t+1} + \sigma_{t+1}F_z^{-1}(1-\alpha))$，厚尾分位數使風險誠實地大於高斯估計。ES（一致性度量，近似CVaR）刻畫了超過VaR之後的平均損失。
+- **用Kupiec檢驗和Christoffersen檢驗回測。** Kupiec檢驗突破頻率；Christoffersen檢驗突破是否未聚集。一個模型可能通過一項而未通過另一項——聚集的突破是最危險的失效模式。回測必須嚴格樣本外進行。
+- **紀律勝於複雜度。** 只有當非對稱性/偏度同時通過BIC*和*樣本外VaR回測時才新增它們。在短樣本或流動性差的序列上，更簡單的模型通常勝出。
+
+---
+
+**References:**
+
+- Nelson, D. B. (1991). Conditional heteroskedasticity in asset returns: A new approach. *Econometrica*, 59(2), 347-370. [DOI](https://doi.org/10.2307/2938260)
+- Glosten, L. R., Jagannathan, R., & Runkle, D. E. (1993). On the relation between the expected value and the volatility of the nominal excess return on stocks. *Journal of Finance*, 48(5), 1779-1801. [DOI](https://doi.org/10.1111/j.1540-6261.1993.tb05128.x)
+- Bollerslev, T. (1987). A conditionally heteroskedastic time series model for speculative prices and rates of return. *Review of Economics and Statistics*, 69(3), 542-547. [DOI](https://doi.org/10.2307/1925546)
+- Hansen, B. E. (1994). Autoregressive conditional density estimation. *International Economic Review*, 35(3), 705-730. [DOI](https://doi.org/10.2307/2527081)
+- Engle, R. F., & Ng, V. K. (1993). Measuring and testing the impact of news on volatility. *Journal of Finance*, 48(5), 1749-1778. [DOI](https://doi.org/10.1111/j.1540-6261.1993.tb05127.x)
+- Christoffersen, P. F. (1998). Evaluating interval forecasts. *International Economic Review*, 39(4), 841-862. [DOI](https://doi.org/10.2307/2527341)
+- Kupiec, P. H. (1995). Techniques for verifying the accuracy of risk measurement models. *Journal of Derivatives*, 3(2), 73-84. [DOI](https://doi.org/10.3905/jod.1995.407942)
+- Black, F. (1976). Studies of stock price volatility changes. *Proceedings of the American Statistical Association, Business and Economic Statistics Section*, 177-181.
+- McNeil, A. J., Frey, R., & Embrechts, P. (2015). *Quantitative Risk Management: Concepts, Techniques and Tools* (2nd ed.). Princeton University Press.
+- Sheppard, K. (2023). arch: Autoregressive conditional heteroskedasticity models in Python. [GitHub](https://github.com/bashtage/arch).

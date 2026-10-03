@@ -2,7 +2,7 @@
 """Resume separate NotebookLM PDF/audio drafts using Gaia's saved Camoufox session.
 
 No cookie import, video generation, rendering, or publication. Mutation intents
-are saved before clicks; uncertain submissions are reconciled, never retried.
+are saved before clicks; reconcile uncertain submissions before recovery.
 """
 import argparse
 import asyncio
@@ -372,6 +372,39 @@ class Runner:
                 raise RuntimeError("Source pre-dispatch baseline changed; inspect before insertion")
             intent["pre_dispatch_recovery_verified_at"] = now()
             insert = True
+        elif not job.get("source_id") and self.state.get("recovery_policy", {}).get("retry_empty_source_uploads"):
+            intent = job["source_intent"]
+            if intent["sha256"] != brief["source_text_sha256"]:
+                raise RuntimeError("Submitted source hash differs from frozen input")
+            # Reconcile permanent/processing additions first. A failed upload
+            # may be retried only in the same, freshly verified empty notebook.
+            if not await source_ids():
+                notebook = permanent_notebook_url(job.get("notebook", ""))
+                if not notebook or permanent_notebook_url(page.url) != notebook or job["artifacts"]:
+                    raise RuntimeError("Source recovery lacks the exact empty bound notebook")
+                await self.account(page)
+                live_cards = await self.cards(page)
+                await self.panel(page, "Sources")
+                await page.wait_for_timeout(2500)
+                if not await source_ids() and not await page.locator(".single-source-container").count():
+                    if live_cards:
+                        raise RuntimeError("Source recovery found existing artifact cards; reconcile before insertion")
+                    if self.quota_active() or await self.source_quota(page):
+                        job["state"] = "quota_wait"
+                        self.save()
+                        return False
+                    observed = now()
+                    job.setdefault("source_intent_history", []).append({
+                        "intent": copy.deepcopy(intent), "superseded_at": observed,
+                        "reason": "Authorized recovery after live zero-source/zero-artifact reconciliation",
+                        "notebook": notebook, "source_ids": [], "artifact_ids": [],
+                    })
+                    job["source_intent"] = {
+                        "at": observed, "sha256": brief["source_text_sha256"], "baseline_ids": [],
+                        "retry_of_at": intent["at"],
+                        "recovery_authorized_at": self.state["recovery_policy"]["authorized_at"],
+                    }
+                    insert = True
         if insert:
             source = ROOT / brief["source_text_path"]
             job["source_intent"]["dispatch_state"] = "dispatch_unknown"
@@ -395,6 +428,7 @@ class Runner:
             if len(stable) != 1:
                 raise RuntimeError("Source insertion unconfirmed or ambiguous; inspect before retry")
             job["source_id"] = stable.pop()
+            intent["resolved_at"] = now()
             self.save()
         source_id = job["source_id"]
         row = page.locator(".single-source-container").filter(has=page.locator("#source-item-more-button-" + source_id))
@@ -635,30 +669,43 @@ class Runner:
             for brief in briefs:
                 key = self.identity(brief)
                 completed = self.state["jobs"].get(key)
-                if completed and len(completed["artifacts"]) == 2 and all(a.get("state") == "downloaded_pending_editorial_review" for a in completed["artifacts"].values()):
-                    self.verify_downloaded([completed])
-                    continue
                 retry_after = ((completed or {}).get("last_error") or {}).get("retry_not_before")
                 if retry_after and datetime.now(timezone.utc) < datetime.fromisoformat(retry_after):
                     print(json.dumps({"job": key, "state": "retry_wait", "not_before": retry_after}), flush=True)
                     continue
-                # A later article/video update must not block finished drafts.
-                self.validate(brief)
                 active = sum(a.get("state") in ACTIVE for j in self.state["jobs"].values() for a in j.get("artifacts", {}).values())
-                if key not in self.state["jobs"]:
+                needs_admission = not completed or completed.get("admission_state") == "preflight_pending"
+                if needs_admission:
                     if new_jobs >= self.args.max_new_jobs or active >= self.args.max_active or self.quota_active():
                         continue
-                    self.state["jobs"][key] = {"slug": brief["slug"], "language": brief["language"], "article_sha256": brief["article_sha256"], "input_hashes": self.input_hashes(brief), "artifacts": {}}
-                    new_jobs += 1
+                if key not in self.state["jobs"]:
+                    frozen_hashes = {"article": brief["article_sha256"], **{name: brief[name + "_sha256"] for name in ("source_text", "slides_prompt", "audio_prompt")}}
+                    self.state["jobs"][key] = {"slug": brief["slug"], "language": brief["language"], "article_sha256": brief["article_sha256"], "input_hashes": frozen_hashes, "artifacts": {}, "admission_state": "preflight_pending"}
                     self.save()
                 job = self.state["jobs"][key]
-                if job["input_hashes"] != self.input_hashes(brief):
-                    raise RuntimeError("Job inputs differ from frozen brief; resume blocked")
+                stage = "inputs"
                 try:
+                    # Completed drafts retain their frozen evidence if the
+                    # published article changes later. Verify only originals.
+                    if len(job["artifacts"]) == 2 and all(a.get("state") == "downloaded_pending_editorial_review" for a in job["artifacts"].values()):
+                        stage = "local_originals"
+                        self.verify_downloaded([job])
+                        job.pop("last_error", None)
+                        continue
+                    self.validate(brief)
+                    if job["input_hashes"] != self.input_hashes(brief):
+                        raise RuntimeError("Job inputs differ from frozen brief; resume blocked")
+                    if needs_admission:
+                        new_jobs += 1
+                        job.update(admission_state="admitted", admitted_at=now())
+                        self.save()
+                    stage = "notebook"
                     print(json.dumps({"job": key, "stage": "reconcile_notebook_and_sources"}), flush=True)
                     await self.notebook(page, brief, job)
+                    stage = "source"
                     if not await self.source(page, brief, job):
                         continue
+                    stage = "artifacts"
                     for kind in ("slides", "audio"):
                         artifact = job["artifacts"].setdefault(kind, {"state": "not_submitted"})
                         if artifact["state"] == "downloaded_pending_editorial_review":
@@ -677,18 +724,43 @@ class Runner:
                             await self.download(page, brief, artifact, kind)
                     job.pop("last_error", None)
                 except Exception as error:
-                    job["last_error"] = {"type": type(error).__name__, "message": (str(error).splitlines() or [type(error).__name__])[0][:240], "at": now()}
+                    if job.get("last_error"):
+                        job.setdefault("error_history", []).append(copy.deepcopy(job["last_error"]))
+                    job["last_error"] = {"type": type(error).__name__, "message": (str(error).splitlines() or [type(error).__name__])[0][:240], "at": now(), "stage": stage}
                     self.save()
                     print(json.dumps({"job": key, "error": job["last_error"]}), flush=True)
+                    if stage in ("inputs", "local_originals"):
+                        job["last_error"].update(
+                            retry_not_before=(datetime.now(timezone.utc) + timedelta(minutes=15)).isoformat(),
+                            next_safe_step="Repair this job's frozen input or original-file mismatch using its retained hashes and bound IDs; do not dispatch its notebook/source/Generate actions. Continue independent jobs.",
+                        )
+                        self.save()
+                        continue
                     try:
-                        await page.screenshot(path=str(RUNTIME / (key.replace(":", "-") + "-error.png")), timeout=10000)
+                        diagnostic_prefix = key.replace(":", "-") + "-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+                        screenshot_path = RUNTIME / (diagnostic_prefix + "-error.png")
+                        controls_path = RUNTIME / (diagnostic_prefix + "-controls.json")
+                        await page.screenshot(path=str(screenshot_path), timeout=10000)
                         controls = await page.locator("button,input,textarea,mat-select").evaluate_all('els=>els.filter(e=>e.getBoundingClientRect().width>0).map(e=>({tag:e.tagName,label:e.getAttribute("aria-label"),placeholder:e.getAttribute("placeholder"),text:e.innerText?.slice(0,90)}))')
-                        save_json(RUNTIME / (key.replace(":", "-") + "-controls.json"), controls)
+                        save_json(controls_path, controls)
+                        job["last_error"]["evidence"] = {name: {"path": str(path.relative_to(ROOT)), "sha256": sha(path)} for name, path in (("screenshot", screenshot_path), ("controls", controls_path))}
                     except Exception as diagnostic_error:
                         job["diagnostic_error"] = type(diagnostic_error).__name__
-                        self.save()
-                    # Stop on any guard failure; another job must not inherit a dirty dialog.
-                    raise
+                    self.save()
+                    # Account/login failures remain global. Identity failures
+                    # defer this job without dispatching its uncertain action.
+                    await self.account(page)
+                    if self.quota_active() or await self.source_quota(page):
+                        break
+                    job["last_error"].update(
+                        retry_not_before=(datetime.now(timezone.utc) + timedelta(minutes=15)).isoformat(),
+                        next_safe_step="Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action.",
+                    )
+                    self.save()
+                    await page.close()
+                    page = await context.new_page()
+                    await page.bring_to_front()
+                    continue
                 self.save()
                 print(json.dumps({"job": key, "notebook": job["notebook"], "artifacts": {k: {"state": a["state"], "artifact_id": a.get("artifact_id")} for k, a in job["artifacts"].items()}}, ensure_ascii=False), flush=True)
                 if any(a.get("state") == "scheduled" for a in job["artifacts"].values()) and await self.source_quota(page, scheduled=True):

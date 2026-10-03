@@ -88,8 +88,17 @@ verify its language, selected source and audio format/length before Generate.
 An evidenced source failure before dispatch may resume only after binding its
 permanent notebook ID and verifying the exact current URL, unchanged source-ID
 baseline, frozen input hash and saved diagnostic hashes. Save an uncertain
-dispatch state before the one insertion attempt; unknown or processing intents
-still prohibit another insertion.
+dispatch state before the one insertion attempt. Reconcile unknown or processing
+intents first; a processing placeholder never triggers another insertion.
+The user's 2026-10-04 recovery instruction authorizes repeating a failed source
+upload after sleep without another permission request. The saved
+`recovery_policy.retry_empty_source_uploads` permits one fresh insertion per
+pass only in the same permanent notebook, with the expected account, unchanged
+frozen inputs, no saved artifacts, and two live empty source-ID observations
+around an empty Studio-card check. Preserve the old intent in
+`source_intent_history` before dispatching the replacement. A permanent source
+addition is bound instead of uploaded again; ambiguous identities are deferred
+for this job while independent articles proceed.
 Chinese selection must explicitly identify Simplified or Traditional; a generic
 "Chinese" or "中文" label does not establish the variant and blocks submission.
 Bind a new
@@ -122,7 +131,13 @@ do not reopen it just to poll the scheduled pair before the displayed reset.
 Preserve all notebook/source/artifact IDs and pending insertion intents.
 After the reset, reconcile existing bound jobs, download ready originals and
 resume missing stages using the same notebook and frozen inputs. Source-helper calls
-have a 120-second deadline; a timeout preserves the insertion intent for review.
+have a 120-second deadline; a timeout preserves the insertion intent for recovery.
+Individual job errors retain timestamped diagnostic evidence and a 15-minute
+retry deadline. After verifying the account and quota, close the affected tab and continue independent
+jobs in a clean tab inside the same Camoufox session. Unknown Generate actions
+remain deferred without a repeated click until their identities are reconciled.
+Sleep does not pause the queue or require user approval. Account/login failures and actual global quota
+blocks retain their existing global guards.
 If a job's saved failure includes `retry_not_before`, skip that job until its
 deadline while allowing other eligible source jobs to proceed. Preserve its
 failure evidence and all bound identities during this wait.
@@ -142,7 +157,7 @@ unchanged during this local wait.
 | `ready` | Download and validate the bound original artifact. |
 | `downloaded_pending_editorial_review` | Verify local SHA-256 and retain provenance; source stage complete. |
 | `failed` | Inspect the bound card and preserve failure evidence before choosing a deliberate recovery. |
-| Ambiguous, missing or wrong-kind binding | Stop mutations and reconcile identity from evidence. |
+| Ambiguous, missing or wrong-kind binding | Defer mutations for the affected job and reconcile its identity from evidence. |
 
 Validate downloaded bytes in a temporary file before promoting them to the
 source directory. `pdfinfo` must confirm at least one page; audio must contain
@@ -158,12 +173,15 @@ On later passes, verify completed artifact hashes and skip their generation
 checks. A subsequent article edit or attached video must not block unfinished
 jobs elsewhere in the queue; completed jobs retain their frozen input evidence.
 
-When every prepared brief has both artifact IDs bound or both originals
-downloaded, freeze the next small batch from `../article-video-queue.json`:
+When every nondeferred prepared brief has both artifact IDs bound or both
+originals downloaded, freeze the next small batch from `../article-video-queue.json`:
 published language, absent article video link, no matching local completed
 package or source draft. Existing generation may continue while the next
 briefs are prepared locally; admission still respects the active-artifact cap.
-Do not extend the batch while a source or submission identity is unresolved.
+An unresolved or deferred source/submission identity affects only its own job;
+preserve its IDs, intents, evidence and next recovery step while preparing and
+admitting independent articles. The active-artifact cap still counts uncertain
+generation submissions, so they cannot silently consume unbounded capacity.
 Check existing NotebookLM notebooks and source jobs before creating one.
 Freeze the exact current article bytes, section order and input hashes in the
 same brief format; record unverified external notebook/channel duplicates and

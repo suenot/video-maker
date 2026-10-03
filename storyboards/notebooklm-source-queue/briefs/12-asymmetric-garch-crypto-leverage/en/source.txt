@@ -1,0 +1,606 @@
+MM article asymmetric-garch-crypto-leverage EN 761d601d5b34
+
+---
+title: "Asymmetric and Heavy-Tailed GARCH: EGARCH, GJR, and Student-t"
+description: "Plain GARCH(1,1) treats good and bad news the same and assumes Gaussian shocks. EGARCH, GJR-GARCH, and Student-t/skew-t innovations fix both — and give you honest VaR and Expected Shortfall for crypto."
+tags: ["volatility", "GARCH", "EGARCH", "risk", "VaR", "crypto", "algorithmic-trading"]
+date: "2026-07-11"
+slug: "asymmetric-garch-crypto-leverage"
+lang: "en"
+
+image: "/images/blog/asymmetric-garch-crypto-leverage.webp"
+---
+
+# Asymmetric and Heavy-Tailed GARCH: EGARCH, GJR, and Student-t
+
+In [Part 1 of this series](/en/blog/post/garch-volatility-forecasting-crypto) we built GARCH(1,1) from the ground up: the volatility-clustering intuition, the conditional-variance recursion, maximum likelihood estimation, forecasting, and the standard residual diagnostics with the `arch` library. If you have not read it, start there — this post assumes you can already fit and interpret a plain GARCH(1,1) and will not re-derive the basics.
+
+Plain GARCH(1,1) is a good baseline and a bad final answer. It has two structural defects that are cheap to ignore in a backtest and expensive to ignore with real capital. First, it is **symmetric**: the model reacts to a $+5\%$ day exactly as it reacts to a $-5\%$ day, because the shock enters the variance recursion only through its square, $\varepsilon_{t-1}^2$. Squaring throws away the sign. Second, it assumes **Gaussian innovations**: even after GARCH soaks up the volatility clustering, the standardized residuals of BTC and ETH are visibly fat-tailed, and a Gaussian likelihood systematically underprices the tail. A GARCH(1,1)-Normal 99% VaR will be breached far more than 1% of the time.
+
+This post fixes both defects. We add **asymmetry** with GJR-GARCH and EGARCH, and **heavy tails** with Student-$t$ and Hansen's skewed-$t$ innovations. Then we do the thing that actually pays the rent: turn the fitted conditional distribution into a one-step Value-at-Risk and Expected Shortfall forecast, and backtest that forecast honestly with the Kupiec and Christoffersen tests. A volatility model you never risk-test is a decoration.
+
+## The Leverage Effect, and Why Crypto Is Messier
+
+![Asymmetric news-impact curves: negative shocks raise volatility more than positive ones](/images/blog/asymmetric-garch-crypto-leverage-news-impact.webp)
+
+In equities the asymmetry has a name and a story. The **leverage effect** (Black, 1976): when a firm's stock falls, its debt-to-equity ratio rises, the equity becomes mechanically riskier, and volatility increases. Bad news raises future volatility more than equally-sized good news. Empirically this is one of the most robust stylized facts in the equity volatility literature.
+
+Crypto has no equity and no balance-sheet leverage in the corporate sense, yet a leverage-effect-like asymmetry still shows up most of the time — driven by forced deleveraging rather than accounting. When BTC drops hard, over-collateralized loans get liquidated, perpetual-futures longs get force-closed, funding flips, and the cascade feeds volatility. So the mechanism differs but the sign often agrees with equities: down-moves spike volatility more.
+
+The important caveat: crypto is **messier**, and you should treat asymmetry as an empirical question rather than a law. Violent *up*-moves — short squeezes, a leverage-fueled melt-up, an ETF-approval gap — can also spike realized volatility. Depending on the asset and the sample window, the estimated asymmetry can be strong, weak, or occasionally the "wrong" sign. The discipline this post insists on: fit the asymmetric model, look at whether the asymmetry parameter is statistically significant and in the expected direction, and only keep the extra parameter if it earns its place. Do not assume the equity story transfers; test it.
+
+## Testing for Asymmetry Before You Model It
+
+The brief above says "treat asymmetry as empirical" — so before fitting an asymmetric model, run a cheap formal test for whether asymmetry is even present. The **Engle-Ng sign-bias tests** (1993) do exactly this. Fit a symmetric GARCH(1,1) first, take its squared standardized residuals $z_t^2$, and regress them on indicators of the previous shock's sign and size:
+
+$$z_t^2 = a_0 + a_1 S_{t-1}^- + a_2 S_{t-1}^- \varepsilon_{t-1} + a_3 S_{t-1}^+ \varepsilon_{t-1} + u_t$$
+
+where $S_{t-1}^- = \mathbf{1}\{\varepsilon_{t-1} < 0\}$ and $S_{t-1}^+ = 1 - S_{t-1}^-$. The logic: if the symmetric model has already captured everything, the sign and size of yesterday's shock should not predict today's squared residual, so $a_1 = a_2 = a_3 = 0$. Individual $t$-tests are the **sign-bias** ($a_1$), **negative-size-bias** ($a_2$), and **positive-size-bias** ($a_3$) tests; a joint $F$-test on all three is the omnibus. A significant $a_1$ or $a_2$ says negative shocks are systematically mispriced by the symmetric model — your cue that GJR or EGARCH will help.
+
+```python
+import statsmodels.api as sm
+
+def sign_bias_test(symmetric_res):
+    """Engle-Ng sign-bias tests on a fitted symmetric GARCH result."""
+    z = symmetric_res.std_resid.dropna()
+    z2 = (z ** 2).values[1:]
+    eps_lag = z.values[:-1]                      # standardized shock proxy
+    neg = (eps_lag < 0).astype(float)
+    X = np.column_stack([
+        np.ones_like(eps_lag),                   # intercept
+        neg,                                     # sign bias
+        neg * eps_lag,                           # negative size bias
+        (1 - neg) * eps_lag,                     # positive size bias
+    ])
+    ols = sm.OLS(z2, X).fit()
+    names = ["const", "sign_bias", "neg_size_bias", "pos_size_bias"]
+    for nm, coef, t, p in zip(names, ols.params, ols.tvalues, ols.pvalues):
+        print(f"{nm:16s} coef={coef:+.4f}  t={t:+.2f}  p={p:.3f}")
+    print(f"Joint F p-value: {ols.f_pvalue:.4f}")
+    return ols
+
+sign_bias_test(models["GARCH-N"])
+```
+
+If the joint $F$-test is insignificant, you have empirical license to stay symmetric and save two parameters. If it is significant — the common outcome for BTC/ETH — proceed to GJR/EGARCH with a clear conscience, knowing you are modeling a real feature and not chasing noise. This is the empirical discipline the hook demanded: do not assume the equity leverage story, test for it.
+
+## GJR-GARCH: Asymmetry via a Threshold Term
+
+The Glosten-Jagannathan-Runkle model (1993) — sometimes called TGARCH or threshold GARCH — is the smallest possible edit to GARCH(1,1) that lets bad news and good news have different effects. Recall the symmetric conditional-variance recursion from Part 1:
+
+$$\sigma_t^2 = \omega + \alpha\,\varepsilon_{t-1}^2 + \beta\,\sigma_{t-1}^2$$
+
+GJR adds one threshold term: an extra dose of variance that switches on only after a negative shock.
+
+$$\sigma_t^2 = \omega + \alpha\,\varepsilon_{t-1}^2 + \gamma\,I_{t-1}\,\varepsilon_{t-1}^2 + \beta\,\sigma_{t-1}^2$$
+
+where $I_{t-1}$ is the indicator
+
+$$I_{t-1} = \begin{cases} 1 & \text{if } \varepsilon_{t-1} < 0 \\ 0 & \text{if } \varepsilon_{t-1} \geq 0 \end{cases}$$
+
+Read the recursion by cases. After a **positive** shock ($\varepsilon_{t-1} \geq 0$), the indicator is zero and the impact of the squared shock on next-period variance is just $\alpha$. After a **negative** shock, the indicator is one and the impact is $\alpha + \gamma$. The parameter $\gamma$ is the entire asymmetry story in a single number:
+
+- $\gamma > 0$: negative shocks raise volatility more than positive shocks of the same magnitude. This is the leverage effect, and it is what you expect to find in BTC/ETH most of the time.
+- $\gamma = 0$: the model collapses back to symmetric GARCH(1,1). A likelihood-ratio or $t$-test on $\gamma$ is therefore a direct test of *whether asymmetry exists at all*.
+- $\gamma < 0$: positive shocks raise volatility more — the occasional crypto melt-up regime. Rare, but do not rule it out a priori.
+
+### Positivity and Stationarity
+
+Because $\sigma_t^2$ is still built additively, we need each term to stay non-negative. The sufficient positivity conditions are
+
+$$\omega > 0, \quad \alpha \geq 0, \quad \alpha + \gamma \geq 0, \quad \beta \geq 0.$$
+
+Note that $\gamma$ itself is allowed to be negative as long as $\alpha + \gamma \geq 0$, so the post-bad-news impact never goes negative.
+
+For covariance stationarity, assume the innovations $z_t = \varepsilon_t/\sigma_t$ are standardized with a symmetric distribution around zero, so that $P(\varepsilon_{t-1} < 0) = 1/2$ and the indicator contributes $\gamma/2$ on average. The stationarity condition becomes
+
+$$\alpha + \beta + \tfrac{1}{2}\gamma < 1.$$
+
+The unconditional (long-run) variance is then
+
+$$\bar{\sigma}^2 = \frac{\omega}{1 - \alpha - \beta - \tfrac{1}{2}\gamma}.$$
+
+This is the GJR analog of the Part 1 result $\bar{\sigma}^2 = \omega/(1-\alpha-\beta)$, with the extra $\tfrac{1}{2}\gamma$ term accounting for the average contribution of the leverage half-life. If your innovation distribution is skewed (Hansen's skew-$t$, below), the $1/2$ is replaced by the actual probability that $z_t < 0$, but $1/2$ is the standard reference used for the reported persistence.
+
+## EGARCH: Modeling log-Variance, No Positivity Constraints
+
+GJR keeps you inside a variance-positivity straitjacket: every parameter combination has to be checked against inequality constraints, which is annoying during optimization and worse during rolling re-estimation when a window occasionally wanders into an infeasible region. Nelson's Exponential GARCH (1991) sidesteps this entirely by modeling the **logarithm** of the conditional variance. Because $\log \sigma_t^2$ can be any real number, $\sigma_t^2 = \exp(\log \sigma_t^2)$ is automatically positive no matter what the parameters are. No constraints to impose.
+
+Write the recursion in terms of the standardized innovation $z_{t-1} = \varepsilon_{t-1}/\sigma_{t-1}$:
+
+$$\log \sigma_t^2 = \omega + \beta \log \sigma_{t-1}^2 + \alpha\bigl(|z_{t-1}| - \mathbb{E}|z_{t-1}|\bigr) + \gamma\, z_{t-1}$$
+
+Two terms carry the shock, and separating them is the whole idea:
+
+- The **magnitude** term $\alpha(|z_{t-1}| - \mathbb{E}|z_{t-1}|)$ responds to the *size* of the shock, sign removed. Subtracting $\mathbb{E}|z_{t-1}|$ centers it so that an average-magnitude shock contributes nothing. For a standard normal, $\mathbb{E}|z| = \sqrt{2/\pi} \approx 0.7979$; for a standardized Student-$t$ the expected absolute value is smaller and depends on $\nu$, but `arch` handles this internally.
+- The **sign** term $\gamma\, z_{t-1}$ is the asymmetry. It is linear in the signed innovation, so a negative $z_{t-1}$ pushes $\log\sigma_t^2$ in the opposite direction from a positive one.
+
+The sign convention matters and trips people up. In this parameterization the leverage effect (bad news raises volatility) corresponds to $\gamma < 0$: a negative shock $z_{t-1} < 0$ then makes $\gamma z_{t-1} > 0$, increasing log-variance. This is the opposite sign from GJR's $\gamma > 0$. Always read the model's own documentation for the convention rather than assuming; `arch` reports EGARCH with its own sign, and we check it against a news impact curve below rather than trusting our memory.
+
+Because everything is additive in logs, the persistence of an EGARCH(1,1) is governed by the single autoregressive coefficient $\beta$ on $\log\sigma_{t-1}^2$; stationarity requires only $|\beta| < 1$. That is a much cleaner condition than the GJR inequality, and it is a real practical advantage when you refit on rolling windows.
+
+A subtlety worth stating: EGARCH's response to shocks is **exponential** in the innovation (you exponentiate at the end), whereas GJR is quadratic. EGARCH therefore reacts more violently to large shocks — a feature in crypto, where the tail events are the ones that matter, but also a reason EGARCH can occasionally produce implausibly large variance forecasts after an outlier day. Neither is universally better; you choose by out-of-sample fit and by risk backtests, which is the point of this whole series.
+
+### The News Impact Curve
+
+The cleanest way to *see* the difference between symmetric GARCH, GJR, and EGARCH is the **news impact curve** (Engle and Ng, 1993): hold $\sigma_{t-1}$ fixed at its long-run level and plot next-period conditional variance $\sigma_t^2$ as a function of the last shock $\varepsilon_{t-1}$. It answers "given a shock of this size and sign, how much does the model raise tomorrow's volatility?"
+
+- **Symmetric GARCH** produces a *symmetric parabola* centered at zero. A $-5\%$ and a $+5\%$ shock land at the same height. This is precisely the defect we are fixing.
+- **GJR** produces a *parabola with a kink at zero* — steeper on the left (negative shocks) than the right when $\gamma > 0$. The two halves have curvature $\alpha+\gamma$ and $\alpha$ respectively.
+- **EGARCH** produces an *asymmetric, exponential V-shape*: the two arms have different slopes because of the $\gamma z$ term, and the whole thing curves upward faster than a parabola because of the final exponentiation.
+
+We plot all three from fitted parameters later, in the implementation section — it is the single most useful diagnostic for communicating what asymmetry buys you.
+
+## Heavy Tails: Student-t and Skewed-t Innovations
+
+![Gaussian vs heavy-tailed return distributions](/images/blog/asymmetric-garch-crypto-leverage-fat-tails.webp)
+
+Asymmetry fixes the model's response to the *sign* of shocks. It does nothing about the *distribution* of the shocks themselves. Plain GARCH assumes $z_t \sim \mathcal{N}(0,1)$, and that assumption is almost always wrong for crypto. Even after GARCH removes the volatility clustering, the standardized residuals $z_t = \varepsilon_t / \sigma_t$ retain excess kurtosis — they are fat-tailed. A Gaussian likelihood, fitting the shoulders of the distribution, underweights how often a $4$-, $5$-, or $6$-sigma standardized day actually occurs.
+
+The consequence for risk is direct. A Gaussian 99% VaR uses the quantile $\Phi^{-1}(0.01) \approx -2.326$, so it predicts $\text{VaR}_{0.99} \approx 2.326\,\sigma_t$. If the true standardized distribution is Student-$t$ with, say, $\nu = 5$ degrees of freedom, the true 1% quantile is near $-3.36$ — the Gaussian VaR is optimistic by roughly $44\%$ at that confidence level. You will breach it far more than 1% of the time and be systematically surprised by "impossible" days. This is not a crypto quirk; Bollerslev (1987) introduced $t$-GARCH precisely because equity and FX residuals showed the same fat tails. Crypto is just a more extreme version of the same problem.
+
+### Standardized Student-t
+
+The Student-$t$ density has a degrees-of-freedom parameter $\nu > 2$ controlling tail thickness: small $\nu$ means fat tails, and as $\nu \to \infty$ the $t$ converges to the Gaussian. The catch is that the raw $t_\nu$ distribution has variance $\nu/(\nu-2) \neq 1$, so we must **standardize** it to unit variance before using it as an innovation — otherwise the "$\sigma_t$" in the GARCH recursion would not actually be the conditional standard deviation.
+
+The standardized Student-$t$ innovation with unit variance has density
+
+$$f(z;\nu) = \frac{\Gamma\!\left(\frac{\nu+1}{2}\right)}{\sqrt{\pi(\nu-2)}\;\Gamma\!\left(\frac{\nu}{2}\right)}\left(1 + \frac{z^2}{\nu-2}\right)^{-\frac{\nu+1}{2}}, \qquad \nu > 2.$$
+
+Note the $(\nu-2)$ inside — that is the standardization, rescaling so that $\mathrm{Var}(z)=1$. The log-likelihood contribution of one observation, given the GARCH conditional variance $\sigma_t^2$ and $z_t = \varepsilon_t/\sigma_t$, is
+
+$$\ell_t = \log\Gamma\!\left(\tfrac{\nu+1}{2}\right) - \log\Gamma\!\left(\tfrac{\nu}{2}\right) - \tfrac{1}{2}\log\bigl(\pi(\nu-2)\bigr) - \tfrac{1}{2}\log\sigma_t^2 - \frac{\nu+1}{2}\log\!\left(1 + \frac{z_t^2}{\nu-2}\right).$$
+
+The $-\tfrac{1}{2}\log\sigma_t^2$ term is the Jacobian of the transformation from $\varepsilon_t$ to $z_t$ — the same term you saw in the Gaussian GARCH likelihood in Part 1. Only the shape changes. Maximizing $\sum_t \ell_t$ jointly over the GARCH parameters and $\nu$ is exactly what `arch` does when you pass `dist='t'`.
+
+Estimated $\nu$ is itself informative. For daily BTC/ETH returns you typically land in the $\nu \approx 3\text{–}6$ range — heavy tails, but with finite variance (which needs $\nu > 2$) and usually finite kurtosis (which needs $\nu > 4$). If your fitted $\nu$ drops below 4, be aware that sample kurtosis is technically infinite in the model and some estimators get unstable; it is a signal to look hard at outliers and data quality.
+
+### Hansen's Skewed-t
+
+Student-$t$ is fat-tailed but still **symmetric** — the left and right tails are equally heavy. Crypto return residuals are often *also* skewed: the left tail (crashes) is heavier than the right. Hansen's skewed-$t$ (1994) generalizes the standardized $t$ with a skewness parameter $\lambda \in (-1, 1)$ alongside $\nu$:
+
+$$f(z;\nu,\lambda) = \begin{cases} b\,c\left(1 + \dfrac{1}{\nu-2}\left(\dfrac{bz+a}{1-\lambda}\right)^2\right)^{-\frac{\nu+1}{2}} & z < -a/b \\[2mm] b\,c\left(1 + \dfrac{1}{\nu-2}\left(\dfrac{bz+a}{1+\lambda}\right)^2\right)^{-\frac{\nu+1}{2}} & z \geq -a/b \end{cases}$$
+
+where the constants $a = 4\lambda c\,\frac{\nu-2}{\nu-1}$, $b^2 = 1 + 3\lambda^2 - a^2$, and $c = \frac{\Gamma(\frac{\nu+1}{2})}{\sqrt{\pi(\nu-2)}\,\Gamma(\frac{\nu}{2})}$ are chosen so that $z$ has zero mean and unit variance for every valid $(\nu,\lambda)$. The distribution splits at $z = -a/b$, using a different scaling in each piece to bend more mass into one tail.
+
+Interpretation: $\lambda < 0$ gives a left-skewed distribution (heavier downside), which is the usual finding for crypto and what you would expect to pair with a leverage effect. $\lambda = 0$ recovers the symmetric Student-$t$, so a test of $\lambda = 0$ tells you whether the skew term is buying anything. In `arch` this is `dist='skewt'`, which estimates both $\nu$ and $\lambda$. The payoff is a VaR whose left-tail quantile is honestly heavier than its right-tail quantile — exactly what you want when the losses you are trying to survive are asymmetric. This connects directly to the [asymmetry of loss versus profit](/en/blog/post/loss-profit-asymmetry) in position outcomes: a drawdown of $x\%$ needs more than $x\%$ to recover, so mis-modeling the left tail is more costly than mis-modeling the right.
+
+## Python Implementation
+
+![Volatility model selection across GARCH variants](/images/blog/asymmetric-garch-crypto-leverage-model-selection.webp)
+
+We now fit all of this with the `arch` library. The setup mirrors Part 1: pull daily returns, scale by 100 for numerical conditioning (GARCH optimizers behave badly when returns are $O(0.01)$), and fit with a constant mean. If you want intraday or a different mean model, the machinery is identical.
+
+### Setup and Data
+
+```python
+import numpy as np
+import pandas as pd
+from arch import arch_model
+from arch.univariate import GARCH, EGARCH, ConstantMean, StudentsT, SkewStudent
+from scipy import stats
+
+def fetch_returns(symbol="BTC-USD", start="2019-01-01", end="2025-12-31"):
+    """Daily log returns, in percent (scaled x100 for the optimizer)."""
+    import yfinance as yf
+    px = yf.download(symbol, start=start, end=end)["Close"].dropna()
+    ret = 100.0 * np.log(px / px.shift(1)).dropna()
+    ret.name = symbol
+    return ret
+
+r = fetch_returns("BTC-USD")
+print(f"{len(r)} daily observations, "
+      f"annualized vol ~ {r.std() * np.sqrt(365):.0f}%")
+```
+
+Crypto trades 24/7, so we annualize with 365, not 252 — a small but recurring source of confusion when you compare a crypto Sharpe or vol against an equity desk's numbers.
+
+### Fitting Four Models
+
+The pattern in `arch`: `vol='Garch'` with `p=1, q=1` is symmetric GARCH; adding `o=1` turns on the GJR threshold term; `vol='EGARCH'` switches to the log-variance model. The innovation distribution is set with `dist`: `'normal'`, `'t'`, `'skewt'`.
+
+```python
+def fit(returns, vol="Garch", p=1, o=0, q=1, dist="normal"):
+    am = arch_model(returns, mean="Constant",
+                    vol=vol, p=p, o=o, q=q, dist=dist)
+    res = am.fit(disp="off")
+    return res
+
+models = {
+    "GARCH-N":    fit(r, vol="Garch",  o=0, dist="normal"),  # Part 1 baseline
+    "GJR-t":      fit(r, vol="Garch",  o=1, dist="t"),        # asymmetry + fat tails
+    "EGARCH-t":   fit(r, vol="EGARCH", o=1, dist="t"),        # log-variance asymmetry
+    "GJR-skewt":  fit(r, vol="Garch",  o=1, dist="skewt"),    # + skew
+}
+
+for name, res in models.items():
+    print(f"\n===== {name} =====")
+    print(res.summary().tables[1])   # parameter table
+```
+
+For `vol='EGARCH'`, the `o` argument controls the asymmetric ($\gamma z$) term and `p`/`q` control the magnitude and lag terms; `o=1, p=1, q=1` is the standard EGARCH(1,1). One gotcha: EGARCH's parameter names in `arch` are the same letters but the *sign convention* on the asymmetry term is Nelson's, so a negative estimate is the leverage effect. We verify this from the news impact curve rather than from memory.
+
+### Reading the GJR Fit
+
+A GJR-$t$ parameter table looks roughly like this (illustrative values, not a reported experiment — refit on your own data):
+
+```
+                  coef    std err       t      P>|t|
+omega           0.0480     0.017     2.82     0.005
+alpha[1]        0.0620     0.018     3.44     0.001
+gamma[1]        0.0910     0.028     3.25     0.001
+beta[1]         0.8850     0.021    42.1      0.000
+nu              4.30       0.55      7.82     0.000
+```
+
+How to read it:
+
+- `gamma[1] = 0.091` with a $t$-stat above 3 is a statistically significant leverage effect. After a negative shock the squared-shock impact is $\alpha + \gamma = 0.062 + 0.091 = 0.153$; after a positive shock it is just $\alpha = 0.062$. Bad news moves this model's volatility roughly $2.5\times$ as much as good news of the same size.
+- `nu = 4.3` confirms heavy tails — far from Gaussian ($\nu \to \infty$), and low enough that the fourth moment is barely finite. A Gaussian VaR on this series would be badly optimistic.
+- Persistence is $\alpha + \beta + \tfrac{1}{2}\gamma = 0.062 + 0.885 + 0.0455 \approx 0.993$ — very high, as usual for daily crypto: shocks decay slowly and volatility is strongly clustered.
+
+The single most important line to check is the $\gamma$ row. If its $p$-value is large, the asymmetric term is not earning its place on this asset and window, and you should prefer the simpler symmetric model. This is model-selection discipline, not decoration — more on that below.
+
+### Comparing Models by Information Criteria
+
+Log-likelihood always improves when you add parameters, so you cannot select on log-likelihood alone. Use AIC/BIC, which penalize parameter count (BIC more aggressively):
+
+```python
+def compare(models: dict) -> pd.DataFrame:
+    rows = []
+    for name, res in models.items():
+        rows.append({
+            "model": name,
+            "n_params": len(res.params),
+            "loglik": res.loglikelihood,
+            "AIC": res.aic,
+            "BIC": res.bic,
+        })
+    df = pd.DataFrame(rows).set_index("model")
+    return df.sort_values("BIC")
+
+print(compare(models))
+```
+
+Interpretation rules of thumb: a BIC improvement of more than ~6 over the baseline is strong evidence the extra structure is real; a difference of 1–2 is noise. If `GJR-t` beats `GARCH-N` by 30+ BIC points but `GJR-skewt` beats `GJR-t` by only 1, keep the $t$ and drop the skew — the skew parameter is not paying for itself on this data. Do not read AIC/BIC as a substitute for out-of-sample validation; they reward in-sample fit adjusted for complexity, which is necessary but not sufficient. The real test is the VaR backtest and, ultimately, [walk-forward evaluation](/en/blog/post/walk-forward-optimization).
+
+### Plotting the News Impact Curve
+
+This is the payoff plot — it makes asymmetry visible and verifies the EGARCH sign convention.
+
+```python
+import matplotlib.pyplot as plt
+
+def news_impact_curve(res, shock_grid):
+    """
+    Next-period conditional variance as a function of the last shock,
+    holding sigma_{t-1} at the model's unconditional level.
+    Works for symmetric GARCH, GJR (o=1), and EGARCH.
+    """
+    p = res.params
+    vol_name = res.model.volatility.__class__.__name__
+    # Unconditional variance anchor from the fitted conditional vols.
+    sigma2_bar = np.mean(res.conditional_volatility ** 2)
+
+    omega = p["omega"]
+    alpha = p.get("alpha[1]", 0.0)
+    gamma = p.get("gamma[1]", 0.0)
+    beta  = p.get("beta[1]", 0.0)
+
+    if vol_name == "EGARCH":
+        # z = eps / sigma; anchor sigma at sqrt(sigma2_bar).
+        sig_prev = np.sqrt(sigma2_bar)
+        z = shock_grid / sig_prev
+        E_abs = np.sqrt(2 / np.pi)   # approx; arch uses the fitted dist's E|z|
+        log_s2 = (omega + beta * np.log(sigma2_bar)
+                  + alpha * (np.abs(z) - E_abs) + gamma * z)
+        return np.exp(log_s2)
+    else:
+        # GARCH / GJR in levels.
+        ind = (shock_grid < 0).astype(float)
+        return omega + (alpha + gamma * ind) * shock_grid**2 + beta * sigma2_bar
+
+shocks = np.linspace(-8, 8, 401)   # daily % shocks
+plt.figure(figsize=(8, 5))
+for name in ["GARCH-N", "GJR-t", "EGARCH-t"]:
+    nic = news_impact_curve(models[name], shocks)
+    plt.plot(shocks, nic, label=name, lw=2)
+plt.axvline(0, color="gray", lw=0.8, ls="--")
+plt.xlabel("Last shock  $\\varepsilon_{t-1}$  (daily %)")
+plt.ylabel("Next-period conditional variance  $\\sigma_t^2$")
+plt.title("News impact curve: symmetric vs GJR vs EGARCH (BTC)")
+plt.legend()
+plt.tight_layout()
+```
+
+When you run this, the symmetric `GARCH-N` curve is a clean parabola centered at zero — a $-6\%$ and $+6\%$ shock give identical variance. `GJR-t` is a parabola with a kink at the origin, higher on the left arm. `EGARCH-t` is the exponential V, and if its left arm sits above its right arm you have confirmed the leverage effect and the sign convention in one glance. If the EGARCH left arm sits *below* the right, either $\gamma$ estimated positive (an up-vol regime) or you have the sign backwards — the plot tells you which without any guessing.
+
+### A Side-by-Side Comparison of the Four Models
+
+Before we turn to risk, it helps to hold the four models next to each other. Each row is a design decision, and the columns show what that decision costs and buys.
+
+| Property | GARCH-N | GJR-t | EGARCH-t | GJR-skewt |
+| --- | --- | --- | --- | --- |
+| Asymmetry (sign of shock) | none | threshold $\gamma I\varepsilon^2$ | signed $\gamma z$ | threshold $\gamma I\varepsilon^2$ |
+| Tail shape of innovation | Gaussian | Student-$t$ | Student-$t$ | skewed-$t$ |
+| Skew in innovation | no | no | no | yes ($\lambda$) |
+| Positivity constraints | yes | yes ($\alpha+\gamma\ge0$) | none (log form) | yes |
+| Stationarity condition | $\alpha+\beta<1$ | $\alpha+\beta+\tfrac12\gamma<1$ | $\lvert\beta\rvert<1$ | $\alpha+\beta+P(z<0)\gamma<1$ |
+| Extra params vs baseline | 0 | $\gamma,\nu$ | $\gamma,\nu$ | $\gamma,\nu,\lambda$ |
+| Typical crypto verdict | fails VaR backtest | strong, robust | strong, robust | marginal over GJR-t |
+
+The pattern to internalize: the jump from column 1 to column 2 — adding both asymmetry and fat tails at once — is where almost all of the risk-calibration improvement lives. The subsequent refinements (EGARCH's functional form, the skew term) are real but second-order, and on many crypto series they are inside the noise. Spend your modeling budget on the first jump and be skeptical of the rest.
+
+## Risk Application: VaR and Expected Shortfall
+
+![VaR threshold, expected shortfall, and breach coverage](/images/blog/asymmetric-garch-crypto-leverage-var-es.webp)
+
+Fitting a fancier volatility model is only worthwhile if it improves a decision. The cleanest decision to improve is the one-step tail-risk forecast: how bad can tomorrow be? We produce a one-day-ahead **Value-at-Risk** and **Expected Shortfall** (a.k.a. Conditional VaR, which the [HRP/CVaR portfolio pipeline](/en/blog/post/portfolio-pipeline-hrp-cvar) uses as its objective) directly from the fitted GARCH-$t$/skew-$t$ forecast.
+
+### From Conditional Distribution to VaR
+
+The GARCH machinery gives a one-step forecast of the conditional mean $\mu_{t+1}$ and conditional standard deviation $\sigma_{t+1}$. The return is modeled as $r_{t+1} = \mu_{t+1} + \sigma_{t+1} z_{t+1}$ with $z_{t+1}$ drawn from the fitted standardized distribution (Gaussian, $t$, or skew-$t$). So the $\alpha$-quantile of the *return* is just an affine transform of the $\alpha$-quantile of the *standardized distribution*:
+
+$$\text{VaR}_{\alpha}(t+1) = -\Bigl(\mu_{t+1} + \sigma_{t+1}\, F_z^{-1}(1-\alpha)\Bigr)$$
+
+where $F_z^{-1}$ is the quantile (inverse CDF) of the standardized innovation and the leading minus sign follows the convention that VaR is a positive loss number. For a 99% VaR, $\alpha = 0.99$ and you plug in $F_z^{-1}(0.01)$. The whole benefit of the $t$/skew-$t$ shows up here: $F_z^{-1}(0.01)$ is more negative than the Gaussian $-2.326$, so the VaR is honestly larger.
+
+### Expected Shortfall
+
+VaR tells you the threshold; it says nothing about how bad the breach is when it happens. Expected Shortfall — the average loss *conditional on* exceeding VaR — does, and it is coherent (subadditive), which is why it is the risk measure behind CVaR optimization and why Basel moved to it. For a location-scale model,
+
+$$\text{ES}_{\alpha}(t+1) = -\Bigl(\mu_{t+1} + \sigma_{t+1}\, \mathbb{E}\!\left[z \mid z \leq F_z^{-1}(1-\alpha)\right]\Bigr).$$
+
+The conditional-tail-expectation term $\mathbb{E}[z \mid z \le q]$ has closed forms for the standard distributions. For the **Gaussian**, with $q = \Phi^{-1}(1-\alpha)$,
+
+$$\mathbb{E}[z \mid z \le q] = -\frac{\phi(q)}{1-\alpha},$$
+
+where $\phi$ is the standard normal pdf. For the **standardized Student-$t$** with $\nu$ degrees of freedom and $q = t_\nu^{-1}(1-\alpha)$ (on the standardized scale), the tail expectation is
+
+$$\mathbb{E}[z \mid z \le q] = -\frac{\nu + q^2}{\nu - 1}\cdot\frac{g_\nu(q)}{1-\alpha},$$
+
+where $g_\nu$ is the standardized-$t$ pdf. The $t$ Expected Shortfall exceeds the Gaussian one by more than the VaR does, because the $t$ tail is not just further out — it is *fatter*, so the average loss beyond the threshold is disproportionately large. That extra gap is the number a Gaussian model hides from you.
+
+### Computing VaR and ES from a Fitted arch Model
+
+`arch` distributions expose a `ppf` (quantile) method, so we can get the standardized quantile directly and avoid re-deriving anything. For ES we integrate numerically, which is robust and works uniformly across `normal`/`t`/`skewt`.
+
+```python
+from scipy import integrate
+
+def var_es_forecast(res, alpha=0.99):
+    """
+    One-step-ahead VaR and ES at level alpha, on the same (x100) scale
+    as the returns fed to the model. Divide by 100 for fractional units.
+    """
+    fc = res.forecast(horizon=1, reindex=False)
+    mu = fc.mean.iloc[-1, 0]
+    sigma = np.sqrt(fc.variance.iloc[-1, 0])
+
+    dist = res.model.distribution          # StudentsT / SkewStudent / Normal
+    # Distribution shape params (nu, or [nu, lambda]) come from the fit.
+    dp = [res.params[k] for k in res.params.index
+          if k in ("nu", "eta", "lambda", "lam")]
+
+    # Standardized lower-tail quantile z_q = F^{-1}(1 - alpha).
+    z_q = dist.ppf(1 - alpha, dp) if dp else dist.ppf(1 - alpha)
+    z_q = float(np.atleast_1d(z_q)[0])
+
+    # ES on the standardized scale: E[z | z <= z_q] via numerical integration
+    # of the fitted standardized pdf.
+    def pdf(z):
+        arr = np.atleast_1d(z).astype(float)
+        lp = dist.loglikelihood(dp, arr, np.ones_like(arr), individual=True) \
+             if dp else dist.loglikelihood([], arr, np.ones_like(arr),
+                                           individual=True)
+        return np.exp(lp)
+
+    num, _ = integrate.quad(lambda z: z * pdf(z), -30, z_q, limit=200)
+    es_z = num / (1 - alpha)               # E[z | z <= z_q]
+
+    var = -(mu + sigma * z_q)
+    es  = -(mu + sigma * es_z)
+    return {"mu": mu, "sigma": sigma, "z_q": z_q,
+            "VaR": var, "ES": es}
+
+for name in ["GARCH-N", "GJR-t", "GJR-skewt"]:
+    out = var_es_forecast(models[name], alpha=0.99)
+    print(f"{name:11s}  sigma={out['sigma']:.2f}%  "
+          f"z_q={out['z_q']:+.2f}  "
+          f"VaR99={out['VaR']:.2f}%  ES99={out['ES']:.2f}%")
+```
+
+The `z_q` column is the whole story in one number. The Gaussian model uses $z_q \approx -2.33$; the $t$ with $\nu \approx 4.3$ uses something near $-3.3$; the skew-$t$ pushes the *left* quantile out further still while pulling the right one in. Same $\sigma_{t+1}$, materially larger VaR. If you have been running Gaussian VaR on crypto, this is the gap you have been quietly absorbing.
+
+### One Step vs Multi-Step: A Caveat
+
+Everything above is a **one-day-ahead** forecast, and that is where GARCH VaR is cleanest. Two things complicate longer horizons and you should know them before extrapolating.
+
+First, variance forecasts mean-revert. The $h$-step-ahead conditional variance from a stationary GARCH converges toward the unconditional level $\bar\sigma^2$ as $h$ grows, and the cumulative $h$-day variance is the sum of the per-step forecasts — it is *not* $h\times\sigma_{t+1}^2$ unless volatility is at its long-run mean. The naive "square-root-of-time" scaling $\text{VaR}(h) = \sqrt{h}\,\text{VaR}(1)$ ignores this mean reversion and is wrong precisely after a shock, when you most need the number. Use the model's own multi-step variance path.
+
+Second, the *distribution* of a multi-day return is not the same shape as the one-day innovation. Summing several $t$-distributed daily shocks (through the nonlinear GARCH recursion) does not give a $t$ distribution at the $h$-day horizon; there is no clean closed form. For multi-day VaR the honest route is **simulation**: draw innovation paths from the fitted standardized distribution, run them through the GARCH recursion to get simulated return paths, aggregate to $h$-day returns, and read the empirical quantile. That also naturally handles the skew-$t$ case, where no analytic multi-horizon quantile exists at all. The one-step analytic formulas in this post are exact; treat any multi-step shortcut as an approximation to validate.
+
+### Backtesting VaR: Kupiec and Christoffersen
+
+A VaR forecast is a probabilistic claim: "the loss will exceed this threshold on only $(1-\alpha)$ of days." You test it by counting **violations** (days when the realized loss exceeded the forecast VaR) over a walk-forward evaluation and checking two things. First, is the violation *rate* right? Second, are the violations *independent*, or do they cluster (which means the model fails exactly when it matters, during volatility spikes)?
+
+Let $I_t = \mathbf{1}\{\text{loss}_t > \text{VaR}_t\}$ be the violation sequence, $N = \sum I_t$ the number of violations over $T$ days, and $\hat{\pi} = N/T$ the observed rate. Target rate $p = 1-\alpha$.
+
+**Kupiec's unconditional coverage test (1995)** checks $\hat\pi \approx p$ via a likelihood ratio:
+
+$$LR_{uc} = -2\log\!\left[\frac{p^{N}(1-p)^{T-N}}{\hat\pi^{N}(1-\hat\pi)^{T-N}}\right] \;\sim\; \chi^2_1.$$
+
+**Christoffersen's independence test (1998)** checks that a violation today is not predicted by a violation yesterday. Let $n_{ij}$ count transitions from state $i$ to state $j$ in the violation sequence, $\pi_{01} = n_{01}/(n_{00}+n_{01})$, $\pi_{11} = n_{11}/(n_{10}+n_{11})$, and $\pi = (n_{01}+n_{11})/T$. Then
+
+$$LR_{ind} = -2\log\!\left[\frac{(1-\pi)^{n_{00}+n_{10}}\,\pi^{\,n_{01}+n_{11}}}{(1-\pi_{01})^{n_{00}}\pi_{01}^{n_{01}}(1-\pi_{11})^{n_{10}}\pi_{11}^{n_{11}}}\right] \;\sim\; \chi^2_1.$$
+
+The two combine into the **conditional coverage** test $LR_{cc} = LR_{uc} + LR_{ind} \sim \chi^2_2$, which simultaneously checks correct rate *and* independence. A model can pass Kupiec (right number of violations) yet fail Christoffersen (they all bunched into one crash week) — that is the failure mode you most want to catch, because clustered violations are the ones that blow up an account.
+
+```python
+from scipy.stats import chi2
+
+def var_backtest(losses, var, p):
+    """
+    losses, var: 1D arrays, same length; loss>0 is a loss, var>0 threshold.
+    p = 1 - alpha (target violation rate, e.g. 0.01 for 99% VaR).
+    Returns Kupiec, Christoffersen-independence, and conditional-coverage LR.
+    """
+    losses = np.asarray(losses)
+    var = np.asarray(var)
+    I = (losses > var).astype(int)          # violation indicators
+    T = len(I)
+    N = int(I.sum())
+    pi_hat = N / T
+
+    # --- Kupiec unconditional coverage ---
+    eps = 1e-12
+    ll_null = N * np.log(p + eps) + (T - N) * np.log(1 - p + eps)
+    ll_alt  = N * np.log(pi_hat + eps) + (T - N) * np.log(1 - pi_hat + eps)
+    LR_uc = -2 * (ll_null - ll_alt)
+    p_uc = 1 - chi2.cdf(LR_uc, df=1)
+
+    # --- Christoffersen independence (Markov transition counts) ---
+    n00 = np.sum((I[:-1] == 0) & (I[1:] == 0))
+    n01 = np.sum((I[:-1] == 0) & (I[1:] == 1))
+    n10 = np.sum((I[:-1] == 1) & (I[1:] == 0))
+    n11 = np.sum((I[:-1] == 1) & (I[1:] == 1))
+    pi01 = n01 / (n00 + n01) if (n00 + n01) else 0.0
+    pi11 = n11 / (n10 + n11) if (n10 + n11) else 0.0
+    pi   = (n01 + n11) / (n00 + n01 + n10 + n11)
+
+    def _ll(pi01, pi11, pi_pooled, use_pooled):
+        if use_pooled:
+            a = (n00 + n10) * np.log(1 - pi_pooled + eps)
+            b = (n01 + n11) * np.log(pi_pooled + eps)
+            return a + b
+        return (n00 * np.log(1 - pi01 + eps) + n01 * np.log(pi01 + eps)
+                + n10 * np.log(1 - pi11 + eps) + n11 * np.log(pi11 + eps))
+
+    LR_ind = -2 * (_ll(pi01, pi11, pi, True) - _ll(pi01, pi11, pi, False))
+    p_ind = 1 - chi2.cdf(LR_ind, df=1)
+
+    # --- Conditional coverage (joint) ---
+    LR_cc = LR_uc + LR_ind
+    p_cc = 1 - chi2.cdf(LR_cc, df=2)
+
+    return {
+        "T": T, "violations": N,
+        "obs_rate": pi_hat, "target_rate": p,
+        "LR_uc": LR_uc, "p_uc": p_uc,
+        "LR_ind": LR_ind, "p_ind": p_ind,
+        "LR_cc": LR_cc, "p_cc": p_cc,
+    }
+```
+
+To generate the `losses`/`var` inputs honestly, you refit (or at least re-forecast) on an expanding or rolling window and record the *one-step-ahead* VaR for each out-of-sample day, then compare it to the realized loss for that day. Never backtest VaR in-sample — a model fitted on the same crash it is being asked to predict will look far better than it is. This is the same discipline as [backtest-live parity](/en/blog/post/backtest-live-parity): the evaluation must only use information available at decision time.
+
+```python
+def walk_forward_var(returns, alpha=0.99, start=750, refit_every=25,
+                     vol="Garch", o=1, dist="t"):
+    """
+    Expanding-window one-step VaR. Refit every `refit_every` days
+    (refitting daily is correct but slow; every ~25 days is a common
+    compromise -- validate the shortcut on your data).
+    """
+    losses, vars_ = [], []
+    res = None
+    for t in range(start, len(returns)):
+        if res is None or (t - start) % refit_every == 0:
+            am = arch_model(returns.iloc[:t], mean="Constant",
+                            vol=vol, p=1, o=o, q=1, dist=dist)
+            res = am.fit(disp="off")
+        fc = res.forecast(horizon=1, reindex=False)
+        mu = fc.mean.iloc[-1, 0]
+        sig = np.sqrt(fc.variance.iloc[-1, 0])
+        dp = [res.params[k] for k in res.params.index
+              if k in ("nu", "eta", "lambda", "lam")]
+        z_q = float(np.atleast_1d(
+            res.model.distribution.ppf(1 - alpha, dp) if dp
+            else res.model.distribution.ppf(1 - alpha))[0])
+        var_t = -(mu + sig * z_q)
+        vars_.append(var_t)
+        losses.append(-returns.iloc[t])     # realized loss for that day
+    return np.array(losses), np.array(vars_)
+
+losses, vars_ = walk_forward_var(r, alpha=0.99, dist="t")
+print(var_backtest(losses, vars_, p=0.01))
+```
+
+The read: a well-calibrated 99% VaR shows an observed rate near 1%, a non-significant Kupiec (large `p_uc`), and a non-significant Christoffersen (large `p_ind`) — no clustering. In practice the honest result on crypto is that **GARCH-Normal fails Kupiec** (too many violations, `p_uc` tiny) while **GJR-$t$ or EGARCH-$t$ passes or comes close**. That contrast is the entire argument of this post rendered as a hypothesis test. If even the $t$ model shows clustered violations (small `p_ind`), your volatility dynamics are still misspecified — often a sign you need a longer memory (component/FIGARCH) or a regime layer, which connects to [regime detection with HMMs](/en/blog/post/regime-detection-hmm-adaptive-trading).
+
+### Ranking Models by Tail Loss, Not Just Pass/Fail
+
+Kupiec and Christoffersen give you a binary verdict — the model is or is not rejected. That is necessary but coarse: two models can both "pass" while one is meaningfully sharper. To *rank* competing VaR forecasts, score them with a strictly consistent loss function for the quantile, the **pinball (quantile) loss**:
+
+$$L_\tau(r, q) = \bigl(\tau - \mathbf{1}\{r < q\}\bigr)\,(r - q), \qquad \tau = 1-\alpha,$$
+
+where $q$ is the (signed) VaR quantile and $r$ the realized return. Averaged over the out-of-sample days, a lower mean pinball loss means a better-calibrated *and* sharper quantile; because the loss is consistent for the $\tau$-quantile, minimizing it does not reward a model for being lazily wide. To compare two models formally, feed their per-day loss differences to a **Diebold-Mariano test**.
+
+```python
+def pinball_loss(returns, var, alpha=0.99):
+    tau = 1 - alpha
+    q = -np.asarray(var)               # VaR is a positive loss; quantile is negative
+    r = np.asarray(returns)
+    hit = (r < q).astype(float)
+    return np.mean((tau - hit) * (r - q))
+```
+
+For Expected Shortfall specifically, note that ES is *not* elicitable on its own (there is no loss function whose minimizer is ES alone), which is a genuine theoretical wrinkle: you evaluate ES *jointly* with VaR using the Fissler-Ziggel scoring rules, or you fall back on the simpler practice of checking that the average breach magnitude matches the model's predicted ES. A crude but useful ES check: among the VaR-violation days, compare the mean realized loss to the mean forecast ES on those days — they should be close.
+
+The regulatory framing is the **Basel traffic-light** approach: over 250 trading days, 0-4 violations of a 99% VaR is "green" (acceptable), 5-9 is "yellow" (scrutiny), 10+ is "red" (the model is rejected and capital multipliers rise). It is a coarser cousin of Kupiec, but it is the language risk committees actually speak, and it is worth reporting alongside the LR statistics.
+
+## Practical Considerations
+
+### When the Extra Parameters Do Not Pay Off
+
+The honest default is skepticism toward complexity. Every parameter you add is a knob the optimizer can overfit, and asymmetric fat-tailed GARCH has several. Concrete guidance:
+
+- **Illiquid or short samples.** With a few hundred daily observations, the standard error on $\gamma$ and $\lambda$ will be large, and you will "detect" asymmetries that are sampling noise. On a new or thin altcoin, a symmetric GARCH-$t$ is often the most complex model the data can support. Fitting skew-$t$ EGARCH to 200 days is fooling yourself.
+- **The skew term frequently does not clear its cost.** In practice, moving Normal → $t$ is a large, reliable improvement (fat tails are real and strong). Moving $t$ → skew-$t$ is often marginal — a BIC gain of 1 or 2, sometimes negative. Add skew only when the data clearly asks for it.
+- **EGARCH vs GJR is usually a wash on daily data.** They encode the same qualitative story with different functional forms. Pick by out-of-sample VaR backtest, not by which has the nicer log-likelihood in-sample.
+- **Higher frequency shifts the answer.** On hourly or minute bars, intraday seasonality and microstructure dominate, and a plain daily-style GARCH is misspecified regardless of asymmetry. Different problem, different tooling.
+
+This is the same lesson as [honest evaluation with no robust edge](/en/blog/post/honest-negative-no-robust-edge): a more complex model that does not survive out-of-sample testing is worse than the simple one it replaced, because it carries the illusion of precision. Report the negative result — "skew did not help on ETH" — as a real finding, and use [walk-forward optimization](/en/blog/post/walk-forward-optimization) as the arbiter, not in-sample AIC.
+
+### These Are the Marginals Everyone Else Builds On
+
+The models here are not an endpoint; they are the univariate building block for the joint-risk machinery. The [copula models for joint crypto risk](/en/blog/post/copula-models-joint-risk-crypto) post uses **exactly** EGARCH/GJR-$t$ as the GARCH-EVT marginals before fitting a vine copula — you fit an asymmetric fat-tailed GARCH per asset, extract standardized residuals, and only then model the cross-asset dependence. If your marginal is a symmetric Gaussian GARCH, the copula inherits its tail errors no matter how good the dependence model is. Garbage marginals, garbage joint VaR.
+
+For the multivariate volatility problem — time-varying *correlations* rather than per-asset variances — see [Part 3, DCC-GARCH](/en/blog/post/dcc-garch-dynamic-correlation-crypto), which layers a dynamic-correlation model on top of these univariate fits. And for turning a volatility forecast into position sizing and a trading backtest, [Part 4 on volatility targeting](/en/blog/post/volatility-targeting-garch-strategy) uses the $\sigma_{t+1}$ forecasts from these exact models to scale exposure inversely to predicted risk.
+
+### A Distribution-Free Alternative
+
+Everything in the risk section rests on a parametric assumption: that standardized residuals follow a $t$ or skew-$t$. That assumption is testable and usually reasonable, but it can fail. If you would rather not commit to a tail shape at all, [conformal prediction](/en/blog/post/conformal-prediction-trading) gives distribution-free prediction intervals with finite-sample coverage guarantees — a genuinely different philosophy that makes no claim about the innovation distribution. The two approaches are complementary: parametric GARCH-$t$ gives you a full conditional density (and thus ES, which conformal intervals do not directly provide), while conformal gives you coverage that holds even when your density is wrong. In production, using both as a cross-check is cheap insurance.
+
+### Numerical and Workflow Hygiene
+
+- **Scale returns by 100.** GARCH optimizers converge far more reliably on percent returns than on raw fractional returns. Remember to unscale VaR/ES if you report in fractional units.
+- **Watch the persistence.** If $\alpha + \beta + \tfrac12\gamma$ estimates above ~0.999, the model is near-integrated (IGARCH-like); forecasts mean-revert extremely slowly and long-horizon variance forecasts become unreliable. Not necessarily wrong, but flag it.
+- **Convergence failures on rolling windows.** EGARCH's log form avoids positivity constraints but can still fail to converge on a pathological window. Wrap `fit()` in a try/except and fall back to the previous window's parameters rather than crashing a live backtest.
+- **Mean model.** We used a constant mean throughout. For most daily crypto the conditional mean is close to zero and swamped by volatility; do not spend model complexity trying to forecast it unless you have a real reason.
+
+## Summary
+
+- **Plain GARCH(1,1) has two structural defects**: it is symmetric (reacts to $+x\%$ and $-x\%$ identically because shocks enter as $\varepsilon^2$) and it assumes Gaussian innovations (underpricing crypto's fat tails). Both cost real money through optimistic VaR.
+- **GJR-GARCH** adds a threshold term $\gamma\,I(\varepsilon_{t-1}<0)\,\varepsilon_{t-1}^2$. A significant $\gamma > 0$ is the leverage effect: bad news raises volatility more. Positivity needs $\alpha+\gamma\ge0$; persistence is $\alpha+\beta+\tfrac12\gamma$.
+- **EGARCH** models $\log\sigma_t^2$, so no positivity constraints and stationarity is just $|\beta|<1$. Asymmetry enters through a signed term $\gamma z_{t-1}$ (leverage is $\gamma<0$ in this convention) separated from a magnitude term $|z_{t-1}|$.
+- **The news impact curve** — next-period variance vs the last shock — makes the asymmetry visible and verifies the EGARCH sign convention at a glance.
+- **Student-$t$ innovations** (`dist='t'`) fix the tails via a degrees-of-freedom $\nu$ (typically 3–6 for crypto); **Hansen's skew-$t$** (`dist='skewt'`) adds a skewness $\lambda$ for a heavier left tail. Moving Normal → $t$ is a big reliable gain; $t$ → skew-$t$ is often marginal.
+- **VaR and ES** follow from the fitted conditional distribution: $\text{VaR}_\alpha = -(\mu_{t+1} + \sigma_{t+1}F_z^{-1}(1-\alpha))$, with the fat-tailed quantile making the risk honestly larger than Gaussian. ES (coherent, $\approx$ CVaR) captures the average loss beyond VaR.
+- **Backtest with Kupiec and Christoffersen.** Kupiec checks the violation rate; Christoffersen checks that violations are not clustered. A model can pass one and fail the other — clustered violations are the dangerous failure mode. Backtest strictly out-of-sample.
+- **Discipline over complexity.** Add asymmetry/skew only when it survives BIC *and* an out-of-sample VaR backtest. On short or illiquid series, the simpler model usually wins.
+
+---
+
+**References:**
+
+- Nelson, D. B. (1991). Conditional heteroskedasticity in asset returns: A new approach. *Econometrica*, 59(2), 347-370. [DOI](https://doi.org/10.2307/2938260)
+- Glosten, L. R., Jagannathan, R., & Runkle, D. E. (1993). On the relation between the expected value and the volatility of the nominal excess return on stocks. *Journal of Finance*, 48(5), 1779-1801. [DOI](https://doi.org/10.1111/j.1540-6261.1993.tb05128.x)
+- Bollerslev, T. (1987). A conditionally heteroskedastic time series model for speculative prices and rates of return. *Review of Economics and Statistics*, 69(3), 542-547. [DOI](https://doi.org/10.2307/1925546)
+- Hansen, B. E. (1994). Autoregressive conditional density estimation. *International Economic Review*, 35(3), 705-730. [DOI](https://doi.org/10.2307/2527081)
+- Engle, R. F., & Ng, V. K. (1993). Measuring and testing the impact of news on volatility. *Journal of Finance*, 48(5), 1749-1778. [DOI](https://doi.org/10.1111/j.1540-6261.1993.tb05127.x)
+- Christoffersen, P. F. (1998). Evaluating interval forecasts. *International Economic Review*, 39(4), 841-862. [DOI](https://doi.org/10.2307/2527341)
+- Kupiec, P. H. (1995). Techniques for verifying the accuracy of risk measurement models. *Journal of Derivatives*, 3(2), 73-84. [DOI](https://doi.org/10.3905/jod.1995.407942)
+- Black, F. (1976). Studies of stock price volatility changes. *Proceedings of the American Statistical Association, Business and Economic Statistics Section*, 177-181.
+- McNeil, A. J., Frey, R., & Embrechts, P. (2015). *Quantitative Risk Management: Concepts, Techniques and Tools* (2nd ed.). Princeton University Press.
+- Sheppard, K. (2023). arch: Autoregressive conditional heteroskedasticity models in Python. [GitHub](https://github.com/bashtage/arch).

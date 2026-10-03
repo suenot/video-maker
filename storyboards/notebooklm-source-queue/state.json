@@ -2002,7 +2002,48 @@
         "slides_prompt": "a9fa067eb887a1dfd2a442b18cf6a8ae5c27211ffa9c961cb251867f30e5769a",
         "audio_prompt": "ac1695233525d26d2f3ae5009a01023122b67b53d27a16c8c060f9b2c14a1705"
       },
-      "artifacts": {},
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 00:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "a9fa067eb887a1dfd2a442b18cf6a8ae5c27211ffa9c961cb251867f30e5769a",
+          "requested_at": "2026-10-03T20:10:16.263329+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "7c6f7408-4d7e-45ba-8118-49c03cd1ee1a",
+          "submission_mode": "later",
+          "artifact_id": "9682ce68-0a58-41b4-8d23-783f779ad468",
+          "card_text": "tablet\nOrder Flow Imbalance Event Decomposition\nScheduled for after 1am\nmore_vert",
+          "observed_at": "2026-10-03T20:10:20.814722+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Trading Strategy Basics\n+ Mathematical Core\n+ Practical Implementation\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 00:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "9682ce68-0a58-41b4-8d23-783f779ad468"
+          ],
+          "prompt_sha256": "ac1695233525d26d2f3ae5009a01023122b67b53d27a16c8c060f9b2c14a1705",
+          "requested_at": "2026-10-03T20:10:31.623489+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "7c6f7408-4d7e-45ba-8118-49c03cd1ee1a",
+          "submission_mode": "later",
+          "artifact_id": "9c50e9c7-5a64-41f2-8f39-664838b45aa5",
+          "card_text": "audio_spark\nOrder Flow Imbalance Event Decomposition\nScheduled for after 1am\nmore_vert",
+          "observed_at": "2026-10-03T20:10:36.163042+00:00"
+        }
+      },
       "notebook_intent": {
         "at": "2026-10-02T20:23:37.205544+00:00",
         "baseline_path": "temp/notebooklm-source-queue/order-flow-imbalance-prediction-zh-TW-notebook-baseline.json",
@@ -2039,79 +2080,13 @@
       "account_guard": "passed",
       "browser": "saved_camoufox",
       "source_intent": {
-        "at": "2026-10-02T20:23:42.347064+00:00",
+        "at": "2026-10-03T20:10:01.687989+00:00",
         "sha256": "1be52d0a5c49921dbc55474be6e397d86b5108d77f2d214c1d2d691c7e749fe8",
         "baseline_ids": [],
+        "retry_of_at": "2026-10-02T20:23:42.347064+00:00",
+        "recovery_authorized_at": "2026-10-03T20:07:07.797622+00:00",
         "dispatch_state": "dispatch_unknown",
-        "pre_dispatch_evidence": {
-          "log": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T201958Z.log",
-            "sha256": "bd3b300274ff4a6bb49e46bc67b852eb21b11b70702cf2c6d92207de32e32aeb"
-          },
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/2026-10-02T201958Z-order-flow-imbalance-prediction-zh-TW-error.png",
-            "sha256": "e565da761577d09b681d1a0b09d30aca6660598fbab60d9da54e6bb064c8ccfe"
-          },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/2026-10-02T201958Z-order-flow-imbalance-prediction-zh-TW-controls.json",
-            "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
-          },
-          "source_helper": {
-            "path": "/Users/suenot/projects/sdvg/gaia/notebooklm_gen.py",
-            "sha256": "f12e73a22a44ee99623ccf90eedb9dbc9eb8e2ce135bae749f813d0c17a8e7be",
-            "guard": "add_source_text returned False after ensure_add_source_dialog failed; Copied text, paste and Insert were not reached."
-          }
-        },
-        "pre_dispatch_recovery_verified_at": "2026-10-02T20:51:13.328722+00:00"
-      },
-      "last_error": {
-        "type": "RuntimeError",
-        "message": "Source insertion unconfirmed or ambiguous; inspect before retry",
-        "at": "2026-10-03T06:52:00.740466+00:00",
-        "stage": "source_identity_reconciliation",
-        "cause": "Two post-hibernation reconciliation passes in the same permanent notebook show 0 sources. No permanent or processing source can be bound. The original insertion outcome remains unknown; this pass did not upload or generate.",
-        "retry_not_before": "2026-10-04T06:55:39.809267+00:00",
-        "next_safe_step": "Keep this job deferred while other source jobs proceed. Request explicit user authorization for one deliberate fresh insertion of the same frozen full article into this exact empty notebook. Before an authorized insertion, recheck the expected account, exact notebook, zero source/artifact IDs and unchanged inputs; preserve the old uncertain intent. Without that authorization, only reconcile source IDs after the backoff, never insert again.",
-        "requires_user_authorized_recovery": true,
-        "evidence": {
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/2026-10-03T065011Z-order-flow-imbalance-prediction-zh-TW-screenshot.png",
-            "sha256": "7f9344ff64cf71f8f90fe41a449daec94c9d2d84dd88a0dcc6d3ff8027f56a1e"
-          },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/2026-10-03T065011Z-order-flow-imbalance-prediction-zh-TW-controls.json",
-            "sha256": "7fbfbc2730b2c351784cbbdb698987dd5b9b9e83bf90cfa83e2f6a8770e58a39"
-          },
-          "log": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-03T065011Z.log",
-            "sha256": "a054db1f3cb4541df8f72cc7e35b86b2e670ca53756c569fd5ce52105b40a10f"
-          }
-        },
-        "previous_error": {
-          "type": "TimeoutError",
-          "message": "TimeoutError",
-          "at": "2026-10-03T05:27:11.841379+00:00",
-          "stage": "source_insertion_confirmation",
-          "cause": "The Mac entered Low Power Sleep at 2026-10-03 00:51:17 Asia/Tbilisi with 1% charge, two seconds after pasting the full source, and woke from Hibernate on AC attach at 09:25:21. Source confirmation and its diagnostic screenshot timed out after resume. Insert path was reached, but the permanent source-ID outcome remains unknown.",
-          "retry_not_before": "2026-10-03T05:45:00+00:00",
-          "next_safe_step": "After the retry deadline, load only the same permanent notebook and reconcile source IDs against the retained empty baseline. Bind a sole permanent addition or wait for pending_upload_doc_id_; retain an unresolved intent if no/ambiguous IDs appear. Never insert again or generate before the source ID is bound.",
-          "evidence": {
-            "log": {
-              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T204958Z.log",
-              "sha256": "14f82bbe44ebe21188c98bf9d649d9a8e3dc86ede6a5816dfd1cf0cd9b6ad27f"
-            },
-            "power_log": {
-              "path": "temp/notebooklm-source-queue/power-evidence-2026-10-03T052808Z.txt",
-              "sha256": "6542dc5dff679b4f2fd5c58058e7331c573837a8f42d377e96fc6c60798511e1"
-            }
-          },
-          "observed_clock_gap": {
-            "pasted_at_local": "2026-10-03 00:51:15 Asia/Tbilisi",
-            "source_wait_timeout_local": "2026-10-03 09:25:22 Asia/Tbilisi",
-            "duration_seconds": 30847,
-            "sleep_cause": "confirmed macOS Low Power Sleep; 30844-second sleep interval"
-          }
-        }
+        "resolved_at": "2026-10-03T20:10:09.167365+00:00"
       },
       "notebook": "https://notebook.google.com/notebook/c0dcc0d9-0bc9-4ac1-a0d5-12c5cc879ecc",
       "reconciled_notebook_candidates": [
@@ -2122,7 +2097,7 @@
       ],
       "diagnostic_error": "TimeoutError",
       "temporary_source_ids": [],
-      "state": "source_identity_unresolved",
+      "state": "source_ready",
       "source_reconciliation_observation": {
         "at": "2026-10-03T06:52:00.740466+00:00",
         "notebook": "https://notebook.google.com/notebook/c0dcc0d9-0bc9-4ac1-a0d5-12c5cc879ecc",
@@ -2182,7 +2157,111 @@
         },
         "quota_guard_changed": false,
         "scope": "near-limit warning only; no all-feature block or scheduled-pair notice observed; reset timezone not measured in this reconciliation pass"
-      }
+      },
+      "error_history": [
+        {
+          "type": "RuntimeError",
+          "message": "Source insertion unconfirmed or ambiguous; inspect before retry",
+          "at": "2026-10-03T06:52:00.740466+00:00",
+          "stage": "source_identity_reconciliation",
+          "cause": "Two post-hibernation reconciliation passes in the same permanent notebook show 0 sources. No permanent or processing source can be bound. The original insertion outcome remains unknown; this pass did not upload or generate.",
+          "retry_not_before": "2026-10-04T06:55:39.809267+00:00",
+          "next_safe_step": "Keep this job deferred while other source jobs proceed. Request explicit user authorization for one deliberate fresh insertion of the same frozen full article into this exact empty notebook. Before an authorized insertion, recheck the expected account, exact notebook, zero source/artifact IDs and unchanged inputs; preserve the old uncertain intent. Without that authorization, only reconcile source IDs after the backoff, never insert again.",
+          "requires_user_authorized_recovery": true,
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/2026-10-03T065011Z-order-flow-imbalance-prediction-zh-TW-screenshot.png",
+              "sha256": "7f9344ff64cf71f8f90fe41a449daec94c9d2d84dd88a0dcc6d3ff8027f56a1e"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/2026-10-03T065011Z-order-flow-imbalance-prediction-zh-TW-controls.json",
+              "sha256": "7fbfbc2730b2c351784cbbdb698987dd5b9b9e83bf90cfa83e2f6a8770e58a39"
+            },
+            "log": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-03T065011Z.log",
+              "sha256": "a054db1f3cb4541df8f72cc7e35b86b2e670ca53756c569fd5ce52105b40a10f"
+            }
+          },
+          "previous_error": {
+            "type": "TimeoutError",
+            "message": "TimeoutError",
+            "at": "2026-10-03T05:27:11.841379+00:00",
+            "stage": "source_insertion_confirmation",
+            "cause": "The Mac entered Low Power Sleep at 2026-10-03 00:51:17 Asia/Tbilisi with 1% charge, two seconds after pasting the full source, and woke from Hibernate on AC attach at 09:25:21. Source confirmation and its diagnostic screenshot timed out after resume. Insert path was reached, but the permanent source-ID outcome remains unknown.",
+            "retry_not_before": "2026-10-03T05:45:00+00:00",
+            "next_safe_step": "After the retry deadline, load only the same permanent notebook and reconcile source IDs against the retained empty baseline. Bind a sole permanent addition or wait for pending_upload_doc_id_; retain an unresolved intent if no/ambiguous IDs appear. Never insert again or generate before the source ID is bound.",
+            "evidence": {
+              "log": {
+                "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T204958Z.log",
+                "sha256": "14f82bbe44ebe21188c98bf9d649d9a8e3dc86ede6a5816dfd1cf0cd9b6ad27f"
+              },
+              "power_log": {
+                "path": "temp/notebooklm-source-queue/power-evidence-2026-10-03T052808Z.txt",
+                "sha256": "6542dc5dff679b4f2fd5c58058e7331c573837a8f42d377e96fc6c60798511e1"
+              }
+            },
+            "observed_clock_gap": {
+              "pasted_at_local": "2026-10-03 00:51:15 Asia/Tbilisi",
+              "source_wait_timeout_local": "2026-10-03 09:25:22 Asia/Tbilisi",
+              "duration_seconds": 30847,
+              "sleep_cause": "confirmed macOS Low Power Sleep; 30844-second sleep interval"
+            }
+          }
+        }
+      ],
+      "recovery_requested": {
+        "at": "2026-10-03T20:07:07.797622+00:00",
+        "reason": "User explicitly requested a fresh insertion in the existing empty notebook and automatic recovery after sleep; prior wait superseded.",
+        "resolved_at": "2026-10-03T20:10:09.167365+00:00",
+        "source_id": "7c6f7408-4d7e-45ba-8118-49c03cd1ee1a",
+        "artifact_ids": {
+          "slides": "9682ce68-0a58-41b4-8d23-783f779ad468",
+          "audio": "9c50e9c7-5a64-41f2-8f39-664838b45aa5"
+        },
+        "state": "source_bound_and_pair_scheduled"
+      },
+      "source_intent_history": [
+        {
+          "intent": {
+            "at": "2026-10-02T20:23:42.347064+00:00",
+            "sha256": "1be52d0a5c49921dbc55474be6e397d86b5108d77f2d214c1d2d691c7e749fe8",
+            "baseline_ids": [],
+            "dispatch_state": "dispatch_unknown",
+            "pre_dispatch_evidence": {
+              "log": {
+                "path": "temp/notebooklm-source-queue/heartbeat-2026-10-02T201958Z.log",
+                "sha256": "bd3b300274ff4a6bb49e46bc67b852eb21b11b70702cf2c6d92207de32e32aeb"
+              },
+              "screenshot": {
+                "path": "temp/notebooklm-source-queue/2026-10-02T201958Z-order-flow-imbalance-prediction-zh-TW-error.png",
+                "sha256": "e565da761577d09b681d1a0b09d30aca6660598fbab60d9da54e6bb064c8ccfe"
+              },
+              "controls": {
+                "path": "temp/notebooklm-source-queue/2026-10-02T201958Z-order-flow-imbalance-prediction-zh-TW-controls.json",
+                "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+              },
+              "source_helper": {
+                "path": "/Users/suenot/projects/sdvg/gaia/notebooklm_gen.py",
+                "sha256": "f12e73a22a44ee99623ccf90eedb9dbc9eb8e2ce135bae749f813d0c17a8e7be",
+                "guard": "add_source_text returned False after ensure_add_source_dialog failed; Copied text, paste and Insert were not reached."
+              }
+            },
+            "pre_dispatch_recovery_verified_at": "2026-10-02T20:51:13.328722+00:00"
+          },
+          "superseded_at": "2026-10-03T20:10:01.687989+00:00",
+          "reason": "Authorized recovery after live zero-source/zero-artifact reconciliation",
+          "notebook": "https://notebook.google.com/notebook/c0dcc0d9-0bc9-4ac1-a0d5-12c5cc879ecc",
+          "source_ids": [],
+          "artifact_ids": []
+        }
+      ],
+      "source_id": "7c6f7408-4d7e-45ba-8118-49c03cd1ee1a",
+      "source_title": "MM article order-flow-imbalance-prediction ZH-TW be3546cf73e4",
+      "source_sha256": "1be52d0a5c49921dbc55474be6e397d86b5108d77f2d214c1d2d691c7e749fe8",
+      "source_display_name": "MM article order-flow-imbalance-prediction ZH-TW …",
+      "selected_source_ids": [
+        "7c6f7408-4d7e-45ba-8118-49c03cd1ee1a"
+      ]
     },
     "twap-vwap-pov-execution-algorithms:zh-CN": {
       "slug": "twap-vwap-pov-execution-algorithms",
@@ -3544,7 +3623,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-03T16:52:37.716179+00:00",
+  "checked_at": "2026-10-03T20:20:41.433334+00:00",
   "browser_geometry_requested": {
     "width": 2000,
     "height": 1290,
@@ -3561,9 +3640,15 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're getting close to your AI usage limit. Limit resets at 19:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 00:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-03T11:36:47.933500+00:00",
-    "not_before": "2026-10-03T15:51:00+00:00"
+    "observed_at": "2026-10-03T20:10:36.174131+00:00",
+    "not_before": "2026-10-03T20:51:00+00:00"
+  },
+  "recovery_policy": {
+    "retry_empty_source_uploads": true,
+    "authorized_at": "2026-10-03T20:07:07.797622+00:00",
+    "authorized_by": "direct human instruction in this chat",
+    "instruction": "Повторить неопределенную загрузку; после сна восстанавливать работу автоматически без повторного разрешения. Ошибка отдельного задания не останавливает независимые статьи."
   }
 }

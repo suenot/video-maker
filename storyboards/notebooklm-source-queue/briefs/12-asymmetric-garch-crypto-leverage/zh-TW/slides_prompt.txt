@@ -1,0 +1,36 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article asymmetric-garch-crypto-leverage ZH-TW 0ff71e4eaf93". It is the complete published zh-Hant article snapshot. Do not merge another language edition or outside facts. Output language: Traditional Chinese for Taiwan. Use Traditional Chinese for Taiwan (zh-TW), not generic Chinese. Use Taiwan financial and statistical terminology such as 波動率, 委託簿, 風險值, 預期短缺 and 資料 when appropriate. Keep formulas, code identifiers, units, citations and proper names exact. Speak Taiwan Mandarin (Guoyu) for audio, not Taiwanese Hokkien; pronunciation and regional terminology need editorial review.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 槓桿效應，以及加密市場為何更加混亂
+2. H2 — 建模之前先檢驗非對稱性
+3. H2 — GJR-GARCH：通過閾值項引入非對稱性
+4. H3 — 正定性與平穩性
+5. H2 — EGARCH：對數方差建模，無正定性約束
+6. H3 — 新聞衝擊曲線
+7. H2 — 厚尾：Student-t與偏態-t新息
+8. H3 — 標準化Student-t
+9. H3 — Hansen偏態-t
+10. H2 — Python實現
+11. H3 — 設定與資料
+12. H3 — 擬合四個模型
+13. H3 — 解讀GJR擬合結果
+14. H3 — 用資訊準則比較模型
+15. H3 — 繪製新聞衝擊曲線
+16. H3 — 四個模型的橫向對比
+17. H2 — 風險應用：VaR與預期損失
+18. H3 — 從條件分佈到VaR
+19. H3 — 預期損失
+20. H3 — 從擬合的arch模型計算VaR與ES
+21. H3 — 一步預測與多步預測：一個警示
+22. H3 — VaR回測：Kupiec檢驗與Christoffersen檢驗
+23. H3 — 按尾部損失而非僅按通過/未通過來排序模型
+24. H2 — 實踐考量
+25. H3 — 額外參數何時不划算
+26. H3 — 這些是其他一切的基礎邊際分佈
+27. H3 — 一個不依賴分佈假設的替代方案
+28. H3 — 數值與工作流衛生
+29. H2 — 小結
+
+Preserve the source's distinction between a symmetric Gaussian GARCH baseline, asymmetric GJR-GARCH and EGARCH, and heavy-tailed Student-t and Hansen skew-t innovations. Keep crypto-specific caveats: the equity leverage story is not a crypto balance-sheet mechanism, and asymmetry can reverse by asset/regime. Retain all displayed equations, variable definitions, sign conventions and constraints: GJR gamma > 0 for downside asymmetry, alpha + gamma >= 0 and persistence; EGARCH gamma < 0 for leverage in its convention and |beta| < 1; standardized t nu > 2, skew-t lambda, and news-impact curves. Explain the illustrative GJR parameter table as illustrative, not empirical results. Preserve the four fitted model variants, Python setup and logic, daily returns scaled by 100, 365-day annualization, AIC/BIC and out-of-sample selection. Retain the source's 99% one-step VaR and Expected Shortfall formulas, sign and percent units, quantile and tail integration, 1-step versus multi-step caveat, and simulation requirement for longer horizons. Cover Kupiec rate, Christoffersen independence, conditional coverage, walk-forward validation, pinball quantile loss, joint VaR/ES evaluation, and the article's Basel traffic-light claim as an attributed claim requiring review. Include short/illiquid samples, convergence, persistence, model complexity, frequency changes, distribution-free conformal alternative and marginal/joint risk links. Preserve the closing summary and all bibliography references.
+
+Preserve every substantive section, example, formula, mathematical symbol, percent sign, unit, table, code logic, caveat, risk, link and reference from the source. Never silently change an article number or claim. Attribute numerical, research, financial, company-specific and mutable statements to the article; they await human editorial and primary-source verification. Do not add guaranteed returns or investment advice. This draft requires mathematical, factual and terminology review. Exact external NotebookLM notebook/source/artifact identities remain unchecked before submission; target-channel duplicates remain unchecked before final render or publication. Do not imply clearance.
+Use enough readable slides to cover every major and material subsection. Show equations, variables, units, diagrams and tables legibly only as supported by the source; label illustrative outputs and article claims. Keep on-slide language in the requested locale apart from necessary technical identifiers. End with the article summary/conclusion and source references.
