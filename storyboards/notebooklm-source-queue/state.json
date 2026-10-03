@@ -2004,7 +2004,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 00:51."
@@ -2019,11 +2019,18 @@
           "source_id": "7c6f7408-4d7e-45ba-8118-49c03cd1ee1a",
           "submission_mode": "later",
           "artifact_id": "9682ce68-0a58-41b4-8d23-783f779ad468",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T21:09:07.666332+00:00"
+          "card_text": "tablet\nUnread\nOrder Flow Imbalance Blueprint\n1 source · 7m ago\nmore_vert",
+          "observed_at": "2026-10-03T21:23:51.455877+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/order-flow-imbalance-prediction/zh-TW/slides.pdf",
+          "sha256": "6ab6111b007b1575ad67c1c0ff824c226b22af18f11fc99ddc021628db4c0ea5",
+          "bytes": 19353079,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T21:24:30.667650+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "generating",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Trading Strategy Basics\n+ Mathematical Core\n+ Practical Implementation\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 00:51."
@@ -2040,8 +2047,8 @@
           "source_id": "7c6f7408-4d7e-45ba-8118-49c03cd1ee1a",
           "submission_mode": "later",
           "artifact_id": "9c50e9c7-5a64-41f2-8f39-664838b45aa5",
-          "card_text": "audio_spark\nOrder Flow Imbalance Event Decomposition\nScheduled for after 1am\nmore_vert",
-          "observed_at": "2026-10-03T21:09:08.691876+00:00"
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T21:24:31.697357+00:00"
         }
       },
       "notebook_intent": {
@@ -3634,7 +3641,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "9c4af2ff2bf97a599678acfada85cb31102d494a94bb771e2de37d7604b8bd96",
           "requested_at": "2026-10-03T21:09:20.009143+00:00",
@@ -3644,11 +3651,18 @@
           "source_id": "1cbe295f-0096-4b41-a1fb-a9ae873aa231",
           "submission_mode": "now",
           "artifact_id": "956d6639-8a7f-4b70-8687-de525f8cc86b",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T21:09:24.565326+00:00"
+          "card_text": "tablet\nUnread\nTrading Bot Anomaly Detection Blueprint\n1 source · 7m ago\nmore_vert",
+          "observed_at": "2026-10-03T21:24:39.340969+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/anomaly-detection-algotrading/en/slides.pdf",
+          "sha256": "7fdd63d7190b7cd33f9e6f7650daf8e37820c1e0495f7246e83a536a6ff55d76",
+          "bytes": 15551185,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T21:25:39.064413+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "956d6639-8a7f-4b70-8687-de525f8cc86b"
           ],
@@ -3660,8 +3674,15 @@
           "source_id": "1cbe295f-0096-4b41-a1fb-a9ae873aa231",
           "submission_mode": "now",
           "artifact_id": "d43f625c-f8df-419a-b50c-0bc801e95418",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T21:09:36.085310+00:00"
+          "card_text": "audio_spark\nUnread\nProtecting Crypto Bots With Anomaly Detection\n14:38 · Deep Dive · 1 source · 8m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T21:25:40.094381+00:00",
+          "duration_seconds": 878.759184,
+          "path": "input/notebooklm-sources/anomaly-detection-algotrading/en/audio.m4a",
+          "sha256": "61d57b17f1c62739b2823fa497019dee4ae8cd5d5601cec6f27e20c5046f9918",
+          "bytes": 28282752,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T21:27:12.506728+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -3708,7 +3729,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "991c8abcc26325f9fbd6f22ee01336568f777d30391e480daade787fd92a57d0",
           "requested_at": "2026-10-03T21:09:51.060385+00:00",
@@ -3718,11 +3739,18 @@
           "source_id": "39726371-47ae-446f-b002-95f09a3a4933",
           "submission_mode": "now",
           "artifact_id": "ddfc8dd8-1b11-483f-82aa-85914706bc20",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T21:09:55.615219+00:00"
+          "card_text": "tablet\nUnread\nTrading Bot Anomaly Detection\n1 source · 8m ago\nmore_vert",
+          "observed_at": "2026-10-03T21:27:19.146685+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/anomaly-detection-algotrading/ru/slides.pdf",
+          "sha256": "b947caa62eb9d6318b6ea14393297fa77938d254305531e7fc8977100f6c8510",
+          "bytes": 13608394,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T21:28:19.173139+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "ddfc8dd8-1b11-483f-82aa-85914706bc20"
           ],
@@ -3734,8 +3762,15 @@
           "source_id": "39726371-47ae-446f-b002-95f09a3a4933",
           "submission_mode": "now",
           "artifact_id": "7e470c19-f491-4118-aea5-03d2ed9f63f8",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T21:10:11.763132+00:00"
+          "card_text": "audio_spark\nUnread\nЗащита торговых ботов от аномалий рынка\n18:18 · Deep Dive · 1 source · 7m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T21:28:20.202477+00:00",
+          "duration_seconds": 1098.396735,
+          "path": "input/notebooklm-sources/anomaly-detection-algotrading/ru/audio.m4a",
+          "sha256": "13b727e391dac0ccda0a171b7df19b9673591aaaa89db2586e2791091322857a",
+          "bytes": 35351546,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T21:29:07.804989+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -3782,7 +3817,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "01a065e2c3a22246e9692ab39f5e561f96010207b60cbfaee92d1e76627ce15b",
           "requested_at": "2026-10-03T21:10:41.828084+00:00",
@@ -3792,11 +3827,18 @@
           "source_id": "3f8387f0-838c-400f-8d2c-5406a66e78a7",
           "submission_mode": "now",
           "artifact_id": "774f8343-dd2d-49db-9aff-c8cc31e68a36",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T21:10:46.385154+00:00"
+          "card_text": "tablet\nUnread\n加密算法交易异常检测\n1 source · 9m ago\nmore_vert",
+          "observed_at": "2026-10-03T21:29:14.520244+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/anomaly-detection-algotrading/zh-CN/slides.pdf",
+          "sha256": "781f8e96a17d7075a4272d95601778b7c4f1a8c796ef95b64b283d89ee776380",
+          "bytes": 15632074,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T21:29:39.530462+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "774f8343-dd2d-49db-9aff-c8cc31e68a36"
           ],
@@ -3808,8 +3850,15 @@
           "source_id": "3f8387f0-838c-400f-8d2c-5406a66e78a7",
           "submission_mode": "now",
           "artifact_id": "2b8bf372-9631-4bfd-8b26-08c5dfc5f64e",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T21:11:03.873812+00:00"
+          "card_text": "audio_spark\nUnread\n交易机器人异常检测\n16:24 · Deep Dive · 1 source · 10m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T21:29:40.563828+00:00",
+          "duration_seconds": 984.967256,
+          "path": "input/notebooklm-sources/anomaly-detection-algotrading/zh-CN/audio.m4a",
+          "sha256": "32dd0f902990d7f3099191c13b295723b3a3aaee10b3eb0ae57591d1815481eb",
+          "bytes": 31700883,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T21:30:22.779605+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -3841,9 +3890,86 @@
       "selected_source_ids": [
         "3f8387f0-838c-400f-8d2c-5406a66e78a7"
       ]
+    },
+    "anomaly-detection-algotrading:zh-TW": {
+      "slug": "anomaly-detection-algotrading",
+      "language": "zh-TW",
+      "article_sha256": "129364549397664ef63bf59c3b9c55c43dda3734815e6bb2885baf50ba71bb00",
+      "input_hashes": {
+        "article": "129364549397664ef63bf59c3b9c55c43dda3734815e6bb2885baf50ba71bb00",
+        "source_text": "32c712b5999838f5a9094b84a5796b9e62811d598a8e14712845d53d9ae0fca0",
+        "slides_prompt": "ebf194a49989fc466bc9a58b6b41037ded104e35c198fcd35ecaba5bf0b49401",
+        "audio_prompt": "e4ef83ede3f6ea930232ef609bb40f0811713c5fe6f5cbd09a59ad7b925170a3"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 05:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "ebf194a49989fc466bc9a58b6b41037ded104e35c198fcd35ecaba5bf0b49401",
+          "requested_at": "2026-10-03T21:30:56.813199+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "bb94ef4e-7303-40d1-9013-8e55863f226c",
+          "submission_mode": "later",
+          "artifact_id": "28538b6e-e46b-422f-9e45-4fcb169bd0d1",
+          "card_text": "tablet\nAlgorithmic Trading Anomaly Detection\nScheduled for after 5am\nmore_vert",
+          "observed_at": "2026-10-03T21:31:01.392755+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "28538b6e-e46b-422f-9e45-4fcb169bd0d1"
+          ],
+          "prompt_sha256": "e4ef83ede3f6ea930232ef609bb40f0811713c5fe6f5cbd09a59ad7b925170a3",
+          "requested_at": "2026-10-03T21:31:13.292770+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "bb94ef4e-7303-40d1-9013-8e55863f226c",
+          "submission_mode": "now",
+          "artifact_id": "9a7e28a7-ef7e-4332-a28e-09af162ae2d5",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T21:31:17.847412+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-03T21:30:22.790680+00:00",
+      "notebook_intent": {
+        "at": "2026-10-03T21:30:29.782251+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/anomaly-detection-algotrading-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "6d9fb40f76b6e4a171207c970b8d97f4f7f2ff1b145cfa395c71e10bc178de5e",
+        "baseline_count": 300,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T21:30:36.909059+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/ffe57cd6-1593-4639-ac27-9da605e9df60",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T21:30:41.227462+00:00",
+        "sha256": "32c712b5999838f5a9094b84a5796b9e62811d598a8e14712845d53d9ae0fca0",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-03T21:30:49.078920+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "bb94ef4e-7303-40d1-9013-8e55863f226c",
+      "source_title": "MM article anomaly-detection-algotrading ZH-TW 129364549397",
+      "source_sha256": "32c712b5999838f5a9094b84a5796b9e62811d598a8e14712845d53d9ae0fca0",
+      "state": "source_ready",
+      "source_display_name": "MM article anomaly-detection-algotrading ZH-TW 12…",
+      "selected_source_ids": [
+        "bb94ef4e-7303-40d1-9013-8e55863f226c"
+      ]
     }
   },
-  "checked_at": "2026-10-03T21:11:03.877043+00:00",
+  "checked_at": "2026-10-03T21:31:17.859681+00:00",
   "browser_geometry_requested": {
     "width": 2000,
     "height": 1290,
@@ -3860,10 +3986,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 00:51.",
+    "notice": "AI usage limit reached. All features will be available after 05:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-03T20:10:36.174131+00:00",
-    "not_before": "2026-10-03T20:51:00+00:00"
+    "observed_at": "2026-10-03T21:31:17.859667+00:00",
+    "not_before": "2026-10-04T01:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
