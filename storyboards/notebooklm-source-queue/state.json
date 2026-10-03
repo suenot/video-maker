@@ -2741,7 +2741,7 @@
           "editorial_review": "pending"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Core Pillars\n+ Beginner Guide\n+ Implementation Steps\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 14:51."
@@ -2758,8 +2758,15 @@
           "source_id": "84ed97ae-4d80-44cf-8f19-1e7a94608b4c",
           "submission_mode": "later",
           "artifact_id": "384c36ea-7828-4bc4-ab37-4aa10d9588b4",
-          "card_text": "audio_spark\nAI4Finance Foundation: FinGPT, FinRL, and FinRobot Ecosystem\nScheduled for after 4pm\nmore_vert",
-          "observed_at": "2026-10-03T11:36:47.915847+00:00"
+          "card_text": "audio_spark\nUnread\n开源AI量化交易生态\n12:17 · Deep Dive · 1 source · 3h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T16:07:18.142358+00:00",
+          "duration_seconds": 737.21034,
+          "path": "input/notebooklm-sources/ai4finance-foundation-guide/zh-CN/audio.m4a",
+          "sha256": "3004d4abea5f212a5dc6d628f90ab23b3dfa850f19a18071c3771d1bd8d06cfd",
+          "bytes": 23727081,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T16:07:40.749699+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -2967,7 +2974,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "19f6d0228e5f986febe190de0dfebfc837f47d3a89eb8e55f70d3308c5065fdb",
           "requested_at": "2026-10-03T11:23:39.218694+00:00",
@@ -2977,11 +2984,18 @@
           "source_id": "17351672-7d37-4509-9d41-0c853da38cdd",
           "submission_mode": "now",
           "artifact_id": "f87f5d6b-8bc5-46d9-b28e-8ae2fa3a3aa3",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T11:23:43.763863+00:00"
+          "card_text": "tablet\nUnread\nAudit-Ready Pitch Decks for Algo Trading\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-03T16:07:47.526365+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/algo-investor-skills/zh-TW/slides.pdf",
+          "sha256": "dfa6329cbef0d3003e8cad343677988951b65deef14803dff0d69decfc7372ae",
+          "bytes": 12765688,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T16:08:00.226998+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "f87f5d6b-8bc5-46d9-b28e-8ae2fa3a3aa3"
           ],
@@ -2993,8 +3007,15 @@
           "source_id": "17351672-7d37-4509-9d41-0c853da38cdd",
           "submission_mode": "now",
           "artifact_id": "2f7c44f0-9e99-4ae6-a326-bc6a8e3521c0",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T11:23:59.784816+00:00"
+          "card_text": "audio_spark\nUnread\n量化交易 AI 募資審查\n13:41 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T16:08:01.259701+00:00",
+          "duration_seconds": 821.893515,
+          "path": "input/notebooklm-sources/algo-investor-skills/zh-TW/audio.m4a",
+          "sha256": "7181f90ba14d20a5a53b07bb095918a0108c32ba2c9cc3ccea166c3cf8ae8ec6",
+          "bytes": 26452575,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T16:08:23.735915+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -3036,7 +3057,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "69fbbeace8457b9e6d155356033a32db84d4a7790b5340c568c70ba2030e7f7c",
           "requested_at": "2026-10-03T11:24:28.493374+00:00",
@@ -3046,11 +3067,18 @@
           "source_id": "0465357d-0745-44af-955a-c57722e43455",
           "submission_mode": "now",
           "artifact_id": "05190d88-ceb6-417f-b7d9-60588245346a",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T11:24:33.039776+00:00"
+          "card_text": "tablet\nUnread\nPractical Almgren-Chriss Execution\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-03T16:08:30.464317+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/almgren-chriss-optimal-execution/zh-CN/slides.pdf",
+          "sha256": "679279dd9c8836a8d256ee753988ffd160b6d3c98a746ee869b46b87c27a132b",
+          "bytes": 12497085,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T16:08:42.678898+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "05190d88-ceb6-417f-b7d9-60588245346a"
           ],
@@ -3062,8 +3090,15 @@
           "source_id": "0465357d-0745-44af-955a-c57722e43455",
           "submission_mode": "now",
           "artifact_id": "c96f3e64-d9f1-4103-95c3-0c3f48644e79",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T11:24:49.006389+00:00"
+          "card_text": "audio_spark\nUnread\nAlmgren-Chriss最优执行模型\n14:49 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T16:08:43.707973+00:00",
+          "duration_seconds": 889.881542,
+          "path": "input/notebooklm-sources/almgren-chriss-optimal-execution/zh-CN/audio.m4a",
+          "sha256": "97da1a74f01333c47f2693b4120b888b01ad4e67bbff12de514c81f9b67567aa",
+          "bytes": 28640716,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T16:09:10.390914+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -3092,9 +3127,147 @@
       "selected_source_ids": [
         "0465357d-0745-44af-955a-c57722e43455"
       ]
+    },
+    "almgren-chriss-optimal-execution:zh-TW": {
+      "slug": "almgren-chriss-optimal-execution",
+      "language": "zh-TW",
+      "article_sha256": "47fa116a84141463991b5a3b038a94510419011d32707eb02d30e10ed7d13a5b",
+      "input_hashes": {
+        "article": "47fa116a84141463991b5a3b038a94510419011d32707eb02d30e10ed7d13a5b",
+        "source_text": "3b27b897bd3027c2fa3a7511a9ad0edf815a000f5e7222be814876856180349e",
+        "slides_prompt": "c5c53b7de065fa283cf2b197849fc023a30d2c34880f282b3c2d0a2ceb6db8ff",
+        "audio_prompt": "932dbddc1bb1c828db9b84f7ba90ec4a9ce96c8c8b168d7e086c22d06a49dc89"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "c5c53b7de065fa283cf2b197849fc023a30d2c34880f282b3c2d0a2ceb6db8ff",
+          "requested_at": "2026-10-03T16:09:39.899925+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "d6913a3d-7918-4023-ac28-234b580a889f",
+          "submission_mode": "now",
+          "artifact_id": "fb05163a-0e20-46c3-a766-1134f9cea9f3",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T16:09:44.473054+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "fb05163a-0e20-46c3-a766-1134f9cea9f3"
+          ],
+          "prompt_sha256": "932dbddc1bb1c828db9b84f7ba90ec4a9ce96c8c8b168d7e086c22d06a49dc89",
+          "requested_at": "2026-10-03T16:09:57.200844+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "d6913a3d-7918-4023-ac28-234b580a889f",
+          "submission_mode": "now",
+          "artifact_id": "3013badb-e95c-4654-b2be-a23f1dbe5f15",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T16:10:01.761057+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T16:09:17.301928+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/almgren-chriss-optimal-execution-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "baceffb81fd731d58880a848bbbd60b1a81a31d7e2631edbb58b401a168f4691",
+        "baseline_count": 292,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T16:09:20.393498+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/dffa019b-2b74-450d-832b-50982721c827",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T16:09:24.470963+00:00",
+        "sha256": "3b27b897bd3027c2fa3a7511a9ad0edf815a000f5e7222be814876856180349e",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "d6913a3d-7918-4023-ac28-234b580a889f",
+      "source_title": "MM article almgren-chriss-optimal-execution ZH-TW 47fa116a8414",
+      "source_sha256": "3b27b897bd3027c2fa3a7511a9ad0edf815a000f5e7222be814876856180349e",
+      "state": "source_ready",
+      "source_display_name": "MM article almgren-chriss-optimal-execution ZH-TW…",
+      "selected_source_ids": [
+        "d6913a3d-7918-4023-ac28-234b580a889f"
+      ]
+    },
+    "analysis-trader-prediction-dex:en": {
+      "slug": "analysis-trader-prediction-dex",
+      "language": "en",
+      "article_sha256": "ee6f054e932c7b13b5314c6c250576a067b982aa228ae49c83c78c7094681f60",
+      "input_hashes": {
+        "article": "ee6f054e932c7b13b5314c6c250576a067b982aa228ae49c83c78c7094681f60",
+        "source_text": "d9c6ff91cd9e4d5aab3d18e04fc3330792204ac640c7bc04b3d68d3c6b6648df",
+        "slides_prompt": "6b9dae658313c3920a75f7db6d36496eefdfb12cb38d6059343fefb8609f2923",
+        "audio_prompt": "5217f17447c058812711aef0bff29f6f54f435267b53d5148f7c701a168eed99"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "6b9dae658313c3920a75f7db6d36496eefdfb12cb38d6059343fefb8609f2923",
+          "requested_at": "2026-10-03T16:10:26.140155+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "d58b5e55-62a4-47db-8ba9-590d302c7a88",
+          "submission_mode": "now",
+          "artifact_id": "692900c7-6e1e-4c1e-82c6-d296f06806c2",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T16:10:30.701217+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "692900c7-6e1e-4c1e-82c6-d296f06806c2"
+          ],
+          "prompt_sha256": "5217f17447c058812711aef0bff29f6f54f435267b53d5148f7c701a168eed99",
+          "requested_at": "2026-10-03T16:10:37.704088+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "d58b5e55-62a4-47db-8ba9-590d302c7a88",
+          "submission_mode": "now",
+          "artifact_id": "ed9cfdf9-66d0-46f1-907e-65d1e9e0e414",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T16:10:42.261652+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T16:10:09.035474+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/analysis-trader-prediction-dex-en-notebook-baseline.json",
+        "baseline_sha256": "1bd54ac1d394c80d34b52888993914a8cc4b52fd61807cc61d24780234515122",
+        "baseline_count": 293,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T16:10:11.119827+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/b231b90a-247d-44ef-a6f0-7986436f566d",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T16:10:15.133013+00:00",
+        "sha256": "d9c6ff91cd9e4d5aab3d18e04fc3330792204ac640c7bc04b3d68d3c6b6648df",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "d58b5e55-62a4-47db-8ba9-590d302c7a88",
+      "source_title": "MM article analysis-trader-prediction-dex EN ee6f054e932c",
+      "source_sha256": "d9c6ff91cd9e4d5aab3d18e04fc3330792204ac640c7bc04b3d68d3c6b6648df",
+      "state": "source_ready",
+      "source_display_name": "MM article analysis-trader-prediction-dex EN ee6f…",
+      "selected_source_ids": [
+        "d58b5e55-62a4-47db-8ba9-590d302c7a88"
+      ]
     }
   },
-  "checked_at": "2026-10-03T11:36:47.933510+00:00",
+  "checked_at": "2026-10-03T16:10:42.266113+00:00",
   "browser_geometry_requested": {
     "width": 2000,
     "height": 1290,
