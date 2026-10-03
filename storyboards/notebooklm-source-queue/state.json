@@ -2720,7 +2720,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "b846f6f7174abee978f671720b960214f0b0ff2db4f37dff46c8165b34e37e35",
           "requested_at": "2026-10-03T07:08:41.463585+00:00",
@@ -2730,8 +2730,15 @@
           "source_id": "84ed97ae-4d80-44cf-8f19-1e7a94608b4c",
           "submission_mode": "now",
           "artifact_id": "92251818-4bac-488e-abd6-42211970caaf",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T07:08:46.016991+00:00"
+          "card_text": "tablet\nUnread\nAI4Finance 量化交易架构蓝图\n1 source · 3h ago\nmore_vert",
+          "observed_at": "2026-10-03T11:06:55.600219+00:00",
+          "pages": 8,
+          "path": "input/notebooklm-sources/ai4finance-foundation-guide/zh-CN/slides.pdf",
+          "sha256": "333fbc8e8446b5d53299a0d2ac2d343b2f1bda9d9f6c32662f84662d9d7da477",
+          "bytes": 6859326,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T11:07:15.370925+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
           "state": "scheduled",
@@ -2752,7 +2759,7 @@
           "submission_mode": "later",
           "artifact_id": "384c36ea-7828-4bc4-ab37-4aa10d9588b4",
           "card_text": "audio_spark\nAI4Finance Foundation: FinGPT, FinRL, and FinRobot Ecosystem\nScheduled for after 4pm\nmore_vert",
-          "observed_at": "2026-10-03T07:09:02.699652+00:00"
+          "observed_at": "2026-10-03T11:07:16.398799+00:00"
         }
       },
       "notebook_intent": {
@@ -2781,21 +2788,159 @@
       "selected_source_ids": [
         "84ed97ae-4d80-44cf-8f19-1e7a94608b4c"
       ]
+    },
+    "ai4finance-foundation-guide:zh-TW": {
+      "slug": "ai4finance-foundation-guide",
+      "language": "zh-TW",
+      "article_sha256": "e56a917b488fbad2a26aae2e2debedc0f3970eb402d29c4915a42ecef5678768",
+      "input_hashes": {
+        "article": "e56a917b488fbad2a26aae2e2debedc0f3970eb402d29c4915a42ecef5678768",
+        "source_text": "3e981e5b164584ee47ba84b308c703cdc69885f61381eed62d233ad55c7b6986",
+        "slides_prompt": "1b54141d9458039910fca9289dc2f992291585b45de6254d00332cc63a648ed4",
+        "audio_prompt": "821310b82abd99db589c100ed6f0a4f0c297b67852c613ef4e16d485bccb4692"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "1b54141d9458039910fca9289dc2f992291585b45de6254d00332cc63a648ed4",
+          "requested_at": "2026-10-03T11:07:44.393607+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "51968106-ac15-41a5-bf18-fae4bd21436a",
+          "submission_mode": "now",
+          "artifact_id": "c6a4953b-5e8c-4bdf-b85b-cb84a9f5a309",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T11:07:48.938525+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "c6a4953b-5e8c-4bdf-b85b-cb84a9f5a309"
+          ],
+          "prompt_sha256": "821310b82abd99db589c100ed6f0a4f0c297b67852c613ef4e16d485bccb4692",
+          "requested_at": "2026-10-03T11:08:00.405187+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "51968106-ac15-41a5-bf18-fae4bd21436a",
+          "submission_mode": "now",
+          "artifact_id": "f1a2960f-12de-4fcf-a729-f8e4f6cb6971",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T11:08:04.964968+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T11:07:23.513775+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/ai4finance-foundation-guide-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "451bf03a9db9c7f0c6ea178068313edc54b99372578a6ad32999c315c8f4e8fc",
+        "baseline_count": 288,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T11:07:25.597137+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/07f99eed-6f41-48c9-b9db-e2bea7c827f2",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T11:07:29.641974+00:00",
+        "sha256": "3e981e5b164584ee47ba84b308c703cdc69885f61381eed62d233ad55c7b6986",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "51968106-ac15-41a5-bf18-fae4bd21436a",
+      "source_title": "MM article ai4finance-foundation-guide ZH-TW e56a917b488f",
+      "source_sha256": "3e981e5b164584ee47ba84b308c703cdc69885f61381eed62d233ad55c7b6986",
+      "state": "source_ready",
+      "source_display_name": "MM article ai4finance-foundation-guide ZH-TW e56a…",
+      "selected_source_ids": [
+        "51968106-ac15-41a5-bf18-fae4bd21436a"
+      ]
+    },
+    "algo-investor-skills:zh-CN": {
+      "slug": "algo-investor-skills",
+      "language": "zh-CN",
+      "article_sha256": "2c948f9f6d41839c49556e7f449dac7c71c0b4cc60a31b21d35410608f9c47b9",
+      "input_hashes": {
+        "article": "2c948f9f6d41839c49556e7f449dac7c71c0b4cc60a31b21d35410608f9c47b9",
+        "source_text": "b2e53622e9044cf470945f619495c694dd87d4a8d943b3140a2a1e9b2f897bf3",
+        "slides_prompt": "1fefa88b7e127bc810f9cb8a1b7f0dca9c0ed7e33cbfeb54e188e1e37fc28406",
+        "audio_prompt": "802457f5b0519eddb56cfb0754bc3d6583149f75064152b48355a7078702c166"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "1fefa88b7e127bc810f9cb8a1b7f0dca9c0ed7e33cbfeb54e188e1e37fc28406",
+          "requested_at": "2026-10-03T11:08:32.664886+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "6b014e4c-ca30-4619-b3da-b8422906b26a",
+          "submission_mode": "now",
+          "artifact_id": "ba2f777f-9b70-4775-9f92-80ec50bc98e5",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T11:08:37.213151+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "ba2f777f-9b70-4775-9f92-80ec50bc98e5"
+          ],
+          "prompt_sha256": "802457f5b0519eddb56cfb0754bc3d6583149f75064152b48355a7078702c166",
+          "requested_at": "2026-10-03T11:08:48.563687+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "6b014e4c-ca30-4619-b3da-b8422906b26a",
+          "submission_mode": "now",
+          "artifact_id": "1426777a-d48a-48d5-b482-438fd8811046",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T11:08:53.111726+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T11:08:11.995285+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/algo-investor-skills-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "1d42ffbc9a467caf1ce7449d7c137eca312b9ebe6e35b813c625b88decc61a65",
+        "baseline_count": 289,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T11:08:14.078915+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/9fe936e2-6f1e-4ffc-aa42-b1532c148016",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T11:08:18.115380+00:00",
+        "sha256": "b2e53622e9044cf470945f619495c694dd87d4a8d943b3140a2a1e9b2f897bf3",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "6b014e4c-ca30-4619-b3da-b8422906b26a",
+      "source_title": "MM article algo-investor-skills ZH-CN 2c948f9f6d41",
+      "source_sha256": "b2e53622e9044cf470945f619495c694dd87d4a8d943b3140a2a1e9b2f897bf3",
+      "state": "source_ready",
+      "source_display_name": "MM article algo-investor-skills ZH-CN 2c948f9f6d41",
+      "selected_source_ids": [
+        "6b014e4c-ca30-4619-b3da-b8422906b26a"
+      ]
     }
   },
-  "checked_at": "2026-10-03T07:09:02.712109+00:00",
+  "checked_at": "2026-10-03T11:08:53.115293+00:00",
   "browser_geometry_requested": {
-    "width": 1998,
+    "width": 1999,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 58,
+    "x": 57,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1998,
+    "outer_width": 1999,
     "outer_height": 1290,
-    "inner_width": 1958,
+    "inner_width": 1959,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
