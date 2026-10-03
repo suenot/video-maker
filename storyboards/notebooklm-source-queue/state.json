@@ -2067,23 +2067,24 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Source insertion unconfirmed or ambiguous; inspect before retry",
-        "at": "2026-10-03T05:51:18.613132+00:00",
+        "at": "2026-10-03T06:52:00.740466+00:00",
         "stage": "source_identity_reconciliation",
-        "cause": "The same permanent notebook still displays 0 sources after the low-battery hibernation incident. No permanent source ID can be bound. This pass only reconciled identities; the original insertion outcome remains unknown.",
-        "retry_not_before": "2026-10-03T06:50:00+00:00",
-        "next_safe_step": "After the retry deadline, reconcile source IDs in the same permanent notebook against the retained empty baseline. Bind only a sole permanent addition, or retain a processing intent for pending_upload_doc_id_. If no source is present, retain dispatch_unknown and back off this job while other source jobs continue. Never repeat insertion or generation without source-identity evidence.",
+        "cause": "Two post-hibernation reconciliation passes in the same permanent notebook show 0 sources. No permanent or processing source can be bound. The original insertion outcome remains unknown; this pass did not upload or generate.",
+        "retry_not_before": "2026-10-04T06:55:39.809267+00:00",
+        "next_safe_step": "Keep this job deferred while other source jobs proceed. Request explicit user authorization for one deliberate fresh insertion of the same frozen full article into this exact empty notebook. Before an authorized insertion, recheck the expected account, exact notebook, zero source/artifact IDs and unchanged inputs; preserve the old uncertain intent. Without that authorization, only reconcile source IDs after the backoff, never insert again.",
+        "requires_user_authorized_recovery": true,
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/2026-10-03T055011Z-order-flow-imbalance-prediction-zh-TW-screenshot.png",
-            "sha256": "ccf03e942b3c7af5af011c29bdfeb56482c9bd96a9a594ebc0e117250784fe27"
+            "path": "temp/notebooklm-source-queue/2026-10-03T065011Z-order-flow-imbalance-prediction-zh-TW-screenshot.png",
+            "sha256": "7f9344ff64cf71f8f90fe41a449daec94c9d2d84dd88a0dcc6d3ff8027f56a1e"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/2026-10-03T055011Z-order-flow-imbalance-prediction-zh-TW-controls.json",
-            "sha256": "96c00be0404ef909a781d3a73f6e5f3d7beb206acb5c7a0b3753d9cf3c95b688"
+            "path": "temp/notebooklm-source-queue/2026-10-03T065011Z-order-flow-imbalance-prediction-zh-TW-controls.json",
+            "sha256": "7fbfbc2730b2c351784cbbdb698987dd5b9b9e83bf90cfa83e2f6a8770e58a39"
           },
           "log": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-03T055011Z.log",
-            "sha256": "f6f100ccf2b25d9192a1464d098efa6ea414a8ce84f7e9b82d8a667a3240738f"
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-03T065011Z.log",
+            "sha256": "a054db1f3cb4541df8f72cc7e35b86b2e670ca53756c569fd5ce52105b40a10f"
           }
         },
         "previous_error": {
@@ -2123,7 +2124,7 @@
       "temporary_source_ids": [],
       "state": "source_identity_unresolved",
       "source_reconciliation_observation": {
-        "at": "2026-10-03T05:51:18.613132+00:00",
+        "at": "2026-10-03T06:52:00.740466+00:00",
         "notebook": "https://notebook.google.com/notebook/c0dcc0d9-0bc9-4ac1-a0d5-12c5cc879ecc",
         "visible_source_count": 0,
         "bound_source_id": null,
@@ -2133,18 +2134,54 @@
         "artifact_submission_dispatched": false,
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/2026-10-03T055011Z-order-flow-imbalance-prediction-zh-TW-screenshot.png",
-            "sha256": "ccf03e942b3c7af5af011c29bdfeb56482c9bd96a9a594ebc0e117250784fe27"
+            "path": "temp/notebooklm-source-queue/2026-10-03T065011Z-order-flow-imbalance-prediction-zh-TW-screenshot.png",
+            "sha256": "7f9344ff64cf71f8f90fe41a449daec94c9d2d84dd88a0dcc6d3ff8027f56a1e"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/2026-10-03T055011Z-order-flow-imbalance-prediction-zh-TW-controls.json",
-            "sha256": "96c00be0404ef909a781d3a73f6e5f3d7beb206acb5c7a0b3753d9cf3c95b688"
+            "path": "temp/notebooklm-source-queue/2026-10-03T065011Z-order-flow-imbalance-prediction-zh-TW-controls.json",
+            "sha256": "7fbfbc2730b2c351784cbbdb698987dd5b9b9e83bf90cfa83e2f6a8770e58a39"
           },
           "log": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-03T055011Z.log",
-            "sha256": "f6f100ccf2b25d9192a1464d098efa6ea414a8ce84f7e9b82d8a667a3240738f"
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-03T065011Z.log",
+            "sha256": "a054db1f3cb4541df8f72cc7e35b86b2e670ca53756c569fd5ce52105b40a10f"
           }
         }
+      },
+      "source_reconciliation_history": [
+        {
+          "at": "2026-10-03T05:51:18.613132+00:00",
+          "notebook": "https://notebook.google.com/notebook/c0dcc0d9-0bc9-4ac1-a0d5-12c5cc879ecc",
+          "visible_source_count": 0,
+          "bound_source_id": null,
+          "source_id_binding": "unresolved",
+          "new_insertion_dispatched": false,
+          "notebook_creation_dispatched": false,
+          "artifact_submission_dispatched": false,
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/2026-10-03T055011Z-order-flow-imbalance-prediction-zh-TW-screenshot.png",
+              "sha256": "ccf03e942b3c7af5af011c29bdfeb56482c9bd96a9a594ebc0e117250784fe27"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/2026-10-03T055011Z-order-flow-imbalance-prediction-zh-TW-controls.json",
+              "sha256": "96c00be0404ef909a781d3a73f6e5f3d7beb206acb5c7a0b3753d9cf3c95b688"
+            },
+            "log": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-03T055011Z.log",
+              "sha256": "f6f100ccf2b25d9192a1464d098efa6ea414a8ce84f7e9b82d8a667a3240738f"
+            }
+          }
+        }
+      ],
+      "observed_usage_warning": {
+        "notice": "You're getting close to your AI usage limit. Limit resets at 14:51.",
+        "observed_at": "2026-10-03T06:52:00.740466+00:00",
+        "evidence": {
+          "path": "temp/notebooklm-source-queue/2026-10-03T065011Z-order-flow-imbalance-prediction-zh-TW-screenshot.png",
+          "sha256": "7f9344ff64cf71f8f90fe41a449daec94c9d2d84dd88a0dcc6d3ff8027f56a1e"
+        },
+        "quota_guard_changed": false,
+        "scope": "near-limit warning only; no all-feature block or scheduled-pair notice observed; reset timezone not measured in this reconciliation pass"
       }
     },
     "twap-vwap-pov-execution-algorithms:zh-CN": {
@@ -2644,7 +2681,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-03T06:39:06.808899+00:00",
+  "checked_at": "2026-10-03T06:55:39.809656+00:00",
   "browser_geometry_requested": {
     "width": 1998,
     "height": 1290,

@@ -163,7 +163,7 @@ class Runner:
         text = await page.locator("body").inner_text()
         notice = re.search(r"AI usage limit reached\.[^\n]*", text, re.I)
         if not notice and scheduled:
-            notice = re.search(r"You're almost at your AI usage limit\.[^\n]*Limit resets at \d{2}:\d{2}\.[^\n]*", text, re.I)
+            notice = re.search(r"You're (?:almost at|getting close to) your AI usage limit\.[^\n]*Limit resets at \d{2}:\d{2}\.[^\n]*", text, re.I)
         if not notice:
             return False
         zone = await page.evaluate("Intl.DateTimeFormat().resolvedOptions().timeZone")

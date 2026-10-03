@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Defer Taiwan Order Flow Imbalance after repeated empty-notebook source reconciliation, retaining the uncertain insertion intent and all failure evidence while other source jobs proceed.
 - Preserve the Taiwan Order Flow Imbalance source intent after low-battery Mac hibernation interrupted insertion confirmation; retain power/log evidence and reconcile the existing source IDs before any further insertion or generation.
 - Prepare subsequent frozen source briefs while already-bound generations run, retaining the active-artifact cap and the documented browser-free quota wait.
 - Record the separate continuous NotebookLM source-draft SOP and acceptance conditions, full-size Camoufox launch policy, and the user's vertical montage reference.
@@ -33,6 +34,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bind NotebookLM production to the designated Gaia Camoufox account and record account verification before source generation.
 - Preserve the rejected bilingual order-types Blueprint package for provenance; record the user's quality rejection and the recovered existing NotebookLM PDF/audio flow before further production.
 - Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
+
+## [1.2.7] - 2026-10-03
+
+### Fixed
+
+- Recognize NotebookLM's "getting close to your AI usage limit" reset notice after a paired request is scheduled, preserving the same browser-free quota wait as the existing "almost at" wording.
 
 ## [1.2.6] - 2026-10-03
 

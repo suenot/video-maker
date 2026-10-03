@@ -115,7 +115,8 @@ that time, every pass checks downloaded originals locally and returns before
 loading browser helpers, reading profile settings or opening Camoufox. Do not
 open the browser merely to poll `scheduled` jobs or refresh the quota notice.
 After a paired slides/audio request is scheduled, a visible "almost at your
-AI usage limit" notice with an exact reset also starts this local-only wait.
+AI usage limit" or "getting close to your AI usage limit" notice with an exact
+reset also starts this local-only wait.
 Record that notice unchanged, finish the current pair, then close the browser;
 do not reopen it just to poll the scheduled pair before the displayed reset.
 Preserve all notebook/source/artifact IDs and pending insertion intents.
