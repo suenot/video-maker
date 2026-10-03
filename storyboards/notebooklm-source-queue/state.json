@@ -2408,7 +2408,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "f821451542c357da4188f5ca7dab671231ce9684bec4b4755c4ea3f24cbaa865",
           "requested_at": "2026-10-03T06:08:53.526522+00:00",
@@ -2418,11 +2418,18 @@
           "source_id": "4dea0833-1754-4d22-81a5-0a4ee4e196fa",
           "submission_mode": "now",
           "artifact_id": "83d24ddd-fde7-4916-aa8b-468391dc8897",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T06:22:21.272895+00:00"
+          "card_text": "tablet\nUnread\nAgentic AI Investment Revolution\n1 source · 10m ago\nmore_vert",
+          "observed_at": "2026-10-03T06:36:25.787437+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/agentic-ai-investment-revolution/zh-TW/slides.pdf",
+          "sha256": "af864c84848427f76840366ef5a9483275d38cb081e65f04fc5826bb9cd682d4",
+          "bytes": 13575668,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T06:36:32.852844+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "ready",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "83d24ddd-fde7-4916-aa8b-468391dc8897"
           ],
@@ -2434,8 +2441,15 @@
           "source_id": "4dea0833-1754-4d22-81a5-0a4ee4e196fa",
           "submission_mode": "now",
           "artifact_id": "b07533ef-506f-443a-8119-2cf9343cb185",
-          "card_text": "audio_spark\nUnread\nAI操盤手自己賺電費\n28:41 · Deep Dive · 1 source · 2m ago\nplay_arrow\nmore_vert",
-          "observed_at": "2026-10-03T06:22:22.293900+00:00"
+          "card_text": "audio_spark\nUnread\nAI操盤手自己賺電費\n28:41 · Deep Dive · 1 source · 17m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T06:36:33.883388+00:00",
+          "duration_seconds": 1721.852517,
+          "path": "input/notebooklm-sources/agentic-ai-investment-revolution/zh-TW/audio.m4a",
+          "sha256": "5393846198e7d060b152acf6c3ffc6fa5f0c4d6c9130a892444a492718f55ff1",
+          "bytes": 55416735,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T06:37:30.266007+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -2464,17 +2478,14 @@
       "selected_source_ids": [
         "4dea0833-1754-4d22-81a5-0a4ee4e196fa"
       ],
-      "last_error": {
-        "type": "TimeoutError",
-        "message": "Locator.click: Timeout 30000ms exceeded.",
-        "at": "2026-10-03T06:22:52.332888+00:00",
-        "stage": "bound_audio_download_menu",
-        "cause": "The exact ready audio artifact menu was opened, but native Playwright pointer dispatch on its visible, enabled and stable Download item timed out. The diagnostic snapshot still shows the Download menu; no original file was promoted. The generation is ready and its identity remains bound.",
-        "retry_not_before": "2026-10-03T06:33:37.996114+00:00",
-        "next_safe_step": "After the retry deadline, reconcile the same saved slide/audio IDs and download the existing ready audio using the verified menu-item dispatch in v1.2.6. Do not submit another audio or slide generation. Verify the download event, bytes, audio stream, full decode and hash before promoting an original.",
-        "artifact_kind": "audio",
-        "artifact_id": "b07533ef-506f-443a-8119-2cf9343cb185",
-        "evidence": {
+      "download_recovery": {
+        "from_failure_at": "2026-10-03T06:22:52.332888+00:00",
+        "version": "1.2.6",
+        "verified_at": "2026-10-03T06:37:30.266007+00:00",
+        "live_pdf_and_audio_downloads": "passed",
+        "same_artifact_ids_preserved": true,
+        "worker_sha256": "d7fca05dd2bbdb02a84a157c39a359f838610ccb43d3acc63eca83f685fb721f",
+        "previous_failure_evidence": {
           "screenshot": {
             "path": "temp/notebooklm-source-queue/2026-10-03T062011Z-agentic-ai-investment-revolution-zh-TW-screenshot.png",
             "sha256": "d084ef7ffee4d8d271f62a0ba7e6f923d90ef6b541ba1712900d9d11b0b0a9d0"
@@ -2488,15 +2499,152 @@
             "sha256": "9a5d8ece06cc74c0c585f4937277cc8eb559dc023ec6ff5d13368e6b4cdf63ff"
           }
         },
-        "download_fix": {
-          "version": "1.2.6",
-          "offline_checks": 21,
-          "live_verification": "pending next bounded pass"
+        "recovery_log": {
+          "path": "temp/notebooklm-source-queue/heartbeat-2026-10-03T063511Z.log",
+          "sha256": "0cc98f803e1d823564b8b880cca62fd7c47bf94f0df08bd5d5a4e294c5c549ac"
         }
       }
+    },
+    "ai-hedge-fund-review:zh-CN": {
+      "slug": "ai-hedge-fund-review",
+      "language": "zh-CN",
+      "article_sha256": "0fa3648777a29eacaea5c29b6f9dd9e42d6958c3d5bfb8fb36cd98cb48452625",
+      "input_hashes": {
+        "article": "0fa3648777a29eacaea5c29b6f9dd9e42d6958c3d5bfb8fb36cd98cb48452625",
+        "source_text": "d566e89f1f36318cb9aace9f048cd2736742b30a20656506f511e61ec1d35084",
+        "slides_prompt": "2db3fc71964f10c6812c3c016ac86cdcbed498828f79a00fe046616d201ff6b2",
+        "audio_prompt": "761f2e05177ddd3238048e581462f26d5a63757abea9eaa282efd497318879de"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "2db3fc71964f10c6812c3c016ac86cdcbed498828f79a00fe046616d201ff6b2",
+          "requested_at": "2026-10-03T06:37:57.515335+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "3ebcb96b-a10e-41a4-bd29-25ba584c0812",
+          "submission_mode": "now",
+          "artifact_id": "52921fd2-31dc-48d6-bbde-e9421a7f6d9f",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T06:38:02.077306+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "52921fd2-31dc-48d6-bbde-e9421a7f6d9f"
+          ],
+          "prompt_sha256": "761f2e05177ddd3238048e581462f26d5a63757abea9eaa282efd497318879de",
+          "requested_at": "2026-10-03T06:38:13.618337+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "3ebcb96b-a10e-41a4-bd29-25ba584c0812",
+          "submission_mode": "now",
+          "artifact_id": "3e8cf806-2222-482a-9874-62d05ad76e1a",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T06:38:18.170780+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T06:37:37.340426+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/ai-hedge-fund-review-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "c21dcb7f535e5fc1845867af2f89adcffd116370b5bee3e824c69d2224ce6470",
+        "baseline_count": 285,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T06:37:39.441884+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/ad9f5c48-1250-4cad-a573-c80fb4c73d19",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T06:37:43.510785+00:00",
+        "sha256": "d566e89f1f36318cb9aace9f048cd2736742b30a20656506f511e61ec1d35084",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "3ebcb96b-a10e-41a4-bd29-25ba584c0812",
+      "source_title": "MM article ai-hedge-fund-review ZH-CN 0fa3648777a2",
+      "source_sha256": "d566e89f1f36318cb9aace9f048cd2736742b30a20656506f511e61ec1d35084",
+      "state": "source_ready",
+      "source_display_name": "MM article ai-hedge-fund-review ZH-CN 0fa3648777a2",
+      "selected_source_ids": [
+        "3ebcb96b-a10e-41a4-bd29-25ba584c0812"
+      ]
+    },
+    "ai-hedge-fund-review:zh-TW": {
+      "slug": "ai-hedge-fund-review",
+      "language": "zh-TW",
+      "article_sha256": "3a62cc49cf93363b7b0751004b90aa9d5c61af9f384965d2bcab3c328d559fc4",
+      "input_hashes": {
+        "article": "3a62cc49cf93363b7b0751004b90aa9d5c61af9f384965d2bcab3c328d559fc4",
+        "source_text": "e19f8dfb9275d66750c3b11a4b2704c44dddd5761f1a24d5aca5bb8d9d937c17",
+        "slides_prompt": "149f8734d3549f206313c79793b94deba6d1d859714d31fc03b383cb7c8d54f8",
+        "audio_prompt": "6035a544599a698023efeb75b6461643ba4d1ede98d68cc9c783e12e54b4cab8"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "149f8734d3549f206313c79793b94deba6d1d859714d31fc03b383cb7c8d54f8",
+          "requested_at": "2026-10-03T06:38:46.309818+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "a9e7d2b1-8b62-436a-b534-f0f2020afe1a",
+          "submission_mode": "now",
+          "artifact_id": "6daed9f7-da27-41bb-92d3-635d09cfc66c",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T06:38:50.855771+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "6daed9f7-da27-41bb-92d3-635d09cfc66c"
+          ],
+          "prompt_sha256": "6035a544599a698023efeb75b6461643ba4d1ede98d68cc9c783e12e54b4cab8",
+          "requested_at": "2026-10-03T06:39:02.250220+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "a9e7d2b1-8b62-436a-b534-f0f2020afe1a",
+          "submission_mode": "now",
+          "artifact_id": "c995b98e-82df-45ba-9ec0-61e90dec3ebc",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T06:39:06.801491+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T06:38:25.363713+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/ai-hedge-fund-review-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "93acf30c86b6edf99b6b02ef92a47e9de34c7f85ca124ecb2ec84f7d80480a05",
+        "baseline_count": 286,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T06:38:27.451400+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/f9d2be0d-f357-47a2-8056-9cba8abac424",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T06:38:31.494891+00:00",
+        "sha256": "e19f8dfb9275d66750c3b11a4b2704c44dddd5761f1a24d5aca5bb8d9d937c17",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "a9e7d2b1-8b62-436a-b534-f0f2020afe1a",
+      "source_title": "MM article ai-hedge-fund-review ZH-TW 3a62cc49cf93",
+      "source_sha256": "e19f8dfb9275d66750c3b11a4b2704c44dddd5761f1a24d5aca5bb8d9d937c17",
+      "state": "source_ready",
+      "source_display_name": "MM article ai-hedge-fund-review ZH-TW 3a62cc49cf93",
+      "selected_source_ids": [
+        "a9e7d2b1-8b62-436a-b534-f0f2020afe1a"
+      ]
     }
   },
-  "checked_at": "2026-10-03T06:28:37.996312+00:00",
+  "checked_at": "2026-10-03T06:39:06.808899+00:00",
   "browser_geometry_requested": {
     "width": 1998,
     "height": 1290,

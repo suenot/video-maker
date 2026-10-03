@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Save the complete Mainland Chinese Agentic AI PDF/audio pair with original hashes and integrity evidence; preserve its Taiwan audio download failure and existing slide generation without repeating either generation.
+- Save complete Mainland Simplified and Taiwan Traditional Chinese Agentic AI PDF/audio originals with hashes and integrity evidence; verify the bound-artifact download recovery without repeating generation.
 - Save the complete Mainland Chinese Order Flow Imbalance PDF/audio pair and reconcile its interrupted Taiwan notebook creation against the hash-matched ID baseline, preserving evidence of the source failure before dispatch.
 - Save separate Simplified/Traditional Chinese Statistical Arbitrage PDF/audio originals and Mainland Chinese Order Flow Imbalance audio with hashes, integrity evidence and pending editorial review.
 - Save the first complete Mainland Simplified and Taiwan Traditional Chinese Funding Rate Arbitrage PDF/audio drafts with original artifact IDs, integrity results and pending editorial review.
