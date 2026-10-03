@@ -2554,7 +2554,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "2db3fc71964f10c6812c3c016ac86cdcbed498828f79a00fe046616d201ff6b2",
           "requested_at": "2026-10-03T06:37:57.515335+00:00",
@@ -2564,11 +2564,18 @@
           "source_id": "3ebcb96b-a10e-41a4-bd29-25ba584c0812",
           "submission_mode": "now",
           "artifact_id": "52921fd2-31dc-48d6-bbde-e9421a7f6d9f",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T06:38:02.077306+00:00"
+          "card_text": "tablet\nUnread\nAI对冲基金多智能体架构解析\n1 source · 22m ago\nmore_vert",
+          "observed_at": "2026-10-03T07:06:38.928652+00:00",
+          "pages": 8,
+          "path": "input/notebooklm-sources/ai-hedge-fund-review/zh-CN/slides.pdf",
+          "sha256": "931670628c22d61b93b2ab1a272695cbbe5c69e7f8bfbb7dffa701acc3d6566c",
+          "bytes": 7152864,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T07:06:45.903864+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "52921fd2-31dc-48d6-bbde-e9421a7f6d9f"
           ],
@@ -2580,8 +2587,15 @@
           "source_id": "3ebcb96b-a10e-41a4-bd29-25ba584c0812",
           "submission_mode": "now",
           "artifact_id": "3e8cf806-2222-482a-9874-62d05ad76e1a",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T06:38:18.170780+00:00"
+          "card_text": "audio_spark\nUnread\nAI对冲基金架构\n26:29 · Deep Dive · 1 source · 18m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T07:06:46.934970+00:00",
+          "duration_seconds": 1589.196916,
+          "path": "input/notebooklm-sources/ai-hedge-fund-review/zh-CN/audio.m4a",
+          "sha256": "ebced4dcd7d256fc289a7f12deedf1831fe3dd0202ee6c417ada5e577e53d717",
+          "bytes": 51147396,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T07:07:34.534046+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -2623,7 +2637,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "149f8734d3549f206313c79793b94deba6d1d859714d31fc03b383cb7c8d54f8",
           "requested_at": "2026-10-03T06:38:46.309818+00:00",
@@ -2633,11 +2647,18 @@
           "source_id": "a9e7d2b1-8b62-436a-b534-f0f2020afe1a",
           "submission_mode": "now",
           "artifact_id": "6daed9f7-da27-41bb-92d3-635d09cfc66c",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T06:38:50.855771+00:00"
+          "card_text": "tablet\nUnread\n多智慧體 AI 對沖基金架構\n1 source · 18m ago\nmore_vert",
+          "observed_at": "2026-10-03T07:07:41.284159+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/ai-hedge-fund-review/zh-TW/slides.pdf",
+          "sha256": "ec06336d1468d57c7246706692de7db35078711a07e54ff835af62a67ed36de7",
+          "bytes": 16747770,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T07:07:52.526098+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "6daed9f7-da27-41bb-92d3-635d09cfc66c"
           ],
@@ -2649,8 +2670,15 @@
           "source_id": "a9e7d2b1-8b62-436a-b534-f0f2020afe1a",
           "submission_mode": "now",
           "artifact_id": "c995b98e-82df-45ba-9ec0-61e90dec3ebc",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T06:39:06.801491+00:00"
+          "card_text": "audio_spark\nUnread\nAI避險基金的多智慧體架構\n16:30 · Deep Dive · 1 source · 20m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T07:07:53.568674+00:00",
+          "duration_seconds": 990.214966,
+          "path": "input/notebooklm-sources/ai-hedge-fund-review/zh-TW/audio.m4a",
+          "sha256": "a3eb98321bcf7d27773512d79f2e5c75ce9452fad5c93256e3998257bb6ba0de",
+          "bytes": 31869829,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T07:08:13.520030+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -2679,9 +2707,83 @@
       "selected_source_ids": [
         "a9e7d2b1-8b62-436a-b534-f0f2020afe1a"
       ]
+    },
+    "ai4finance-foundation-guide:zh-CN": {
+      "slug": "ai4finance-foundation-guide",
+      "language": "zh-CN",
+      "article_sha256": "61981223c1cef11c9060cf2c3f4f20c26e118a194502bc00fa578a4296cf046c",
+      "input_hashes": {
+        "article": "61981223c1cef11c9060cf2c3f4f20c26e118a194502bc00fa578a4296cf046c",
+        "source_text": "39b41227f70a87f9cc20035b89d1f709a89e9d35ff9ef529398f55f347d180f3",
+        "slides_prompt": "b846f6f7174abee978f671720b960214f0b0ff2db4f37dff46c8165b34e37e35",
+        "audio_prompt": "1d112300fceb2776bd56a9016a21d2642dd895de39ff273a045060fb2c0fe0a4"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "b846f6f7174abee978f671720b960214f0b0ff2db4f37dff46c8165b34e37e35",
+          "requested_at": "2026-10-03T07:08:41.463585+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "84ed97ae-4d80-44cf-8f19-1e7a94608b4c",
+          "submission_mode": "now",
+          "artifact_id": "92251818-4bac-488e-abd6-42211970caaf",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T07:08:46.016991+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Core Pillars\n+ Beginner Guide\n+ Implementation Steps\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 14:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "92251818-4bac-488e-abd6-42211970caaf"
+          ],
+          "prompt_sha256": "1d112300fceb2776bd56a9016a21d2642dd895de39ff273a045060fb2c0fe0a4",
+          "requested_at": "2026-10-03T07:08:58.150907+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "84ed97ae-4d80-44cf-8f19-1e7a94608b4c",
+          "submission_mode": "later",
+          "artifact_id": "384c36ea-7828-4bc4-ab37-4aa10d9588b4",
+          "card_text": "audio_spark\nAI4Finance Foundation: FinGPT, FinRL, and FinRobot Ecosystem\nScheduled for after 4pm\nmore_vert",
+          "observed_at": "2026-10-03T07:09:02.699652+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T07:08:20.620615+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/ai4finance-foundation-guide-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "c0c7ed5e4f7ddc0a1cfe612e8cf7581af158b21f7061f3b9708f908a860cc8d7",
+        "baseline_count": 287,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T07:08:22.718969+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/7b22b9a7-c2d5-4588-baed-ecbf855daff9",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T07:08:26.977465+00:00",
+        "sha256": "39b41227f70a87f9cc20035b89d1f709a89e9d35ff9ef529398f55f347d180f3",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "84ed97ae-4d80-44cf-8f19-1e7a94608b4c",
+      "source_title": "MM article ai4finance-foundation-guide ZH-CN 61981223c1ce",
+      "source_sha256": "39b41227f70a87f9cc20035b89d1f709a89e9d35ff9ef529398f55f347d180f3",
+      "state": "source_ready",
+      "source_display_name": "MM article ai4finance-foundation-guide ZH-CN 6198…",
+      "selected_source_ids": [
+        "84ed97ae-4d80-44cf-8f19-1e7a94608b4c"
+      ]
     }
   },
-  "checked_at": "2026-10-03T06:55:39.809656+00:00",
+  "checked_at": "2026-10-03T07:09:02.712109+00:00",
   "browser_geometry_requested": {
     "width": 1998,
     "height": 1290,
@@ -2698,9 +2800,9 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 23:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 14:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-02T15:38:17.223423+00:00",
-    "not_before": "2026-10-02T19:51:00+00:00"
+    "observed_at": "2026-10-03T07:09:02.712099+00:00",
+    "not_before": "2026-10-03T10:51:00+00:00"
   }
 }
