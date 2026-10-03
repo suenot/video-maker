@@ -2004,7 +2004,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "generating",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 00:51."
@@ -2019,8 +2019,8 @@
           "source_id": "7c6f7408-4d7e-45ba-8118-49c03cd1ee1a",
           "submission_mode": "later",
           "artifact_id": "9682ce68-0a58-41b4-8d23-783f779ad468",
-          "card_text": "tablet\nOrder Flow Imbalance Event Decomposition\nScheduled for after 1am\nmore_vert",
-          "observed_at": "2026-10-03T20:54:06.388424+00:00"
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T21:09:07.666332+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -2041,7 +2041,7 @@
           "submission_mode": "later",
           "artifact_id": "9c50e9c7-5a64-41f2-8f39-664838b45aa5",
           "card_text": "audio_spark\nOrder Flow Imbalance Event Decomposition\nScheduled for after 1am\nmore_vert",
-          "observed_at": "2026-10-03T20:54:07.411652+00:00"
+          "observed_at": "2026-10-03T21:09:08.691876+00:00"
         }
       },
       "notebook_intent": {
@@ -3632,7 +3632,38 @@
         "slides_prompt": "9c4af2ff2bf97a599678acfada85cb31102d494a94bb771e2de37d7604b8bd96",
         "audio_prompt": "87bb7a862cdd35b6d4ae6b726e0785cbb20345303d600def4dec049825816082"
       },
-      "artifacts": {},
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "9c4af2ff2bf97a599678acfada85cb31102d494a94bb771e2de37d7604b8bd96",
+          "requested_at": "2026-10-03T21:09:20.009143+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "1cbe295f-0096-4b41-a1fb-a9ae873aa231",
+          "submission_mode": "now",
+          "artifact_id": "956d6639-8a7f-4b70-8687-de525f8cc86b",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T21:09:24.565326+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "956d6639-8a7f-4b70-8687-de525f8cc86b"
+          ],
+          "prompt_sha256": "87bb7a862cdd35b6d4ae6b726e0785cbb20345303d600def4dec049825816082",
+          "requested_at": "2026-10-03T21:09:31.530000+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "1cbe295f-0096-4b41-a1fb-a9ae873aa231",
+          "submission_mode": "now",
+          "artifact_id": "d43f625c-f8df-419a-b50c-0bc801e95418",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T21:09:36.085310+00:00"
+        }
+      },
       "admission_state": "admitted",
       "admitted_at": "2026-10-03T20:54:08.369241+00:00",
       "notebook_intent": {
@@ -3650,12 +3681,20 @@
         "at": "2026-10-03T20:54:30.920048+00:00",
         "sha256": "488d43e765624539e8d9107913433851c809ac3df8777b328eea2296417a5c60",
         "baseline_ids": [],
-        "dispatch_state": "dispatch_unknown"
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-03T21:09:16.689181+00:00"
       },
       "temporary_source_ids": [
         "pending_upload_doc_id_89252107-FF2F-4732-AD3A-0ECA3052AE2E"
       ],
-      "state": "source_processing"
+      "state": "source_ready",
+      "source_id": "1cbe295f-0096-4b41-a1fb-a9ae873aa231",
+      "source_title": "MM article anomaly-detection-algotrading EN 2aef0a30a661",
+      "source_sha256": "488d43e765624539e8d9107913433851c809ac3df8777b328eea2296417a5c60",
+      "source_display_name": "MM article anomaly-detection-algotrading EN 2aef0…",
+      "selected_source_ids": [
+        "1cbe295f-0096-4b41-a1fb-a9ae873aa231"
+      ]
     },
     "anomaly-detection-algotrading:ru": {
       "slug": "anomaly-detection-algotrading",
@@ -3667,7 +3706,38 @@
         "slides_prompt": "991c8abcc26325f9fbd6f22ee01336568f777d30391e480daade787fd92a57d0",
         "audio_prompt": "35b5bae59113a68bc85ef5873f3087bd30a531a79601e94cfa41a3ba5253678b"
       },
-      "artifacts": {},
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "991c8abcc26325f9fbd6f22ee01336568f777d30391e480daade787fd92a57d0",
+          "requested_at": "2026-10-03T21:09:51.060385+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "39726371-47ae-446f-b002-95f09a3a4933",
+          "submission_mode": "now",
+          "artifact_id": "ddfc8dd8-1b11-483f-82aa-85914706bc20",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T21:09:55.615219+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "ddfc8dd8-1b11-483f-82aa-85914706bc20"
+          ],
+          "prompt_sha256": "35b5bae59113a68bc85ef5873f3087bd30a531a79601e94cfa41a3ba5253678b",
+          "requested_at": "2026-10-03T21:10:07.215441+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "39726371-47ae-446f-b002-95f09a3a4933",
+          "submission_mode": "now",
+          "artifact_id": "7e470c19-f491-4118-aea5-03d2ed9f63f8",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T21:10:11.763132+00:00"
+        }
+      },
       "admission_state": "admitted",
       "admitted_at": "2026-10-03T20:54:38.759094+00:00",
       "notebook_intent": {
@@ -3685,15 +3755,95 @@
         "at": "2026-10-03T20:54:57.091170+00:00",
         "sha256": "b35fb8215437da3b9e83892641ba9a00d0066af9e6e276de895cb77ae7417109",
         "baseline_ids": [],
-        "dispatch_state": "dispatch_unknown"
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-03T21:09:43.332359+00:00"
       },
       "temporary_source_ids": [
         "pending_upload_doc_id_ED11EC3B-4E83-4478-A7CB-4E81C106C156"
       ],
-      "state": "source_processing"
+      "state": "source_ready",
+      "source_id": "39726371-47ae-446f-b002-95f09a3a4933",
+      "source_title": "MM article anomaly-detection-algotrading RU 0e53c9644803",
+      "source_sha256": "b35fb8215437da3b9e83892641ba9a00d0066af9e6e276de895cb77ae7417109",
+      "source_display_name": "MM article anomaly-detection-algotrading RU 0e53c…",
+      "selected_source_ids": [
+        "39726371-47ae-446f-b002-95f09a3a4933"
+      ]
+    },
+    "anomaly-detection-algotrading:zh-CN": {
+      "slug": "anomaly-detection-algotrading",
+      "language": "zh-CN",
+      "article_sha256": "1259b5ba1c4c3dd209840fa79f5648864539d966bf199cce2c840630c274beb4",
+      "input_hashes": {
+        "article": "1259b5ba1c4c3dd209840fa79f5648864539d966bf199cce2c840630c274beb4",
+        "source_text": "dc9a0cacc042c1b3b1dee01997d1ccd0df87c35df9e990abec249f11e524e146",
+        "slides_prompt": "01a065e2c3a22246e9692ab39f5e561f96010207b60cbfaee92d1e76627ce15b",
+        "audio_prompt": "a25ef5f028f0568bee751542cf6c9bc0d3ddb48d187c4108cd3f6855c7bc44d5"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "01a065e2c3a22246e9692ab39f5e561f96010207b60cbfaee92d1e76627ce15b",
+          "requested_at": "2026-10-03T21:10:41.828084+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "3f8387f0-838c-400f-8d2c-5406a66e78a7",
+          "submission_mode": "now",
+          "artifact_id": "774f8343-dd2d-49db-9aff-c8cc31e68a36",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T21:10:46.385154+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "774f8343-dd2d-49db-9aff-c8cc31e68a36"
+          ],
+          "prompt_sha256": "a25ef5f028f0568bee751542cf6c9bc0d3ddb48d187c4108cd3f6855c7bc44d5",
+          "requested_at": "2026-10-03T21:10:59.325787+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "3f8387f0-838c-400f-8d2c-5406a66e78a7",
+          "submission_mode": "now",
+          "artifact_id": "2b8bf372-9631-4bfd-8b26-08c5dfc5f64e",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T21:11:03.873812+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-03T21:10:11.773705+00:00",
+      "notebook_intent": {
+        "at": "2026-10-03T21:10:20.318947+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/anomaly-detection-algotrading-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "49a188facc1a77d0159b5ba8dec3fd55f639e2284a9b46696652ad5cfa7240d0",
+        "baseline_count": 299,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T21:10:22.405784+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/58e494a9-cae8-491c-a1e6-862ba15f391b",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T21:10:26.449511+00:00",
+        "sha256": "dc9a0cacc042c1b3b1dee01997d1ccd0df87c35df9e990abec249f11e524e146",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-03T21:10:34.322456+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "3f8387f0-838c-400f-8d2c-5406a66e78a7",
+      "source_title": "MM article anomaly-detection-algotrading ZH-CN 1259b5ba1c4c",
+      "source_sha256": "dc9a0cacc042c1b3b1dee01997d1ccd0df87c35df9e990abec249f11e524e146",
+      "state": "source_ready",
+      "source_display_name": "MM article anomaly-detection-algotrading ZH-CN 12…",
+      "selected_source_ids": [
+        "3f8387f0-838c-400f-8d2c-5406a66e78a7"
+      ]
     }
   },
-  "checked_at": "2026-10-03T20:55:04.946287+00:00",
+  "checked_at": "2026-10-03T21:11:03.877043+00:00",
   "browser_geometry_requested": {
     "width": 2000,
     "height": 1290,
