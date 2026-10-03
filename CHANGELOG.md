@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Save complete Taiwan Traditional Chinese AI4Finance and Mainland Simplified Chinese algo-investor-skills PDF/audio originals with hashes and integrity evidence; bind separate Taiwan algo-investor-skills and Mainland Almgren-Chriss requests without repeating existing generations.
 - Bind separate Taiwan Traditional Chinese AI4Finance and Mainland Simplified Chinese algo-investor-skills slide/audio requests with frozen full articles and explicit variants; save the existing AI4Finance Simplified deck while retaining its scheduled audio identity.
 - Save complete Mainland Simplified and Taiwan Traditional Chinese AI Hedge Fund PDF/audio originals with hashes and integrity evidence; retain the bound AI4Finance Simplified requests and displayed quota reset without repeating generation.
 - Save complete Mainland Simplified and Taiwan Traditional Chinese Agentic AI PDF/audio originals with hashes and integrity evidence; verify the bound-artifact download recovery without repeating generation.

@@ -2759,7 +2759,7 @@
           "submission_mode": "later",
           "artifact_id": "384c36ea-7828-4bc4-ab37-4aa10d9588b4",
           "card_text": "audio_spark\nAI4Finance Foundation: FinGPT, FinRL, and FinRobot Ecosystem\nScheduled for after 4pm\nmore_vert",
-          "observed_at": "2026-10-03T11:07:16.398799+00:00"
+          "observed_at": "2026-10-03T11:21:48.891258+00:00"
         }
       },
       "notebook_intent": {
@@ -2801,7 +2801,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "1b54141d9458039910fca9289dc2f992291585b45de6254d00332cc63a648ed4",
           "requested_at": "2026-10-03T11:07:44.393607+00:00",
@@ -2811,11 +2811,18 @@
           "source_id": "51968106-ac15-41a5-bf18-fae4bd21436a",
           "submission_mode": "now",
           "artifact_id": "c6a4953b-5e8c-4bdf-b85b-cb84a9f5a309",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T11:07:48.938525+00:00"
+          "card_text": "tablet\nUnread\nAI4Finance 開源金融 AI 架構\n1 source · 9m ago\nmore_vert",
+          "observed_at": "2026-10-03T11:21:55.546767+00:00",
+          "pages": 8,
+          "path": "input/notebooklm-sources/ai4finance-foundation-guide/zh-TW/slides.pdf",
+          "sha256": "c45d9ffaa78c35e8e784fdf0ca0a7f6c46066b49a5d6ebeb5e8d431b180af379",
+          "bytes": 8454969,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T11:22:02.389254+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "c6a4953b-5e8c-4bdf-b85b-cb84a9f5a309"
           ],
@@ -2827,8 +2834,15 @@
           "source_id": "51968106-ac15-41a5-bf18-fae4bd21436a",
           "submission_mode": "now",
           "artifact_id": "f1a2960f-12de-4fcf-a729-f8e4f6cb6971",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T11:08:04.964968+00:00"
+          "card_text": "audio_spark\nUnread\nAI4Finance開源量化交易生態系\n18:36 · Deep Dive · 1 source · 2m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T11:22:03.414590+00:00",
+          "duration_seconds": 1116.13678,
+          "path": "input/notebooklm-sources/ai4finance-foundation-guide/zh-TW/audio.m4a",
+          "sha256": "8d1b393597d824eb77665ca6b385b9952222ca744df71aed5c902297809dfa55",
+          "bytes": 35922411,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T11:22:34.098438+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -2870,7 +2884,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "1fefa88b7e127bc810f9cb8a1b7f0dca9c0ed7e33cbfeb54e188e1e37fc28406",
           "requested_at": "2026-10-03T11:08:32.664886+00:00",
@@ -2880,11 +2894,18 @@
           "source_id": "6b014e4c-ca30-4619-b3da-b8422906b26a",
           "submission_mode": "now",
           "artifact_id": "ba2f777f-9b70-4775-9f92-80ec50bc98e5",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-03T11:08:37.213151+00:00"
+          "card_text": "tablet\nUnread\nAlgo Investor Skills\n1 source · 5m ago\nmore_vert",
+          "observed_at": "2026-10-03T11:22:40.882902+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/algo-investor-skills/zh-CN/slides.pdf",
+          "sha256": "ef9b10256978d7747c7c945f8fb0d7a02a1a010dad0d53e33e779746459196de",
+          "bytes": 18295100,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T11:22:51.040310+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "ba2f777f-9b70-4775-9f92-80ec50bc98e5"
           ],
@@ -2896,8 +2917,15 @@
           "source_id": "6b014e4c-ca30-4619-b3da-b8422906b26a",
           "submission_mode": "now",
           "artifact_id": "1426777a-d48a-48d5-b482-438fd8811046",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T11:08:53.111726+00:00"
+          "card_text": "audio_spark\nUnread\n防诈量化方案\n17:22 · Deep Dive · 1 source · 4m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-03T11:22:52.063600+00:00",
+          "duration_seconds": 1042.134785,
+          "path": "input/notebooklm-sources/algo-investor-skills/zh-CN/audio.m4a",
+          "sha256": "6527932c97bff9218605939c8030af60ac699a40dfe24c8c93809de962f7fdb8",
+          "bytes": 33540788,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-03T11:23:12.921038+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -2926,21 +2954,159 @@
       "selected_source_ids": [
         "6b014e4c-ca30-4619-b3da-b8422906b26a"
       ]
+    },
+    "algo-investor-skills:zh-TW": {
+      "slug": "algo-investor-skills",
+      "language": "zh-TW",
+      "article_sha256": "fe250b3998af44492e8e794d88d4c5dc8f3c52a1372eb8c1a06df468a49106a8",
+      "input_hashes": {
+        "article": "fe250b3998af44492e8e794d88d4c5dc8f3c52a1372eb8c1a06df468a49106a8",
+        "source_text": "e3964323121cd4847b341710308430cf9981aa8d93b93cb643f62555ff632bcb",
+        "slides_prompt": "19f6d0228e5f986febe190de0dfebfc837f47d3a89eb8e55f70d3308c5065fdb",
+        "audio_prompt": "2809f158929e68f4b8bfe5acf0c8f0b5292781f57dae4f321c6b70085ea3d7a3"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "19f6d0228e5f986febe190de0dfebfc837f47d3a89eb8e55f70d3308c5065fdb",
+          "requested_at": "2026-10-03T11:23:39.218694+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "17351672-7d37-4509-9d41-0c853da38cdd",
+          "submission_mode": "now",
+          "artifact_id": "f87f5d6b-8bc5-46d9-b28e-8ae2fa3a3aa3",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T11:23:43.763863+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "f87f5d6b-8bc5-46d9-b28e-8ae2fa3a3aa3"
+          ],
+          "prompt_sha256": "2809f158929e68f4b8bfe5acf0c8f0b5292781f57dae4f321c6b70085ea3d7a3",
+          "requested_at": "2026-10-03T11:23:55.238618+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "17351672-7d37-4509-9d41-0c853da38cdd",
+          "submission_mode": "now",
+          "artifact_id": "2f7c44f0-9e99-4ae6-a326-bc6a8e3521c0",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T11:23:59.784816+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T11:23:19.213786+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/algo-investor-skills-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "9644df2bbdd829180e39ac60d6fc3827b2f336466b7728868e04f1d55f022fc3",
+        "baseline_count": 290,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T11:23:21.317463+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/0f7e080e-ae53-4689-88e0-edf57b110049",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T11:23:25.415606+00:00",
+        "sha256": "e3964323121cd4847b341710308430cf9981aa8d93b93cb643f62555ff632bcb",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "17351672-7d37-4509-9d41-0c853da38cdd",
+      "source_title": "MM article algo-investor-skills ZH-TW fe250b3998af",
+      "source_sha256": "e3964323121cd4847b341710308430cf9981aa8d93b93cb643f62555ff632bcb",
+      "state": "source_ready",
+      "source_display_name": "MM article algo-investor-skills ZH-TW fe250b3998af",
+      "selected_source_ids": [
+        "17351672-7d37-4509-9d41-0c853da38cdd"
+      ]
+    },
+    "almgren-chriss-optimal-execution:zh-CN": {
+      "slug": "almgren-chriss-optimal-execution",
+      "language": "zh-CN",
+      "article_sha256": "c8ca2a276e8bce8941fdbd378741ed10c7b98751cb775853528aac56ce169633",
+      "input_hashes": {
+        "article": "c8ca2a276e8bce8941fdbd378741ed10c7b98751cb775853528aac56ce169633",
+        "source_text": "599845f070bdd8148f43ab9b093fc3eec73fafc95f2089887fe71cb823727e0b",
+        "slides_prompt": "69fbbeace8457b9e6d155356033a32db84d4a7790b5340c568c70ba2030e7f7c",
+        "audio_prompt": "a4853d4b3b4e93944288d69d0e34211c58772ffea71485b4a2a62c37b9e837a4"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "69fbbeace8457b9e6d155356033a32db84d4a7790b5340c568c70ba2030e7f7c",
+          "requested_at": "2026-10-03T11:24:28.493374+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "0465357d-0745-44af-955a-c57722e43455",
+          "submission_mode": "now",
+          "artifact_id": "05190d88-ceb6-417f-b7d9-60588245346a",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-03T11:24:33.039776+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "05190d88-ceb6-417f-b7d9-60588245346a"
+          ],
+          "prompt_sha256": "a4853d4b3b4e93944288d69d0e34211c58772ffea71485b4a2a62c37b9e837a4",
+          "requested_at": "2026-10-03T11:24:44.456567+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "0465357d-0745-44af-955a-c57722e43455",
+          "submission_mode": "now",
+          "artifact_id": "c96f3e64-d9f1-4103-95c3-0c3f48644e79",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-03T11:24:49.006389+00:00"
+        }
+      },
+      "notebook_intent": {
+        "at": "2026-10-03T11:24:07.241369+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/almgren-chriss-optimal-execution-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "014faff06700d62b55cf931a2ea84a4a12ffc1777d905e971a530c826baed0e0",
+        "baseline_count": 291,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-03T11:24:09.344347+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/f0d0af7e-5bad-4cec-9ad0-b70113c99fed",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-03T11:24:13.833621+00:00",
+        "sha256": "599845f070bdd8148f43ab9b093fc3eec73fafc95f2089887fe71cb823727e0b",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "temporary_source_ids": [],
+      "source_id": "0465357d-0745-44af-955a-c57722e43455",
+      "source_title": "MM article almgren-chriss-optimal-execution ZH-CN c8ca2a276e8b",
+      "source_sha256": "599845f070bdd8148f43ab9b093fc3eec73fafc95f2089887fe71cb823727e0b",
+      "state": "source_ready",
+      "source_display_name": "MM article almgren-chriss-optimal-execution ZH-CN…",
+      "selected_source_ids": [
+        "0465357d-0745-44af-955a-c57722e43455"
+      ]
     }
   },
-  "checked_at": "2026-10-03T11:08:53.115293+00:00",
+  "checked_at": "2026-10-03T11:24:49.009189+00:00",
   "browser_geometry_requested": {
-    "width": 1999,
+    "width": 2000,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 57,
+    "x": 56,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1999,
+    "outer_width": 2000,
     "outer_height": 1290,
-    "inner_width": 1959,
+    "inner_width": 1960,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
