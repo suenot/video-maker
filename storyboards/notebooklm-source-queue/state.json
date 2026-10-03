@@ -2759,7 +2759,7 @@
           "submission_mode": "later",
           "artifact_id": "384c36ea-7828-4bc4-ab37-4aa10d9588b4",
           "card_text": "audio_spark\nAI4Finance Foundation: FinGPT, FinRL, and FinRobot Ecosystem\nScheduled for after 4pm\nmore_vert",
-          "observed_at": "2026-10-03T11:21:48.891258+00:00"
+          "observed_at": "2026-10-03T11:36:47.915847+00:00"
         }
       },
       "notebook_intent": {
@@ -3094,7 +3094,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-03T11:24:49.009189+00:00",
+  "checked_at": "2026-10-03T11:36:47.933510+00:00",
   "browser_geometry_requested": {
     "width": 2000,
     "height": 1290,
@@ -3111,9 +3111,9 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 14:51.",
+    "notice": "You're getting close to your AI usage limit. Limit resets at 19:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-03T07:09:02.712099+00:00",
-    "not_before": "2026-10-03T10:51:00+00:00"
+    "observed_at": "2026-10-03T11:36:47.933500+00:00",
+    "not_before": "2026-10-03T15:51:00+00:00"
   }
 }

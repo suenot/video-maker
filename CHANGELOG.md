@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Verify the live "getting close to your AI usage limit" guard against an existing scheduled Chinese audio request, preserving all identities and the displayed reset before returning to local-only checks.
 - Defer Taiwan Order Flow Imbalance after repeated empty-notebook source reconciliation, retaining the uncertain insertion intent and all failure evidence while other source jobs proceed.
 - Preserve the Taiwan Order Flow Imbalance source intent after low-battery Mac hibernation interrupted insertion confirmation; retain power/log evidence and reconcile the existing source IDs before any further insertion or generation.
 - Prepare subsequent frozen source briefs while already-bound generations run, retaining the active-artifact cap and the documented browser-free quota wait.
