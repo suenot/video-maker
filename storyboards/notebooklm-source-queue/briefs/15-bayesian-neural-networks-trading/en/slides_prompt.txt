@@ -1,0 +1,24 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article bayesian-neural-networks-trading EN f0c2f80a6488". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English. Use English throughout. Keep formulas, code identifiers, units, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — The Thesis: Two Uncertainties Demand Two Responses
+2. H3 — The Decomposition
+3. H2 — Where This Sits Relative to What's Already Published
+4. H2 — Method 1: Variational Inference (Bayes by Backprop)
+5. H2 — Method 2: MC Dropout
+6. H3 — Predictive Statistics
+7. H3 — PyTorch Implementation
+8. H3 — Choosing the Number of Forward Passes
+9. H2 — Method 3: Deep Ensembles
+10. H3 — Ensemble Implementation
+11. H3 — Trade-offs: MC Dropout vs Deep Ensembles
+12. H2 — The Payoff: Asymmetric Sizing
+13. H2 — Calibration: Hand This Off
+14. H2 — What Has To Be Measured Before This Publishes
+15. H2 — Practical Tips for Production
+16. H2 — Limitations and Honest Caveats
+17. H2 — Conclusion
+
+Keep epistemic parameter ignorance distinct from aleatoric conditional market noise, including the predictive posterior integral, heteroscedastic Gaussian variance head, law-of-total-variance decomposition and the article's comparison with conformal coverage and GARCH. Retain VI/Bayes-by-Backprop prior, mean-field q, KL and ELBO equations, reparameterization, parameter and gradient costs, and underestimation risk. For MC Dropout preserve T stochastic passes, predictive mean, between-pass epistemic variance, mean predicted aleatoric variance, heteroscedastic loss and PyTorch training logic. The code must keep model.train() at inference; model.eval() would turn dropout off and silently collapse the epistemic estimate. T=30/100/500+ are illustrative pass counts, with hardware latency unmeasured. For deep ensembles distinguish M independently trained members from merely constructed models; model.eval() is correct at ensemble inference, and training, memory and inference costs differ from MC Dropout. Retain Gaussian Kelly f*=mu/sigma² and effective variance sigma_eff²=sigma_alea²+lambda*sigma_epi² with lambda>1 as a hypothesis, quarter-Kelly illustration, epi/alea abstain ratio, clipping and validation rather than a proven trading edge. Preserve 95% nominal-versus-empirical coverage, linear rescaling versus adaptive conformal inference, walk-forward lambda tuning, all five explicitly missing real-data measurements, production monitoring and honest caveats. In particular, a flexible aleatoric head can absorb epistemic signal; novel regimes can break calibration. Do not present a measured sizing benefit, coverage or latency where the article marks it TODO.
+
+Preserve every substantive section, example, formula, mathematical symbol, percent sign, unit, table, code rule, caveat, risk, link and source reference. Never silently alter an article number, heading or claim. Numerical, research, financial, company-specific and mutable statements remain attributed article claims pending human editorial, mathematical and primary-source review. No guaranteed returns or investment advice. Chinese translation/terminology and Mandarin pronunciation remain pending review where applicable. External NotebookLM notebook/source/artifact duplicate identities are unchecked before submission; target-channel duplicates are unchecked before final production. Do not imply either is cleared.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams and tables only as supported by this locale's source. Keep visible text in the requested locale apart from exact technical identifiers. End with the article conclusion and references.

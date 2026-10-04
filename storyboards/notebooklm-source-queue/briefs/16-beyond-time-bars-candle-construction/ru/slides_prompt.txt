@@ -1,0 +1,48 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article beyond-time-bars-candle-construction RU 827956349f93". It is the complete published ru article snapshot. Do not merge another language edition or outside facts. Output language: Russian. Use Russian throughout; preserve exact source headings, formulas, identifiers and units. Keep formulas, code identifiers, units, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — Коротко (TL;DR)
+2. H2 — Две оси построения свечей
+3. H2 — 1. Таймбары (стандартные)
+4. H2 — 2–4. Бары на основе активности
+5. H3 — 2. Тиковые бары
+6. H3 — 3. Объёмные бары
+7. H3 — 4. Долларовые бары
+8. H3 — Выбор порога
+9. H2 — 5–7. Ценовые бары
+10. H3 — 5. Бары Renko
+11. H3 — 6. Диапазонные бары
+12. H3 — 7. Волатильностные бары
+13. H2 — 8. Heikin-Ashi (сглаженная трансформация)
+14. H2 — 9–11. Японские графики разворотов
+15. H3 — 9. Графики Kagi
+16. H3 — 10. Графики Line Break
+17. H3 — 11. Графики Point & Figure
+18. H2 — 12–14. Информационные бары
+19. H3 — 12. Бары тикового дисбаланса (TIB)
+20. H3 — 13. Бары объёмного дисбаланса (VIB)
+21. H3 — Проблема взрыва
+22. H3 — 14. Бары серий (Run Bars)
+23. H2 — 15. CUSUM-фильтр
+24. H2 — 16. Энтропийные бары
+25. H2 — 17. Дельта-бары (поток ордеров)
+26. H2 — Метод A: Календарная агрегация
+27. H2 — Метод B: Скользящее окно
+28. H2 — Метод C: Адаптивное скользящее окно
+29. H3 — Примеры комбинаций
+30. H3 — Гибридный движок: календарная + скользящая
+31. H3 — Гибрид время-объём: календарная с разбиением по объёму
+32. H2 — Практическая агрегация: каскадная предзагрузка
+33. H3 — Лимиты бирж
+34. H3 — Проверка согласованности агрегации
+35. H2 — Сравнительная матрица
+36. H3 — Ось 1: Базовые типы баров
+37. H3 — Ось 2: Методы агрегации
+38. H2 — Практические рекомендации
+39. H2 — Заключение
+40. H2 — Полезные ссылки
+41. H2 — Цитирование
+
+Preserve the two independent axes: 17 listed base bar types and 3 aggregation methods (17 × 3 = 51 combinations), while explaining that Heikin-Ashi is also described as a transformation. For time, tick, volume and dollar bars retain their closing rules, trade-count versus base-asset volume versus USD/USDT notional units, illustrative BTCUSDT thresholds and regime sensitivity. Distinguish Renko, range and ATR-adaptive volatility bars; keep Heikin-Ashi OHLC formulas and its loss of exact prices; then Kagi, Line Break and Point & Figure reversals. For information-driven sampling keep tick-rule signs ±1, TIB cumulative theta and EWMA threshold, VIB signed volume, run-length logic and the imbalance-bar feedback/explosion problem with min_ticks/max_ticks clamps. Preserve CUSUM on 1-minute OHLCV without tick data, entropy threshold/bin/min-trade example, and delta as aggressive buy volume minus sell volume requiring side classification. Separate calendar-aligned, closed-base-bar rolling and ATR-adaptive rolling aggregation; explain cold start, backtest/live parity, hybrid calendar+rolling and calendar-with-volume-splits. Keep cascading 1-minute/1-hour/1-day preload, mutable exchange REST limits, composable OHLCV and the 0.001 tolerance in the aggregation check. Cover both comparison axes, four-layer recommendation, implementation/data limitations, conclusion, links and citation. Treat exchange limits, activity thresholds, performance and example code as article claims or illustrations pending primary and engineering review; never imply that a bar type guarantees predictive advantage.
+
+Preserve every substantive section, example, formula, mathematical symbol, percent sign, unit, table, code rule, caveat, risk, link and source reference. Never silently alter an article number, heading or claim. Numerical, research, financial, company-specific and mutable statements remain attributed article claims pending human editorial, mathematical and primary-source review. No guaranteed returns or investment advice. Chinese translation/terminology and Mandarin pronunciation remain pending review where applicable. External NotebookLM notebook/source/artifact duplicate identities are unchecked before submission; target-channel duplicates are unchecked before final production. Do not imply either is cleared.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams and tables only as supported by this locale's source. Keep visible text in the requested locale apart from exact technical identifiers. End with the article conclusion and references.

@@ -1,0 +1,384 @@
+MM article bayesian-neural-networks-trading ZH-TW 087aaa1be429
+
+---
+title: "認識與對立：衡量收益模型不知道的東西"
+description: "本博客的每個位置 sizing 規則都把不確定性坍縮成單一純量。MC Dropout 和深度集成將其拆分為模型無知與市場噪聲——這兩者值得不同的 position size。"
+date: "2026-07-31"
+tags: ["bayesian", "uncertainty", "neural-network", "risk", "position-sizing"]
+slug: "bayesian-neural-networks-trading"
+lang: "zh-Hant"
+image: "/images/blog/bayesian-neural-networks-trading.webp"
+authors: ["suenot"]
+---
+
+# 認識與對立：衡量收益模型不知道的東西
+
+本博客的每個位置 sizing 規則都把不確定性坍縮成單一純量。[Kelly](/en/blog/post/kelly-criterion-strategy-sizing)除以方差。[Conformal prediction](/en/blog/post/conformal-prediction-trading)除以區間寬度。[Volatility targeting](/en/blog/post/garch-volatility-forecasting-crypto)除以 GARCH 預測。三者都正確，而三者都拋棄了對交易至關重要的區別：**喧鬧市場與無知模型之間的區別。**
+
+這不是同樣的風險。市場噪聲有價格——這是你承受它所得到的補償。模型無知沒有價格，沒有補償，而且正是你的優勢估計最不可信的狀態。同樣懲罰兩者的 sizing 規則會把錢留在桌上。
+
+這篇文章是關於讓這種分割可測量。具體來說：
+
+$$\sigma^2_{\text{eff}} = \sigma^2_{\text{alea}} + \lambda \cdot \sigma^2_{\text{epi}}, \qquad \lambda > 1$$
+
+把它放在 Kelly 分母中代替總方差。其餘部分是如何估計兩個分量（MC Dropout、深度集成），以及分割在真實數據上的實際樣子。
+
+## 論點：兩種不確定性要求兩種回應
+
+|                    | 認識                    | 對立                        |
+| ------------------ | ---------------------------- | -------------------------------- |
+| **來源**         | 有限的數據 / 模型         | 數據中的固有噪聲           |
+| **可減少？**     | 是（更多數據有幫助）        | 否                               |
+| **交易行動** | 縮減 position 或 abstain   | 放寬 stop，降低槓桿     |
+| **信號**         | "我沒見過這種 regime" | "這個市場現在很喧鬧" |
+
+「交易行動」行中的不對稱是整個論點。高對立方差是已知的未知：你可以為其 sizing，對其進行 hedge，並期望因持有它而獲得風險溢價。高認識方差是未知的未知：模型正在外推，其均值估計 $\mu$ 與其方差估計一樣可疑，並且對自己參數出錯沒有附加溢價。
+
+將兩者混為一談的模型要麼在不熟悉的 regime 中過度交易（忽略認識不確定性），要麼在熟悉但喧鬧的 regime 中交易不足（過度懲罰對立不確定性）。應用於 $\sigma^2_{\text{total}}$ 的標準 Kelly 根據哪個分量佔主導而兩者都做。
+
+### 分解
+
+認識不確定性來自對模型參數 $\theta$ 的不確定性。我們不是維持單個 $\theta^*$（如在最大似然中），而是維持分佈 $p(\theta \mid \mathcal{D})$ 並積分：
+
+$$p(y \mid x, \mathcal{D}) = \int p(y \mid x, \theta)\, p(\theta \mid \mathcal{D})\, d\theta$$
+
+通過 $\theta$ 積分引起的擴散是認識的。隨著 $\mathcal{D}$ 增長以覆蓋輸入區域，它會縮小。
+
+對立不確定性是數據生成過程的條件噪聲。在神經網絡中，它由發出輸入相依方差的第二個輸出頭建模：
+
+$$p(y \mid x, \theta) = \mathcal{N}\bigl(y;\, \mu_\theta(x),\, \sigma^2_\theta(x)\bigr)$$
+
+這個異方差頭正在估計 GARCH 傳統估計的同一對象——夜間高、峰值時間低的狀態相依條件方差。如果你想要它在加密貨幣上的經驗數據，[GARCH(1,1) for crypto volatility](/en/blog/post/garch-volatility-forecasting-crypto) 適當涵蓋了它，包括為什麼 live 條件預測（而不是無條件樣本方差）屬於 Kelly 分母。NN 頭只是同一數量的不同估計器，與均值聯合 fit。
+
+GARCH 無法給你的是另一項。這就是這篇文章其餘部分的目的。
+
+## 與已發布內容的相關位置
+
+之前的兩篇文章涵蓋了相鄰領域，值得先閱讀，因為這篇文章故意不重複它們：
+
+- [Conformal prediction for risk-aware position sizing](/en/blog/post/conformal-prediction-trading) 給你具有有限樣本覆蓋保證的區間，無分佈假設，加上逆寬度 sizing 和 edge-ratio 無交易過濾器。如果你只想要一個正確 sized 的區間，它是更強的工具。
+- [Temporal Fusion Transformers](/en/blog/post/temporal-fusion-transformer-trading) 直接發出分位數，並已警告 pinball-loss 分位數不會自動在樣本外校準。
+
+權衡清晰。**Conformal 給你保證但只有一個數字**——區間寬度不可分解，因此它無法告訴你*為什麼*它變寬了。**貝葉斯方法給你分解但沒有保證**——MC Dropout 的區間只能與近似後驗一樣好。這篇文章是關於購買分解；你可能應該在上方保留 conformal 以進行覆蓋。
+
+## 方法 1：變分推理（Bayes by Backprop）
+
+![稠密的貝葉斯權重後驗在產生預測收益分佈之前被壓縮成可處理的變分近似](/images/blog/bayesian-neural-networks-trading-variational-inference.webp)
+
+貝葉斯神經網絡在權重上放置先驗 $p(\theta)$ 並尋找後驗 $p(\theta \mid \mathcal{D}) \propto p(\mathcal{D} \mid \theta) p(\theta)$。歸一化因子需要對每個權重配置進行積分，這對於任何具有多於少數參數的東西都是難以處理的。
+
+變分推理用可處理的族 $q_\phi(\theta)$——通常是因式分解高斯 $q_\phi(\theta) = \prod_j \mathcal{N}(\theta_j; \mu_j, \sigma_j^2)$——替換難以處理的後驗，並最小化：
+
+$$\text{KL}\bigl(q_\phi(\theta) \,\|\, p(\theta \mid \mathcal{D})\bigr)$$
+
+由於這涉及未知的後驗，我們改為最大化 **證據下界**：
+
+$$\mathcal{L}(\phi) = \mathbb{E}_{q_\phi(\theta)}\bigl[\log p(\mathcal{D} \mid \theta)\bigr] - \text{KL}\bigl(q_\phi(\theta) \,\|\, p(\theta)\bigr)$$
+
+第一項將 $q_\phi$ 推向解釋數據；第二項使其保持接近先驗。**Bayes by Backprop** (Blundell et al., 2015) 通過重參數技巧使其可微分：採樣 $\epsilon \sim \mathcal{N}(0, I)$，設置 $\theta = \mu + \sigma \odot \epsilon$。
+
+在實踐中，VI 將參數數量加倍，增加梯度方差（每次前向傳遞使用不同的權重），平均場假設忽略權重相關性，這傾向於*低估*認識不確定性。對於你已經有訓練好的確定性模型的交易棧來說，下面兩種更便宜的方法通常是更好的入門點。
+
+## 方法 2：MC Dropout
+
+![重複的啟用 dropout 前向傳遞分散成不同的預測，它們的分歧形成認識不確定性](/images/blog/bayesian-neural-networks-trading-mc-dropout.webp)
+
+Gal 和 Ghahramani (2016) 表明，用 dropout 訓練並在 **測試時仍啟用 dropout** 評估的網絡是深高斯過程中的近似變分推理程序。Dropout 已經在子網絡上產生分佈；在推理期間保持其開啟並運行 $T$ 次前向傳遞從該隱式後驗中採樣。
+
+這個博客的其他地方都沒有。這裡發布的代碼僅將 dropout 用作訓練時間正則化器（[spread modeling](/en/blog/post/spread-modeling-machine-learning)，TFT 在 `dropout=0.1–0.3`）。在推理期間保持其開啟是一行更改，具有完全不同的含義。
+
+### 預測統計
+
+給定 $T$ 個隨機前向傳遞產生 $\{\hat{y}_t\}_{t=1}^{T}$ 和每次傳遞的方差 $\hat{\sigma}_t^2(x)$：
+
+**預測均值：**
+
+$$\bar{y} = \frac{1}{T} \sum_{t=1}^T \hat{y}_t$$
+
+**認識（傳遞之間的分歧）：**
+
+$$\sigma^2_{\text{epi}} = \frac{1}{T} \sum_{t=1}^T (\hat{y}_t - \bar{y})^2$$
+
+**對立（預測噪聲的均值）：**
+
+$$\sigma^2_{\text{alea}} = \frac{1}{T} \sum_{t=1}^T \hat{\sigma}_t^2$$
+
+分解正是總方差定律：條件均值的方差加上條件方差的均值。總預測方差是它們的總和。
+
+### PyTorch 實現
+
+```python
+import torch
+import torch.nn as nn
+import numpy as np
+
+class MCDropoutNet(nn.Module):
+    """
+    用於不確定性估計的 MC Dropout 收益預測網絡。
+    輸出預測均值和對數方差（對立）。
+    """
+    def __init__(self, input_dim: int, hidden_dim: int = 128, dropout_p: float = 0.1):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(p=dropout_p),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(p=dropout_p),
+        )
+        self.head_mu = nn.Linear(hidden_dim, 1)        # 預測收益
+        self.head_logvar = nn.Linear(hidden_dim, 1)    # log(對立方差)
+
+    def forward(self, x: torch.Tensor):
+        h = self.net(x)
+        return self.head_mu(h), self.head_logvar(h)
+
+
+def heteroscedastic_loss(mu, log_var, target):
+    """對於學習的輸入相依方差的高斯的負對數似然。"""
+    precision = torch.exp(-log_var)
+    return torch.mean(0.5 * precision * (target - mu) ** 2 + 0.5 * log_var)
+
+
+@torch.no_grad()
+def mc_predict(model: MCDropoutNet, x: torch.Tensor, n_samples: int = 100):
+    """
+    MC Dropout 推理：保持 dropout ON，收集 T 個前向傳遞，
+    將預測方差分解為認識和對立部分。
+    """
+    model.train()  # 不是 eval() -- 這就是讓 dropout 保持活動的東西
+    mus, log_vars = [], []
+    for _ in range(n_samples):
+        mu, log_var = model(x)
+        mus.append(mu)
+        log_vars.append(log_var)
+
+    mus = torch.stack(mus)            # (T, batch, 1)
+    log_vars = torch.stack(log_vars)  # (T, batch, 1)
+
+    pred_mean = mus.mean(dim=0)
+    epistemic_var = mus.var(dim=0)              # 傳遞的方差
+    aleatoric_var = log_vars.exp().mean(dim=0)  # 傳遞的期望
+
+    return {
+        "mean": pred_mean.squeeze(-1),
+        "epistemic_std": epistemic_var.sqrt().squeeze(-1),
+        "aleatoric_std": aleatoric_var.sqrt().squeeze(-1),
+        "total_std": (epistemic_var + aleatoric_var).sqrt().squeeze(-1),
+    }
+```
+
+訓練使用異方差損失，這使方差頭具有意義。注意自我調節結構：`0.5 * precision * (target - mu)**2` 項希望小方差，`0.5 * log_var` 項懲罰它，平衡點是條件噪聲水平。
+
+```python
+model = MCDropoutNet(input_dim=50, hidden_dim=128, dropout_p=0.1)
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+
+for epoch in range(200):
+    model.train()
+    for x_batch, y_batch in train_loader:
+        mu, log_var = model(x_batch)
+        loss = heteroscedastic_loss(mu, log_var, y_batch)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+```
+
+**靜靜扼殺方法的一點：**在 `mc_predict` 中調用 `model.eval()`。它禁用 dropout，每次傳遞返回相同的值，`epistemic_var` 完全坍縮為零，你的 sizing 規則悄悄恢復為對立方差上的普通 Kelly。它在沒有錯誤的情況下失敗。在你的推理路徑中斷言 `epistemic_var > 0`。
+
+### 選擇前向傳遞數量
+
+- $T = 30$：穩定均值的合理下限
+- $T = 100$：均值和方差的可工作默認值
+- $T = 500{+}$：除非你需要尾部分位數，否則收益遞減
+
+<!-- TODO: 需要真實數據結果——測量實際模型和硬件上 T=30/100/500 的 wall-clock 推理成本，並說明它符合的延遲預算。不要發布未測量的延遲聲稱。 -->
+
+## 方法 3：深度集成
+
+![五個獨立訓練的神經網絡結合它們的預測，同時它們的分歧形成認識光暈](/images/blog/bayesian-neural-networks-trading-deep-ensembles.webp)
+
+Lakshminarayanan et al. (2017) 訓練 $M$ 個來自不同隨機初始化的獨立網絡並聚合。儘管不是正式貝葉斯，深度集成在不確定性校準基準上始終優於更原則的方法。
+
+$$p(y \mid x) \approx \frac{1}{M} \sum_{m=1}^M p(y \mid x, \theta_m^*)$$
+
+成員之間的分歧是認識估計。集成在這個博客的其他地方作為聚合設備出現——[異常檢測](/en/blog/post/anomaly-detection-algotrading)、[HMM regime 檢測](/en/blog/post/regime-detection-hmm-adaptive-trading)、conformal 的 EnbPI block bootstrap——但從未作為通過成員間擴散的不確定性估計器。這就是這裡的用法。
+
+### 集成實現
+
+多樣性來自**獨立訓練**，而不是構建 $M$ 個對象。未訓練或相同訓練的成員的集成返回噪聲或零認識方差：
+
+```python
+class DeepEnsemble:
+    def __init__(self, input_dim: int, n_models: int = 5, hidden_dim: int = 128):
+        self.models = []
+        for seed in range(n_models):
+            torch.manual_seed(seed)          # 每個成員的不同 init
+            self.models.append(
+                MCDropoutNet(input_dim, hidden_dim, dropout_p=0.0)
+            )
+
+    def fit(self, train_loader, epochs: int = 200, lr: float = 1e-3):
+        """每個成員獨立訓練。這就是多樣性的來源
+        -- 不同的 init，不同的洗牌順序。跳過這個
+        給出 epistemic_var == 0（相同成員）或純噪聲（未訓練）。"""
+        for seed, model in enumerate(self.models):
+            torch.manual_seed(1000 + seed)   # 不同的洗牌/dropout 流
+            opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
+            model.train()
+            for _ in range(epochs):
+                for x_batch, y_batch in train_loader:
+                    mu, log_var = model(x_batch)
+                    loss = heteroscedastic_loss(mu, log_var, y_batch)
+                    opt.zero_grad()
+                    loss.backward()
+                    opt.step()
+        return self
+
+    @torch.no_grad()
+    def predict(self, x: torch.Tensor):
+        mus, variances = [], []
+        for model in self.models:
+            model.eval()                     # 在這裡正確：沒有 dropout 採樣
+            mu, log_var = model(x)
+            mus.append(mu.squeeze(-1))
+            variances.append(log_var.exp().squeeze(-1))
+
+        all_mus = torch.stack(mus)
+        all_vars = torch.stack(variances)
+
+        epistemic_var = all_mus.var(dim=0)   # 跨越成員的擴散
+        aleatoric_var = all_vars.mean(dim=0)
+
+        return {
+            "mean": all_mus.mean(dim=0),
+            "epistemic_std": epistemic_var.sqrt(),
+            "aleatoric_std": aleatoric_var.sqrt(),
+            "total_std": (epistemic_var + aleatoric_var).sqrt(),
+        }
+```
+
+注意 `model.eval()` 在 `DeepEnsemble.predict` 中是正確的，而在 `mc_predict` 中是錯誤的。隨機性來源不同：集成來自獨立訓練，MC Dropout 來自實時 dropout 掩碼。
+
+### 權衡：MC Dropout vs 深度集成
+
+|                            | MC Dropout                       | 深度集成             |
+| -------------------------- | -------------------------------- | -------------------------- |
+| **訓練成本**          | 1x（單個模型）                | $M$x（$M$ 個模型）          |
+| **推理成本**         | $T$ 個前向傳遞               | $M$ 個前向傳遞         |
+| **記憶體**                 | 1x 參數                    | $M$x 參數            |
+| **不確定性質量**    | 傾向於低估認識 | 整體校準更好  |
+| **實現容易度** | 琐碎（翻轉標誌）            | 琐碎（訓練 $M$ 個模型） |
+| **並行性**            | 順序傳遞（同一模型）   | 尷尬並行    |
+
+務實的混合：訓練一個小集成（$M = 3{-}5$），其中每個成員也使用 MC Dropout，捕獲模型間分歧和模型內隨機性。
+
+## 收益：不對稱 Sizing
+
+![對立噪聲擴大風隅包絡，同時認識不確定性縮小 sizing 光圈並創建 abstain 區域](/images/blog/bayesian-neural-networks-trading-asymmetric-sizing.webp)
+
+這是真正的貢獻。高斯 Kelly 是 $f^* = \mu / \sigma^2$；推導、增長拋物線、回撤概率表和四個運行部分而非完整 Kelly 的原因都在 [The Kelly Criterion for Strategies](/en/blog/post/kelly-criterion-strategy-sizing) 中，這裡不重複。採用 $f^* = \mu / \sigma^2$ 作為給定的 quarter-Kelly 分數。
+
+修改是分母。而不是總預測方差：
+
+$$\sigma^2_{\text{eff}} = \sigma^2_{\text{alea}} + \lambda \cdot \sigma^2_{\text{epi}}, \qquad \lambda > 1$$
+
+$\lambda > 1$ 的論點：對立方差是市場的噪聲，它有價格，承受它是策略賺錢的方式。認識方差是*你的*無知——它沒有溢價，更糟糕的是，它與你的 $\mu$ 估計錯誤相關。當 $\sigma_{\text{epi}}$ 大時，Kelly 的分子在分母同時不可靠，因此 sizing 錯誤複合。相對於市場噪聲超線性懲罰它是其直接表達。
+
+```python
+def uncertainty_adjusted_position_size(
+    pred_mean: float,
+    epistemic_std: float,
+    aleatoric_std: float,
+    max_position: float = 1.0,
+    lam: float = 2.0,                   # 認識懲罰；在 validation 上調整
+    max_epi_ratio: float = 0.5,         # 在此 epi/alea 比率以上 abstain
+    base_kelly_fraction: float = 0.25,
+) -> float:
+    """Kelly sizing，其中認識方差被懲罰得比對立更重。"""
+    effective_var = aleatoric_std ** 2 + lam * epistemic_std ** 2
+    if effective_var < 1e-10:
+        return 0.0
+
+    position = (pred_mean / effective_var) * base_kelly_fraction
+
+    # 在比率上的信心閘，而非總不確定性
+    epi_ratio = epistemic_std / (aleatoric_std + 1e-8)
+    if epi_ratio > max_epi_ratio:
+        position *= max(0.0, 1.0 - epi_ratio)
+
+    return float(np.clip(position, -max_position, max_position))
+```
+
+閘值得到了註釋。在信心閾值以下將 position 歸零在這裡並不新——conformal 文章將一般 no-trade 過濾器指定和編碼為 $e_t = |\hat{\mu}| / w_t$ 並帶有 `min_edge` 閾值，包括如何選擇閾值以及 straddling 零的區間的幾何讀取。有關該機械裝置，請參閱 [conformal prediction](/en/blog/post/conformal-prediction-trading)。*新*的是分母：在 $\sigma_{\text{epi}} / \sigma_{\text{alea}}$ 上的閘門具體在模型對自己的參數比市場更困惑時觸發——總不確定性 gating 無法檢測到的狀態，因為平靜但不熟悉的 regime 可能具有低總方差和糟糕的認識比率。
+
+## 校準：委派這個
+
+不確定性估計只有在校準時才有用：名義 95% 區間應該包含真理約 95% 的時間。不要在這裡推出自己的 Gaussian 分位數可靠性檢查——厚尾收益殘差上的參數區間正是 [conformal prediction](/en/blog/post/conformal-prediction-trading) 存在以避免的失敗模式，它帶有一個正在運行的 `evaluate()`，報目標與經驗覆蓋，背後有有限樣本保證。TFT 帖子對分位數頭做了同樣的點。
+
+後驗重新縮放（$\tilde{\sigma} = \alpha \sigma + \beta$ 在驗證集上 fit）是廉價的修復，它是 **Adaptive Conformal Inference** 的較弱表弟，後者維持在線 miscoverage 水平 $\alpha_t$ 並具有長期覆蓋界限，而不是靜態重新縮放。ACI 是更強的選擇；唯一更喜歡線性重新縮放的原因是它保留了認識/對立比率，而 ACI 的單一寬度則不會。
+
+<!-- TODO: 需要真實數據結果——明確說明測量的設置使用的是線性重新縮放還是 ACI，以及為什麼。 -->
+
+## 發布前必須測量的內容
+
+上述方法已建立。*分割*在交易中買到任何東西的主張沒有，這個博客不會基於論點發布 sizing 規則。標準：
+
+**1. 數據集和目標。** 命名工具、bar 大小、明確日期範圍、特徵集和預測目標。
+<!-- TODO: 需要真實數據結果 -->
+
+**2. 分割本身。** 總預測方差有多少是認識與對立，以及該比率在命名的平靜窗口和命名的波動窗口之間如何移動。這是資金圖表，它還不存在。值得 falsify 的假設：比率在實際波動性之前 *pike*，因為不熟悉先於湍流。
+<!-- TODO: 需要真實數據結果 -->
+
+**3. 覆蓋率 vs conformal。** 在同一數據上發布文章的 split-conformal 區間相比，MC Dropout 區間的測量外樣本覆蓋率與名義。這個 head-to-head 本身是一個新結果，是兩篇文章之間的自然橋樑。
+<!-- TODO: 需要真實數據結果 -->
+
+**4. $\lambda$ 買到任何東西嗎？** 在 validation 上掃描認識懲罰並報告 PnL 和最大回撤與 $\lambda = 1$ 基線相比。如果它沒有買到任何東西，就這樣說——[The Honest Negative](/en/blog/post/honest-negative-no-robust-edge) 是該結果的模板，它是可發布的結果。
+<!-- TODO: 需要真實數據結果 -->
+
+**5. 推理成本。** 在目標硬件上測量，在每個 $T$ 處。
+<!-- TODO: 需要真實數據結果 -->
+
+這裡的任何評估都在 [walk-forward optimization](/en/blog/post/walk-forward-optimization) 紀律下運行——$\lambda$ 是超參數，在完整樣本上調整的 $\lambda$ 不是結果。
+
+## 生產實用技巧
+
+**1. 預熱先驗。** 使用變分推理時，從預訓練的確定性網絡初始化變分均值，而不是隨機。通常將收斂時間減半。
+
+**2. 注意方差坍縮。** 學習的方差 $\sigma_j$ 可能漂移到接近零，悄悄將 BNN 恢復為確定性網絡。在訓練期間監視平均 $\sigma_j$；如需要添加 KL 退火。
+
+**3. 在滾動基礎上重新校準，而不是固定驗證集。** 市場是非平穩的，一次 fit 的校準會衰減。要在 [walk-forward](/en/blog/post/walk-forward-optimization) 紀律下的滾動窗口上 retrain，或讓 [ACI](/en/blog/post/conformal-prediction-trading) 在線吸收模型過時——conformal 帖子直接涵蓋了 retraining 頻率權衡。
+
+**4. 集成多樣性很重要。** 不同的種子，不同的洗牌，可選每個成員的不同超參數。初始化多樣性是集成質量的主要驅動因素，這就是為什麼上面的 `fit()` 循環不是可選的。
+
+**5. 記錄分解，而不僅是總數。** 將兩個分量與實際結果一起存儲。沒有這個，你無法回答審查中唯一重要的問題：當 sizer 削減暴露時，是因為市場喧鬧還是因為模型迷失——以及它是否正確？
+
+**6. 不確定性作為特徵。** 滾動認識統計本身可能預測回撤。合理，未測量，值得單獨的文章。
+<!-- TODO: 需要真實數據結果 -->
+
+## 限制和誠實警告
+
+- **近似後驗仍然是近似。** MC Dropout 和 VI 對真正後驗的視角有限。比沒有好，不是基本事實，兩者都沒有附加覆蓋保證。
+- **校準正是你需要時惡化。** 在真正的新 regime 中，模型可能仍然未校準——它只是傾向於比確定性模型*更少*未校準。來自外部分佈輸入的不確定性估計本身就是外部分佈輸出。
+- **對立方差可以吸收認識信號。** 如果異方差頭足夠靈活，它學會將模型不確定性解釋為數據噪聲，將 $\sigma_{\text{epi}}$ 坍縮到零並悄悄擊敗整個分解。這是這篇文章中最重要的失敗模式，它不會自己宣布。跨 regime 監視比率；從不移動的比率是分解損壞，而不是穩定的市場。
+- **$\lambda$ 是一個自由參數。** 將可調整的旋鈕引入 sizing 規則是構建 overfit sizing 規則的方式。它需要 walk-forward 正當性或需要固定在 1。
+
+## 結論
+
+Conformal prediction 已經為這個博客提供了帶有覆蓋保證的區間寬度，Kelly 已經為它提供了 sizing 規則。兩者都沒有給出*為什麼*區間寬的答案。將預測方差分解為認識和對立部分回答了這一點，答案是總數不是的方式：市場噪聲是補償風險，模型無知不是，sizing 分母應該這麼說。
+
+MC Dropout 使分解幾乎免費——推理時的一行（`model.train()`）將任何 dropout 網絡變成近似貝葉斯。深度集成成本 $M$x 並校準得更好。兩者都提供相同的不對稱分母 $\sigma^2_{\text{alea}} + \lambda \sigma^2_{\text{epi}}$。
+
+$\lambda > 1$ 是否真的支付是這個草稿尚未回答的實證問題。上面列出的測量是發布它的代價。
+
+---
+
+**參考文獻：**
+
+- Blundell, C., Cornebise, J., Kavukcuoglu, K., & Wierstra, D. (2015). Weight Uncertainty in Neural Networks. *ICML*.
+- Gal, Y. & Ghahramani, Z. (2016). Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning. *ICML*.
+- Lakshminarayanan, B., Pritzel, A., & Blundell, C. (2017). Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles. *NeurIPS*.
+- Kendall, A. & Gal, Y. (2017). What Uncertainties Do We Need in Bayesian Deep Learning for Computer Vision? *NeurIPS*.
+- Gibbs, I. & Candes, E. (2021). Adaptive Conformal Inference Under Distribution Shift. *NeurIPS*.
+- Kelly, J. L. (1956). A New Interpretation of Information Rate. *Bell System Technical Journal*.

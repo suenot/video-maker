@@ -1,0 +1,1818 @@
+MM article beyond-time-bars-candle-construction ZH-TW 50ce98e0057b
+
+---
+title: "演算法交易的K線型別與聚合方法"
+description: "K線構建的雙軸分類：17種基礎K線型別（時間、成交筆數、成交量、美元、磚形、範圍、波動率、Heikin-Ashi、卡吉、折線突破、點數圖、TIB、VIB、遊程、CUSUM、熵、Delta）× 3種聚合方法（日曆、滾動、自適應）= 51種組合。附實現程式碼和實踐建議。"
+tags: ["algotrading", "candles", "market microstructure", "Lopez de Prado", "order flow", "backtesting", "research"]
+date: "2026-03-22"
+lang: "zh-Hant"
+image: "/images/blog/beyond-time-bars-candle-construction.webp"
+slug: "beyond-time-bars-candle-construction"
+authors: ["suenot"]
+---
+
+你在 Binance、TradingView 或任何交易所介面上看到的每一張K線圖，構建方式都完全相同：在固定時間視窗內聚合成交——1分鐘、5分鐘、1小時——然後生成一根 OHLCV K線。這種做法如此普遍，以至於大多數交易者從未質疑過它。但對於演算法交易而言，K線型別的選擇和聚合方法是兩個獨立的決策——而大多數系統將二者混為一談。
+
+本文將K線構建分離為兩個軸：**構建什麼型別的K線**（17種類型）以及**如何將它們聚合**為更高時間框架（3種方法）。兩者的組合產生51種可能的配置，每種配置在回測、實盤交易和訊號生成中具有不同的特性。
+
+關於原始成交如何轉化為標準K線的入門介紹，請參閱 [交易K線揭秘](https://marketmaker.cc/zh/blog/post/trading-candles-demystified/)。
+
+---
+
+## 要點速覽
+
+- K線構建有**兩個獨立軸**：K線型別和聚合方法
+- **17種基礎K線型別**：時間、成交筆數（tick）、成交量、美元、磚形（Renko）、範圍、波動率、Heikin-Ashi、卡吉（Kagi）、折線突破（Line Break）、點數圖（P&F）、成交筆數失衡（TIB）、成交量失衡（VIB）、遊程（run）、CUSUM、熵（entropy）、Delta
+- **3種聚合方法**：日曆對齊、滾動視窗、自適應滾動
+- **17 × 3 = 51** 種可能的組合，每種具有不同特性
+- 大多數系統只使用一種組合：日曆對齊的時間K線。其餘50種尚未被充分利用。
+- **實踐建議**：分層使用多種組合——滾動時間K線用於訊號、日曆時間K線用於市場結構、資訊驅動K線用於微觀結構
+
+---
+
+## K線構建的兩個軸
+
+傳統視角將所有K線型別排成一個扁平列表：時間K線、tick K線、成交量K線、磚形圖等。這是有誤導性的。實際上存在兩個正交的選擇：
+
+**軸1——基礎K線型別（17種類型）：** 如何決定一根新K線何時關閉？在固定時間間隔之後？在N筆成交之後？在價格移動之後？當資訊含量發生變化時？這決定了"一根K線"的含義。
+
+**軸2——聚合方法（3種方法）：** 如何將基礎K線組合成更高時間框架的K線？對齊到日曆邊界（00:00、01:00、...）？使用最近N根K線的滾動視窗？根據波動率自適應調整視窗大小？
+
+這兩個軸是獨立的。你可以擁有：
+- **日曆對齊的 tick K線** —— 將14:00到14:59之間關閉的 tick K線聚合為一根小時K線
+- **滾動成交量K線** —— 取最近24根成交量K線，不管它們何時關閉
+- **自適應 Delta K線** —— 在 Delta K線上使用波動率驅動的視窗
+
+標準的"1小時K線"只是這個17×3矩陣中的一個點：**時間K線 + 日曆對齊**。其他每一種組合都是值得考慮的替代方案。
+
+---
+
+# 第一部分：17種基礎K線型別
+
+## 1. 時間K線（標準）
+
+![日曆時間K線問題](/images/blog/beyond-time-bars-calendar-problem.webp)
+*資訊密度不均：剛性時間邊界將200筆成交的平靜時段與50,000筆成交的公告時段同等對待。*
+
+預設型別。固定時間間隔後形成一根新K線：1分鐘、5分鐘、1小時。每個交易所都原生提供這些資料。
+
+**特性：**
+- 在亞洲時段（00:00–08:00 UTC），一根1小時K線可能包含200筆成交。在 Binance 上幣公告期間，同一視窗可能包含50,000筆成交。時間K線將兩者等同對待。檢測此類活躍度峰值對於機器人保護至關重要——參見 [交易機器人的異常檢測](https://marketmaker.cc/zh/blog/post/anomaly-detection-algotrading/)。
+- 所有市場參與者看到相同的K線邊界——一個謝林焦點。這使得時間K線對於分析群體行為至關重要。
+- 在重啟後對不完整K線計算的指標會產生垃圾值。
+
+```python
+# The cold start problem: partial candle after restart
+from datetime import datetime
+
+def time_until_valid_hourly_candle():
+    """How long until the first complete hourly candle after restart."""
+    now = datetime.utcnow()
+    minutes_into_hour = now.minute
+    seconds_into_minute = now.second
+
+    # Time remaining in current (partial) hour
+    wait_seconds = (60 - minutes_into_hour) * 60 - seconds_into_minute
+    # Plus one full hour for the first complete candle
+    wait_seconds += 3600
+
+    return wait_seconds
+
+# Restart at 14:37:05 → first valid 1h candle at 16:00:00
+# That's 82 minutes and 55 seconds of dead time
+```
+
+## 2–4. 基於活躍度的K線
+
+![基於活躍度的K線](/images/blog/beyond-time-bars-activity-bars.webp)
+*Tick K線、成交量K線和美元K線：三種讓市場參與度——而非時鐘——決定K線邊界的方法。*
+
+不再按固定時間間隔取樣，而是在固定量的市場活動之後取樣。這會產生資訊含量大致相等的K線，不受一天中時段的影響。
+
+### 2. Tick K線
+
+每N筆成交（tick）後形成一根新K線。在高活躍期，K線快速形成。在平靜時期，一根K線可能跨越數小時。
+
+```python
+from collections import deque
+from dataclasses import dataclass
+
+@dataclass
+class OHLCV:
+    timestamp: int
+    open: float
+    high: float
+    low: float
+    close: float
+    volume: float
+
+class TickBarGenerator:
+    """
+    Generates a new bar every `threshold` trades.
+    Each bar contains equal number of market "opinions".
+    """
+
+    def __init__(self, threshold: int = 1000):
+        self.threshold = threshold
+        self.trades: list[tuple[float, float]] = []  # (price, qty)
+        self.bars: list[OHLCV] = []
+
+    def on_trade(self, timestamp: int, price: float, qty: float):
+        self.trades.append((price, qty))
+
+        if len(self.trades) >= self.threshold:
+            self._close_bar(timestamp)
+
+    def _close_bar(self, timestamp: int):
+        prices = [t[0] for t in self.trades]
+        volumes = [t[1] for t in self.trades]
+
+        bar = OHLCV(
+            timestamp=timestamp,
+            open=prices[0],
+            high=max(prices),
+            low=min(prices),
+            close=prices[-1],
+            volume=sum(volumes),
+        )
+        self.bars.append(bar)
+        self.trades = []
+        return bar
+```
+
+**優點：** 自然適應市場活躍度。tick K線的收益率分佈比時間K線的收益率分佈更接近正態分佈——這一特性可以提高許多統計模型的效能。
+
+**缺點：** 需要原始成交流（並非所有資料提供商都提供歷史 tick 資料）。K線關閉時間不可預測——你無法說"下一根K線將在X時關閉。"
+
+### 3. 成交量K線
+
+當N個合約（或加密貨幣中的代幣）成交後，形成一根新K線。與 tick K線類似，但按成交規模加權——一筆100 BTC的交易貢獻的權重是1 BTC交易的100倍。
+
+```python
+class VolumeBarGenerator:
+    """
+    Generates a new bar every `threshold` units of volume.
+    Normalizes for trade size: one large order ≠ one small order.
+    """
+
+    def __init__(self, threshold: float = 100.0):
+        self.threshold = threshold
+        self.accumulated_volume = 0.0
+        self.trades: list[tuple[int, float, float]] = []  # (ts, price, qty)
+        self.bars: list[OHLCV] = []
+
+    def on_trade(self, timestamp: int, price: float, qty: float):
+        self.trades.append((timestamp, price, qty))
+        self.accumulated_volume += qty
+
+        if self.accumulated_volume >= self.threshold:
+            self._close_bar()
+
+    def _close_bar(self):
+        prices = [t[1] for t in self.trades]
+        volumes = [t[2] for t in self.trades]
+
+        bar = OHLCV(
+            timestamp=self.trades[-1][0],
+            open=prices[0],
+            high=max(prices),
+            low=min(prices),
+            close=prices[-1],
+            volume=sum(volumes),
+        )
+        self.bars.append(bar)
+        self.accumulated_volume = 0.0
+        self.trades = []
+        return bar
+```
+
+### 4. 美元K線
+
+當固定名義價值（以 USD/USDT 計）的交易完成後，形成一根新K線。這是基於活躍度的K線中最穩健的型別，因為它同時對成交筆數和價格水平進行了標準化。
+
+考慮一下：如果 ETH 從 $1,000 涨到 $4,000，賣出 $10,000 的 ETH 在 $4,000 時需要 2.5 ETH，但在 $1,000 時需要 10 ETH。成交量K線會對這兩種情況區別對待；美元K線則一視同仁。
+
+```python
+class DollarBarGenerator:
+    """
+    Generates a new bar every `threshold` dollars (USDT) of notional volume.
+    Most robust normalization: independent of price level.
+
+    Lopez de Prado (2018) recommends dollar bars as the default
+    for most quantitative applications.
+    """
+
+    def __init__(self, threshold: float = 1_000_000.0):
+        self.threshold = threshold
+        self.accumulated_dollars = 0.0
+        self.trades: list[tuple[int, float, float]] = []
+        self.bars: list[OHLCV] = []
+
+    def on_trade(self, timestamp: int, price: float, qty: float):
+        self.trades.append((timestamp, price, qty))
+        self.accumulated_dollars += price * qty
+
+        if self.accumulated_dollars >= self.threshold:
+            self._close_bar()
+
+    def _close_bar(self):
+        prices = [t[1] for t in self.trades]
+        volumes = [t[2] for t in self.trades]
+
+        bar = OHLCV(
+            timestamp=self.trades[-1][0],
+            open=prices[0],
+            high=max(prices),
+            low=min(prices),
+            close=prices[-1],
+            volume=sum(volumes),
+        )
+        self.bars.append(bar)
+        self.accumulated_dollars = 0.0
+        self.trades = []
+        return bar
+```
+
+### 閾值選擇
+
+基於活躍度的K線的閾值應設定為每天產生的K線數量與你要替換的時間K線大致相同。以 Binance 上的 BTCUSDT 為例：
+
+| K線型別 | 典型閾值 | 每日約K線數 | 等效時間框架 |
+|---------|---------|------------|------------|
+| Tick | 1,000 筆成交 | ~1,400 | ~1分鐘 |
+| Tick | 50,000 筆成交 | ~28 | ~1小時 |
+| 成交量 | 100 BTC | ~600 | ~2-3分鐘 |
+| 成交量 | 2,400 BTC | ~25 | ~1小時 |
+| 美元 | $1M | ~1,400 | ~1分鐘 |
+| 美元 | $50M | ~28 | ~1小時 |
+
+這些數字是近似值，會隨市場狀態發生巨大變化。在上漲或崩盤期間，基於活躍度的K線會產生比平常多5-10倍的K線——這正是其核心意義。
+
+## 5–7. 基於價格的K線
+
+![基於價格的K線](/images/blog/beyond-time-bars-price-bars.webp)
+*磚形圖（Renko）、範圍K線和波動率K線：僅在價格移動足夠顯著時才進行取樣。*
+
+基於價格的K線同時忽略時間和活躍度。只有當價格移動了指定幅度時，才形成一根新K線。這自然過濾了橫盤噪音並突出趨勢。
+
+### 5. Renko K線
+
+當收盤價相對前一塊磚的收盤價移動至少N個單位時，形成一塊新的 Renko "磚"。磚塊大小始終相同，為趨勢方向建立清晰的視覺表示。
+
+```python
+class RenkoBarGenerator:
+    """
+    Generates Renko bricks based on price movement.
+
+    Key property: during sideways movement, no new bricks form.
+    During strong trends, bricks form rapidly.
+    """
+
+    def __init__(self, brick_size: float = 10.0):
+        self.brick_size = brick_size
+        self.bricks: list[dict] = []
+        self.last_close: float | None = None
+
+    def on_price(self, timestamp: int, price: float, volume: float = 0.0):
+        if self.last_close is None:
+            self.last_close = price
+            return []
+
+        new_bricks = []
+        diff = price - self.last_close
+        num_bricks = int(abs(diff) / self.brick_size)
+
+        if num_bricks == 0:
+            return []
+
+        direction = 1 if diff > 0 else -1
+
+        for i in range(num_bricks):
+            brick_open = self.last_close
+            brick_close = self.last_close + direction * self.brick_size
+
+            brick = {
+                'timestamp': timestamp,
+                'open': brick_open,
+                'high': max(brick_open, brick_close),
+                'low': min(brick_open, brick_close),
+                'close': brick_close,
+                'volume': volume / num_bricks if num_bricks > 0 else 0,
+                'direction': direction,
+            }
+            new_bricks.append(brick)
+            self.last_close = brick_close
+
+        self.bricks.extend(new_bricks)
+        return new_bricks
+```
+
+**動態 Renko** 使用 ATR（平均真實波幅）代替固定磚塊大小，自動適應波動率。
+
+### 6. 範圍K線
+
+每根K線具有固定的最高-最低價範圍。當範圍被超過時，K線關閉並開始新的一根。與 Renko 不同，範圍K線包含影線，可以展示K線內的波動情況。
+
+```python
+class RangeBarGenerator:
+    """
+    Generates bars with a fixed high-low range.
+
+    Difference from Renko: range bars show the full OHLC within
+    the range, not just brick direction. More information-rich.
+    """
+
+    def __init__(self, range_size: float = 20.0):
+        self.range_size = range_size
+        self.current_high: float | None = None
+        self.current_low: float | None = None
+        self.current_open: float | None = None
+        self.current_volume: float = 0.0
+        self.current_start_ts: int = 0
+        self.bars: list[OHLCV] = []
+
+    def on_trade(self, timestamp: int, price: float, qty: float):
+        if self.current_open is None:
+            self.current_open = price
+            self.current_high = price
+            self.current_low = price
+            self.current_start_ts = timestamp
+
+        self.current_high = max(self.current_high, price)
+        self.current_low = min(self.current_low, price)
+        self.current_volume += qty
+
+        if self.current_high - self.current_low >= self.range_size:
+            bar = OHLCV(
+                timestamp=timestamp,
+                open=self.current_open,
+                high=self.current_high,
+                low=self.current_low,
+                close=price,
+                volume=self.current_volume,
+            )
+            self.bars.append(bar)
+
+            # Reset
+            self.current_open = price
+            self.current_high = price
+            self.current_low = price
+            self.current_volume = 0.0
+            self.current_start_ts = timestamp
+
+            return bar
+
+        return None
+```
+
+**Renko 和範圍K線的關鍵區別：** Renko 僅追蹤收盤價並展示方向；範圍K線追蹤完整的價格範圍並展示K線內部結構。範圍K線通常對演算法交易更有用，因為它們保留了止損和止盈模擬所需的最高-最低價資訊。
+
+### 7. 波動率K線
+
+當K線內波動率達到動態閾值時——例如近期 ATR 的倍數——形成一根新K線。與範圍K線（固定閾值）不同，波動率K線會適應市場狀況。
+
+```python
+class VolatilityBarGenerator:
+    """
+    Generates bars when intra-bar volatility reaches a threshold.
+
+    Similar to range bars, but the threshold adapts to market conditions
+    using a rolling ATR measure. In calm markets, bars need less
+    absolute movement to close; in volatile markets, more.
+    """
+
+    def __init__(
+        self,
+        atr_period: int = 14,
+        atr_multiplier: float = 1.0,
+        initial_threshold: float = 20.0,
+    ):
+        self.atr_period = atr_period
+        self.atr_multiplier = atr_multiplier
+        self.threshold = initial_threshold
+
+        self.recent_ranges: list[float] = []
+        self.current_open: float | None = None
+        self.current_high: float | None = None
+        self.current_low: float | None = None
+        self.current_volume: float = 0.0
+        self.bars: list[OHLCV] = []
+
+    def on_trade(self, timestamp: int, price: float, qty: float):
+        if self.current_open is None:
+            self.current_open = price
+            self.current_high = price
+            self.current_low = price
+
+        self.current_high = max(self.current_high, price)
+        self.current_low = min(self.current_low, price)
+        self.current_volume += qty
+
+        intra_bar_range = self.current_high - self.current_low
+
+        if intra_bar_range >= self.threshold:
+            bar = OHLCV(
+                timestamp=timestamp,
+                open=self.current_open,
+                high=self.current_high,
+                low=self.current_low,
+                close=price,
+                volume=self.current_volume,
+            )
+            self.bars.append(bar)
+
+            # Update adaptive threshold
+            self.recent_ranges.append(intra_bar_range)
+            if len(self.recent_ranges) > self.atr_period:
+                self.recent_ranges = self.recent_ranges[-self.atr_period:]
+            if len(self.recent_ranges) >= self.atr_period:
+                avg_range = sum(self.recent_ranges) / len(self.recent_ranges)
+                self.threshold = avg_range * self.atr_multiplier
+
+            # Reset
+            self.current_open = price
+            self.current_high = price
+            self.current_low = price
+            self.current_volume = 0.0
+            return bar
+
+        return None
+```
+
+## 8. Heikin-Ashi（平滑變換）
+
+![Heikin-Ashi 變換](/images/blog/beyond-time-bars-heikin-ashi.webp)
+*Heikin-Ashi：均值變換將噪聲K線轉化為平滑的趨勢訊號——但代價是丟失精確價格資訊。*
+
+Heikin-Ashi（日語意為"平均K線"）不是一種K線型別——它是一種**變換**，可以應用於任何基礎K線型別之上。它通過對當前和前一根K線的值求平均來平滑K線：
+
+- **HA 收盤價** = (開盤價 + 最高價 + 最低價 + 收盤價) / 4
+- **HA 開盤價** = (前一根 HA 開盤價 + 前一根 HA 收盤價) / 2
+- **HA 最高價** = max(最高價, HA 開盤價, HA 收盤價)
+- **HA 最低價** = min(最低價, HA 開盤價, HA 收盤價)
+
+趨勢表現為連續同色K線的序列，無下影線（上升趨勢）或無上影線（下降趨勢）。
+
+```python
+class HeikinAshiTransformer:
+    """
+    Transforms standard OHLCV candles into Heikin-Ashi candles.
+
+    Can be applied on top of ANY bar type: time bars, volume bars,
+    rolling bars, etc. It's a transformation, not a sampling method.
+
+    WARNING: HA prices are synthetic — they don't represent real
+    traded prices. Never use HA close for order placement or
+    PnL calculation. Use HA only for signal generation, then
+    execute at real prices.
+    """
+
+    def __init__(self):
+        self.prev_ha_open: float | None = None
+        self.prev_ha_close: float | None = None
+
+    def transform(self, candle: OHLCV) -> OHLCV:
+        ha_close = (candle.open + candle.high + candle.low + candle.close) / 4
+
+        if self.prev_ha_open is None:
+            ha_open = (candle.open + candle.close) / 2
+        else:
+            ha_open = (self.prev_ha_open + self.prev_ha_close) / 2
+
+        ha_high = max(candle.high, ha_open, ha_close)
+        ha_low = min(candle.low, ha_open, ha_close)
+
+        self.prev_ha_open = ha_open
+        self.prev_ha_close = ha_close
+
+        return OHLCV(
+            timestamp=candle.timestamp,
+            open=ha_open,
+            high=ha_high,
+            low=ha_low,
+            close=ha_close,
+            volume=candle.volume,
+        )
+
+    def transform_series(self, candles: list[OHLCV]) -> list[OHLCV]:
+        """Transform an entire series. Resets state first."""
+        self.prev_ha_open = None
+        self.prev_ha_close = None
+        return [self.transform(c) for c in candles]
+
+def ha_trend_signal(ha_candles: list[OHLCV], lookback: int = 3) -> int:
+    """
+    Simple HA trend signal.
+
+    Returns:
+        +1: bullish (N consecutive green HA candles with no lower wick)
+        -1: bearish (N consecutive red HA candles with no upper wick)
+         0: no clear trend
+    """
+    if len(ha_candles) < lookback:
+        return 0
+
+    recent = ha_candles[-lookback:]
+
+    all_bullish = all(
+        c.close > c.open and abs(c.low - min(c.open, c.close)) < 1e-10
+        for c in recent
+    )
+
+    all_bearish = all(
+        c.close < c.open and abs(c.high - max(c.open, c.close)) < 1e-10
+        for c in recent
+    )
+
+    if all_bullish:
+        return 1
+    elif all_bearish:
+        return -1
+    return 0
+```
+
+**回測中的關鍵注意事項：** Heikin-Ashi 價格是合成的。如果你的回測使用 HA 收盤價作為入場價格，結果將是錯誤的。始終僅將 HA 用於訊號生成，並以真實 OHLC 價格執行交易。
+
+**HA 有用的場景：** 需要清晰"持倉"訊號的趨勢追蹤策略。在任何基礎K線型別——時間K線、成交量K線、美元K線——之上應用 HA，以過濾虛假交叉訊號。
+
+**HA 有害的場景：** 任何需要精確價格水平的策略——支撐/阻力、訂單簿分析、[PIQ（佇列位置）](https://marketmaker.cc/zh/blog/post/queue-position-order-book-wall-analysis/)。均值化會破壞精確的價格資訊。
+
+## 9–11. 日本反轉圖表
+
+![日本圖表方法](/images/blog/beyond-time-bars-japanese-charts.webp)
+*卡吉圖、折線突破圖和點數圖：完全無時間維度的圖表方法，純粹關注價格結構。*
+
+這些是傳統的日本圖表方法（與 Renko 並列），完全拋棄時間維度，專注於價格結構。
+
+### 9. 卡吉圖（Kagi）
+
+卡吉圖由垂直線組成，當價格反轉達到指定幅度時改變方向。當價格突破前高時線條變粗（粗線 = "陽" = 需求），當價格跌破前低時線條變細（細線 = "陰" = 供給）。
+
+```python
+class KagiChartGenerator:
+    """
+    Generates Kagi chart lines based on price reversals.
+
+    Unlike Renko (fixed brick size), Kagi tracks the actual magnitude
+    of each move and changes line thickness at breakout points.
+
+    Useful for identifying support/resistance breaks and
+    supply/demand shifts without time noise.
+    """
+
+    def __init__(self, reversal_amount: float = 10.0):
+        self.reversal_amount = reversal_amount
+        self.lines: list[dict] = []
+        self.current_direction: int = 0  # 1=up, -1=down
+        self.current_price: float | None = None
+        self.extreme_price: float | None = None
+        self.prev_high: float | None = None
+        self.prev_low: float | None = None
+        self.line_type: str = 'yang'  # 'yang' (thick) or 'yin' (thin)
+
+    def on_price(self, timestamp: int, price: float):
+        if self.current_price is None:
+            self.current_price = price
+            self.extreme_price = price
+            return None
+
+        if self.current_direction == 0:
+            if price - self.current_price >= self.reversal_amount:
+                self.current_direction = 1
+                self.extreme_price = price
+            elif self.current_price - price >= self.reversal_amount:
+                self.current_direction = -1
+                self.extreme_price = price
+            return None
+
+        if self.current_direction == 1:
+            if price > self.extreme_price:
+                self.extreme_price = price
+                if self.prev_high is not None and price > self.prev_high:
+                    self.line_type = 'yang'
+            elif self.extreme_price - price >= self.reversal_amount:
+                line = {
+                    'timestamp': timestamp,
+                    'start': self.current_price,
+                    'end': self.extreme_price,
+                    'direction': 'up',
+                    'type': self.line_type,
+                }
+                self.lines.append(line)
+                self.prev_high = self.extreme_price
+                self.current_price = self.extreme_price
+                self.extreme_price = price
+                self.current_direction = -1
+                if self.prev_low is not None and price < self.prev_low:
+                    self.line_type = 'yin'
+                return line
+        else:
+            if price < self.extreme_price:
+                self.extreme_price = price
+                if self.prev_low is not None and price < self.prev_low:
+                    self.line_type = 'yin'
+            elif price - self.extreme_price >= self.reversal_amount:
+                line = {
+                    'timestamp': timestamp,
+                    'start': self.current_price,
+                    'end': self.extreme_price,
+                    'direction': 'down',
+                    'type': self.line_type,
+                }
+                self.lines.append(line)
+                self.prev_low = self.extreme_price
+                self.current_price = self.extreme_price
+                self.extreme_price = price
+                self.current_direction = 1
+                if self.prev_high is not None and price > self.prev_high:
+                    self.line_type = 'yang'
+                return line
+
+        return None
+```
+
+### 10. 折線突破圖（Line Break）
+
+折線突破圖僅在收盤價超過前N根線（通常為3根）的最高或最低價時才繪製新線（方塊）。如果價格保持在該範圍內，則不繪製新線。
+
+```python
+class LineBreakGenerator:
+    """
+    Generates Line Break bars (Three Line Break by default).
+
+    A new bar is drawn only when the close exceeds the high or low
+    of the last N bars. Filters out minor noise by requiring price
+    to break through a multi-bar range.
+
+    The 'N' parameter (line_count) controls sensitivity:
+    - N=2: more sensitive, more bars, more noise
+    - N=3: standard (Three Line Break)
+    - N=4+: less sensitive, fewer bars, stronger signals
+    """
+
+    def __init__(self, line_count: int = 3):
+        self.line_count = line_count
+        self.lines: list[dict] = []
+
+    def on_close(self, timestamp: int, close: float) -> dict | None:
+        if not self.lines:
+            self.lines.append({
+                'timestamp': timestamp,
+                'open': close,
+                'close': close,
+                'high': close,
+                'low': close,
+                'direction': 0,
+            })
+            return None
+
+        lookback = self.lines[-self.line_count:] if len(self.lines) >= self.line_count else self.lines
+
+        highest = max(l['high'] for l in lookback)
+        lowest = min(l['low'] for l in lookback)
+        last = self.lines[-1]
+
+        new_line = None
+
+        if close > highest:
+            new_line = {
+                'timestamp': timestamp,
+                'open': last['close'],
+                'close': close,
+                'high': close,
+                'low': last['close'],
+                'direction': 1,
+            }
+        elif close < lowest:
+            new_line = {
+                'timestamp': timestamp,
+                'open': last['close'],
+                'close': close,
+                'high': last['close'],
+                'low': close,
+                'direction': -1,
+            }
+
+        if new_line:
+            self.lines.append(new_line)
+            return new_line
+
+        return None
+```
+
+### 11. 點數圖（Point & Figure）
+
+點數圖（P&F）使用 X 列（價格上漲）和 O 列（價格下跌）。列的切換通常需要3個格子大小的反轉。這是最古老的噪音過濾和支撐/阻力識別方法之一。
+
+```python
+class PointAndFigureGenerator:
+    """
+    Generates Point & Figure chart data.
+
+    X column: price rising by box_size increments.
+    O column: price falling by box_size increments.
+    Column switch: requires reversal_boxes * box_size movement
+    in the opposite direction.
+
+    Classic setting: box_size based on ATR, reversal_boxes = 3.
+    """
+
+    def __init__(self, box_size: float = 10.0, reversal_boxes: int = 3):
+        self.box_size = box_size
+        self.reversal_boxes = reversal_boxes
+        self.reversal_amount = box_size * reversal_boxes
+
+        self.columns: list[dict] = []
+        self.current_direction: int = 0
+        self.current_top: float | None = None
+        self.current_bottom: float | None = None
+
+    def on_price(self, timestamp: int, price: float):
+        if self.current_top is None:
+            box_price = self._round_to_box(price)
+            self.current_top = box_price
+            self.current_bottom = box_price
+            self.current_direction = 1
+            return None
+
+        events = []
+
+        if self.current_direction == 1:
+            while price >= self.current_top + self.box_size:
+                self.current_top += self.box_size
+                events.append(('X', self.current_top, timestamp))
+
+            if price <= self.current_top - self.reversal_amount:
+                col = {
+                    'type': 'X',
+                    'top': self.current_top,
+                    'bottom': self.current_bottom,
+                    'boxes': int((self.current_top - self.current_bottom) / self.box_size) + 1,
+                    'timestamp': timestamp,
+                }
+                self.columns.append(col)
+                self.current_direction = -1
+                self.current_top = self.current_top - self.box_size
+                self.current_bottom = self._round_to_box(price)
+                events.append(('new_column', 'O', timestamp))
+
+        else:
+            while price <= self.current_bottom - self.box_size:
+                self.current_bottom -= self.box_size
+                events.append(('O', self.current_bottom, timestamp))
+
+            if price >= self.current_bottom + self.reversal_amount:
+                col = {
+                    'type': 'O',
+                    'top': self.current_top,
+                    'bottom': self.current_bottom,
+                    'boxes': int((self.current_top - self.current_bottom) / self.box_size) + 1,
+                    'timestamp': timestamp,
+                }
+                self.columns.append(col)
+                self.current_direction = 1
+                self.current_bottom = self.current_bottom + self.box_size
+                self.current_top = self._round_to_box(price)
+                events.append(('new_column', 'X', timestamp))
+
+        return events if events else None
+
+    def _round_to_box(self, price: float) -> float:
+        return round(price / self.box_size) * self.box_size
+```
+
+**卡吉圖、折線突破圖和點數圖在演算法交易中的應用：** 主要用於長期趨勢檢測和支撐/阻力識別。作為**過濾層**——"當卡吉圖處於陰線模式時不發出做多訊號"——它們通過將交易與宏觀結構對齊來增加價值。
+
+## 12–14. 資訊驅動K線
+
+![資訊驅動K線](/images/blog/beyond-time-bars-information-bars.webp)
+*失衡K線、遊程K線、CUSUM 過濾器和熵K線：當市場告訴我們某些事情發生了變化時進行取樣。*
+
+這是最精密的方法，來自 Marcos Lopez de Prado 的《Advances in Financial Machine Learning》（2018）。核心洞察：當新資訊到達市場時進行取樣，而不是按固定間隔取樣。
+
+### 12. 成交筆數失衡K線（TIB）
+
+如果市場處於均衡狀態，買方發起和賣方發起的成交應大致平衡。當失衡超出我們的預期時，說明某些事情發生了變化。在那個時刻取樣一根K線。
+
+每筆成交使用 tick 規則分類為買方發起（+1）或賣方發起（-1）。我們追蹤累積失衡 θ，當 |θ| 超過動態閾值時取樣。
+
+```python
+class TickImbalanceBarGenerator:
+    """
+    Generates bars when the cumulative tick imbalance exceeds
+    expected levels — i.e., when "new information" arrives.
+
+    Based on Lopez de Prado (2018), Chapter 2.
+    """
+
+    def __init__(
+        self,
+        expected_ticks_init: int = 1000,
+        ewma_window: int = 100,
+        min_ticks: int = 100,
+        max_ticks: int = 50000,
+    ):
+        self.expected_ticks_init = expected_ticks_init
+        self.ewma_window = ewma_window
+        self.min_ticks = min_ticks
+        self.max_ticks = max_ticks
+
+        self.theta = 0.0
+        self.prev_price: float | None = None
+        self.prev_sign = 1
+        self.trades: list[tuple[int, float, float]] = []
+
+        self.bar_lengths: list[int] = []
+        self.imbalances: list[float] = []
+        self.expected_ticks = float(expected_ticks_init)
+        self.expected_imbalance = 0.0
+
+        self.bars: list[OHLCV] = []
+
+    def _tick_sign(self, price: float) -> int:
+        """Classify trade as buy (+1) or sell (-1) using tick rule."""
+        if self.prev_price is None:
+            self.prev_price = price
+            return 1
+
+        if price > self.prev_price:
+            sign = 1
+        elif price < self.prev_price:
+            sign = -1
+        else:
+            sign = self.prev_sign
+
+        self.prev_price = price
+        self.prev_sign = sign
+        return sign
+
+    def on_trade(self, timestamp: int, price: float, qty: float):
+        sign = self._tick_sign(price)
+        self.theta += sign
+        self.trades.append((timestamp, price, qty))
+
+        threshold = self.expected_ticks * abs(self.expected_imbalance)
+        if threshold == 0:
+            threshold = self.expected_ticks_init * 0.5
+
+        if abs(self.theta) >= threshold and len(self.trades) >= self.min_ticks:
+            return self._close_bar()
+
+        if len(self.trades) >= self.max_ticks:
+            return self._close_bar()
+
+        return None
+
+    def _close_bar(self):
+        prices = [t[1] for t in self.trades]
+        volumes = [t[2] for t in self.trades]
+
+        bar = OHLCV(
+            timestamp=self.trades[-1][0],
+            open=prices[0],
+            high=max(prices),
+            low=min(prices),
+            close=prices[-1],
+            volume=sum(volumes),
+        )
+        self.bars.append(bar)
+
+        self.bar_lengths.append(len(self.trades))
+        self.imbalances.append(self.theta / len(self.trades))
+
+        if len(self.bar_lengths) >= 2:
+            alpha = 2.0 / (self.ewma_window + 1)
+            self.expected_ticks = (
+                alpha * self.bar_lengths[-1]
+                + (1 - alpha) * self.expected_ticks
+            )
+            self.expected_ticks = max(
+                self.min_ticks,
+                min(self.max_ticks, self.expected_ticks)
+            )
+            self.expected_imbalance = (
+                alpha * self.imbalances[-1]
+                + (1 - alpha) * self.expected_imbalance
+            )
+
+        self.theta = 0.0
+        self.trades = []
+        return bar
+```
+
+### 13. 成交量失衡K線（VIB）
+
+TIB 的擴充：不是將每筆成交計為 ±1，而是按帶符號的成交量加權。100 BTC 的買入貢獻 +100，1 BTC 的賣出貢獻 -1。捕獲可能被拆分為多筆小額交易的大額知情訂單。
+
+```python
+class VolumeImbalanceBarGenerator:
+    """
+    Like TIBs, but uses signed volume instead of signed ticks.
+
+    Captures the insight that a 100-BTC buy signal is 100x more
+    informative than a 1-BTC buy signal.
+    """
+
+    def __init__(
+        self,
+        expected_ticks_init: int = 1000,
+        ewma_window: int = 100,
+    ):
+        self.expected_ticks_init = expected_ticks_init
+        self.ewma_window = ewma_window
+
+        self.theta = 0.0
+        self.prev_price: float | None = None
+        self.prev_sign = 1
+        self.trades: list[tuple[int, float, float]] = []
+
+        self.bar_lengths: list[int] = []
+        self.volume_imbalances: list[float] = []
+        self.expected_ticks = float(expected_ticks_init)
+        self.expected_vol_imbalance = 0.0
+
+        self.bars: list[OHLCV] = []
+
+    def _tick_sign(self, price: float) -> int:
+        if self.prev_price is None:
+            self.prev_price = price
+            return 1
+        if price > self.prev_price:
+            sign = 1
+        elif price < self.prev_price:
+            sign = -1
+        else:
+            sign = self.prev_sign
+        self.prev_price = price
+        self.prev_sign = sign
+        return sign
+
+    def on_trade(self, timestamp: int, price: float, qty: float):
+        sign = self._tick_sign(price)
+        self.theta += sign * qty
+        self.trades.append((timestamp, price, qty))
+
+        threshold = self.expected_ticks * abs(self.expected_vol_imbalance)
+        if threshold == 0:
+            threshold = self.expected_ticks_init * 0.5
+
+        if abs(self.theta) >= threshold and len(self.trades) >= 10:
+            return self._close_bar()
+        return None
+
+    def _close_bar(self):
+        prices = [t[1] for t in self.trades]
+        volumes = [t[2] for t in self.trades]
+
+        bar = OHLCV(
+            timestamp=self.trades[-1][0],
+            open=prices[0],
+            high=max(prices),
+            low=min(prices),
+            close=prices[-1],
+            volume=sum(volumes),
+        )
+        self.bars.append(bar)
+
+        self.bar_lengths.append(len(self.trades))
+        self.volume_imbalances.append(self.theta / len(self.trades))
+
+        alpha = 2.0 / (self.ewma_window + 1)
+        if len(self.bar_lengths) >= 2:
+            self.expected_ticks = (
+                alpha * self.bar_lengths[-1] + (1 - alpha) * self.expected_ticks
+            )
+            self.expected_vol_imbalance = (
+                alpha * self.volume_imbalances[-1]
+                + (1 - alpha) * self.expected_vol_imbalance
+            )
+
+        self.theta = 0.0
+        self.trades = []
+        return bar
+```
+
+### 爆炸問題
+
+失衡K線的一個已知問題：基於 EWMA 的閾值可能進入正反饋迴圈。解決方案：使用 `min_ticks` 和 `max_ticks` 邊界進行鉗制。
+
+```python
+# Without bounds: threshold explodes
+# expected_ticks: 1000 → 5000 → 25000 → 125000 → ∞
+
+# With bounds: stable behavior
+self.expected_ticks = max(
+    self.min_ticks,    # Floor: never less than 100 ticks
+    min(
+        self.max_ticks,  # Ceiling: never more than 50000 ticks
+        new_expected_ticks
+    )
+)
+```
+
+### 14. 遊程K線（Run Bars）
+
+遊程K線追蹤**當前方向性遊程的長度**——最長的連續買入或賣出序列。當大型知情交易者將一筆訂單拆分為多筆小額交易時，該序列會變得異常長。遊程K線可以檢測到這一點。
+
+```python
+class TickRunBarGenerator:
+    """
+    Generates bars when the length of a directional run exceeds expectations.
+
+    Based on Lopez de Prado (2018), Chapter 2.
+
+    Difference from imbalance bars:
+    - Imbalance bars track NET imbalance (buys minus sells)
+    - Run bars track the MAXIMUM run length (consecutive buys OR sells)
+    """
+
+    def __init__(
+        self,
+        expected_ticks_init: int = 1000,
+        ewma_window: int = 100,
+        min_ticks: int = 100,
+        max_ticks: int = 50000,
+    ):
+        self.expected_ticks_init = expected_ticks_init
+        self.ewma_window = ewma_window
+        self.min_ticks = min_ticks
+        self.max_ticks = max_ticks
+
+        self.prev_price: float | None = None
+        self.prev_sign = 1
+        self.trades: list[tuple[int, float, float]] = []
+
+        self.buy_run = 0
+        self.sell_run = 0
+        self.max_buy_run = 0
+        self.max_sell_run = 0
+
+        self.bar_lengths: list[int] = []
+        self.max_runs: list[float] = []
+        self.expected_ticks = float(expected_ticks_init)
+        self.expected_max_run = 0.0
+
+        self.bars: list[OHLCV] = []
+
+    def _tick_sign(self, price: float) -> int:
+        if self.prev_price is None:
+            self.prev_price = price
+            return 1
+        if price > self.prev_price:
+            sign = 1
+        elif price < self.prev_price:
+            sign = -1
+        else:
+            sign = self.prev_sign
+        self.prev_price = price
+        self.prev_sign = sign
+        return sign
+
+    def on_trade(self, timestamp: int, price: float, qty: float):
+        sign = self._tick_sign(price)
+        self.trades.append((timestamp, price, qty))
+
+        if sign == 1:
+            self.buy_run += 1
+            self.sell_run = 0
+        else:
+            self.sell_run += 1
+            self.buy_run = 0
+
+        self.max_buy_run = max(self.max_buy_run, self.buy_run)
+        self.max_sell_run = max(self.max_sell_run, self.sell_run)
+
+        theta = max(self.max_buy_run, self.max_sell_run)
+        threshold = self.expected_ticks * self.expected_max_run if self.expected_max_run > 0 else self.expected_ticks_init * 0.3
+
+        if theta >= threshold and len(self.trades) >= self.min_ticks:
+            return self._close_bar()
+
+        if len(self.trades) >= self.max_ticks:
+            return self._close_bar()
+
+        return None
+
+    def _close_bar(self):
+        prices = [t[1] for t in self.trades]
+        volumes = [t[2] for t in self.trades]
+
+        bar = OHLCV(
+            timestamp=self.trades[-1][0],
+            open=prices[0],
+            high=max(prices),
+            low=min(prices),
+            close=prices[-1],
+            volume=sum(volumes),
+        )
+        self.bars.append(bar)
+
+        max_run = max(self.max_buy_run, self.max_sell_run) / len(self.trades)
+        self.bar_lengths.append(len(self.trades))
+        self.max_runs.append(max_run)
+
+        alpha = 2.0 / (self.ewma_window + 1)
+        if len(self.bar_lengths) >= 2:
+            self.expected_ticks = alpha * self.bar_lengths[-1] + (1 - alpha) * self.expected_ticks
+            self.expected_ticks = max(self.min_ticks, min(self.max_ticks, self.expected_ticks))
+            self.expected_max_run = alpha * self.max_runs[-1] + (1 - alpha) * self.expected_max_run
+
+        self.trades = []
+        self.buy_run = 0
+        self.sell_run = 0
+        self.max_buy_run = 0
+        self.max_sell_run = 0
+
+        return bar
+```
+
+遊程K線可以擴充為**成交量遊程K線**和**美元遊程K線**。
+
+## 15. CUSUM 過濾器K線
+
+CUSUM（累積和）過濾器通過追蹤累積收益來確定*何時*取樣。與失衡K線（基於原始成交）不同，CUSUM 可以應用於現有的1分鐘 OHLCV 資料——不需要 tick 資料。
+
+```python
+class CUSUMFilterBarGenerator:
+    """
+    Symmetric CUSUM filter for event-based sampling.
+
+    Based on Lopez de Prado (2018), Chapter 2.5.
+
+    Key advantage over Bollinger Bands: CUSUM requires a FULL
+    run of threshold magnitude before triggering. Bollinger Bands
+    trigger repeatedly when price hovers near the band.
+
+    Can be applied to 1m OHLCV data — no tick data required.
+    """
+
+    def __init__(self, threshold: float = 0.01):
+        self.threshold = threshold
+        self.s_pos = 0.0
+        self.s_neg = 0.0
+        self.prev_price: float | None = None
+        self.buffer: list[OHLCV] = []
+        self.bars: list[OHLCV] = []
+
+    def on_candle_1m(self, candle: OHLCV) -> OHLCV | None:
+        self.buffer.append(candle)
+
+        if self.prev_price is None:
+            self.prev_price = candle.close
+            return None
+
+        import math
+        log_ret = math.log(candle.close / self.prev_price)
+        self.prev_price = candle.close
+
+        self.s_pos = max(0.0, self.s_pos + log_ret)
+        self.s_neg = min(0.0, self.s_neg + log_ret)
+
+        triggered = False
+
+        if self.s_pos > self.threshold:
+            self.s_pos = 0.0
+            triggered = True
+
+        if self.s_neg < -self.threshold:
+            self.s_neg = 0.0
+            triggered = True
+
+        if triggered and len(self.buffer) >= 2:
+            bars = self.buffer
+            bar = OHLCV(
+                timestamp=bars[-1].timestamp,
+                open=bars[0].open,
+                high=max(b.high for b in bars),
+                low=min(b.low for b in bars),
+                close=bars[-1].close,
+                volume=sum(b.volume for b in bars),
+            )
+            self.bars.append(bar)
+            self.buffer = []
+            return bar
+
+        return None
+```
+
+**CUSUM + 三重障礙法（Triple Barrier Method）：** 在 Lopez de Prado 的框架中，CUSUM 事件被用作三重障礙法的入場點——每個事件觸發一筆設有止損、止盈和到期障礙的交易。要對此類事件驅動策略進行穩健驗證，請參閱 [前向最佳化](https://marketmaker.cc/zh/blog/post/walk-forward-optimization/) 和 [蒙特卡洛 Bootstrap 回測](https://marketmaker.cc/zh/blog/post/monte-carlo-bootstrap-backtest/)。
+
+## 16. 熵K線（Entropy Bars）
+
+理論上最優雅的方法：當K線內價格序列的資訊含量（夏農熵）超過閾值時進行取樣。
+
+```python
+class EntropyBarGenerator:
+    """
+    Generates bars when the entropy of intra-bar returns exceeds
+    a threshold.
+
+    Based on Shannon's information theory: bars are sampled when
+    "new information" arrives, measured as the entropy of the
+    return distribution within the current bar.
+
+    This is the most theoretically "pure" information-driven bar.
+    """
+
+    def __init__(
+        self,
+        entropy_threshold: float = 2.0,
+        min_trades: int = 50,
+        n_bins: int = 10,
+    ):
+        self.entropy_threshold = entropy_threshold
+        self.min_trades = min_trades
+        self.n_bins = n_bins
+        self.trades: list[tuple[int, float, float]] = []
+        self.bars: list[OHLCV] = []
+
+    def on_trade(self, timestamp: int, price: float, qty: float):
+        self.trades.append((timestamp, price, qty))
+
+        if len(self.trades) < self.min_trades:
+            return None
+
+        entropy = self._compute_entropy()
+
+        if entropy >= self.entropy_threshold:
+            return self._close_bar()
+
+        return None
+
+    def _compute_entropy(self) -> float:
+        import math
+
+        prices = [t[1] for t in self.trades]
+        if len(prices) < 2:
+            return 0.0
+
+        returns = [
+            math.log(prices[i] / prices[i-1])
+            for i in range(1, len(prices))
+            if prices[i-1] > 0
+        ]
+
+        if not returns:
+            return 0.0
+
+        min_r = min(returns)
+        max_r = max(returns)
+
+        if max_r == min_r:
+            return 0.0
+
+        bin_width = (max_r - min_r) / self.n_bins
+        bins = [0] * self.n_bins
+
+        for r in returns:
+            idx = min(int((r - min_r) / bin_width), self.n_bins - 1)
+            bins[idx] += 1
+
+        total = sum(bins)
+        entropy = 0.0
+        for count in bins:
+            if count > 0:
+                p = count / total
+                entropy -= p * math.log2(p)
+
+        return entropy
+
+    def _close_bar(self):
+        prices = [t[1] for t in self.trades]
+        volumes = [t[2] for t in self.trades]
+
+        bar = OHLCV(
+            timestamp=self.trades[-1][0],
+            open=prices[0],
+            high=max(prices),
+            low=min(prices),
+            close=prices[-1],
+            volume=sum(volumes),
+        )
+        self.bars.append(bar)
+        self.trades = []
+        return bar
+```
+
+**實踐說明：** 熵K線計算成本較高，主要用於研究——但對於基於機器學習的策略，它們能產生統計性質更好的特徵，因為每根K線包含大致相等的"資訊量"。
+
+## 17. Delta K線（訂單流）
+
+![Delta K線和訂單流](/images/blog/beyond-time-bars-delta-bars.webp)
+*累積 Delta：即時衡量主動買方與賣方的淨力量。*
+
+Delta K線基於累積 Delta——買入成交量與賣出成交量之間的執行差值——進行取樣。與失衡K線（使用 tick 符號 ±1）不同，Delta K線使用實際的成交量加權訂單流。
+
+```python
+class DeltaBarGenerator:
+    """
+    Generates bars based on cumulative order flow delta.
+
+    Delta = Buy Volume - Sell Volume (classified by aggressor side).
+
+    Requires trade-level data with side classification
+    (available from Binance aggTrades, Bybit trades, etc.)
+    """
+
+    def __init__(self, threshold: float = 500.0):
+        self.threshold = threshold
+        self.cumulative_delta = 0.0
+        self.trades: list[tuple[int, float, float, int]] = []
+        self.bars: list[OHLCV] = []
+
+    def on_trade(self, timestamp: int, price: float, qty: float, is_buyer_maker: bool):
+        side = -1 if is_buyer_maker else 1
+        signed_qty = side * qty
+
+        self.cumulative_delta += signed_qty
+        self.trades.append((timestamp, price, qty, side))
+
+        if abs(self.cumulative_delta) >= self.threshold:
+            return self._close_bar()
+
+        return None
+
+    def _close_bar(self):
+        prices = [t[1] for t in self.trades]
+        volumes = [t[2] for t in self.trades]
+
+        bar = OHLCV(
+            timestamp=self.trades[-1][0],
+            open=prices[0],
+            high=max(prices),
+            low=min(prices),
+            close=prices[-1],
+            volume=sum(volumes),
+        )
+        bar.delta = self.cumulative_delta  # type: ignore
+        bar.buy_volume = sum(t[2] for t in self.trades if t[3] == 1)  # type: ignore
+        bar.sell_volume = sum(t[2] for t in self.trades if t[3] == -1)  # type: ignore
+
+        self.bars.append(bar)
+        self.cumulative_delta = 0.0
+        self.trades = []
+        return bar
+```
+
+**Delta 背離：** 最強大的訊號之一——價格上漲而累積 Delta 為負（賣方積極但價格仍在上漲，表明限價買單在吸收拋壓）。這與 [數字指紋：交易者識別](https://marketmaker.cc/zh/blog/post/digital-fingerprint-trader-identification/) 文章中描述的行為指紋方法直接相關。對於使用 [Avellaneda-Stoikov 模型](https://marketmaker.cc/zh/blog/post/market-making-avellaneda-stoikov/) 的做市商，Delta K線提供了庫存風險和主動方壓力的即時檢視。
+
+---
+
+# 第二部分：3種聚合方法
+
+![滾動視窗聚合](/images/blog/beyond-time-bars-rolling-window.webp)
+*基礎K線的迴圈緩衝區：新資料進入，舊資料退出，聚合K線始終有效。*
+
+聚合方法決定了基礎K線如何組合成更高時間框架（HTF）的K線。它們**獨立於**K線型別——你可以將任何聚合方法應用於任何基礎K線型別。
+
+## 方法 A：日曆對齊聚合
+
+聚合落在固定日曆邊界內的所有基礎K線。"1小時"K線涵蓋14:00:00到14:59:59之間的所有K線。
+
+**特性：**
+- 所有市場參與者看到相同的邊界——對市場結構分析、支撐/阻力、[PIQ 觸發](https://marketmaker.cc/zh/blog/post/queue-position-order-book-wall-analysis/)至關重要
+- 冷啟動問題：重啟後的不完整K線
+- 對時間K線來說很自然（這是交易所原生提供的）
+- 也適用於非時間K線："14:00到15:00之間關閉的所有成交量K線" = 成交量K線的日曆對齊小時K線
+
+## 方法 B：滾動視窗聚合
+
+聚合最近N根已關閉的基礎K線，每當有新K線時重新計算。"1小時"滾動K線 = 最近60根已關閉的1分鐘時間K線，每分鐘更新一次。
+
+**原子單位是已關閉的基礎K線。** 這一設計選擇帶來：
+1. **無冷啟動。** N根K線之後，聚合K線即為有效。無不完整K線噪音。
+2. **回測一致性。** 如果實盤交易使用與回測引擎相同的原子單位，訊號是一致的。
+3. **簡單驗證。** 一條規則：`if buffer not full: skip`。
+
+```python
+import numpy as np
+
+class RollingCandleAggregator:
+    """
+    Produces rolling higher-timeframe candles from closed base bars.
+
+    Works with ANY bar type: time bars, tick bars, volume bars,
+    dollar bars, delta bars — anything that produces OHLCV output.
+
+    Example: RollingCandleAggregator(window=60) with 1m time bars
+    produces a "1h" candle updated every minute.
+
+    Example: RollingCandleAggregator(window=24) with volume bars
+    produces a candle spanning the last 24 volume bars.
+    """
+
+    def __init__(self, window: int):
+        self.window = window
+        self.buffer: deque[OHLCV] = deque(maxlen=window)
+
+    def push(self, bar: OHLCV) -> OHLCV | None:
+        """
+        Add a closed base bar. Returns aggregated candle
+        only when buffer is full (= candle is valid).
+        """
+        self.buffer.append(bar)
+
+        if len(self.buffer) < self.window:
+            return None
+
+        return self._aggregate()
+
+    def _aggregate(self) -> OHLCV:
+        bars = list(self.buffer)
+        return OHLCV(
+            timestamp=bars[-1].timestamp,
+            open=bars[0].open,
+            high=max(b.high for b in bars),
+            low=min(b.low for b in bars),
+            close=bars[-1].close,
+            volume=sum(b.volume for b in bars),
+        )
+
+    @property
+    def is_valid(self) -> bool:
+        return len(self.buffer) == self.window
+```
+
+**相位偏移的權衡：** 如果你在 :37 開始執行，滾動K線在 :37 關閉，而不是像其他人的K線那樣在 :00 關閉。這對於依賴群體可見水平的策略很重要。解決方案：**兩者並用**——日曆用於市場結構，滾動用於訊號。
+
+## 方法 C：自適應滾動聚合
+
+與滾動類似，但視窗大小根據當前波動率自適應調整。平靜市場 → 更寬的視窗（更多平滑）。波動市場 → 更窄的視窗（更快反應）。
+
+```python
+class AdaptiveRollingAggregator:
+    """
+    Rolling window where the window size adapts to volatility.
+
+    Works with any base bar type. Uses ATR of recent bars
+    as the volatility measure.
+
+    Low volatility → wider window (more smoothing, fewer signals)
+    High volatility → narrower window (faster reaction)
+    """
+
+    def __init__(
+        self,
+        base_window: int = 60,
+        min_window: int = 15,
+        max_window: int = 240,
+        atr_period: int = 14,
+        atr_base: float | None = None,
+    ):
+        self.base_window = base_window
+        self.min_window = min_window
+        self.max_window = max_window
+        self.atr_period = atr_period
+        self.atr_base = atr_base
+
+        self.all_candles: deque[OHLCV] = deque(maxlen=max_window)
+        self.atr_values: deque[float] = deque(maxlen=atr_period * 2)
+        self.current_window = base_window
+
+    def push(self, bar: OHLCV) -> OHLCV | None:
+        self.all_candles.append(bar)
+
+        tr = bar.high - bar.low
+        self.atr_values.append(tr)
+
+        if len(self.atr_values) < self.atr_period:
+            return None
+
+        current_atr = sum(list(self.atr_values)[-self.atr_period:]) / self.atr_period
+
+        if self.atr_base is None and len(self.atr_values) >= self.atr_period * 2:
+            self.atr_base = sum(self.atr_values) / len(self.atr_values)
+
+        if self.atr_base is None or self.atr_base == 0:
+            return None
+
+        vol_ratio = current_atr / self.atr_base
+        self.current_window = int(self.base_window / vol_ratio)
+        self.current_window = max(self.min_window, min(self.max_window, self.current_window))
+
+        if len(self.all_candles) < self.current_window:
+            return None
+
+        bars = list(self.all_candles)[-self.current_window:]
+        return OHLCV(
+            timestamp=bars[-1].timestamp,
+            open=bars[0].open,
+            high=max(b.high for b in bars),
+            low=min(b.low for b in bars),
+            close=bars[-1].close,
+            volume=sum(b.volume for b in bars),
+        )
+```
+
+---
+
+# 第三部分：K線與聚合的組合（17 × 3 = 51）
+
+每種基礎K線型別都可以與每種聚合方法組合。有些組合是標準的（日曆時間K線 = 交易所提供的預設資料），有些則新穎但強大。
+
+### 組合示例
+
+| 基礎K線型別 | 日曆 | 滾動 | 自適應 |
+|------------|------|------|-------|
+| **時間** | 標準交易所K線 | 始終有效的HTF，無冷啟動 | 波動率自適應時間框架 |
+| **成交量** | "本小時所有成交量K線" | 最近24根成交量K線 | 平靜市場時更寬的視窗 |
+| **美元** | 每小時美元K線聚合 | 最近N根美元K線 | 自適應美元視窗 |
+| **成交筆數失衡** | 每小時失衡聚合 | 最近N個失衡事件 | 波動行情中快速反應 |
+| **Delta** | 每小時淨訂單流 | 滾動 Delta 快照 | 自適應流量視窗 |
+| **Renko** | "本小時的磚塊" | 最近N塊磚 | 自適應磚塊數量 |
+
+### 混合引擎：日曆 + 滾動
+
+在實踐中，你需要同時維護日曆和滾動聚合。記憶體開銷可忽略不計——每個交易對每個時間框架只需兩個 `deque` 緩衝區。
+
+```python
+class HybridCandleEngine:
+    """
+    Maintains both calendar-aligned and rolling candles
+    for any base bar type.
+
+    Calendar candles: for market structure, support/resistance, PIQ.
+    Rolling candles: for indicators, signal generation, entries/exits.
+    """
+
+    def __init__(self):
+        self.rolling = {
+            '1h': RollingCandleAggregator(60),
+            '4h': RollingCandleAggregator(240),
+        }
+        self.calendar: dict[str, list[OHLCV]] = {
+            '1h': [],
+            '4h': [],
+        }
+        self._calendar_buffer: dict[str, list[OHLCV]] = {
+            '1h': [],
+            '4h': [],
+        }
+
+    def on_bar(self, bar: OHLCV):
+        """Process any base bar type — time, volume, tick, delta, etc."""
+        # Update rolling candles
+        rolling_results = {}
+        for tf, agg in self.rolling.items():
+            rolling_results[tf] = agg.push(bar)
+
+        # Update calendar candles
+        self._update_calendar(bar)
+
+        return rolling_results
+
+    def _update_calendar(self, bar: OHLCV):
+        from datetime import datetime
+        ts = datetime.utcfromtimestamp(bar.timestamp)
+
+        for tf, minutes in [('1h', 60), ('4h', 240)]:
+            self._calendar_buffer[tf].append(bar)
+
+            total_minutes = ts.hour * 60 + ts.minute
+            if (total_minutes + 1) % minutes == 0:
+                bars = self._calendar_buffer[tf]
+                if bars:
+                    agg = OHLCV(
+                        timestamp=bars[-1].timestamp,
+                        open=bars[0].open,
+                        high=max(b.high for b in bars),
+                        low=min(b.low for b in bars),
+                        close=bars[-1].close,
+                        volume=sum(b.volume for b in bars),
+                    )
+                    self.calendar[tf].append(agg)
+                    self._calendar_buffer[tf] = []
+```
+
+### 時間-成交量混合：日曆 + 成交量拆分
+
+一種特殊的聚合變體：日曆對齊的K線在成交量超過閾值時強制提前關閉。在適應活躍度高峰的同時保持時間同步。
+
+```python
+class TimeVolumeHybridGenerator:
+    """
+    Calendar-aligned candles that split when volume spikes.
+
+    Rule: close the candle at the calendar boundary OR when
+    accumulated volume exceeds vol_threshold, whichever comes first.
+
+    Works with any base bar type — the volume trigger adds an
+    extra split dimension on top of calendar alignment.
+    """
+
+    def __init__(
+        self,
+        interval_minutes: int = 60,
+        vol_threshold: float = 5000.0,
+    ):
+        self.interval_minutes = interval_minutes
+        self.vol_threshold = vol_threshold
+
+        self.buffer: list[OHLCV] = []
+        self.accumulated_volume = 0.0
+        self.bars: list[OHLCV] = []
+
+    def on_bar(self, bar: OHLCV) -> OHLCV | None:
+        self.buffer.append(bar)
+        self.accumulated_volume += bar.volume
+
+        from datetime import datetime
+        ts = datetime.utcfromtimestamp(bar.timestamp)
+        total_minutes = ts.hour * 60 + ts.minute
+        at_boundary = (total_minutes + 1) % self.interval_minutes == 0
+
+        vol_spike = self.accumulated_volume >= self.vol_threshold
+
+        if at_boundary or vol_spike:
+            return self._close_bar(split_reason='volume' if vol_spike else 'time')
+
+        return None
+
+    def _close_bar(self, split_reason: str) -> OHLCV:
+        bars = self.buffer
+        bar = OHLCV(
+            timestamp=bars[-1].timestamp,
+            open=bars[0].open,
+            high=max(b.high for b in bars),
+            low=min(b.low for b in bars),
+            close=bars[-1].close,
+            volume=sum(b.volume for b in bars),
+        )
+        bar.split_reason = split_reason  # type: ignore
+        bar.num_bars = len(bars)  # type: ignore
+
+        self.bars.append(bar)
+        self.buffer = []
+        self.accumulated_volume = 0.0
+        return bar
+```
+
+---
+
+## 實用聚合：級聯預載入
+
+![級聯聚合](/images/blog/beyond-time-bars-cascading-aggregation.webp)
+*級聯預載入：從小時K線組合日K線，從分鐘K線組合小時K線——繞過API限制。*
+
+交易所限制提供的歷史資料量。Binance 每次 REST 請求約給1000根K線，OKX 上限為300根。如果你需要滾動1日K線（1440分鐘），你不一定能獲取足夠的1分鐘歷史資料。關於通過 WebSocket 即時流式獲取成交和訂單簿資料，請參閱 [CCXT Pro WebSocket 方法](https://marketmaker.cc/zh/blog/post/ccxt-pro-websocket-orderbook-methods/)。
+
+解決方案：**級聯聚合**——從每個深度可用的最高解析度構建更高時間框架，然後將它們拼接在一起。
+
+```
+Rolling 1W candle:
+├── 6 completed 1D candles ← fetch from REST /klines?interval=1d
+├── 1 partial day:
+│   ├── 23 completed 1h candles ← fetch from REST /klines?interval=1h
+│   └── 1 partial hour:
+│       └── N completed 1m candles ← fetch from REST /klines?interval=1m
+└── Live: each new closed 1m candle updates the entire chain
+```
+
+這之所以可行，是因為 OHLCV 聚合是可組合的：1日K線的最高價是24根1小時最高價的最大值，也是1440根1分鐘最高價的最大值。
+
+### 多交易所限制
+
+| 交易所 | 最大1分鐘K線數 | 最大1小時K線數 | 特殊時間間隔 |
+|--------|--------------|--------------|------------|
+| [Binance](https://www.binance.com) | 1,000 | 1,000 | 1分鐘–1月，完整範圍 |
+| [Bybit](https://www.bybit.com) | 1,000 | 1,000 | 1–720，日/周/月 |
+| [OKX](https://www.okx.com) | 300 | 300 | 1分鐘–1月（限制更嚴格） |
+| [Gate.io](https://www.gate.io) | 1,000 | 1,000 | 10秒–30天 |
+
+### 聚合一致性校驗
+
+REST API 返回的1小時K線可能與你從60根1分鐘K線計算得到的不匹配。務必驗證：
+
+```python
+def validate_aggregation(
+    candle_htf: OHLCV,
+    candles_ltf: list[OHLCV],
+    tolerance_pct: float = 0.001,
+) -> dict[str, bool]:
+    agg = OHLCV(
+        timestamp=candles_ltf[-1].timestamp,
+        open=candles_ltf[0].open,
+        high=max(c.high for c in candles_ltf),
+        low=min(c.low for c in candles_ltf),
+        close=candles_ltf[-1].close,
+        volume=sum(c.volume for c in candles_ltf),
+    )
+
+    def close_enough(a: float, b: float) -> bool:
+        if a == 0 and b == 0:
+            return True
+        return abs(a - b) / max(abs(a), abs(b)) < tolerance_pct
+
+    return {
+        'open': close_enough(candle_htf.open, agg.open),
+        'high': close_enough(candle_htf.high, agg.high),
+        'low': close_enough(candle_htf.low, agg.low),
+        'close': close_enough(candle_htf.close, agg.close),
+        'volume': close_enough(candle_htf.volume, agg.volume),
+    }
+```
+
+如果驗證持續失敗，**務必自行從1分鐘K線聚合**——永遠不要信任交易所的高時間框架K線來保證[回測一致性](https://marketmaker.cc/zh/blog/post/backtest-live-parity/)。
+
+---
+
+## 對比矩陣
+
+### 軸1：基礎K線型別
+
+| # | K線型別 | 觸發條件 | 需要 Tick 資料 | 最適用於 |
+|---|--------|---------|--------------|---------|
+| 1 | 時間 | 固定間隔 | 否 | 市場結構、群體行為 |
+| 2 | Tick | N筆成交 | 是 | 機器學習特徵、等資訊取樣 |
+| 3 | 成交量 | N個單位成交 | 是 | 標準化活躍度分析 |
+| 4 | 美元 | $N 名義價值 | 是 | 跨資產比較 |
+| 5 | Renko | 價格 ± N 個單位 | 否 | 趨勢追蹤、噪音過濾 |
+| 6 | 範圍 | 最高-最低 ≥ N | 是 | 突破檢測 |
+| 7 | 波動率 | 自適應範圍 | 是 | 狀態自適應分析 |
+| 8 | Heikin-Ashi | 變換 | 否 | 趨勢確認（合成價格！） |
+| 9 | Kagi | 價格反轉 | 否 | 供需結構 |
+| 10 | Line Break | N線突破 | 否 | 宏觀趨勢過濾 |
+| 11 | Point & Figure | 格子 + 反轉 | 否 | 支撐/阻力對映 |
+| 12 | TIB | 成交筆數失衡 | 是 | 知情流量檢測 |
+| 13 | VIB | 成交量失衡 | 是 | 大單檢測 |
+| 14 | Run | 遊程長度 | 是 | 訂單拆分檢測 |
+| 15 | CUSUM | 累積收益 | 否（1分鐘收盤價） | 結構性突變事件 |
+| 16 | Entropy | 夏農熵 | 是 | 機器學習研究、特徵純度 |
+| 17 | Delta | 訂單流 Delta | 是（aggTrades） | 主動方流量分析 |
+
+### 軸2：聚合方法
+
+| 方法 | 對齊方式 | 冷啟動 | 相位偏移 | 最適用於 |
+|------|---------|--------|---------|---------|
+| 日曆 | 掛鐘時間 | 不完整K線風險 | 無（與群體對齊） | 市場結構、[PIQ](https://marketmaker.cc/zh/blog/post/queue-position-order-book-wall-analysis/)、支撐/阻力 |
+| 滾動 | N根K線 | 無（預熱後） | 有（相對 :00 偏移） | 指標、訊號 |
+| 自適應 | 波動率驅動的N | ATR 校準後 | 有 | 波動率自適應策略 |
+
+---
+
+## 實踐建議
+
+![分層架構](/images/blog/beyond-time-bars-layered-architecture.webp)
+*四層K線架構：滾動訊號、日曆結構、微觀結構流量和趨勢過濾。*
+
+**如果你的回測引擎基於1分鐘 OHLCV 資料執行：**
+
+1. **滾動時間K線** —— 最簡單的升級。無需額外資料。消除冷啟動問題。
+2. **混合（滾動 + 日曆）時間K線** —— 日曆用於市場結構，滾動用於訊號。
+3. **CUSUM 過濾器** —— 基於1分鐘收盤價，無需 tick 資料。"價格移動了足夠多，值得關注。"
+
+**如果你有 tick/成交資料：**
+
+4. **美元K線 + 滾動** —— 量化金融文獻推薦的預設選擇。
+5. **成交量失衡K線 + 滾動** —— 檢測知情流量，在重要事件期間取樣更密集。
+6. **Delta K線 + 日曆** —— 如果你有主動方分類，這是觀察誰在推動市場的最直接視角。
+
+**作為過濾器（在任何基礎+聚合組合之上應用 Heikin-Ashi 或 Line Break）：**
+
+7. **Heikin-Ashi 疊加滾動成交量K線** —— 在活躍度標準化資料上獲得清晰的趨勢訊號。
+8. **Line Break / Kagi 疊加日級日曆K線** —— 宏觀趨勢過濾器。
+
+**針對 [Marketmaker.cc](https://marketmaker.cc) 的分層方案：**
+
+- **第1層（訊號）：** 時間K線的滾動聚合，用於指標和入場/出場訊號。無冷啟動，完美的回測一致性。
+- **第2層（市場結構）：** 日曆對齊的時間K線，用於支撐/阻力、小時收盤價分析和 [PIQ 觸發](https://marketmaker.cc/zh/blog/post/queue-position-order-book-wall-analysis/)。
+- **第3層（微觀結構）：** 來自原始成交流的成交量失衡K線 + Delta K線，用於檢測知情流量、訂單拆分以及預判大行情。另請參閱 [數字指紋：交易者識別](https://marketmaker.cc/zh/blog/post/digital-fingerprint-trader-identification/) 瞭解訂單流資料上的行為模式識別。
+- **第4層（趨勢過濾）：** 在滾動K線上應用 Heikin-Ashi 變換，或在4小時日曆收盤價上應用 Line Break，以保持訊號與宏觀方向一致。
+
+---
+
+## 結論
+
+K線構建不是單一的選擇——而是兩個獨立的決策：
+
+1. **什麼型別的K線？** 時間K線捕獲時鐘間隔。活躍度K線（tick、成交量、美元）捕獲市場參與度。價格K線（Renko、範圍、波動率）捕獲價格運動。資訊K線（失衡、遊程、CUSUM、熵）捕獲新資訊的到達。訂單流K線（Delta）捕獲主動方壓力。
+
+2. **如何聚合為更高時間框架？** 日曆對齊與群體同步。滾動消除冷啟動。自適應響應波動率變化。
+
+標準的"來自 Binance 的1小時K線"只是17×3矩陣中的一個單元格。其餘50種組合對任何願意實現它們的人開放。對於生產系統，答案是"為決策引擎的每一層選擇合適的組合。"
+
+原子單位——已關閉的基礎K線——始終是基礎。其他一切都是聚合。
+
+關於使用細粒度資料提高回測精度的更多內容，請參閱 [自適應下鑽：可變粒度回測](https://marketmaker.cc/zh/blog/post/adaptive-resolution-drill-down-backtest/)。關於指標預計算對多時間框架策略的影響，請參閱 [聚合 Parquet 快取](https://marketmaker.cc/zh/blog/post/parquet-cache-multitimeframe-backtest/)。
+
+---
+
+## 實用連結
+
+1. [Lopez de Prado — Advances in Financial Machine Learning (2018)](https://www.wiley.com/en-us/Advances+in+Financial+Machine+Learning-p-9781119482086)
+2. [Easley, Lopez de Prado, O'Hara — The Volume Clock: Insights into the High Frequency Paradigm (2012)](https://jpm.pm-research.com/content/39/1/19)
+3. [mlfinlab — 實現資訊驅動K線的 Python 庫](https://mlfinpy.readthedocs.io/)
+4. [Binance — 歷史市場資料](https://data.binance.vision/)
+5. [Apache Parquet — 列式儲存格式](https://parquet.apache.org/)
+
+## Citation
+
+```
+@article{soloviov2026bartypes,
+  author = {Soloviov, Eugen},
+  title = {17 × 3: Bar Types and Aggregation Methods for Algorithmic Trading},
+  year = {2026},
+  url = {https://marketmaker.cc/en/blog/post/beyond-time-bars-candle-construction},
+  description = {Two-axis classification of candle construction: 17 base bar types × 3 aggregation methods = 51 combinations, with implementation code and practical recommendations for crypto algotrading.}
+}
+```

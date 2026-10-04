@@ -1,0 +1,384 @@
+MM article bayesian-neural-networks-trading EN f0c2f80a6488
+
+---
+title: "Epistemic vs Aleatoric: Measuring What a Return Model Doesn't Know"
+description: "Every sizing rule on this blog treats uncertainty as one number. MC Dropout and deep ensembles split it into model ignorance and market noise — and those two deserve different position sizes."
+date: "2026-07-31"
+tags: ["bayesian", "uncertainty", "neural-network", "risk", "position-sizing"]
+slug: "bayesian-neural-networks-trading"
+lang: "en"
+image: "/images/blog/bayesian-neural-networks-trading.webp"
+authors: ["suenot"]
+---
+
+# Epistemic vs Aleatoric: Measuring What a Return Model Doesn't Know
+
+Every position sizing rule on this blog collapses uncertainty into a single scalar. [Kelly](/en/blog/post/kelly-criterion-strategy-sizing) divides by variance. [Conformal prediction](/en/blog/post/conformal-prediction-trading) divides by interval width. [Volatility targeting](/en/blog/post/garch-volatility-forecasting-crypto) divides by a GARCH forecast. All three are correct, and all three throw away a distinction that matters for trading: **the difference between a market that is noisy and a model that is ignorant.**
+
+Those are not the same risk. Market noise is priced — it is what you are compensated for bearing. Model ignorance is not priced, is not compensated, and is precisely the state in which your edge estimate is least trustworthy. A sizing rule that penalizes them equally is leaving something on the table.
+
+This post is about making that split measurable. Concretely:
+
+$$\sigma^2_{\text{eff}} = \sigma^2_{\text{alea}} + \lambda \cdot \sigma^2_{\text{epi}}, \qquad \lambda > 1$$
+
+Put that in the Kelly denominator instead of total variance. The rest of the article is how to estimate the two components (MC Dropout, deep ensembles), and what the split actually looks like on real data.
+
+## The Thesis: Two Uncertainties Demand Two Responses
+
+|                    | Epistemic                    | Aleatoric                        |
+| ------------------ | ---------------------------- | -------------------------------- |
+| **Source**         | Limited data / model         | Inherent noise in data           |
+| **Reducible?**     | Yes (more data helps)        | No                               |
+| **Trading action** | Reduce position or abstain   | Widen stops, reduce leverage     |
+| **Signal**         | "I haven't seen this regime" | "This market is noisy right now" |
+
+The asymmetry in the "trading action" row is the whole argument. High aleatoric variance is a known unknown: you can size for it, hedge it, and expect to be paid a risk premium for holding it. High epistemic variance is an unknown unknown: the model is extrapolating, its mean estimate $\mu$ is as suspect as its variance estimate, and there is no premium attached to being wrong about your own parameters.
+
+A model that conflates the two will either overtrade in unfamiliar regimes (ignoring epistemic uncertainty) or undertrade in familiar-but-noisy ones (over-penalizing aleatoric uncertainty). Standard Kelly, applied to $\sigma^2_{\text{total}}$, does both depending on which component happens to dominate.
+
+### The Decomposition
+
+Epistemic uncertainty comes from uncertainty over the model parameters $\theta$. Instead of a single $\theta^*$ (as in maximum likelihood), we maintain a distribution $p(\theta \mid \mathcal{D})$ and integrate:
+
+$$p(y \mid x, \mathcal{D}) = \int p(y \mid x, \theta)\, p(\theta \mid \mathcal{D})\, d\theta$$
+
+The spread induced by integrating over $\theta$ is epistemic. It shrinks as $\mathcal{D}$ grows to cover the input region.
+
+Aleatoric uncertainty is the conditional noise of the data-generating process. In a neural network it is modeled by a second output head emitting an input-dependent variance:
+
+$$p(y \mid x, \theta) = \mathcal{N}\bigl(y;\, \mu_\theta(x),\, \sigma^2_\theta(x)\bigr)$$
+
+That heteroscedastic head is estimating the same object GARCH estimates classically — state-dependent conditional variance that is high overnight and low at peak hours. If you want the empirics of that object on crypto, [GARCH(1,1) for crypto volatility](/en/blog/post/garch-volatility-forecasting-crypto) covers it properly, including why the live conditional forecast (not the unconditional sample variance) belongs in the Kelly denominator. The NN head is just a different estimator of the same quantity, fit jointly with the mean.
+
+What GARCH cannot give you is the other term. That is what the rest of this post is for.
+
+## Where This Sits Relative to What's Already Published
+
+Two prior posts cover adjacent ground and are worth reading first, because this one deliberately does not repeat them:
+
+- [Conformal prediction for risk-aware position sizing](/en/blog/post/conformal-prediction-trading) gives you intervals with a finite-sample coverage guarantee, no distributional assumption, plus inverse-width sizing and an edge-ratio no-trade filter. It is the stronger tool if all you want is a correctly-sized interval.
+- [Temporal Fusion Transformers](/en/blog/post/temporal-fusion-transformer-trading) emit quantiles directly and already warn that pinball-loss quantiles are not automatically calibrated out of sample.
+
+The trade is clean. **Conformal gives you a guarantee but one number** — the interval width is not decomposable, so it cannot tell you *why* it widened. **Bayesian methods give you a decomposition but no guarantee** — MC Dropout's intervals are only as good as the approximate posterior. This article is about buying the decomposition; you should probably keep conformal on top of it for the coverage.
+
+## Method 1: Variational Inference (Bayes by Backprop)
+
+![A dense Bayesian weight posterior is compressed into a tractable variational approximation before producing a predictive return distribution](/images/blog/bayesian-neural-networks-trading-variational-inference.webp)
+
+A Bayesian neural network places a prior $p(\theta)$ over weights and seeks the posterior $p(\theta \mid \mathcal{D}) \propto p(\mathcal{D} \mid \theta) p(\theta)$. The normalizer requires integrating over every weight configuration, which is intractable for anything with more than a handful of parameters.
+
+Variational inference replaces the intractable posterior with a tractable family $q_\phi(\theta)$ — typically a factorized Gaussian $q_\phi(\theta) = \prod_j \mathcal{N}(\theta_j; \mu_j, \sigma_j^2)$ — and minimizes
+
+$$\text{KL}\bigl(q_\phi(\theta) \,\|\, p(\theta \mid \mathcal{D})\bigr)$$
+
+Since that involves the unknown posterior, we instead maximize the **Evidence Lower Bound**:
+
+$$\mathcal{L}(\phi) = \mathbb{E}_{q_\phi(\theta)}\bigl[\log p(\mathcal{D} \mid \theta)\bigr] - \text{KL}\bigl(q_\phi(\theta) \,\|\, p(\theta)\bigr)$$
+
+The first term pushes $q_\phi$ toward explaining the data; the second keeps it near the prior. **Bayes by Backprop** (Blundell et al., 2015) makes this differentiable with the reparameterization trick: sample $\epsilon \sim \mathcal{N}(0, I)$, set $\theta = \mu + \sigma \odot \epsilon$.
+
+In practice VI doubles the parameter count, raises gradient variance (each forward pass uses different weights), and the mean-field assumption ignores weight correlations, which tends to *underestimate* epistemic uncertainty. For a trading stack where you already have a trained deterministic model, the two cheaper methods below are usually the better entry point.
+
+## Method 2: MC Dropout
+
+![Repeated dropout-enabled forward passes fan into distinct forecasts whose disagreement forms epistemic uncertainty](/images/blog/bayesian-neural-networks-trading-mc-dropout.webp)
+
+Gal and Ghahramani (2016) showed that a network trained with dropout and evaluated with **dropout still active at test time** is an approximate variational inference procedure in a deep Gaussian process. Dropout already induces a distribution over subnetworks; keeping it on during inference and running $T$ forward passes samples from that implicit posterior.
+
+This is nowhere else on this blog. Published code here uses dropout only as a training-time regularizer ([spread modeling](/en/blog/post/spread-modeling-machine-learning), TFT at `dropout=0.1–0.3`). Leaving it on at inference is a one-line change with an entirely different meaning.
+
+### Predictive Statistics
+
+Given $T$ stochastic forward passes producing $\{\hat{y}_t\}_{t=1}^{T}$ and per-pass variances $\hat{\sigma}_t^2(x)$:
+
+**Predictive mean:**
+
+$$\bar{y} = \frac{1}{T} \sum_{t=1}^T \hat{y}_t$$
+
+**Epistemic (disagreement between passes):**
+
+$$\sigma^2_{\text{epi}} = \frac{1}{T} \sum_{t=1}^T (\hat{y}_t - \bar{y})^2$$
+
+**Aleatoric (mean of the predicted noise):**
+
+$$\sigma^2_{\text{alea}} = \frac{1}{T} \sum_{t=1}^T \hat{\sigma}_t^2$$
+
+The decomposition is exactly the law of total variance: variance of the conditional mean, plus mean of the conditional variance. Total predictive variance is their sum.
+
+### PyTorch Implementation
+
+```python
+import torch
+import torch.nn as nn
+import numpy as np
+
+class MCDropoutNet(nn.Module):
+    """
+    Return-prediction network with MC Dropout for uncertainty estimation.
+    Outputs both predicted mean and log-variance (aleatoric).
+    """
+    def __init__(self, input_dim: int, hidden_dim: int = 128, dropout_p: float = 0.1):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(p=dropout_p),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(p=dropout_p),
+        )
+        self.head_mu = nn.Linear(hidden_dim, 1)        # predicted return
+        self.head_logvar = nn.Linear(hidden_dim, 1)    # log(aleatoric variance)
+
+    def forward(self, x: torch.Tensor):
+        h = self.net(x)
+        return self.head_mu(h), self.head_logvar(h)
+
+
+def heteroscedastic_loss(mu, log_var, target):
+    """Negative log-likelihood for a Gaussian with learned, input-dependent variance."""
+    precision = torch.exp(-log_var)
+    return torch.mean(0.5 * precision * (target - mu) ** 2 + 0.5 * log_var)
+
+
+@torch.no_grad()
+def mc_predict(model: MCDropoutNet, x: torch.Tensor, n_samples: int = 100):
+    """
+    MC Dropout inference: keep dropout ON, collect T forward passes,
+    decompose predictive variance into epistemic and aleatoric parts.
+    """
+    model.train()  # NOT eval() -- this is what keeps dropout active
+    mus, log_vars = [], []
+    for _ in range(n_samples):
+        mu, log_var = model(x)
+        mus.append(mu)
+        log_vars.append(log_var)
+
+    mus = torch.stack(mus)            # (T, batch, 1)
+    log_vars = torch.stack(log_vars)  # (T, batch, 1)
+
+    pred_mean = mus.mean(dim=0)
+    epistemic_var = mus.var(dim=0)              # Var over passes
+    aleatoric_var = log_vars.exp().mean(dim=0)  # E over passes
+
+    return {
+        "mean": pred_mean.squeeze(-1),
+        "epistemic_std": epistemic_var.sqrt().squeeze(-1),
+        "aleatoric_std": aleatoric_var.sqrt().squeeze(-1),
+        "total_std": (epistemic_var + aleatoric_var).sqrt().squeeze(-1),
+    }
+```
+
+Training uses the heteroscedastic loss, which is what makes the variance head mean something. Note the self-regulating structure: the `0.5 * precision * (target - mu)**2` term wants small variance, the `0.5 * log_var` term punishes it, and the balance point is the conditional noise level.
+
+```python
+model = MCDropoutNet(input_dim=50, hidden_dim=128, dropout_p=0.1)
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+
+for epoch in range(200):
+    model.train()
+    for x_batch, y_batch in train_loader:
+        mu, log_var = model(x_batch)
+        loss = heteroscedastic_loss(mu, log_var, y_batch)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+```
+
+**The gotcha that silently kills the method:** calling `model.eval()` inside `mc_predict`. It disables dropout, every pass returns the identical value, `epistemic_var` collapses to exactly zero, and your sizing rule quietly reverts to plain Kelly on aleatoric variance. It fails without erroring. Assert that `epistemic_var > 0` in your inference path.
+
+### Choosing the Number of Forward Passes
+
+- $T = 30$: reasonable lower bound for a stable mean
+- $T = 100$: workable default for mean and variance
+- $T = 500{+}$: diminishing returns unless you need tail quantiles
+
+<!-- TODO: needs real-data result — measure wall-clock inference cost for T=30/100/500 on the actual model and hardware, and state the latency budget it fits. Do not ship an unmeasured latency claim. -->
+
+## Method 3: Deep Ensembles
+
+![Five independently trained neural networks combine their predictions while their disagreement forms an epistemic halo](/images/blog/bayesian-neural-networks-trading-deep-ensembles.webp)
+
+Lakshminarayanan et al. (2017) train $M$ independent networks from different random initializations and aggregate. Despite not being formally Bayesian, deep ensembles consistently beat more principled methods on uncertainty calibration benchmarks.
+
+$$p(y \mid x) \approx \frac{1}{M} \sum_{m=1}^M p(y \mid x, \theta_m^*)$$
+
+The disagreement between members is the epistemic estimate. Ensembles appear elsewhere on this blog as aggregation devices — [anomaly detection](/en/blog/post/anomaly-detection-algotrading), [HMM regime detection](/en/blog/post/regime-detection-hmm-adaptive-trading), conformal's EnbPI block bootstrap — but never as an uncertainty estimator via inter-member spread. That is the use here.
+
+### Ensemble Implementation
+
+Diversity comes from **independent training**, not from constructing $M$ objects. An ensemble of untrained or identically-trained members returns either noise or zero epistemic variance:
+
+```python
+class DeepEnsemble:
+    def __init__(self, input_dim: int, n_models: int = 5, hidden_dim: int = 128):
+        self.models = []
+        for seed in range(n_models):
+            torch.manual_seed(seed)          # different init per member
+            self.models.append(
+                MCDropoutNet(input_dim, hidden_dim, dropout_p=0.0)
+            )
+
+    def fit(self, train_loader, epochs: int = 200, lr: float = 1e-3):
+        """Each member is trained independently. This is where the diversity
+        comes from -- different init, different shuffle order. Skipping this
+        yields epistemic_var == 0 (identical members) or pure noise (untrained)."""
+        for seed, model in enumerate(self.models):
+            torch.manual_seed(1000 + seed)   # different shuffle/dropout stream
+            opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
+            model.train()
+            for _ in range(epochs):
+                for x_batch, y_batch in train_loader:
+                    mu, log_var = model(x_batch)
+                    loss = heteroscedastic_loss(mu, log_var, y_batch)
+                    opt.zero_grad()
+                    loss.backward()
+                    opt.step()
+        return self
+
+    @torch.no_grad()
+    def predict(self, x: torch.Tensor):
+        mus, variances = [], []
+        for model in self.models:
+            model.eval()                     # correct here: no dropout sampling
+            mu, log_var = model(x)
+            mus.append(mu.squeeze(-1))
+            variances.append(log_var.exp().squeeze(-1))
+
+        all_mus = torch.stack(mus)
+        all_vars = torch.stack(variances)
+
+        epistemic_var = all_mus.var(dim=0)   # spread ACROSS members
+        aleatoric_var = all_vars.mean(dim=0)
+
+        return {
+            "mean": all_mus.mean(dim=0),
+            "epistemic_std": epistemic_var.sqrt(),
+            "aleatoric_std": aleatoric_var.sqrt(),
+            "total_std": (epistemic_var + aleatoric_var).sqrt(),
+        }
+```
+
+Note that `model.eval()` is correct in `DeepEnsemble.predict` and wrong in `mc_predict`. The stochasticity source differs: ensembles get it from independent training, MC Dropout gets it from live dropout masks.
+
+### Trade-offs: MC Dropout vs Deep Ensembles
+
+|                            | MC Dropout                       | Deep Ensembles             |
+| -------------------------- | -------------------------------- | -------------------------- |
+| **Training cost**          | 1x (single model)                | $M$x ($M$ models)          |
+| **Inference cost**         | $T$ forward passes               | $M$ forward passes         |
+| **Memory**                 | 1x parameters                    | $M$x parameters            |
+| **Uncertainty quality**    | Tends to underestimate epistemic | Better calibrated overall  |
+| **Ease of implementation** | Trivial (flip a flag)            | Trivial (train $M$ models) |
+| **Parallelism**            | Sequential passes (same model)   | Embarrassingly parallel    |
+
+A pragmatic hybrid: train a small ensemble ($M = 3{-}5$) where each member also uses MC Dropout, capturing both inter-model disagreement and intra-model stochasticity.
+
+## The Payoff: Asymmetric Sizing
+
+![Aleatoric noise widens the risk envelope while epistemic uncertainty closes the position-sizing aperture and creates an abstain zone](/images/blog/bayesian-neural-networks-trading-asymmetric-sizing.webp)
+
+Here is the actual contribution. Gaussian Kelly is $f^* = \mu / \sigma^2$; the derivation, the growth parabola, the drawdown-probability table and the four reasons to run fractional rather than full Kelly are all in [The Kelly Criterion for Strategies](/en/blog/post/kelly-criterion-strategy-sizing), and are not repeated here. Take $f^* = \mu / \sigma^2$ at a quarter-Kelly fraction as given.
+
+The modification is the denominator. Instead of total predictive variance:
+
+$$\sigma^2_{\text{eff}} = \sigma^2_{\text{alea}} + \lambda \cdot \sigma^2_{\text{epi}}, \qquad \lambda > 1$$
+
+The argument for $\lambda > 1$: aleatoric variance is the market's noise, it is priced, and bearing it is how a strategy earns. Epistemic variance is *your* ignorance — it carries no premium, and worse, it is correlated with your $\mu$ estimate being wrong. When $\sigma_{\text{epi}}$ is large, the numerator of Kelly is unreliable at the same time as the denominator, so the sizing error compounds. Penalizing it superlinearly relative to market noise is the direct expression of that.
+
+```python
+def uncertainty_adjusted_position_size(
+    pred_mean: float,
+    epistemic_std: float,
+    aleatoric_std: float,
+    max_position: float = 1.0,
+    lam: float = 2.0,                   # epistemic penalty; tune on validation
+    max_epi_ratio: float = 0.5,         # abstain above this epi/alea ratio
+    base_kelly_fraction: float = 0.25,
+) -> float:
+    """Kelly sizing where epistemic variance is penalized harder than aleatoric."""
+    effective_var = aleatoric_std ** 2 + lam * epistemic_std ** 2
+    if effective_var < 1e-10:
+        return 0.0
+
+    position = (pred_mean / effective_var) * base_kelly_fraction
+
+    # Confidence gate on the ratio, not on total uncertainty
+    epi_ratio = epistemic_std / (aleatoric_std + 1e-8)
+    if epi_ratio > max_epi_ratio:
+        position *= max(0.0, 1.0 - epi_ratio)
+
+    return float(np.clip(position, -max_position, max_position))
+```
+
+The gate deserves a note. Zeroing positions below a confidence threshold is not new here — the conformal article specifies and codes the general no-trade filter as $e_t = |\hat{\mu}| / w_t$ with a `min_edge` threshold, including how to pick the threshold and the geometric reading of an interval straddling zero. See [conformal prediction](/en/blog/post/conformal-prediction-trading) for that machinery. What *is* new is the denominator: gating on $\sigma_{\text{epi}} / \sigma_{\text{alea}}$ fires specifically when the model is more confused about its own parameters than the market is noisy — a state that total-uncertainty gating cannot detect, because a calm-but-unfamiliar regime can have low total variance and a terrible epistemic ratio.
+
+## Calibration: Hand This Off
+
+An uncertainty estimate is only useful if calibrated: a nominal 95% interval should contain the truth ~95% of the time. Do not roll your own Gaussian-quantile reliability check here — a parametric interval on fat-tailed return residuals is exactly the failure mode [conformal prediction](/en/blog/post/conformal-prediction-trading) exists to avoid, and it ships a working `evaluate()` that reports target vs empirical coverage with a finite-sample guarantee behind it. The TFT post makes the same point for quantile heads.
+
+Post-hoc rescaling ($\tilde{\sigma} = \alpha \sigma + \beta$ fit on a validation set) is the cheap fix, and it is the weaker cousin of **Adaptive Conformal Inference**, which maintains an online miscoverage level $\alpha_t$ with a long-run coverage bound rather than a static rescale. ACI is the stronger option; the only reason to prefer linear rescaling is that it preserves the epistemic/aleatoric ratio, which ACI's single width does not.
+
+<!-- TODO: needs real-data result — state plainly whether the measured setup used linear rescaling or ACI, and why. -->
+
+## What Has To Be Measured Before This Publishes
+
+The methods above are established. The claim that the *split* buys anything in trading is not, and this blog does not publish sizing rules on argument alone. The bar:
+
+**1. Dataset and target.** Name the instrument, bar size, explicit date range, feature set, and prediction target.
+<!-- TODO: needs real-data result -->
+
+**2. The split itself.** What fraction of total predictive variance is epistemic vs aleatoric, and how that ratio moves between a named calm window and a named volatile one. This is the money chart and it does not exist yet. The hypothesis worth falsifying: the ratio spikes *before* realized volatility does, because unfamiliarity precedes turbulence.
+<!-- TODO: needs real-data result -->
+
+**3. Coverage vs conformal.** Measured out-of-sample coverage of MC Dropout intervals against nominal, compared to split-conformal intervals from the published article on the same data. That head-to-head is itself a new result and the natural bridge between the two posts.
+<!-- TODO: needs real-data result -->
+
+**4. Does $\lambda$ buy anything?** Sweep the epistemic penalty on validation and report PnL and max drawdown against the $\lambda = 1$ baseline. If it buys nothing, say so — [The Honest Negative](/en/blog/post/honest-negative-no-robust-edge) is the template for that outcome and it is a publishable result.
+<!-- TODO: needs real-data result -->
+
+**5. Inference cost.** Measured, on the target hardware, at each $T$.
+<!-- TODO: needs real-data result -->
+
+Any evaluation here runs under [walk-forward optimization](/en/blog/post/walk-forward-optimization) discipline — $\lambda$ is a hyperparameter, and a $\lambda$ tuned on the full sample is not a result.
+
+## Practical Tips for Production
+
+**1. Warm-up the prior.** With variational inference, initialize the variational mean from a pre-trained deterministic network rather than at random. Typically halves convergence time.
+
+**2. Watch for variance collapse.** Learned variances $\sigma_j$ can drift to near zero, silently reverting the BNN to a deterministic network. Monitor mean $\sigma_j$ during training; add KL annealing if needed.
+
+**3. Recalibrate on a rolling basis, not a fixed validation set.** Markets are non-stationary and a calibration fit once decays. Either retrain on a rolling window under [walk-forward](/en/blog/post/walk-forward-optimization) discipline, or let [ACI](/en/blog/post/conformal-prediction-trading) absorb model staleness online — the conformal post covers the retraining-frequency trade-off directly.
+
+**4. Ensemble diversity matters.** Different seeds, different shuffles, optionally different hyperparameters per member. Initialization diversity is the primary driver of ensemble quality, which is why the `fit()` loop above is not optional.
+
+**5. Log the decomposition, not just the total.** Store both components alongside realized outcomes. Without this you cannot answer the only question that matters in review: when the sizer cut exposure, was it because the market was noisy or because the model was lost — and was it right?
+
+**6. Uncertainty as a feature.** Rolling epistemic statistics may themselves be predictive of drawdowns. Plausible, unmeasured, and worth a separate post.
+<!-- TODO: needs real-data result -->
+
+## Limitations and Honest Caveats
+
+- **Approximate posteriors are still approximate.** MC Dropout and VI give a limited view of the true posterior. Better than nothing, not ground truth, and no coverage guarantee attaches to either.
+- **Calibration degrades exactly when you need it.** In a truly novel regime the model may still be miscalibrated — it just tends to be *less* miscalibrated than a deterministic one. Uncertainty estimates from an out-of-distribution input are themselves out-of-distribution outputs.
+- **Aleatoric variance can absorb epistemic signal.** If the heteroscedastic head is flexible enough, it learns to explain model uncertainty away as data noise, collapsing $\sigma_{\text{epi}}$ toward zero and quietly defeating the entire decomposition. This is the most important failure mode in this post and it does not announce itself. Monitor the ratio across regimes; a ratio that never moves is a broken decomposition, not a stable market.
+- **$\lambda$ is a free parameter.** Introducing a tunable knob into a sizing rule is how overfit sizing rules get built. It needs a walk-forward justification or it needs to be fixed at 1.
+
+## Conclusion
+
+Conformal prediction already gives this blog interval widths with a coverage guarantee, and Kelly already gives it a sizing rule. What neither gives is an answer to *why* the interval is wide. Splitting predictive variance into epistemic and aleatoric parts answers that, and the answer is actionable in a way the total is not: market noise is compensated risk, model ignorance is not, and the sizing denominator should say so.
+
+MC Dropout makes the split nearly free — one line (`model.train()` at inference) turns any dropout network into an approximate Bayesian one. Deep ensembles cost $M$x and calibrate better. Both feed the same asymmetric denominator $\sigma^2_{\text{alea}} + \lambda \sigma^2_{\text{epi}}$.
+
+Whether $\lambda > 1$ actually pays is an empirical question this draft does not yet answer. The measurements listed above are the price of publishing it.
+
+---
+
+**References:**
+
+- Blundell, C., Cornebise, J., Kavukcuoglu, K., & Wierstra, D. (2015). Weight Uncertainty in Neural Networks. *ICML*.
+- Gal, Y. & Ghahramani, Z. (2016). Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning. *ICML*.
+- Lakshminarayanan, B., Pritzel, A., & Blundell, C. (2017). Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles. *NeurIPS*.
+- Kendall, A. & Gal, Y. (2017). What Uncertainties Do We Need in Bayesian Deep Learning for Computer Vision? *NeurIPS*.
+- Gibbs, I. & Candes, E. (2021). Adaptive Conformal Inference Under Distribution Shift. *NeurIPS*.
+- Kelly, J. L. (1956). A New Interpretation of Information Rate. *Bell System Technical Journal*.

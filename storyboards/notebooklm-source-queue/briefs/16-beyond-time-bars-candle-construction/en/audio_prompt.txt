@@ -1,0 +1,48 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article beyond-time-bars-candle-construction EN f21de2101b98". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English. Use English throughout. Keep formulas, code identifiers, units, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — TL;DR
+2. H2 — Two Axes of Candle Construction
+3. H2 — 1. Time Bars (Standard)
+4. H2 — 2–4. Activity-Based Bars
+5. H3 — 2. Tick Bars
+6. H3 — 3. Volume Bars
+7. H3 — 4. Dollar Bars
+8. H3 — Choosing the Threshold
+9. H2 — 5–7. Price-Based Bars
+10. H3 — 5. Renko Bars
+11. H3 — 6. Range Bars
+12. H3 — 7. Volatility Bars
+13. H2 — 8. Heikin-Ashi (Smoothed Transformation)
+14. H2 — 9–11. Japanese Reversal Charts
+15. H3 — 9. Kagi Charts
+16. H3 — 10. Line Break Charts
+17. H3 — 11. Point & Figure Charts
+18. H2 — 12–14. Information-Driven Bars
+19. H3 — 12. Tick Imbalance Bars (TIB)
+20. H3 — 13. Volume Imbalance Bars (VIB)
+21. H3 — The Explosion Problem
+22. H3 — 14. Run Bars
+23. H2 — 15. CUSUM Filter Bars
+24. H2 — 16. Entropy Bars
+25. H2 — 17. Delta Bars (Order Flow)
+26. H2 — Method A: Calendar-Aligned Aggregation
+27. H2 — Method B: Rolling Window Aggregation
+28. H2 — Method C: Adaptive Rolling Aggregation
+29. H3 — Combination Examples
+30. H3 — Hybrid Engine: Calendar + Rolling
+31. H3 — Time-Volume Hybrid: Calendar with Volume Splits
+32. H2 — Practical Aggregation: Cascading Preload
+33. H3 — Multi-Exchange Limits
+34. H3 — Aggregation Consistency Check
+35. H2 — Comparison Matrix
+36. H3 — Axis 1: Base Bar Types
+37. H3 — Axis 2: Aggregation Methods
+38. H2 — Practical Recommendations
+39. H2 — Conclusion
+40. H2 — Useful Links
+41. H2 — Citation
+
+Preserve the two independent axes: 17 listed base bar types and 3 aggregation methods (17 × 3 = 51 combinations), while explaining that Heikin-Ashi is also described as a transformation. For time, tick, volume and dollar bars retain their closing rules, trade-count versus base-asset volume versus USD/USDT notional units, illustrative BTCUSDT thresholds and regime sensitivity. Distinguish Renko, range and ATR-adaptive volatility bars; keep Heikin-Ashi OHLC formulas and its loss of exact prices; then Kagi, Line Break and Point & Figure reversals. For information-driven sampling keep tick-rule signs ±1, TIB cumulative theta and EWMA threshold, VIB signed volume, run-length logic and the imbalance-bar feedback/explosion problem with min_ticks/max_ticks clamps. Preserve CUSUM on 1-minute OHLCV without tick data, entropy threshold/bin/min-trade example, and delta as aggressive buy volume minus sell volume requiring side classification. Separate calendar-aligned, closed-base-bar rolling and ATR-adaptive rolling aggregation; explain cold start, backtest/live parity, hybrid calendar+rolling and calendar-with-volume-splits. Keep cascading 1-minute/1-hour/1-day preload, mutable exchange REST limits, composable OHLCV and the 0.001 tolerance in the aggregation check. Cover both comparison axes, four-layer recommendation, implementation/data limitations, conclusion, links and citation. Treat exchange limits, activity thresholds, performance and example code as article claims or illustrations pending primary and engineering review; never imply that a bar type guarantees predictive advantage.
+
+Preserve every substantive section, example, formula, mathematical symbol, percent sign, unit, table, code rule, caveat, risk, link and source reference. Never silently alter an article number, heading or claim. Numerical, research, financial, company-specific and mutable statements remain attributed article claims pending human editorial, mathematical and primary-source review. No guaranteed returns or investment advice. Chinese translation/terminology and Mandarin pronunciation remain pending review where applicable. External NotebookLM notebook/source/artifact duplicate identities are unchecked before submission; target-channel duplicates are unchecked before final production. Do not imply either is cleared.
+Use natural spoken narration or dialogue in the requested locale. Explain formulas, variables, units, tables, plots and code behavior in words; do not request on-screen drawings or text. Distinguish article claims from verified facts when speaking. End with the article conclusion and references.

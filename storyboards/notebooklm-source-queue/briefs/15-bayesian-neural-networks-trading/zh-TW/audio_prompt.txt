@@ -1,0 +1,24 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article bayesian-neural-networks-trading ZH-TW 087aaa1be429". It is the complete published zh-Hant article snapshot. Do not merge another language edition or outside facts. Output language: Traditional Chinese for Taiwan (zh-TW), explicitly not generic Chinese. Use Taiwan financial and statistical terminology contextually: 認知不確定性, 偶然不確定性, 部位, 變異數, K線, 成交量, 委託簿 and 回測. Preserve the source headings exactly; the Bayesian article's 認識/對立 wording needs human terminology review against epistemic/aleatoric. Keep formulas, code identifiers, units, citations and proper names exact. Speak Taiwan Mandarin (Guoyu) for audio, not Taiwanese Hokkien; regional terminology and pronunciation need editorial listening review. The source title uses 认识与对立/認識與對立; keep its exact heading in the outline, but do not speak that phrase as an accepted technical pair. In explanatory narration explicitly distinguish epistemic model/knowledge uncertainty from aleatoric data/noise uncertainty. Correct regional terminology and the title translation remain pending human editorial review.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 論點：兩種不確定性要求兩種回應
+2. H3 — 分解
+3. H2 — 與已發布內容的相關位置
+4. H2 — 方法 1：變分推理（Bayes by Backprop）
+5. H2 — 方法 2：MC Dropout
+6. H3 — 預測統計
+7. H3 — PyTorch 實現
+8. H3 — 選擇前向傳遞數量
+9. H2 — 方法 3：深度集成
+10. H3 — 集成實現
+11. H3 — 權衡：MC Dropout vs 深度集成
+12. H2 — 收益：不對稱 Sizing
+13. H2 — 校準：委派這個
+14. H2 — 發布前必須測量的內容
+15. H2 — 生產實用技巧
+16. H2 — 限制和誠實警告
+17. H2 — 結論
+
+Keep epistemic parameter ignorance distinct from aleatoric conditional market noise, including the predictive posterior integral, heteroscedastic Gaussian variance head, law-of-total-variance decomposition and the article's comparison with conformal coverage and GARCH. Retain VI/Bayes-by-Backprop prior, mean-field q, KL and ELBO equations, reparameterization, parameter and gradient costs, and underestimation risk. For MC Dropout preserve T stochastic passes, predictive mean, between-pass epistemic variance, mean predicted aleatoric variance, heteroscedastic loss and PyTorch training logic. The code must keep model.train() at inference; model.eval() would turn dropout off and silently collapse the epistemic estimate. T=30/100/500+ are illustrative pass counts, with hardware latency unmeasured. For deep ensembles distinguish M independently trained members from merely constructed models; model.eval() is correct at ensemble inference, and training, memory and inference costs differ from MC Dropout. Retain Gaussian Kelly f*=mu/sigma² and effective variance sigma_eff²=sigma_alea²+lambda*sigma_epi² with lambda>1 as a hypothesis, quarter-Kelly illustration, epi/alea abstain ratio, clipping and validation rather than a proven trading edge. Preserve 95% nominal-versus-empirical coverage, linear rescaling versus adaptive conformal inference, walk-forward lambda tuning, all five explicitly missing real-data measurements, production monitoring and honest caveats. In particular, a flexible aleatoric head can absorb epistemic signal; novel regimes can break calibration. Do not present a measured sizing benefit, coverage or latency where the article marks it TODO.
+
+Preserve every substantive section, example, formula, mathematical symbol, percent sign, unit, table, code rule, caveat, risk, link and source reference. Never silently alter an article number, heading or claim. Numerical, research, financial, company-specific and mutable statements remain attributed article claims pending human editorial, mathematical and primary-source review. No guaranteed returns or investment advice. Chinese translation/terminology and Mandarin pronunciation remain pending review where applicable. External NotebookLM notebook/source/artifact duplicate identities are unchecked before submission; target-channel duplicates are unchecked before final production. Do not imply either is cleared.
+Use natural spoken narration or dialogue in the requested locale. Explain formulas, variables, units, tables, plots and code behavior in words; do not request on-screen drawings or text. Distinguish article claims from verified facts when speaking. End with the article conclusion and references.

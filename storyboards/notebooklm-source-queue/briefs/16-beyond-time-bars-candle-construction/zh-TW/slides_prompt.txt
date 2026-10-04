@@ -1,0 +1,48 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article beyond-time-bars-candle-construction ZH-TW 50ce98e0057b". It is the complete published zh-Hant article snapshot. Do not merge another language edition or outside facts. Output language: Traditional Chinese for Taiwan (zh-TW), explicitly not generic Chinese. Use Taiwan financial and statistical terminology contextually: 認知不確定性, 偶然不確定性, 部位, 變異數, K線, 成交量, 委託簿 and 回測. Preserve the source headings exactly; the Bayesian article's 認識/對立 wording needs human terminology review against epistemic/aleatoric. Keep formulas, code identifiers, units, citations and proper names exact. Speak Taiwan Mandarin (Guoyu) for audio, not Taiwanese Hokkien; regional terminology and pronunciation need editorial listening review.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 要點速覽
+2. H2 — K線構建的兩個軸
+3. H2 — 1. 時間K線（標準）
+4. H2 — 2–4. 基於活躍度的K線
+5. H3 — 2. Tick K線
+6. H3 — 3. 成交量K線
+7. H3 — 4. 美元K線
+8. H3 — 閾值選擇
+9. H2 — 5–7. 基於價格的K線
+10. H3 — 5. Renko K線
+11. H3 — 6. 範圍K線
+12. H3 — 7. 波動率K線
+13. H2 — 8. Heikin-Ashi（平滑變換）
+14. H2 — 9–11. 日本反轉圖表
+15. H3 — 9. 卡吉圖（Kagi）
+16. H3 — 10. 折線突破圖（Line Break）
+17. H3 — 11. 點數圖（Point & Figure）
+18. H2 — 12–14. 資訊驅動K線
+19. H3 — 12. 成交筆數失衡K線（TIB）
+20. H3 — 13. 成交量失衡K線（VIB）
+21. H3 — 爆炸問題
+22. H3 — 14. 遊程K線（Run Bars）
+23. H2 — 15. CUSUM 過濾器K線
+24. H2 — 16. 熵K線（Entropy Bars）
+25. H2 — 17. Delta K線（訂單流）
+26. H2 — 方法 A：日曆對齊聚合
+27. H2 — 方法 B：滾動視窗聚合
+28. H2 — 方法 C：自適應滾動聚合
+29. H3 — 組合示例
+30. H3 — 混合引擎：日曆 + 滾動
+31. H3 — 時間-成交量混合：日曆 + 成交量拆分
+32. H2 — 實用聚合：級聯預載入
+33. H3 — 多交易所限制
+34. H3 — 聚合一致性校驗
+35. H2 — 對比矩陣
+36. H3 — 軸1：基礎K線型別
+37. H3 — 軸2：聚合方法
+38. H2 — 實踐建議
+39. H2 — 結論
+40. H2 — 實用連結
+41. H2 — Citation
+
+Preserve the two independent axes: 17 listed base bar types and 3 aggregation methods (17 × 3 = 51 combinations), while explaining that Heikin-Ashi is also described as a transformation. For time, tick, volume and dollar bars retain their closing rules, trade-count versus base-asset volume versus USD/USDT notional units, illustrative BTCUSDT thresholds and regime sensitivity. Distinguish Renko, range and ATR-adaptive volatility bars; keep Heikin-Ashi OHLC formulas and its loss of exact prices; then Kagi, Line Break and Point & Figure reversals. For information-driven sampling keep tick-rule signs ±1, TIB cumulative theta and EWMA threshold, VIB signed volume, run-length logic and the imbalance-bar feedback/explosion problem with min_ticks/max_ticks clamps. Preserve CUSUM on 1-minute OHLCV without tick data, entropy threshold/bin/min-trade example, and delta as aggressive buy volume minus sell volume requiring side classification. Separate calendar-aligned, closed-base-bar rolling and ATR-adaptive rolling aggregation; explain cold start, backtest/live parity, hybrid calendar+rolling and calendar-with-volume-splits. Keep cascading 1-minute/1-hour/1-day preload, mutable exchange REST limits, composable OHLCV and the 0.001 tolerance in the aggregation check. Cover both comparison axes, four-layer recommendation, implementation/data limitations, conclusion, links and citation. Treat exchange limits, activity thresholds, performance and example code as article claims or illustrations pending primary and engineering review; never imply that a bar type guarantees predictive advantage.
+
+Preserve every substantive section, example, formula, mathematical symbol, percent sign, unit, table, code rule, caveat, risk, link and source reference. Never silently alter an article number, heading or claim. Numerical, research, financial, company-specific and mutable statements remain attributed article claims pending human editorial, mathematical and primary-source review. No guaranteed returns or investment advice. Chinese translation/terminology and Mandarin pronunciation remain pending review where applicable. External NotebookLM notebook/source/artifact duplicate identities are unchecked before submission; target-channel duplicates are unchecked before final production. Do not imply either is cleared.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams and tables only as supported by this locale's source. Keep visible text in the requested locale apart from exact technical identifiers. End with the article conclusion and references.
