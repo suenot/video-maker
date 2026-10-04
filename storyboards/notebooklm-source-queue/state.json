@@ -4275,10 +4275,10 @@
           "submission_mode": "later",
           "artifact_id": "759e65b4-9a0a-4fdb-a0e7-87a2348ba2ca",
           "card_text": "tablet\nAsymmetric and Heavy-Tailed GARCH for Crypto Volatility\nScheduled for after 11am\nmore_vert",
-          "observed_at": "2026-10-04T06:57:17.585991+00:00"
+          "observed_at": "2026-10-04T07:14:35.044551+00:00"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "generating",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Risk Metrics Explained\n+ Model Comparison Guide\n+ Technical Implementation Tips\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 10:51."
@@ -4295,8 +4295,8 @@
           "source_id": "c11b7736-f34a-4d4d-ae98-7a6997e12cbc",
           "submission_mode": "later",
           "artifact_id": "b067e038-7698-49c3-926c-8568f1d022f4",
-          "card_text": "audio_spark\nAsymmetric and Heavy-Tailed GARCH for Crypto Volatility\nScheduled for after 11am\nmore_vert",
-          "observed_at": "2026-10-04T06:57:18.605076+00:00"
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T07:14:36.092156+00:00"
         }
       },
       "admission_state": "admitted",
@@ -4341,7 +4341,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "5d2772e53e5ecade8ae75c8ceb93181da6dc219c863c44b6df3a7b94077e00e8",
           "requested_at": "2026-10-04T06:57:42.512943+00:00",
@@ -4351,11 +4351,18 @@
           "source_id": "77ca197e-0ad1-4891-860f-88993c2efced",
           "submission_mode": "now",
           "artifact_id": "16cce4c4-13c0-4edf-a6ec-81697e03adb3",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T06:57:47.077200+00:00"
+          "card_text": "tablet\nUnread\nAttractors in HFT\n1 source · 8m ago\nmore_vert",
+          "observed_at": "2026-10-04T07:14:43.529219+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/attractors-algotrading/en/slides.pdf",
+          "sha256": "d40455ba72d143eb7d26957293ea889f6686d32452908567338509fe07c6063f",
+          "bytes": 14905733,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T07:14:57.055173+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "16cce4c4-13c0-4edf-a6ec-81697e03adb3"
           ],
@@ -4367,8 +4374,15 @@
           "source_id": "77ca197e-0ad1-4891-860f-88993c2efced",
           "submission_mode": "now",
           "artifact_id": "b6e7b154-2d49-4d15-b88a-999c52984f99",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T06:57:58.627040+00:00"
+          "card_text": "audio_spark\nUnread\nMathematical Attractors in High Frequency Trading\n23:38 · Deep Dive · 1 source · 9m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T07:14:58.105326+00:00",
+          "duration_seconds": 1418.04263,
+          "path": "input/notebooklm-sources/attractors-algotrading/en/audio.m4a",
+          "sha256": "d6e992bac86a2b8a29986d8854f1e118b359df5afef371746e100b8d237fd666",
+          "bytes": 45639003,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T07:15:40.651111+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -4413,7 +4427,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "d777e0cf769e55dcfadda853c86e3c6dc02b9fe9ca0f97e4fb4b9b2001da912d",
           "requested_at": "2026-10-04T06:58:26.622949+00:00",
@@ -4423,11 +4437,18 @@
           "source_id": "a498b836-0bd6-4ab7-87e9-edc9d3bb753e",
           "submission_mode": "now",
           "artifact_id": "df837064-2db1-47dc-a25b-5ce409c9a614",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T06:58:31.185217+00:00"
+          "card_text": "tablet\nUnread\nАттракторы в алготрейдинге\n1 source · 8m ago\nmore_vert",
+          "observed_at": "2026-10-04T07:15:48.592785+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/attractors-algotrading/ru/slides.pdf",
+          "sha256": "33c56df526c8dd0ee30e8234f3fcacab56cc350f572b2699423ac697149a6a4f",
+          "bytes": 15442008,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T07:15:56.821355+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "df837064-2db1-47dc-a25b-5ce409c9a614"
           ],
@@ -4439,8 +4460,15 @@
           "source_id": "a498b836-0bd6-4ab7-87e9-edc9d3bb753e",
           "submission_mode": "now",
           "artifact_id": "08792c96-a11d-4429-9bfc-364e908fc4c3",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T06:58:47.900012+00:00"
+          "card_text": "audio_spark\nUnread\nАттракторы и коинтеграция в алгоритмическом трейдинге\n13:51 · Deep Dive · 1 source · 9m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T07:15:57.893407+00:00",
+          "duration_seconds": 831.251156,
+          "path": "input/notebooklm-sources/attractors-algotrading/ru/audio.m4a",
+          "sha256": "8818fc5c9bb2d4cc44a1890f0e1c8d77bb7449a3a3ea0572170ce79a26e07f03",
+          "bytes": 26753748,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T07:16:19.662520+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -4472,9 +4500,156 @@
       "selected_source_ids": [
         "a498b836-0bd6-4ab7-87e9-edc9d3bb753e"
       ]
+    },
+    "attractors-algotrading:zh-CN": {
+      "slug": "attractors-algotrading",
+      "language": "zh-CN",
+      "article_sha256": "f20ea8f6a89c3b426f4b093466c20c9dc7ec4412834d686e4fd52058b3d1bfc8",
+      "input_hashes": {
+        "article": "f20ea8f6a89c3b426f4b093466c20c9dc7ec4412834d686e4fd52058b3d1bfc8",
+        "source_text": "5aec7397e04b9e2cc3e7561178e97643ca00baa85339077921be8e99804f79b5",
+        "slides_prompt": "0b8fc31b6efaff3564622e847da62187da0f564900de2c17e67c75cf0d7c18f8",
+        "audio_prompt": "0ef34cb57d7c2a51e77438dfd4e49b5c765f18b0f9cde580ec36bc93879f0735"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "0b8fc31b6efaff3564622e847da62187da0f564900de2c17e67c75cf0d7c18f8",
+          "requested_at": "2026-10-04T07:17:04.638977+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "b2bb2020-ec8c-4b59-8d15-d023a1203618",
+          "submission_mode": "now",
+          "artifact_id": "757c44f1-cef6-450e-bcc3-9cf4d938f3cd",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T07:17:09.251441+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "757c44f1-cef6-450e-bcc3-9cf4d938f3cd"
+          ],
+          "prompt_sha256": "0ef34cb57d7c2a51e77438dfd4e49b5c765f18b0f9cde580ec36bc93879f0735",
+          "requested_at": "2026-10-04T07:17:35.628237+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "b2bb2020-ec8c-4b59-8d15-d023a1203618",
+          "submission_mode": "now",
+          "artifact_id": "b809b815-568f-49d9-9005-c94331732a17",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T07:17:40.244150+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T07:16:19.674800+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T07:16:28.875713+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/attractors-algotrading-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "db032dd06715c15684c2b53d3189f773adb2d320c725e00afcaad577c88dce04",
+        "baseline_count": 307,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T07:16:31.166160+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/5001d8ce-7a45-4852-8075-6bcf9cd3dc86",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T07:16:36.374804+00:00",
+        "sha256": "5aec7397e04b9e2cc3e7561178e97643ca00baa85339077921be8e99804f79b5",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T07:16:49.537188+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "b2bb2020-ec8c-4b59-8d15-d023a1203618",
+      "source_title": "MM article attractors-algotrading ZH-CN f20ea8f6a89c",
+      "source_sha256": "5aec7397e04b9e2cc3e7561178e97643ca00baa85339077921be8e99804f79b5",
+      "state": "source_ready",
+      "source_display_name": "MM article attractors-algotrading ZH-CN f20ea8f6a…",
+      "selected_source_ids": [
+        "b2bb2020-ec8c-4b59-8d15-d023a1203618"
+      ]
+    },
+    "attractors-algotrading:zh-TW": {
+      "slug": "attractors-algotrading",
+      "language": "zh-TW",
+      "article_sha256": "2dd02fb34b384343efab476df9820c9026ed5b729914d2b85cc7bfee0955bff0",
+      "input_hashes": {
+        "article": "2dd02fb34b384343efab476df9820c9026ed5b729914d2b85cc7bfee0955bff0",
+        "source_text": "9c099a8e1dff9d31fddb9686e1bdbe660f218f27de8781c4441e34753ab3017b",
+        "slides_prompt": "55ec348715836c7459a1d667196a5ea4a83de733d2be601f06369c62c49745d3",
+        "audio_prompt": "2406ba19246f560c299f53068a46245e3ce550c5d329ff3c8e694b0699876f32"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "55ec348715836c7459a1d667196a5ea4a83de733d2be601f06369c62c49745d3",
+          "requested_at": "2026-10-04T07:18:26.687391+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "07006fb0-0be7-4e9c-ad8a-bfe496df1a99",
+          "submission_mode": "now",
+          "artifact_id": "b353d3d7-a178-4d6c-8c3d-8061d7f564b0",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T07:18:31.311921+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Beginner Overview\n+ Strategy Steps\n+ Risk Analysis\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "b353d3d7-a178-4d6c-8c3d-8061d7f564b0"
+          ],
+          "prompt_sha256": "2406ba19246f560c299f53068a46245e3ce550c5d329ff3c8e694b0699876f32",
+          "requested_at": "2026-10-04T07:18:57.445287+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "07006fb0-0be7-4e9c-ad8a-bfe496df1a99",
+          "submission_mode": "later",
+          "artifact_id": "5b639672-4bea-4fa8-8064-ac1ef55c96fa",
+          "card_text": "audio_spark\nMarket Attractors in Algorithmic Trading\nScheduled for after 7pm\nmore_vert",
+          "observed_at": "2026-10-04T07:19:02.053926+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T07:17:40.258608+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T07:17:48.992283+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/attractors-algotrading-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "7e502d52420b16ededf223735ddfcc930d8680d1c421c68b51454f31351f4361",
+        "baseline_count": 308,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T07:17:53.349166+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/d207d024-3025-46d0-ac5b-37088fd46993",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T07:17:58.345419+00:00",
+        "sha256": "9c099a8e1dff9d31fddb9686e1bdbe660f218f27de8781c4441e34753ab3017b",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T07:18:11.592273+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "07006fb0-0be7-4e9c-ad8a-bfe496df1a99",
+      "source_title": "MM article attractors-algotrading ZH-TW 2dd02fb34b38",
+      "source_sha256": "9c099a8e1dff9d31fddb9686e1bdbe660f218f27de8781c4441e34753ab3017b",
+      "state": "source_ready",
+      "source_display_name": "MM article attractors-algotrading ZH-TW 2dd02fb34…",
+      "selected_source_ids": [
+        "07006fb0-0be7-4e9c-ad8a-bfe496df1a99"
+      ]
     }
   },
-  "checked_at": "2026-10-04T06:58:47.903772+00:00",
+  "checked_at": "2026-10-04T07:19:02.085303+00:00",
   "browser_geometry_requested": {
     "width": 1998,
     "height": 1290,
@@ -4491,10 +4666,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 10:51.",
+    "notice": "AI usage limit reached. All features will be available after 15:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-04T02:13:07.095400+00:00",
-    "not_before": "2026-10-04T06:51:00+00:00"
+    "observed_at": "2026-10-04T07:19:02.085295+00:00",
+    "not_before": "2026-10-04T11:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Save complete English and Russian Attractors PDF/audio originals with verified hashes and integrity evidence; bind separate Mainland Simplified and Taiwan Traditional Chinese requests with explicit variants, preserving existing GARCH identities and the new all-feature quota reset.
 - Save the complete Mainland Simplified Chinese asymmetric GARCH PDF/audio originals with hashes and integrity evidence; bind separate English and Russian Attractors requests while preserving the existing Taiwan GARCH scheduled artifact IDs.
 - Freeze eight separate EN/RU/Mainland Simplified/Taiwan Traditional Attractors and AutoML source briefs with full published articles, ordered section prompts and hashes; record pending external/editorial checks and exclude AutoHedge because its four locale files share the same Russian body.
 - Complete the Taiwan Traditional Chinese anomaly-detection and English/Russian asymmetric GARCH PDF/audio pairs with verified original hashes and integrity evidence; bind the separate Mainland Simplified and Taiwan Traditional GARCH requests with explicit Chinese variants and retain the displayed quota reset.
