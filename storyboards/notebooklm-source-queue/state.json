@@ -5218,7 +5218,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "9c16cc6f8e16c8e3b790b0ceb5da17a297302d1ea03b9bce8ac5f3cabe733411",
           "requested_at": "2026-10-04T17:12:26.182639+00:00",
@@ -5228,11 +5228,18 @@
           "source_id": "7f02a9d7-7e83-4944-9175-dd1ef03998dd",
           "submission_mode": "now",
           "artifact_id": "653d3949-34d9-419f-b593-8530feaa22e6",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T17:12:30.733617+00:00"
+          "card_text": "tablet\nUnread\nUncertainty-Aware Position Sizing\n1 source · 3m ago\nmore_vert",
+          "observed_at": "2026-10-04T17:26:02.101476+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/bayesian-neural-networks-trading/zh-CN/slides.pdf",
+          "sha256": "17a79b1503195d6732e983868e60acf2c558e673b59cbd6171fcfc35ed1bb3fe",
+          "bytes": 14175038,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T17:26:09.337335+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "653d3949-34d9-419f-b593-8530feaa22e6"
           ],
@@ -5244,8 +5251,15 @@
           "source_id": "7f02a9d7-7e83-4944-9175-dd1ef03998dd",
           "submission_mode": "now",
           "artifact_id": "3bdb8917-26f6-43ef-b3ef-9b371046c577",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T17:12:47.984753+00:00"
+          "card_text": "audio_spark\nUnread\n别为模型无知买单\n20:18 · Deep Dive · 1 source · 4m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T17:26:10.372898+00:00",
+          "duration_seconds": 1218.81542,
+          "path": "input/notebooklm-sources/bayesian-neural-networks-trading/zh-CN/audio.m4a",
+          "sha256": "4ca38b4da8ccffc1baee236281c653e82def408ac5723466f022508463536e18",
+          "bytes": 39227092,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T17:26:30.910158+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -5290,7 +5304,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "6e735d35ca7f5c13cf831858c18f21c0aa6bb6f22a7e900ed3ce91354007869d",
           "requested_at": "2026-10-04T17:13:16.267651+00:00",
@@ -5300,11 +5314,18 @@
           "source_id": "31e83a2c-d02e-4e43-9d96-2beb3674e5c6",
           "submission_mode": "now",
           "artifact_id": "b01893ce-0887-498d-ba4f-60aa5314a631",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T17:13:20.826410+00:00"
+          "card_text": "tablet\nUnread\nUncertainty-Aware Position Sizing\n1 source · 2m ago\nmore_vert",
+          "observed_at": "2026-10-04T17:26:37.599813+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/bayesian-neural-networks-trading/zh-TW/slides.pdf",
+          "sha256": "8f8275510cff8dc596b99d13227552f98230d3dfec565ebd8ab0e7f82c0a2058",
+          "bytes": 20532048,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T17:26:43.547565+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "b01893ce-0887-498d-ba4f-60aa5314a631"
           ],
@@ -5316,8 +5337,15 @@
           "source_id": "31e83a2c-d02e-4e43-9d96-2beb3674e5c6",
           "submission_mode": "now",
           "artifact_id": "77e955c5-352b-441e-856f-b47bfd17f913",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T17:13:38.210035+00:00"
+          "card_text": "audio_spark\nUnread\nAI無知與市場雜訊\n19:49 · Deep Dive · 1 source · 3m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T17:26:44.592840+00:00",
+          "duration_seconds": 1189.488617,
+          "path": "input/notebooklm-sources/bayesian-neural-networks-trading/zh-TW/audio.m4a",
+          "sha256": "8b9ce496208151ceea0cf55cf38b63bce6e42353ac3930a8516711868840745c",
+          "bytes": 38283234,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T17:27:03.369273+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -5349,9 +5377,86 @@
       "selected_source_ids": [
         "31e83a2c-d02e-4e43-9d96-2beb3674e5c6"
       ]
+    },
+    "beyond-time-bars-candle-construction:en": {
+      "slug": "beyond-time-bars-candle-construction",
+      "language": "en",
+      "article_sha256": "f21de2101b982f500bee58a1a0a63a10d2ac0ab453f00aa8aa1cd4a4fdde2c68",
+      "input_hashes": {
+        "article": "f21de2101b982f500bee58a1a0a63a10d2ac0ab453f00aa8aa1cd4a4fdde2c68",
+        "source_text": "269a0769391645c0d5f21db3c8cdb9e0849b4e92036ed5d34f8c20bc6716b994",
+        "slides_prompt": "38e4c010c9c364f02a84759eb5d86262180d29aa242c777da3ebbc7bb79f528f",
+        "audio_prompt": "f2d3d0a7bbd15415da9a32e5be67c0c6a5128146725109e224562e268bfdf0d0"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nEnglish\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 01:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "38e4c010c9c364f02a84759eb5d86262180d29aa242c777da3ebbc7bb79f528f",
+          "requested_at": "2026-10-04T17:27:26.124777+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "8f7d8b56-e10f-4c10-a5df-b6de973856ab",
+          "submission_mode": "later",
+          "artifact_id": "db9df48b-4ced-49b1-93df-42d9bb1a9bc3",
+          "card_text": "tablet\nBar Types and Aggregation Methods for Algorithmic Trading\nScheduled for after 2am\nmore_vert",
+          "observed_at": "2026-10-04T17:27:30.671927+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "db9df48b-4ced-49b1-93df-42d9bb1a9bc3"
+          ],
+          "prompt_sha256": "f2d3d0a7bbd15415da9a32e5be67c0c6a5128146725109e224562e268bfdf0d0",
+          "requested_at": "2026-10-04T17:27:37.782613+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "8f7d8b56-e10f-4c10-a5df-b6de973856ab",
+          "submission_mode": "now",
+          "artifact_id": "8e433554-f2bd-4435-8d5e-6b24e7ce3145",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T17:27:42.341093+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T17:27:03.383535+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T17:27:09.715131+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/beyond-time-bars-candle-construction-en-notebook-baseline.json",
+        "baseline_sha256": "771205279f71e99c766b99dfcbad03521e27dc790e8e6483828392d99c3211ec",
+        "baseline_count": 317,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T17:27:10.806728+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/9ae73c26-c945-4e68-af22-d4b2558fb7f3",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T17:27:14.983778+00:00",
+        "sha256": "269a0769391645c0d5f21db3c8cdb9e0849b4e92036ed5d34f8c20bc6716b994",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T17:27:22.819711+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "8f7d8b56-e10f-4c10-a5df-b6de973856ab",
+      "source_title": "MM article beyond-time-bars-candle-construction EN f21de2101b98",
+      "source_sha256": "269a0769391645c0d5f21db3c8cdb9e0849b4e92036ed5d34f8c20bc6716b994",
+      "state": "source_ready",
+      "source_display_name": "MM article beyond-time-bars-candle-construction E…",
+      "selected_source_ids": [
+        "8f7d8b56-e10f-4c10-a5df-b6de973856ab"
+      ]
     }
   },
-  "checked_at": "2026-10-04T17:13:38.214111+00:00",
+  "checked_at": "2026-10-04T17:27:42.355180+00:00",
   "browser_geometry_requested": {
     "width": 1999,
     "height": 1290,
@@ -5368,10 +5473,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 20:51.",
+    "notice": "AI usage limit reached. All features will be available after 01:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-04T12:26:08.809917+00:00",
-    "not_before": "2026-10-04T16:51:00+00:00"
+    "observed_at": "2026-10-04T17:27:42.355173+00:00",
+    "not_before": "2026-10-04T21:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
