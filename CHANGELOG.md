@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Complete the Taiwan Traditional Chinese anomaly-detection and English/Russian asymmetric GARCH PDF/audio pairs with verified original hashes and integrity evidence; bind the separate Mainland Simplified and Taiwan Traditional GARCH requests with explicit Chinese variants and retain the displayed quota reset.
 - Complete the Taiwan Traditional Chinese Order Flow PDF/audio pair and save the Taiwan anomaly-detection audio with verified original hashes and integrity evidence; bind separate English and Russian asymmetric GARCH PDF/audio requests after the saved quota reset without repeating existing generations.
 - Save complete English, Russian and Mainland Simplified Chinese anomaly-detection PDF/audio originals with hashes and integrity evidence; save the Taiwan Order Flow deck and bind the separate Taiwan anomaly-detection pair while preserving NotebookLM's displayed all-feature quota reset.
 - Bind separate English, Russian and Mainland Simplified Chinese anomaly-detection PDF/audio requests to permanent source IDs and verified language selections, preserving the existing Taiwan Order Flow requests and the eight-artifact active cap.
