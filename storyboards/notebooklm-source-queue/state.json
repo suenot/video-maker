@@ -5046,7 +5046,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "1b5a8235f8773ff005b454105eb5a4e30087a699de46532aa97546c4b3234105",
           "requested_at": "2026-10-04T16:57:28.526480+00:00",
@@ -5056,11 +5056,18 @@
           "source_id": "40302c26-d6b2-4def-b78c-229d149e2620",
           "submission_mode": "now",
           "artifact_id": "b67f7a80-1d97-47c4-92dd-96a1cbd4cc86",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T16:57:33.075658+00:00"
+          "card_text": "tablet\nUnread\nDecomposing Trading Uncertainty\n1 source · 4m ago\nmore_vert",
+          "observed_at": "2026-10-04T17:11:02.194209+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/bayesian-neural-networks-trading/en/slides.pdf",
+          "sha256": "f1a902a85ebb8bde7bfd259bb286ba0157b7f1d8e507109ad65f6b4ffa063c66",
+          "bytes": 8998593,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T17:11:05.629962+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "b67f7a80-1d97-47c4-92dd-96a1cbd4cc86"
           ],
@@ -5072,8 +5079,15 @@
           "source_id": "40302c26-d6b2-4def-b78c-229d149e2620",
           "submission_mode": "now",
           "artifact_id": "353169d1-2d70-4c82-91ab-4dacef7794c9",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T16:57:44.723029+00:00"
+          "card_text": "audio_spark\nUnread\nSeparating Market Noise From Model Ignorance\n24:33 · Deep Dive · 1 source · 5m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T17:11:06.660437+00:00",
+          "duration_seconds": 1473.097143,
+          "path": "input/notebooklm-sources/bayesian-neural-networks-trading/en/audio.m4a",
+          "sha256": "8e59612293c0633f9a504445d6ab26b69566db8b3e222ebbbd3c28142c3885ae",
+          "bytes": 47410811,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T17:11:31.749186+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -5118,7 +5132,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "2c3d04f04b72a5d00da030b6ead3786b74ba1c4097a2768eeeecb98c74468f1b",
           "requested_at": "2026-10-04T16:58:11.998656+00:00",
@@ -5128,11 +5142,18 @@
           "source_id": "08d46c32-5f4b-4864-b81c-b81a51b929c2",
           "submission_mode": "now",
           "artifact_id": "61b89fd1-4a4b-4f7e-a5ce-16fa68cad1e3",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T16:58:16.562199+00:00"
+          "card_text": "tablet\nUnread\nBayesian Uncertainty in Quant Trading\n1 source · 4m ago\nmore_vert",
+          "observed_at": "2026-10-04T17:11:38.410541+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/bayesian-neural-networks-trading/ru/slides.pdf",
+          "sha256": "6d6211559f57cc6e7794e747edffb7298516823ae85404e2541e1e5838542b87",
+          "bytes": 14442257,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T17:11:42.958013+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "61b89fd1-4a4b-4f7e-a5ce-16fa68cad1e3"
           ],
@@ -5144,8 +5165,15 @@
           "source_id": "08d46c32-5f4b-4864-b81c-b81a51b929c2",
           "submission_mode": "now",
           "artifact_id": "a1c71f64-13c0-4657-a022-7a9d38179803",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T16:58:34.058772+00:00"
+          "card_text": "audio_spark\nUnread\nКак торговый алгоритм измеряет собственное незнание\n17:31 · Deep Dive · 1 source · 4m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T17:11:43.992136+00:00",
+          "duration_seconds": 1051.445986,
+          "path": "input/notebooklm-sources/bayesian-neural-networks-trading/ru/audio.m4a",
+          "sha256": "45b3e0c0729ec26575b32f2cf2c886a6a15a7c6fc350569aff4204516f067c09",
+          "bytes": 33840466,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T17:11:59.417460+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -5177,9 +5205,153 @@
       "selected_source_ids": [
         "08d46c32-5f4b-4864-b81c-b81a51b929c2"
       ]
+    },
+    "bayesian-neural-networks-trading:zh-CN": {
+      "slug": "bayesian-neural-networks-trading",
+      "language": "zh-CN",
+      "article_sha256": "5df89b30eefc1b1e19224c14aecb7893bd744ff1c3b1d1ed0cbf8f773ac7af68",
+      "input_hashes": {
+        "article": "5df89b30eefc1b1e19224c14aecb7893bd744ff1c3b1d1ed0cbf8f773ac7af68",
+        "source_text": "578cd121df5ca7489ef44ef1b92726f6ecdb08c8e40da033368669d498180ab2",
+        "slides_prompt": "9c16cc6f8e16c8e3b790b0ceb5da17a297302d1ea03b9bce8ac5f3cabe733411",
+        "audio_prompt": "a0e4eb56683eb127b65f70a95880523c7c106017edd329c99a501b714ec08e11"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "9c16cc6f8e16c8e3b790b0ceb5da17a297302d1ea03b9bce8ac5f3cabe733411",
+          "requested_at": "2026-10-04T17:12:26.182639+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "7f02a9d7-7e83-4944-9175-dd1ef03998dd",
+          "submission_mode": "now",
+          "artifact_id": "653d3949-34d9-419f-b593-8530feaa22e6",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T17:12:30.733617+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "653d3949-34d9-419f-b593-8530feaa22e6"
+          ],
+          "prompt_sha256": "a0e4eb56683eb127b65f70a95880523c7c106017edd329c99a501b714ec08e11",
+          "requested_at": "2026-10-04T17:12:43.432052+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "7f02a9d7-7e83-4944-9175-dd1ef03998dd",
+          "submission_mode": "now",
+          "artifact_id": "3bdb8917-26f6-43ef-b3ef-9b371046c577",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T17:12:47.984753+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T17:11:59.431209+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T17:12:06.455605+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/bayesian-neural-networks-trading-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "17df50d81ea27f46a8d0730cc4679662daef1687623f3fc5c802cc80c66677ae",
+        "baseline_count": 315,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T17:12:07.537469+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/44ea4950-bab9-4f92-8e09-de93fd0b17d1",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T17:12:11.651564+00:00",
+        "sha256": "578cd121df5ca7489ef44ef1b92726f6ecdb08c8e40da033368669d498180ab2",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T17:12:19.566094+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "7f02a9d7-7e83-4944-9175-dd1ef03998dd",
+      "source_title": "MM article bayesian-neural-networks-trading ZH-CN 5df89b30eefc",
+      "source_sha256": "578cd121df5ca7489ef44ef1b92726f6ecdb08c8e40da033368669d498180ab2",
+      "state": "source_ready",
+      "source_display_name": "MM article bayesian-neural-networks-trading ZH-CN…",
+      "selected_source_ids": [
+        "7f02a9d7-7e83-4944-9175-dd1ef03998dd"
+      ]
+    },
+    "bayesian-neural-networks-trading:zh-TW": {
+      "slug": "bayesian-neural-networks-trading",
+      "language": "zh-TW",
+      "article_sha256": "087aaa1be42977133cce00d8623802b321392601eb22868d3d407b13e0c82503",
+      "input_hashes": {
+        "article": "087aaa1be42977133cce00d8623802b321392601eb22868d3d407b13e0c82503",
+        "source_text": "8862348279ebcda5ee6363278fecee2bd3c80ec2c047f20e9ac92d05a5848a55",
+        "slides_prompt": "6e735d35ca7f5c13cf831858c18f21c0aa6bb6f22a7e900ed3ce91354007869d",
+        "audio_prompt": "bfd65edbc79199eac762649848b64002095addcd33ef6d40d86a5ca0dc48db39"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "6e735d35ca7f5c13cf831858c18f21c0aa6bb6f22a7e900ed3ce91354007869d",
+          "requested_at": "2026-10-04T17:13:16.267651+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "31e83a2c-d02e-4e43-9d96-2beb3674e5c6",
+          "submission_mode": "now",
+          "artifact_id": "b01893ce-0887-498d-ba4f-60aa5314a631",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T17:13:20.826410+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "b01893ce-0887-498d-ba4f-60aa5314a631"
+          ],
+          "prompt_sha256": "bfd65edbc79199eac762649848b64002095addcd33ef6d40d86a5ca0dc48db39",
+          "requested_at": "2026-10-04T17:13:33.662436+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "31e83a2c-d02e-4e43-9d96-2beb3674e5c6",
+          "submission_mode": "now",
+          "artifact_id": "77e955c5-352b-441e-856f-b47bfd17f913",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T17:13:38.210035+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T17:12:47.998558+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T17:12:55.226423+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/bayesian-neural-networks-trading-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "7fa70f977f1e8278bd6104556efb4fe5cc9d79183a9705d32d0374079c3c0242",
+        "baseline_count": 316,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T17:12:56.314700+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/bb46f76d-dd37-47c8-bebb-2ffd0fec4ba9",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T17:13:00.600328+00:00",
+        "sha256": "8862348279ebcda5ee6363278fecee2bd3c80ec2c047f20e9ac92d05a5848a55",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T17:13:08.421558+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "31e83a2c-d02e-4e43-9d96-2beb3674e5c6",
+      "source_title": "MM article bayesian-neural-networks-trading ZH-TW 087aaa1be429",
+      "source_sha256": "8862348279ebcda5ee6363278fecee2bd3c80ec2c047f20e9ac92d05a5848a55",
+      "state": "source_ready",
+      "source_display_name": "MM article bayesian-neural-networks-trading ZH-TW…",
+      "selected_source_ids": [
+        "31e83a2c-d02e-4e43-9d96-2beb3674e5c6"
+      ]
     }
   },
-  "checked_at": "2026-10-04T16:58:34.062849+00:00",
+  "checked_at": "2026-10-04T17:13:38.214111+00:00",
   "browser_geometry_requested": {
     "width": 1999,
     "height": 1290,
