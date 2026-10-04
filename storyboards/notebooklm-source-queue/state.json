@@ -4650,7 +4650,7 @@
           "submission_mode": "later",
           "artifact_id": "5b639672-4bea-4fa8-8064-ac1ef55c96fa",
           "card_text": "audio_spark\nMarket Attractors in Algorithmic Trading\nScheduled for after 7pm\nmore_vert",
-          "observed_at": "2026-10-04T11:58:50.831679+00:00"
+          "observed_at": "2026-10-04T12:11:05.745383+00:00"
         }
       },
       "admission_state": "admitted",
@@ -4695,7 +4695,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "08ed75f2686ed9bebf4b165b5670f1af072c606c8eef11d9caea6c87f6fdecc3",
           "requested_at": "2026-10-04T11:59:15.176966+00:00",
@@ -4705,11 +4705,18 @@
           "source_id": "5b14b229-b480-4b02-807f-0dcac0f91816",
           "submission_mode": "now",
           "artifact_id": "cd6860a2-9981-42ac-bd92-0ae339419610",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T11:59:19.725009+00:00"
+          "card_text": "tablet\nUnread\nAutoML for Systematic Trading\n1 source · 5m ago\nmore_vert",
+          "observed_at": "2026-10-04T12:11:12.381210+00:00",
+          "pages": 11,
+          "path": "input/notebooklm-sources/automl-systematic-trading/en/slides.pdf",
+          "sha256": "226eadc7467eac986a2f5693a4bab193d5c8f0f2e7858ab1f7502b9845dfbe1f",
+          "bytes": 9918653,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T12:11:24.187620+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "cd6860a2-9981-42ac-bd92-0ae339419610"
           ],
@@ -4721,8 +4728,15 @@
           "source_id": "5b14b229-b480-4b02-807f-0dcac0f91816",
           "submission_mode": "now",
           "artifact_id": "a7111a78-822b-442d-bb68-647791a755a9",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T11:59:31.394205+00:00"
+          "card_text": "audio_spark\nUnread\nThe Statistical Debt of AI Trading\n23:13 · Deep Dive · 1 source · 2m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T12:11:25.218537+00:00",
+          "duration_seconds": 1393.243719,
+          "path": "input/notebooklm-sources/automl-systematic-trading/en/audio.m4a",
+          "sha256": "d4171f3b538a5310a68f59c004a6f36505ec95da1330a87ac26b886e0de9f8e4",
+          "bytes": 44840818,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T12:12:33.939055+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -4767,7 +4781,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "a9dd5e6188cd944bce105d6112bb927dc45c8e5d620d8b69e64bb5d52cbdf8bd",
           "requested_at": "2026-10-04T12:00:00.575874+00:00",
@@ -4777,11 +4791,18 @@
           "source_id": "a72d9cdb-3716-4000-bb56-df086592e574",
           "submission_mode": "now",
           "artifact_id": "48a6d6a3-91a3-4503-9cf6-bc2517cd7f97",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T12:00:05.144781+00:00"
+          "card_text": "tablet\nUnread\nAutoML в систематическом трейдинге\n1 source · 3m ago\nmore_vert",
+          "observed_at": "2026-10-04T12:12:41.121199+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/automl-systematic-trading/ru/slides.pdf",
+          "sha256": "255998d91007abb8c1d22b6da44acf5160cb0c65314aa54eb22071c45fa23140",
+          "bytes": 19147154,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T12:12:56.300929+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "48a6d6a3-91a3-4503-9cf6-bc2517cd7f97"
           ],
@@ -4793,8 +4814,15 @@
           "source_id": "a72d9cdb-3716-4000-bb56-df086592e574",
           "submission_mode": "now",
           "artifact_id": "27109225-a96d-4f37-852c-5c3ea4747b6c",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T12:00:22.419836+00:00"
+          "card_text": "audio_spark\nUnread\nПочему 37000 алгоритмов трейдинга терпят провал\n13:54 · Deep Dive · 1 source · 3m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T12:12:57.333849+00:00",
+          "duration_seconds": 834.896689,
+          "path": "input/notebooklm-sources/automl-systematic-trading/ru/audio.m4a",
+          "sha256": "6c7b46bf2a48912be47efb020640a2340b850d37f4a8143e6d67e5ecc9bae46a",
+          "bytes": 26871033,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T12:13:24.577854+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -4826,9 +4854,153 @@
       "selected_source_ids": [
         "a72d9cdb-3716-4000-bb56-df086592e574"
       ]
+    },
+    "automl-systematic-trading:zh-CN": {
+      "slug": "automl-systematic-trading",
+      "language": "zh-CN",
+      "article_sha256": "b2eb16e96255d1aad81cd6508c49b360eb3be2661328df66320f9b42eda379fe",
+      "input_hashes": {
+        "article": "b2eb16e96255d1aad81cd6508c49b360eb3be2661328df66320f9b42eda379fe",
+        "source_text": "11d65e16c851bdb3e3b4cd4e106fca406879a178d5d83baae0af5fd924c2e8d6",
+        "slides_prompt": "e67d245996c67a33b81c61222124d6bfc45ce3c795d031c0146c99cca00326bf",
+        "audio_prompt": "3466668a35b9440571ded477b533fba364a34015e4685736769428bf75665857"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "e67d245996c67a33b81c61222124d6bfc45ce3c795d031c0146c99cca00326bf",
+          "requested_at": "2026-10-04T12:13:53.639401+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "3b236e5e-47c0-48d5-a592-3654416c8970",
+          "submission_mode": "now",
+          "artifact_id": "b0db9823-ec9b-43b8-a5e6-2aa462d3978f",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T12:13:58.190970+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "b0db9823-ec9b-43b8-a5e6-2aa462d3978f"
+          ],
+          "prompt_sha256": "3466668a35b9440571ded477b533fba364a34015e4685736769428bf75665857",
+          "requested_at": "2026-10-04T12:14:10.670976+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "3b236e5e-47c0-48d5-a592-3654416c8970",
+          "submission_mode": "now",
+          "artifact_id": "f150484a-ae1f-4248-a093-41bd89cb9c26",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T12:14:15.235044+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T12:13:24.590540+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T12:13:31.940493+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/automl-systematic-trading-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "656d67ff8350c6832f9ccb1c57a0139593cba1bf25e1c17b78916e6cea95eb72",
+        "baseline_count": 311,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T12:13:34.058198+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/8a453039-49a5-437f-a532-13a13bba84bd",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T12:13:38.133617+00:00",
+        "sha256": "11d65e16c851bdb3e3b4cd4e106fca406879a178d5d83baae0af5fd924c2e8d6",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T12:13:45.984976+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "3b236e5e-47c0-48d5-a592-3654416c8970",
+      "source_title": "MM article automl-systematic-trading ZH-CN b2eb16e96255",
+      "source_sha256": "11d65e16c851bdb3e3b4cd4e106fca406879a178d5d83baae0af5fd924c2e8d6",
+      "state": "source_ready",
+      "source_display_name": "MM article automl-systematic-trading ZH-CN b2eb16…",
+      "selected_source_ids": [
+        "3b236e5e-47c0-48d5-a592-3654416c8970"
+      ]
+    },
+    "automl-systematic-trading:zh-TW": {
+      "slug": "automl-systematic-trading",
+      "language": "zh-TW",
+      "article_sha256": "509856426db2be7305a804f300d7c185b10713efd9b78b0eb4e615d49b4f40e5",
+      "input_hashes": {
+        "article": "509856426db2be7305a804f300d7c185b10713efd9b78b0eb4e615d49b4f40e5",
+        "source_text": "61df72c7f586482ae7b786fe7774e995a8dae00ff6ac58549485826a911ada57",
+        "slides_prompt": "de083e4678df56ddb74bec5d2fe0a64e1bf0ed14173e7a7b39a4e756b9c105ca",
+        "audio_prompt": "84c1cf9aa0945d0d54a80013872c1833983bd3cdde208469c448325be09d9b13"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "de083e4678df56ddb74bec5d2fe0a64e1bf0ed14173e7a7b39a4e756b9c105ca",
+          "requested_at": "2026-10-04T12:14:43.951181+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "d455dbdb-1c85-4c57-81ba-6ee5d2c25f13",
+          "submission_mode": "now",
+          "artifact_id": "b9aae8c5-98c4-4b85-af69-6c06855a585b",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T12:14:48.504156+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "b9aae8c5-98c4-4b85-af69-6c06855a585b"
+          ],
+          "prompt_sha256": "84c1cf9aa0945d0d54a80013872c1833983bd3cdde208469c448325be09d9b13",
+          "requested_at": "2026-10-04T12:15:01.205770+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "d455dbdb-1c85-4c57-81ba-6ee5d2c25f13",
+          "submission_mode": "now",
+          "artifact_id": "eed6c4a7-7db2-4eec-9534-793ae751bd61",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T12:15:05.760396+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T12:14:15.248011+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T12:14:22.471124+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/automl-systematic-trading-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "7a0501a85aee0a6204ab27200454ebde8a7291a09f6a4fea38987a1e23947900",
+        "baseline_count": 312,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T12:14:24.562411+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/47fb529d-cab1-43c3-bd7a-4f353ec3ae53",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T12:14:28.565711+00:00",
+        "sha256": "61df72c7f586482ae7b786fe7774e995a8dae00ff6ac58549485826a911ada57",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T12:14:36.513681+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "d455dbdb-1c85-4c57-81ba-6ee5d2c25f13",
+      "source_title": "MM article automl-systematic-trading ZH-TW 509856426db2",
+      "source_sha256": "61df72c7f586482ae7b786fe7774e995a8dae00ff6ac58549485826a911ada57",
+      "state": "source_ready",
+      "source_display_name": "MM article automl-systematic-trading ZH-TW 509856…",
+      "selected_source_ids": [
+        "d455dbdb-1c85-4c57-81ba-6ee5d2c25f13"
+      ]
     }
   },
-  "checked_at": "2026-10-04T12:00:22.423626+00:00",
+  "checked_at": "2026-10-04T12:15:05.765024+00:00",
   "browser_geometry_requested": {
     "width": 1999,
     "height": 1290,
