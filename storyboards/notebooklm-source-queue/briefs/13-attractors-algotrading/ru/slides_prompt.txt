@@ -1,0 +1,19 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article attractors-algotrading RU 94694dce3dae". It is the complete published ru article snapshot. Do not merge another language edition or outside facts. Output language: Russian. Use Russian throughout; keep mathematical symbols, code identifiers and article headings exact. Keep formulas, code identifiers, units, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — Что такое аттрактор и зачем он трейдеру
+2. H2 — Теоретические основы: от простого к сложному
+3. H2 — Аттракторы в финансовых рынках
+4. H2 — Коинтеграция как практическое проявление аттракторов
+5. H2 — Применение в алгоритмическом трейдинге
+6. H2 — Практические торговые стратегии
+7. H2 — Продвинутые методы и многомерные аттракторы
+8. H2 — Ограничения и риски стратегий на основе аттракторов
+9. H2 — Технические аспекты реализации
+10. H2 — Заключение: будущее аттракторов в трейдинге
+11. H2 — Цитирование
+12. H2 — Ссылки и источники
+
+Preserve the mathematical distinction among point attractors, limit cycles, strange/fractal attractors and sensitive dependence on initial conditions. Treat market equilibrium and the attractor analogy as the article's conceptual claims, not proof that a price must revert. Explain high-frequency law-of-one-price reasoning versus low-frequency economic cointegration. Keep the exact spread equation Spread = P_A - γ*P_B, the definition of γ, stationarity versus mere correlation, the article's illustrative VSYDP/NKHP pair, first-half parameter estimation, 2-standard-deviation signal threshold and 1:γ hedge ratio. Show both long/short directions and mean-reversion exit, and keep the structural-break stop-loss. Explain the Johansen multi-asset basket and distinguish its possible benefits from a guarantee. Cover moving equilibria/drift, CAPM-beta hedge risk, butterfly sensitivity, real-time data/statistics/risk/execution modules and latency. Company and product examples (Algoter/Goldseek, TradeHelp), HFT profitability and market-neutral assertions remain dated article claims requiring verification. Retain conclusion, citation and supplied references without silently repairing source errors.
+
+Preserve every substantive section, example, formula, mathematical symbol, unit, table, code logic, caveat, risk, link and reference from this locale's source. Do not silently change an article number, heading or claim. Numerical, research, financial, company-specific and mutable statements are attributed article claims pending human editorial, primary-source and mathematical review. No guaranteed returns or investment advice. Chinese terminology and translation, and Mandarin pronunciation, remain pending review where applicable. Exact external NotebookLM notebook/source/artifact duplicates remain unchecked before submission; target-channel duplicates remain unchecked before final production. Do not imply clearance.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams and tables legibly only as supported by the source. Keep on-slide language in the requested locale apart from technical identifiers. End with the conclusion and source references.

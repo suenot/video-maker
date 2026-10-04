@@ -1,0 +1,21 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article automl-systematic-trading EN 597e545ca997". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English. Use English throughout. Keep formulas, code identifiers, units, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — What AutoML Automates
+2. H2 — Automated Feature Engineering
+3. H3 — tsfresh: From One Price Series to 800+ Features
+4. H3 — Featuretools: Deep Feature Synthesis
+5. H2 — Budget-Aware AutoML: FLAML
+6. H2 — Neural Architecture Search for Trading Models
+7. H3 — NAS Search Space for Trading
+8. H2 — The WorldQuant Alpha Factory Approach
+9. H3 — Philosophy: Exponential Alpha Generation, and Its Correction
+10. H3 — The 101 Formulaic Alphas
+11. H3 — LLM-Enhanced Alpha Discovery
+12. H3 — Building Your Own Mini Alpha Factory
+13. H2 — Guardrails: What You Already Owe
+14. H2 — Conclusion
+
+Explain the six automation stages and the need to optimize a financial objective, not a proxy classification metric. For tsfresh retain the article's 63 methods, ~794 features, rolling 24-bar BTC 1h example, 4-hour forward-return target, Benjamini-Yekutieli FDR at 0.05 and the separate model-search multiplicity. For Featuretools keep relational DFS, max_depth=2 and point-in-time time_index to prevent leakage. For FLAML distinguish cost-frugal budgeting from Optuna/TPE sampler choice; preserve the illustrative 300-second budget, time split/5 folds, sqrt(252) Sharpe scorer, configuration log and trial count. Cover NAS cell/layer/lookback search, NNI illustration, costly evaluations and the third-party EXAMM performance claim as unreplicated. For the WorldQuant alpha factory retain IR ≈ IC·sqrt(BR), BR as independent bets rather than generated trials, N_eff = N/C_f, the article's C_f≈3 example, 101 formulaic alphas, operator grammar, LLM formula discovery and the six-template/five-window 30-trial mini-factory. Its report is explicitly SCHEMATIC and real-data IC/DSR/PBO results are TODO, not a demonstrated alpha. Keep DSR, temporal purging/embargo, PBO null 0.5, plateau and constrained-search guardrails. Attribute all speed, Sharpe, trial, PBO and WorldQuant claims to the article; retain its honest negative conclusion, no robust edge, and all units and formulas exactly.
+
+Preserve every substantive section, example, formula, mathematical symbol, unit, table, code logic, caveat, risk, link and reference from this locale's source. Do not silently change an article number, heading or claim. Numerical, research, financial, company-specific and mutable statements are attributed article claims pending human editorial, primary-source and mathematical review. No guaranteed returns or investment advice. Chinese terminology and translation, and Mandarin pronunciation, remain pending review where applicable. Exact external NotebookLM notebook/source/artifact duplicates remain unchecked before submission; target-channel duplicates remain unchecked before final production. Do not imply clearance.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams and tables legibly only as supported by the source. Keep on-slide language in the requested locale apart from technical identifiers. End with the conclusion and source references.

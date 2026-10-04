@@ -1,0 +1,471 @@
+MM article automl-systematic-trading ZH-TW 509856426db2
+
+---
+title: "用於系統化交易流程的 AutoML"
+description: "自動特徵生成（tsfresh、Featuretools）、具預算感知的模型搜尋（FLAML 的節省成本最佳化器），以及 WorldQuant 公式化 alpha 工廠——本部落格搜尋與過度擬合系列尚未涵蓋的研究流程部分，以及該系列自身結果對它們的啟示。"
+date: "2026-07-30"
+tags: ["AutoML", "NAS", "feature-engineering", "automation", "quant"]
+slug: "automl-systematic-trading"
+image: "/images/blog/automl-systematic-trading/hero.webp"
+lang: "zh-Hant"
+draft: false
+authors: ["suenot"]
+---
+
+# 用於系統交易管道的 AutoML
+
+本部落格花了很長的篇幅討論*如何搜尋*：使用哪個採樣器以及何時使用（[交叉是評估成本](/en/blog/post/search-method-crossover-eval-cost)），如何為您運行的搜尋定價（[壓縮夏普比率](/en/blog/post/deflated-sharpe-multiple -testing)），如何對選擇過程本身進行評分([PBO](/en/blog/post/probability-backtest-overfitting-pbo))，以及整個裝置誠實落地的地方([無魯棒邊緣](/en/blog/post/honest-negative-no-robust-edge))。
+
+它從未涵蓋的是您搜尋*的內容。這些文章都以給定的功能集和策略系列為基礎，並優化其中的參數。 AutoML 攻擊上面的圖層－它會自動建構候選者本身。其中三個部分沒有出現在該部落格的其他任何地方：
+
+1. **自動特徵提取** - tsfresh 將一個價格系列轉換為約 794 個統計特徵特徵，而 Featuretools 透過深度特徵合成在相關市場表中組合特徵。
+2. **預算感知 AutoML** — FLAML 的成本節約優化，它可以在*計算預算內*找到最佳模型，而不是不考慮成本。
+3. **公式化 alpha 工廠** — WorldQuant 的 101 個公式化 Alpha 作為機器可以列舉的可組合運算符語法。
+
+其他所有內容——目標函數、驗證方案、多重測試校正——都已經在此處的其他地方進行了測量，因此本文只是連結而不是重新教授。這比平常更重要，因為 AutoML 會使試驗計數激增，而試驗計數正是弧線其餘部分的內容。
+
+![AutoML 系統交易管道](/images/blog/automl-systematic-trading/hero.webp)
+
+## AutoML 自動化什麼
+
+AutoML 不是單一演算法。它是一系列自動化管道不同階段的技術：
+
+|舞台|手動方法| AutoML 方法 |
+|---|---|---|
+|特徵工程 |領域專家製程指標|自動擷取（tsfresh、Featuretools）|
+|特徵選擇|相關性分析，直覺|統計假設檢驗，SHAP |
+|選型|嘗試 2-3 個模型 |搜尋數十位學習者 |
+|超參數調優 |網格搜索，手動調整|貝葉斯/成本節約搜尋（Optuna、FLAML）|
+|建築設計|固定神經網路拓樸 |神經架構搜尋（NAS）|
+|合奏施工|手動堆疊|自動合奏選擇 |
+
+前提是，在系統交易中，候選空間是巨大的——單一 OHLCV 系列會產生數百個技術特徵，而多種資產、訂單簿資料和替代來源使其具有組合性。這個前提也是危險的：每個候選人都是試驗，而試驗會產生錯誤的發現。
+
+關於 AutoML 目標的一個特定點：搜尋最大化的指標必須是財務指標，因為搜尋將準確優化您寫下的內容，而不是您想要的內容。您選擇的標量會默默地選擇您的策略 - 請參閱[目標函數設計](/en/blog/post/objective-function-design-backtest)，其中天真的每筆交易夏普在 600 個種子中的 56% 中獲得了低於 5% 的曝光率，並發布了樣本內夏普為 21 的樣本，該樣本外為 0.131313131313573。從一開始就將財務指標連接到 AutoML 評分器；不優化 `roc_auc` 並希望它能夠轉移。
+
+## 自動化特徵工程
+
+特徵工程是大多數 alpha 生活的地方。原始價格數據對每個人來說都是相同的。將數據轉化為預測訊號是將獲利策略與噪音區分開來的關鍵。
+
+![自動化特徵工程工廠](/images/blog/automl-systematic-trading/feature-factory.webp)
+
+### tsfresh：從單一價格系列到 800 多種功能
+
+[ts新鮮](https://tsfresh.readthedocs.io/）（基於可擴展假設檢定的時間序列特徵提取）是專門為時間序列特徵提取而建構的。它計算 63 種表徵方法，預設擴展到約 794 個特徵，包括：
+
+- 統計矩（平均數、變異數、偏度、峰度）
+- 多個滯後的自相關
+- 傅立葉係數和光譜能量
+- 複雜度量（近似熵、樣本熵）
+- 非線性特徵（弗里德里希係數、最大朗之萬定點）
+- 更改分位數和範圍計數
+
+對於金融數據，這意味著單一價格系列會產生數百個候選特徵，其中許多特徵捕捉了手動特徵工程可能會錯過的動態。這與[傳播建模](/en/blog/post/spread-modeling-machine-learning)和[DeepLOB](/en/blog/post/deeplob-deep-learning-order-book)中使用的手工製作的、領域衍生的特徵集有本質上的不同：人類決定訂單簿不平衡很重要；這裡，圖書館枚舉了所有內容。
+
+```python
+import pandas as pd
+import numpy as np
+from tsfresh import extract_features, select_features
+from tsfresh.utilities.dataframe_functions import impute
+
+# Prepare OHLCV data in tsfresh format
+# tsfresh expects: id (window identifier), time (sort column), value columns
+def prepare_rolling_windows(df: pd.DataFrame, window_size: int = 20) -> pd.DataFrame:
+    """Convert OHLCV DataFrame into rolling windows for tsfresh."""
+    records = []
+    for i in range(window_size, len(df)):
+        window = df.iloc[i - window_size:i].copy()
+        window["id"] = i  # window identifier
+        window["time"] = range(window_size)
+        records.append(window[["id", "time", "close", "volume", "high", "low"]])
+    return pd.concat(records, ignore_index=True)
+
+# Extract features from rolling windows
+df_ohlcv = pd.read_csv("btc_1h.csv", parse_dates=["timestamp"])
+df_rolled = prepare_rolling_windows(df_ohlcv, window_size=24)
+
+features = extract_features(
+    df_rolled,
+    column_id="id",
+    column_sort="time",
+    n_jobs=8,  # parallel extraction
+    disable_progressbar=False,
+)
+
+# Impute missing values (some features undefined for constant series)
+impute(features)
+
+# Build forward return target (next 4-hour return)
+y = df_ohlcv["close"].pct_change(4).shift(-4).iloc[24:].reset_index(drop=True)
+y_binary = (y > 0).astype(int)
+
+# Automatic feature selection via hypothesis testing
+# tsfresh controls the false discovery rate across all ~794 tests
+features_selected = select_features(features, y_binary, fdr_level=0.05)
+print(f"Selected {features_selected.shape[1]} features from {features.shape[1]}")
+```
+
+這 `select_features` 函數應用 Benjamini-Yekutieli 過程來控制整個功能組的錯誤發現率 - 這是正確的本能，[Deflated Sharpe 文章](/en/blog/post/deflated-sharpe-multiple-testing) 同樣的本能也適用於策略搜尋。請注意它「不」做什麼：對特徵選擇步驟的 FDR 控制沒有提及其後的模型搜尋的試驗成本。這是兩個不同的多重性，都必須付費。
+
+<!-- TODO：需要真實數據結果——大約 794 個特徵中有多少實際上在真實 BTC/ETH 數據上的 BY-FDR 選擇中倖存下來，基於倖存者構建的 FLAML 模型是否擊敗了樣本中手工製作的基線？ -->
+
+### 特徵工具：深度特徵合成
+
+雖然 tsfresh 專注於時間序列表徵，[Featuretools](https://www.featuretools.com/）擅長關係特徵工程－透過跨相關表組合原始操作來建構特徵。
+
+對於交易來說，當您擁有多表資料時，這是非常強大的：交易歷史記錄、訂單簿快照、資金費率和鏈上指標。 Featuretools 應用深度特徵合成 (DFS)，它堆疊轉換和聚合基元：
+
+```python
+import featuretools as ft
+
+# Define entity set with relationships
+es = ft.EntitySet(id="crypto_trading")
+
+# Add OHLCV entity
+es = es.add_dataframe(
+    dataframe_name="candles",
+    dataframe=df_candles,
+    index="candle_id",
+    time_index="timestamp",
+)
+
+# Add order book snapshots
+es = es.add_dataframe(
+    dataframe_name="orderbook",
+    dataframe=df_orderbook,
+    index="snapshot_id",
+    time_index="timestamp",
+)
+
+# Add funding rate data
+es = es.add_dataframe(
+    dataframe_name="funding",
+    dataframe=df_funding,
+    index="funding_id",
+    time_index="timestamp",
+)
+
+# Deep Feature Synthesis: automatically compose primitives
+feature_matrix, feature_defs = ft.dfs(
+    entityset=es,
+    target_dataframe_name="candles",
+    agg_primitives=["mean", "std", "max", "min", "skew", "trend"],
+    trans_primitives=["percentile", "diff", "cum_mean"],
+    max_depth=2,  # compose up to 2 primitives deep
+    features_only=False,
+)
+
+print(f"Generated {len(feature_defs)} features via DFS")
+```
+
+這 `time_index` 聲明是承載的：它允許Featuretools僅使用截止處存在的行來計算聚合。如果發生錯誤，DFS 將很樂意在未來建立一個功能 - 在[前瞻偏差分類法](/en/blog/post/look-ahead-bias-taxonomy) 中編目的洩漏的關聯資料實例。
+
+tsfresh（時間序列表徵）和 Featuretools（關係綜合）的結合為您提供了一個特徵工廠，可以從原始市場數據中產生數千個候選訊號，而無需手動指標編碼。
+
+## 預算感知 AutoML：FLAML
+
+我們假設 Optuna 和樹結構 Parzen 估計器作為背景 - 推導、採樣器比較和基準在[坐標下降與貝葉斯優化](/en/blog/post/optuna-vs-coefficient-descent)中。關於要達到的*哪個*採樣器，本博客自己的測量是參考，而不是民間傳說的答案：交叉是由評估成本決定的，而不是算法的聰明程度——當回測幾乎免費時，加擾的 Sobol 在吞吐量上獲勝（~2,830 cfg/s，TPE 的~154），並且只有昂貴的隨機評估才能提高樣本效率（[]智慧型]搜尋](/en/blog/post/search-method-crossover-eval-cost))。
+
+![預算感知 AutoML 搜尋](/images/blog/automl-systematic-trading/budget-aware-automl.webp)
+
+這種框架使得 FLAML 成為一個不同的軸，而不是一個競爭的採樣器。 Optuna 詢問*下一步在哪裡採樣*； [FLAML](https://microsoft.github.io/FLAML/）（快速輕量級 AutoML）詢問*我能負擔得起採樣什麼*。它使用 CFO（成本節儉優化）在一段時間內或計算預算內優化最佳模型，該優化會儘早優先考慮廉價評估配置，並僅在估計的邊際收益證明支出合理時才升級。
+
+```python
+from flaml import AutoML
+from sklearn.metrics import make_scorer
+import numpy as np
+
+def sharpe_score(y_true, y_pred):
+    """Custom scorer: Sharpe ratio of predicted signals."""
+    # Convert predictions to signals
+    signal = np.sign(y_pred - 0.5)
+    returns = signal * y_true  # y_true contains forward returns
+    if returns.std() == 0:
+        return 0.0
+    return np.sqrt(252) * returns.mean() / returns.std()
+
+sharpe_scorer = make_scorer(sharpe_score, greater_is_better=True)
+
+automl = AutoML()
+automl_settings = {
+    "time_budget": 300,          # 5 minutes
+    "metric": sharpe_scorer,     # optimize the financial objective, not accuracy
+    "task": "classification",
+    "estimator_list": [
+        "lgbm", "xgboost", "rf", "extra_tree", "catboost",
+    ],
+    "eval_method": "cv",
+    "split_type": "time",        # time series split (no future leakage)
+    "n_splits": 5,
+    "log_file_name": "flaml_trading.log",
+    "seed": 42,
+}
+
+automl.fit(
+    X_train=X_train,
+    y_train=y_train,
+    **automl_settings,
+)
+
+print(f"Best model: {automl.best_estimator}")
+print(f"Best config: {automl.best_config}")
+
+# Inspect the search trajectory
+from flaml.data import get_output_from_log
+time_history, best_valid_loss_history, valid_loss_history, config_history, metric_history = \
+    get_output_from_log(filename="flaml_trading.log", time_budget=300)
+```
+
+FLAML 的交易優勢是跨異質模型類型的計算分配。如果 LightGBM 配置的評估速度比 CatBoost 快 10 倍，則 FLAML 會儘早探索更多 LightGBM，並且僅在估計邊際改進證明成本合理時才進行切換。這是交叉文章中廉價制度的見解，概括地說：吞吐量是搜尋預算中一流的術語，而不是實現細節。
+
+軌跡日誌是值得保留的部分。 `get_output_from_log` 為您提供完整的配置歷史記錄，即您的試用計數 - 試用計數是您即將欠的每個通貨緊縮的輸入。
+
+## 交易模型的神經架構搜索
+
+神經架構搜尋可以自動化網路拓撲的設計，而不是調整固定的拓撲。金融系列的架構選擇確實不明顯——非平穩性、低信噪比、混合頻率和跨越幾分鐘到幾個月的依賴關係，所有這些都朝著不同的方向發展——但這種動機已經在其他地方具體爭論過：請參閱[Temporal Fusion Transformer](/en/blog/post/temporal-fusion-transformer-trading)，了解 TFT 擊敗普通何時 LSTM Transformer，以及[DeepLOB](/en/blog/post/deeplob-deep-learning-order-book) 關於 CNN+Inception+LSTM 權衡，以及精心手工設計的固定架構已經實現的目標。 NAS 的論點是這個選擇本身應該要被搜尋。
+
+【股票收益預測的神經進化 NAS】研究（https://arxiv.org/html/2410.17212v1）報告稱，透過 EXAMM（增強記憶模型的進化探索）進化而來的 RNN 在熊市（2022 年）和牛市（2023 年）中使用簡單的多空策略，表現均優於 DJI 和標準普爾 500 指數。將其視為第三方聲明，而不是此處複製的結果 - 這是最佳搜尋數據，沒有報告通貨緊縮。
+
+### NAS 交易搜尋空間
+
+實用的 NAS 交易模型搜尋空間包括：
+
+```
+Search Space:
+  - Cell types: {LSTM, GRU, Temporal Conv, Transformer block, Linear}
+  - Number of layers: [1, 8]
+  - Hidden dimensions: {32, 64, 128, 256}
+  - Attention heads (if Transformer): {2, 4, 8}
+  - Dropout rate: [0.0, 0.5]
+  - Skip connections: {True, False}
+  - Normalization: {BatchNorm, LayerNorm, None}
+  - Activation: {ReLU, GELU, SiLU, Mish}
+  - Lookback window: {20, 60, 120, 252}
+```
+
+透過 Microsoft 的 NNI（神經網路智慧），您可以定義和搜尋該空間：
+
+```python
+import nni
+from nni.nas.nn.pytorch import LayerChoice, InputChoice
+import torch
+import torch.nn as nn
+
+class TradingNASModel(nn.Module):
+    """NAS-searchable model for financial time series."""
+
+    def __init__(self, input_dim: int, seq_len: int):
+        super().__init__()
+        self.input_proj = nn.Linear(input_dim, 128)
+
+        # NAS searches over cell type
+        self.temporal_block = LayerChoice([
+            nn.LSTM(128, 128, num_layers=2, batch_first=True, dropout=0.1),
+            nn.GRU(128, 128, num_layers=2, batch_first=True, dropout=0.1),
+            nn.TransformerEncoder(
+                nn.TransformerEncoderLayer(d_model=128, nhead=4, batch_first=True),
+                num_layers=2,
+            ),
+        ], label="temporal_cell")
+
+        # NAS searches over head architecture
+        self.head = LayerChoice([
+            nn.Sequential(nn.Linear(128, 64), nn.ReLU(), nn.Linear(64, 1)),
+            nn.Sequential(nn.Linear(128, 32), nn.GELU(), nn.Linear(32, 1)),
+            nn.Linear(128, 1),
+        ], label="prediction_head")
+
+        # Optional skip connection
+        self.skip = InputChoice(n_candidates=2, n_chosen=1, label="skip_conn")
+        self.skip_proj = nn.Linear(input_dim, 128)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # x shape: (batch, seq_len, input_dim)
+        h = self.input_proj(x)
+        out = self.temporal_block(h)
+
+        # Handle different output formats (LSTM returns tuple)
+        if isinstance(out, tuple):
+            out = out[0]
+
+        # Take last timestep
+        last = out[:, -1, :]
+
+        # Skip connection from raw input
+        skip_val = self.skip_proj(x[:, -1, :])
+        last = self.skip([last, last + skip_val])
+
+        return self.head(last).squeeze(-1)
+```
+
+搜尋演算法（ENAS、DARTS 或演化）使用財務目標在驗證集上評估候選架構，然後逐步縮小範圍以實現高效能拓撲。請注意本文中與其他所有內容相比的成本不對稱性：NAS 位於評估成本軸的昂貴一端，這是樣本高效採樣器和多保真修剪真正收回成本的一種機制。
+
+## WorldQuant Alpha 工廠方法
+
+WorldQuant 的 alpha 發現方法是 AutoML 原則在金融領域最具工業規模的實施。 WorldQuant 由 Igor Tulchinsky 創立，經營所謂的「阿爾法工廠」——一個用於產生、測試和組合數百萬個預測訊號的系統流程。
+
+### 哲學：指數 Alpha 生成及其修正
+
+WorldQuant 在 2010 年設定了達到 100 萬個 alpha 的目標，而當時他們每年只生產數千個。他們在 2016 年實現了這一目標。這理念是基於主動管理的基本法則：
+
+$IR \approx IC \cdot \sqrt{BR}$
+
+在哪裡 $IR$ 為資訊比， $IC$ 資訊係數，以及 $BR$ 廣度 — *獨立*投注的數量。每個人 $\alpha_i$ 是一個弱預測變數；他們的主張是，將足夠多的弱相關因素組合起來，將微小的 IC 組合成有意義的風險調整報酬。
+
+造成或破壞這一點的修正，以及對公式的天真的解讀隱藏了：**廣度不是試驗計數。 ** $BR$ 計算獨立投注，並且生成的 alpha 不是獨立的 - 它們由相同價格和交易量字段上的相同運算符組成，因此它們繼承了彼此的相關結構。本部落格直接在[Signal Correlation](/en/blog/post/signal-correlation-pairs)中測量了效果：有效寬度為 $N_{eff} = N / C_f$，並具有典型的加密相關因子 $C_f \approx 3$，10 個訊號大約相當於 3.3 個獨立訊號。這 $\sqrt{BR}$ term 不會隨著您產生的 alpha 數量而增長；它隨著有多少「不相關」的倖存而增長。一百萬個相關阿爾法帶給你的收益遠低於公式所宣傳的。
+
+這就是為什麼下面的步驟 3（與現有庫去相關）不是 alpha 工廠中的衛生步驟。這是首先產生寬度的步驟。
+
+### 101 個公式阿爾法
+
+論文[“101 Formulaic Alphas”](https://arxiv.org/pdf/1601.00991）由 Kakushadze（與 WorldQuant 研究相關）發表了一組公式化的 alpha 表達式——關於價格、交易量和基本數據的數學表達式：
+
+```
+Alpha#1:  (rank(Ts_ArgMax(SignedPower(((returns < 0) ? stddev(returns, 20)
+          : close), 2.), 5)) - 0.5)
+
+Alpha#7:  ((adv20 < volume) ? ((-1 * ts_rank(abs(delta(close, 7)), 60))
+          * sign(delta(close, 7))) : (-1 * 1))
+
+Alpha#42: (rank(vwap - close) / rank(vwap + close))
+```
+
+AutoML 的有趣之處在於它是一種「語法」。 alpha 是一個小的算子集的組合（`rank`, `delta`, `ts_rank`, `stddev`, `correlation`, `signedpower`）在一個小字段集（`close`, `volume`, `vwap`, `returns`, `adv20`）。語法是可枚舉的，這意味著搜尋空間是機器可產生的，而「想到一個好特徵」則不然。 AutoML 系統可以：
+
+1. 透過在資料欄位上組合運算子來**產生**候選表達式
+2. **評估**每個表達式的 IC、營業額和回撤
+3. **過濾**，找出在統計測試中倖存下來的表達式 *並且* 與現有庫完全不相關
+4. **將**合併到一個投資組合中
+
+請注意，步驟 1 和 2 很簡單，步驟 3 是值所在的位置 - 請參閱上面的寬度校正。
+
+### LLM-增強阿爾法發現
+
+WorldQuant 已開始將大型語言模型整合到 alpha 工廠。根據財經媒體報道，該公司正在探索法學碩士如何「轉變和發現不同領域的阿爾法」——生成新穎的表達方式，將研究論文轉化為可測試的假設，以及揭示純粹的枚舉搜尋可能會錯過的跨領域關係。這是與從文本中提取訊號不同的機制，本部落格在 [LLM Alpha Mining on Earnings Calls](/en/blog/post/llm-alpha-mining-earnings-calls) 中對此進行了介紹；這裡法學碩士寫的是*公式*，而不是*特徵*。
+
+### 建造自己的迷你阿爾法工廠
+
+這是一個關於運算符語法的緊湊但實用的 alpha 工廠：
+
+```python
+import itertools
+from dataclasses import dataclass
+from typing import Callable, List
+import pandas as pd
+import numpy as np
+from scipy.stats import spearmanr
+
+@dataclass
+class Alpha:
+    name: str
+    expression: Callable[[pd.DataFrame], pd.Series]
+    ic: float = 0.0
+    turnover: float = 0.0
+    sharpe: float = 0.0
+
+# Define primitive operators
+def ts_rank(series: pd.Series, window: int) -> pd.Series:
+    return series.rolling(window).apply(lambda x: pd.Series(x).rank().iloc[-1] / len(x))
+
+def ts_delta(series: pd.Series, period: int) -> pd.Series:
+    return series.diff(period)
+
+def ts_std(series: pd.Series, window: int) -> pd.Series:
+    return series.rolling(window).std()
+
+def cs_rank(series: pd.Series) -> pd.Series:
+    return series.rank(pct=True)
+
+def ts_mean(series: pd.Series, window: int) -> pd.Series:
+    return series.rolling(window).mean()
+
+# Define alpha templates (composable expressions)
+ALPHA_TEMPLATES = [
+    ("momentum_{w}",
+     lambda df, w: cs_rank(ts_delta(df["close"], w))),
+    ("mean_reversion_{w}",
+     lambda df, w: -cs_rank(df["close"] / ts_mean(df["close"], w) - 1)),
+    ("vol_surprise_{w}",
+     lambda df, w: cs_rank(df["volume"] / ts_mean(df["volume"], w))),
+    ("price_vol_divergence_{w}",
+     lambda df, w: cs_rank(ts_delta(df["close"], w)) * -cs_rank(ts_delta(df["volume"], w))),
+    ("volatility_rank_{w}",
+     lambda df, w: -cs_rank(ts_std(df["close"].pct_change(), w))),
+    ("high_low_range_{w}",
+     lambda df, w: cs_rank(ts_mean(df["high"] - df["low"], w) / df["close"])),
+]
+
+WINDOWS = [5, 10, 20, 60, 120]
+
+def generate_alphas(df: pd.DataFrame, forward_returns: pd.Series) -> List[Alpha]:
+    """Generate and evaluate all alpha candidates."""
+    alphas = []
+
+    for (name_tpl, expr_fn), window in itertools.product(ALPHA_TEMPLATES, WINDOWS):
+        name = name_tpl.format(w=window)
+        try:
+            signal = expr_fn(df, window)
+            signal = signal.replace([np.inf, -np.inf], np.nan)
+
+            # Information Coefficient (rank correlation with forward returns)
+            valid = signal.notna() & forward_returns.notna()
+            if valid.sum() < 100:
+                continue
+
+            ic, _ = spearmanr(signal[valid], forward_returns[valid])
+            turnover = signal.diff().abs().mean()
+
+            ret = (signal * forward_returns).dropna()
+            sharpe = np.sqrt(252) * ret.mean() / (ret.std() + 1e-9)
+
+            alphas.append(Alpha(
+                name=name,
+                expression=lambda df, fn=expr_fn, w=window: fn(df, w),
+                ic=ic,
+                turnover=turnover,
+                sharpe=sharpe,
+            ))
+        except Exception:
+            continue
+
+    alphas.sort(key=lambda a: abs(a.ic), reverse=True)
+    return alphas
+```
+
+五個視窗中的六個模板相當於 30 個配置的掃描。它產生的報告具有以下**示意性**形狀 - 欄位是工廠發出的內容，沒有填寫任何數字，因為這裡沒有測量任何數字：
+
+```
+SCHEMATIC — illustrative format only, not a measurement
+
+Generated <N> alphas from <N> candidate configurations
+
+Top by |IC|:
+  <alpha_name>   IC=<±0.0xxx>   Sharpe=<±x.xxx>   Turnover=<0.0xxx>
+  ...
+```
+
+<!-- TODO：需要真實資料結果 — 對真實 BTC/ETH 資料執行generate_alphas，並報告實際 IC 分佈、營業額以及給定 30 個候選（或 3,000 個候選）試驗計數的最佳 alpha 的 DSR/PBO。有趣的數字不是最好的阿爾法夏普；而是最好的阿爾法夏普。這是有多少阿爾法能在通貨緊縮中倖存下來的。 -->
+
+30 個配置掃描中頂部 alpha 的原始夏普值 **不是結果** — 它是 30 次抽取的最大值，在 1,000 個零邊緣策略中，最佳年化夏普平均值為 1.63，而樸素測試則宣布 100% 的時間都有發現（[壓縮夏普比率](/en/blog/post/defd-shartesting)。因此，工廠誠實的交付成果不是“我們找到了一個 alpha”，而是“有多少 alpha 在通貨緊縮中倖存下來”：IC 分佈、試驗計數、獲勝者相對於該計數的 DSR 以及選擇的 PBO。這就是本節仍欠的衡量標準。
+
+## 護欄：你已經欠下的東西
+
+AutoML 以相同的方式放大發現和過度擬合，並且在差異不再微妙的試驗計數中這樣做。這些內容中的每一個都在其他地方進行了深入介紹；這裡的要點是，AutoML 使所有這些都是強制性的，而不是建議性的。
+
+**為搜尋定價，而不僅僅是糾正它。 ** 特徵模型超參數掃描是嘗試計數，嘗試計數會移動條形 - 請參閱[壓縮夏普比率](/en/blog/post/deflated-sharpe-multiple-testing)。
+
+**透過清除和禁止進行臨時驗證。 ** 請參閱[前向最佳化](/en/blog/post/walk-forward-optimization) 和[前瞻偏差分類](/en/blog/post/look-ahead-bias-taxonomy)，以了解在天真的時間分割中倖存下來的洩漏。
+
+**對過程進行評分，而不僅僅是獲勝者。 **請參閱[回測過擬合的機率](/en/blog/post/probability-backtest-overfitting-pbo)，並進行其承載修正：**PBO的零值是0.5，而不是1**——一半不是“一半過擬合”，而是完全過擬合，就像一枚硬幣翻轉一樣。
+
+**注意不存在的峰值。 ** 有效搜尋雜訊主導的表面只會更快找到更清晰的錯覺（[高原分析](/en/blog/post/plateau-analysis-overfitting)）；這對策略參數影響最大，對 ML 超參數影響最小，而 FLAML 和 Optuna 正是為此而建構的。
+
+**限制搜尋空間。 ** 最小葉子樣本、上限深度和估計器計數、特徵預算、週轉懲罰——規範搜尋比事後縮小搜尋便宜。
+
+## 結論
+
+AutoML 將自動化提升了一個層次：從調整固定候選物件內部的參數到產生候選物件本身。三個組件值得付出努力——用於特徵生成的 tsfresh 和 Featuretools、用於預算感知模型選擇的 FLAML 成本節約搜索，以及用於可枚舉 alpha 構造的公式化運算符語法。只有當你的信噪比證明它合理時，NAS 才值得計算，而且它位於評估成本軸的昂貴一端，而樣本效率最終會得到回報。
+
+WorldQuant 廣度論證僅以其更正後的形式與本部落格自己的測量結果相聯繫： $IR \approx IC\sqrt{BR}$ 在哪裡 $BR$ 計算「獨立」的賭注，而工廠的產出遠遠不是獨立的。產生一百萬個阿爾法是容易的一半。確定它們不相關足以算作廣度是決定公式是否有意義的一半。
+
+誠實的警告不是道德，而是衡量的結果。該部落格在 [The Honest Negative](/en/blog/post/honest-negative-no-robust-edge) 中對搜尋和過度擬合弧線進行了總結：五個專業進行了數萬次回測，在約 37,000 次試驗中 DSR = 0.00，PBO 0.264 和 0.327，並且沒有穩健邊緣。 AutoML 將試驗次數提高了幾個數量級。無論發現什麼，它都將面臨相應更大的通貨緊縮——而阿爾法工廠的有用產出是通貨緊縮之後的生存率，而不是之前的頂線。

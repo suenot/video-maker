@@ -1,0 +1,471 @@
+MM article automl-systematic-trading EN 597e545ca997
+
+---
+title: "AutoML for Systematic Trading Pipelines"
+description: "Automated feature generation (tsfresh, Featuretools), budget-aware model search (FLAML's cost-frugal optimizer), and the WorldQuant formulaic alpha factory — the parts of the research pipeline this blog's search-and-overfit arc never covered, and what the arc's own results say about them."
+date: "2026-07-30"
+tags: ["AutoML", "NAS", "feature-engineering", "automation", "quant"]
+slug: "automl-systematic-trading"
+image: "/images/blog/automl-systematic-trading/hero.webp"
+lang: "en"
+draft: false
+authors: ["suenot"]
+---
+
+# AutoML for Systematic Trading Pipelines
+
+This blog has spent a long arc on *how to search*: which sampler to use and when ([the crossover is eval cost](/en/blog/post/search-method-crossover-eval-cost)), how to price the search you ran ([the Deflated Sharpe Ratio](/en/blog/post/deflated-sharpe-multiple-testing)), how to score the selection procedure itself ([PBO](/en/blog/post/probability-backtest-overfitting-pbo)), and where that whole apparatus honestly lands ([no robust edge](/en/blog/post/honest-negative-no-robust-edge)).
+
+What it has never covered is what you search *over*. Those articles all take the feature set and strategy family as given and optimize parameters inside it. AutoML attacks the layer above — it automates construction of the candidates themselves. Three parts of that do not appear anywhere else on this blog:
+
+1. **Automated feature extraction** — tsfresh turning one price series into ~794 statistically characterized features, and Featuretools composing features across related market tables via Deep Feature Synthesis.
+2. **Budget-aware AutoML** — FLAML's Cost-Frugal Optimization, which finds the best model *within a compute budget* rather than regardless of cost.
+3. **The formulaic alpha factory** — WorldQuant's 101 Formulaic Alphas as a composable operator grammar a machine can enumerate.
+
+Everything else — objective function, validation scheme, multiple-testing correction — is already measured elsewhere here, so this article links rather than re-teaches. That matters more than usual, because AutoML makes the trial count explode, and the trial count is precisely what the rest of the arc is about.
+
+![AutoML systematic trading pipeline](/images/blog/automl-systematic-trading/hero.webp)
+
+## What AutoML Automates
+
+AutoML is not a single algorithm. It is a family of techniques that automate different stages of the pipeline:
+
+| Stage | Manual Approach | AutoML Approach |
+|---|---|---|
+| Feature engineering | Domain expert crafts indicators | Automated extraction (tsfresh, Featuretools) |
+| Feature selection | Correlation analysis, intuition | Statistical hypothesis testing, SHAP |
+| Model selection | Try 2-3 models | Search over dozens of learners |
+| Hyperparameter tuning | Grid search, manual tweaking | Bayesian / cost-frugal search (Optuna, FLAML) |
+| Architecture design | Fixed neural network topology | Neural Architecture Search (NAS) |
+| Ensemble construction | Manual stacking | Automated ensemble selection |
+
+The premise is that in systematic trading the candidate space is enormous — a single OHLCV series generates hundreds of technical features, and multiple assets, order book data and alternative sources make it combinatorial. The premise is also the danger: every candidate is a trial, and trials are what manufacture false discoveries.
+
+One AutoML-specific point on the objective: the metric the search maximizes must be the financial one, because the search will optimize exactly what you wrote down and nothing you meant. Which scalar you pick silently selects your strategy — see [Objective-Function Design](/en/blog/post/objective-function-design-backtest), where a naive per-trade Sharpe crowns a sub-5%-exposure lottery in 56% of 600 seeds and posts an in-sample Sharpe of 21 that collapses to 0.13 out of sample. Wire the financial metric into the AutoML scorer from the start; do not optimize `roc_auc` and hope it transfers.
+
+## Automated Feature Engineering
+
+Feature engineering is where most alpha lives. Raw price data is the same for everyone. The transformation of that data into predictive signals is what separates profitable strategies from noise.
+
+![Automated feature engineering factory](/images/blog/automl-systematic-trading/feature-factory.webp)
+
+### tsfresh: From One Price Series to 800+ Features
+
+[tsfresh](https://tsfresh.readthedocs.io/) (Time Series Feature Extraction based on Scalable Hypothesis Tests) is purpose-built for time series feature extraction. It computes 63 characterization methods that expand into ~794 features by default, including:
+
+- Statistical moments (mean, variance, skewness, kurtosis)
+- Autocorrelation at multiple lags
+- Fourier coefficients and spectral energy
+- Complexity measures (approximate entropy, sample entropy)
+- Nonlinear features (Friedrich coefficients, max Langevin fixed point)
+- Change quantiles and range counts
+
+For financial data, this means a single price series produces hundreds of candidate features — many capturing dynamics that manual feature engineering would miss. This is a materially different approach from the hand-crafted, domain-derived feature sets used in [spread modeling](/en/blog/post/spread-modeling-machine-learning) and [DeepLOB](/en/blog/post/deeplob-deep-learning-order-book): there a human decides that order-book imbalance matters; here a library enumerates everything and lets a hypothesis test decide.
+
+```python
+import pandas as pd
+import numpy as np
+from tsfresh import extract_features, select_features
+from tsfresh.utilities.dataframe_functions import impute
+
+# Prepare OHLCV data in tsfresh format
+# tsfresh expects: id (window identifier), time (sort column), value columns
+def prepare_rolling_windows(df: pd.DataFrame, window_size: int = 20) -> pd.DataFrame:
+    """Convert OHLCV DataFrame into rolling windows for tsfresh."""
+    records = []
+    for i in range(window_size, len(df)):
+        window = df.iloc[i - window_size:i].copy()
+        window["id"] = i  # window identifier
+        window["time"] = range(window_size)
+        records.append(window[["id", "time", "close", "volume", "high", "low"]])
+    return pd.concat(records, ignore_index=True)
+
+# Extract features from rolling windows
+df_ohlcv = pd.read_csv("btc_1h.csv", parse_dates=["timestamp"])
+df_rolled = prepare_rolling_windows(df_ohlcv, window_size=24)
+
+features = extract_features(
+    df_rolled,
+    column_id="id",
+    column_sort="time",
+    n_jobs=8,  # parallel extraction
+    disable_progressbar=False,
+)
+
+# Impute missing values (some features undefined for constant series)
+impute(features)
+
+# Build forward return target (next 4-hour return)
+y = df_ohlcv["close"].pct_change(4).shift(-4).iloc[24:].reset_index(drop=True)
+y_binary = (y > 0).astype(int)
+
+# Automatic feature selection via hypothesis testing
+# tsfresh controls the false discovery rate across all ~794 tests
+features_selected = select_features(features, y_binary, fdr_level=0.05)
+print(f"Selected {features_selected.shape[1]} features from {features.shape[1]}")
+```
+
+The `select_features` function applies a Benjamini-Yekutieli procedure to control the false discovery rate across the whole feature battery — which is the right instinct, and the same instinct the [Deflated Sharpe article](/en/blog/post/deflated-sharpe-multiple-testing) applies to strategy searches. Note what it does *not* do: FDR control on the feature-selection step says nothing about the trial cost of the model search that follows it. Those are two separate multiplicities and both have to be paid.
+
+<!-- TODO: needs real-data result — how many of the ~794 features actually survive BY-FDR selection on real BTC/ETH data, and does a FLAML model built on the survivors beat a hand-crafted baseline out of sample? -->
+
+### Featuretools: Deep Feature Synthesis
+
+While tsfresh focuses on time series characterization, [Featuretools](https://www.featuretools.com/) excels at relational feature engineering — constructing features by composing primitive operations across related tables.
+
+For trading, this is powerful when you have multi-table data: trade history, order book snapshots, funding rates, and on-chain metrics. Featuretools applies Deep Feature Synthesis (DFS), which stacks transformation and aggregation primitives:
+
+```python
+import featuretools as ft
+
+# Define entity set with relationships
+es = ft.EntitySet(id="crypto_trading")
+
+# Add OHLCV entity
+es = es.add_dataframe(
+    dataframe_name="candles",
+    dataframe=df_candles,
+    index="candle_id",
+    time_index="timestamp",
+)
+
+# Add order book snapshots
+es = es.add_dataframe(
+    dataframe_name="orderbook",
+    dataframe=df_orderbook,
+    index="snapshot_id",
+    time_index="timestamp",
+)
+
+# Add funding rate data
+es = es.add_dataframe(
+    dataframe_name="funding",
+    dataframe=df_funding,
+    index="funding_id",
+    time_index="timestamp",
+)
+
+# Deep Feature Synthesis: automatically compose primitives
+feature_matrix, feature_defs = ft.dfs(
+    entityset=es,
+    target_dataframe_name="candles",
+    agg_primitives=["mean", "std", "max", "min", "skew", "trend"],
+    trans_primitives=["percentile", "diff", "cum_mean"],
+    max_depth=2,  # compose up to 2 primitives deep
+    features_only=False,
+)
+
+print(f"Generated {len(feature_defs)} features via DFS")
+```
+
+The `time_index` declaration is load-bearing: it is what lets Featuretools compute aggregations using only rows that existed at the cutoff. Get it wrong and DFS will happily build a feature out of the future — the relational-data instance of the leaks catalogued in the [look-ahead bias taxonomy](/en/blog/post/look-ahead-bias-taxonomy).
+
+The combination of tsfresh (time series characterization) and Featuretools (relational synthesis) gives you a feature factory that produces thousands of candidate signals from raw market data with no manual indicator coding.
+
+## Budget-Aware AutoML: FLAML
+
+We assume Optuna and Tree-structured Parzen Estimators as background — the derivation, sampler comparison and benchmark are in [Coordinate Descent vs Bayesian Optimization](/en/blog/post/optuna-vs-coordinate-descent). On *which* sampler to reach for, this blog's own measurement is the reference and it is not the folklore answer: the crossover is governed by evaluation cost, not algorithm cleverness — when a backtest is nearly free, scrambled Sobol wins on throughput (~2,830 cfg/s against ~154 for TPE), and only expensive evaluations make sample efficiency pay ([Random vs Smart Search](/en/blog/post/search-method-crossover-eval-cost)).
+
+![Budget-aware AutoML search](/images/blog/automl-systematic-trading/budget-aware-automl.webp)
+
+That framing is what makes FLAML a different axis rather than a competing sampler. Optuna asks *where to sample next*; [FLAML](https://microsoft.github.io/FLAML/) (Fast Lightweight AutoML) asks *what can I afford to sample at all*. It optimizes for the best model within a time or compute budget using CFO (Cost-Frugal Optimization), which prioritizes cheap-to-evaluate configurations early and escalates only when the estimated marginal gain justifies the spend.
+
+```python
+from flaml import AutoML
+from sklearn.metrics import make_scorer
+import numpy as np
+
+def sharpe_score(y_true, y_pred):
+    """Custom scorer: Sharpe ratio of predicted signals."""
+    # Convert predictions to signals
+    signal = np.sign(y_pred - 0.5)
+    returns = signal * y_true  # y_true contains forward returns
+    if returns.std() == 0:
+        return 0.0
+    return np.sqrt(252) * returns.mean() / returns.std()
+
+sharpe_scorer = make_scorer(sharpe_score, greater_is_better=True)
+
+automl = AutoML()
+automl_settings = {
+    "time_budget": 300,          # 5 minutes
+    "metric": sharpe_scorer,     # optimize the financial objective, not accuracy
+    "task": "classification",
+    "estimator_list": [
+        "lgbm", "xgboost", "rf", "extra_tree", "catboost",
+    ],
+    "eval_method": "cv",
+    "split_type": "time",        # time series split (no future leakage)
+    "n_splits": 5,
+    "log_file_name": "flaml_trading.log",
+    "seed": 42,
+}
+
+automl.fit(
+    X_train=X_train,
+    y_train=y_train,
+    **automl_settings,
+)
+
+print(f"Best model: {automl.best_estimator}")
+print(f"Best config: {automl.best_config}")
+
+# Inspect the search trajectory
+from flaml.data import get_output_from_log
+time_history, best_valid_loss_history, valid_loss_history, config_history, metric_history = \
+    get_output_from_log(filename="flaml_trading.log", time_budget=300)
+```
+
+FLAML's advantage for trading is compute allocation across heterogeneous model types. If LightGBM configurations evaluate 10x faster than CatBoost, FLAML explores more LightGBM early and switches only when it estimates the marginal improvement justifies the cost. That is the cheap-regime insight from the crossover article, generalized: throughput is a first-class term in the search budget, not an implementation detail.
+
+The trajectory log is the part worth keeping. `get_output_from_log` gives you the full config history, which is your trial count — and the trial count is the input to every deflation you are about to owe.
+
+## Neural Architecture Search for Trading Models
+
+Neural Architecture Search automates the design of network topologies rather than the tuning of a fixed one. Architecture choice for financial series is genuinely non-obvious — non-stationarity, low signal-to-noise, mixed frequencies and dependencies spanning minutes to months all pull in different directions — but that motivation is already argued concretely elsewhere: see [Temporal Fusion Transformer](/en/blog/post/temporal-fusion-transformer-trading) on when TFT beats LSTM beats vanilla Transformer, and [DeepLOB](/en/blog/post/deeplob-deep-learning-order-book) on the CNN+Inception+LSTM tradeoff, for what carefully hand-designed fixed architectures already achieve. NAS is the argument that this choice should itself be searched.
+
+Research on [Neuroevolution NAS for Stock Return Prediction](https://arxiv.org/html/2410.17212v1) reports that RNNs evolved via EXAMM (Evolutionary eXploration of Augmenting Memory Models) outperformed the DJI and S&P 500 in both bear (2022) and bull (2023) markets using simple long-short strategies. Treat that as a third-party claim, not as a result reproduced here — it is a best-of-search figure with no deflation reported.
+
+### NAS Search Space for Trading
+
+A practical NAS search space for trading models includes:
+
+```
+Search Space:
+  - Cell types: {LSTM, GRU, Temporal Conv, Transformer block, Linear}
+  - Number of layers: [1, 8]
+  - Hidden dimensions: {32, 64, 128, 256}
+  - Attention heads (if Transformer): {2, 4, 8}
+  - Dropout rate: [0.0, 0.5]
+  - Skip connections: {True, False}
+  - Normalization: {BatchNorm, LayerNorm, None}
+  - Activation: {ReLU, GELU, SiLU, Mish}
+  - Lookback window: {20, 60, 120, 252}
+```
+
+With NNI (Neural Network Intelligence) from Microsoft, you can define and search this space:
+
+```python
+import nni
+from nni.nas.nn.pytorch import LayerChoice, InputChoice
+import torch
+import torch.nn as nn
+
+class TradingNASModel(nn.Module):
+    """NAS-searchable model for financial time series."""
+
+    def __init__(self, input_dim: int, seq_len: int):
+        super().__init__()
+        self.input_proj = nn.Linear(input_dim, 128)
+
+        # NAS searches over cell type
+        self.temporal_block = LayerChoice([
+            nn.LSTM(128, 128, num_layers=2, batch_first=True, dropout=0.1),
+            nn.GRU(128, 128, num_layers=2, batch_first=True, dropout=0.1),
+            nn.TransformerEncoder(
+                nn.TransformerEncoderLayer(d_model=128, nhead=4, batch_first=True),
+                num_layers=2,
+            ),
+        ], label="temporal_cell")
+
+        # NAS searches over head architecture
+        self.head = LayerChoice([
+            nn.Sequential(nn.Linear(128, 64), nn.ReLU(), nn.Linear(64, 1)),
+            nn.Sequential(nn.Linear(128, 32), nn.GELU(), nn.Linear(32, 1)),
+            nn.Linear(128, 1),
+        ], label="prediction_head")
+
+        # Optional skip connection
+        self.skip = InputChoice(n_candidates=2, n_chosen=1, label="skip_conn")
+        self.skip_proj = nn.Linear(input_dim, 128)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # x shape: (batch, seq_len, input_dim)
+        h = self.input_proj(x)
+        out = self.temporal_block(h)
+
+        # Handle different output formats (LSTM returns tuple)
+        if isinstance(out, tuple):
+            out = out[0]
+
+        # Take last timestep
+        last = out[:, -1, :]
+
+        # Skip connection from raw input
+        skip_val = self.skip_proj(x[:, -1, :])
+        last = self.skip([last, last + skip_val])
+
+        return self.head(last).squeeze(-1)
+```
+
+The search algorithm (ENAS, DARTS, or evolutionary) evaluates candidate architectures on a validation set using a financial objective, then progressively narrows toward high-performing topologies. Note the cost asymmetry against everything else in this article: NAS sits at the far expensive end of the eval-cost axis, which is the one regime where sample-efficient samplers and multi-fidelity pruning genuinely pay for themselves.
+
+## The WorldQuant Alpha Factory Approach
+
+WorldQuant's approach to alpha discovery is the most industrial-scale implementation of AutoML principles in finance. Founded by Igor Tulchinsky, WorldQuant operates what they call an "alpha factory" — a systematic process for generating, testing, and combining millions of predictive signals.
+
+### Philosophy: Exponential Alpha Generation, and Its Correction
+
+WorldQuant set a target in 2010 to reach one million alphas, at a time when they produced only several thousand per year. They hit that target in 2016. The philosophy rests on the fundamental law of active management:
+
+$$IR \approx IC \cdot \sqrt{BR}$$
+
+where $IR$ is the information ratio, $IC$ the information coefficient, and $BR$ the breadth — the number of *independent* bets. Each individual $\alpha_i$ is a weak predictor; the claim is that combining enough weakly correlated ones compounds tiny ICs into a meaningful risk-adjusted return.
+
+The correction that makes or breaks this, and that the naive reading of the formula hides: **breadth is not trial count.** $BR$ counts independent bets, and generated alphas are not independent — they are composed from the same operators over the same price and volume fields, so they inherit each other's correlation structure. This blog measured the effect directly in [Signal Correlation](/en/blog/post/signal-correlation-pairs): effective breadth is $N_{eff} = N / C_f$, and with a typical crypto correlation factor $C_f \approx 3$, ten signals are worth about 3.3 independent ones. The $\sqrt{BR}$ term does not grow with how many alphas you generated; it grows with how many *uncorrelated* ones survived. A million correlated alphas buy you far less than the formula advertises.
+
+This is why step 3 below — decorrelation against the existing library — is not a hygiene step in the alpha factory. It is the step that produces the breadth in the first place.
+
+### The 101 Formulaic Alphas
+
+The paper ["101 Formulaic Alphas"](https://arxiv.org/pdf/1601.00991) by Kakushadze (associated with WorldQuant research) published a set of formulaic alpha expressions — mathematical expressions over price, volume and fundamental data:
+
+```
+Alpha#1:  (rank(Ts_ArgMax(SignedPower(((returns < 0) ? stddev(returns, 20)
+          : close), 2.), 5)) - 0.5)
+
+Alpha#7:  ((adv20 < volume) ? ((-1 * ts_rank(abs(delta(close, 7)), 60))
+          * sign(delta(close, 7))) : (-1 * 1))
+
+Alpha#42: (rank(vwap - close) / rank(vwap + close))
+```
+
+What makes this interesting for AutoML is that it is a *grammar*. The alphas are compositions of a small operator set (`rank`, `delta`, `ts_rank`, `stddev`, `correlation`, `signedpower`) over a small field set (`close`, `volume`, `vwap`, `returns`, `adv20`). A grammar is enumerable, which means the search space is machine-generatable in a way that "think of a good feature" is not. An AutoML system can:
+
+1. **Generate** candidate expressions by composing operators over data fields
+2. **Evaluate** each expression's IC, turnover, and drawdown
+3. **Filter** for expressions that survive statistical testing *and* are sufficiently uncorrelated with the existing library
+4. **Combine** the survivors into a portfolio
+
+Note that steps 1 and 2 are the easy ones and step 3 is where the value is — see the breadth correction above.
+
+### LLM-Enhanced Alpha Discovery
+
+WorldQuant has begun integrating large language models into the alpha factory. As reported in financial press, the firm is exploring how LLMs can "transform and discover alphas across different domains" — generating novel expressions, translating research papers into testable hypotheses, and surfacing cross-domain relationships that a pure enumerative search would miss. This is a different mechanism from extracting signals from text, which this blog covers in [LLM Alpha Mining on Earnings Calls](/en/blog/post/llm-alpha-mining-earnings-calls); here the LLM writes the *formula*, not the *feature*.
+
+### Building Your Own Mini Alpha Factory
+
+Here is a compact but functional alpha factory over the operator grammar:
+
+```python
+import itertools
+from dataclasses import dataclass
+from typing import Callable, List
+import pandas as pd
+import numpy as np
+from scipy.stats import spearmanr
+
+@dataclass
+class Alpha:
+    name: str
+    expression: Callable[[pd.DataFrame], pd.Series]
+    ic: float = 0.0
+    turnover: float = 0.0
+    sharpe: float = 0.0
+
+# Define primitive operators
+def ts_rank(series: pd.Series, window: int) -> pd.Series:
+    return series.rolling(window).apply(lambda x: pd.Series(x).rank().iloc[-1] / len(x))
+
+def ts_delta(series: pd.Series, period: int) -> pd.Series:
+    return series.diff(period)
+
+def ts_std(series: pd.Series, window: int) -> pd.Series:
+    return series.rolling(window).std()
+
+def cs_rank(series: pd.Series) -> pd.Series:
+    return series.rank(pct=True)
+
+def ts_mean(series: pd.Series, window: int) -> pd.Series:
+    return series.rolling(window).mean()
+
+# Define alpha templates (composable expressions)
+ALPHA_TEMPLATES = [
+    ("momentum_{w}",
+     lambda df, w: cs_rank(ts_delta(df["close"], w))),
+    ("mean_reversion_{w}",
+     lambda df, w: -cs_rank(df["close"] / ts_mean(df["close"], w) - 1)),
+    ("vol_surprise_{w}",
+     lambda df, w: cs_rank(df["volume"] / ts_mean(df["volume"], w))),
+    ("price_vol_divergence_{w}",
+     lambda df, w: cs_rank(ts_delta(df["close"], w)) * -cs_rank(ts_delta(df["volume"], w))),
+    ("volatility_rank_{w}",
+     lambda df, w: -cs_rank(ts_std(df["close"].pct_change(), w))),
+    ("high_low_range_{w}",
+     lambda df, w: cs_rank(ts_mean(df["high"] - df["low"], w) / df["close"])),
+]
+
+WINDOWS = [5, 10, 20, 60, 120]
+
+def generate_alphas(df: pd.DataFrame, forward_returns: pd.Series) -> List[Alpha]:
+    """Generate and evaluate all alpha candidates."""
+    alphas = []
+
+    for (name_tpl, expr_fn), window in itertools.product(ALPHA_TEMPLATES, WINDOWS):
+        name = name_tpl.format(w=window)
+        try:
+            signal = expr_fn(df, window)
+            signal = signal.replace([np.inf, -np.inf], np.nan)
+
+            # Information Coefficient (rank correlation with forward returns)
+            valid = signal.notna() & forward_returns.notna()
+            if valid.sum() < 100:
+                continue
+
+            ic, _ = spearmanr(signal[valid], forward_returns[valid])
+            turnover = signal.diff().abs().mean()
+
+            ret = (signal * forward_returns).dropna()
+            sharpe = np.sqrt(252) * ret.mean() / (ret.std() + 1e-9)
+
+            alphas.append(Alpha(
+                name=name,
+                expression=lambda df, fn=expr_fn, w=window: fn(df, w),
+                ic=ic,
+                turnover=turnover,
+                sharpe=sharpe,
+            ))
+        except Exception:
+            continue
+
+    alphas.sort(key=lambda a: abs(a.ic), reverse=True)
+    return alphas
+```
+
+Six templates over five windows is a 30-configuration sweep. The report it produces has this **schematic** shape — the fields are what the factory emits, and no numbers are filled in because none have been measured here:
+
+```
+SCHEMATIC — illustrative format only, not a measurement
+
+Generated <N> alphas from <N> candidate configurations
+
+Top by |IC|:
+  <alpha_name>   IC=<±0.0xxx>   Sharpe=<±x.xxx>   Turnover=<0.0xxx>
+  ...
+```
+
+<!-- TODO: needs real-data result — run generate_alphas on real BTC/ETH data and report the actual IC distribution, turnover, and the DSR/PBO of the best alpha given the 30-candidate (or 3,000-candidate) trial count. The interesting number is not the best alpha's Sharpe; it is how many alphas survive deflation. -->
+
+The raw Sharpe of the top alpha out of a 30-configuration sweep is **not a result** — it is the maximum of 30 draws, and on 1,000 zero-edge strategies the best annualized Sharpe averages 1.63 while the naive test declares a discovery 100% of the time ([Deflated Sharpe Ratio](/en/blog/post/deflated-sharpe-multiple-testing)). The honest deliverable from a factory is therefore not "we found an alpha" but *how many alphas survived deflation*: the IC distribution, the trial count, the winner's DSR against that count, and the PBO of the selection. That is the measurement this section still owes.
+
+## Guardrails: What You Already Owe
+
+AutoML amplifies discovery and overfitting in equal measure, and it does so at the trial counts where the difference stops being subtle. Each of these is covered in depth elsewhere; the point here is that AutoML makes all of them mandatory rather than advisable.
+
+**Price the search, do not merely correct it.** A feature-model-hyperparameter sweep is a trial count and the trial count moves the bar — see [The Deflated Sharpe Ratio](/en/blog/post/deflated-sharpe-multiple-testing).
+
+**Validate temporally, with purging and embargo.** See [Walk-Forward Optimization](/en/blog/post/walk-forward-optimization) and the [Look-Ahead Bias Taxonomy](/en/blog/post/look-ahead-bias-taxonomy) for the leaks that survive a naive temporal split.
+
+**Score the procedure, not just the winner.** See [Probability of Backtest Overfitting](/en/blog/post/probability-backtest-overfitting-pbo), and carry its load-bearing correction: **PBO's null is 0.5, not 1** — half is not "half overfit," it is fully overfit, a coin flip.
+
+**Watch for peaks that are not there.** Searching a noise-dominated surface efficiently just finds sharper illusions faster ([Plateau Analysis](/en/blog/post/plateau-analysis-overfitting)); this bites hardest on strategy parameters and least on ML hyperparameters, which is the case FLAML and Optuna are actually built for.
+
+**Constrain the search space.** Minimum leaf samples, capped depth and estimator counts, a feature budget, a turnover penalty — regularizing the search is cheaper than deflating it afterward.
+
+## Conclusion
+
+AutoML moves automation up a level: from tuning parameters inside a fixed candidate to generating the candidates themselves. Three components are worth the effort — tsfresh and Featuretools for feature generation, FLAML's cost-frugal search for budget-aware model selection, and the formulaic operator grammar for enumerable alpha construction. NAS becomes worth its compute only when your signal-to-noise ratio justifies it, and it lives at the expensive end of the eval-cost axis where sample efficiency finally pays.
+
+The WorldQuant breadth argument survives contact with this blog's own measurements only in its corrected form: $IR \approx IC\sqrt{BR}$ where $BR$ counts *independent* bets, and a factory's output is nowhere near independent. Generating a million alphas is the easy half. Establishing that they are uncorrelated enough to count as breadth is the half that determines whether the formula means anything.
+
+And the honest caveat is not a moral, it is a measured result. This blog ran the search-and-overfit arc to its conclusion in [The Honest Negative](/en/blog/post/honest-negative-no-robust-edge): tens of thousands of backtests across five majors, DSR = 0.00 at ~37,000 trials, PBO 0.264 and 0.327, and no robust edge. AutoML raises the trial count by orders of magnitude. Whatever it finds, it will owe a correspondingly larger deflation — and the useful output of an alpha factory is the survival rate after that deflation, not the top line before it.

@@ -1,0 +1,471 @@
+MM article automl-systematic-trading RU 9cc260281437
+
+---
+title: "AutoML для систематических торговых конвейеров"
+description: "Автоматическая генерация признаков (tsfresh, Featuretools), поиск моделей с учетом бюджета (экономный по стоимости оптимизатор FLAML) и формульная альфа-фабрика WorldQuant — части исследовательского конвейера, которые эта серия о поиске и переобучении не охватывала, и выводы из собственных результатов серии."
+date: "2026-07-30"
+tags: ["AutoML", "NAS", "feature-engineering", "automation", "quant"]
+slug: "automl-systematic-trading"
+image: "/images/blog/automl-systematic-trading/hero.webp"
+lang: "ru"
+draft: false
+authors: ["suenot"]
+---
+
+# AutoML для системных торговых конвейеров
+
+В этом блоге большое внимание уделяется *как осуществлять поиск*: какой сэмплер использовать и когда ([пересечение — это стоимость оценки](/en/blog/post/search-method-crossover-eval-cost)), как оценить цену за выполненный вами поиск ([Дефлированный коэффициент Шарпа](/en/blog/post/deflated-sharpe-multiple-testing)), как оценить саму процедуру отбора ([PBO](/en/blog/post/probability-backtest-overfitting-pbo)), и где честно приземляется весь этот аппарат ([нет надежного преимущества](/en/blog/post/honest-negative-no-robust-edge)).
+
+Чего он никогда не касался, так это того, что вы ищете *по*. Все эти статьи принимают набор функций и семейство стратегий как заданные и оптимизируют внутри них параметры. AutoML атакует верхний уровень — он автоматизирует построение самих кандидатов. Три части из этого больше нигде в этом блоге не встречаются:
+
+1. **Автоматическое извлечение признаков** – tsfresh превращает один ценовой ряд в примерно 794 статистически охарактеризованных признака, а Featuretools компонует признаки из связанных рыночных таблиц с помощью глубокого синтеза признаков.
+2. **AutoML с учетом бюджета** — экономичная оптимизация FLAML, которая находит лучшую модель *в рамках вычислительного бюджета*, а не независимо от стоимости.
+3. **Фабрика формульных альфа** — 101 формульная альфа от WorldQuant в виде составной операторной грамматики, которую может пересчитать машина.
+
+Все остальное — целевая функция, схема проверки, коррекция при множественном тестировании — уже измерено здесь где-то еще, поэтому эта статья скорее связывает, чем переучивает. Это имеет большее значение, чем обычно, поскольку AutoML увеличивает количество попыток, а именно количество попыток и составляет оставшуюся часть дуги.
+
+![Систематический торговый конвейер AutoML](/images/blog/automl-systematic-trading/hero.webp)
+
+## Что автоматизирует AutoML
+
+AutoML — это не единый алгоритм. Это семейство методов, которые автоматизируют различные этапы конвейера:
+
+| Этап | Ручной подход | Подход AutoML |
+|---|---|---|
+| Особенности проектирования | Экспертные индикаторы ремесла домена | Автоматическое извлечение (tsfresh, Featuretools) |
+| Выбор функции | Корреляционный анализ, интуиция | Статистическая проверка гипотез, SHAP |
+| Выбор модели | Попробуйте 2-3 модели | Поиск среди десятков учащихся |
+| Настройка гиперпараметров | Поиск по сетке, ручная настройка | Байесовский / экономичный поиск (Optuna, FLAML) |
+| Архитектурный дизайн | Фиксированная топология нейронной сети | Поиск нейронной архитектуры (NAS) |
+| Строительство ансамбля | Ручная укладка | Автоматизированный подбор ансамбля |
+
+Идея состоит в том, что при систематической торговле пространство кандидатов огромно: одна серия OHLCV генерирует сотни технических характеристик, а множество активов, данные книги заказов и альтернативные источники делают ее комбинаторной. Посылка также представляет собой опасность: каждый кандидат — это испытание, а испытания — это то, что производит ложные открытия.
+
+Один момент, специфичный для AutoML: метрика, которую максимизирует поиск, должна быть финансовой, потому что поиск оптимизирует именно то, что вы записали, а не то, что вы имели в виду. Какой скаляр вы выберете, молча выберет вашу стратегию — см. [Дизайн целевой функции](/en/blog/post/objective-function-design-backtest), где наивный Шарп, рассчитывающий на каждую сделку, побеждает в лотерее с риском менее 5% в 56% из 600 семян и публикует в выборке значение Шарпа, равное 21, которое падает до 0,13 из выборки. С самого начала подключите финансовые показатели к системе оценки AutoML; не оптимизировать `roc_auc` и надеюсь, что это перейдет.
+
+## Автоматизированное проектирование функций
+
+Разработка функций — это то, где живет большая часть альфы. Исходные данные о ценах одинаковы для всех. Преобразование этих данных в прогнозирующие сигналы — это то, что отличает прибыльные стратегии от шума.
+
+![Фабрика автоматизированного проектирования функций](/images/blog/automl-systematic-trading/feature-factory.webp)
+
+### tsfresh: от одной ценовой серии до более чем 800 функций
+
+[тссвежий](https://tsfresh.readthedocs.io/) (Извлечение признаков временных рядов на основе масштабируемых проверок гипотез) специально создано для извлечения признаков временных рядов. Он вычисляет 63 метода характеризации, которые по умолчанию расширяются до примерно 794 функций, в том числе:
+
+- Статистические моменты (среднее значение, дисперсия, асимметрия, эксцесс)
+- Автокорреляция с несколькими лагами
+- Коэффициенты Фурье и спектральная энергия
+- Меры сложности (приблизительная энтропия, выборочная энтропия)
+- Нелинейные характеристики (коэффициенты Фридриха, максимальная фиксированная точка Ланжевена)
+- Изменение квантилей и количества диапазонов
+
+Для финансовых данных это означает, что один ряд цен дает сотни потенциальных функций — многие из них отражают динамику, которую невозможно пропустить при ручном проектировании функций. Это существенно отличается от созданных вручную наборов функций, полученных из предметной области, используемых в [моделировании распространения](/en/blog/post/spread-modeling-machine-learning) и [DeepLOB](/en/blog/post/deeplob-deep-learning-order-book): там человек решает, что дисбаланс в книге заказов имеет значение; здесь библиотека все перечисляет и позволяет проверить гипотезу.
+
+```python
+import pandas as pd
+import numpy as np
+from tsfresh import extract_features, select_features
+from tsfresh.utilities.dataframe_functions import impute
+
+# Prepare OHLCV data in tsfresh format
+# tsfresh expects: id (window identifier), time (sort column), value columns
+def prepare_rolling_windows(df: pd.DataFrame, window_size: int = 20) -> pd.DataFrame:
+    """Convert OHLCV DataFrame into rolling windows for tsfresh."""
+    records = []
+    for i in range(window_size, len(df)):
+        window = df.iloc[i - window_size:i].copy()
+        window["id"] = i  # window identifier
+        window["time"] = range(window_size)
+        records.append(window[["id", "time", "close", "volume", "high", "low"]])
+    return pd.concat(records, ignore_index=True)
+
+# Extract features from rolling windows
+df_ohlcv = pd.read_csv("btc_1h.csv", parse_dates=["timestamp"])
+df_rolled = prepare_rolling_windows(df_ohlcv, window_size=24)
+
+features = extract_features(
+    df_rolled,
+    column_id="id",
+    column_sort="time",
+    n_jobs=8,  # parallel extraction
+    disable_progressbar=False,
+)
+
+# Impute missing values (some features undefined for constant series)
+impute(features)
+
+# Build forward return target (next 4-hour return)
+y = df_ohlcv["close"].pct_change(4).shift(-4).iloc[24:].reset_index(drop=True)
+y_binary = (y > 0).astype(int)
+
+# Automatic feature selection via hypothesis testing
+# tsfresh controls the false discovery rate across all ~794 tests
+features_selected = select_features(features, y_binary, fdr_level=0.05)
+print(f"Selected {features_selected.shape[1]} features from {features.shape[1]}")
+```
+
+The `select_features` Функция применяет процедуру Бенджамини-Йекутиэли для контроля уровня ложных открытий по всему набору функций — это правильный инстинкт, и тот же инстинкт, который [Статья Дефлированного Шарпа](/en/blog/post/deflated-sharpe-multiple-testing) применяется к стратегическому поиску. Обратите внимание, что он *не* делает: контроль FDR на этапе выбора функций ничего не говорит о стоимости пробного поиска модели, который следует за ним. Это две отдельные кратности, и обе должны быть оплачены.
+
+<!-- TODO: нужен результат на основе реальных данных — сколько из примерно 794 функций действительно выдерживают выбор BY-FDR на реальных данных BTC/ETH, и превосходит ли модель FLAML, построенную на выживших, созданный вручную базовый уровень из выборки? -->
+
+### Featuretools: глубокий синтез функций
+
+В то время как tsfresh фокусируется на характеристике временных рядов, [Featuretools](https://www.featuretools.com/) преуспевает в реляционной разработке функций — создании функций путем объединения примитивных операций в связанных таблицах.
+
+Для торговли это очень полезно, когда у вас есть данные из нескольких таблиц: история торговли, снимки книги заказов, ставки финансирования и метрики в цепочке. Featuretools применяет Deep Feature Synthesis (DFS), который объединяет примитивы преобразования и агрегирования:
+
+```python
+import featuretools as ft
+
+# Define entity set with relationships
+es = ft.EntitySet(id="crypto_trading")
+
+# Add OHLCV entity
+es = es.add_dataframe(
+    dataframe_name="candles",
+    dataframe=df_candles,
+    index="candle_id",
+    time_index="timestamp",
+)
+
+# Add order book snapshots
+es = es.add_dataframe(
+    dataframe_name="orderbook",
+    dataframe=df_orderbook,
+    index="snapshot_id",
+    time_index="timestamp",
+)
+
+# Add funding rate data
+es = es.add_dataframe(
+    dataframe_name="funding",
+    dataframe=df_funding,
+    index="funding_id",
+    time_index="timestamp",
+)
+
+# Deep Feature Synthesis: automatically compose primitives
+feature_matrix, feature_defs = ft.dfs(
+    entityset=es,
+    target_dataframe_name="candles",
+    agg_primitives=["mean", "std", "max", "min", "skew", "trend"],
+    trans_primitives=["percentile", "diff", "cum_mean"],
+    max_depth=2,  # compose up to 2 primitives deep
+    features_only=False,
+)
+
+print(f"Generated {len(feature_defs)} features via DFS")
+```
+
+The `time_index` Объявление несет нагрузку: именно оно позволяет Featuretools вычислять агрегаты, используя только те строки, которые существовали на момент обрезки. Если вы сделаете ошибку, DFS с радостью создаст новую функцию из будущего — экземпляр реляционных данных об утечках, каталогизированный в [таксономии прогнозируемого смещения](/en/blog/post/look-ahead-bias-taxonomy).
+
+Комбинация tsfresh (характеристика временных рядов) и Featuretools (реляционный синтез) дает вам фабрику функций, которая создает тысячи потенциальных сигналов на основе необработанных рыночных данных без ручного кодирования индикаторов.
+
+## AutoML с учетом бюджета: FLAML
+
+В качестве фона мы предполагаем Optuna и древовидные оценщики Парзена — вывод, сравнение семплеров и тесты находятся в [Координатный спуск против байесовской оптимизации](/en/blog/post/optuna-vs-coordinate-descent). Что касается *какого* сэмплера, собственное измерение в этом блоге является эталоном, а не фольклорным ответом: кроссовер определяется стоимостью оценки, а не хитростью алгоритма - когда бэктест почти бесплатен, зашифрованный Соболь выигрывает по пропускной способности (~ 2830 куб. футов в секунду против ~ 154 для TPE), и только дорогие оценки делают выборку эффективной ([Случайный против умного) Поиск](/en/blog/post/search-method-crossover-eval-cost)).
+
+![Поиск AutoML с учетом бюджета](/images/blog/automl-systematic-trading/budget-aware-automl.webp)
+
+Именно эта структура делает FLAML другой осью, а не конкурирующим сэмплером. Оптуна спрашивает *где попробовать дальше*; [ФЛАМЛ](https://microsoft.github.io/FLAML/) (Fast Lightweight AutoML) спрашивает *что я вообще могу позволить себе семплировать*. Он оптимизирует лучшую модель в рамках временного или вычислительного бюджета с помощью CFO (оптимизация затрат), которая отдает приоритет дешевым для оценки конфигурациям на ранней стадии и увеличивает масштабы только тогда, когда предполагаемая предельная выгода оправдывает затраты.
+
+```python
+from flaml import AutoML
+from sklearn.metrics import make_scorer
+import numpy as np
+
+def sharpe_score(y_true, y_pred):
+    """Custom scorer: Sharpe ratio of predicted signals."""
+    # Convert predictions to signals
+    signal = np.sign(y_pred - 0.5)
+    returns = signal * y_true  # y_true contains forward returns
+    if returns.std() == 0:
+        return 0.0
+    return np.sqrt(252) * returns.mean() / returns.std()
+
+sharpe_scorer = make_scorer(sharpe_score, greater_is_better=True)
+
+automl = AutoML()
+automl_settings = {
+    "time_budget": 300,          # 5 minutes
+    "metric": sharpe_scorer,     # optimize the financial objective, not accuracy
+    "task": "classification",
+    "estimator_list": [
+        "lgbm", "xgboost", "rf", "extra_tree", "catboost",
+    ],
+    "eval_method": "cv",
+    "split_type": "time",        # time series split (no future leakage)
+    "n_splits": 5,
+    "log_file_name": "flaml_trading.log",
+    "seed": 42,
+}
+
+automl.fit(
+    X_train=X_train,
+    y_train=y_train,
+    **automl_settings,
+)
+
+print(f"Best model: {automl.best_estimator}")
+print(f"Best config: {automl.best_config}")
+
+# Inspect the search trajectory
+from flaml.data import get_output_from_log
+time_history, best_valid_loss_history, valid_loss_history, config_history, metric_history = \
+    get_output_from_log(filename="flaml_trading.log", time_budget=300)
+```
+
+Преимущество FLAML для торговли заключается в распределении вычислений по разнородным типам моделей. Если конфигурации LightGBM оцениваются в 10 раз быстрее, чем CatBoost, FLAML заранее исследует больше LightGBM и переключается только тогда, когда считает, что незначительное улучшение оправдывает затраты. Это обобщенный вывод о дешевом режиме из перекрестной статьи: пропускная способность — это первоклассный термин в бюджете поиска, а не деталь реализации.
+
+Журнал траектории — это та часть, которую стоит сохранить. `get_output_from_log` дает вам полную историю конфигурации, которая является вашим количеством пробных версий, а количество пробных версий является входными данными для каждого дефляции, которую вы собираетесь задолжать.
+
+## Нейронная архитектура Поиск торговых моделей
+
+Neural Architecture Search автоматизирует проектирование сетевых топологий, а не настройку фиксированной. Выбор архитектуры для финансовых сериалов действительно неочевиден — нестационарность, низкое соотношение сигнал/шум, смешанные частоты и зависимости, охватывающие минуты и месяцы, тянутся в разных направлениях — но эта мотивация уже конкретно аргументирована в другом месте: см. [Temporal Fusion Transformer](/en/blog/post/temporal-fusion-transformer-trading) о том, когда TFT превосходит LSTM, побеждает ванильный Transformer, и [DeepLOB](/en/blog/post/deeplob-deep-learning-order-book) о компромиссе CNN+Inception+LSTM, чего уже достигают тщательно разработанные вручную фиксированные архитектуры. НАН является аргументом в пользу того, что этот выбор следует искать самому.
+
+Исследование [Нейроэволюционная NAS для прогнозирования доходности акций](https://arxiv.org/html/2410.17212v1) сообщает, что RNN, разработанные с помощью EXAMM (Эволюционное исследование расширяющих моделей памяти), превзошли DJI и S&P 500 как на медвежьем (2022 г.), так и на бычьем (2023 г.) рынках с использованием простых длинных и коротких стратегий. Считайте это заявлением третьей стороны, а не результатом, воспроизведенным здесь — это лучший результат поиска, о дефляции не сообщается.
+
+### Пространство поиска NAS для трейдинга
+
+Практическое пространство поиска торговых моделей NAS включает в себя:
+
+```
+Search Space:
+  - Cell types: {LSTM, GRU, Temporal Conv, Transformer block, Linear}
+  - Number of layers: [1, 8]
+  - Hidden dimensions: {32, 64, 128, 256}
+  - Attention heads (if Transformer): {2, 4, 8}
+  - Dropout rate: [0.0, 0.5]
+  - Skip connections: {True, False}
+  - Normalization: {BatchNorm, LayerNorm, None}
+  - Activation: {ReLU, GELU, SiLU, Mish}
+  - Lookback window: {20, 60, 120, 252}
+```
+
+С помощью NNI (Neural Network Intelligence) от Microsoft вы можете определить и выполнить поиск в этом пространстве:
+
+```python
+import nni
+from nni.nas.nn.pytorch import LayerChoice, InputChoice
+import torch
+import torch.nn as nn
+
+class TradingNASModel(nn.Module):
+    """NAS-searchable model for financial time series."""
+
+    def __init__(self, input_dim: int, seq_len: int):
+        super().__init__()
+        self.input_proj = nn.Linear(input_dim, 128)
+
+        # NAS searches over cell type
+        self.temporal_block = LayerChoice([
+            nn.LSTM(128, 128, num_layers=2, batch_first=True, dropout=0.1),
+            nn.GRU(128, 128, num_layers=2, batch_first=True, dropout=0.1),
+            nn.TransformerEncoder(
+                nn.TransformerEncoderLayer(d_model=128, nhead=4, batch_first=True),
+                num_layers=2,
+            ),
+        ], label="temporal_cell")
+
+        # NAS searches over head architecture
+        self.head = LayerChoice([
+            nn.Sequential(nn.Linear(128, 64), nn.ReLU(), nn.Linear(64, 1)),
+            nn.Sequential(nn.Linear(128, 32), nn.GELU(), nn.Linear(32, 1)),
+            nn.Linear(128, 1),
+        ], label="prediction_head")
+
+        # Optional skip connection
+        self.skip = InputChoice(n_candidates=2, n_chosen=1, label="skip_conn")
+        self.skip_proj = nn.Linear(input_dim, 128)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # x shape: (batch, seq_len, input_dim)
+        h = self.input_proj(x)
+        out = self.temporal_block(h)
+
+        # Handle different output formats (LSTM returns tuple)
+        if isinstance(out, tuple):
+            out = out[0]
+
+        # Take last timestep
+        last = out[:, -1, :]
+
+        # Skip connection from raw input
+        skip_val = self.skip_proj(x[:, -1, :])
+        last = self.skip([last, last + skip_val])
+
+        return self.head(last).squeeze(-1)
+```
+
+Алгоритм поиска (ENAS, DARTS или эволюционный) оценивает возможные архитектуры на наборе проверки с учетом финансовых целей, а затем постепенно сужается в сторону высокопроизводительных топологий. Обратите внимание на асимметрию затрат по сравнению со всем остальным в этой статье: NAS находится на самом дорогом конце оси оценки-стоимости, которая является единственным режимом, где эффективные семплеры и многоточность обрезки действительно окупают себя.
+
+## Подход WorldQuant Alpha Factory
+
+Подход WorldQuant к альфа-открытию представляет собой наиболее масштабную реализацию принципов AutoML в сфере финансов. Компания WorldQuant, основанная Игорем Тульчинским, управляет так называемой "альфа-фабрикой" — систематическим процессом генерации, тестирования и объединения миллионов прогнозирующих сигналов.
+
+### Философия: экспоненциальная альфа-генерация и ее коррекция
+
+WorldQuant поставила цель в 2010 году достичь одного миллиона альф, в то время как они производили всего несколько тысяч в год. Они достигли этой цели в 2016 году. Философия основана на фундаментальном законе активного управления:
+
+$IR \approx IC \cdot \sqrt{BR}$
+
+где $IR$ это соотношение информации, $IC$ информационный коэффициент и $BR$ ширина — количество *независимых* ставок. Каждый человек $\alpha_i$ является слабым предиктором; утверждение состоит в том, что объединение достаточно слабо коррелирующих активов приводит к получению значимой доходности с поправкой на риск.
+
+Поправка, которая делает или разрушает это, и которую скрывает наивное прочтение формулы: **ширина — это не количество попыток.** $BR$ подсчитывает независимые ставки, а сгенерированные альфа не являются независимыми — они состоят из одних и тех же операторов с одинаковыми полями цены и объема, поэтому они наследуют структуру корреляции друг друга. В этом блоге этот эффект измерялся непосредственно в [Корреляции сигналов](/en/blog/post/signal-correlation-pairs): эффективная ширина равна $N_{eff} = N / C_f$и с типичным коэффициентом криптокорреляции $C_f \approx 3$, десять сигналов стоят примерно 3,3 независимых. $\sqrt{BR}$ срок не увеличивается в зависимости от количества сгенерированных вами альф; оно растет пропорционально тому, сколько *некоррелированных* выжило. Миллион коррелирующих альф принесет вам гораздо меньше, чем обещает формула.
+
+Вот почему шаг 3 ниже — декорреляция с существующей библиотекой — не является гигиеническим шагом в альфа-фабрике. Это шаг, который в первую очередь производит широту.
+
+### 101 формульная альфа
+
+Статья ["101 формульная альфа"](https://arxiv.org/pdf/1601.00991) Какушадзе (связанный с исследованием WorldQuant) опубликовал набор шаблонных альфа-выражений — математических выражений для цены, объема и фундаментальных данных:
+
+```
+Alpha#1:  (rank(Ts_ArgMax(SignedPower(((returns < 0) ? stddev(returns, 20)
+          : close), 2.), 5)) - 0.5)
+
+Alpha#7:  ((adv20 < volume) ? ((-1 * ts_rank(abs(delta(close, 7)), 60))
+          * sign(delta(close, 7))) : (-1 * 1))
+
+Alpha#42: (rank(vwap - close) / rank(vwap + close))
+```
+
+Что делает это интересным для AutoML, так это то, что это *грамматика*. Альфы представляют собой композиции небольшого набора операторов (`rank`, `delta`, `ts_rank`, `stddev`, `correlation`, `signedpower`) над небольшим набором полей (`close`, `volume`, `vwap`, `returns`, `adv20`). Грамматика является перечислимой, что означает, что пространство поиска генерируется машиной, чего нельзя сказать о "придумать хорошую функцию". Система AutoML может:
+
+1. **Создавайте** выражения-кандидаты путем составления операторов над полями данных.
+2. **Оцените** IC, оборот и просадку каждого выражения.
+3. **Фильтр** для выражений, которые выдерживают статистическое тестирование *и* достаточно не коррелируют с существующей библиотекой.
+4. **Объедините** выживших в портфолио.
+
+Обратите внимание, что шаги 1 и 2 являются простыми, а шаг 3 — это значение — см. Поправку на ширину выше.
+
+### Альфа-открытие с расширенным LLM
+
+WorldQuant начал интеграцию больших языковых моделей в альфа-фабрику. Как сообщается в финансовой прессе, фирма изучает, как LLM могут "преобразовывать и обнаруживать альфы в разных областях" — генерируя новые выражения, переводя исследовательские работы в проверяемые гипотезы и выявляя междоменные связи, которые были бы упущены при чистом перечислительном поиске. Это механизм, отличный от извлечения сигналов из текста, который рассматривается в этом блоге в [LLM Alpha Mining on Earnings Calls](/en/blog/post/llm-alpha-mining-earnings-calls); здесь LLM пишет *формулу*, а не *функцию*.
+
+### Создание собственной мини-фабрики "Альфа"
+
+Вот компактная, но функциональная альфа-фабрика над грамматикой операторов:
+
+```python
+import itertools
+from dataclasses import dataclass
+from typing import Callable, List
+import pandas as pd
+import numpy as np
+from scipy.stats import spearmanr
+
+@dataclass
+class Alpha:
+    name: str
+    expression: Callable[[pd.DataFrame], pd.Series]
+    ic: float = 0.0
+    turnover: float = 0.0
+    sharpe: float = 0.0
+
+# Define primitive operators
+def ts_rank(series: pd.Series, window: int) -> pd.Series:
+    return series.rolling(window).apply(lambda x: pd.Series(x).rank().iloc[-1] / len(x))
+
+def ts_delta(series: pd.Series, period: int) -> pd.Series:
+    return series.diff(period)
+
+def ts_std(series: pd.Series, window: int) -> pd.Series:
+    return series.rolling(window).std()
+
+def cs_rank(series: pd.Series) -> pd.Series:
+    return series.rank(pct=True)
+
+def ts_mean(series: pd.Series, window: int) -> pd.Series:
+    return series.rolling(window).mean()
+
+# Define alpha templates (composable expressions)
+ALPHA_TEMPLATES = [
+    ("momentum_{w}",
+     lambda df, w: cs_rank(ts_delta(df["close"], w))),
+    ("mean_reversion_{w}",
+     lambda df, w: -cs_rank(df["close"] / ts_mean(df["close"], w) - 1)),
+    ("vol_surprise_{w}",
+     lambda df, w: cs_rank(df["volume"] / ts_mean(df["volume"], w))),
+    ("price_vol_divergence_{w}",
+     lambda df, w: cs_rank(ts_delta(df["close"], w)) * -cs_rank(ts_delta(df["volume"], w))),
+    ("volatility_rank_{w}",
+     lambda df, w: -cs_rank(ts_std(df["close"].pct_change(), w))),
+    ("high_low_range_{w}",
+     lambda df, w: cs_rank(ts_mean(df["high"] - df["low"], w) / df["close"])),
+]
+
+WINDOWS = [5, 10, 20, 60, 120]
+
+def generate_alphas(df: pd.DataFrame, forward_returns: pd.Series) -> List[Alpha]:
+    """Generate and evaluate all alpha candidates."""
+    alphas = []
+
+    for (name_tpl, expr_fn), window in itertools.product(ALPHA_TEMPLATES, WINDOWS):
+        name = name_tpl.format(w=window)
+        try:
+            signal = expr_fn(df, window)
+            signal = signal.replace([np.inf, -np.inf], np.nan)
+
+            # Information Coefficient (rank correlation with forward returns)
+            valid = signal.notna() & forward_returns.notna()
+            if valid.sum() < 100:
+                continue
+
+            ic, _ = spearmanr(signal[valid], forward_returns[valid])
+            turnover = signal.diff().abs().mean()
+
+            ret = (signal * forward_returns).dropna()
+            sharpe = np.sqrt(252) * ret.mean() / (ret.std() + 1e-9)
+
+            alphas.append(Alpha(
+                name=name,
+                expression=lambda df, fn=expr_fn, w=window: fn(df, w),
+                ic=ic,
+                turnover=turnover,
+                sharpe=sharpe,
+            ))
+        except Exception:
+            continue
+
+    alphas.sort(key=lambda a: abs(a.ic), reverse=True)
+    return alphas
+```
+
+Шесть шаблонов в пяти окнах — это набор из 30 конфигураций. Отчет, который он создает, имеет такую ​​**схематическую** форму: поля представляют собой то, что выдает фабрика, и никакие числа не заполняются, потому что здесь ни одно измерение не проводилось:
+
+```
+SCHEMATIC — illustrative format only, not a measurement
+
+Generated <N> alphas from <N> candidate configurations
+
+Top by |IC|:
+  <alpha_name>   IC=<±0.0xxx>   Sharpe=<±x.xxx>   Turnover=<0.0xxx>
+  ...
+```
+
+<!-- TODO: нужен результат на основе реальных данных — запустите функциюgenerate_alphas на реальных данных BTC/ETH и сообщите о фактическом распределении IC, обороте и DSR/PBO лучшей альфа-версии с учетом количества испытаний с 30 кандидатами (или 3000 кандидатов). Интересный номер — это не лучший Шарп альфы; это то, сколько альф переживут дефляцию. -->
+
+Чистый показатель Шарпа верхней альфа из 30 конфигураций — это **не результат** — это максимум 30 розыгрышей, а на 1000 стратегиях с нулевым преимуществом лучший годовой средний показатель Шарпа составляет 1,63, в то время как наивный тест объявляет открытие в 100% случаев ([Дефлированный коэффициент Шарпа](/en/blog/post/deflated-sharpe-multiple-testing)). Таким образом, честный результат завода — это не "мы нашли альфу", а *сколько альф пережили дефляцию*: распределение IC, количество попыток, DSR победителя по сравнению с этим подсчетом и PBO выбора. Это то измерение, которому по-прежнему обязан этот раздел.
+
+## Ограждения: то, что вы уже должны
+
+AutoML в равной степени усиливает обнаружение и переоснащение, и это происходит при подсчете проб, когда разница перестает быть незначительной. Каждый из них подробно описан в другом месте; Дело в том, что AutoML делает все из них обязательными, а не желательными.
+
+**Оценивайте поиск, а не просто исправляйте его.** Анализ функциональной модели и гиперпараметров — это подсчет проб, а количество проб сдвигает планку — см. [Дефлированный коэффициент Шарпа](/en/blog/post/deflated-sharpe-multiple-testing).
+
+**Проверка временная, с очисткой и эмбарго.** См. [Walk-Forward Optimization](/en/blog/post/walk-forward-optimization) и [Look-Ahead Bias Taxonomy](/en/blog/post/look-ahead-bias-taxonomy), чтобы узнать об утечках, переживших наивное временное разделение.
+
+**Оценивайте процедуру, а не только победителя.** См. [Вероятность переоснащения бэктеста](/en/blog/post/probability-backtest-overfitting-pbo) и внесите поправку, несущую нагрузку: **Нуль PBO равен 0,5, а не 1** — половина не является "половинным переобучением", она полностью переоснащена, подбрасывание монеты.
+
+**Следите за пиками, которых нет.** Эффективный поиск на поверхности с преобладанием шума приводит к более быстрому обнаружению более резких иллюзий ([Анализ плато](/en/blog/post/plateau-anaанализ-overfitting)); это сильнее всего влияет на параметры стратегии и меньше всего на гиперпараметры ML, для которых фактически созданы FLAML и Optuna.
+
+**Ограничьте пространство поиска.** Минимальные листовые выборки, ограниченная глубина и количество оценщиков, бюджет функций, штраф за текучесть — упорядочить поиск дешевле, чем потом его обесценивать.
+
+## Заключение
+
+AutoML поднимает автоматизацию на новый уровень: от настройки параметров внутри фиксированного кандидата до генерации самих кандидатов. Три компонента стоят затраченных усилий — tsfresh и Featuretools для генерации признаков, экономичный поиск FLAML для бюджетного выбора модели и формульная грамматика операторов для построения перечислимых альфа-каналов. NAS оправдает свои вычисления только тогда, когда ваше соотношение сигнал/шум оправдывает это, и он находится на самом дорогом конце оси оценки и стоимости, где эффективность выборки, наконец, окупается.
+
+Аргумент широты WorldQuant выдерживает контакт с собственными измерениями этого блога только в исправленной форме: $IR \approx IC\sqrt{BR}$ где $BR$ считает *независимые* ставки, а продукция фабрики далеко не независима. Генерация миллиона альф — это легкая половина дела. Установление того, что они достаточно некоррелированы, чтобы считаться широтой, — это половина, которая определяет, означает ли формула что-либо.
+
+И честное предостережение – это не мораль, это измеряемый результат. В этом блоге дуга поиска и переоснащения завершилась в [The Honest Negative](/en/blog/post/honest-negative-no-robust-edge): десятки тысяч бэктестов по пяти основным направлениям, DSR = 0,00 при ~37 000 испытаниях, PBO 0,264 и 0,327 и отсутствие надежного преимущества. AutoML увеличивает количество попыток на порядки. Что бы она ни обнаружила, она будет обязана соответственно большей дефляции — и полезный результат альфа-фабрики — это уровень выживаемости после этой дефляции, а не выручка до нее.

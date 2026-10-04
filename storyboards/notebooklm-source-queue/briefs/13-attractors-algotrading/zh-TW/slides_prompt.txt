@@ -1,0 +1,19 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article attractors-algotrading ZH-TW 2dd02fb34b38". It is the complete published zh-Hant article snapshot. Do not merge another language edition or outside facts. Output language: Traditional Chinese for Taiwan (zh-TW), explicitly not generic Chinese. Use Taiwan financial terms such as 協整, 價差, 均值回歸, 波動率, 特徵, 回測 and 樣本外 where context requires. Keep formulas, code identifiers, units, citations and proper names exact. Audio must use Taiwan Mandarin (Guoyu), not Taiwanese Hokkien; pronunciation and terminology require editorial listening review.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 什麼是吸引子，為什麼交易員需要它？
+2. H2 — 理論基礎：從簡單到複雜
+3. H2 — 金融市場中的吸引子
+4. H2 — 協整：吸引子的實際體現
+5. H2 — 演算法交易中的應用
+6. H2 — 實用交易策略
+7. H2 — 高階方法與多維吸引子
+8. H2 — 吸引子策略的侷限與風險
+9. H2 — 技術實現要點
+10. H2 — 結論：吸引子在交易中的未來
+11. H2 — 引用
+12. H2 — 參考文獻
+
+Preserve the mathematical distinction among point attractors, limit cycles, strange/fractal attractors and sensitive dependence on initial conditions. Treat market equilibrium and the attractor analogy as the article's conceptual claims, not proof that a price must revert. Explain high-frequency law-of-one-price reasoning versus low-frequency economic cointegration. Keep the exact spread equation Spread = P_A - γ*P_B, the definition of γ, stationarity versus mere correlation, the article's illustrative VSYDP/NKHP pair, first-half parameter estimation, 2-standard-deviation signal threshold and 1:γ hedge ratio. Show both long/short directions and mean-reversion exit, and keep the structural-break stop-loss. Explain the Johansen multi-asset basket and distinguish its possible benefits from a guarantee. Cover moving equilibria/drift, CAPM-beta hedge risk, butterfly sensitivity, real-time data/statistics/risk/execution modules and latency. Company and product examples (Algoter/Goldseek, TradeHelp), HFT profitability and market-neutral assertions remain dated article claims requiring verification. Retain conclusion, citation and supplied references without silently repairing source errors.
+
+Preserve every substantive section, example, formula, mathematical symbol, unit, table, code logic, caveat, risk, link and reference from this locale's source. Do not silently change an article number, heading or claim. Numerical, research, financial, company-specific and mutable statements are attributed article claims pending human editorial, primary-source and mathematical review. No guaranteed returns or investment advice. Chinese terminology and translation, and Mandarin pronunciation, remain pending review where applicable. Exact external NotebookLM notebook/source/artifact duplicates remain unchecked before submission; target-channel duplicates remain unchecked before final production. Do not imply clearance.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams and tables legibly only as supported by the source. Keep on-slide language in the requested locale apart from technical identifiers. End with the conclusion and source references.
