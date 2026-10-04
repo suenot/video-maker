@@ -4634,7 +4634,7 @@
           "editorial_review": "pending"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Beginner Overview\n+ Strategy Steps\n+ Risk Analysis\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -4649,8 +4649,15 @@
           "source_id": "07006fb0-0be7-4e9c-ad8a-bfe496df1a99",
           "submission_mode": "later",
           "artifact_id": "5b639672-4bea-4fa8-8064-ac1ef55c96fa",
-          "card_text": "audio_spark\nMarket Attractors in Algorithmic Trading\nScheduled for after 7pm\nmore_vert",
-          "observed_at": "2026-10-04T12:26:08.783889+00:00"
+          "card_text": "audio_spark\nUnread\n高頻交易吸引子\n15:37 · Deep Dive · 1 source · 1h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T16:56:02.549919+00:00",
+          "duration_seconds": 937.08771,
+          "path": "input/notebooklm-sources/attractors-algotrading/zh-TW/audio.m4a",
+          "sha256": "ba9be11181c095a174b72e43023441e3c6f7c5dc9b843afd2d80a00803c1810d",
+          "bytes": 30159909,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T16:56:13.934573+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -4867,7 +4874,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "e67d245996c67a33b81c61222124d6bfc45ce3c795d031c0146c99cca00326bf",
           "requested_at": "2026-10-04T12:13:53.639401+00:00",
@@ -4877,11 +4884,18 @@
           "source_id": "3b236e5e-47c0-48d5-a592-3654416c8970",
           "submission_mode": "now",
           "artifact_id": "b0db9823-ec9b-43b8-a5e6-2aa462d3978f",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T12:13:58.190970+00:00"
+          "card_text": "tablet\nUnread\nAutoML for Quantitative Trading\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-04T16:56:20.660527+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/automl-systematic-trading/zh-CN/slides.pdf",
+          "sha256": "0e6d8c3f25e8af74c9d47a1b1757cdef7fb5ab1caa545354ae2648e23a2180a3",
+          "bytes": 12944752,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T16:56:24.365314+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "b0db9823-ec9b-43b8-a5e6-2aa462d3978f"
           ],
@@ -4893,8 +4907,15 @@
           "source_id": "3b236e5e-47c0-48d5-a592-3654416c8970",
           "submission_mode": "now",
           "artifact_id": "f150484a-ae1f-4248-a093-41bd89cb9c26",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T12:14:15.235044+00:00"
+          "card_text": "audio_spark\nUnread\nAutoML量化策略的过拟合陷阱\n14:37 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T16:56:25.395882+00:00",
+          "duration_seconds": 877.923265,
+          "path": "input/notebooklm-sources/automl-systematic-trading/zh-CN/audio.m4a",
+          "sha256": "f827e77ff9a4a9d6179ec4e31b1d24bec5dd436a22a12ff0692dfaedf54c2f98",
+          "bytes": 28255759,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T16:56:39.285388+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -4939,7 +4960,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "de083e4678df56ddb74bec5d2fe0a64e1bf0ed14173e7a7b39a4e756b9c105ca",
           "requested_at": "2026-10-04T12:14:43.951181+00:00",
@@ -4949,11 +4970,18 @@
           "source_id": "d455dbdb-1c85-4c57-81ba-6ee5d2c25f13",
           "submission_mode": "now",
           "artifact_id": "b9aae8c5-98c4-4b85-af69-6c06855a585b",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T12:14:48.504156+00:00"
+          "card_text": "tablet\nUnread\nAutoML for Systematic Trading\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-04T16:56:45.899032+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/automl-systematic-trading/zh-TW/slides.pdf",
+          "sha256": "da5cafdc72ac2d46f8b0bdec5e060352728d197c73f5c8d5479b973a6f7a249f",
+          "bytes": 18529935,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T16:56:52.008638+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "b9aae8c5-98c4-4b85-af69-6c06855a585b"
           ],
@@ -4965,8 +4993,15 @@
           "source_id": "d455dbdb-1c85-4c57-81ba-6ee5d2c25f13",
           "submission_mode": "now",
           "artifact_id": "eed6c4a7-7db2-4eec-9534-793ae751bd61",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T12:15:05.760396+00:00"
+          "card_text": "audio_spark\nUnread\n破解AutoML量化交易幻覺\n15:32 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T16:56:53.042879+00:00",
+          "duration_seconds": 932.490159,
+          "path": "input/notebooklm-sources/automl-systematic-trading/zh-TW/audio.m4a",
+          "sha256": "4fc30f4bb48c1da6108f8e3b35367ef0516ff94efebac9dcafc87ddda7206eec",
+          "bytes": 30011996,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T16:57:05.848387+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -4998,9 +5033,153 @@
       "selected_source_ids": [
         "d455dbdb-1c85-4c57-81ba-6ee5d2c25f13"
       ]
+    },
+    "bayesian-neural-networks-trading:en": {
+      "slug": "bayesian-neural-networks-trading",
+      "language": "en",
+      "article_sha256": "f0c2f80a64885ab5c26e08150f8ea859330d892389b27af723f729b88a705fde",
+      "input_hashes": {
+        "article": "f0c2f80a64885ab5c26e08150f8ea859330d892389b27af723f729b88a705fde",
+        "source_text": "8e8dd98e819f268cbd737b7a6c5b97e24bbc378996d65a4dc29450453641331e",
+        "slides_prompt": "1b5a8235f8773ff005b454105eb5a4e30087a699de46532aa97546c4b3234105",
+        "audio_prompt": "1c89e760f853a89a69826566229e736022c1b569093f0eec5af482d7bb803761"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "1b5a8235f8773ff005b454105eb5a4e30087a699de46532aa97546c4b3234105",
+          "requested_at": "2026-10-04T16:57:28.526480+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "40302c26-d6b2-4def-b78c-229d149e2620",
+          "submission_mode": "now",
+          "artifact_id": "b67f7a80-1d97-47c4-92dd-96a1cbd4cc86",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T16:57:33.075658+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "b67f7a80-1d97-47c4-92dd-96a1cbd4cc86"
+          ],
+          "prompt_sha256": "1c89e760f853a89a69826566229e736022c1b569093f0eec5af482d7bb803761",
+          "requested_at": "2026-10-04T16:57:40.164062+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "40302c26-d6b2-4def-b78c-229d149e2620",
+          "submission_mode": "now",
+          "artifact_id": "353169d1-2d70-4c82-91ab-4dacef7794c9",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T16:57:44.723029+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T16:57:05.861975+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T16:57:12.085737+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/bayesian-neural-networks-trading-en-notebook-baseline.json",
+        "baseline_sha256": "874c1b0c35c670cb0afa065f6a325378f7e49eaaa06fc9438f8b7234ee5c10f8",
+        "baseline_count": 313,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T16:57:13.180177+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/c4282079-bbfa-40ca-a9e6-7430237ba530",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T16:57:17.355654+00:00",
+        "sha256": "8e8dd98e819f268cbd737b7a6c5b97e24bbc378996d65a4dc29450453641331e",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T16:57:25.258860+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "40302c26-d6b2-4def-b78c-229d149e2620",
+      "source_title": "MM article bayesian-neural-networks-trading EN f0c2f80a6488",
+      "source_sha256": "8e8dd98e819f268cbd737b7a6c5b97e24bbc378996d65a4dc29450453641331e",
+      "state": "source_ready",
+      "source_display_name": "MM article bayesian-neural-networks-trading EN f0…",
+      "selected_source_ids": [
+        "40302c26-d6b2-4def-b78c-229d149e2620"
+      ]
+    },
+    "bayesian-neural-networks-trading:ru": {
+      "slug": "bayesian-neural-networks-trading",
+      "language": "ru",
+      "article_sha256": "a973384688032b6d44d3575e1fdbcd4bbf9cf79b7741041412385df65f51252c",
+      "input_hashes": {
+        "article": "a973384688032b6d44d3575e1fdbcd4bbf9cf79b7741041412385df65f51252c",
+        "source_text": "a25b20da1fd276fd190fa2bebb2ea85c640433bfad280023075c98c62bdf3f98",
+        "slides_prompt": "2c3d04f04b72a5d00da030b6ead3786b74ba1c4097a2768eeeecb98c74468f1b",
+        "audio_prompt": "10138863e5d8c445387a38facd7664ff93fb48b0185af342517cb54ddc028f50"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "2c3d04f04b72a5d00da030b6ead3786b74ba1c4097a2768eeeecb98c74468f1b",
+          "requested_at": "2026-10-04T16:58:11.998656+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "08d46c32-5f4b-4864-b81c-b81a51b929c2",
+          "submission_mode": "now",
+          "artifact_id": "61b89fd1-4a4b-4f7e-a5ce-16fa68cad1e3",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T16:58:16.562199+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "61b89fd1-4a4b-4f7e-a5ce-16fa68cad1e3"
+          ],
+          "prompt_sha256": "10138863e5d8c445387a38facd7664ff93fb48b0185af342517cb54ddc028f50",
+          "requested_at": "2026-10-04T16:58:29.494826+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "08d46c32-5f4b-4864-b81c-b81a51b929c2",
+          "submission_mode": "now",
+          "artifact_id": "a1c71f64-13c0-4657-a022-7a9d38179803",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T16:58:34.058772+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T16:57:44.736026+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T16:57:51.968685+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/bayesian-neural-networks-trading-ru-notebook-baseline.json",
+        "baseline_sha256": "1f3bf5fbf6a2668ba46b55545960a566bb11cb8a10f44423ff030eeac267373a",
+        "baseline_count": 314,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T16:57:53.055027+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/57764391-7fde-4853-bce5-345ae4841bbe",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T16:57:57.202720+00:00",
+        "sha256": "a25b20da1fd276fd190fa2bebb2ea85c640433bfad280023075c98c62bdf3f98",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T16:58:05.243662+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "08d46c32-5f4b-4864-b81c-b81a51b929c2",
+      "source_title": "MM article bayesian-neural-networks-trading RU a97338468803",
+      "source_sha256": "a25b20da1fd276fd190fa2bebb2ea85c640433bfad280023075c98c62bdf3f98",
+      "state": "source_ready",
+      "source_display_name": "MM article bayesian-neural-networks-trading RU a9…",
+      "selected_source_ids": [
+        "08d46c32-5f4b-4864-b81c-b81a51b929c2"
+      ]
     }
   },
-  "checked_at": "2026-10-04T12:26:08.809930+00:00",
+  "checked_at": "2026-10-04T16:58:34.062849+00:00",
   "browser_geometry_requested": {
     "width": 1999,
     "height": 1290,

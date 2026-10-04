@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Complete the Taiwan Traditional Chinese Attractors and separate Mainland Simplified/Taiwan Traditional Chinese AutoML PDF/audio pairs with verified original hashes and integrity evidence; bind English and Russian Bayesian neural network requests after reconciling all existing artifact IDs.
 - Freeze eight separate EN/RU/Mainland Simplified/Taiwan Traditional Bayesian neural network and Beyond Time Bars briefs with full published article bytes, complete ordered section prompts and hashes; retain external/editorial checks and flag the Chinese epistemic/aleatoric title translation for review.
 - Save complete English and Russian AutoML PDF/audio originals with verified hashes and integrity evidence; bind separate Mainland Simplified and Taiwan Traditional Chinese AutoML requests with explicit variants while preserving the Taiwan Attractors scheduled audio identity.
 - Complete the Taiwan Traditional Chinese asymmetric GARCH and Mainland Simplified Chinese Attractors PDF/audio pairs with verified original hashes and integrity evidence; save the Taiwan Attractors deck, retain its existing scheduled audio ID, and bind separate English/Russian AutoML requests.
