@@ -4259,7 +4259,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 10:51."
@@ -4274,11 +4274,18 @@
           "source_id": "c11b7736-f34a-4d4d-ae98-7a6997e12cbc",
           "submission_mode": "later",
           "artifact_id": "759e65b4-9a0a-4fdb-a0e7-87a2348ba2ca",
-          "card_text": "tablet\nAsymmetric and Heavy-Tailed GARCH for Crypto Volatility\nScheduled for after 11am\nmore_vert",
-          "observed_at": "2026-10-04T07:14:35.044551+00:00"
+          "card_text": "tablet\nUnread\n非對稱與厚尾 GARCH 建模\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-04T11:56:26.339354+00:00",
+          "pages": 16,
+          "path": "input/notebooklm-sources/asymmetric-garch-crypto-leverage/zh-TW/slides.pdf",
+          "sha256": "710ce0f0c70f9f2e40a122a32ba0fc5d83dd7bd037d9fe62445a0bff14470b26",
+          "bytes": 19953300,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T11:56:58.395384+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Risk Metrics Explained\n+ Model Comparison Guide\n+ Technical Implementation Tips\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 10:51."
@@ -4295,8 +4302,15 @@
           "source_id": "c11b7736-f34a-4d4d-ae98-7a6997e12cbc",
           "submission_mode": "later",
           "artifact_id": "b067e038-7698-49c3-926c-8568f1d022f4",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T07:14:36.092156+00:00"
+          "card_text": "audio_spark\nUnread\n加密貨幣非對稱GARCH模型\n15:42 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T11:56:59.425261+00:00",
+          "duration_seconds": 942.05678,
+          "path": "input/notebooklm-sources/asymmetric-garch-crypto-leverage/zh-TW/audio.m4a",
+          "sha256": "ceb43809f662a40b53d18c39069a6dd0f880c22e63b6f18af260714d5c56036a",
+          "bytes": 30319891,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T11:57:38.085534+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -4513,7 +4527,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "0b8fc31b6efaff3564622e847da62187da0f564900de2c17e67c75cf0d7c18f8",
           "requested_at": "2026-10-04T07:17:04.638977+00:00",
@@ -4523,11 +4537,18 @@
           "source_id": "b2bb2020-ec8c-4b59-8d15-d023a1203618",
           "submission_mode": "now",
           "artifact_id": "757c44f1-cef6-450e-bcc3-9cf4d938f3cd",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T07:17:09.251441+00:00"
+          "card_text": "tablet\nUnread\nAttractors in High-Frequency Trading\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-04T11:57:44.841449+00:00",
+          "pages": 13,
+          "path": "input/notebooklm-sources/attractors-algotrading/zh-CN/slides.pdf",
+          "sha256": "c4284b1b5ee55c0bf298ff5e629ee89b8183c101df6c636cbe1fa11a03c1a557",
+          "bytes": 12237480,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T11:57:55.400386+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "757c44f1-cef6-450e-bcc3-9cf4d938f3cd"
           ],
@@ -4539,8 +4560,15 @@
           "source_id": "b2bb2020-ec8c-4b59-8d15-d023a1203618",
           "submission_mode": "now",
           "artifact_id": "b809b815-568f-49d9-9005-c94331732a17",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T07:17:40.244150+00:00"
+          "card_text": "audio_spark\nUnread\n高频交易中的数学吸引子\n20:05 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T11:57:56.434189+00:00",
+          "duration_seconds": 1205.533605,
+          "path": "input/notebooklm-sources/attractors-algotrading/zh-CN/audio.m4a",
+          "sha256": "186df6fda180f925c657fe90e7214fe38a52311dacece6c5bde65106e694f403",
+          "bytes": 38799554,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T11:58:32.363271+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -4585,7 +4613,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "55ec348715836c7459a1d667196a5ea4a83de733d2be601f06369c62c49745d3",
           "requested_at": "2026-10-04T07:18:26.687391+00:00",
@@ -4595,8 +4623,15 @@
           "source_id": "07006fb0-0be7-4e9c-ad8a-bfe496df1a99",
           "submission_mode": "now",
           "artifact_id": "b353d3d7-a178-4d6c-8c3d-8061d7f564b0",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T07:18:31.311921+00:00"
+          "card_text": "tablet\nUnread\nAttractors in High-Frequency Trading\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-04T11:58:39.108886+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/attractors-algotrading/zh-TW/slides.pdf",
+          "sha256": "cd266638c720c1579d73740ab9b096c9f4eac8a8766365bfb536a49698c13123",
+          "bytes": 11901069,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T11:58:49.808720+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
           "state": "scheduled",
@@ -4615,7 +4650,7 @@
           "submission_mode": "later",
           "artifact_id": "5b639672-4bea-4fa8-8064-ac1ef55c96fa",
           "card_text": "audio_spark\nMarket Attractors in Algorithmic Trading\nScheduled for after 7pm\nmore_vert",
-          "observed_at": "2026-10-04T07:19:02.053926+00:00"
+          "observed_at": "2026-10-04T11:58:50.831679+00:00"
         }
       },
       "admission_state": "admitted",
@@ -4647,21 +4682,165 @@
       "selected_source_ids": [
         "07006fb0-0be7-4e9c-ad8a-bfe496df1a99"
       ]
+    },
+    "automl-systematic-trading:en": {
+      "slug": "automl-systematic-trading",
+      "language": "en",
+      "article_sha256": "597e545ca997e9125283cc9b7c46ff12bd0fa4ea70ff04a81177608a48f61e5f",
+      "input_hashes": {
+        "article": "597e545ca997e9125283cc9b7c46ff12bd0fa4ea70ff04a81177608a48f61e5f",
+        "source_text": "8dacadc80111c6d8a0e6ea517d8d7b84c5ddf1c32a8cf13be64cda08ba1ea466",
+        "slides_prompt": "08ed75f2686ed9bebf4b165b5670f1af072c606c8eef11d9caea6c87f6fdecc3",
+        "audio_prompt": "af678202ab650324ecc037732461f7401b48496774d68c298bdb5740fa503eb3"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "08ed75f2686ed9bebf4b165b5670f1af072c606c8eef11d9caea6c87f6fdecc3",
+          "requested_at": "2026-10-04T11:59:15.176966+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "5b14b229-b480-4b02-807f-0dcac0f91816",
+          "submission_mode": "now",
+          "artifact_id": "cd6860a2-9981-42ac-bd92-0ae339419610",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T11:59:19.725009+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "cd6860a2-9981-42ac-bd92-0ae339419610"
+          ],
+          "prompt_sha256": "af678202ab650324ecc037732461f7401b48496774d68c298bdb5740fa503eb3",
+          "requested_at": "2026-10-04T11:59:26.835354+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "5b14b229-b480-4b02-807f-0dcac0f91816",
+          "submission_mode": "now",
+          "artifact_id": "a7111a78-822b-442d-bb68-647791a755a9",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T11:59:31.394205+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T11:58:50.848871+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T11:58:57.945417+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/automl-systematic-trading-en-notebook-baseline.json",
+        "baseline_sha256": "24848024d3262a92171fa1b504dcddd8280cf1cea3dc838b0816c0ff65ff31c4",
+        "baseline_count": 309,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T11:59:00.031047+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/6af6a8c8-d28c-4c14-98f2-1df64c179b93",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T11:59:04.067860+00:00",
+        "sha256": "8dacadc80111c6d8a0e6ea517d8d7b84c5ddf1c32a8cf13be64cda08ba1ea466",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T11:59:11.869913+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "5b14b229-b480-4b02-807f-0dcac0f91816",
+      "source_title": "MM article automl-systematic-trading EN 597e545ca997",
+      "source_sha256": "8dacadc80111c6d8a0e6ea517d8d7b84c5ddf1c32a8cf13be64cda08ba1ea466",
+      "state": "source_ready",
+      "source_display_name": "MM article automl-systematic-trading EN 597e545ca…",
+      "selected_source_ids": [
+        "5b14b229-b480-4b02-807f-0dcac0f91816"
+      ]
+    },
+    "automl-systematic-trading:ru": {
+      "slug": "automl-systematic-trading",
+      "language": "ru",
+      "article_sha256": "9cc26028143733a30f1f340d525c0aff712233b8a0405b53bad4d3674a77dd21",
+      "input_hashes": {
+        "article": "9cc26028143733a30f1f340d525c0aff712233b8a0405b53bad4d3674a77dd21",
+        "source_text": "51909464e19c8d71d10320665943a8e46d957f937f2782623583752cd401b73e",
+        "slides_prompt": "a9dd5e6188cd944bce105d6112bb927dc45c8e5d620d8b69e64bb5d52cbdf8bd",
+        "audio_prompt": "a36bdf578968c7bc11be7fbc6f33158cf8e95929ff89dd893a5c1e8e459246ec"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "a9dd5e6188cd944bce105d6112bb927dc45c8e5d620d8b69e64bb5d52cbdf8bd",
+          "requested_at": "2026-10-04T12:00:00.575874+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "a72d9cdb-3716-4000-bb56-df086592e574",
+          "submission_mode": "now",
+          "artifact_id": "48a6d6a3-91a3-4503-9cf6-bc2517cd7f97",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T12:00:05.144781+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "48a6d6a3-91a3-4503-9cf6-bc2517cd7f97"
+          ],
+          "prompt_sha256": "a36bdf578968c7bc11be7fbc6f33158cf8e95929ff89dd893a5c1e8e459246ec",
+          "requested_at": "2026-10-04T12:00:17.866943+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "a72d9cdb-3716-4000-bb56-df086592e574",
+          "submission_mode": "now",
+          "artifact_id": "27109225-a96d-4f37-852c-5c3ea4747b6c",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T12:00:22.419836+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T11:59:31.407463+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T11:59:38.743873+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/automl-systematic-trading-ru-notebook-baseline.json",
+        "baseline_sha256": "6841461cd4724c19764cdc5405f91353109f8814cc74d5c1d33d65b05d25074a",
+        "baseline_count": 310,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T11:59:40.833836+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/19a62d73-4972-449e-a2b4-df81a7405b09",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T11:59:44.866039+00:00",
+        "sha256": "51909464e19c8d71d10320665943a8e46d957f937f2782623583752cd401b73e",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T11:59:53.039790+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "a72d9cdb-3716-4000-bb56-df086592e574",
+      "source_title": "MM article automl-systematic-trading RU 9cc260281437",
+      "source_sha256": "51909464e19c8d71d10320665943a8e46d957f937f2782623583752cd401b73e",
+      "state": "source_ready",
+      "source_display_name": "MM article automl-systematic-trading RU 9cc260281…",
+      "selected_source_ids": [
+        "a72d9cdb-3716-4000-bb56-df086592e574"
+      ]
     }
   },
-  "checked_at": "2026-10-04T07:19:02.085303+00:00",
+  "checked_at": "2026-10-04T12:00:22.423626+00:00",
   "browser_geometry_requested": {
-    "width": 1998,
+    "width": 1999,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 58,
+    "x": 57,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1998,
+    "outer_width": 1999,
     "outer_height": 1290,
-    "inner_width": 1958,
+    "inner_width": 1959,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
