@@ -2030,7 +2030,7 @@
           "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Trading Strategy Basics\n+ Mathematical Core\n+ Practical Implementation\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 00:51."
@@ -2047,8 +2047,15 @@
           "source_id": "7c6f7408-4d7e-45ba-8118-49c03cd1ee1a",
           "submission_mode": "later",
           "artifact_id": "9c50e9c7-5a64-41f2-8f39-664838b45aa5",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T21:24:31.697357+00:00"
+          "card_text": "audio_spark\nUnread\n訂單流不平衡模型\n12:52 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T01:53:53.401284+00:00",
+          "duration_seconds": 772.249252,
+          "path": "input/notebooklm-sources/order-flow-imbalance-prediction/zh-TW/audio.m4a",
+          "sha256": "6b4c4c5ed8270ef3cb7d26729aba40d7b603ee957773c2e05db8b15702c7c654",
+          "bytes": 24854827,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T01:54:17.528951+00:00",
+          "editorial_review": "pending"
         }
       },
       "notebook_intent": {
@@ -3919,10 +3926,10 @@
           "submission_mode": "later",
           "artifact_id": "28538b6e-e46b-422f-9e45-4fcb169bd0d1",
           "card_text": "tablet\nAlgorithmic Trading Anomaly Detection\nScheduled for after 5am\nmore_vert",
-          "observed_at": "2026-10-03T21:31:01.392755+00:00"
+          "observed_at": "2026-10-04T01:54:25.189459+00:00"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "28538b6e-e46b-422f-9e45-4fcb169bd0d1"
           ],
@@ -3934,8 +3941,15 @@
           "source_id": "bb94ef4e-7303-40d1-9013-8e55863f226c",
           "submission_mode": "now",
           "artifact_id": "9a7e28a7-ef7e-4332-a28e-09af162ae2d5",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-03T21:31:17.847412+00:00"
+          "card_text": "audio_spark\nUnread\n量化機器人防閃崩\n20:36 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T01:54:26.216001+00:00",
+          "duration_seconds": 1236.091066,
+          "path": "input/notebooklm-sources/anomaly-detection-algotrading/zh-TW/audio.m4a",
+          "sha256": "0ec589ada8b32a40e767fcfb87529ffffadb80e382bb84298f447f4801d79be8",
+          "bytes": 39783005,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T01:54:54.821727+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -3967,9 +3981,153 @@
       "selected_source_ids": [
         "bb94ef4e-7303-40d1-9013-8e55863f226c"
       ]
+    },
+    "asymmetric-garch-crypto-leverage:en": {
+      "slug": "asymmetric-garch-crypto-leverage",
+      "language": "en",
+      "article_sha256": "761d601d5b349a3bb39dcd3714cdc8d9f9b2d1152dfdefaa92cb8d3c0f72a397",
+      "input_hashes": {
+        "article": "761d601d5b349a3bb39dcd3714cdc8d9f9b2d1152dfdefaa92cb8d3c0f72a397",
+        "source_text": "aa7ef103817b129c81394e18a0ea9cb0a7dcae6ca7dd2dfb4fa80e38e45cf0da",
+        "slides_prompt": "4fc1b5b5e416ef41160129e62a21bcd3a927017be9e210036bec3f75e9de6544",
+        "audio_prompt": "5e393c096f8a6659cf7f5da53a47001351f2f50ad8a6ded6d366ec1df4c51673"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "4fc1b5b5e416ef41160129e62a21bcd3a927017be9e210036bec3f75e9de6544",
+          "requested_at": "2026-10-04T01:55:18.946690+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "cf2aea00-b145-4843-a722-16e865d877ae",
+          "submission_mode": "now",
+          "artifact_id": "27986f2c-ecc0-42ab-8f03-2cafcd6b318c",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T01:55:23.497025+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "27986f2c-ecc0-42ab-8f03-2cafcd6b318c"
+          ],
+          "prompt_sha256": "5e393c096f8a6659cf7f5da53a47001351f2f50ad8a6ded6d366ec1df4c51673",
+          "requested_at": "2026-10-04T01:55:30.466340+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "cf2aea00-b145-4843-a722-16e865d877ae",
+          "submission_mode": "now",
+          "artifact_id": "c749ffae-6365-4b62-afe2-4b022083eefb",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T01:55:35.021632+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T01:54:54.841615+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T01:55:01.646094+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/asymmetric-garch-crypto-leverage-en-notebook-baseline.json",
+        "baseline_sha256": "5cabe16038b92bba88a88509d5a06aee960024b2954badd79b3f096672d45da2",
+        "baseline_count": 301,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T01:55:03.726174+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/575152f4-2f05-436c-b0fd-6ee18b9a80c3",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T01:55:07.769767+00:00",
+        "sha256": "aa7ef103817b129c81394e18a0ea9cb0a7dcae6ca7dd2dfb4fa80e38e45cf0da",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T01:55:15.673855+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "cf2aea00-b145-4843-a722-16e865d877ae",
+      "source_title": "MM article asymmetric-garch-crypto-leverage EN 761d601d5b34",
+      "source_sha256": "aa7ef103817b129c81394e18a0ea9cb0a7dcae6ca7dd2dfb4fa80e38e45cf0da",
+      "state": "source_ready",
+      "source_display_name": "MM article asymmetric-garch-crypto-leverage EN 76…",
+      "selected_source_ids": [
+        "cf2aea00-b145-4843-a722-16e865d877ae"
+      ]
+    },
+    "asymmetric-garch-crypto-leverage:ru": {
+      "slug": "asymmetric-garch-crypto-leverage",
+      "language": "ru",
+      "article_sha256": "403691ed731db02728d200d9f78386a180620c1e37b66182613ea4a6387bad45",
+      "input_hashes": {
+        "article": "403691ed731db02728d200d9f78386a180620c1e37b66182613ea4a6387bad45",
+        "source_text": "5c00995667639d81dbb035c74a2b936007368a4f27c23abc12dff271820bfda2",
+        "slides_prompt": "2c9f5143dac93cab050fb00acb78839f6874c3c9ab617a992c4eb67b567c1106",
+        "audio_prompt": "ea1515dc5b2339fb833145b5af0a91c44ee6becdb3b49cff18691aeeb50981af"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "2c9f5143dac93cab050fb00acb78839f6874c3c9ab617a992c4eb67b567c1106",
+          "requested_at": "2026-10-04T01:56:03.978440+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "3c637a94-4933-400b-afa4-3a30be7f4b56",
+          "submission_mode": "now",
+          "artifact_id": "df2ec149-8b1c-4251-b070-874d2d0bcfdf",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T01:56:08.529334+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "df2ec149-8b1c-4251-b070-874d2d0bcfdf"
+          ],
+          "prompt_sha256": "ea1515dc5b2339fb833145b5af0a91c44ee6becdb3b49cff18691aeeb50981af",
+          "requested_at": "2026-10-04T01:56:20.984369+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "3c637a94-4933-400b-afa4-3a30be7f4b56",
+          "submission_mode": "now",
+          "artifact_id": "99653221-b608-4c31-bea3-695c38991fb7",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T01:56:25.543564+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T01:55:35.037906+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T01:55:42.410932+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/asymmetric-garch-crypto-leverage-ru-notebook-baseline.json",
+        "baseline_sha256": "290b3a421e5805391d041f7fb9f8c2c97d2fb87c4fd61f2206f05d6e4a7163f7",
+        "baseline_count": 302,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T01:55:44.494510+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/23eae4fe-043c-4c7c-9db9-146fea6bf9c1",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T01:55:48.520843+00:00",
+        "sha256": "5c00995667639d81dbb035c74a2b936007368a4f27c23abc12dff271820bfda2",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T01:55:56.340166+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "3c637a94-4933-400b-afa4-3a30be7f4b56",
+      "source_title": "MM article asymmetric-garch-crypto-leverage RU 403691ed731d",
+      "source_sha256": "5c00995667639d81dbb035c74a2b936007368a4f27c23abc12dff271820bfda2",
+      "state": "source_ready",
+      "source_display_name": "MM article asymmetric-garch-crypto-leverage RU 40…",
+      "selected_source_ids": [
+        "3c637a94-4933-400b-afa4-3a30be7f4b56"
+      ]
     }
   },
-  "checked_at": "2026-10-03T21:31:17.859681+00:00",
+  "checked_at": "2026-10-04T01:56:25.548400+00:00",
   "browser_geometry_requested": {
     "width": 2000,
     "height": 1290,
