@@ -4173,7 +4173,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "1e210b4681179700bd849b1f55a21714a2648be8ea24f6c3d7ea5e9e17aff134",
           "requested_at": "2026-10-04T02:11:54.402027+00:00",
@@ -4183,11 +4183,18 @@
           "source_id": "4ea7be73-d140-45d3-b095-27a3756673cd",
           "submission_mode": "now",
           "artifact_id": "3df90b17-f98b-4d73-a3c1-e2926987266f",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-04T02:11:58.956984+00:00"
+          "card_text": "tablet\nUnread\n加密资产非对称与厚尾GARCH风险建模\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-04T06:55:59.056524+00:00",
+          "pages": 16,
+          "path": "input/notebooklm-sources/asymmetric-garch-crypto-leverage/zh-CN/slides.pdf",
+          "sha256": "5d29723a441ca9c4738b62140f8dd07f19f2cdcfd6cb5b87b6e4eb97617dd522",
+          "bytes": 17371801,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T06:56:17.003881+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "3df90b17-f98b-4d73-a3c1-e2926987266f"
           ],
@@ -4199,8 +4206,15 @@
           "source_id": "4ea7be73-d140-45d3-b095-27a3756673cd",
           "submission_mode": "now",
           "artifact_id": "3f43d45d-5502-42d7-bd28-67d41e5b38f1",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-04T02:12:16.222511+00:00"
+          "card_text": "audio_spark\nUnread\n币圈尾部风险与GARCH模型\n24:29 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-04T06:56:18.035338+00:00",
+          "duration_seconds": 1469.24263,
+          "path": "input/notebooklm-sources/asymmetric-garch-crypto-leverage/zh-CN/audio.m4a",
+          "sha256": "2d072fbd309fb4fa6d99156059b7040d8993e7e0c4f468a15e242d04b3c68027",
+          "bytes": 47286803,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-04T06:57:10.908566+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -4261,7 +4275,7 @@
           "submission_mode": "later",
           "artifact_id": "759e65b4-9a0a-4fdb-a0e7-87a2348ba2ca",
           "card_text": "tablet\nAsymmetric and Heavy-Tailed GARCH for Crypto Volatility\nScheduled for after 11am\nmore_vert",
-          "observed_at": "2026-10-04T02:12:49.665226+00:00"
+          "observed_at": "2026-10-04T06:57:17.585991+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -4282,7 +4296,7 @@
           "submission_mode": "later",
           "artifact_id": "b067e038-7698-49c3-926c-8568f1d022f4",
           "card_text": "audio_spark\nAsymmetric and Heavy-Tailed GARCH for Crypto Volatility\nScheduled for after 11am\nmore_vert",
-          "observed_at": "2026-10-04T02:13:07.082757+00:00"
+          "observed_at": "2026-10-04T06:57:18.605076+00:00"
         }
       },
       "admission_state": "admitted",
@@ -4314,21 +4328,165 @@
       "selected_source_ids": [
         "c11b7736-f34a-4d4d-ae98-7a6997e12cbc"
       ]
+    },
+    "attractors-algotrading:en": {
+      "slug": "attractors-algotrading",
+      "language": "en",
+      "article_sha256": "5399525d6bf5bbce79e2a5defa073998ba5c2bc5d8a4e402ae08236fd6edd2ea",
+      "input_hashes": {
+        "article": "5399525d6bf5bbce79e2a5defa073998ba5c2bc5d8a4e402ae08236fd6edd2ea",
+        "source_text": "79ce35a65cf50ed02b95ec15aab603ceb979fccb6d507908f746d5c02e1e1772",
+        "slides_prompt": "5d2772e53e5ecade8ae75c8ceb93181da6dc219c863c44b6df3a7b94077e00e8",
+        "audio_prompt": "63751d8e85bc7fd7474ec2f9b57412efa9145486ca0a360f9cbb7d51013548f7"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "5d2772e53e5ecade8ae75c8ceb93181da6dc219c863c44b6df3a7b94077e00e8",
+          "requested_at": "2026-10-04T06:57:42.512943+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "77ca197e-0ad1-4891-860f-88993c2efced",
+          "submission_mode": "now",
+          "artifact_id": "16cce4c4-13c0-4edf-a6ec-81697e03adb3",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T06:57:47.077200+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "16cce4c4-13c0-4edf-a6ec-81697e03adb3"
+          ],
+          "prompt_sha256": "63751d8e85bc7fd7474ec2f9b57412efa9145486ca0a360f9cbb7d51013548f7",
+          "requested_at": "2026-10-04T06:57:54.074293+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "77ca197e-0ad1-4891-860f-88993c2efced",
+          "submission_mode": "now",
+          "artifact_id": "b6e7b154-2d49-4d15-b88a-999c52984f99",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T06:57:58.627040+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T06:57:18.620572+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T06:57:25.168545+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/attractors-algotrading-en-notebook-baseline.json",
+        "baseline_sha256": "800470934517311c0f7c6da8363b98d0801253c7f0f6b0d6f20aad460da80c7f",
+        "baseline_count": 305,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T06:57:27.255575+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/473b447a-e343-422f-8cc4-795ac16f52b3",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T06:57:31.288305+00:00",
+        "sha256": "79ce35a65cf50ed02b95ec15aab603ceb979fccb6d507908f746d5c02e1e1772",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T06:57:39.172304+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "77ca197e-0ad1-4891-860f-88993c2efced",
+      "source_title": "MM article attractors-algotrading EN 5399525d6bf5",
+      "source_sha256": "79ce35a65cf50ed02b95ec15aab603ceb979fccb6d507908f746d5c02e1e1772",
+      "state": "source_ready",
+      "source_display_name": "MM article attractors-algotrading EN 5399525d6bf5",
+      "selected_source_ids": [
+        "77ca197e-0ad1-4891-860f-88993c2efced"
+      ]
+    },
+    "attractors-algotrading:ru": {
+      "slug": "attractors-algotrading",
+      "language": "ru",
+      "article_sha256": "94694dce3daece46b8708ea2a6dd592e2e0c6022b68fdc8a945ce75bf2091cc4",
+      "input_hashes": {
+        "article": "94694dce3daece46b8708ea2a6dd592e2e0c6022b68fdc8a945ce75bf2091cc4",
+        "source_text": "1fffa5a35a21648b491e4e3617d9d5a46cdb988bc81d27b3e439ef6802527a4c",
+        "slides_prompt": "d777e0cf769e55dcfadda853c86e3c6dc02b9fe9ca0f97e4fb4b9b2001da912d",
+        "audio_prompt": "b301457041d4dbb6302d3fc80fcb7ccf0e97b10ce3548d3ac12f7dc5fea6fd9f"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "d777e0cf769e55dcfadda853c86e3c6dc02b9fe9ca0f97e4fb4b9b2001da912d",
+          "requested_at": "2026-10-04T06:58:26.622949+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "a498b836-0bd6-4ab7-87e9-edc9d3bb753e",
+          "submission_mode": "now",
+          "artifact_id": "df837064-2db1-47dc-a25b-5ce409c9a614",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-04T06:58:31.185217+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "df837064-2db1-47dc-a25b-5ce409c9a614"
+          ],
+          "prompt_sha256": "b301457041d4dbb6302d3fc80fcb7ccf0e97b10ce3548d3ac12f7dc5fea6fd9f",
+          "requested_at": "2026-10-04T06:58:43.348017+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "a498b836-0bd6-4ab7-87e9-edc9d3bb753e",
+          "submission_mode": "now",
+          "artifact_id": "08792c96-a11d-4429-9bfc-364e908fc4c3",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-04T06:58:47.900012+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-04T06:57:58.643026+00:00",
+      "notebook_intent": {
+        "at": "2026-10-04T06:58:05.959951+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/attractors-algotrading-ru-notebook-baseline.json",
+        "baseline_sha256": "0c3c8ed6eeb6619ea2ccbb8889cfefe44ff1502b0017fa57e5f0a5440b5a4689",
+        "baseline_count": 306,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-04T06:58:08.047619+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/8dde8836-4d8e-429d-a097-16039b7dc966",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-04T06:58:12.073507+00:00",
+        "sha256": "1fffa5a35a21648b491e4e3617d9d5a46cdb988bc81d27b3e439ef6802527a4c",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-04T06:58:19.834725+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "a498b836-0bd6-4ab7-87e9-edc9d3bb753e",
+      "source_title": "MM article attractors-algotrading RU 94694dce3dae",
+      "source_sha256": "1fffa5a35a21648b491e4e3617d9d5a46cdb988bc81d27b3e439ef6802527a4c",
+      "state": "source_ready",
+      "source_display_name": "MM article attractors-algotrading RU 94694dce3dae",
+      "selected_source_ids": [
+        "a498b836-0bd6-4ab7-87e9-edc9d3bb753e"
+      ]
     }
   },
-  "checked_at": "2026-10-04T02:13:07.095409+00:00",
+  "checked_at": "2026-10-04T06:58:47.903772+00:00",
   "browser_geometry_requested": {
-    "width": 2000,
+    "width": 1998,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 56,
+    "x": 58,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 2000,
+    "outer_width": 1998,
     "outer_height": 1290,
-    "inner_width": 1960,
+    "inner_width": 1958,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
