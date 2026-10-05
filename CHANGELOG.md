@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Save complete Russian and Mainland Simplified Chinese Bill Williams PDF/audio originals and the English audio with verified hashes and integrity evidence; bind the separate Taiwan Traditional Chinese pair and English Causal Forests requests, retaining scheduled/generating identities and the displayed all-feature quota reset.
 - Bind separate Russian and Mainland Simplified Chinese Bill Williams PDF/audio requests to permanent source IDs and verified output languages after the saved quota reset; retain the existing English scheduled deck and generating audio identities.
 - Complete the Taiwan Traditional Chinese Beyond Time Bars PDF/audio originals with verified hashes and integrity evidence, completing all four locale pairs; retain the English Bill Williams scheduled artifact IDs and the displayed quota reset before further admissions.
 - Freeze eight separate EN/RU/Mainland Simplified/Taiwan Traditional Bill Williams and Causal Forests source briefs with exact published article bytes, complete ordered section prompts and hashes; retain external duplicate checks, biographical claims and localized causal-terminology corrections for editorial review.

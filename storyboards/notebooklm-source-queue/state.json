@@ -5739,7 +5739,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "generating",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nEnglish\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 06:51."
@@ -5754,11 +5754,11 @@
           "source_id": "42c17f86-4e9d-4fae-a813-be048a9a7f45",
           "submission_mode": "later",
           "artifact_id": "8d00b336-82de-451a-8f67-228f6276a2b2",
-          "card_text": "tablet\nTrading Chaos: The Bill Williams Story\nScheduled for after 7am\nmore_vert",
-          "observed_at": "2026-10-05T03:04:13.330693+00:00"
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T03:19:15.289120+00:00"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nEnglish\nLength\nShort\nDefault\nLong\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Trading Psychology\n+ Beginner Guide\n+ Systematic Critique\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 06:51."
@@ -5775,8 +5775,15 @@
           "source_id": "42c17f86-4e9d-4fae-a813-be048a9a7f45",
           "submission_mode": "later",
           "artifact_id": "ec309e8c-6bbb-44e8-87c3-514027d19419",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T03:04:14.363783+00:00"
+          "card_text": "audio_spark\nUnread\nBill Williams and Chaos Theory Trading\n25:09 · Deep Dive · 1 source · 13m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T03:19:16.320847+00:00",
+          "duration_seconds": 1509.807891,
+          "path": "input/notebooklm-sources/bill-williams/en/audio.m4a",
+          "sha256": "7087f245b3c90f19cd03d830162b620870724618ac256adfd78f1c219fc6d951",
+          "bytes": 48592343,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T03:19:39.490073+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -5821,7 +5828,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "b9a0cc47e75929e5b1c0e06c8a90048a467aa826ff9f76bdf558618e65a73be8",
           "requested_at": "2026-10-05T03:04:41.995750+00:00",
@@ -5831,11 +5838,18 @@
           "source_id": "f30179ef-64cb-472d-87e7-825a3f8d3e60",
           "submission_mode": "now",
           "artifact_id": "fcb064be-ced0-491b-b389-94be2de41cf4",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T03:04:46.563811+00:00"
+          "card_text": "tablet\nUnread\nТорговый Хаос Билла Вильямса\n1 source · 5m ago\nmore_vert",
+          "observed_at": "2026-10-05T03:19:46.134899+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/bill-williams/ru/slides.pdf",
+          "sha256": "2ee3f4b2ae19e77d1321356ac544ae180cdebdb26f383abe796b30c57efdd2dd",
+          "bytes": 16844292,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T03:19:53.924657+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "fcb064be-ced0-491b-b389-94be2de41cf4"
           ],
@@ -5847,8 +5861,15 @@
           "source_id": "f30179ef-64cb-472d-87e7-825a3f8d3e60",
           "submission_mode": "now",
           "artifact_id": "7b696822-1e4f-4e01-bc2f-3180ced6d166",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T03:05:04.840495+00:00"
+          "card_text": "audio_spark\nUnread\nАллигатор и торговый хаос Билла Вильямса\n13:58 · Deep Dive · 1 source · 7m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T03:19:54.964273+00:00",
+          "duration_seconds": 838.286803,
+          "path": "input/notebooklm-sources/bill-williams/ru/audio.m4a",
+          "sha256": "1f4d8531da72c71676da467373c0400af71c5362012542c0d41aa1e2fc1a6c17",
+          "bytes": 26980100,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T03:20:07.383794+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -5893,7 +5914,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "7f5f4ceb2f83655d2028a2aeb87f7a8dc614915f79fb0df30a54011735b5a2d3",
           "requested_at": "2026-10-05T03:05:33.496001+00:00",
@@ -5903,11 +5924,18 @@
           "source_id": "6b4717b8-33ca-4709-a242-56f598fceebd",
           "submission_mode": "now",
           "artifact_id": "30899db8-111a-4691-92b1-4288bd3b42a3",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T03:05:38.054691+00:00"
+          "card_text": "tablet\nUnread\nBill Williams Chaos Trading\n1 source · 6m ago\nmore_vert",
+          "observed_at": "2026-10-05T03:20:14.011485+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/bill-williams/zh-CN/slides.pdf",
+          "sha256": "a485f2c69242be8f7e7bda2d63de8e2d01a589d7e041fce501d99d95571a5204",
+          "bytes": 17030560,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T03:20:19.732358+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "30899db8-111a-4691-92b1-4288bd3b42a3"
           ],
@@ -5919,8 +5947,15 @@
           "source_id": "6b4717b8-33ca-4709-a242-56f598fceebd",
           "submission_mode": "now",
           "artifact_id": "816d1e5b-13f8-4c92-b9ea-298b5773a7b9",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T03:05:56.310489+00:00"
+          "card_text": "audio_spark\nUnread\n比尔威廉姆斯的混沌交易法\n21:33 · Deep Dive · 1 source · 4m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T03:20:20.767977+00:00",
+          "duration_seconds": 1293.049615,
+          "path": "input/notebooklm-sources/bill-williams/zh-CN/audio.m4a",
+          "sha256": "21af319c30fc3bcd7c906fcf8778de3cc4b10f6958de2586b2e174998d23baed",
+          "bytes": 41616186,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T03:20:41.920875+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -5952,9 +5987,158 @@
       "selected_source_ids": [
         "6b4717b8-33ca-4709-a242-56f598fceebd"
       ]
+    },
+    "bill-williams:zh-TW": {
+      "slug": "bill-williams",
+      "language": "zh-TW",
+      "article_sha256": "d32a1d679c2e7e5e8ac7578e9e1d2032f357238ec7c33145a25240f3e1189f7b",
+      "input_hashes": {
+        "article": "d32a1d679c2e7e5e8ac7578e9e1d2032f357238ec7c33145a25240f3e1189f7b",
+        "source_text": "9dd899aa0dc0ebe2e108c64ffe0f5cedb80f6491d0487c077861a92a805325c6",
+        "slides_prompt": "1c0ff5f89185687027e96fdb9ebd326dbedf1e25c6bb394ae7e73467bbe5817f",
+        "audio_prompt": "9a9581de5965f6f16fea7dc7ede8c2362264a0cec8bd25946cf8d83bc44e58b4"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "1c0ff5f89185687027e96fdb9ebd326dbedf1e25c6bb394ae7e73467bbe5817f",
+          "requested_at": "2026-10-05T03:21:09.692834+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "6f89a7fb-cc6a-4c06-897b-ad605d559e27",
+          "submission_mode": "now",
+          "artifact_id": "842365c9-d8d2-4033-b379-7563d3d708f5",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T03:21:14.259389+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "842365c9-d8d2-4033-b379-7563d3d708f5"
+          ],
+          "prompt_sha256": "9a9581de5965f6f16fea7dc7ede8c2362264a0cec8bd25946cf8d83bc44e58b4",
+          "requested_at": "2026-10-05T03:21:26.828917+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "6f89a7fb-cc6a-4c06-897b-ad605d559e27",
+          "submission_mode": "now",
+          "artifact_id": "b422604c-3ee5-449d-9bbb-89201d133136",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T03:21:31.393691+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T03:20:41.935445+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T03:20:48.364347+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/bill-williams-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "4e436edffec0971dd5b027707a30a79d072c737f6c3c90c2dab1921b73b85180",
+        "baseline_count": 324,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T03:20:49.450234+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/44ddd113-96e5-404a-a8dd-67d486d59abf",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T03:20:53.633186+00:00",
+        "sha256": "9dd899aa0dc0ebe2e108c64ffe0f5cedb80f6491d0487c077861a92a805325c6",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T03:21:01.758645+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "6f89a7fb-cc6a-4c06-897b-ad605d559e27",
+      "source_title": "MM article bill-williams ZH-TW d32a1d679c2e",
+      "source_sha256": "9dd899aa0dc0ebe2e108c64ffe0f5cedb80f6491d0487c077861a92a805325c6",
+      "state": "source_ready",
+      "source_display_name": "MM article bill-williams ZH-TW d32a1d679c2e",
+      "selected_source_ids": [
+        "6f89a7fb-cc6a-4c06-897b-ad605d559e27"
+      ]
+    },
+    "causal-forests-treatment-effects-trading:en": {
+      "slug": "causal-forests-treatment-effects-trading",
+      "language": "en",
+      "article_sha256": "95517fcdf1c76379dc1640fe4ccc2b558050d1d572607ea6f8e836848f38f751",
+      "input_hashes": {
+        "article": "95517fcdf1c76379dc1640fe4ccc2b558050d1d572607ea6f8e836848f38f751",
+        "source_text": "bb4a295190df9eb039a72f1edb90868bc3278eb9fe29e10d3097d5c94708c4a1",
+        "slides_prompt": "4760bab8b4f0756a044487b1d069b646e01b1b1ffb1742daf8841e6c442bee1e",
+        "audio_prompt": "0e27277eb090102184781d731ac7a85654dab5ebd4f0dfd096a293e313e111f8"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nEnglish\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 11:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "4760bab8b4f0756a044487b1d069b646e01b1b1ffb1742daf8841e6c442bee1e",
+          "requested_at": "2026-10-05T03:21:55.704779+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "dda148d5-fae7-4248-a380-8ce2ef0d5f5e",
+          "submission_mode": "later",
+          "artifact_id": "b87cb49b-bbe8-40ce-b0b8-958505067d71",
+          "card_text": "tablet\nCausal Forests for Trading Treatment Effects\nScheduled for after 12pm\nmore_vert",
+          "observed_at": "2026-10-05T03:22:00.263053+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "b87cb49b-bbe8-40ce-b0b8-958505067d71"
+          ],
+          "prompt_sha256": "0e27277eb090102184781d731ac7a85654dab5ebd4f0dfd096a293e313e111f8",
+          "requested_at": "2026-10-05T03:22:07.543926+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "dda148d5-fae7-4248-a380-8ce2ef0d5f5e",
+          "submission_mode": "now",
+          "artifact_id": "df7cb451-d131-4978-8361-c559286e1afe",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T03:22:12.118065+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T03:21:31.415667+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T03:21:38.803405+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/causal-forests-treatment-effects-trading-en-notebook-baseline.json",
+        "baseline_sha256": "f3daa84cbf7fa2e23ba1ffe10b9e62637b346b038f81d6b59cd49252cd28c268",
+        "baseline_count": 325,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T03:21:39.890342+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/4a47e2a2-35ff-4f57-b5be-051d9219afbb",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T03:21:44.085630+00:00",
+        "sha256": "bb4a295190df9eb039a72f1edb90868bc3278eb9fe29e10d3097d5c94708c4a1",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T03:21:52.333652+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "dda148d5-fae7-4248-a380-8ce2ef0d5f5e",
+      "source_title": "MM article causal-forests-treatment-effects-trading EN 95517fcdf1c7",
+      "source_sha256": "bb4a295190df9eb039a72f1edb90868bc3278eb9fe29e10d3097d5c94708c4a1",
+      "state": "source_ready",
+      "source_display_name": "MM article causal-forests-treatment-effects-tradi…",
+      "selected_source_ids": [
+        "dda148d5-fae7-4248-a380-8ce2ef0d5f5e"
+      ]
     }
   },
-  "checked_at": "2026-10-05T03:05:56.318487+00:00",
+  "checked_at": "2026-10-05T03:22:12.139829+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
@@ -5971,10 +6155,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 06:51.",
+    "notice": "AI usage limit reached. All features will be available after 11:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-05T02:05:38.055654+00:00",
-    "not_before": "2026-10-05T02:51:00+00:00"
+    "observed_at": "2026-10-05T03:22:12.139815+00:00",
+    "not_before": "2026-10-05T07:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
