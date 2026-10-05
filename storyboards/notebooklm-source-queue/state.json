@@ -5481,7 +5481,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "940a234ec43895c2c9cc63550aa594d8911ba19f8dcfaf2b9967e6ee3498a15a",
           "requested_at": "2026-10-05T01:33:08.330645+00:00",
@@ -5491,11 +5491,18 @@
           "source_id": "d5ab7448-64aa-49c6-b295-6c4ba37b8e9e",
           "submission_mode": "now",
           "artifact_id": "052460b7-d2c7-4de7-b502-72d6c67ec6ff",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T01:33:12.892563+00:00"
+          "card_text": "tablet\nUnread\nThe Quant's Blueprint\n1 source · 3m ago\nmore_vert",
+          "observed_at": "2026-10-05T01:47:10.233779+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/beyond-time-bars-candle-construction/ru/slides.pdf",
+          "sha256": "6a06ab5dbc5305fe7334395745b92ceef7a08abe29a89d601408dd761c099455",
+          "bytes": 15760556,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T01:47:16.160049+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "052460b7-d2c7-4de7-b502-72d6c67ec6ff"
           ],
@@ -5507,8 +5514,15 @@
           "source_id": "d5ab7448-64aa-49c6-b295-6c4ba37b8e9e",
           "submission_mode": "now",
           "artifact_id": "7e9ba961-9cce-41c7-afc7-d542ae88a698",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T01:33:28.539299+00:00"
+          "card_text": "audio_spark\nUnread\n51 способ построения свечей на бирже\n14:19 · Deep Dive · 1 source · 4m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T01:47:17.193735+00:00",
+          "duration_seconds": 859.602721,
+          "path": "input/notebooklm-sources/beyond-time-bars-candle-construction/ru/audio.m4a",
+          "sha256": "5bf4ddd522f951416a37637a6578ffa8fa88a68bf20a452a77f8f56dbbdbaeb4",
+          "bytes": 27666230,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T01:47:28.625342+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -5553,7 +5567,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "abe2877c2b44e59fbcf5028466c47dfcae9bbd8b3806679df4be8e93d884ad47",
           "requested_at": "2026-10-05T01:34:08.265106+00:00",
@@ -5563,11 +5577,18 @@
           "source_id": "2ad29f9a-1d52-4e8c-9f5c-6d50b82ce854",
           "submission_mode": "now",
           "artifact_id": "7f2dc495-6f72-4ae8-9ff8-2943caf08681",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T01:34:12.820906+00:00"
+          "card_text": "tablet\nUnread\nAdvanced Bar Types for Algorithmic Trading\n1 source · 3m ago\nmore_vert",
+          "observed_at": "2026-10-05T01:47:35.263132+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/beyond-time-bars-candle-construction/zh-CN/slides.pdf",
+          "sha256": "bee9e13c6474d49d79a9d818ee44e63b37157cf7354b9c826e8e5bacbad729ca",
+          "bytes": 17608820,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T01:47:40.173308+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "7f2dc495-6f72-4ae8-9ff8-2943caf08681"
           ],
@@ -5579,8 +5600,15 @@
           "source_id": "2ad29f9a-1d52-4e8c-9f5c-6d50b82ce854",
           "submission_mode": "now",
           "artifact_id": "e1120bcc-2e2d-4dd5-ac4d-2830dc7b9f5e",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T01:34:28.991638+00:00"
+          "card_text": "audio_spark\nUnread\n别用时间K线做量化\n16:22 · Deep Dive · 1 source · 3m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T01:47:41.208833+00:00",
+          "duration_seconds": 982.087982,
+          "path": "input/notebooklm-sources/beyond-time-bars-candle-construction/zh-CN/audio.m4a",
+          "sha256": "381d481446ab61640ba1842e7e09664d16497064b2f499843bbf16e8b0e98a3a",
+          "bytes": 31608250,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T01:47:50.757454+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -5612,9 +5640,81 @@
       "selected_source_ids": [
         "2ad29f9a-1d52-4e8c-9f5c-6d50b82ce854"
       ]
+    },
+    "beyond-time-bars-candle-construction:zh-TW": {
+      "slug": "beyond-time-bars-candle-construction",
+      "language": "zh-TW",
+      "article_sha256": "50ce98e0057b2e1e56bc646c3945ce79b9d02c2f6a52e9e77edd401a1d1333e7",
+      "input_hashes": {
+        "article": "50ce98e0057b2e1e56bc646c3945ce79b9d02c2f6a52e9e77edd401a1d1333e7",
+        "source_text": "dd445d856aa8778c6eaf568d80fc6b01d8201d41eafbc73878795620dfb59c96",
+        "slides_prompt": "268bb9c7bb0afc8d49ca8e2faac2c36b76ca02b9555c9cfeb1108eeb535bd135",
+        "audio_prompt": "e3b6cd4a3afc6b6d89fda102ceaa5869d9213f60013b6413a671df6d32373a1e"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "268bb9c7bb0afc8d49ca8e2faac2c36b76ca02b9555c9cfeb1108eeb535bd135",
+          "requested_at": "2026-10-05T01:48:19.355371+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "198754e4-5d74-4f82-88b5-aa5d142d15db",
+          "submission_mode": "now",
+          "artifact_id": "9d6b8ec0-9bde-44d9-a765-eec447654ebb",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T01:48:23.941098+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "9d6b8ec0-9bde-44d9-a765-eec447654ebb"
+          ],
+          "prompt_sha256": "e3b6cd4a3afc6b6d89fda102ceaa5869d9213f60013b6413a671df6d32373a1e",
+          "requested_at": "2026-10-05T01:48:37.667858+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "198754e4-5d74-4f82-88b5-aa5d142d15db",
+          "submission_mode": "now",
+          "artifact_id": "9aba6409-59b2-4960-b084-f871184e770f",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T01:48:42.230940+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T01:47:50.772256+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T01:47:57.852649+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/beyond-time-bars-candle-construction-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "8e63ad1fa70e829ba08e3213d58e7907ef9357f56a8acb3373d0eadc41c9df6b",
+        "baseline_count": 320,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T01:47:58.938749+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/35658a42-703e-4970-b971-d2680f8439d2",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T01:48:03.097157+00:00",
+        "sha256": "dd445d856aa8778c6eaf568d80fc6b01d8201d41eafbc73878795620dfb59c96",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T01:48:11.202408+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "198754e4-5d74-4f82-88b5-aa5d142d15db",
+      "source_title": "MM article beyond-time-bars-candle-construction ZH-TW 50ce98e0057b",
+      "source_sha256": "dd445d856aa8778c6eaf568d80fc6b01d8201d41eafbc73878795620dfb59c96",
+      "state": "source_ready",
+      "source_display_name": "MM article beyond-time-bars-candle-construction Z…",
+      "selected_source_ids": [
+        "198754e4-5d74-4f82-88b5-aa5d142d15db"
+      ]
     }
   },
-  "checked_at": "2026-10-05T01:34:28.998677+00:00",
+  "checked_at": "2026-10-05T01:48:42.238428+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,

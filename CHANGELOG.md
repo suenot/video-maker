@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Save complete Russian and Mainland Simplified Chinese Beyond Time Bars PDF/audio originals with verified hashes and integrity evidence; bind the separate Taiwan Traditional Chinese pair from the full published localized article with an explicit output variant.
 - Save complete English Beyond Time Bars PDF/audio originals with verified hashes and integrity evidence; bind separate Russian and Mainland Simplified Chinese requests after the recorded quota reset, preserving all existing identities and the frozen full articles.
 - Complete separate Mainland Simplified and Taiwan Traditional Chinese Bayesian neural network PDF/audio originals with verified hashes and integrity evidence; retain the English Beyond Time Bars scheduled deck and generating audio IDs with the displayed all-feature quota reset.
 - Save complete English and Russian Bayesian neural network PDF/audio originals with verified hashes and integrity evidence; bind separate Mainland Simplified and Taiwan Traditional Chinese requests from the full published localized articles with explicit output variants.
