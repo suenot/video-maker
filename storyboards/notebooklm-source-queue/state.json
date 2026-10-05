@@ -6442,7 +6442,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nEnglish\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 16:51."
@@ -6457,8 +6457,15 @@
           "source_id": "497b3415-ad3d-4dc9-aff4-8175d34f5cfe",
           "submission_mode": "later",
           "artifact_id": "60fece16-e867-4b9d-b15c-462929abf166",
-          "card_text": "tablet\nCCXT WebSocket Orderbook Methods Guide\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-05T13:07:29.564388+00:00"
+          "card_text": "tablet\nUnread\nCCXT WebSocket Orderbooks in Production\n1 source · 1h ago\nmore_vert",
+          "observed_at": "2026-10-05T18:03:27.555420+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/ccxt-pro-websocket-orderbook-methods/en/slides.pdf",
+          "sha256": "712939b28313e1d95ce0744ca7a4510a55eb61dc76ca3c3ee31e17812bdfd706",
+          "bytes": 13511999,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T18:03:34.432652+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -6541,8 +6548,8 @@
           "source_id": "c1b6e81f-f71d-4f8a-adf8-02ff6c91d135",
           "submission_mode": "later",
           "artifact_id": "df7d9b23-1f3c-41b1-9c39-647cf1a8f7e9",
-          "card_text": "tablet\nCCXT WebSocket Orderbooks\nScheduled for after 9pm\nmore_vert",
-          "observed_at": "2026-10-05T13:08:08.937207+00:00"
+          "card_text": "tablet\nCCXT WebSocket Orderbooks\nScheduled for after 10pm\nmore_vert",
+          "observed_at": "2026-10-05T18:03:41.038313+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -6562,8 +6569,8 @@
           "source_id": "c1b6e81f-f71d-4f8a-adf8-02ff6c91d135",
           "submission_mode": "later",
           "artifact_id": "a1d0cd5c-ee24-430d-8ce2-f93f53908813",
-          "card_text": "audio_spark\nCCXT WebSocket Orderbooks\nScheduled for after 9pm\nmore_vert",
-          "observed_at": "2026-10-05T13:08:09.964697+00:00"
+          "card_text": "audio_spark\nCCXT WebSocket Orderbooks\nScheduled for after 10pm\nmore_vert",
+          "observed_at": "2026-10-05T18:03:42.067065+00:00"
         }
       },
       "admission_state": "admitted",
@@ -6780,7 +6787,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "4b857ade69702660f664318d13fc65b05751e9207250756e35ef7dbc01dff07c",
           "requested_at": "2026-10-05T13:09:36.489614+00:00",
@@ -6790,11 +6797,18 @@
           "source_id": "5299212c-87c1-4ea1-a15f-a6b8a8f5fcb2",
           "submission_mode": "now",
           "artifact_id": "9c4c76a2-d9b6-4317-97ed-632f51fa933f",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T13:09:41.057793+00:00"
+          "card_text": "tablet\nUnread\nChild-Order Execution Tactics\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-05T18:03:48.785076+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/child-order-execution-tactics/en/slides.pdf",
+          "sha256": "3adaa1bd2a1ad7290daaac5ff74465dfe194f23bdd114cfb461dfda46a0db723",
+          "bytes": 13949271,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T18:03:53.690027+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "9c4c76a2-d9b6-4317-97ed-632f51fa933f"
           ],
@@ -6806,8 +6820,15 @@
           "source_id": "5299212c-87c1-4ea1-a15f-a6b8a8f5fcb2",
           "submission_mode": "now",
           "artifact_id": "bf9937be-6be6-42fe-a75e-037b76d23a0b",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T13:10:02.587915+00:00"
+          "card_text": "audio_spark\nUnread\nChild Order Execution Tactics in Algorithmic Trading\n18:17 · Deep Dive · 1 source · 4h ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T18:03:54.720149+00:00",
+          "duration_seconds": 1097.119637,
+          "path": "input/notebooklm-sources/child-order-execution-tactics/en/audio.m4a",
+          "sha256": "793a9a1710365a174a6622db06f294f233cb22c14f041f46b90e4c5f80e5ce99",
+          "bytes": 35310355,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T18:04:08.933964+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -6852,7 +6873,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "d380e1021854405b8f8ddcf92bd4fcf73f1025229207f323dda38cdbb8c260e7",
           "requested_at": "2026-10-05T13:10:42.417816+00:00",
@@ -6862,8 +6883,15 @@
           "source_id": "920dd869-be22-4628-a3aa-058a6dc51616",
           "submission_mode": "now",
           "artifact_id": "bcd7e28c-6fde-4fb0-9074-5bb55c7f5d60",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T13:10:46.985694+00:00"
+          "card_text": "tablet\nUnread\nChild Order Execution Tactics\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-05T18:04:15.957850+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/child-order-execution-tactics/ru/slides.pdf",
+          "sha256": "22a68e05c0e1f1090f9e3171f3eb1bb7a9701d0f0db5d5d46584c74c6cfaa360",
+          "bytes": 15923446,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T18:04:21.314440+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
           "state": "scheduled",
@@ -6884,7 +6912,7 @@
           "submission_mode": "later",
           "artifact_id": "d8860750-a932-4493-a541-63d7ff38d3b8",
           "card_text": "audio_spark\nTactics of Child-Order Execution Between Scheduler and Exchange\nScheduled for after 10pm\nmore_vert",
-          "observed_at": "2026-10-05T13:11:05.866584+00:00"
+          "observed_at": "2026-10-05T18:04:22.352787+00:00"
         }
       },
       "admission_state": "admitted",
@@ -6916,9 +6944,130 @@
       "selected_source_ids": [
         "920dd869-be22-4628-a3aa-058a6dc51616"
       ]
+    },
+    "child-order-execution-tactics:zh-CN": {
+      "slug": "child-order-execution-tactics",
+      "language": "zh-CN",
+      "article_sha256": "403a0a5e72654f2c9d4e68de864b323a67c8b320d4fa83f1e886009fafcd78b7",
+      "input_hashes": {
+        "article": "403a0a5e72654f2c9d4e68de864b323a67c8b320d4fa83f1e886009fafcd78b7",
+        "source_text": "d78beccb8c56671c71fce4d2d1771f0b79169734bb09590834e4b715bca1e9e2",
+        "slides_prompt": "291d2beb4d3dec6ce3be698ed7314cc423f68623b45d8150997904223079368d",
+        "audio_prompt": "da79250922e1cdc8d6c1a0cfc320eb4c7b6e607e5f4245b596e4a3d68744339e"
+      },
+      "artifacts": {},
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T18:04:22.382057+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T18:04:29.185870+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/child-order-execution-tactics-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "4305b9787875283341c79368687bee997621e4da886aebfd72c1b650731c267d",
+        "baseline_count": 335,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T18:04:30.279664+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/7e9b71f1-6b77-4b21-8188-9c4e8cae2a16",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T18:04:34.444167+00:00",
+        "sha256": "d78beccb8c56671c71fce4d2d1771f0b79169734bb09590834e4b715bca1e9e2",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown"
+      },
+      "last_error": {
+        "type": "RuntimeError",
+        "message": "Source submission unconfirmed",
+        "at": "2026-10-05T18:04:45.723454+00:00",
+        "stage": "source",
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/child-order-execution-tactics-zh-CN-20261005T180445730298Z-error.png",
+            "sha256": "8ac0c134858e229ece1b9b2a1bf5d560ea759942bfc630a24b1067dc80af94d5"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/child-order-execution-tactics-zh-CN-20261005T180445730298Z-controls.json",
+            "sha256": "4a4e8852825d2777625279e9828e903a1cb87a6a61785b43bf886a2fe13d23b4"
+          }
+        },
+        "retry_not_before": "2026-10-05T18:19:45.880700+00:00",
+        "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+      }
+    },
+    "child-order-execution-tactics:zh-TW": {
+      "slug": "child-order-execution-tactics",
+      "language": "zh-TW",
+      "article_sha256": "312c8fadaf3e948e0ac2204ab19b2d2889db0de097c6a517e71024e16ad80b72",
+      "input_hashes": {
+        "article": "312c8fadaf3e948e0ac2204ab19b2d2889db0de097c6a517e71024e16ad80b72",
+        "source_text": "15d09b404a39ac90a739c23acb1c6f80f763c419b6722077c101675120f18757",
+        "slides_prompt": "304cf950069ed0033d9e0939fe5e96cdc2d007052761f39e22bf9e6784b8f844",
+        "audio_prompt": "433d443f2a53a3b0e61b0cf0208401aa5c7e049e823c6ef29611ad06929011e3"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "304cf950069ed0033d9e0939fe5e96cdc2d007052761f39e22bf9e6784b8f844",
+          "requested_at": "2026-10-05T18:05:15.497756+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "2c860a47-fc83-4b68-9152-0eab5438664f",
+          "submission_mode": "now",
+          "artifact_id": "3b09d852-0510-4b54-84d6-8e94f269c5cc",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T18:05:20.062377+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "3b09d852-0510-4b54-84d6-8e94f269c5cc"
+          ],
+          "prompt_sha256": "433d443f2a53a3b0e61b0cf0208401aa5c7e049e823c6ef29611ad06929011e3",
+          "requested_at": "2026-10-05T18:05:33.653259+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "2c860a47-fc83-4b68-9152-0eab5438664f",
+          "submission_mode": "now",
+          "artifact_id": "3c4e9bea-0ed5-46b5-9873-be8499160e72",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T18:05:38.221027+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T18:04:46.435712+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T18:04:54.225716+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/child-order-execution-tactics-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "ee58c1052211e3d720870f3680c3b2c99cfeabfaa48c956102e683ddd167d7e9",
+        "baseline_count": 336,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T18:04:56.326565+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/a2f91099-4f71-465c-b53d-f2686ada154a",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T18:05:00.349150+00:00",
+        "sha256": "15d09b404a39ac90a739c23acb1c6f80f763c419b6722077c101675120f18757",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T18:05:08.369578+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "2c860a47-fc83-4b68-9152-0eab5438664f",
+      "source_title": "MM article child-order-execution-tactics ZH-TW 312c8fadaf3e",
+      "source_sha256": "15d09b404a39ac90a739c23acb1c6f80f763c419b6722077c101675120f18757",
+      "state": "source_ready",
+      "source_display_name": "MM article child-order-execution-tactics ZH-TW 31…",
+      "selected_source_ids": [
+        "2c860a47-fc83-4b68-9152-0eab5438664f"
+      ]
     }
   },
-  "checked_at": "2026-10-05T13:11:05.885256+00:00",
+  "checked_at": "2026-10-05T18:05:38.230067+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
