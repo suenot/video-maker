@@ -6533,7 +6533,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 16:51."
@@ -6548,8 +6548,15 @@
           "source_id": "c1b6e81f-f71d-4f8a-adf8-02ff6c91d135",
           "submission_mode": "later",
           "artifact_id": "df7d9b23-1f3c-41b1-9c39-647cf1a8f7e9",
-          "card_text": "tablet\nCCXT WebSocket Orderbooks\nScheduled for after 10pm\nmore_vert",
-          "observed_at": "2026-10-05T18:19:27.090454+00:00"
+          "card_text": "tablet\nUnread\nCCXT Pro WebSocket Order Books\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-05T23:03:49.533873+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/ccxt-pro-websocket-orderbook-methods/ru/slides.pdf",
+          "sha256": "c5d4b7094fb5c2cd5439a41844e98ad207576d25efd68847c38ce609045b9f71",
+          "bytes": 14366167,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T23:03:57.044701+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
           "state": "scheduled",
@@ -6569,8 +6576,8 @@
           "source_id": "c1b6e81f-f71d-4f8a-adf8-02ff6c91d135",
           "submission_mode": "later",
           "artifact_id": "a1d0cd5c-ee24-430d-8ce2-f93f53908813",
-          "card_text": "audio_spark\nCCXT WebSocket Orderbooks\nScheduled for after 10pm\nmore_vert",
-          "observed_at": "2026-10-05T18:19:28.124572+00:00"
+          "card_text": "audio_spark\nCCXT WebSocket Orderbooks\nScheduled for after 3am\nmore_vert",
+          "observed_at": "2026-10-05T23:03:58.091357+00:00"
         }
       },
       "admission_state": "admitted",
@@ -6964,7 +6971,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "291d2beb4d3dec6ce3be698ed7314cc423f68623b45d8150997904223079368d",
           "requested_at": "2026-10-05T18:20:14.224614+00:00",
@@ -6974,11 +6981,18 @@
           "source_id": "a6ef14f2-d0e1-4f64-b4ab-6dca8d328d3c",
           "submission_mode": "now",
           "artifact_id": "7675e211-b46c-40ca-9fc2-e4cf4d7c7f6a",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T18:20:18.779719+00:00"
+          "card_text": "tablet\nUnread\n高频子订单执行战术\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-05T23:04:05.018534+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/child-order-execution-tactics/zh-CN/slides.pdf",
+          "sha256": "1bc7c25563816688dc901db186cf8345086d60a56c96d1e7097669e243a01b44",
+          "bytes": 19091715,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T23:04:11.342028+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "7675e211-b46c-40ca-9fc2-e4cf4d7c7f6a"
           ],
@@ -6990,8 +7004,15 @@
           "source_id": "a6ef14f2-d0e1-4f64-b4ab-6dca8d328d3c",
           "submission_mode": "now",
           "artifact_id": "93dc146c-c0fc-4184-9184-5d09ddc40153",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T18:20:37.040666+00:00"
+          "card_text": "audio_spark\nUnread\n量化订单排队战术\n18:38 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T23:04:12.390411+00:00",
+          "duration_seconds": 1118.876735,
+          "path": "input/notebooklm-sources/child-order-execution-tactics/zh-CN/audio.m4a",
+          "sha256": "bda7c2395875c1fc0e054f52ec8a927c1cf43b35776b83290445eca055c20ffc",
+          "bytes": 36010678,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T23:04:33.251235+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -7139,7 +7160,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "4b0715a01422f71146b09f54b9628f046f0b7ad4921656e5d98b1ae737189d7f",
           "requested_at": "2026-10-05T18:21:25.548636+00:00",
@@ -7149,11 +7170,18 @@
           "source_id": "95b0c02d-309a-4600-b37a-65c2ffd3f20e",
           "submission_mode": "now",
           "artifact_id": "6bef9f9d-c26c-45af-91eb-c554083cffb8",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T18:21:30.122087+00:00"
+          "card_text": "tablet\nUnread\nLow Latency Arbitrage in Rust\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-05T23:04:40.095937+00:00",
+          "pages": 12,
+          "path": "input/notebooklm-sources/complex-arbitrage-execution-rust/en/slides.pdf",
+          "sha256": "cad4b8efe41a4ce7249a842c5b64e711d4a99078d2790fd47650dbf08b8e5bfb",
+          "bytes": 11385783,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T23:04:43.583555+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "6bef9f9d-c26c-45af-91eb-c554083cffb8"
           ],
@@ -7165,8 +7193,15 @@
           "source_id": "95b0c02d-309a-4600-b37a-65c2ffd3f20e",
           "submission_mode": "now",
           "artifact_id": "f862140a-ebb1-440f-822f-b5257908cfba",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T18:21:42.038074+00:00"
+          "card_text": "audio_spark\nUnread\nLow Latency Crypto Arbitrage in Rust\n15:15 · Deep Dive · 1 source · 4h ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T23:04:44.621925+00:00",
+          "duration_seconds": 915.841451,
+          "path": "input/notebooklm-sources/complex-arbitrage-execution-rust/en/audio.m4a",
+          "sha256": "9fac806bd33d612ab8689fd8c7a082a847b0721ea3729f586d13ff84e999e9a3",
+          "bytes": 29476137,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T23:04:58.477909+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -7211,7 +7246,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "generating",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 02:51."
@@ -7226,11 +7261,11 @@
           "source_id": "77a4f38d-52cf-48c0-8f85-219bbb220701",
           "submission_mode": "later",
           "artifact_id": "a99a8a3e-7186-4830-8de8-fb7bcd4db994",
-          "card_text": "tablet\nRust Arbitrage Execution: Nanoseconds to Atomic Multilegs\nScheduled for after 2am\nmore_vert",
-          "observed_at": "2026-10-05T18:22:15.335359+00:00"
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T23:05:05.290424+00:00"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "a99a8a3e-7186-4830-8de8-fb7bcd4db994"
           ],
@@ -7242,8 +7277,15 @@
           "source_id": "77a4f38d-52cf-48c0-8f85-219bbb220701",
           "submission_mode": "now",
           "artifact_id": "64f06401-cda9-40f8-8cac-395274faf636",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T18:22:33.308964+00:00"
+          "card_text": "audio_spark\nUnread\nВысокочастотный криптоарбитраж на Rust\n17:31 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T23:05:06.321158+00:00",
+          "duration_seconds": 1051.956825,
+          "path": "input/notebooklm-sources/complex-arbitrage-execution-rust/ru/audio.m4a",
+          "sha256": "ced154a9b7690fde617187551f3fa3af3f9ae63c24ce709feebf193df6e894f8",
+          "bytes": 33856901,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T23:05:22.647844+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -7275,9 +7317,153 @@
       "selected_source_ids": [
         "77a4f38d-52cf-48c0-8f85-219bbb220701"
       ]
+    },
+    "complex-arbitrage-execution-rust:zh-CN": {
+      "slug": "complex-arbitrage-execution-rust",
+      "language": "zh-CN",
+      "article_sha256": "3b9e0fdff3cd255ad5ee9783b78fbea51f5b30f68f9a5b3765b1a3fb120bfa4f",
+      "input_hashes": {
+        "article": "3b9e0fdff3cd255ad5ee9783b78fbea51f5b30f68f9a5b3765b1a3fb120bfa4f",
+        "source_text": "102f6675308d6cba2ad2d441d7b3297e2f83c6fc1892776e60b0e100d02fb208",
+        "slides_prompt": "b72aaa8e3bd4d434b32d5a3da9b8a4c4451fec9922efbda7f81e1c02cc1e9dc4",
+        "audio_prompt": "31d2f99b93f90495809708b48cdcaaaccf09c7d33a4451288acf7480f0a489d6"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "b72aaa8e3bd4d434b32d5a3da9b8a4c4451fec9922efbda7f81e1c02cc1e9dc4",
+          "requested_at": "2026-10-05T23:05:50.724611+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "973db790-9f94-4ee2-a80a-79a4d1d53c8b",
+          "submission_mode": "now",
+          "artifact_id": "3eb80e42-479a-421b-ae36-55ddd4066834",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T23:05:55.287022+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "3eb80e42-479a-421b-ae36-55ddd4066834"
+          ],
+          "prompt_sha256": "31d2f99b93f90495809708b48cdcaaaccf09c7d33a4451288acf7480f0a489d6",
+          "requested_at": "2026-10-05T23:06:08.945209+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "973db790-9f94-4ee2-a80a-79a4d1d53c8b",
+          "submission_mode": "now",
+          "artifact_id": "a4ad386f-f8cc-4370-9644-0a973de65299",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T23:06:13.508773+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T23:05:22.666413+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T23:05:29.850443+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-execution-rust-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "7fe02b5c9855d92c4129fc84655ae8a7dbd98d81f3962205f69ac8497186e2bb",
+        "baseline_count": 339,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T23:05:31.942867+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/910b72b2-3376-464b-9181-dddc22864427",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T23:05:35.952060+00:00",
+        "sha256": "102f6675308d6cba2ad2d441d7b3297e2f83c6fc1892776e60b0e100d02fb208",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T23:05:43.939417+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "973db790-9f94-4ee2-a80a-79a4d1d53c8b",
+      "source_title": "MM article complex-arbitrage-execution-rust ZH-CN 3b9e0fdff3cd",
+      "source_sha256": "102f6675308d6cba2ad2d441d7b3297e2f83c6fc1892776e60b0e100d02fb208",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-execution-rust ZH-CN…",
+      "selected_source_ids": [
+        "973db790-9f94-4ee2-a80a-79a4d1d53c8b"
+      ]
+    },
+    "complex-arbitrage-execution-rust:zh-TW": {
+      "slug": "complex-arbitrage-execution-rust",
+      "language": "zh-TW",
+      "article_sha256": "867c55ee2146a330fa153a3ef930a57233a89c14750dfc350bdd9649cb41956f",
+      "input_hashes": {
+        "article": "867c55ee2146a330fa153a3ef930a57233a89c14750dfc350bdd9649cb41956f",
+        "source_text": "77c9a77c17a0230aea4d21a7f2d4c37fed591e13ac2d1e0c00dfda00b953441f",
+        "slides_prompt": "77b09c94a7472cb79eab13359e801065cc13d3fe5de245dc4e61776da4f0d6fd",
+        "audio_prompt": "83255cc4924a3813e1eb485de6804cc2f4b20b5ff232137672ef585320682358"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "77b09c94a7472cb79eab13359e801065cc13d3fe5de245dc4e61776da4f0d6fd",
+          "requested_at": "2026-10-05T23:06:42.126408+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "30118af1-ae97-425e-94c7-7768a00ee94a",
+          "submission_mode": "now",
+          "artifact_id": "79529ef8-71a9-4342-ad46-4fcf997444fd",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T23:06:46.698391+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "79529ef8-71a9-4342-ad46-4fcf997444fd"
+          ],
+          "prompt_sha256": "83255cc4924a3813e1eb485de6804cc2f4b20b5ff232137672ef585320682358",
+          "requested_at": "2026-10-05T23:07:00.194562+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "30118af1-ae97-425e-94c7-7768a00ee94a",
+          "submission_mode": "now",
+          "artifact_id": "36b2f6cb-6a7c-4a34-8374-2329e596e6f4",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T23:07:04.770227+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T23:06:13.533025+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T23:06:20.975160+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-execution-rust-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "fa768496aaa108b89bd6c74b9300064c1237a35f8aaaa3d911c52b62ea8c4266",
+        "baseline_count": 340,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T23:06:22.076165+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/e68e2880-02c5-410a-8fff-2e9f5a158515",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T23:06:26.199207+00:00",
+        "sha256": "77c9a77c17a0230aea4d21a7f2d4c37fed591e13ac2d1e0c00dfda00b953441f",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T23:06:34.274021+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "30118af1-ae97-425e-94c7-7768a00ee94a",
+      "source_title": "MM article complex-arbitrage-execution-rust ZH-TW 867c55ee2146",
+      "source_sha256": "77c9a77c17a0230aea4d21a7f2d4c37fed591e13ac2d1e0c00dfda00b953441f",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-execution-rust ZH-TW…",
+      "selected_source_ids": [
+        "30118af1-ae97-425e-94c7-7768a00ee94a"
+      ]
     }
   },
-  "checked_at": "2026-10-05T18:22:33.330899+00:00",
+  "checked_at": "2026-10-05T23:07:04.778363+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
