@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Resume the unsubmitted CCXT Pro English Deep Dive after the recorded quota reset and bind separate Mainland Simplified/Taiwan Traditional PDF/audio requests with explicit output variants; preserve the existing EN/RU scheduled artifacts and frozen sources while clearing the resolved customization error.
 - Complete the English and Taiwan Traditional Chinese Causal Forests PDF/audio pairs with verified original hashes and integrity evidence, completing all four locales; bind scheduled CCXT Pro EN slides and RU slides/audio, retaining the unsubmitted EN audio diagnostic, finite retry and displayed quota reset before resuming its exact notebook.
 - Freeze eight separate EN/RU/Mainland Simplified/Taiwan Traditional CCXT Pro WebSocket and child-order execution briefs with exact published article bytes, complete ordered section prompts and hashes; retain external duplicate checks, version-specific API claims, execution formulas and illustrative order-state safety for editorial review.
 - Save complete Russian and Mainland Simplified Chinese Causal Forests PDF/audio originals with verified hashes and integrity evidence; bind its separate Taiwan Traditional Chinese pair with an explicit output variant while retaining the English deck's existing generating identity.
