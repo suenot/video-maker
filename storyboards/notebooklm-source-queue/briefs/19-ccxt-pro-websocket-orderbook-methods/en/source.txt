@@ -1,0 +1,436 @@
+MM article ccxt-pro-websocket-orderbook-methods EN dbaf7723eed1
+
+---
+title: "CCXT: How WebSocket Orderbook Methods Really Work"
+description: "Detailed breakdown of CCXT WebSocket methods for orderbooks: watchOrderBook, watchBidsAsks, watchOrderBookForSymbols. Real tests on 75+ exchanges."
+tags: ["CCXT", "WebSocket", "orderbook", "exchanges", "API", "trading", "cryptocurrency"]
+date: "2025-06-03"
+lang: "en"
+image: "/images/blog/ccxt-pro-websocket-orderbook-methods.webp"
+original: "ccxt-pro-websocket-orderbook-methods"
+slug: "ccxt-pro-websocket-orderbook-methods"
+authors: ["suenot"]
+---
+
+# CCXT: How WebSocket Orderbook Methods Really Work
+
+Hello! Today we'll dive into one of the most important topics for trading system developers — how WebSocket methods for getting orderbooks work in CCXT. If you've ever faced questions like "why is the method in the documentation but doesn't work in practice?" or "which method to choose for monitoring 100+ trading pairs?", this article is for you.
+
+## Introduction: Why This Matters
+
+When working with [CCXT](https://github.com/ccxt/ccxt) for market data collection, many face critical questions:
+
+- Which WebSocket methods for orderbooks are actually supported on different exchanges?
+- How do methods differ in traffic volume and data structure?
+- Why can automated tests show "✓" while the method doesn't work in practice?
+
+In this article — a detailed breakdown of popular methods, their features, and the real situation with 75+ exchanges.
+
+## Overview of Key Methods
+
+![Overview of WebSocket orderbook methods](/images/blog/ccxt-pro-key-methods.webp)
+*Four main WebSocket methods for orderbook data: single subscription, bulk subscription, top-of-book monitoring, and one-time snapshot*
+
+Modern exchange APIs offer several ways to get orderbook data via WebSocket. Let's examine each of them:
+
+### 1. `watchOrderBook` - Classic Approach
+
+This is the main method for subscribing to orderbook updates for a single trading pair.
+
+**Key characteristics:**
+- **Purpose:** Subscribe to orderbook updates for one pair
+- **Connection type:** Persistent WebSocket connection
+- **Data:** Full orderbook (usually 100–1000 levels per side)
+- **Traffic:** Medium to high, depends on update frequency and depth
+
+**Usage example:**
+```javascript
+const exchange = new ccxt.pro.binance();
+const orderbook = await exchange.watchOrderBook('BTC/USDT');
+console.log(orderbook);
+```
+
+### 2. `watchOrderBookForSymbols` - Bulk Subscription
+
+This method allows subscribing to multiple trading pairs simultaneously, if the exchange supports it.
+
+**Key characteristics:**
+- **Purpose:** Subscribe to multiple pairs at once
+- **Connection type:** Persistent WebSocket, often one connection for multiple pairs
+- **Data:** For each pair — full orderbook
+- **Traffic:** Very high with large number of pairs (100–1000 levels × 2 sides × number of pairs)
+
+**Example response:**
+```json
+{
+  "BTC/USDT": {
+    "bids": [[50000.1, 1.5], [50000.0, 2.1]],
+    "asks": [[50001.0, 1.2], [50001.1, 0.8]],
+    "timestamp": 1717398000000,
+    "datetime": "2025-06-03T12:00:00Z"
+  },
+  "ETH/USDT": {
+    "bids": [[3000.5, 10.2], [3000.4, 5.7]],
+    "asks": [[3001.0, 8.3], [3001.1, 12.1]],
+    "timestamp": 1717398000000,
+    "datetime": "2025-06-03T12:00:00Z"
+  }
+}
+```
+
+**Important warning:** In reality, not supported on all exchanges. Sometimes the method exists in the API but isn't implemented.
+
+### 3. `watchBidsAsks` - Optimized Monitoring
+
+The most economical way to track best prices across multiple trading pairs.
+
+**Key characteristics:**
+- **Purpose:** Subscribe only to best prices (top of book) for multiple pairs
+- **Connection type:** Persistent WebSocket, often one connection for all pairs
+- **Data:** Only one price per side (bid/ask)
+- **Traffic:** Minimal, suitable for monitoring large number of pairs
+
+**Example response:**
+```json
+{
+  "BTC/USDT": {
+    "bids": [[50000.1, 1.5]],
+    "asks": [[50001.0, 1.2]],
+    "timestamp": 1717398000000,
+    "datetime": "2025-06-03T12:00:00Z"
+  },
+  "ETH/USDT": {
+    "bids": [[3000.5, 10.2]],
+    "asks": [[3001.0, 8.3]],
+    "timestamp": 1717398000000,
+    "datetime": "2025-06-03T12:00:00Z"
+  }
+}
+```
+
+**Feature:** Usually implemented via ticker endpoint — saves resources for both client and exchange.
+
+### 4. `fetchOrderBookWs` - One-time Requests
+
+Alternative to REST API for getting orderbook snapshots.
+
+**Key characteristics:**
+- **Purpose:** One-time orderbook request via WebSocket (REST-like)
+- **Connection type:** Temporary WebSocket, connection closes after receiving data
+- **Data:** Orderbook snapshot
+- **Traffic:** Minimal
+
+## Important Differences and Method Comparison
+
+Understanding differences between methods is critical for choosing the right approach:
+
+### Persistent vs Temporary Connections
+
+1. **watch* methods** — create persistent connection, receive streaming real-time updates
+2. **fetch* methods** — use WebSocket only for one-time request, similar to REST API
+
+### Traffic Comparison
+
+**watchBidsAsks vs watchOrderBookForSymbols:**
+- `watchBidsAsks` — 100–1000 times less traffic, ideal for bulk monitoring
+- `watchOrderBookForSymbols` — powerful but very heavy on traffic and not supported by all exchanges
+
+**Traffic calculation example:**
+- watchBidsAsks for 100 pairs: ~100 records (1 bid/ask per pair)
+- watchOrderBookForSymbols for 100 pairs: ~100,000-1,000,000 records (100-1000 levels × 2 sides × 100 pairs)
+
+![Orderbook Methods Traffic Comparison](/images/blog/ccxt-orderbook-comparison.webp)
+*Visual comparison of data intensity between full orderbook and top-of-book (Bids/Asks) methods*
+
+
+## Practical Case: Gate.io and Reality vs Documentation
+
+![Documentation vs reality](/images/blog/ccxt-pro-gate-io-reality.webp)
+*The gap between clean API documentation and real-world exchange behavior*
+
+Let's look at a real example of how documentation might not match practice.
+
+### Test: `watchOrderBookForSymbols` on Gate.io
+
+Attempting to subscribe to 10 popular trading pairs:
+
+```javascript
+const symbols = [
+  '1CAT/USDT:USDT',
+  '1INCH/USDT:USDT',
+  'A8/USDT:USDT',
+  'AAVE/USDT:USDT',
+  'ACE/USDT:USDT',
+  'ACH/USDT:USDT',
+  'ACT/USDT:USDT',
+  'ACX/USDT:USDT',
+  'ADA/USDT:USDT',
+  'ADX/USDT:USDT'
+];
+
+const exchange = new ccxt.pro.gateio();
+try {
+  const orderbooks = await exchange.watchOrderBookForSymbols(symbols);
+  console.log('Success!', orderbooks);
+} catch (error) {
+  console.error('Error:', error.message);
+}
+```
+
+**Actual result:**  
+```
+NotSupported: gateio watchOrderBookForSymbols() is not supported yet
+```
+
+> **Important lesson:** Even if a method is declared in API documentation, this doesn't guarantee it works for a specific exchange. Always test in practice!
+
+## Automated Audit: What's Actually Supported
+
+![Exchange compatibility audit matrix](/images/blog/ccxt-pro-exchange-audit.webp)
+*Compatibility matrix showing real method support across 75+ cryptocurrency exchanges*
+
+To get a real picture of method support, a script was written to check all CCXT exchanges:
+
+```javascript
+const ccxt = require('ccxt');
+
+async function checkAllExchangeMethods() {
+    const results = [];
+    
+    // Get list of all supported exchanges
+    const exchangeIds = ccxt.pro.exchanges;
+    
+    for (const exchangeId of exchangeIds) {
+        try {
+            const exchange = new ccxt.pro[exchangeId]();
+            
+            // Check for method presence
+            const hasWatchOrderBook = typeof exchange.watchOrderBook === 'function';
+            const hasWatchBidsAsks = typeof exchange.watchBidsAsks === 'function';
+            const hasWatchOrderBookForSymbols = typeof exchange.watchOrderBookForSymbols === 'function';
+            
+            // Check spot and futures support
+            const hasSpot = exchange.has['spot'];
+            const hasFutures = exchange.has['future'] || exchange.has['swap'];
+            
+            results.push({
+                exchange: exchangeId,
+                spot: hasSpot,
+                futures: hasFutures,
+                watchOrderBook: hasWatchOrderBook,
+                watchBidsAsks: hasWatchBidsAsks,
+                watchOrderBookForSymbols: hasWatchOrderBookForSymbols
+            });
+            
+        } catch (error) {
+            console.error(`Error checking ${exchangeId}:`, error.message);
+        }
+    }
+    
+    return results;
+}
+
+// Run the check
+checkAllExchangeMethods().then(results => {
+    console.table(results);
+});
+```
+
+### Audit Results (Fragment of Top Exchanges)
+
+```
+Exchange        | Spot (OB/BA/OBS) | Futures (OB/BA/OBS)
+----------------------------------------------------------
+binance         | ✓/✓/✓            | ✓/✓/✓
+bybit           | ✓/✓/✓            | ✓/✓/✓
+okx             | ✓/✓/✓            | ✓/✓/✓
+gateio          | ✓/✓/✓            | ✓/✓/✓
+mexc            | ✓/✓/✓            | ✓/✓/✓
+kucoin          | ✓/✓/✓            | ✓/✓/✓
+huobi           | ✓/✓/✓            | ✓/✓/✓
+bitget          | ✓/✓/✓            | ✓/✓/✓
+```
+
+**Important note:**  
+The script only checks for method presence in the JavaScript object, not actual support on the exchange side. So "✓" doesn't always mean functionality — as we saw with the Gate.io example.
+
+## Practical Recommendations for Method Selection
+
+![Method selection decision tree](/images/blog/ccxt-pro-method-selection.webp)
+*Decision flowchart for choosing the right WebSocket method based on your use case*
+
+### For Different Use Cases
+
+**1. Monitoring large number of pairs (100+):**
+- Use `watchBidsAsks`
+- Minimal traffic
+- Get only best prices
+- Ideal for arbitrage bots
+
+**2. Building full orderbook for one pair:**
+- Use `watchOrderBook`
+- Full market depth
+- Suitable for market making strategies
+
+**3. Monitoring several pairs with full depth:**
+- First try `watchOrderBookForSymbols`
+- If not supported — use multiple `watchOrderBook`
+- Consider exchange limits on connection count
+
+**4. One-time data retrieval:**
+- Use `fetchOrderBookWs` or regular REST API
+- For snapshots or initialization
+
+### Performance Optimization
+
+![Connection optimization: many vs multiplexed](/images/blog/ccxt-pro-performance-optimization.webp)
+*Chaotic individual connections (left) vs optimized multiplexed WebSocket connection (right)*
+
+**Connection management:**
+```javascript
+// Bad: creating multiple connections
+const symbols = ['BTC/USDT', 'ETH/USDT', 'ADA/USDT'];
+const orderbooks = await Promise.all(
+    symbols.map(symbol => exchange.watchOrderBook(symbol))
+);
+
+// Good: one connection for all pairs (if supported)
+try {
+    const orderbooks = await exchange.watchOrderBookForSymbols(symbols);
+} catch (error) {
+    // Fallback to individual subscriptions
+    const orderbooks = await Promise.all(
+        symbols.map(symbol => exchange.watchOrderBook(symbol))
+    );
+}
+```
+
+**Depth management:**
+```javascript
+// Limit depth to save traffic
+const orderbook = await exchange.watchOrderBook('BTC/USDT', 20); // only 20 levels
+```
+
+## Error Handling and Connection Recovery
+
+![Error handling and exponential backoff retry](/images/blog/ccxt-pro-error-handling.webp)
+*Resilient connection recovery with exponential backoff retry pattern*
+
+WebSocket connections can drop, so proper error handling is important:
+
+```javascript
+async function robustWatchOrderBook(exchange, symbol, maxRetries = 3) {
+    let retries = 0;
+    
+    while (retries < maxRetries) {
+        try {
+            const orderbook = await exchange.watchOrderBook(symbol);
+            retries = 0; // reset counter on success
+            return orderbook;
+        } catch (error) {
+            retries++;
+            console.error(`Subscription error (attempt ${retries}):`, error.message);
+            
+            if (retries >= maxRetries) {
+                throw new Error(`Failed to subscribe after ${maxRetries} attempts`);
+            }
+            
+            // Exponential backoff
+            await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retries)));
+        }
+    }
+}
+```
+
+## Data Quality Monitoring
+
+![Data quality validation pipeline](/images/blog/ccxt-pro-data-quality.webp)
+*Orderbook data flowing through validation checkpoints: structure, freshness, and spread logic*
+
+It's important to track the quality of received data:
+
+```javascript
+function validateOrderBook(orderbook) {
+    // Check basic structure
+    if (!orderbook.bids || !orderbook.asks) {
+        throw new Error('Invalid orderbook structure');
+    }
+    
+    // Check data freshness
+    const now = Date.now();
+    const dataAge = now - orderbook.timestamp;
+    if (dataAge > 10000) { // older than 10 seconds
+        console.warn('Stale orderbook data:', dataAge, 'ms');
+    }
+    
+    // Check price logic
+    const bestBid = orderbook.bids[0] ? orderbook.bids[0][0] : 0;
+    const bestAsk = orderbook.asks[0] ? orderbook.asks[0][0] : 0;
+    
+    if (bestBid >= bestAsk && bestBid > 0 && bestAsk > 0) {
+        console.warn('Crossed spread:', { bestBid, bestAsk });
+    }
+}
+```
+
+## Conclusions and Best Practices
+
+Based on practical experience with CCXT, here are the main recommendations:
+
+### 1. Don't Rely Only on Documentation
+Always test methods on real data before implementing in production. Method presence in API doesn't guarantee functionality.
+
+### 2. Choose Method for the Task
+- **Bulk monitoring:** `watchBidsAsks`
+- **Detailed analysis:** `watchOrderBook`
+- **One-time requests:** `fetchOrderBookWs`
+
+### 3. Optimize Traffic
+For monitoring large numbers of pairs, `watchBidsAsks` can be 1000x more efficient than `watchOrderBookForSymbols`.
+
+### 4. Prepare for Failures
+Implement robust retry logic and data quality monitoring.
+
+### 5. Test at Production Loads
+API behavior can differ dramatically under load vs test requests.
+
+## Future of WebSocket APIs for Orderbooks
+
+![Evolution of WebSocket APIs](/images/blog/ccxt-pro-future-websocket.webp)
+*From fragmented exchange connections to unified standardized API protocols*
+
+The industry is moving toward more standardized approaches:
+
+- **Method unification** between exchanges
+- **Improved documentation** with real examples
+- **More efficient** data compression protocols
+- **Better debugging tools** and monitoring
+
+## Conclusion
+
+WebSocket APIs for orderbooks are powerful tools but require deep understanding of each exchange's specifics. CCXT significantly simplifies the work by unifying interfaces, but reality is still more complex than documentation.
+
+The key to success is testing, monitoring, and choosing the right methods for specific tasks. Remember: what works on one exchange might not work on another, even if the APIs look identical.
+
+A successful trading system is not just correct algorithms, but also reliable data infrastructure. And CCXT WebSocket methods are an important part of this infrastructure.
+
+What's your experience with exchange WebSocket APIs? Have you encountered unexpected issues? Share in the comments!
+
+## Useful Links
+
+- [CCXT Documentation](https://github.com/ccxt/ccxt)
+- [WebSocket API Best Practices](https://docs.ccxt.com/#/ccxt.pro.manual?id=public-methods)
+- [Demo Script Sources](https://github.com/suenot/ccxt-orderbooks-example/)
+
+## Citation
+
+```bibtex
+@software{soloviov2025ccxtprowebsocketorderbook,
+  author = {Soloviov, Eugen},
+  title = {CCXT: How WebSocket Orderbook Methods Really Work},
+  year = {2025},
+  url = {https://marketmaker.cc/en/blog/post/ccxt-pro-websocket-orderbook-methods},
+  version = {0.1.0},
+  description = {Detailed breakdown of CCXT WebSocket methods for orderbooks: watchOrderBook, watchBidsAsks, watchOrderBookForSymbols. Real tests on 75+ exchanges.}
+}
+``` 

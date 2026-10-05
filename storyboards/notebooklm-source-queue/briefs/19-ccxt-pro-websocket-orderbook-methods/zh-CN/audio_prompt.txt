@@ -1,0 +1,37 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article ccxt-pro-websocket-orderbook-methods ZH-CN bcc99de38dd5". It is the complete published zh article snapshot. Do not merge another language edition or outside facts. Output language: Simplified Chinese for Mainland China (zh-CN), not generic Chinese. Use Mainland terminology contextually: 订单簿, 买一卖一, 挂单, 吃单, 子订单, 队列位置, 手续费 and 回测. Preserve exact source headings in the outline; regional terminology requires human editorial review. Keep mathematical symbols, units, API and code identifiers, citations and proper names exact. Speak Mainland Mandarin (Putonghua) for audio; Chinese regional terminology and pronunciation need editorial listening review. Keep CCXT identifiers in their original case and English spelling. Review source translations of method, order-book depth, top-of-book and market type before narration; enforce the requested regional script without changing source bytes.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 引言：为什么这很重要
+2. H2 — 关键方法概览
+3. H3 — 1. `watchOrderBook` - 经典方法
+4. H3 — 2. `watchOrderBookForSymbols` - 批量订阅
+5. H3 — 3. `watchBidsAsks` - 优化监控
+6. H3 — 4. `fetchOrderBookWs` - 一次性请求
+7. H2 — 重要差异和方法比较
+8. H3 — 持久连接 vs 临时连接
+9. H3 — 流量比较
+10. H2 — 实际案例：Gate.io 和现实 vs 文档
+11. H3 — 测试：Gate.io 上的 `watchOrderBookForSymbols`
+12. H2 — 自动化审计：实际支持的功能
+13. H3 — 审计结果（顶级交易所片段）
+14. H2 — 方法选择的实际建议
+15. H3 — 针对不同使用场景
+16. H3 — 性能优化
+17. H2 — 错误处理和连接恢复
+18. H2 — 数据质量监控
+19. H2 — 结论和最佳实践
+20. H3 — 1. 不要仅依赖文档
+21. H3 — 2. 为任务选择方法
+22. H3 — 3. 优化流量
+23. H3 — 4. 为故障做准备
+24. H3 — 5. 在生产负载下测试
+25. H2 — 订单簿 WebSocket API 的未来
+26. H2 — 结论
+27. H2 — 有用链接
+28. H2 — 引用
+
+Explain four distinct methods without collapsing them: watchOrderBook streams full depth for one symbol; watchOrderBookForSymbols attempts full depth for several symbols only where supported; watchBidsAsks is best-bid/ask monitoring, not a full book; fetchOrderBookWs is a one-time WebSocket snapshot. Keep persistent versus one-time connection behavior and the article’s example depth, pairs, records and traffic units, attributed to the article rather than a measured universal ratio. The Gate.io watchOrderBookForSymbols NotSupported example must remain a dated example; do not imply it describes current support. Explain that the article’s 75+ exchange audit and check for a JavaScript method function establish method presence only, not successful subscription, market type support or a live load test. The check snippet and ✓ matrix must never be narrated as verified working capability. Keep fallback selection, multiplexing versus individual subscriptions, subscription limits, depth=20 example, reconnect/backoff, order-book freshness in milliseconds (10,000 ms example), bid/ask structure and crossed-spread checks. Flag timestamp availability, exchange-specific schemas, method signatures, fees, limits, market support, documentation and version behavior for current primary-source and runtime review. Preserve useful links and citation; do not invent a fresh exchange test or a performance benchmark.
+
+Editorial/API audit flags: pin CCXT Pro version, exchange, market mode and subscription type before treating any API claim as current. The article’s 75+ exchange count, 100–1000x traffic comparison and multiplication of depth, sides and pairs are illustrative assertions requiring arithmetic and measurement review. Its sample response shape and timestamp/datetime pairing are not a guaranteed contract. Verify whether fetchOrderBookWs really uses a temporary connection and whether multi-symbol methods multiplex one connection on each venue; do not universalize the examples. Only a live, version-pinned subscription test can establish actual support; this draft performs none.
+
+Preserve the substantive order, equations, symbols, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, research, financial, company-specific and mutable assertions are dated article claims pending human editorial and primary-source review. Formula, software/API behavior and risk review is pending. Do not add outside facts, guaranteed returns, investment advice, or claims of production validation. Chinese regional terminology and Mandarin pronunciation await human review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use natural spoken narration or dialogue in the requested locale. Explain formulas, variables, units, tables, plots and code in words without requesting on-screen text. Distinguish article claims from verified facts when speaking. End with its conclusion and references.

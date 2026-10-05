@@ -1,0 +1,235 @@
+MM article child-order-execution-tactics EN cde4ddd665ab
+
+---
+title: "Inside the slice: child-order tactics between your scheduler and the exchange"
+description: "Almgren-Chriss and VWAP only set slice budgets — execution is won in the tactics layer. Escalation timers, maker-taker break-even math, amend vs cancel-replace queue semantics on Binance/OKX/CME, iceberg anti-signaling, and a Python per-slice state machine."
+tags: ["execution", "child orders", "order tactics", "queue position", "maker-taker", "iceberg orders", "microstructure", "python"]
+date: "2026-07-24"
+draft: false
+lang: "en"
+image: "/images/blog/child-order-execution-tactics.webp"
+slug: "child-order-execution-tactics"
+authors: ["suenot"]
+---
+
+# Inside the slice: child-order tactics between your scheduler and the exchange
+
+An [Almgren-Chriss trajectory](/blog/almgren-chriss-optimal-execution) hands you a number: sell 4.2 BTC in the next five minutes. A [VWAP schedule](/blog/twap-vwap-pov-execution-algorithms) hands you the same kind of number with a different justification. Neither says anything about what happens next — whether those 4.2 BTC hit the book as one marketable order, sit at the touch collecting maker fees, hide behind a 0.3 BTC display, or get repriced eleven times chasing a drifting quote. That second decision layer is the tactics layer, and on fee-dominated crypto books it routinely moves more PnL per slice than the choice of scheduler above it. The scheduler's interval budgets differ between TWAP and a well-tuned Almgren-Chriss by a few bps of impact over the whole parent order; paying taker fees on slices you could have made, or bleeding queue position through careless repricing, costs that much per hour. This article is about the layer everyone runs and almost nobody writes down: the state machine that decides how each child order touches the book.
+
+## Two layers, one narrow interface
+
+Lehalle and Laruelle's *Market Microstructure in Practice* (2nd ed., 2018) formalizes what every execution desk converges on: a **strategic layer** (the scheduler) that allocates quantity across time, and a **tactical layer** (the microtrader) that works each allocation against the live book. The separation is not aesthetic — the two layers live on different clocks and different data. The scheduler thinks in minutes, consumes volatility and volume forecasts, and solves a variational problem. The tactics layer thinks in milliseconds-to-seconds, consumes L2 deltas and queue estimates, and solves a sequence of small stopping problems.
+
+![Two-layer execution architecture: scheduler passes slice budget and urgency down, tactics layer returns fills and shortfall up](/images/blog/child-order-execution-tactics-two-layer.webp)
+
+The interface between them should be narrow. Downward, per slice $k$:
+
+- **budget** $q_k$ — the quantity to execute this interval (the $n_k$ of Almgren-Chriss, or the volume-curve increment of VWAP);
+- **window** $\tau_k$ — the slice length;
+- **urgency** — for Almgren-Chriss, the natural candidate is $\kappa = \sqrt{\lambda\sigma^2/\eta}$, which already compresses risk aversion, volatility, and liquidity into one rate; for a VWAP scheduler it is usually a band-distance ("we are 1.8% behind the target curve").
+
+Upward: fills with timestamps and fees, the unfilled remainder, and slice-level implementation shortfall measured against the interval arrival mid. That last one matters: the scheduler's impact parameter $\eta$ already prices what demanding liquidity at rate $q_k/\tau_k$ *should* cost. The tactics layer's entire job description is one line: **realize fills at better than the $\eta$-implied cost, without leaking the parent order's existence.** If your measured slice shortfall consistently beats the model cost, your calibrated $\eta$ can come down, the scheduler speeds up, and the whole stack improves. If you can't measure slice shortfall separately from schedule cost, you can't tune either layer — you have one blurry number and two knobs.
+
+The remainder policy is part of the contract too. When a slice ends with unfilled quantity, either the tactics layer force-completes (cross the remainder — the default under deadline urgency) or returns it to the scheduler for re-amortization over remaining slices (acceptable early in a low-$\kappa$ schedule, poisonous near the deadline where re-amortization silently compounds into a massive final slice).
+
+## The escalation ladder: passive first, aggressive by deadline
+
+The oldest result in this space is Harris (1998), "Optimal dynamic order submission strategies in some stylized trading problems" (*Financial Markets, Institutions & Instruments* 7(2)): for a liquidity trader who must complete a trade by a deadline, the optimal strategy is dynamic — stand in the book with limit orders while time is cheap, reprice toward the market as the deadline approaches, and cross at the end. Every production tactics engine is a descendant of this shape: **post at the touch, age out, escalate, cross.** What modern fee schedules and queue dynamics add is the arithmetic of exactly *when* each transition fires.
+
+### The break-even for crossing
+
+Work per unit, prices relative to the current mid, for a buy. Crossing now costs half the spread plus the taker fee:
+
+$$
+c_{\text{take}} = \frac{s}{2} + f_t.
+$$
+
+Posting at the bid over a window $\tau$ fills with probability $p$; a fill earns the half-spread and pays the maker fee $f_m$ (negative if a rebate). No fill means crossing at window end after the price has, on average, moved against you by $\delta(\tau) = E[\,\text{adverse mid move} \mid \text{no fill}\,] > 0$ — strictly positive, because non-fill and adverse drift are the same event: your bid doesn't get hit when the market lifts away from it. Expected posting cost:
+
+$$
+c_{\text{post}} = p\left(-\frac{s}{2} + f_m\right) + (1-p)\left(\frac{s}{2} + f_t + \delta\right).
+$$
+
+Posting beats crossing iff
+
+$$
+\boxed{\; p \;>\; p^\* = \frac{\delta}{\Pi + \delta}, \qquad \Pi = s + f_t - f_m \;}
+$$
+
+where $\Pi$ is the **prize** — the full round-trip you capture by making instead of taking: the spread plus the fee differential. This is the same break-even that governs the entire [maker-taker economics of execution](/blog/maker-taker-fees-rebates-execution), collapsed to a single slice.
+
+Numbers, BTCUSDT perp: mid \$100,000, spread one tick $s = \char36 0.10$, VIP0-ish fees maker 2 bps / taker 5 bps, so $f_m = \char36 20$, $f_t = \char36 50$ per BTC. The prize $\Pi = 0.10 + 50 - 20 = \char36 30.10 \approx 3$ bps — note the spread contributes essentially nothing; on tight crypto majors the prize *is* the fee differential. Take 3% daily vol ($\sigma_{\text{day}} = \char36 3{,}000$) and $\delta(\tau) \approx 0.6\,\sigma_{\text{day}}\sqrt{\tau/86400}$ (the 0.6 is an adverse-selection haircut you should calibrate, not trust):
+
+- $\tau = 10$ s: $\delta \approx \char36 19$, so $p^\* = 19/49 \approx 0.39$. Post only if you expect at least a 39% fill within 10 seconds.
+- $\tau = 60$ s: $\delta \approx \char36 47$, so $p^\* = 47/77 \approx 0.61$.
+- With a maker rebate of 1 bp instead of a 2 bp fee ($f_m = -\char36 10$): $\Pi = \char36 60.10$, and the 10 s threshold drops to $p^\* \approx 0.24$.
+
+Two structural facts fall out. First, $\delta$ grows like $\sqrt{\tau}$ while $\Pi$ is constant, so $p^\*(\tau) \to 1$: patience has a hard expiry, and the age-out timer is not a heuristic but the crossing point of two curves — your estimated $p(\tau)$ (concave, saturating as the queue ahead of you drains) against $p^\*(\tau)$ (rising). Second, the fee tier you trade on physically moves the ladder. A tier upgrade that cuts taker fees makes your optimal tactics *more* aggressive — a coupling most people discover only when their fill statistics shift after a VIP re-tier.
+
+Cont and Kukanov, "Optimal order placement in limit order markets" (*Quantitative Finance* 17(1), 2017; arXiv 2012), make this rigorous in one period: minimize expected cost of executing $S$ units split between market and limit orders (across one or several venues), with a penalty for shortfall. The single-venue solution is explicit and has a newsvendor structure: the optimal limit-order size is driven by the distribution of **queue outflow** — post size aggressively when the queue ahead is small relative to expected outflow, and cover the tail risk with market orders. Their multi-venue extension is solved by stochastic approximation and is the intellectual core of every smart order router's passive-allocation logic. The practical reading for a tactics engine: $p$ in the break-even above is not a constant — it is a function of queue position and drain rate, which is why the tactics layer must consume the [queue-position estimator](/blog/queue-position-order-book-wall-analysis) as a first-class input.
+
+![Slice timeline showing escalation from passive post at touch through repricing to crossing the remainder at the deadline](/images/blog/child-order-execution-tactics-escalation.webp)
+
+The urgency parameter compresses this whole ladder. High $\kappa$ from the scheduler means the characteristic time $\theta = 1/\kappa$ is short: windows shrink, $p^\*$ rises, and the engine skips straight to crossing — correctly, because the scheduler has already declared that inventory risk dominates fee savings. Low $\kappa$ stretches the passive phase. The tactics layer should never re-derive urgency from its own view of the market; that is the scheduler's job, and duplicating it creates two disagreeing controllers.
+
+## Repricing without burning your queue position
+
+Once posted, the quote drifts. Chasing it naively — cancel, repost at the new touch, repeat — is how tactics engines quietly destroy the very fill probability that justified posting. Queue position is an asset with measurable dollar value (Moallemi and Yuan, 2016, put a price on it: front-of-queue positions in liquid FIFO books are worth a meaningful fraction of the spread), and every reprice decision is a trade: sell your current queue position, buy one at the back of a different price level. The trade is only worth doing when the new level's value exceeds the old one's plus messaging costs. That requires knowing what each venue's amend actually does to your place in line — and the answer is wildly non-uniform.
+
+**CME Globex** documents the cleanest semantics: reducing order quantity retains time priority; increasing quantity or changing price sends you to the back of the queue. This is the reference model — quantity-down is free, everything else is a re-queue.
+
+**Binance spot** historically offered only `POST /api/v3/order/cancelReplace` — an atomic-looking, explicitly non-transactional cancel-plus-new. Two modes: `STOP_ON_FAILURE` (default — if the cancel fails, no new order) and `ALLOW_FAILURE` (place the new order even if the cancel fails — hello, accidental double exposure). The operation can partially succeed, signaled by HTTP 409, so your OMS must reconcile both legs independently; and the new order always starts a fresh queue life. Then in 2025 Binance shipped **Order Amend Keep Priority** (`PUT /api/v3/order/amend/keepPriority`): reduce quantity in place, keep time priority, at zero unfilled-order-count cost. CME semantics, fifteen years later — and only the quantity-down half.
+
+**Binance USDT-M futures** has a true modify endpoint (`PUT /fapi/v1/order`), but read the fine print: only LIMIT orders, both `price` and `quantity` must be sent, and *"modified orders will be reordered in the match queue"* — the docs promise no priority retention even for pure quantity reductions. Treat every futures modify as a queue reset that happens to save you one message and keep the order ID. One sharp edge worth knowing: modifying a GTX (post-only) order to a price that would cross gets the order **canceled**, not rejected-and-kept — a peg implementation that doesn't check this will occasionally amend itself out of existence.
+
+**OKX** exposes `POST /api/v5/trade/amend-order` (`newPx`, `newSz`, with `cxlOnFail` to auto-cancel on amend failure). It is a single message, preserves the order ID, and confirms asynchronously — `sCode = 0` means "request accepted", and the actual outcome arrives on the orders channel as `amendResult`. What the public docs conspicuously do not specify is queue-priority behavior. Do not fill that documentation gap with optimism. Measure it: post two marker orders at a quiet level, amend the size of one downward, and watch which fills first over a few hundred trials. Until you have that data, the conservative assumption — any price change re-queues you everywhere, quantity-down preserves priority only where explicitly documented — is the only defensible one.
+
+![Matrix of amend operations versus venues showing which operations preserve queue priority and which reset it](/images/blog/child-order-execution-tactics-amend-matrix.webp)
+
+The policy consequences:
+
+1. **Hysteresis, not pegging.** Reprice only when the touch has drifted more than a band $b$ ticks from your resting price. Inside the band, drift is noise and your queue position is worth more than one tick of price improvement. A sensible starting band is 1–3 ticks scaled by short-horizon vol; the correct band makes the *marginal* reprice EV-neutral: $V_{\text{new}} - V_{\text{cur}} = c_{\text{msg}}$, with $V$ the Moallemi-Yuan-style queue value and $c_{\text{msg}}$ your rate-limit shadow price. Amend/cancel-replace operations consume order-rate budget on both Binance venues; a tactics engine that pegs every tick will starve the rest of your system of message capacity.
+2. **Amend down, never cancel-repost down.** When the scheduler cuts a slice budget mid-flight (a POV scheduler seeing volume dry up, an Almgren-Chriss re-solve after partial fills), use the priority-preserving path where it exists. This is the one free lunch in the whole layer.
+3. **Asymmetric urgency on the reprice.** Repricing *toward* the market (chasing) resets your queue at a worse price — it should fire only from the escalation logic, on its timer. Repricing *away* (the market came to you) is a gift; take it only via the passive band, because your current level is about to fill anyway.
+
+## Icebergs, display size, and what leaks your intent
+
+Display size is the third decision, and it is a genuine two-sided trade, not a free stealth button. The empirical record:
+
+- Frey and Sandås ("The Impact of Iceberg Orders in Limit Order Books", 2009 working paper; *Quarterly Journal of Finance*, 2017), on Xetra data: iceberg orders carried 9.3% of submitted and 15.9% of executed volume, ran 12–20x the size of ordinary limit orders, and — the punchline — when other participants *detect* an iceberg, they respond with matching market orders. Hidden size, once inferred, attracts flow: latent liquidity search works in both directions.
+- Bessembinder, Panayides and Venkataraman ("Hidden liquidity: an analysis of order exposure strategies in electronic stock markets", *JFE* 94(3), 2009), on Euronext Paris, where hidden orders were 44% of sample volume: hiding lowers implementation shortfall but also lowers the probability of full execution and lengthens time-to-completion. Exposure buys fills and pays for them in impact; the option is used exactly as theory predicts — aggressive orders expose to draw counterparties, patient size hides.
+- Esser and Mönch ("The navigation of an iceberg", *Finance Research Letters* 4(2), 2007) treat peak size as an optimization: larger display fills faster, smaller display leaks less, and the optimum is interior.
+
+Mechanics first, because they bind the optimization: on essentially every venue that supports native icebergs (Binance spot via `icebergQty`, OKX via its iceberg algo orders), **each refill of the visible peak enters the back of the queue at that price**. An iceberg is therefore not "one order with hidden size" — it is a *sequence* of small orders, each paying the full queue-wait, fired automatically. At the fee break-even above, this matters: the effective $p$ per peak is the back-of-queue fill probability, not your original position's. Deep queues punish small peaks twice — slower fills and more refills' worth of adverse selection.
+
+Then the signaling problem. Frey and Sandås's own detection method is the cautionary tale: their frequentist detector keys on the two most common implementation laziness patterns — **constant peak size** and **refill timestamps identical to the executing trade's timestamp**. Any participant running that detector (and on crypto venues, plenty do — the exchange's own matching metadata makes it even easier for colocated flow) reconstructs your hidden size in a handful of refills. The leak vectors, ranked by how often I see them in the wild:
+
+1. Constant or round display sizes (0.5 BTC, every time).
+2. Instant, deterministic refill after a full-peak execution — the same-timestamp signature.
+3. Deterministic escalation timers: cross exactly 30 s into every slice and the tape shows a metronome.
+4. Fixed reprice latency and band — your amend cadence is a fingerprint just as identifying as your order sizes, which is the subject of [digital fingerprints and trader identification](/blog/digital-fingerprint-trader-identification).
+
+The cost of getting detected is not hypothetical. Van Kervel and Menkveld ("High-frequency trading around large institutional orders", *Journal of Finance* 74(3), 2019) show HFTs initially lean *against* institutional metaorders — providing the liquidity your passive tactics consume — then flip to trading *with* the order once its persistence reveals information, back-running the remainder and materially raising the parent's cost. Their institutions responded by trading off speculative profit against detection risk. Your tactics layer is exactly where that trade-off is implemented: randomize display size (uniform 30–70% of a vol-scaled base works fine), jitter every timer by ±20–30%, occasionally let a refill wait, and never let two child orders share a size, a timer phase, and a latency profile. None of this costs measurable fill quality; all of it raises the noise floor for anyone fitting a detector to your flow.
+
+## A minimal tactics engine
+
+The whole layer above compresses into a small state machine per slice: `IDLE → POSTED → (reprice loop) → CROSSING → DONE`, with the break-even gate at entry, a hysteresis band while posted, and deadline escalation. The version below is deliberately minimal — no venue adapters, no iceberg management — but it is event-driven and side-effect-free, so it drops straight into the rung-4 queue-aware simulator from the [fill-simulation ladder](/blog/fill-simulation-partial-fills-backtest): the simulator calls `on_tick`/`on_fill`, and interprets actions as `post` → GTX/post-only, `cross` → IOC, `cancel_replace`/`amend_down` → the venue's semantics from the matrix above.
+
+```python
+import math
+from dataclasses import dataclass
+from enum import Enum, auto
+
+class State(Enum):
+    IDLE = auto(); POSTED = auto(); CROSSING = auto(); DONE = auto()
+
+@dataclass
+class Fees:
+    maker: float          # $ per unit; negative = rebate
+    taker: float          # $ per unit
+
+@dataclass
+class Cfg:
+    tick: float
+    sigma_1s: float       # $ per sqrt(second), from your live vol estimator
+    adverse_frac: float = 0.6   # E[adverse move | no fill] ~ 0.6 * sigma; calibrate
+    reprice_band: float = 2.0   # ticks of touch drift tolerated before repricing
+    escalate_frac: float = 0.7  # cross the remainder at this fraction of the window
+
+class SliceTactic:
+    """One instance per scheduler slice. Drive it from a fill simulator or OMS."""
+
+    def __init__(self, side: str, qty: float, window: float, fees: Fees, cfg: Cfg):
+        self.side, self.qty, self.window = side, qty, window
+        self.fees, self.cfg = fees, cfg
+        self.filled, self.state, self.px, self.t0 = 0.0, State.IDLE, None, None
+
+    def p_star(self, spread: float, tau: float) -> float:
+        """Break-even fill probability for posting over a window tau."""
+        delta = self.cfg.adverse_frac * self.cfg.sigma_1s * math.sqrt(tau)
+        prize = spread + self.fees.taker - self.fees.maker
+        return delta / (prize + delta)
+
+    def p_fill(self, queue_ahead: float, drain: float, tau: float) -> float:
+        """Crude queue-drain estimate; swap in your calibrated fill model."""
+        if drain <= 0: return 0.0
+        return min(1.0, drain * tau / max(queue_ahead + self.qty, 1e-9))
+
+    def on_tick(self, t, bid, ask, queue_ahead, drain):
+        if self.state == State.DONE: return []
+        if self.t0 is None: self.t0 = t
+        left = self.qty - self.filled
+        elapsed, remain = t - self.t0, self.window - (t - self.t0)
+        touch = bid if self.side == "buy" else ask
+
+        if elapsed >= self.cfg.escalate_frac * self.window and left > 0:
+            self.state = State.CROSSING          # deadline: pay up, finish
+            return [("cross", left)]
+
+        if self.state == State.IDLE:
+            if self.p_fill(queue_ahead, drain, remain) >= self.p_star(ask - bid, remain):
+                self.state, self.px = State.POSTED, touch
+                return [("post", touch, left)]    # GTX / post-only
+            self.state = State.CROSSING           # posting is -EV here
+            return [("cross", left)]
+
+        if self.state == State.POSTED:
+            if abs(touch - self.px) / self.cfg.tick > self.cfg.reprice_band:
+                self.px = touch                   # hysteresis breached:
+                return [("cancel_replace", touch)]  # accept the queue reset
+        return []
+
+    def on_fill(self, t, fill_qty):
+        self.filled += fill_qty
+        if self.filled >= self.qty - 1e-9:
+            self.state = State.DONE
+            return [("slice_done", self.filled)]
+        return []
+
+    def on_budget_cut(self, new_qty):
+        """Scheduler revised the slice down: amend-down keeps queue priority
+        where documented (CME, Binance spot amend/keepPriority)."""
+        self.qty = new_qty
+        left = new_qty - self.filled
+        return [("amend_down", left)] if left > 0 else [("cancel",)]
+```
+
+Three honest caveats. `p_fill` here is a placeholder ratio — in production it should be the bucketed, live-calibrated model from the fill-simulation article, because the entire post/cross gate is only as good as that estimate. `adverse_frac` hides the hardest quantity in the article ($\delta$ is regime-dependent and spikes exactly when posting is most tempting); estimate it from your own no-fill outcomes, bucketed by vol regime. And the engine above reprices via cancel-replace unconditionally — a venue-aware version should route quantity-down changes through the priority-preserving path and charge every action against a message budget.
+
+Run it inside the simulator against a replay tape before believing any of the parameters. The experiment that matters: fix the scheduler, sweep `escalate_frac` and `reprice_band`, and plot slice shortfall against the $\eta$-implied model cost. The surface has a plateau — wide bands of near-optimal parameters — and two cliffs: escalate too late (unfilled remainders crossing into momentum) and reprice too eagerly (all queue value burned). You want to know where your cliffs are before production finds them for you.
+
+## What to take away
+
+1. **Two layers, one contract.** Scheduler decides how much and by when; tactics decides how. The interface is budget, window, urgency down; fills and slice shortfall vs interval arrival up. If you can't attribute shortfall to a layer, you can't tune either.
+2. **The post/cross gate is arithmetic, not vibes.** Post iff $p > \delta/(\Pi + \delta)$ with $\Pi = s + f_t - f_m$. On tight crypto books the prize is the fee differential, so your fee tier sets your tactics — retune the ladder after every re-tier.
+3. **Age-out timers are the crossing point of two curves** — saturating fill probability against $\sqrt{\tau}$-growing adverse selection — not folklore constants.
+4. **Queue position is an asset; know each venue's amend semantics before spending it.** CME: quantity-down keeps priority. Binance spot: cancelReplace always re-queues, 2025's amend-keepPriority preserves it for quantity cuts. Binance futures: every modify re-queues. OKX: undocumented — measure, and assume the worst meanwhile.
+5. **Icebergs are a sequence of back-of-queue orders, and lazy ones are readable.** Constant peaks and same-timestamp refills are a published detection signature; randomize sizes and timers or accept being back-run.
+6. **Ship the state machine into your fill simulator first.** The tactics layer is the part of the stack where backtest and production diverge hardest — which is exactly why it belongs inside the simulator, not bolted on after.
+
+## Useful links
+
+1. [Harris, L. — Optimal Dynamic Order Submission Strategies in Some Stylized Trading Problems, Financial Markets, Institutions & Instruments 7(2), 1-76 (1998)](https://onlinelibrary.wiley.com/doi/abs/10.1111/1468-0416.00019)
+2. [Cont, R., Kukanov, A. — Optimal Order Placement in Limit Order Markets, Quantitative Finance 17(1), 21-39 (2017)](https://arxiv.org/abs/1210.1625)
+3. [Frey, S., Sandås, P. — The Impact of Iceberg Orders in Limit Order Books (2009)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1108485)
+4. [Bessembinder, H., Panayides, M., Venkataraman, K. — Hidden Liquidity: An Analysis of Order Exposure Strategies in Electronic Stock Markets, Journal of Financial Economics 94(3), 361-383 (2009)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=956476)
+5. [van Kervel, V., Menkveld, A. — High-Frequency Trading around Large Institutional Orders, Journal of Finance 74(3), 1091-1137 (2019)](https://onlinelibrary.wiley.com/doi/abs/10.1111/jofi.12759)
+6. [Moallemi, C., Yuan, K. — A Model for Queue Position Valuation in a Limit Order Book (2016)](https://moallemi.com/ciamac/papers/queue-value-2016.pdf)
+7. [Lehalle, C.-A. — Market Microstructure Knowledge Needed for Controlling an Intra-Day Trading Process (2011)](https://arxiv.org/abs/1104.4482)
+8. [Binance Spot API — Order Amend Keep Priority](https://developers.binance.com/docs/binance-spot-api-docs/faqs/order_amend_keep_priority)
+9. [Binance Spot API — Trading endpoints (cancelReplace semantics)](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints)
+10. [Binance USDT-M Futures API — Modify Order](https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Modify-Order)
+11. [OKX API v5 — Amend order](https://www.okx.com/docs-v5/en/)
+12. [CME Group — Order Functionalities (modification and time priority)](https://cmegroupclientsite.atlassian.net/wiki/spaces/EPICSANDBOX/pages/457414497/Order+Functionalities)
+
+## Citation
+
+```bibtex
+@article{soloviov2026childordertactics,
+  author = {Soloviov, Eugen},
+  title = {Inside the slice: child-order tactics between your scheduler and the exchange},
+  year = {2026},
+  url = {https://marketmaker.cc/blog/child-order-execution-tactics},
+  description = {The tactics layer between execution schedulers and the exchange: passive-then-aggressive escalation with maker-taker break-even math, amend vs cancel-replace queue semantics across venues, iceberg anti-signaling, and a per-slice Python state machine for fill simulators.}
+}
+```

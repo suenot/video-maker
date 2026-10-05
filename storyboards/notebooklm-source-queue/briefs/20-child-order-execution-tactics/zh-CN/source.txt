@@ -1,0 +1,239 @@
+MM article child-order-execution-tactics ZH-CN 403a0a5e7265
+
+---
+title: "切片内部:调度器与交易所之间的子订单战术"
+description: "Almgren-Chriss 与 VWAP 只负责设定切片预算——执行的胜负却在战术层决出。升级计时器、maker-taker 盈亏平衡数学、Binance/OKX/CME 上 amend 与 cancel-replace 的队列语义、冰山订单的反信号泄露,以及一套 Python 逐切片状态机。"
+tags: ["执行", "子订单", "订单战术", "队列位置", "maker-taker", "冰山订单", "微观结构", "python"]
+date: "2026-07-24"
+draft: false
+lang: "zh"
+image: "/images/blog/child-order-execution-tactics.webp"
+slug: "child-order-execution-tactics"
+authors: ["suenot"]
+---
+
+# 切片内部:调度器与交易所之间的子订单战术
+
+一条 [Almgren-Chriss 轨迹](/blog/almgren-chriss-optimal-execution) 交给你一个数字:在接下来五分钟内卖出 4.2 BTC。一份 [VWAP 计划](/blog/twap-vwap-pov-execution-algorithms) 用另一套理由交给你同一类数字。二者都没有说接下来会发生什么——这 4.2 BTC 是作为一笔可成交的市价单砸向订单簿,还是挂在盘口收取 maker 费用,或是藏在 0.3 BTC 的显示量后面,又或是在追逐一个漂移报价的过程中被重新定价十一次。这第二个决策层就是战术层,而在费用主导的加密订单簿上,它每个切片带来的 PnL 变动往往超过它上面调度器的选择。就整笔母订单而言,TWAP 与一个调校良好的 Almgren-Chriss 之间的区间预算差异不过是几个 bp 的冲击;而在本可以做市的切片上支付 taker 费用,或因粗心的重新定价而流失队列位置,代价却是每小时那么多。本文讲的正是那个人人都在运行、却几乎没人写下来的层:决定每个子订单如何触及订单簿的状态机。
+
+## 两层,一个窄接口
+
+Lehalle 与 Laruelle 的《Market Microstructure in Practice》(第 2 版,2018)将每个执行台最终都会收敛到的东西形式化:一个**策略层**(调度器),负责把数量分配到时间上;一个**战术层**(microtrader),负责让每份分配去应对实时的订单簿。这种分离并非出于审美——两层运行在不同的时钟和不同的数据上。调度器以分钟为单位思考,消费波动率与成交量预测,求解一个变分问题。战术层以毫秒到秒为单位思考,消费 L2 增量和队列估计,求解一连串小的停时问题。
+
+![两层执行架构:调度器向下传递切片预算与紧迫度,战术层向上返回成交与缺口](/images/blog/child-order-execution-tactics-two-layer.webp)
+
+两者之间的接口应当是窄的。向下,对每个切片 $k$:
+
+- **预算** $q_k$——本区间要执行的数量(Almgren-Chriss 的 $n_k$,或 VWAP 的成交量曲线增量);
+- **窗口** $\tau_k$——切片时长;
+- **紧迫度**——对 Almgren-Chriss 而言,天然的候选量是 $\kappa = \sqrt{\lambda\sigma^2/\eta}$,它已经把风险厌恶、波动率和流动性压缩进一个速率;对 VWAP 调度器而言,它通常是一个带宽距离("我们落后目标曲线 1.8%")。
+
+向上:带时间戳和费用的成交、未成交余量,以及以区间到达中价为基准衡量的切片级实施缺口。最后这一项很重要:调度器的冲击参数 $\eta$ 已经为以速率 $q_k/\tau_k$ 索取流动性*应当*付出的代价定了价。战术层的全部工作职责就一句话:**以优于 $\eta$ 隐含成本的价格实现成交,同时不泄露母订单的存在。** 如果你测得的切片缺口持续跑赢模型成本,你标定的 $\eta$ 就可以下调,调度器可以加速,整个栈都随之改进。如果你无法把切片缺口与计划成本分开测量,你就无法调校任何一层——你只有一个模糊的数字和两个旋钮。
+
+余量策略也是合约的一部分。当一个切片结束时仍有未成交数量,战术层要么强制完成(把余量吃掉——截止期紧迫下的默认行为),要么把它退回给调度器,在剩余切片上重新摊销(在低 $\kappa$ 计划的早期尚可接受,但在临近截止期时则是毒药,因为重新摊销会悄无声息地累积成一个巨大的末尾切片)。
+
+## 升级阶梯:先被动,截止期前转主动
+
+这个领域最古老的结论是 Harris(1998)的《Optimal dynamic order submission strategies in some stylized trading problems》(*Financial Markets, Institutions & Instruments* 7(2)):对于一个必须在截止期前完成交易的流动性交易者,最优策略是动态的——在时间还便宜时用限价单站在订单簿里,随着截止期临近向市场方向重新定价,并在最后吃掉。每一个生产级战术引擎都是这一形态的后代:**在盘口挂单,过期,升级,吃单。** 现代费率表和队列动态所增添的,是精确到*何时*触发每次转换的算术。
+
+### 吃单的盈亏平衡
+
+以单位为基准计算,价格相对当前中价,以买入为例。现在吃单的成本是半点差加上 taker 费用:
+
+$$
+c_{\text{take}} = \frac{s}{2} + f_t.
+$$
+
+在买价挂单,经过窗口 $\tau$,以概率 $p$ 成交;一次成交赚得半点差并支付 maker 费用 $f_m$(若为返佣则为负)。未成交则意味着在窗口结束时吃单,此时价格平均已朝不利方向移动了 $\delta(\tau) = E[\,\text{adverse mid move} \mid \text{no fill}\,] > 0$——严格为正,因为未成交与不利漂移是同一事件:当市场从你的买价抬升离去时,你的买价就得不到成交。挂单的期望成本:
+
+$$
+c_{\text{post}} = p\left(-\frac{s}{2} + f_m\right) + (1-p)\left(\frac{s}{2} + f_t + \delta\right).
+$$
+
+挂单优于吃单当且仅当
+
+$$
+\boxed{\; p \;>\; p^\* = \frac{\delta}{\Pi + \delta}, \qquad \Pi = s + f_t - f_m \;}
+$$
+
+其中 $\Pi$ 是**奖赏**——通过做市而非吃单所捕获的完整往返:点差加上费用差。这与主宰整个 [执行中 maker-taker 经济学](/blog/maker-taker-fees-rebates-execution) 的盈亏平衡是同一个,只是坍缩到了单个切片上。
+
+数字,BTCUSDT 永续:中价 \$100,000,点差一个 tick $s = \char36 0.10$,VIP0 左右的费率 maker 2 bps / taker 5 bps,于是每 BTC $f_m = \char36 20$,$f_t = \char36 50$。奖赏 $\Pi = 0.10 + 50 - 20 = \char36 30.10 \approx 3$ bps——注意点差几乎没有贡献;在紧凑的加密主流品种上,奖赏*就是*费用差。取 3% 的日波动率($\sigma_{\text{day}} = \char36 3{,}000$)和 $\delta(\tau) \approx 0.6\,\sigma_{\text{day}}\sqrt{\tau/86400}$(其中的 0.6 是一个逆向选择折让,你应当去标定它,而不是信任它):
+
+- $\tau = 10$ s:$\delta \approx \char36 19$,于是 $p^\* = 19/49 \approx 0.39$。只有当你预期 10 秒内至少有 39% 的成交率时才挂单。
+- $\tau = 60$ s:$\delta \approx \char36 47$,于是 $p^\* = 47/77 \approx 0.61$。
+- 若把 2 bp 的费用换成 1 bp 的 maker 返佣($f_m = -\char36 10$):$\Pi = \char36 60.10$,10 s 的门槛降至 $p^\* \approx 0.24$。
+
+由此得出两个结构性事实。第一,$\delta$ 按 $\sqrt{\tau}$ 增长而 $\Pi$ 恒定,所以 $p^\*(\tau) \to 1$:耐心有一个硬性到期日,过期计时器不是一条启发式规则,而是两条曲线的交点——你估计的 $p(\tau)$(凹的,随你前方队列排空而饱和)对上 $p^\*(\tau)$(上升的)。第二,你所交易的费率档位会实实在在地移动这条阶梯。一次削减 taker 费用的档位升级会让你的最优战术*更*激进——这种耦合关系,大多数人只有在 VIP 重新分档后发现自己的成交统计发生变化时才会察觉。
+
+Cont 与 Kukanov 的《Optimal order placement in limit order markets》(*Quantitative Finance* 17(1),2017;arXiv 2012)在单周期里把这一点做得严谨:最小化将 $S$ 单位在市价单与限价单之间拆分执行(跨一个或多个交易场所)的期望成本,并对缺口施加惩罚。单场所解是显式的,具有报童(newsvendor)结构:最优限价单规模由**队列流出**的分布驱动——当前方队列相对于期望流出量较小时激进地挂单,并用市价单去覆盖尾部风险。他们的多场所扩展用随机逼近求解,是每一个智能订单路由被动分配逻辑的智力内核。对战术引擎的实用解读是:上面盈亏平衡里的 $p$ 不是一个常数——它是队列位置与排空速率的函数,这正是为什么战术层必须把 [队列位置估计器](/blog/queue-position-order-book-wall-analysis) 作为一等输入来消费。
+
+![切片时间线:从盘口被动挂单经重新定价升级到在截止期吃掉余量](/images/blog/child-order-execution-tactics-escalation.webp)
+
+紧迫度参数把整条阶梯压缩起来。调度器给出的高 $\kappa$ 意味着特征时间 $\theta = 1/\kappa$ 很短:窗口收缩,$p^\*$ 上升,引擎直接跳到吃单——这是正确的,因为调度器已经宣告库存风险压过了费用节省。低 $\kappa$ 则拉长被动阶段。战术层永远不应从自己对市场的看法中重新推导紧迫度;那是调度器的工作,重复它会制造出两个意见相左的控制器。
+
+## 重新定价而不烧掉你的队列位置
+
+一旦挂出,报价就会漂移。天真地去追它——撤单、在新盘口重挂、如此往复——正是战术引擎悄悄摧毁那个当初为挂单正名的成交概率的方式。队列位置是一项具有可衡量美元价值的资产(Moallemi 与 Yuan,2016,为它标了价:流动性充足的 FIFO 订单簿中,队首位置价值相当于点差的一个可观分数),而每一次重新定价决策都是一笔交易:卖出你当前的队列位置,买入另一个价位队尾的位置。只有当新价位的价值超过旧价位加上消息成本时,这笔交易才值得做。这要求你知道各个交易场所的 amend 到底对你在队列中的位置做了什么——而答案千差万别。
+
+**CME Globex** 记录了最干净的语义:减少订单数量保留时间优先级;增加数量或改变价格则会把你送到队尾。这是参考模型——数量下调是免费的,其余一切都是重新排队。
+
+**Binance 现货** 历来只提供 `POST /api/v3/order/cancelReplace`——一个看似原子、实则明确非事务性的撤单加新建。两种模式:`STOP_ON_FAILURE`(默认——若撤单失败,则不下新单)和 `ALLOW_FAILURE`(即使撤单失败也下新单——你好,意外的双重敞口)。该操作可能部分成功,以 HTTP 409 发出信号,所以你的 OMS 必须独立对账两条腿;而新订单总是开启一段全新的队列生命。随后在 2025 年,Binance 推出了 **Order Amend Keep Priority**(`PUT /api/v3/order/amend/keepPriority`):就地减少数量,保留时间优先级,零未成交订单计数成本。CME 的语义,晚了十五年——而且只有数量下调这一半。
+
+**Binance USDT-M 合约** 有一个真正的 modify 端点(`PUT /fapi/v1/order`),但要读小字:只支持 LIMIT 订单,`price` 和 `quantity` 都必须发送,而且*"modified orders will be reordered in the match queue"*——文档承诺即使是纯数量减少也不保留优先级。把每一次合约 modify 都当作一次恰好帮你省下一条消息并保住订单 ID 的队列重置来对待。有一个值得知道的尖锐边界:把一个 GTX(post-only)订单修改到一个会穿越盘口的价格,会导致订单被**撤销**,而非被拒绝并保留——一个不检查这一点的挂钩(peg)实现,偶尔会把自己 amend 到不复存在。
+
+**OKX** 暴露了 `POST /api/v5/trade/amend-order`(`newPx`、`newSz`,并带 `cxlOnFail` 以在 amend 失败时自动撤单)。它是单条消息,保留订单 ID,并异步确认——`sCode = 0` 意味着"请求已接受",而实际结果通过 orders 频道以 `amendResult` 到达。公开文档惹眼地没有指明的,是队列优先级的行为。不要用乐观去填补那个文档空白。去测量它:在一个安静的价位挂两个标记单,把其中一个的数量向下 amend,在几百次试验中观察哪个先成交。在你拿到那份数据之前,保守假设——任何价格变化在任何地方都让你重新排队,数量下调只在明确文档化的地方保留优先级——是唯一站得住脚的立场。
+
+![amend 操作对各交易场所的矩阵:显示哪些操作保留队列优先级、哪些将其重置](/images/blog/child-order-execution-tactics-amend-matrix.webp)
+
+由此产生的策略后果:
+
+1. **迟滞,而非挂钩。** 只有当盘口相对你的挂单价漂移超过 $b$ 个 tick 的带宽时才重新定价。在带宽以内,漂移只是噪声,而你的队列位置比一个 tick 的价格改善更值钱。一个合理的起始带宽是 1–3 个 tick,按短期波动率缩放;正确的带宽会让*边际*重新定价的 EV 为零:$V_{\text{new}} - V_{\text{cur}} = c_{\text{msg}}$,其中 $V$ 是 Moallemi-Yuan 式的队列价值,$c_{\text{msg}}$ 是你的限速影子价格。amend/cancel-replace 操作在 Binance 的两个场所上都会消耗订单速率预算;一个对每个 tick 都挂钩的战术引擎会把系统其余部分的消息容量饿死。
+
+2. **向下 amend,永不向下撤单重挂。** 当调度器在飞行途中削减切片预算时(POV 调度器看到成交量枯竭,或 Almgren-Chriss 在部分成交后重新求解),使用存在保留优先级路径的地方。这是整层里唯一的免费午餐。
+
+3. **重新定价上的非对称紧迫度。** *朝*市场重新定价(追单)会以更差的价格重置你的队列——它只应由升级逻辑在其计时器上触发。*远离*市场的重新定价(市场向你走来)是一份礼物;只通过被动带宽去接受它,因为你当前的价位反正马上就要成交了。
+
+## 冰山、显示量,以及什么泄露你的意图
+
+显示量是第三个决策,而它是一笔货真价实的双向交易,不是一个免费的隐身按钮。实证记录如下:
+
+- Frey 与 Sandås(《The Impact of Iceberg Orders in Limit Order Books》,2009 工作论文;*Quarterly Journal of Finance*,2017),基于 Xetra 数据:冰山订单占提交量的 9.3% 和成交量的 15.9%,其规模是普通限价单的 12–20 倍,而且——关键点——当其他参与者*察觉*到一个冰山时,他们会以匹配的市价单作出回应。隐藏的规模一旦被推断出来,就会招来流量:潜在流动性搜索是双向运作的。
+
+- Bessembinder、Panayides 与 Venkataraman(《Hidden liquidity: an analysis of order exposure strategies in electronic stock markets》,*JFE* 94(3),2009),基于 Euronext Paris,其中隐藏订单占样本成交量的 44%:隐藏降低实施缺口,但也降低完全执行的概率并拉长完成时间。暴露买来成交,并以冲击为其付费;这个期权的使用方式恰如理论所预测——激进的订单暴露以吸引对手方,而耐心的规模则隐藏。
+
+- Esser 与 Mönch(《The navigation of an iceberg》,*Finance Research Letters* 4(2),2007)把峰值规模当作一个优化问题:更大的显示量成交更快,更小的显示量泄露更少,而最优解在内部。
+
+先说机制,因为它约束着这个优化:在几乎每一个支持原生冰山的交易场所(Binance 现货通过 `icebergQty`,OKX 通过其冰山算法订单)上,**可见峰值的每一次补充都进入该价位的队尾**。因此,冰山不是"一笔带有隐藏规模的订单"——它是一个*序列*的小订单,每一个都支付完整的队列等待,自动依次触发。在上面的费用盈亏平衡里,这很重要:每个峰值的有效 $p$ 是队尾成交概率,而非你原始位置的成交概率。深队列对小峰值双重惩罚——成交更慢,以及更多次补充所值的逆向选择。
+
+然后是信号问题。Frey 与 Sandås 自己的检测方法就是那个警世故事:他们的频率派检测器盯住两种最常见的实现懒惰模式——**恒定的峰值规模**和**与成交交易时间戳完全相同的补充时间戳**。任何运行该检测器的参与者(而在加密场所,许多人都在运行——交易所自己的撮合元数据让共置流量做起来更容易),都能在寥寥数次补充内重构出你的隐藏规模。泄露向量,按我在实战中见到的频率排序:
+
+1. 恒定或整数的显示量(每次都是 0.5 BTC)。
+2. 满峰成交后即时、确定性的补充——同一时间戳的签名。
+3. 确定性的升级计时器:每个切片都恰好在 30 秒时吃单,盘口就像节拍器一样。
+4. 固定的重新定价延迟和带宽——你的 amend 节奏和你的订单规模一样是一枚指纹,这正是 [数字指纹与交易者识别](/blog/digital-fingerprint-trader-identification) 所讨论的主题。
+
+被检测到的代价并非虚构。Van Kervel 与 Menkveld(《High-frequency trading around large institutional orders》,*Journal of Finance* 74(3),2019)表明,HFT 起初会*逆着*机构 metaorder 站位——为你的被动战术所消费的正是它们提供的流动性——然后,一旦该订单的持续性泄露了信息,它们就翻转为*顺着*该订单交易,回跑(back-run)其余量,并实质性地抬高母订单的成本。他们研究中的机构以在投机利润与被检测风险之间的权衡作出回应。你的战术层正是实现那个权衡的地方:随机化显示量(在一个按波动率缩放的基准上取均匀分布的 30–70% 就很好用),把每个计时器抖动 ±20–30%,偶尔让一次补充等一等,并且永远不要让两个子订单共享同一个规模、同一个计时器相位和同一个延迟画像。这些都不会带来可衡量的成交质量损失;而所有这些都会抬高任何想对你的流量拟合检测器的人所面对的噪声底。
+
+## 一个最小的战术引擎
+
+上面这整层压缩成一个逐切片的小状态机:`IDLE → POSTED → (reprice loop) → CROSSING → DONE`,在入口处有盈亏平衡门,挂单期间有迟滞带宽,以及截止期升级。下面这个版本刻意做到最小——没有交易场所适配器,没有冰山管理——但它是事件驱动且无副作用的,所以它可以直接落入 [成交仿真阶梯](/blog/fill-simulation-partial-fills-backtest) 中第 4 级的队列感知仿真器:仿真器调用 `on_tick`/`on_fill`,并把动作解释为 `post` → GTX/post-only,`cross` → IOC,`cancel_replace`/`amend_down` → 上面矩阵里各交易场所的语义。
+
+```python
+import math
+from dataclasses import dataclass
+from enum import Enum, auto
+
+class State(Enum):
+    IDLE = auto(); POSTED = auto(); CROSSING = auto(); DONE = auto()
+
+@dataclass
+class Fees:
+    maker: float          # $ per unit; negative = rebate
+    taker: float          # $ per unit
+
+@dataclass
+class Cfg:
+    tick: float
+    sigma_1s: float       # $ per sqrt(second), from your live vol estimator
+    adverse_frac: float = 0.6   # E[adverse move | no fill] ~ 0.6 * sigma; calibrate
+    reprice_band: float = 2.0   # ticks of touch drift tolerated before repricing
+    escalate_frac: float = 0.7  # cross the remainder at this fraction of the window
+
+class SliceTactic:
+    """One instance per scheduler slice. Drive it from a fill simulator or OMS."""
+
+    def __init__(self, side: str, qty: float, window: float, fees: Fees, cfg: Cfg):
+        self.side, self.qty, self.window = side, qty, window
+        self.fees, self.cfg = fees, cfg
+        self.filled, self.state, self.px, self.t0 = 0.0, State.IDLE, None, None
+
+    def p_star(self, spread: float, tau: float) -> float:
+        """Break-even fill probability for posting over a window tau."""
+        delta = self.cfg.adverse_frac * self.cfg.sigma_1s * math.sqrt(tau)
+        prize = spread + self.fees.taker - self.fees.maker
+        return delta / (prize + delta)
+
+    def p_fill(self, queue_ahead: float, drain: float, tau: float) -> float:
+        """Crude queue-drain estimate; swap in your calibrated fill model."""
+        if drain <= 0: return 0.0
+        return min(1.0, drain * tau / max(queue_ahead + self.qty, 1e-9))
+
+    def on_tick(self, t, bid, ask, queue_ahead, drain):
+        if self.state == State.DONE: return []
+        if self.t0 is None: self.t0 = t
+        left = self.qty - self.filled
+        elapsed, remain = t - self.t0, self.window - (t - self.t0)
+        touch = bid if self.side == "buy" else ask
+
+        if elapsed >= self.cfg.escalate_frac * self.window and left > 0:
+            self.state = State.CROSSING          # deadline: pay up, finish
+            return [("cross", left)]
+
+        if self.state == State.IDLE:
+            if self.p_fill(queue_ahead, drain, remain) >= self.p_star(ask - bid, remain):
+                self.state, self.px = State.POSTED, touch
+                return [("post", touch, left)]    # GTX / post-only
+            self.state = State.CROSSING           # posting is -EV here
+            return [("cross", left)]
+
+        if self.state == State.POSTED:
+            if abs(touch - self.px) / self.cfg.tick > self.cfg.reprice_band:
+                self.px = touch                   # hysteresis breached:
+                return [("cancel_replace", touch)]  # accept the queue reset
+        return []
+
+    def on_fill(self, t, fill_qty):
+        self.filled += fill_qty
+        if self.filled >= self.qty - 1e-9:
+            self.state = State.DONE
+            return [("slice_done", self.filled)]
+        return []
+
+    def on_budget_cut(self, new_qty):
+        """Scheduler revised the slice down: amend-down keeps queue priority
+        where documented (CME, Binance spot amend/keepPriority)."""
+        self.qty = new_qty
+        left = new_qty - self.filled
+        return [("amend_down", left)] if left > 0 else [("cancel",)]
+```
+
+三条诚实的告诫。这里的 `p_fill` 是一个占位比率——在生产中它应当是成交仿真文章里那个分桶、实时标定的模型,因为整个 post/cross 门的好坏,完全取决于那个估计。`adverse_frac` 藏着本文里最难的量($\delta$ 依赖于市场状态,并且恰好在挂单最诱人的时候暴涨);要从你自己的未成交结果中、按波动率状态分桶去估计它。而上面的引擎无条件地通过 cancel-replace 重新定价——一个交易场所感知的版本应当把数量下调的变化路由到保留优先级的路径,并把每个动作记入一个消息预算。
+
+在相信任何参数之前,先在仿真器里对着一段回放盘口运行它。真正重要的实验是:固定调度器,扫描 `escalate_frac` 与 `reprice_band`,并把切片缺口对着 $\eta$ 隐含的模型成本作图。这个曲面有一个平台——大片近乎最优的参数带——以及两道悬崖:升级太晚(未成交余量吃单撞进动量)和重新定价太急切(所有队列价值都被烧光)。你想在生产替你找到你的悬崖之前,先知道它们在哪里。
+
+## 要点带走
+
+1. **两层,一个合约。** 调度器决定多少、到何时;战术层决定如何。接口是向下的预算、窗口、紧迫度,向上的成交与相对区间到达价的切片缺口。如果你无法把缺口归因到某一层,你就无法调校任何一层。
+2. **post/cross 门是算术,不是感觉。** 当 $p > \delta/(\Pi + \delta)$、$\Pi = s + f_t - f_m$ 时挂单。在紧凑的加密订单簿上,奖赏就是费用差,所以你的费率档位决定你的战术——每次重新分档后都重新调校这条阶梯。
+3. **过期计时器是两条曲线的交点**——饱和的成交概率对上按 $\sqrt{\tau}$ 增长的逆向选择——而非民间流传的常数。
+4. **队列位置是一项资产;在花掉它之前,先知道每个交易场所的 amend 语义。** CME:数量下调保留优先级。Binance 现货:cancelReplace 总是重新排队,2025 年的 amend-keepPriority 在数量削减时保留它。Binance 合约:每次 modify 都重新排队。OKX:未文档化——去测量,同时假设最坏情况。
+5. **冰山是一个队尾订单的序列,而懒惰的冰山是可读的。** 恒定峰值和同一时间戳的补充是一份已发表的检测签名;要么随机化规模和计时器,要么接受被回跑。
+6. **先把状态机送进你的成交仿真器。** 战术层是整个栈里回测与生产分歧最剧烈的部分——这恰恰是为什么它属于仿真器内部,而不是事后再拴上去。
+
+## 有用的链接
+
+1. [Harris, L. — Optimal Dynamic Order Submission Strategies in Some Stylized Trading Problems, Financial Markets, Institutions & Instruments 7(2), 1-76 (1998)](https://onlinelibrary.wiley.com/doi/abs/10.1111/1468-0416.00019)
+2. [Cont, R., Kukanov, A. — Optimal Order Placement in Limit Order Markets, Quantitative Finance 17(1), 21-39 (2017)](https://arxiv.org/abs/1210.1625)
+3. [Frey, S., Sandås, P. — The Impact of Iceberg Orders in Limit Order Books (2009)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1108485)
+4. [Bessembinder, H., Panayides, M., Venkataraman, K. — Hidden Liquidity: An Analysis of Order Exposure Strategies in Electronic Stock Markets, Journal of Financial Economics 94(3), 361-383 (2009)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=956476)
+5. [van Kervel, V., Menkveld, A. — High-Frequency Trading around Large Institutional Orders, Journal of Finance 74(3), 1091-1137 (2019)](https://onlinelibrary.wiley.com/doi/abs/10.1111/jofi.12759)
+6. [Moallemi, C., Yuan, K. — A Model for Queue Position Valuation in a Limit Order Book (2016)](https://moallemi.com/ciamac/papers/queue-value-2016.pdf)
+7. [Lehalle, C.-A. — Market Microstructure Knowledge Needed for Controlling an Intra-Day Trading Process (2011)](https://arxiv.org/abs/1104.4482)
+8. [Binance Spot API — Order Amend Keep Priority](https://developers.binance.com/docs/binance-spot-api-docs/faqs/order_amend_keep_priority)
+9. [Binance Spot API — Trading endpoints (cancelReplace semantics)](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/trading-endpoints)
+10. [Binance USDT-M Futures API — Modify Order](https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Modify-Order)
+11. [OKX API v5 — Amend order](https://www.okx.com/docs-v5/en/)
+12. [CME Group — Order Functionalities (modification and time priority)](https://cmegroupclientsite.atlassian.net/wiki/spaces/EPICSANDBOX/pages/457414497/Order+Functionalities)
+
+## 引用
+
+```bibtex
+@article{soloviov2026childordertactics,
+  author = {Soloviov, Eugen},
+  title = {Inside the slice: child-order tactics between your scheduler and the exchange},
+  year = {2026},
+  url = {https://marketmaker.cc/blog/child-order-execution-tactics},
+  description = {The tactics layer between execution schedulers and the exchange: passive-then-aggressive escalation with maker-taker break-even math, amend vs cancel-replace queue semantics across venues, iceberg anti-signaling, and a per-slice Python state machine for fill simulators.}
+}
+```
