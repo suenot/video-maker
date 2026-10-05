@@ -6458,10 +6458,10 @@
           "submission_mode": "later",
           "artifact_id": "60fece16-e867-4b9d-b15c-462929abf166",
           "card_text": "tablet\nCCXT WebSocket Orderbook Methods Guide\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-05T12:52:20.844391+00:00"
+          "observed_at": "2026-10-05T13:07:29.564388+00:00"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "60fece16-e867-4b9d-b15c-462929abf166"
           ],
@@ -6473,8 +6473,15 @@
           "source_id": "497b3415-ad3d-4dc9-aff4-8175d34f5cfe",
           "submission_mode": "now",
           "artifact_id": "2532a32a-1efb-4f06-b91b-df8f6fa40e15",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T12:52:33.085078+00:00"
+          "card_text": "audio_spark\nUnread\nHow CCXT WebSocket Orderbooks Actually Work\n25:48 · Deep Dive · 1 source · 4m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T13:07:30.597996+00:00",
+          "duration_seconds": 1548.887075,
+          "path": "input/notebooklm-sources/ccxt-pro-websocket-orderbook-methods/en/audio.m4a",
+          "sha256": "cb45ef5694dcb0ec0df8c6f057e9edf393846d132e00d743e9d5af81ab8a8e62",
+          "bytes": 49850073,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T13:08:02.209415+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -6535,7 +6542,7 @@
           "submission_mode": "later",
           "artifact_id": "df7d9b23-1f3c-41b1-9c39-647cf1a8f7e9",
           "card_text": "tablet\nCCXT WebSocket Orderbooks\nScheduled for after 9pm\nmore_vert",
-          "observed_at": "2026-10-05T12:52:39.720073+00:00"
+          "observed_at": "2026-10-05T13:08:08.937207+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -6556,7 +6563,7 @@
           "submission_mode": "later",
           "artifact_id": "a1d0cd5c-ee24-430d-8ce2-f93f53908813",
           "card_text": "audio_spark\nCCXT WebSocket Orderbooks\nScheduled for after 9pm\nmore_vert",
-          "observed_at": "2026-10-05T12:52:40.754570+00:00"
+          "observed_at": "2026-10-05T13:08:09.964697+00:00"
         }
       },
       "admission_state": "admitted",
@@ -6601,7 +6608,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "d2932ae15f5133297548b5632b3119e8f906897fa887d17f9200b30a54bb1456",
           "requested_at": "2026-10-05T12:53:09.666348+00:00",
@@ -6611,11 +6618,18 @@
           "source_id": "7a4503e8-2608-4f07-8a90-c4faf07e0d20",
           "submission_mode": "now",
           "artifact_id": "c41f52b0-1c1f-481a-9c9b-dad3514e5f18",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T12:53:14.232460+00:00"
+          "card_text": "tablet\nUnread\nCCXT WebSocket 订单簿架构指南\n1 source · 6m ago\nmore_vert",
+          "observed_at": "2026-10-05T13:08:16.622493+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/ccxt-pro-websocket-orderbook-methods/zh-CN/slides.pdf",
+          "sha256": "0e8cb65c574cef931e262367d56fab7fb4a7fb2a07e3927d9a2a9fa20f753e88",
+          "bytes": 19366203,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T13:08:25.431657+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "c41f52b0-1c1f-481a-9c9b-dad3514e5f18"
           ],
@@ -6627,8 +6641,15 @@
           "source_id": "7a4503e8-2608-4f07-8a90-c4faf07e0d20",
           "submission_mode": "now",
           "artifact_id": "c589901d-d043-43cf-a289-dc18705f2324",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T12:53:31.975172+00:00"
+          "card_text": "audio_spark\nUnread\nCCXT WebSocket订单簿实战陷阱\n16:03 · Deep Dive · 1 source · 6m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T13:08:26.462007+00:00",
+          "duration_seconds": 963.326259,
+          "path": "input/notebooklm-sources/ccxt-pro-websocket-orderbook-methods/zh-CN/audio.m4a",
+          "sha256": "94adf87949781f63519c9ace911dee0c82e2d0ba03ce0588256cb6b473aea592",
+          "bytes": 31004411,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T13:08:39.839458+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -6673,7 +6694,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "64e6d6fd5b1a608a24fb8168636d4c9b117c4f5546aec60a005ff3dd811e7321",
           "requested_at": "2026-10-05T12:54:00.134974+00:00",
@@ -6683,11 +6704,18 @@
           "source_id": "02c856a0-828a-486e-bdf8-2d8c0330a5f4",
           "submission_mode": "now",
           "artifact_id": "d67e14d5-6678-492f-a08f-05f602a955f5",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T12:54:04.697815+00:00"
+          "card_text": "tablet\nUnread\nCCXT WebSocket Order Books in Practice\n1 source · 5m ago\nmore_vert",
+          "observed_at": "2026-10-05T13:08:46.488579+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/ccxt-pro-websocket-orderbook-methods/zh-TW/slides.pdf",
+          "sha256": "62ffb77647d997e3295ac5b1d5ae1529a6ae2f979b2922259769d2e1045d54cb",
+          "bytes": 14794761,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T13:08:51.450249+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "d67e14d5-6678-492f-a08f-05f602a955f5"
           ],
@@ -6699,8 +6727,15 @@
           "source_id": "02c856a0-828a-486e-bdf8-2d8c0330a5f4",
           "submission_mode": "now",
           "artifact_id": "e35138aa-56bf-46e4-8a2f-526bdc710f75",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T12:54:22.091984+00:00"
+          "card_text": "audio_spark\nUnread\nCCXT委託簿WebSocket實戰指南\n13:20 · Deep Dive · 1 source · 6m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T13:08:52.478518+00:00",
+          "duration_seconds": 800.322177,
+          "path": "input/notebooklm-sources/ccxt-pro-websocket-orderbook-methods/zh-TW/audio.m4a",
+          "sha256": "aeeda5b5e1456fe69099e650674cc9ba3caeef0936f297b1238a87b3237427a0",
+          "bytes": 25758344,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T13:09:04.544176+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -6732,9 +6767,158 @@
       "selected_source_ids": [
         "02c856a0-828a-486e-bdf8-2d8c0330a5f4"
       ]
+    },
+    "child-order-execution-tactics:en": {
+      "slug": "child-order-execution-tactics",
+      "language": "en",
+      "article_sha256": "cde4ddd665abc0e1f46e8d2d3b74ff4da7b76646a7793301732d17b600a78a43",
+      "input_hashes": {
+        "article": "cde4ddd665abc0e1f46e8d2d3b74ff4da7b76646a7793301732d17b600a78a43",
+        "source_text": "8416d67bfbae5be270ccfb281a3c5f9c0f7321ee78077ad4dbf0675d9d70e669",
+        "slides_prompt": "4b857ade69702660f664318d13fc65b05751e9207250756e35ef7dbc01dff07c",
+        "audio_prompt": "767c8e226b1d86a28e69c4c2a32b8eb10a19742e997322fa23791390d1c90336"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "4b857ade69702660f664318d13fc65b05751e9207250756e35ef7dbc01dff07c",
+          "requested_at": "2026-10-05T13:09:36.489614+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "5299212c-87c1-4ea1-a15f-a6b8a8f5fcb2",
+          "submission_mode": "now",
+          "artifact_id": "9c4c76a2-d9b6-4317-97ed-632f51fa933f",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T13:09:41.057793+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "9c4c76a2-d9b6-4317-97ed-632f51fa933f"
+          ],
+          "prompt_sha256": "767c8e226b1d86a28e69c4c2a32b8eb10a19742e997322fa23791390d1c90336",
+          "requested_at": "2026-10-05T13:09:58.027075+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "5299212c-87c1-4ea1-a15f-a6b8a8f5fcb2",
+          "submission_mode": "now",
+          "artifact_id": "bf9937be-6be6-42fe-a75e-037b76d23a0b",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T13:10:02.587915+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T13:09:04.561720+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T13:09:12.304867+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/child-order-execution-tactics-en-notebook-baseline.json",
+        "baseline_sha256": "65efc9d4374cb11a406f774c4f7f81dd5188ab453b9a16378e134a58b76e004b",
+        "baseline_count": 333,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T13:09:14.408120+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/0576fce9-0404-4a12-8776-af28682b5d18",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T13:09:18.439400+00:00",
+        "sha256": "8416d67bfbae5be270ccfb281a3c5f9c0f7321ee78077ad4dbf0675d9d70e669",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T13:09:30.719142+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "5299212c-87c1-4ea1-a15f-a6b8a8f5fcb2",
+      "source_title": "MM article child-order-execution-tactics EN cde4ddd665ab",
+      "source_sha256": "8416d67bfbae5be270ccfb281a3c5f9c0f7321ee78077ad4dbf0675d9d70e669",
+      "state": "source_ready",
+      "source_display_name": "MM article child-order-execution-tactics EN cde4d…",
+      "selected_source_ids": [
+        "5299212c-87c1-4ea1-a15f-a6b8a8f5fcb2"
+      ]
+    },
+    "child-order-execution-tactics:ru": {
+      "slug": "child-order-execution-tactics",
+      "language": "ru",
+      "article_sha256": "285f6338090b05f685fd106476b337d04ac4c8541e655a6e08c3f5bd2f284094",
+      "input_hashes": {
+        "article": "285f6338090b05f685fd106476b337d04ac4c8541e655a6e08c3f5bd2f284094",
+        "source_text": "5cea1dbe0ccf3a2b9291936c0c0b5859639bf4ea6fd247f633be88cceaa74775",
+        "slides_prompt": "d380e1021854405b8f8ddcf92bd4fcf73f1025229207f323dda38cdbb8c260e7",
+        "audio_prompt": "b5d16b44948c62fa4b7bd4944a77b3865e01732c8a8e7698a874e4001672cbfb"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "d380e1021854405b8f8ddcf92bd4fcf73f1025229207f323dda38cdbb8c260e7",
+          "requested_at": "2026-10-05T13:10:42.417816+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "920dd869-be22-4628-a3aa-058a6dc51616",
+          "submission_mode": "now",
+          "artifact_id": "bcd7e28c-6fde-4fb0-9074-5bb55c7f5d60",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T13:10:46.985694+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Tactical Execution Overview\n+ Beginner's Trading Guide\n+ Automation Strategy Arc\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 21:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "bcd7e28c-6fde-4fb0-9074-5bb55c7f5d60"
+          ],
+          "prompt_sha256": "b5d16b44948c62fa4b7bd4944a77b3865e01732c8a8e7698a874e4001672cbfb",
+          "requested_at": "2026-10-05T13:11:01.317659+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "920dd869-be22-4628-a3aa-058a6dc51616",
+          "submission_mode": "later",
+          "artifact_id": "d8860750-a932-4493-a541-63d7ff38d3b8",
+          "card_text": "audio_spark\nTactics of Child-Order Execution Between Scheduler and Exchange\nScheduled for after 10pm\nmore_vert",
+          "observed_at": "2026-10-05T13:11:05.866584+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T13:10:02.613349+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T13:10:10.361220+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/child-order-execution-tactics-ru-notebook-baseline.json",
+        "baseline_sha256": "eb03d280e9e1359f802bcf6112b9f90849fd6346a7a3ee72ff324c8413e5aa10",
+        "baseline_count": 334,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T13:10:11.463363+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/10cd72bc-81e6-42dc-9f96-8b1dcfdc926a",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T13:10:15.607147+00:00",
+        "sha256": "5cea1dbe0ccf3a2b9291936c0c0b5859639bf4ea6fd247f633be88cceaa74775",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T13:10:27.970426+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "920dd869-be22-4628-a3aa-058a6dc51616",
+      "source_title": "MM article child-order-execution-tactics RU 285f6338090b",
+      "source_sha256": "5cea1dbe0ccf3a2b9291936c0c0b5859639bf4ea6fd247f633be88cceaa74775",
+      "state": "source_ready",
+      "source_display_name": "MM article child-order-execution-tactics RU 285f6…",
+      "selected_source_ids": [
+        "920dd869-be22-4628-a3aa-058a6dc51616"
+      ]
     }
   },
-  "checked_at": "2026-10-05T12:54:22.100487+00:00",
+  "checked_at": "2026-10-05T13:11:05.885256+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
@@ -6751,10 +6935,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 16:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 21:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-05T08:40:10.612746+00:00",
-    "not_before": "2026-10-05T12:51:00+00:00"
+    "observed_at": "2026-10-05T13:11:05.885246+00:00",
+    "not_before": "2026-10-05T17:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
