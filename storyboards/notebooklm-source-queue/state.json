@@ -6549,7 +6549,7 @@
           "submission_mode": "later",
           "artifact_id": "df7d9b23-1f3c-41b1-9c39-647cf1a8f7e9",
           "card_text": "tablet\nCCXT WebSocket Orderbooks\nScheduled for after 10pm\nmore_vert",
-          "observed_at": "2026-10-05T18:03:41.038313+00:00"
+          "observed_at": "2026-10-05T18:19:27.090454+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -6570,7 +6570,7 @@
           "submission_mode": "later",
           "artifact_id": "a1d0cd5c-ee24-430d-8ce2-f93f53908813",
           "card_text": "audio_spark\nCCXT WebSocket Orderbooks\nScheduled for after 10pm\nmore_vert",
-          "observed_at": "2026-10-05T18:03:42.067065+00:00"
+          "observed_at": "2026-10-05T18:19:28.124572+00:00"
         }
       },
       "admission_state": "admitted",
@@ -6894,7 +6894,7 @@
           "editorial_review": "pending"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Tactical Execution Overview\n+ Beginner's Trading Guide\n+ Automation Strategy Arc\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 21:51."
@@ -6911,8 +6911,15 @@
           "source_id": "920dd869-be22-4628-a3aa-058a6dc51616",
           "submission_mode": "later",
           "artifact_id": "d8860750-a932-4493-a541-63d7ff38d3b8",
-          "card_text": "audio_spark\nTactics of Child-Order Execution Between Scheduler and Exchange\nScheduled for after 10pm\nmore_vert",
-          "observed_at": "2026-10-05T18:04:22.352787+00:00"
+          "card_text": "audio_spark\nUnread\nТактика исполнения дочерних ордеров на бирже\n18:45 · Deep Dive · 1 source · 1m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T18:19:35.072548+00:00",
+          "duration_seconds": 1125.378322,
+          "path": "input/notebooklm-sources/child-order-execution-tactics/ru/audio.m4a",
+          "sha256": "f5fd4850e6d729ea4b5086ab42a3a941fabe4285c773e5837bd83936a48d63ca",
+          "bytes": 36219849,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T18:19:48.154891+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -6955,7 +6962,38 @@
         "slides_prompt": "291d2beb4d3dec6ce3be698ed7314cc423f68623b45d8150997904223079368d",
         "audio_prompt": "da79250922e1cdc8d6c1a0cfc320eb4c7b6e607e5f4245b596e4a3d68744339e"
       },
-      "artifacts": {},
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "291d2beb4d3dec6ce3be698ed7314cc423f68623b45d8150997904223079368d",
+          "requested_at": "2026-10-05T18:20:14.224614+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "a6ef14f2-d0e1-4f64-b4ab-6dca8d328d3c",
+          "submission_mode": "now",
+          "artifact_id": "7675e211-b46c-40ca-9fc2-e4cf4d7c7f6a",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T18:20:18.779719+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "7675e211-b46c-40ca-9fc2-e4cf4d7c7f6a"
+          ],
+          "prompt_sha256": "da79250922e1cdc8d6c1a0cfc320eb4c7b6e607e5f4245b596e4a3d68744339e",
+          "requested_at": "2026-10-05T18:20:32.477430+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "a6ef14f2-d0e1-4f64-b4ab-6dca8d328d3c",
+          "submission_mode": "now",
+          "artifact_id": "93dc146c-c0fc-4184-9184-5d09ddc40153",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T18:20:37.040666+00:00"
+        }
+      },
       "admission_state": "admitted",
       "admitted_at": "2026-10-05T18:04:22.382057+00:00",
       "notebook_intent": {
@@ -6970,29 +7008,38 @@
       "account_guard": "passed",
       "browser": "saved_camoufox",
       "source_intent": {
-        "at": "2026-10-05T18:04:34.444167+00:00",
+        "at": "2026-10-05T18:19:58.249735+00:00",
         "sha256": "d78beccb8c56671c71fce4d2d1771f0b79169734bb09590834e4b715bca1e9e2",
         "baseline_ids": [],
-        "dispatch_state": "dispatch_unknown"
+        "retry_of_at": "2026-10-05T18:04:34.444167+00:00",
+        "recovery_authorized_at": "2026-10-03T20:07:07.797622+00:00",
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T18:20:06.223496+00:00"
       },
-      "last_error": {
-        "type": "RuntimeError",
-        "message": "Source submission unconfirmed",
-        "at": "2026-10-05T18:04:45.723454+00:00",
-        "stage": "source",
-        "evidence": {
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/child-order-execution-tactics-zh-CN-20261005T180445730298Z-error.png",
-            "sha256": "8ac0c134858e229ece1b9b2a1bf5d560ea759942bfc630a24b1067dc80af94d5"
+      "source_intent_history": [
+        {
+          "intent": {
+            "at": "2026-10-05T18:04:34.444167+00:00",
+            "sha256": "d78beccb8c56671c71fce4d2d1771f0b79169734bb09590834e4b715bca1e9e2",
+            "baseline_ids": [],
+            "dispatch_state": "dispatch_unknown"
           },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/child-order-execution-tactics-zh-CN-20261005T180445730298Z-controls.json",
-            "sha256": "4a4e8852825d2777625279e9828e903a1cb87a6a61785b43bf886a2fe13d23b4"
-          }
-        },
-        "retry_not_before": "2026-10-05T18:19:45.880700+00:00",
-        "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
-      }
+          "superseded_at": "2026-10-05T18:19:58.249735+00:00",
+          "reason": "Authorized recovery after live zero-source/zero-artifact reconciliation",
+          "notebook": "https://notebook.google.com/notebook/7e9b71f1-6b77-4b21-8188-9c4e8cae2a16",
+          "source_ids": [],
+          "artifact_ids": []
+        }
+      ],
+      "temporary_source_ids": [],
+      "source_id": "a6ef14f2-d0e1-4f64-b4ab-6dca8d328d3c",
+      "source_title": "MM article child-order-execution-tactics ZH-CN 403a0a5e7265",
+      "source_sha256": "d78beccb8c56671c71fce4d2d1771f0b79169734bb09590834e4b715bca1e9e2",
+      "state": "source_ready",
+      "source_display_name": "MM article child-order-execution-tactics ZH-CN 40…",
+      "selected_source_ids": [
+        "a6ef14f2-d0e1-4f64-b4ab-6dca8d328d3c"
+      ]
     },
     "child-order-execution-tactics:zh-TW": {
       "slug": "child-order-execution-tactics",
@@ -7006,7 +7053,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "304cf950069ed0033d9e0939fe5e96cdc2d007052761f39e22bf9e6784b8f844",
           "requested_at": "2026-10-05T18:05:15.497756+00:00",
@@ -7016,11 +7063,18 @@
           "source_id": "2c860a47-fc83-4b68-9152-0eab5438664f",
           "submission_mode": "now",
           "artifact_id": "3b09d852-0510-4b54-84d6-8e94f269c5cc",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T18:05:20.062377+00:00"
+          "card_text": "tablet\nUnread\nMicro-Execution Tactics\n1 source · 6m ago\nmore_vert",
+          "observed_at": "2026-10-05T18:20:43.674379+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/child-order-execution-tactics/zh-TW/slides.pdf",
+          "sha256": "1158bff3dbc99b40e4d5e75aa2a707eef6f1e74b8bffd2928ef3cddabcb62b27",
+          "bytes": 14748242,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T18:20:47.385246+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "3b09d852-0510-4b54-84d6-8e94f269c5cc"
           ],
@@ -7032,8 +7086,15 @@
           "source_id": "2c860a47-fc83-4b68-9152-0eab5438664f",
           "submission_mode": "now",
           "artifact_id": "3c4e9bea-0ed5-46b5-9873-be8499160e72",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T18:05:38.221027+00:00"
+          "card_text": "audio_spark\nUnread\n微秒級子訂單戰術\n14:02 · Deep Dive · 1 source · 7m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T18:20:48.421870+00:00",
+          "duration_seconds": 842.443175,
+          "path": "input/notebooklm-sources/child-order-execution-tactics/zh-TW/audio.m4a",
+          "sha256": "aa240f5b7a95f1079b7a2a30b7c84695f22c8a210586f2fe64e9de210baa3316",
+          "bytes": 27113936,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T18:21:00.471360+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -7065,9 +7126,158 @@
       "selected_source_ids": [
         "2c860a47-fc83-4b68-9152-0eab5438664f"
       ]
+    },
+    "complex-arbitrage-execution-rust:en": {
+      "slug": "complex-arbitrage-execution-rust",
+      "language": "en",
+      "article_sha256": "fa4c29b693327fb3e00eab5ce8ff0730127b6c3c3a7be6710652914d65124cc4",
+      "input_hashes": {
+        "article": "fa4c29b693327fb3e00eab5ce8ff0730127b6c3c3a7be6710652914d65124cc4",
+        "source_text": "7d5a47c06fd9ac0d880a6a9432f1394462b23988ee566938ed06381eb0370871",
+        "slides_prompt": "4b0715a01422f71146b09f54b9628f046f0b7ad4921656e5d98b1ae737189d7f",
+        "audio_prompt": "2d72e684f3bd93e83127b7d51ad1b448e3d6fb908ce254869d62aa48fced7312"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "4b0715a01422f71146b09f54b9628f046f0b7ad4921656e5d98b1ae737189d7f",
+          "requested_at": "2026-10-05T18:21:25.548636+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "95b0c02d-309a-4600-b37a-65c2ffd3f20e",
+          "submission_mode": "now",
+          "artifact_id": "6bef9f9d-c26c-45af-91eb-c554083cffb8",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T18:21:30.122087+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "6bef9f9d-c26c-45af-91eb-c554083cffb8"
+          ],
+          "prompt_sha256": "2d72e684f3bd93e83127b7d51ad1b448e3d6fb908ce254869d62aa48fced7312",
+          "requested_at": "2026-10-05T18:21:37.467952+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "95b0c02d-309a-4600-b37a-65c2ffd3f20e",
+          "submission_mode": "now",
+          "artifact_id": "f862140a-ebb1-440f-822f-b5257908cfba",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T18:21:42.038074+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T18:21:00.488124+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T18:21:08.054626+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-execution-rust-en-notebook-baseline.json",
+        "baseline_sha256": "a7e8d67540fe1dfe055d795e3f842ffe3f9d36e87b3df7d28f3a3b4c0429f676",
+        "baseline_count": 337,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T18:21:10.146795+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/a3a5f639-0953-4bf5-abca-1bd2944f274d",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T18:21:14.204981+00:00",
+        "sha256": "7d5a47c06fd9ac0d880a6a9432f1394462b23988ee566938ed06381eb0370871",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T18:21:22.164216+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "95b0c02d-309a-4600-b37a-65c2ffd3f20e",
+      "source_title": "MM article complex-arbitrage-execution-rust EN fa4c29b69332",
+      "source_sha256": "7d5a47c06fd9ac0d880a6a9432f1394462b23988ee566938ed06381eb0370871",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-execution-rust EN fa…",
+      "selected_source_ids": [
+        "95b0c02d-309a-4600-b37a-65c2ffd3f20e"
+      ]
+    },
+    "complex-arbitrage-execution-rust:ru": {
+      "slug": "complex-arbitrage-execution-rust",
+      "language": "ru",
+      "article_sha256": "ce888ba5ac7e17c897f4770f26d233f72a8bdbffb0e98d1441ca738ae0a814de",
+      "input_hashes": {
+        "article": "ce888ba5ac7e17c897f4770f26d233f72a8bdbffb0e98d1441ca738ae0a814de",
+        "source_text": "c02743a216546ef097bfd7d267f853bc2e39211f1ca35b10ba156305549b10ac",
+        "slides_prompt": "39621f0f662c07df2c31f0f35ff08fc618c779074a68346339c79f06324d8e2d",
+        "audio_prompt": "e24c165277cb6bc05d08afd559445b36e3627707b548a70a3a49c28c6efcf973"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 02:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "39621f0f662c07df2c31f0f35ff08fc618c779074a68346339c79f06324d8e2d",
+          "requested_at": "2026-10-05T18:22:10.778417+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "77a4f38d-52cf-48c0-8f85-219bbb220701",
+          "submission_mode": "later",
+          "artifact_id": "a99a8a3e-7186-4830-8de8-fb7bcd4db994",
+          "card_text": "tablet\nRust Arbitrage Execution: Nanoseconds to Atomic Multilegs\nScheduled for after 2am\nmore_vert",
+          "observed_at": "2026-10-05T18:22:15.335359+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "a99a8a3e-7186-4830-8de8-fb7bcd4db994"
+          ],
+          "prompt_sha256": "e24c165277cb6bc05d08afd559445b36e3627707b548a70a3a49c28c6efcf973",
+          "requested_at": "2026-10-05T18:22:28.742355+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "77a4f38d-52cf-48c0-8f85-219bbb220701",
+          "submission_mode": "now",
+          "artifact_id": "64f06401-cda9-40f8-8cac-395274faf636",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T18:22:33.308964+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T18:21:42.061746+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T18:21:49.433420+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-execution-rust-ru-notebook-baseline.json",
+        "baseline_sha256": "c51e71b5147f27d209b082f5a4be4612fbf3f4b4c6e06f343f7ef55c4320bb46",
+        "baseline_count": 338,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T18:21:50.524094+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/a595c25b-11c2-44ce-8ec3-6716849c841c",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T18:21:54.683214+00:00",
+        "sha256": "c02743a216546ef097bfd7d267f853bc2e39211f1ca35b10ba156305549b10ac",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T18:22:02.767820+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "77a4f38d-52cf-48c0-8f85-219bbb220701",
+      "source_title": "MM article complex-arbitrage-execution-rust RU ce888ba5ac7e",
+      "source_sha256": "c02743a216546ef097bfd7d267f853bc2e39211f1ca35b10ba156305549b10ac",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-execution-rust RU ce…",
+      "selected_source_ids": [
+        "77a4f38d-52cf-48c0-8f85-219bbb220701"
+      ]
     }
   },
-  "checked_at": "2026-10-05T18:05:38.230067+00:00",
+  "checked_at": "2026-10-05T18:22:33.330899+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
@@ -7084,10 +7294,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 21:51.",
+    "notice": "AI usage limit reached. All features will be available after 02:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-05T13:11:05.885246+00:00",
-    "not_before": "2026-10-05T17:51:00+00:00"
+    "observed_at": "2026-10-05T18:22:33.330890+00:00",
+    "not_before": "2026-10-05T22:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
