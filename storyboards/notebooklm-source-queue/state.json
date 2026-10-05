@@ -5755,10 +5755,10 @@
           "submission_mode": "later",
           "artifact_id": "8d00b336-82de-451a-8f67-228f6276a2b2",
           "card_text": "tablet\nTrading Chaos: The Bill Williams Story\nScheduled for after 7am\nmore_vert",
-          "observed_at": "2026-10-05T02:05:26.278190+00:00"
+          "observed_at": "2026-10-05T03:04:13.330693+00:00"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "generating",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nEnglish\nLength\nShort\nDefault\nLong\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Trading Psychology\n+ Beginner Guide\n+ Systematic Critique\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 06:51."
@@ -5775,8 +5775,8 @@
           "source_id": "42c17f86-4e9d-4fae-a813-be048a9a7f45",
           "submission_mode": "later",
           "artifact_id": "ec309e8c-6bbb-44e8-87c3-514027d19419",
-          "card_text": "audio_spark\nTrading Chaos: The Bill Williams Story\nScheduled for after 6am\nmore_vert",
-          "observed_at": "2026-10-05T02:05:38.036330+00:00"
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T03:04:14.363783+00:00"
         }
       },
       "admission_state": "admitted",
@@ -5808,9 +5808,153 @@
       "selected_source_ids": [
         "42c17f86-4e9d-4fae-a813-be048a9a7f45"
       ]
+    },
+    "bill-williams:ru": {
+      "slug": "bill-williams",
+      "language": "ru",
+      "article_sha256": "b586d2429754cdf63937533e8e8cf363931ed333903791b8cc19d7155b00112c",
+      "input_hashes": {
+        "article": "b586d2429754cdf63937533e8e8cf363931ed333903791b8cc19d7155b00112c",
+        "source_text": "4cfc98ffe02370a1f040ac75fe558584d8481c4677e59998e1ce2ab9bd750303",
+        "slides_prompt": "b9a0cc47e75929e5b1c0e06c8a90048a467aa826ff9f76bdf558618e65a73be8",
+        "audio_prompt": "1fbfd6c4415f3a979e99d11c0bd644720d29a3f4ef926630bbf5ae0a54c51594"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "b9a0cc47e75929e5b1c0e06c8a90048a467aa826ff9f76bdf558618e65a73be8",
+          "requested_at": "2026-10-05T03:04:41.995750+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "f30179ef-64cb-472d-87e7-825a3f8d3e60",
+          "submission_mode": "now",
+          "artifact_id": "fcb064be-ced0-491b-b389-94be2de41cf4",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T03:04:46.563811+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "fcb064be-ced0-491b-b389-94be2de41cf4"
+          ],
+          "prompt_sha256": "1fbfd6c4415f3a979e99d11c0bd644720d29a3f4ef926630bbf5ae0a54c51594",
+          "requested_at": "2026-10-05T03:05:00.271105+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "f30179ef-64cb-472d-87e7-825a3f8d3e60",
+          "submission_mode": "now",
+          "artifact_id": "7b696822-1e4f-4e01-bc2f-3180ced6d166",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T03:05:04.840495+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T03:04:14.390649+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T03:04:21.585026+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/bill-williams-ru-notebook-baseline.json",
+        "baseline_sha256": "a17565c1a893b20ecc4403faa6bd1a486c338cf68b83db41bbeeb913f6bd035c",
+        "baseline_count": 322,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T03:04:22.671715+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/8c718add-4a9a-4878-b30b-47918d935129",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T03:04:26.847770+00:00",
+        "sha256": "4cfc98ffe02370a1f040ac75fe558584d8481c4677e59998e1ce2ab9bd750303",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T03:04:34.931704+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "f30179ef-64cb-472d-87e7-825a3f8d3e60",
+      "source_title": "MM article bill-williams RU b586d2429754",
+      "source_sha256": "4cfc98ffe02370a1f040ac75fe558584d8481c4677e59998e1ce2ab9bd750303",
+      "state": "source_ready",
+      "source_display_name": "MM article bill-williams RU b586d2429754",
+      "selected_source_ids": [
+        "f30179ef-64cb-472d-87e7-825a3f8d3e60"
+      ]
+    },
+    "bill-williams:zh-CN": {
+      "slug": "bill-williams",
+      "language": "zh-CN",
+      "article_sha256": "65a4114617041ec5cc288e5878de8276dc8d09d4b57c67a2dcfebde104d00843",
+      "input_hashes": {
+        "article": "65a4114617041ec5cc288e5878de8276dc8d09d4b57c67a2dcfebde104d00843",
+        "source_text": "2a8f99b1fb73a7e8a232c52545e3d74fb548a122ac66fcdeeaebd17ad835f7e9",
+        "slides_prompt": "7f5f4ceb2f83655d2028a2aeb87f7a8dc614915f79fb0df30a54011735b5a2d3",
+        "audio_prompt": "7800b9845e827080fb64a2e2c2f60fc1baea2710f446cf08ba57644b20bf2fd7"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "7f5f4ceb2f83655d2028a2aeb87f7a8dc614915f79fb0df30a54011735b5a2d3",
+          "requested_at": "2026-10-05T03:05:33.496001+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "6b4717b8-33ca-4709-a242-56f598fceebd",
+          "submission_mode": "now",
+          "artifact_id": "30899db8-111a-4691-92b1-4288bd3b42a3",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T03:05:38.054691+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "30899db8-111a-4691-92b1-4288bd3b42a3"
+          ],
+          "prompt_sha256": "7800b9845e827080fb64a2e2c2f60fc1baea2710f446cf08ba57644b20bf2fd7",
+          "requested_at": "2026-10-05T03:05:51.746461+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "6b4717b8-33ca-4709-a242-56f598fceebd",
+          "submission_mode": "now",
+          "artifact_id": "816d1e5b-13f8-4c92-b9ea-298b5773a7b9",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T03:05:56.310489+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T03:05:04.858362+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T03:05:12.275725+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/bill-williams-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "8a8ab101f72cf89c38248d7c43b2dce64d0ef0c73a36bc9f1767d07e981cf73d",
+        "baseline_count": 323,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T03:05:13.365814+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/ec949cf8-437c-4c34-a8f1-df589af1c75d",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T03:05:17.536228+00:00",
+        "sha256": "2a8f99b1fb73a7e8a232c52545e3d74fb548a122ac66fcdeeaebd17ad835f7e9",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T03:05:25.595236+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "6b4717b8-33ca-4709-a242-56f598fceebd",
+      "source_title": "MM article bill-williams ZH-CN 65a411461704",
+      "source_sha256": "2a8f99b1fb73a7e8a232c52545e3d74fb548a122ac66fcdeeaebd17ad835f7e9",
+      "state": "source_ready",
+      "source_display_name": "MM article bill-williams ZH-CN 65a411461704",
+      "selected_source_ids": [
+        "6b4717b8-33ca-4709-a242-56f598fceebd"
+      ]
     }
   },
-  "checked_at": "2026-10-05T02:05:38.055663+00:00",
+  "checked_at": "2026-10-05T03:05:56.318487+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
