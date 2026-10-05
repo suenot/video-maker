@@ -1,0 +1,363 @@
+MM article causal-forests-treatment-effects-trading ZH-CN ec6d296e32b8
+
+---
+title: "交易中异质处理效应的因果森林"
+description: "本博客每个回测估计条件平均值。因果森林估计条件处理效果 — tau(x) 而非 mu(x) — 具有诚实分裂、自适应核权重表示以及告诉您发现的异质性是否真实的校准测试。"
+date: "2026-08-01"
+tags: ["causal-inference", "causal-forest", "heterogeneous-effects", "econometrics", "treatment"]
+slug: "causal-forests-treatment-effects-trading"
+lang: "zh"
+image: "/images/blog/causal-forests-treatment-effects-trading.webp"
+authors: ["suenot"]
+---
+
+本博客中每个预测模型估计同一对象：条件平均值 $\mu(\mathbf{x}) = \mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}]$。特征工程、梯度提升、适形区间、前向验证 — 一切服务于一个估计量。本文关于一个不同的估计量，以及替换它时变化的机械。
+
+对象是**条件平均处理效果**：
+
+$$
+\tau(\mathbf{x}) = \mathbb{E}[Y_i(1) - Y_i(0) \mid \mathbf{X}_i = \mathbf{x}]
+$$
+
+同一单位的两个潜在结果之间的差异 — 其中一个您从未观察到。您无法对其进行回归，因为它不在您的数据中。因果森林（Athey 和 Imbens 2016；Wager 和 Athey 2018）以非参数方式估计它，并且显著地，在它周围提供有效的置信区间。
+
+三件事使这成为可能，而且它们都不存在于标准随机森林中：一个分裂标准，最大化处理效果方差而不是最小化预测误差，一个**诚实**约束，禁止使用相同的观测值来选择分裂和估计其中的效果，以及将森林重新读取为自适应内核，将叶片共现转化为估计权重。这三件事，加上告诉您发现的异质性是否为信号的校准测试，就是本文的内容。
+
+## 从平均效果到异质效果
+
+![平坦的平均处理效果隐藏了异质处理效果揭示的正负口袋](/images/blog/causal-forests-treatment-effects-trading-heterogeneous-effects.webp)
+
+### 平均处理效果
+
+设定：二元处理 $W_i \in \{0, 1\}$（事件触发或未触发），结果 $Y_i$（回报），协变量 $\mathbf{X}_i$。**平均处理效果**为
+
+$$
+\tau_{\text{ATE}} = \mathbb{E}[Y_i(1) - Y_i(0)]
+$$
+
+所有单位的平均影响。对于交易，这几乎无用 — 您不交易平均。如果事件推动宇宙的一半上升，一半下降，ATE 为零，机会最大。
+
+### 条件平均处理效果
+
+CATE $\tau(\mathbf{x})$ 以特征为条件。给定一个具有特定市值、实现波动率、资金历史和订单簿深度的币：*此*事件对*此*资产的预期回报影响是什么？CATE 是协变量空间上的函数，在不强加其形状的情况下估计该函数就是因果森林所做的。
+
+### 为什么不只使用线性交互模型？
+
+教科书的替代方案是饱和回归：
+
+$$
+Y_i = \alpha + \beta W_i + \gamma W_i \cdot \mathbf{X}_i + \delta \mathbf{X}_i + \epsilon_i
+$$
+
+其中 $\gamma$ 承载交互作用。这假设交互作用是**线性的**。很少如此：对资金翻转的敏感度在杠杆上是凸的，不是线性的；深度与市值以乘法方式交互；波动率 regime 控制其他一切。因果森林不强加任何这些 — 它们自适应地分割协变量空间，让异质结构从数据中掉落。
+
+## 因果森林：算法
+
+![不相交样本构建树结构并在冻结叶片中估计效果，然后许多诚实树合并为因果森林](/images/blog/causal-forests-treatment-effects-trading-honest-forest.webp)
+
+因果森林是围绕处理效果估计量重建的随机森林。每棵树是一个**因果树**，分割协变量空间以最大化处理效果异质性。
+
+### 因果树
+
+在每个内部节点，算法选择分裂变量 $j$ 和分裂点 $s$。与回归树的关键区别：标准最大化子节点之间**估计处理效果的方差**，而不是最小化平方预测误差。
+
+对于具有数据 $(Y_i, W_i, \mathbf{X}_i)_{i \in \text{node}}$ 的节点，节点级效果估计是组均值之差：
+
+$$
+\hat{\tau}_{\text{node}} = \bar{Y}_{\text{treated}} - \bar{Y}_{\text{control}}
+$$
+
+分裂分数为
+
+$$
+\Delta(\text{split}) = n_L \cdot \hat{\tau}_L^2 + n_R \cdot \hat{\tau}_R^2 - n \cdot \hat{\tau}_{\text{parent}}^2
+$$
+
+其中 $n_L, n_R, n$ 是左子节点、右子节点和父节点中的样本大小。这正是处理效果的组间方差：当两个子节点不同意效果时分裂是好的，而不是当它们很好地预测结果时。强烈预测 $Y$ 但与 $W$ 如何作用正交的协变量将永远不会被选中。
+
+### 诚实估计
+
+关键创新是**诚实**。用于确定树结构的数据必须与用于估计叶片效果的数据不相交：
+
+1. **分割数据**为 $\mathcal{I}_{\text{split}}$ 和 $\mathcal{I}_{\text{est}}$
+2. **构建树**仅使用 $\mathcal{I}_{\text{split}}$ 选择分裂变量和点
+3. **估计叶片效果**仅使用 $\mathcal{I}_{\text{est}}$，将这些观测值放入已经固定的树中
+
+没有这个，树作弊：它雕刻出叶片，其极端效果是用于找到它们的同一样本中的噪声，然后将该噪声报告为估计。这是与[回测过拟合的概率](/en/blog/post/probability-backtest-overfitting-pbo)在策略级别测量的相同自适应选择失败，除了这里在估计器内部防御它，而不是事后诊断。诚实购买渐近无偏性：
+
+$$
+\mathbb{E}[\hat{\tau}(\mathbf{x}) \mid \mathbf{X}_i = \mathbf{x}] = \tau(\mathbf{x}) + o(1)
+$$
+
+价格是样本效率 — 您的一半数据构建无法用于填充的结构。
+
+### 从树到森林
+
+因果森林聚合 $B$ 棵因果树，每棵树在大小为 $s < n$ 的随机子样本上，每次分裂时具有随机协变量子集：
+
+$$
+\hat{\tau}(\mathbf{x}) = \frac{1}{B}\sum_{b=1}^{B} \hat{\tau}_b(\mathbf{x})
+$$
+
+更有用的写法是作为**结果的加权平均值**：
+
+$$
+\hat{\tau}(\mathbf{x}) = \sum_{i=1}^{n} \alpha_i(\mathbf{x}) \cdot Y_i
+$$
+
+权重由观测值 $i$ 与 $\mathbf{x}$ 落入同一叶片的频率设定：
+
+$$
+\alpha_i(\mathbf{x}) = \frac{1}{B}\sum_{b=1}^{B} \frac{\mathbb{1}(\mathbf{X}_i \in L_b(\mathbf{x}))}{|L_b(\mathbf{x})|}
+$$
+
+其中 $L_b(\mathbf{x})$ 是树 $b$ 中包含 $\mathbf{x}$ 的叶片。这是广义随机森林视图（Athey、Tibshirani 和 Wager 2019）：因果森林是**局部自适应内核估计器**。它学习自己的「相似」概念，由实际重要的协变量定义，用于效果异质性，而不是在您必须手动选择缩放的空间中的欧几里得距离。
+
+### 渐近理论
+
+在正则性条件下（Wager 和 Athey 2018），估计器是一致的，$\hat{\tau}(\mathbf{x}) \xrightarrow{p} \tau(\mathbf{x})$，并且渐近正态：
+
+$$
+\frac{\hat{\tau}(\mathbf{x}) - \tau(\mathbf{x})}{\hat{\sigma}(\mathbf{x})} \xrightarrow{d} \mathcal{N}(0, 1)
+$$
+
+给出逐点区间 $\hat{\tau}(\mathbf{x}) \pm z_{\alpha/2} \cdot \hat{\sigma}(\mathbf{x})$。方差 $\hat{\sigma}^2(\mathbf{x})$ 来自无穷小刀切法（或小袋自助法），从森林已经建立的相同子样本结构计算 — 没有外部自助循环。
+
+值得精确说明这个保证是什么和不是什么。它是渐近的和逐点的，并且对 CATE 成立。本博客其他地方使用的[适形预测](/en/blog/post/conformal-prediction-trading)区间是有限样本和免分布的，但是边际的，并且覆盖结果。不同的估计量，不同的保证；它们不是替代品。
+
+## Double Machine Learning 连接
+
+当处理未随机分配时，因果森林在残差化数据上拟合：结果模型 $\hat{m}(\mathbf{X}) = \mathbb{E}[Y \mid \mathbf{X}]$ 和倾向模型 $\hat{e}(\mathbf{X}) = \mathbb{E}[W \mid \mathbf{X}]$ 通过交叉拟合估计，森林在 $\tilde{Y} = Y - \hat{m}$ 对 $\tilde{W} = W - \hat{e}$ 上运行。奈曼正交性使这安全：干扰估计误差仅作为乘积进入，因此 $\hat{m}$ 和 $\hat{e}$ 各自可以以 $n^{-1/4}$ 收敛，而 $\hat{\tau}$ 仍以 $n^{-1/2}$ 收敛。
+
+该框架 — 残差化、交叉拟合、正交性论证、样本大小影响 — 是其自身文章的主题，[因果交易信号的 Double Machine Learning](/en/blog/post/double-ml-causal-trading)。先阅读它；以下所有内容假设它，仅涵盖估计量为 $\tau(\mathbf{x})$ 而非 $\tau$ 时变化的内容。
+
+## 交易应用：事件影响异质性
+
+![一个市场事件在具有不同协变量的资产上产生正面、中性和负面的反事实响应](/images/blog/causal-forests-treatment-effects-trading-event-impact.webp)
+
+### 设定
+
+本博客的自然领域是永续币宇宙，其中事件频繁、有时间戳，并且无需供应商 feed 即可观察。
+
+- **单位**：可交易 perp 宇宙中的币-事件观测
+- **处理**：$W_i = 1$ 如果事件为币 $i$ 触发 — 资金率符号翻转、现货上市，或跨过超临界阈值的清算级联，如[清算级联作为交易信号](/en/blog/post/liquidation-cascades-trading-signal)中所述 — 对于匹配的非事件窗口 $W_i = 0$
+- **结果**：$Y_i$ = 事件窗口上的**异常**回报，而不是原始回报。在事件前的估计窗口上拟合市场模型，然后采取累积异常回报。确切规范 — 估计窗口、市场模型回归、CAR 构建及其 t 统计量 — 在[从财报电话挖掘 LLM alpha](/en/blog/post/llm-alpha-mining-earnings-calls)的事件研究部分中制定；逐字重用。此步骤不是可选的：原始 close-to-close 结果让市场范围的运动进入 $\hat{\tau}$，并且由于市场运动对所有处理单位是通用的，它看起来完全像处理效果
+- **协变量** $\mathbf{X}_i$：市值、实现波动率、资金历史、订单簿深度、未结持仓与市值比
+- **干扰因子** $\mathbf{W}_i$：同时转移事件概率和回报的 regime 变量
+
+### 交易信号
+
+CATE 表面映射到头寸规模器，就像任何校准的不确定估计一样：按 $|\hat{\tau}|$ 相对于区间宽度进行规模，并且当区间跨越零时不交易。该决策规则 — 反向宽度规模、边缘比率 $e = |\hat{\tau}|/w$、无交易过滤器、成本感知变体，以及为什么您不应将其乘以 Kelly 分数的论证 — 在[风险感知头寸规模的适形预测](/en/blog/post/conformal-prediction-trading)中推导。用 $\hat{\tau}$ 代替 $\hat{\mu}$，并用因果森林区间代替适形区间重用。平衡长腿和短腿，账簿通过构建是市场中性的。
+
+## 使用 EconML 的 Python 实现
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import GradientBoostingRegressor, GradientBoostingClassifier
+from econml.dml import CausalForestDML
+
+
+def fit_causal_forest(Y, T, X, W, n_estimators=1000):
+    """
+    CausalForestDML: 对 (X, W) 残差化，然后在残差上拟合因果
+    森林。
+
+    Y: 事件窗口上的异常回报（CAR，市场模型调整）
+    T: 事件指示器
+    X: 效应修饰符 -- 仅这些驱动异质性
+    W: 干扰因子 -- 仅进入干扰模型
+    """
+    cf = CausalForestDML(
+        model_y=GradientBoostingRegressor(
+            n_estimators=200, max_depth=5, learning_rate=0.05
+        ),
+        model_t=GradientBoostingClassifier(
+            n_estimators=200, max_depth=5, learning_rate=0.05
+        ),
+        n_estimators=n_estimators,
+        min_samples_leaf=20,
+        max_depth=None,
+        criterion="het",          # 异质性基础分裂
+        honest=True,              # 诚实估计
+        inference=True,           # 无穷小刀切法区间
+        cv=5,                     # DML 交叉拟合折
+        random_state=42,
+    )
+    cf.fit(Y=Y, T=T, X=X, W=W)
+    return cf
+
+
+def summarize_cate(cf, X, feature_names):
+    """CATE 分布及其驱动异质性的因素。"""
+    tau_hat = cf.effect(X)
+    tau_lo, tau_hi = cf.effect_interval(X, alpha=0.05)
+
+    print(f"Mean CATE:      {tau_hat.mean():.4f}")
+    print(f"Std CATE:       {tau_hat.std():.4f}")
+    print(f"Range:          [{tau_hat.min():.4f}, {tau_hat.max():.4f}]")
+    print(f"% CI excl. 0:   {((tau_lo > 0) | (tau_hi < 0)).mean():.1%}")
+
+    # 注意：这不是普通的特征重要性。因果森林的
+    # 重要性按协变量驱动效果异质性的程度排名，
+    # 而不是按它们预测结果的程度。协变量可能
+    # 主导回报预测并在此得零分。
+    for idx in np.argsort(cf.feature_importances_)[::-1]:
+        print(f"  {feature_names[idx]:>20s}: {cf.feature_importances_[idx]:.4f}")
+
+    return tau_hat, tau_lo, tau_hi
+```
+
+### 解释 CATE 表面
+
+边际效果图显示处理效果沿着一个协变量移动，其余保持在中位数：
+
+```python
+def plot_cate_by_feature(cf, X, feature_idx, n_points=50):
+    x_grid = np.linspace(X[:, feature_idx].min(),
+                         X[:, feature_idx].max(), n_points)
+    X_eval = np.tile(np.median(X, axis=0), (n_points, 1))
+    X_eval[:, feature_idx] = x_grid
+
+    tau = cf.effect(X_eval)
+    tau_lo, tau_hi = cf.effect_interval(X_eval, alpha=0.05)
+    return x_grid, tau, tau_lo, tau_hi
+```
+
+将这些读作拟合表面的描述，而不是因果剂量-响应曲线 — 将其他协变量保持在中位数可能会将您置于没有支持的协变量空间区域。
+
+## 关键假设和诊断
+
+![重叠、平衡、隐藏干扰和安慰剂检查控制通往可防御因果估计的路径](/images/blog/causal-forests-treatment-effects-trading-assumptions-diagnostics.webp)
+
+违反这些，您会得到自信、精确、错误的效果。
+
+### 1. 无干扰（可观测选择）
+
+$$
+Y(0), Y(1) \perp W \mid \mathbf{X}, \mathbf{W}
+$$
+
+给定观测协变量，处理分配必须独立于潜在结果。对于机械定义的事件，这是可防御的；对于本身是市场反应的事件 — 上市公告、交易所自己的清算引擎触发 — 则不是，因为触发事件的同一未观察流也移动回报。
+
+通过 Rosenbaum 敏感性分析测试：如果未观察的 $U$ 可以将处理赔率移动最多 $\Gamma$ 倍，
+
+$$
+\frac{P(W=1 \mid \mathbf{X}, U)}{P(W=0 \mid \mathbf{X}, U)} \leq \Gamma \cdot \frac{P(W=1 \mid \mathbf{X})}{P(W=0 \mid \mathbf{X})}
+$$
+
+估计效果翻转符号前 $\Gamma$ 必须多大？在 $\Gamma = 1.1$ 时破坏的设计不是发现。
+
+### 2. 重叠（正性）
+
+$$
+0 < P(W = 1 \mid \mathbf{X} = \mathbf{x}) < 1 \quad \forall \mathbf{x}
+$$
+
+每个单位需要出现在两个分支中的正概率。检查倾向得分并修剪：
+
+```python
+propensity = cf.models_t[0][0].predict_proba(np.hstack([X, W]))[:, 1]
+print(f"Propensity range: [{propensity.min():.3f}, {propensity.max():.3f}]")
+valid = (propensity > 0.05) & (propensity < 0.95)
+print(f"Retained after trimming: {valid.mean():.1%}")
+```
+
+修剪不是免费的 — 它重新定义您的 $\hat{\tau}$ 描述的总体。报告存活的部分。
+
+### 3. SUTVA（稳定单位处理值假设）
+
+$$
+Y_i = Y_i(W_i) \quad \text{(单位之间无干扰)}
+$$
+
+一个单位的处理不得影响另一个单位的结果。在加密货币中，这是三者中最弱的：一个 perp 中的清算级联通过共同抵押和做市商库存传播到每个相关对，这按定义是干扰。按相关组聚类标准误差部分解决它；没有什么完全解决。
+
+### 超越二元处理
+
+因果森林通过相同的 DML 机械扩展到**连续处理** — 估计冲击的*幅度*，而不仅仅是其发生，如何差异地移动资产：
+
+$$
+Y_i = \tau(\mathbf{X}_i) \cdot T_i + g(\mathbf{X}_i, \mathbf{W}_i) + \epsilon_i
+$$
+
+其中 $T_i$ 是，例如说，资金率变化的大小（以基点为单位）。现在 $\tau(\mathbf{x})$ 是每基点效果。
+
+```python
+cf_continuous = CausalForestDML(
+    model_y=GradientBoostingRegressor(n_estimators=200),
+    model_t=GradientBoostingRegressor(n_estimators=200),  # 回归，不是分类器
+    discrete_treatment=False,
+    n_estimators=1000,
+    honest=True,
+    inference=True,
+)
+cf_continuous.fit(Y=car, T=funding_change_bps, X=asset_features, W=controls)
+effects_25bp = cf_continuous.effect(X_test, T0=0, T1=25)
+```
+
+## 实际考量
+
+### 异质性是真的吗？
+
+这是因果森林回答的问题，本博客中没有其他内容回答，并且值得真正的测试，而不是经验法则。诚实防御估计器内的虚假分裂；在保留的*事件*上（不是保留的资产）的样本外评估是标准的，并在[前向优化](/en/blog/post/walk-forward-optimization)和[缩减 Sharpe 和多重测试](/en/blog/post/deflated-sharpe-multiple-testing)中涵盖。没有什么告诉您 $\hat{\tau}(\mathbf{x})$ 是否根本随 $\mathbf{x}$ 变化。
+
+**最佳线性预测器**测试确实如此。将残差化结果对残差化处理及其与居中 CATE 估计的交互作用进行回归：
+
+$$
+Y_i - \hat{m}(\mathbf{X}_i) = \alpha_0 (W_i - \hat{e}(\mathbf{X}_i)) + \alpha_1 (W_i - \hat{e}(\mathbf{X}_i))(\hat{\tau}(\mathbf{X}_i) - \bar{\tau}) + \epsilon_i
+$$
+
+两个系数回答两个不同的问题。$\alpha_0$ 是平均效果：这里有任何东西吗？$\alpha_1$ 是您自己预测上的校准斜率：当您的森林说效果更大时，它真的更大吗？在无异质性的零假设下 $\alpha_1 = 0$。在完美校准下 $\alpha_1 = 1$。$\alpha_1$ 显著高于零但远低于一意味着森林发现了真正的排序但夸大了其分散 — 您可以交易排名，而不是幅度。
+
+EconML 的 `RScorer` 给出同伴模型选择分数：
+
+```python
+from econml.score import RScorer
+
+scorer = RScorer(
+    model_y=GradientBoostingRegressor(n_estimators=100),
+    model_t=GradientBoostingClassifier(n_estimators=100),
+    discrete_treatment=True,
+    cv=5,
+)
+scorer.fit(Y_val, T_val, X=X_val, W=W_val)
+print(f"R-score: {scorer.score(cf):.4f}")
+```
+
+在森林从未见过的验证分割上拟合评分者，然后使用它将候选 CATE 模型相互比较以及与恒定效果基线比较。在 R 分数上无法击败恒定效果模型的森林没有发现值得交易的异质性，无论其样本内重要性说什么。
+
+### 样本大小
+
+因果森林需要比结果模型更多的数据，因为估计量是差异并且两个分支必须在每个叶片内填充。数据与参数的一般纪律 — 每个自由参数多少个样本外点，以及当您比较配置时的 Bonferroni 校正 — 在[前向优化](/en/blog/post/walk-forward-optimization)的数据要求部分。因果森林特定的答案是经验的，而不是经验法则：在嵌套子样本上拟合森林并绘制中位数区间宽度与 $n$；可用样本大小是宽度降至您打算交易的效果大小以下的地方。
+
+### 前向，有两个转折
+
+评估协议是普通的锚定前向 — 在所有事件到 $t$ 上重新拟合，交易事件 $t+1$ — 以及完整处理，包括清除、禁运、前向效率比率和退化率，在[前向优化](/en/blog/post/walk-forward-optimization)中。两件事是此估计器特有的。
+
+首先，**事件窗口重叠**。如果事件 $t+1$ 之前的协变量窗口包含事件 $t$ 的结果窗口，折共享观测值并且样本外结果被污染。在计算单个盈亏数字之前清除重叠窗口；对于像资金翻转这样的机械频繁处理，这可能会移除事件的很大一部分。
+
+其次，**诚实分裂必须在每次重新拟合时重新绘制**。跨折携带相同的 $\mathcal{I}_{\text{split}}$/$\mathcal{I}_{\text{est}}$ 分区重新引入诚实存在以防止的完全相同的结构选择泄漏，因为新添加的事件落入使用旧事件知识选择的分区。
+
+然后将事件级别样本外盈亏通过常规闸门运行 — [PBO](/en/blog/post/probability-backtest-overfitting-pbo) 和[缩减 Sharpe 比率](/en/blog/post/deflated-sharpe-multiple-testing) — 然后才相信任何东西。
+
+### 成本
+
+CATE 信号像任何其他事件驱动信号一样定价：在无交易过滤器之前从 $|\hat{\tau}|$ 减去预期 half-spread，并在薄书中缩小规模。定量版本 — 平方根冲击定律和[滑点成本模型](/en/blog/post/slippage-cost-models-backtest)中的拟合成本曲线、[适形预测](/en/blog/post/conformal-prediction-trading)中的成本感知无交易过滤器，以及[实施缺失和 TCA](/en/blog/post/implementation-shortfall-tca-execution)中的执行会计 — 所有不变地转移。
+
+唯一不转移的：CATE 信号的保质期受事件窗口限制，因此成本在固定短持有期而不是开放期上摊销。连续持有的信号支付价差一次并在边缘持续期间赚取；这个在每个事件支付。边缘存续与否是关于您的特定事件和特定宇宙的经验问题，这是首先要检查的事情，因为它可以在任何因果机械重要之前杀死策略。
+
+## 结论
+
+因果森林估计与本博客其余工具包不同的对象。不是「此资产将回报什么」，而是「相对于它未触发的反事实，此事件移动此资产多少」。使其可估计的机械 — 最大化异质性的分裂、诚实估计、自适应内核权重表示和无穷小刀切法区间 — 在普通监督学习中没有类比，并且它需要的假设（无干扰、重叠、SUTVA）足够强，必须测试而不是断言。
+
+本文没有的是结果。上面的每个数字都是占位符。相对于[诚实负面](/en/blog/post/honest-negative-no-robust-edge)和[缩减 Sharpe](/en/blog/post/deflated-sharpe-multiple-testing)设立的标准，没有测量的 CATE 分布、具有 p 值的 BLP $\alpha_1$、重叠诊断和 DSR/PBO 闸门样本外盈亏的方法是教程，而不是发现。这些数字是下一项工作；负面结果值得发布。
+
+## 参考文献
+
+1. Athey, S., Imbens, G.W. "Recursive Partitioning for Heterogeneous Causal Effects." *PNAS*, 113(27), 7353-7360 (2016).
+2. Wager, S., Athey, S. "Estimation and Inference of Heterogeneous Treatment Effects using Random Forests." *JASA*, 113(523), 1228-1242 (2018). [arXiv:1510.04342](https://arxiv.org/abs/1510.04342)
+3. Athey, S., Tibshirani, J., Wager, S. "Generalized Random Forests." *Annals of Statistics*, 47(2), 1148-1178 (2019).
+4. Chernozhukov, V., et al. "Double/Debiased Machine Learning for Treatment and Structural Parameters." *The Econometrics Journal*, 21(1), C1-C68 (2018).
+5. Chernozhukov, V., Demirer, M., Duflo, E., Fernandez-Val, I. "Generic Machine Learning Inference on Heterogeneous Treatment Effects in Randomized Experiments." (2018). [arXiv:1712.04802](https://arxiv.org/abs/1712.04802)
+6. Battocchi, K., et al. "EconML: A Python Package for ML-Based Heterogeneous Treatment Effects Estimation." Microsoft Research (2019). [GitHub](https://github.com/py-why/EconML)

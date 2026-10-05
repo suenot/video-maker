@@ -1,0 +1,34 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article causal-forests-treatment-effects-trading RU 5160a44cf12b". It is the complete published ru article snapshot. Do not merge another language edition or outside facts. Output language: Russian. Use Russian throughout; retain exact source headings and formulas. Keep mathematical symbols, units, code identifiers, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — От средних эффектов к гетерогенным
+2. H3 — Средний эффект обработки
+3. H3 — Условный средний эффект обработки
+4. H3 — Почему не использовать линейные модели взаимодействия?
+5. H2 — Causal Forests: Алгоритм
+6. H3 — Каузальные деревья
+7. H3 — Честная оценка
+8. H3 — От деревьев к лесам
+9. H3 — Асимптотическая теория
+10. H2 — Связь Double Machine Learning
+11. H2 — Приложение в трейдинге: гетерогенность воздействия событий
+12. H3 — Настройка
+13. H3 — Торговый сигнал
+14. H2 — Реализация Python с EconML
+15. H3 — Интерпретация поверхности CATE
+16. H2 — Ключевые предположения и диагностика
+17. H3 — 1. Неконфаундированность (Selection on Observables)
+18. H3 — 2. Overlap (Позитивность)
+19. H3 — 3. SUTVA (Stable Unit Treatment Value Assumption)
+20. H2 — За пределами бинарных обработок
+21. H2 — Практические соображения
+22. H3 — Гетерогенность реальна?
+23. H3 — Размер выборки
+24. H3 — Walk-Forward, с двумя нюансами
+25. H3 — Издержки
+26. H2 — Заключение
+27. H2 — Ссылки
+
+Distinguish conditional prediction mu(x) from ATE and CATE tau(x), binary treatment versus potential outcomes, and event impact relative to the missing counterfactual. Keep linear-interaction limitations, causal-tree split score for effect heterogeneity, disjoint honest structure/estimation samples, forest aggregation and adaptive leaf-cooccurrence weights. Explain asymptotic pointwise CATE intervals and their different estimand/guarantee from finite-sample marginal conformal outcome intervals. Preserve DML outcome/propensity residualization, cross-fitting, orthogonality, and the n^-1/4 versus n^-1/2 conditions as source claims. In the trading setup keep coin-event units, event indicator, abnormal cumulative return (CAR) after a pre-event market model rather than raw returns, effect modifiers X and confounders W, and event-window decision timing. Present the EconML CausalForestDML code and 95% interval as an illustrative workflow, not a measured result; distinguish heterogeneity importance from outcome importance and warn about unsupported covariate combinations in marginal plots. Keep unconfoundedness/selection on observables, Rosenbaum Gamma sensitivity, overlap/propensity trimming with reported retention, and SUTVA/no interference distinct; crypto liquidation contagion threatens SUTVA. Continuous treatment effects have basis-point units, including the article's 0-to-25 bps example. Preserve BLP alpha_0 versus alpha_1 calibration/null, RScorer versus constant-effect baseline, sample-size interval widths, anchored walk-forward, purging overlapping event windows, redrawing honest splits, DSR/PBO, half-spread/execution costs and short event shelf life. The article explicitly lacks real CATE, diagnostic and PnL results; every TODO remains unmeasured and no causal trading edge may be claimed. Flag its stale publication-sequencing comment for editor.
+
+Preserve substantive coverage, equations, symbols, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, biographical, research, financial, company-specific and mutable assertions remain attributed article claims pending human editorial and primary-source review. Formula and causal-assumption review is pending. Do not add outside facts, guaranteed returns or investment advice. Chinese regional terminology and Mandarin pronunciation await human review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use natural spoken narration or dialogue in the requested locale. Explain formulas, variables, units, tables, plots and code in words, without requesting on-screen text. Distinguish article claims from verified facts when speaking. End with its conclusion and references.

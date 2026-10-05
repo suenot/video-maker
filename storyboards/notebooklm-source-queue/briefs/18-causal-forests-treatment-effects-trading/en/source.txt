@@ -1,0 +1,377 @@
+MM article causal-forests-treatment-effects-trading EN 95517fcdf1c7
+
+---
+title: "Causal Forests for Heterogeneous Treatment Effects in Trading"
+description: "Every backtest on this blog estimates a conditional mean. Causal forests estimate a conditional treatment effect instead — tau(x) rather than mu(x) — with honest splitting, an adaptive-kernel weight representation, and a calibration test that tells you whether the heterogeneity you found is real."
+date: "2026-08-01"
+tags: ["causal-inference", "causal-forest", "heterogeneous-effects", "econometrics", "treatment"]
+slug: "causal-forests-treatment-effects-trading"
+lang: "en"
+image: "/images/blog/causal-forests-treatment-effects-trading.webp"
+authors: ["suenot"]
+---
+
+Every predictive model on this blog estimates the same object: a conditional mean $\mu(\mathbf{x}) = \mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}]$. Feature engineering, gradient boosting, conformal intervals, walk-forward validation — all of it serves one estimand. This article is about a different estimand, and about the machinery that changes when you swap it in.
+
+The object is the **conditional average treatment effect**:
+
+$$
+\tau(\mathbf{x}) = \mathbb{E}[Y_i(1) - Y_i(0) \mid \mathbf{X}_i = \mathbf{x}]
+$$
+
+the difference between two potential outcomes for the same unit — one of which you never observe. You cannot regress on it, because it is not in your data. Causal forests (Athey and Imbens 2016; Wager and Athey 2018) estimate it non-parametrically and, remarkably, give you a valid confidence interval around it.
+
+Three things make that possible and none of them exist in a standard random forest: a splitting criterion that maximizes treatment-effect variance instead of minimizing prediction error, an **honesty** constraint that forbids using the same observations to choose a split and to estimate the effect inside it, and a re-reading of the forest as an adaptive kernel that turns leaf co-occurrence into estimation weights. Those three, plus the calibration test that tells you whether the heterogeneity you found is signal, are the content of this article.
+
+## From Average to Heterogeneous Effects
+
+![A flat average treatment effect hides the positive and negative pockets revealed by a heterogeneous treatment-effect surface](/images/blog/causal-forests-treatment-effects-trading-heterogeneous-effects.webp)
+
+### The Average Treatment Effect
+
+The setup: a binary treatment $W_i \in \{0, 1\}$ (an event fired or it did not), an outcome $Y_i$ (a return), covariates $\mathbf{X}_i$. The **Average Treatment Effect** is
+
+$$
+\tau_{\text{ATE}} = \mathbb{E}[Y_i(1) - Y_i(0)]
+$$
+
+the average impact across all units. For trading this is almost useless — you do not trade the average. If an event pushes half the universe up and half down, the ATE is zero and the opportunity is maximal.
+
+### The Conditional Average Treatment Effect
+
+The CATE $\tau(\mathbf{x})$ conditions on characteristics. Given a coin with a specific market cap, realized volatility, funding history, and book depth, what is the expected return impact of *this* event on *this* asset? The CATE is a function over covariate space, and estimating that function without imposing its shape is what causal forests do.
+
+### Why Not Just Use Linear Interaction Models?
+
+The textbook alternative is a saturated regression:
+
+$$
+Y_i = \alpha + \beta W_i + \gamma W_i \cdot \mathbf{X}_i + \delta \mathbf{X}_i + \epsilon_i
+$$
+
+where $\gamma$ carries the interaction. This assumes the interaction is **linear**. It rarely is: sensitivity to a funding flip is convex in leverage, not linear; depth interacts with market cap multiplicatively; volatility regime gates everything else. Causal forests impose none of this — they partition covariate space adaptively and let the heterogeneity structure fall out of the data.
+
+## Causal Forests: The Algorithm
+
+![Disjoint samples build tree structure and estimate effects in frozen leaves before many honest trees merge into a causal forest](/images/blog/causal-forests-treatment-effects-trading-honest-forest.webp)
+
+A causal forest is a random forest rebuilt around the treatment-effect estimand. Each tree is a **causal tree** that partitions covariate space to maximize treatment-effect heterogeneity.
+
+### Causal Trees
+
+At each internal node, the algorithm chooses a split variable $j$ and split point $s$. The key difference from a regression tree: the criterion maximizes the **variance of the estimated treatment effect** across children rather than minimizing squared prediction error.
+
+For a node with data $(Y_i, W_i, \mathbf{X}_i)_{i \in \text{node}}$, the node-level effect estimate is the difference in group means:
+
+$$
+\hat{\tau}_{\text{node}} = \bar{Y}_{\text{treated}} - \bar{Y}_{\text{control}}
+$$
+
+and the split score is
+
+$$
+\Delta(\text{split}) = n_L \cdot \hat{\tau}_L^2 + n_R \cdot \hat{\tau}_R^2 - n \cdot \hat{\tau}_{\text{parent}}^2
+$$
+
+with $n_L, n_R, n$ the sample sizes in the left child, right child, and parent. This is exactly the between-group variance of treatment effects: a split is good when the two children disagree about the effect, not when they predict the outcome well. A covariate that strongly predicts $Y$ but is orthogonal to how $W$ acts will never be selected.
+
+### Honest Estimation
+
+The critical innovation is **honesty**. The data used to determine tree structure must be disjoint from the data used to estimate leaf effects:
+
+1. **Split the data** into $\mathcal{I}_{\text{split}}$ and $\mathcal{I}_{\text{est}}$
+2. **Build the tree** using only $\mathcal{I}_{\text{split}}$ to choose split variables and points
+3. **Estimate leaf effects** using only $\mathcal{I}_{\text{est}}$, dropping those observations into the already-fixed tree
+
+Without this, the tree cheats: it carves out leaves whose extreme effects are noise in the very sample used to find them, and then reports that noise as the estimate. This is the same adaptive-selection failure that [probability of backtest overfitting](/en/blog/post/probability-backtest-overfitting-pbo) measures at the strategy level, except here it is defended against inside the estimator rather than diagnosed after the fact. Honesty buys asymptotic unbiasedness:
+
+$$
+\mathbb{E}[\hat{\tau}(\mathbf{x}) \mid \mathbf{X}_i = \mathbf{x}] = \tau(\mathbf{x}) + o(1)
+$$
+
+The price is sample efficiency — half your data builds structure it cannot then be used to fill.
+
+### From Trees to Forests
+
+A causal forest aggregates $B$ causal trees, each on a random subsample of size $s < n$ with a random covariate subset at each split:
+
+$$
+\hat{\tau}(\mathbf{x}) = \frac{1}{B}\sum_{b=1}^{B} \hat{\tau}_b(\mathbf{x})
+$$
+
+The more useful way to write this is as a **weighted average of outcomes**:
+
+$$
+\hat{\tau}(\mathbf{x}) = \sum_{i=1}^{n} \alpha_i(\mathbf{x}) \cdot Y_i
+$$
+
+with adaptive weights set by how often observation $i$ lands in the same leaf as $\mathbf{x}$:
+
+$$
+\alpha_i(\mathbf{x}) = \frac{1}{B}\sum_{b=1}^{B} \frac{\mathbb{1}(\mathbf{X}_i \in L_b(\mathbf{x}))}{|L_b(\mathbf{x})|}
+$$
+
+where $L_b(\mathbf{x})$ is the leaf containing $\mathbf{x}$ in tree $b$. This is the generalized random forest view (Athey, Tibshirani and Wager 2019): a causal forest is a **locally adaptive kernel estimator**. It learns its own notion of "similar", defined by which covariates actually matter for effect heterogeneity, rather than by Euclidean distance in a space where you had to pick the scaling by hand.
+
+### Asymptotic Theory
+
+Under regularity conditions (Wager and Athey 2018) the estimator is consistent, $\hat{\tau}(\mathbf{x}) \xrightarrow{p} \tau(\mathbf{x})$, and asymptotically normal:
+
+$$
+\frac{\hat{\tau}(\mathbf{x}) - \tau(\mathbf{x})}{\hat{\sigma}(\mathbf{x})} \xrightarrow{d} \mathcal{N}(0, 1)
+$$
+
+giving pointwise intervals $\hat{\tau}(\mathbf{x}) \pm z_{\alpha/2} \cdot \hat{\sigma}(\mathbf{x})$. The variance $\hat{\sigma}^2(\mathbf{x})$ comes from the infinitesimal jackknife (or bootstrap-of-little-bags), computed from the same subsample structure the forest already built — no outer bootstrap loop.
+
+Worth being precise about what this guarantee is and is not. It is asymptotic and pointwise, and it holds for the CATE. The [conformal prediction](/en/blog/post/conformal-prediction-trading) intervals used elsewhere on this blog are finite-sample and distribution-free, but marginal, and they cover an outcome. Different estimand, different guarantee; they are not substitutes.
+
+## The Double Machine Learning Connection
+
+When treatment is not randomly assigned, the causal forest is fit on residualized data: an outcome model $\hat{m}(\mathbf{X}) = \mathbb{E}[Y \mid \mathbf{X}]$ and a propensity model $\hat{e}(\mathbf{X}) = \mathbb{E}[W \mid \mathbf{X}]$ are estimated by cross-fitting, and the forest runs on $\tilde{Y} = Y - \hat{m}$ against $\tilde{W} = W - \hat{e}$. Neyman orthogonality is what makes this safe: nuisance-estimation error enters only as a product, so $\hat{m}$ and $\hat{e}$ can each converge at $n^{-1/4}$ and $\hat{\tau}$ still converges at $n^{-1/2}$.
+
+That framework — residualization, cross-fitting, the orthogonality argument, sample-size implications — is the subject of its own article, [Double Machine Learning for Causal Trading Signals](/en/blog/post/double-ml-causal-trading). Read it first; everything below assumes it and only covers what changes when the estimand is $\tau(\mathbf{x})$ instead of $\tau$.
+
+<!-- SEQUENCING: double-ml-causal-trading must be published before this article, otherwise this link is dead. Both drafts currently carry date 2026-03-30 and the tag "causal-inference" — re-date this one after the DML piece ships. -->
+
+## Trading Application: Event Impact Heterogeneity
+
+![One market event produces positive, neutral, and negative counterfactual responses across assets with different covariates](/images/blog/causal-forests-treatment-effects-trading-event-impact.webp)
+
+### Setup
+
+The natural domain for this blog is the perpetual-futures coin universe, where events are frequent, timestamped, and observable without a vendor feed.
+
+- **Units**: coin-event observations across the tradable perp universe
+- **Treatment**: $W_i = 1$ if the event fired for coin $i$ — a funding-rate sign flip, a spot listing, or a liquidation cascade crossing the supercritical threshold described in [liquidation cascades as a trading signal](/en/blog/post/liquidation-cascades-trading-signal) — and $W_i = 0$ for matched non-event windows
+- **Outcome**: $Y_i$ = the **abnormal** return over the event window, not the raw return. Fit a market model on an estimation window preceding the event, then take the cumulative abnormal return. The exact specification — estimation window, market-model regression, CAR construction and its t-statistic — is worked out in the event-study section of [LLM alpha mining from earnings calls](/en/blog/post/llm-alpha-mining-earnings-calls); reuse it verbatim. This step is not optional: a raw close-to-close outcome lets the market-wide move enter $\hat{\tau}$, and since the market move is common to all treated units it looks exactly like a treatment effect
+- **Covariates** $\mathbf{X}_i$: market cap, realized volatility, funding history, order-book depth, open-interest-to-cap ratio
+- **Confounders** $\mathbf{W}_i$: regime variables that shift both event probability and returns
+
+### The Trading Signal
+
+The CATE surface maps onto a position sizer exactly like any calibrated uncertainty estimate: size by $|\hat{\tau}|$ relative to interval width, and do not trade when the interval straddles zero. That decision rule — inverse-width sizing, the edge ratio $e = |\hat{\tau}|/w$, the no-trade filter, the cost-aware variant, and the argument for why you should *not* multiply it into a Kelly fraction — is derived in [Conformal Prediction for Risk-Aware Position Sizing](/en/blog/post/conformal-prediction-trading). Reuse it with $\hat{\tau}$ in place of $\hat{\mu}$ and the causal-forest interval in place of the conformal one. Balance the long and short legs and the book is market-neutral by construction.
+
+## Python Implementation with EconML
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import GradientBoostingRegressor, GradientBoostingClassifier
+from econml.dml import CausalForestDML
+
+
+def fit_causal_forest(Y, T, X, W, n_estimators=1000):
+    """
+    CausalForestDML: residualize against (X, W), then fit a causal
+    forest on the residuals.
+
+    Y: abnormal returns over the event window (CAR, market-model adjusted)
+    T: event indicator
+    X: effect modifiers -- only these drive heterogeneity
+    W: confounders -- enter the nuisance models only
+    """
+    cf = CausalForestDML(
+        model_y=GradientBoostingRegressor(
+            n_estimators=200, max_depth=5, learning_rate=0.05
+        ),
+        model_t=GradientBoostingClassifier(
+            n_estimators=200, max_depth=5, learning_rate=0.05
+        ),
+        n_estimators=n_estimators,
+        min_samples_leaf=20,
+        max_depth=None,
+        criterion="het",          # heterogeneity-based splitting
+        honest=True,              # honest estimation
+        inference=True,           # infinitesimal-jackknife intervals
+        cv=5,                     # cross-fitting folds for DML
+        random_state=42,
+    )
+    cf.fit(Y=Y, T=T, X=X, W=W)
+    return cf
+
+
+def summarize_cate(cf, X, feature_names):
+    """Distribution of the CATE and what drives its heterogeneity."""
+    tau_hat = cf.effect(X)
+    tau_lo, tau_hi = cf.effect_interval(X, alpha=0.05)
+
+    print(f"Mean CATE:      {tau_hat.mean():.4f}")
+    print(f"Std CATE:       {tau_hat.std():.4f}")
+    print(f"Range:          [{tau_hat.min():.4f}, {tau_hat.max():.4f}]")
+    print(f"% CI excl. 0:   {((tau_lo > 0) | (tau_hi < 0)).mean():.1%}")
+
+    # NOTE: this is NOT ordinary feature importance. A causal forest's
+    # importances rank covariates by how much they drive effect
+    # HETEROGENEITY, not by how much they predict the outcome. A
+    # covariate can dominate return prediction and score zero here.
+    for idx in np.argsort(cf.feature_importances_)[::-1]:
+        print(f"  {feature_names[idx]:>20s}: {cf.feature_importances_[idx]:.4f}")
+
+    return tau_hat, tau_lo, tau_hi
+```
+
+<!-- TODO: needs real-data result — the fitted CATE distribution (mean, spread, % of intervals excluding zero) on the perp universe, plus the heterogeneity-importance ranking. No number in this article has been measured. -->
+
+### Interpreting the CATE Surface
+
+Marginal effect plots show how the treatment effect moves along one covariate with the rest held at their median:
+
+```python
+def plot_cate_by_feature(cf, X, feature_idx, n_points=50):
+    x_grid = np.linspace(X[:, feature_idx].min(),
+                         X[:, feature_idx].max(), n_points)
+    X_eval = np.tile(np.median(X, axis=0), (n_points, 1))
+    X_eval[:, feature_idx] = x_grid
+
+    tau = cf.effect(X_eval)
+    tau_lo, tau_hi = cf.effect_interval(X_eval, alpha=0.05)
+    return x_grid, tau, tau_lo, tau_hi
+```
+
+Read these as descriptions of the fitted surface, not as causal dose-response curves — holding the other covariates at their median can place you in a region of covariate space with no support.
+
+## Key Assumptions and Diagnostics
+
+![Overlap, balance, hidden-confounding, and placebo checks gate the path to a defensible causal estimate](/images/blog/causal-forests-treatment-effects-trading-assumptions-diagnostics.webp)
+
+Violate these and you get confident, precise, wrong effects.
+
+### 1. Unconfoundedness (Selection on Observables)
+
+$$
+Y(0), Y(1) \perp W \mid \mathbf{X}, \mathbf{W}
+$$
+
+Treatment assignment must be independent of potential outcomes given observed covariates. For a mechanically defined event this is defensible; for an event that is itself a market reaction — a listing announcement, an exchange's own liquidation engine firing — it is not, because the same unobserved flow that triggered the event also moves the return.
+
+Test it with Rosenbaum sensitivity analysis: if an unobserved $U$ can shift the treatment odds by up to a factor $\Gamma$,
+
+$$
+\frac{P(W=1 \mid \mathbf{X}, U)}{P(W=0 \mid \mathbf{X}, U)} \leq \Gamma \cdot \frac{P(W=1 \mid \mathbf{X})}{P(W=0 \mid \mathbf{X})}
+$$
+
+how large must $\Gamma$ be before the estimated effect flips sign? A design that breaks at $\Gamma = 1.1$ is not a finding.
+
+### 2. Overlap (Positivity)
+
+$$
+0 < P(W = 1 \mid \mathbf{X} = \mathbf{x}) < 1 \quad \forall \mathbf{x}
+$$
+
+Every unit needs positive probability of appearing in both arms. Check the propensity scores and trim:
+
+```python
+propensity = cf.models_t[0][0].predict_proba(np.hstack([X, W]))[:, 1]
+print(f"Propensity range: [{propensity.min():.3f}, {propensity.max():.3f}]")
+valid = (propensity > 0.05) & (propensity < 0.95)
+print(f"Retained after trimming: {valid.mean():.1%}")
+```
+
+Trimming is not free — it redefines the population your $\hat{\tau}$ describes. Report what fraction survived.
+
+<!-- TODO: needs real-data result — propensity overlap and retention rate after trimming on the actual coin universe. -->
+
+### 3. SUTVA (Stable Unit Treatment Value Assumption)
+
+$$
+Y_i = Y_i(W_i) \quad \text{(no interference between units)}
+$$
+
+One unit's treatment must not affect another's outcome. In crypto this is the weakest of the three: a liquidation cascade in one perp propagates through shared collateral and market-maker inventory into every correlated pair, which is interference by definition. Clustering standard errors by correlation group partially addresses it; nothing fully does.
+
+## Beyond Binary Treatments
+
+Causal forests extend to **continuous treatments** through the same DML machinery — estimating how the *magnitude* of a shock, not just its occurrence, differentially moves assets:
+
+$$
+Y_i = \tau(\mathbf{X}_i) \cdot T_i + g(\mathbf{X}_i, \mathbf{W}_i) + \epsilon_i
+$$
+
+where $T_i$ is, say, the size of the funding-rate change in basis points. Now $\tau(\mathbf{x})$ is a per-basis-point effect.
+
+```python
+cf_continuous = CausalForestDML(
+    model_y=GradientBoostingRegressor(n_estimators=200),
+    model_t=GradientBoostingRegressor(n_estimators=200),  # regression, not classifier
+    discrete_treatment=False,
+    n_estimators=1000,
+    honest=True,
+    inference=True,
+)
+cf_continuous.fit(Y=car, T=funding_change_bps, X=asset_features, W=controls)
+effects_25bp = cf_continuous.effect(X_test, T0=0, T1=25)
+```
+
+## Practical Considerations
+
+### Is the Heterogeneity Real?
+
+This is the question causal forests answer that nothing else on this blog does, and it deserves an actual test rather than a rule of thumb. Honesty guards against spurious splits inside the estimator; out-of-sample evaluation over held-out *events* (not held-out assets) is standard and covered in [walk-forward optimization](/en/blog/post/walk-forward-optimization) and [deflated Sharpe and multiple testing](/en/blog/post/deflated-sharpe-multiple-testing). Neither tells you whether $\hat{\tau}(\mathbf{x})$ varies with $\mathbf{x}$ at all.
+
+The **Best Linear Predictor** test does. Regress the residualized outcome on the residualized treatment and on its interaction with the demeaned CATE estimate:
+
+$$
+Y_i - \hat{m}(\mathbf{X}_i) = \alpha_0 (W_i - \hat{e}(\mathbf{X}_i)) + \alpha_1 (W_i - \hat{e}(\mathbf{X}_i))(\hat{\tau}(\mathbf{X}_i) - \bar{\tau}) + \epsilon_i
+$$
+
+The two coefficients answer two different questions. $\alpha_0$ is the average effect: is there anything here at all? $\alpha_1$ is the calibration slope on your own predictions: when your forest says the effect is larger, is it actually larger? Under the null of no heterogeneity $\alpha_1 = 0$. Under perfect calibration $\alpha_1 = 1$. An $\alpha_1$ significantly above zero but far below one means the forest has found a real ordering but overstated its spread — you can trade the ranking, not the magnitudes.
+
+EconML's `RScorer` gives a companion model-selection score:
+
+```python
+from econml.score import RScorer
+
+scorer = RScorer(
+    model_y=GradientBoostingRegressor(n_estimators=100),
+    model_t=GradientBoostingClassifier(n_estimators=100),
+    discrete_treatment=True,
+    cv=5,
+)
+scorer.fit(Y_val, T_val, X=X_val, W=W_val)
+print(f"R-score: {scorer.score(cf):.4f}")
+```
+
+Fit the scorer on a validation split the forest never saw, then use it to compare candidate CATE models against each other and against a constant-effect baseline. A forest that cannot beat the constant-effect model on R-score has found no heterogeneity worth trading, whatever its in-sample importances say.
+
+<!-- TODO: needs real-data result — the BLP estimates alpha_0 and alpha_1 with standard errors and p-values, plus the R-score of the causal forest against a constant-effect baseline. Without these the article asserts a method and demonstrates nothing. -->
+
+### Sample Size
+
+Causal forests need more data than an outcome model, because the estimand is a difference and both arms must be populated inside every leaf. The general data-vs-parameters discipline — how many out-of-sample points per free parameter, and the Bonferroni correction once you are comparing configurations — is in the data-requirements section of [walk-forward optimization](/en/blog/post/walk-forward-optimization). The causal-forest-specific answer is empirical, not a rule of thumb: fit the forest on nested subsamples and plot median interval width against $n$; the usable sample size is where the width drops below the effect sizes you intend to trade.
+
+<!-- TODO: needs real-data result — median CI width vs sample size on the perp event panel, replacing any rule-of-thumb minimum. -->
+
+### Walk-Forward, With Two Wrinkles
+
+The evaluation protocol is ordinary anchored walk-forward — refit on all events up to $t$, trade event $t+1$ — and the full treatment, including purging, embargo, the walk-forward efficiency ratio and degradation rate, is in [walk-forward optimization](/en/blog/post/walk-forward-optimization). Two things are specific to this estimator.
+
+First, **event windows overlap**. If the covariate window preceding event $t+1$ contains the outcome window of event $t$, the folds share observations and the out-of-sample result is contaminated. Purge overlapping windows before you count a single PnL number; with a mechanically frequent treatment like a funding flip this can remove a substantial share of events.
+
+Second, **the honest split must be redrawn at every refit**. Carrying the same $\mathcal{I}_{\text{split}}$/$\mathcal{I}_{\text{est}}$ partition across folds reintroduces exactly the structure-selection leakage honesty exists to prevent, because the newly added events land in a partition that was chosen with knowledge of the old ones.
+
+Then run event-level out-of-sample PnL through the usual gates — [PBO](/en/blog/post/probability-backtest-overfitting-pbo) and the [deflated Sharpe ratio](/en/blog/post/deflated-sharpe-multiple-testing) — before believing anything.
+
+<!-- TODO: needs real-data result — event-level OOS PnL with DSR and PBO, on the same footing as honest-negative-no-robust-edge. A negative result is publishable. -->
+
+### Costs
+
+A CATE signal is priced like any other event-driven signal: subtract the expected half-spread from $|\hat{\tau}|$ before the no-trade filter, and size down in thin books. The quantitative versions — the square-root impact law and fitted cost curves in [slippage cost models](/en/blog/post/slippage-cost-models-backtest), the cost-aware no-trade filter in [conformal prediction](/en/blog/post/conformal-prediction-trading), and the execution accounting in [implementation shortfall and TCA](/en/blog/post/implementation-shortfall-tca-execution) — all transfer unchanged.
+
+The one thing that does not transfer: a CATE signal's shelf life is bounded by the event window, so the cost is amortized over a fixed short holding period rather than over an open-ended one. A continuously-held signal pays the spread once and earns for as long as the edge persists; this one pays it every event. Whether the edge survives that is an empirical question about your specific event and your specific universe, and it is the first thing to check, because it can kill the strategy before any of the causal machinery matters.
+
+<!-- TODO: needs real-data result — round-trip cost as a fraction of mean |tau_hat| per event. -->
+
+## Conclusion
+
+Causal forests estimate a different object than the rest of this blog's toolkit. Not "what will this asset return", but "how much did this event move this asset, relative to the counterfactual where it did not fire". The machinery that makes that estimable — heterogeneity-maximizing splits, honest estimation, the adaptive-kernel weight representation, and infinitesimal-jackknife intervals — has no analogue in ordinary supervised learning, and the assumptions it needs (unconfoundedness, overlap, SUTVA) are strong enough that they must be tested rather than asserted.
+
+What this article does not have is a result. Every number above is a placeholder. Against the standard set by [the honest negative](/en/blog/post/honest-negative-no-robust-edge) and [deflated Sharpe](/en/blog/post/deflated-sharpe-multiple-testing), a method without a measured CATE distribution, a BLP $\alpha_1$ with a p-value, an overlap diagnostic, and DSR/PBO-gated out-of-sample PnL is a tutorial, not a finding. Those numbers are the next piece of work; a negative one is worth publishing.
+
+## References
+
+1. Athey, S., Imbens, G.W. "Recursive Partitioning for Heterogeneous Causal Effects." *PNAS*, 113(27), 7353-7360 (2016).
+2. Wager, S., Athey, S. "Estimation and Inference of Heterogeneous Treatment Effects using Random Forests." *JASA*, 113(523), 1228-1242 (2018). [arXiv:1510.04342](https://arxiv.org/abs/1510.04342)
+3. Athey, S., Tibshirani, J., Wager, S. "Generalized Random Forests." *Annals of Statistics*, 47(2), 1148-1178 (2019).
+4. Chernozhukov, V., et al. "Double/Debiased Machine Learning for Treatment and Structural Parameters." *The Econometrics Journal*, 21(1), C1-C68 (2018).
+5. Chernozhukov, V., Demirer, M., Duflo, E., Fernandez-Val, I. "Generic Machine Learning Inference on Heterogeneous Treatment Effects in Randomized Experiments." (2018). [arXiv:1712.04802](https://arxiv.org/abs/1712.04802)
+6. Battocchi, K., et al. "EconML: A Python Package for ML-Based Heterogeneous Treatment Effects Estimation." Microsoft Research (2019). [GitHub](https://github.com/py-why/EconML)

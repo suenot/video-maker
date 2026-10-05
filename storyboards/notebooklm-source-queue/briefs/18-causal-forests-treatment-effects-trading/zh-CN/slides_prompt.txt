@@ -1,0 +1,34 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article causal-forests-treatment-effects-trading ZH-CN ec6d296e32b8". It is the complete published zh article snapshot. Do not merge another language edition or outside facts. Output language: Simplified Chinese for Mainland China (zh-CN), not generic Chinese. Use Mainland trading and causal-inference terminology contextually, including 处理/干预 for a trading event, 条件平均处理效应, 无混杂性, 重叠性, 仓位 and 回测. Preserve source headings verbatim; translation quality needs editorial review. Keep mathematical symbols, units, code identifiers, citations and proper names exact. Speak Mainland Mandarin (Putonghua) for audio, not another Chinese language; regional terminology and pronunciation need editorial listening review. The localized source uses 无干扰/無干擾 for unconfoundedness and Taiwan text uses medical 治療 for treatment. Keep source headings exactly in the outline but do not endorse these as technical translations. Explain conditional no-unmeasured-confounding separately from SUTVA/no interference, and treatment as a trading event or intervention. Final regional wording requires a human editor.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 从平均效果到异质效果
+2. H3 — 平均处理效果
+3. H3 — 条件平均处理效果
+4. H3 — 为什么不只使用线性交互模型？
+5. H2 — 因果森林：算法
+6. H3 — 因果树
+7. H3 — 诚实估计
+8. H3 — 从树到森林
+9. H3 — 渐近理论
+10. H2 — Double Machine Learning 连接
+11. H2 — 交易应用：事件影响异质性
+12. H3 — 设定
+13. H3 — 交易信号
+14. H2 — 使用 EconML 的 Python 实现
+15. H3 — 解释 CATE 表面
+16. H2 — 关键假设和诊断
+17. H3 — 1. 无干扰（可观测选择）
+18. H3 — 2. 重叠（正性）
+19. H3 — 3. SUTVA（稳定单位处理值假设）
+20. H3 — 超越二元处理
+21. H2 — 实际考量
+22. H3 — 异质性是真的吗？
+23. H3 — 样本大小
+24. H3 — 前向，有两个转折
+25. H3 — 成本
+26. H2 — 结论
+27. H2 — 参考文献
+
+Distinguish conditional prediction mu(x) from ATE and CATE tau(x), binary treatment versus potential outcomes, and event impact relative to the missing counterfactual. Keep linear-interaction limitations, causal-tree split score for effect heterogeneity, disjoint honest structure/estimation samples, forest aggregation and adaptive leaf-cooccurrence weights. Explain asymptotic pointwise CATE intervals and their different estimand/guarantee from finite-sample marginal conformal outcome intervals. Preserve DML outcome/propensity residualization, cross-fitting, orthogonality, and the n^-1/4 versus n^-1/2 conditions as source claims. In the trading setup keep coin-event units, event indicator, abnormal cumulative return (CAR) after a pre-event market model rather than raw returns, effect modifiers X and confounders W, and event-window decision timing. Present the EconML CausalForestDML code and 95% interval as an illustrative workflow, not a measured result; distinguish heterogeneity importance from outcome importance and warn about unsupported covariate combinations in marginal plots. Keep unconfoundedness/selection on observables, Rosenbaum Gamma sensitivity, overlap/propensity trimming with reported retention, and SUTVA/no interference distinct; crypto liquidation contagion threatens SUTVA. Continuous treatment effects have basis-point units, including the article's 0-to-25 bps example. Preserve BLP alpha_0 versus alpha_1 calibration/null, RScorer versus constant-effect baseline, sample-size interval widths, anchored walk-forward, purging overlapping event windows, redrawing honest splits, DSR/PBO, half-spread/execution costs and short event shelf life. The article explicitly lacks real CATE, diagnostic and PnL results; every TODO remains unmeasured and no causal trading edge may be claimed. Flag its stale publication-sequencing comment for editor.
+
+Preserve substantive coverage, equations, symbols, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, biographical, research, financial, company-specific and mutable assertions remain attributed article claims pending human editorial and primary-source review. Formula and causal-assumption review is pending. Do not add outside facts, guaranteed returns or investment advice. Chinese regional terminology and Mandarin pronunciation await human review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams and tables only as supported by the source. Keep on-slide text in the requested locale apart from technical identifiers. End with its conclusion, citation or references.

@@ -1,0 +1,20 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article bill-williams ZH-CN 65a411461704". It is the complete published zh article snapshot. Do not merge another language edition or outside facts. Output language: Simplified Chinese for Mainland China (zh-CN), not generic Chinese. Use Mainland trading terminology, including 交易指标, 成交量, 仓位 and 回测. Preserve source headings verbatim; translation quality needs editorial review. Keep mathematical symbols, units, code identifiers, citations and proper names exact. Speak Mainland Mandarin (Putonghua) for audio, not another Chinese language; regional terminology and pronunciation need editorial listening review. The Chinese article includes regional-script and translation artifacts; keep its headings in this outline but require full Simplified or Traditional regional output as requested and editorial review.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 从教会学院到交易大厅
+2. H2 — 五大创新：核心发明
+3. H3 — 1. 鳄鱼线——"沉睡"与"狩猎"的指标
+4. H3 — 2. 分形——市场的"指纹"
+5. H3 — 3. 超级震荡指标（AO）
+6. H3 — 4. 市场推动力指数（MFI）
+7. H3 — 5. "五维理论"
+8. H2 — 哲学：为什么95%的交易者亏钱
+9. H2 — Profitunity学院：2.5万学员的家族事业
+10. H2 — 争议与批评
+11. H2 — 遗产：从慈善到梗图
+12. H2 — 引用
+13. H2 — 参考文献
+
+Keep the biography as an attributed account, not independently established fact: education, early exchange work, losses, books, Profitunity, family and legacy all require primary editorial verification. Preserve the five named indicator subsections in order. Explain the Alligator Jaw/Teeth/Lips phase metaphor, five-bar fractal and Alligator confirmation caveat, Awesome Oscillator, Market Facilitation Index with volume, and the five dimensions without claiming predictive validity. Preserve psychology, adaptation, position sizing and risk discussion along with indicator lag, false sideways-market signals and complexity criticism. When present in this exact language edition, treat 95% losing traders, 2% deposit risk, 80% psychology, 25,000 graduates, $6,000 tuition, 50% charity, all years, quotations, product adoption and any performance implications as claims made by this dated article, pending primary-source checks. Do not turn colorful sayings or the 2019 death statement into verified evidence. Keep controversy, citation and supplied references, including video links used as references rather than an attached article video. No strategy or indicator is a guarantee.
+
+Preserve substantive coverage, equations, symbols, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, biographical, research, financial, company-specific and mutable assertions remain attributed article claims pending human editorial and primary-source review. Biographical claims and indicator explanations require primary-source and editorial review. Do not add outside facts, guaranteed returns or investment advice. Chinese regional terminology and Mandarin pronunciation await human review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use natural spoken narration or dialogue in the requested locale. Explain formulas, variables, units, tables, plots and code in words, without requesting on-screen text. Distinguish article claims from verified facts when speaking. End with its conclusion and references.

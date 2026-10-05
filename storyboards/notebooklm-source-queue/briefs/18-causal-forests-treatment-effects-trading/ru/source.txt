@@ -1,0 +1,363 @@
+MM article causal-forests-treatment-effects-trading RU 5160a44cf12b
+
+---
+title: "Причинно-следственные леса для гетерогенных эффектов обработки в трейдинге"
+description: "Каждый бэктест в этом блоге оценивает условное среднее. Causal forests оценивают условный эффект обработки вместо этого — tau(x) вместо mu(x) — с честным разделением, представлением адаптивных весов ядра и тестом калибровки, который говорит, реальна ли найденная гетерогенность."
+date: "2026-08-01"
+tags: ["causal-inference", "causal-forest", "heterogeneous-effects", "econometrics", "treatment"]
+slug: "causal-forests-treatment-effects-trading"
+lang: "ru"
+image: "/images/blog/causal-forests-treatment-effects-trading.webp"
+authors: ["suenot"]
+---
+
+Каждая прогностическая модель в этом блоге оценивает один и тот же объект: условное среднее $\mu(\mathbf{x}) = \mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}]$. Feature engineering, gradient boosting, конформные интервалы, walk-forward валидация — все это служит одной оценке. Эта статья о другой оценке и о машинах, которые меняются, когда вы ее меняете.
+
+Объект — это **условный средний эффект обработки**:
+
+$$
+\tau(\mathbf{x}) = \mathbb{E}[Y_i(1) - Y_i(0) \mid \mathbf{X}_i = \mathbf{x}]
+$$
+
+разница между двумя потенциальными результатами для одной и той же единицы — один из которых вы никогда не наблюдаете. Вы не можете строить регрессию на нем, потому что его нет в ваших данных. Causal forests (Athey и Imbens 2016; Wager и Athey 2018) оценивают его непараметрически и, замечательно, дают валидный доверительный интервал вокруг него.
+
+Три вещи делают это возможным, и ни одной из них нет в стандартном случайном лесу: критерий разделения, который максимизирует дисперсию эффекта обработки вместо минимизации ошибки прогнозирования, ограничение **честности**, которое запрещает использовать одни и те же наблюдения для выбора разделения и оценки эффекта внутри него, и повторное чтение леса как адаптивного ядра, которое превращает сосуществование листьев в веса оценки. Эти три вещи, плюс тест калибровки, который говорит, является ли найденная гетерогенность сигналом, — содержание этой статьи.
+
+## От средних эффектов к гетерогенным
+
+![Плоский средний эффект обработки скрывает положительные и отрицательные карманы, которые выявляет поверхность гетерогенного эффекта обработки](/images/blog/causal-forests-treatment-effects-trading-heterogeneous-effects.webp)
+
+### Средний эффект обработки
+
+Настройка: бинарная обработка $W_i \in \{0, 1\}$ (событие произошло или нет), результат $Y_i$ (доход), ковариаты $\mathbf{X}_i$. **Средний эффект обработки** — это
+
+$$
+\tau_{\text{ATE}} = \mathbb{E}[Y_i(1) - Y_i(0)]
+$$
+
+среднее воздействие по всем единицам. Для трейдинга это почти бесполезно — вы не торгуете средним. Если событие толкает половину вселенной вверх, а половину вниз, ATE равен нулю, а возможность максимальна.
+
+### Условный средний эффект обработки
+
+CATE $\tau(\mathbf{x})$ обусловлен характеристиками. Дана монета с конкретной рыночной капитализацией, реализованной волатильностью, историей funding и глубиной книги: какой ожидаемый эффект доходности *этого* события на *этот* актив? CATE — это функция над пространством ковариат, и оценка этой функции без наложения ее формы — это то, что делают causal forests.
+
+### Почему не использовать линейные модели взаимодействия?
+
+Альтернатива учебника — насыщенная регрессия:
+
+$$
+Y_i = \alpha + \beta W_i + \gamma W_i \cdot \mathbf{X}_i + \delta \mathbf{X}_i + \epsilon_i
+$$
+
+где $\gamma$ несет взаимодействие. Это предполагает, что взаимодействие **линейно**. Это редко бывает: чувствительность к flip funding выпукла в leverage, не линейна; глубина взаимодействует мультипликативно с рыночной капитализацией; режим волатильности определяет все остальное. Causal forests не накладывают ничего этого — они адаптивно разбивают пространство ковариат и позволяют структуре гетерогенности выпасть из данных.
+
+## Causal Forests: Алгоритм
+
+![Disjoint выборки строят структуру дерева и оценивают эффекты в замороженных листьях, пока много честных деревьев не сольются в causal forest](/images/blog/causal-forests-treatment-effects-trading-honest-forest.webp)
+
+Causal forest — это случайный лес, перестроенный вокруг оценки эффекта обработки. Каждое дерево — это **каузальное дерево**, которое разбивает пространство ковариат для максимизации гетерогенности эффекта обработки.
+
+### Каузальные деревья
+
+В каждом внутреннем узле алгоритм выбирает переменную разделения $j$ и точку разделения $s$. Ключевое отличие от дерева регрессии: критерий максимизирует **дисперсию оцененного эффекта обработки** среди потомков, а не минимизирует квадратную ошибку прогнозирования.
+
+Для узла с данными $(Y_i, W_i, \mathbf{X}_i)_{i \in \text{node}}$ оценка эффекта на уровне узла — это разница средних групп:
+
+$$
+\hat{\tau}_{\text{node}} = \bar{Y}_{\text{treated}} - \bar{Y}_{\text{control}}
+$$
+
+и оценка разделения — это
+
+$$
+\Delta(\text{split}) = n_L \cdot \hat{\tau}_L^2 + n_R \cdot \hat{\tau}_R^2 - n \cdot \hat{\tau}_{\text{parent}}^2
+$$
+
+с $n_L, n_R, n$ — размерами выборки в левом потомке, правом потомке и родителе. Это в точности межгрупповая дисперсия эффектов обработки: разделение хорошо, когда два потомка не согласны по эффекту, а не когда они хорошо прогнозируют результат. Ковариата, которая сильно прогнозирует $Y$, но ортогональна тому, как действует $W$, никогда не будет выбрана.
+
+### Честная оценка
+
+Критическая инновация — **честность**. Данные, используемые для определения структуры дерева, должны быть disjoинт от данных, используемых для оценки эффектов листьев:
+
+1. **Разделите данные** на $\mathcal{I}_{\text{split}}$ и $\mathcal{I}_{\text{est}}$
+2. **Постройте дерево**, используя только $\mathcal{I}_{\text{split}}$ для выбора переменных и точек разделения
+3. **Оцените эффекты листьев**, используя только $\mathcal{I}_{\text{est}}$, dropping эти наблюдения в уже зафиксированное дерево
+
+Без этого дерево жульничает: оно вырезывает листья, чьи крайние эффекты — это шум в той же выборке, которая использовалась для их поиска, а затем сообщает этот шум как оценку. Это тот же сбой адаптивного выбора, который [вероятность overfitting бэктеста](/en/blog/post/probability-backtest-overfitting-pbo) измеряет на уровне стратегии, за исключением того, что здесь защищаются от него внутри оценщика, а не диагностируют post factum. Честность покупает асимптотическую несмещенность:
+
+$$
+\mathbb{E}[\hat{\tau}(\mathbf{x}) \mid \mathbf{X}_i = \mathbf{x}] = \tau(\mathbf{x}) + o(1)
+$$
+
+Цена — эффективность выборки; половина ваших данных строит структуру, которую затем нельзя использовать для заполнения.
+
+### От деревьев к лесам
+
+Causal forest агрегирует $B$ каузальных деревьев, каждое на случайной подвыборке размера $s < n$ со случайным подмножеством ковариат в каждом разделении:
+
+$$
+\hat{\tau}(\mathbf{x}) = \frac{1}{B}\sum_{b=1}^{B} \hat{\tau}_b(\mathbf{x})
+$$
+
+Более полезный способ написать это — как **взвешенное среднее результатов**:
+
+$$
+\hat{\tau}(\mathbf{x}) = \sum_{i=1}^{n} \alpha_i(\mathbf{x}) \cdot Y_i
+$$
+
+с адаптивными весами, установленными частотой, с которой наблюдение $i$ попадает в тот же лист, что $\mathbf{x}$:
+
+$$
+\alpha_i(\mathbf{x}) = \frac{1}{B}\sum_{b=1}^{B} \frac{\mathbb{1}(\mathbf{X}_i \in L_b(\mathbf{x}))}{|L_b(\mathbf{x})|}
+$$
+
+где $L_b(\mathbf{x})$ — лист, содержащий $\mathbf{x}$ в дереве $b$. Это обобщенное представление random forest (Athey, Tibshirani и Wager 2019): causal forest — это **локально адаптивный ядерный оценщик**. Он учится собственному понятию "похожести", определяемому тем, какие ковариаты реально важны для гетерогенности эффекта, а не евклидовым расстоянием в пространстве, где вам пришлось бы выбирать масштаб вручную.
+
+### Асимптотическая теория
+
+При условиях регулярности (Wager и Athey 2018) оценщик состоятелен, $\hat{\tau}(\mathbf{x}) \xrightarrow{p} \tau(\mathbf{x})$, и асимптотически нормален:
+
+$$
+\frac{\hat{\tau}(\mathbf{x}) - \tau(\mathbf{x})}{\hat{\sigma}(\mathbf{x})} \xrightarrow{d} \mathcal{N}(0, 1)
+$$
+
+дающим поточечные интервалы $\hat{\tau}(\mathbf{x}) \pm z_{\alpha/2} \cdot \hat{\sigma}(\mathbf{x})$. Дисперсия $\hat{\sigma}^2(\mathbf{x})$ берется из infinitesimal jackknife (или bootstrap-of-little-bags), вычисленного из той же структуры подвыборки, которую лес уже построил — нет внешнего цикла bootstrap.
+
+Стоит быть точным в том, что эта гарантия гарантирует и что нет. Она асимптотическая и поточечная, и выполняется для CATE. Интервалы [конформного прогнозирования](/en/blog/post/conformal-prediction-trading), используемые в других местах этого блога, конечновыборочные и свободные от распределения, но маргинальные, и покрывают результат. Разный estimand, разная гарантия; они не заменители.
+
+## Связь Double Machine Learning
+
+Когда обработка не назначена случайно, causal forest строится на residualised данных: модель результата $\hat{m}(\mathbf{X}) = \mathbb{E}[Y \mid \mathbf{X}]$ и модель propensity $\hat{e}(\mathbf{X}) = \mathbb{E}[W \mid \mathbf{X}]$ оцениваются посредством cross-fitting, и лес работает на $\tilde{Y} = Y - \hat{m}$ против $\tilde{W} = W - \hat{e}$. Ортогональность Неймана — это что делает это безопасным: ошибка оценки nuisance входит только как произведение, поэтому $\hat{m}$ и $\hat{e}$ могут каждая сходиться на $n^{-1/4}$, а $\hat{\tau}$ все еще сходится на $n^{-1/2}$.
+
+Этот фреймворк — residualisation, cross-fitting, аргумент ортогональности, последствия для размера выборки — это предмет собственной статьи, [Double Machine Learning для каузальных торговых сигналов](/en/blog/post/double-ml-causal-trading). Прочитайте ее сначала; все ниже предполагает это и покрывает только то, что меняется, когда estimand — это $\tau(\mathbf{x})$, а не $\tau$.
+
+## Приложение в трейдинге: гетерогенность воздействия событий
+
+![Одно рыночное событие производит положительные, нейтральные и отрицательные контрфактические отклики по активам с разными ковариатами](/images/blog/causal-forests-treatment-effects-trading-event-impact.webp)
+
+### Настройка
+
+Естественная область для этого блога — вселенная perpetual-futures монет, где события часты, имеют временные метки и наблюдаемы без vendor feed.
+
+- **Единицы**: наблюдения монета-событие по торгующей вселенной perp
+- **Обработка**: $W_i = 1$, если событие произошло для монеты $i$ — flip знака funding rate, spot listing, или каскад ликвидации, пересекающий суперкритический порог, описанный в [каскадах ликвидации как торговый сигнал](/en/blog/post/liquidation-cascades-trading-signal) — и $W_i = 0$ для соответствующих окон не-событий
+- **Результат**: $Y_i$ = **аномальная** доходность за окно события, не сырая доходность. Постройте рыночную модель на окне оценки перед событием, затем возьмите кумулятивную аномальную доходность. Точная спецификация — окно оценки, регрессия рыночной модели, конструкция CAR и ее t-статистика — проработана в секции исследования события [LLM alpha mining из earnings calls](/en/blog/post/llm-alpha-mining-earnings-calls); используйте verbatim. Этот шаг не обязателен: сырой результат close-to-close позволяет рыночному движению войти в $\hat{\tau}$, и поскольку рыночное движение общее для всех обработанных единиц, оно выглядит точно как эффект обработки
+- **Ковариаты** $\mathbf{X}_i$: рыночная капитализация, реализованная волатильность, история funding, глубина книги ордеров, отношение open-interest-to-cap
+- **Конфаундеры** $\mathbf{W}_i$: переменные режима, которые сдвигают и вероятность события, и доходность
+
+### Торговый сигнал
+
+Поверхность CATE отображается на position sizer точно так же, как любая откалиброванная оценка неопределенности: sizing по $|\hat{\tau}|$ относительно ширины интервала, и не торгуйте, когда интервал пересекает ноль. Это правило решения — inverse-width sizing, соотношение edge $e = |\hat{\tau}|/w$, фильтр no-trade, cost-aware вариант и аргумент, почему вы не должны умножать это в дробь Келли — выведено в [Конформном прогнозировании для риск-осознающего sizing позиций](/en/blog/post/conformal-prediction-trading). Используйте повторно с $\hat{\tau}$ вместо $\hat{\mu}$ и интервалом causal forest вместо конформного. Балансируйте длинную и короткую ноги, и книга нейтральна рынку по построению.
+
+## Реализация Python с EconML
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import GradientBoostingRegressor, GradientBoostingClassifier
+from econml.dml import CausalForestDML
+
+
+def fit_causal_forest(Y, T, X, W, n_estimators=1000):
+    """
+    CausalForestDML: residualize against (X, W), then fit a causal
+    forest on the residuals.
+
+    Y: abnormal returns over the event window (CAR, market-model adjusted)
+    T: event indicator
+    X: effect modifiers -- only these drive heterogeneity
+    W: confounders -- enter the nuisance models only
+    """
+    cf = CausalForestDML(
+        model_y=GradientBoostingRegressor(
+            n_estimators=200, max_depth=5, learning_rate=0.05
+        ),
+        model_t=GradientBoostingClassifier(
+            n_estimators=200, max_depth=5, learning_rate=0.05
+        ),
+        n_estimators=n_estimators,
+        min_samples_leaf=20,
+        max_depth=None,
+        criterion="het",          # heterogeneity-based splitting
+        honest=True,              # honest estimation
+        inference=True,           # infinitesimal-jackknife intervals
+        cv=5,                     # cross-fitting folds for DML
+        random_state=42,
+    )
+    cf.fit(Y=Y, T=T, X=X, W=W)
+    return cf
+
+
+def summarize_cate(cf, X, feature_names):
+    """Distribution of the CATE and what drives its heterogeneity."""
+    tau_hat = cf.effect(X)
+    tau_lo, tau_hi = cf.effect_interval(X, alpha=0.05)
+
+    print(f"Mean CATE:      {tau_hat.mean():.4f}")
+    print(f"Std CATE:       {tau_hat.std():.4f}")
+    print(f"Range:          [{tau_hat.min():.4f}, {tau_hat.max():.4f}]")
+    print(f"% CI excl. 0:   {((tau_lo > 0) | (tau_hi < 0)).mean():.1%}")
+
+    # NOTE: this is NOT ordinary feature importance. A causal forest's
+    # importances rank covariates by how much they drive effect
+    # HETEROGENEITY, not by how much they predict the outcome. A
+    # covariate can dominate return prediction and score zero here.
+    for idx in np.argsort(cf.feature_importances_)[::-1]:
+        print(f"  {feature_names[idx]:>20s}: {cf.feature_importances_[idx]:.4f}")
+
+    return tau_hat, tau_lo, tau_hi
+```
+
+### Интерпретация поверхности CATE
+
+Графики маржинального эффекта показывают, как эффект обработки движется вдоль одной ковариаты, когда остальные удерживаются на их медиане:
+
+```python
+def plot_cate_by_feature(cf, X, feature_idx, n_points=50):
+    x_grid = np.linspace(X[:, feature_idx].min(),
+                         X[:, feature_idx].max(), n_points)
+    X_eval = np.tile(np.median(X, axis=0), (n_points, 1))
+    X_eval[:, feature_idx] = x_grid
+
+    tau = cf.effect(X_eval)
+    tau_lo, tau_hi = cf.effect_interval(X_eval, alpha=0.05)
+    return x_grid, tau, tau_lo, tau_hi
+```
+
+Читайте эти как описания подобранной поверхности, а не как каузальные кривые доза-ответ — удержание других ковариат на их медиане может поместить вас в регион пространства ковариат без поддержки.
+
+## Ключевые предположения и диагностика
+
+![Overlap, баланс, hidden confounding и placebo проверки контролируют путь к защищенной каузальной оценке](/images/blog/causal-forests-treatment-effects-trading-assumptions-diagnostics.webp)
+
+Нарушите эти, и вы получите уверенные, точные, неправильные эффекты.
+
+### 1. Неконфаундированность (Selection on Observables)
+
+$$
+Y(0), Y(1) \perp W \mid \mathbf{X}, \mathbf{W}
+$$
+
+Назначение обработки должно быть независимо от потенциальных результатов при данных наблюдаемых ковариатах. Для механически определенного события это защитимо; для события, которое само является рыночной реакцией — анонс листинга, срабатывание собственной ликвидационной движка биржи — нет, потому что тот же ненаблюдаемый поток, который вызвал событие, также двигает доход.
+
+Протестируйте анализом чувствительности Розенбаума: если ненаблюдаемый $U$ может сдвинуть шансы обработки до фактора $\Gamma$,
+
+$$
+\frac{P(W=1 \mid \mathbf{X}, U)}{P(W=0 \mid \mathbf{X}, U)} \leq \Gamma \cdot \frac{P(W=1 \mid \mathbf{X})}{P(W=0 \mid \mathbf{X})}
+$$
+
+насколько велика должна быть $\Gamma$, прежде чем оцененный эффект изменит знак? Дизайн, ломающийся при $\Gamma = 1.1$ — не находка.
+
+### 2. Overlap (Позитивность)
+
+$$
+0 < P(W = 1 \mid \mathbf{X} = \mathbf{x}) < 1 \quad \forall \mathbf{x}
+$$
+
+Каждая единица нуждается в положительной вероятности появиться в обеих руках. Проверьте propensity scores и обрежьте:
+
+```python
+propensity = cf.models_t[0][0].predict_proba(np.hstack([X, W]))[:, 1]
+print(f"Propensity range: [{propensity.min():.3f}, {propensity.max():.3f}]")
+valid = (propensity > 0.05) & (propensity < 0.95)
+print(f"Retained after trimming: {valid.mean():.1%}")
+```
+
+Trimming не бесплатен — он переопределяет популяцию, которую описывает ваш $\hat{\tau}$. Сообщите, какая доля выжила.
+
+### 3. SUTVA (Stable Unit Treatment Value Assumption)
+
+$$
+Y_i = Y_i(W_i) \quad \text{(no interference between units)}
+$$
+
+Обработка одной единицы не должна влиять на результат другой. В крипто это самое слабое из трех: каскад ликвидации в одном perp распространяется через общий collateral и инвентарь маркет-мейкера в каждую коррелированную пару, что по определению является интерференцией. Кластеризация стандартных ошибок по группе корреляции частично решает это; ничто не решает полностью.
+
+## За пределами бинарных обработок
+
+Causal forests распространяются на **непрерывные обработки** через ту же DML machinery — оценивая, насколько *величина* шока, а не только его появление, по-разному сдвигает активы:
+
+$$
+Y_i = \tau(\mathbf{X}_i) \cdot T_i + g(\mathbf{X}_i, \mathbf{W}_i) + \epsilon_i
+$$
+
+где $T_i$ — это, скажем, размер изменения funding rate в базисных пунктах. Теперь $\tau(\mathbf{x})$ — это эффект на базисный пункт.
+
+```python
+cf_continuous = CausalForestDML(
+    model_y=GradientBoostingRegressor(n_estimators=200),
+    model_t=GradientBoostingRegressor(n_estimators=200),  # regression, not classifier
+    discrete_treatment=False,
+    n_estimators=1000,
+    honest=True,
+    inference=True,
+)
+cf_continuous.fit(Y=car, T=funding_change_bps, X=asset_features, W=controls)
+effects_25bp = cf_continuous.effect(X_test, T0=0, T1=25)
+```
+
+## Практические соображения
+
+### Гетерогенность реальна?
+
+Это вопрос, на который отвечают causal forests, и на который больше ничего в этом блоге не отвечает, и он заслуживает настоящего теста, а не эмпирического правила. Честность защищает от ложных разделений внутри оценщика; out-of-sample оценка на удержанных *событиях* (не удержанных активах) стандартна и покрыта в [walk-forward оптимизации](/en/blog/post/walk-forward-optimization) и [deflated Sharpe и множественном тестировании](/en/blog/post/deflated-sharpe-multiple-testing). Ничто не говорит вам, отличается ли $\hat{\tau}(\mathbf{x})$ с $\mathbf{x}$ вообще.
+
+Тест **Лучшего Линейного Предиктора** делает это. Регрессируйте residualised результат на residualised обработку и ее взаимодействие с центрированной оценкой CATE:
+
+$$
+Y_i - \hat{m}(\mathbf{X}_i) = \alpha_0 (W_i - \hat{e}(\mathbf{X}_i)) + \alpha_1 (W_i - \hat{e}(\mathbf{X}_i))(\hat{\tau}(\mathbf{X}_i) - \bar{\tau}) + \epsilon_i
+$$
+
+Два коэффициента отвечают на два разных вопроса. $\alpha_0$ — это средний эффект: есть ли здесь вообще что-то? $\alpha_1$ — это калибровочный наклон по вашим собственным прогнозам: когда ваш лес говорит, что эффект больше, он действительно больше? При нулевой гипотезе отсутствия гетерогенности $\alpha_1 = 0$. При идеальной калибровке $\alpha_1 = 1$. $\alpha_1$ значительно выше нуля, но далеко ниже единицы означает, что лес нашел настоящий порядок, но преувеличил его разброс — вы можете торговать рейтинг, а не величины.
+
+`RScorer` EconML дает сопровождающий score выбора модели:
+
+```python
+from econml.score import RScorer
+
+scorer = RScorer(
+    model_y=GradientBoostingRegressor(n_estimators=100),
+    model_t=GradientBoostingClassifier(n_estimators=100),
+    discrete_treatment=True,
+    cv=5,
+)
+scorer.fit(Y_val, T_val, X=X_val, W=W_val)
+print(f"R-score: {scorer.score(cf):.4f}")
+```
+
+Постройте scorer на split валидации, который лес никогда не видел, затем используйте для сравнения кандидатных моделей CATE друг с другом и против константно-эффектной baseline. Лес, который не может побить константно-эффектную модель на R-score, не нашел гетерогенность, стоящую торговли, что бы ни говорили его in-sample важности.
+
+### Размер выборки
+
+Causal forests нужны больше данных, чем модель результата, потому что estimand — это разница, и обе руки должны быть заселены в каждом листе. Общая дисциплина данных-против-параметров — сколько out-of-sample точек на свободный параметр, и коррекция Бонферони, когда вы сравниваете конфигурации — есть в секции требований к данным [walk-forward оптимизации](/en/blog/post/walk-forward-optimization). Ответ, специфичный для causal forest, эмпирический, а не правило большого пальца: постройте лес на nested subsamples и постройте медианную ширину интервала против $n$; используемый размер выборки там, где ширина падает ниже размеров эффекта, которые вы намерены торговать.
+
+### Walk-Forward, с двумя нюансами
+
+Протокол оценки — обычный anchored walk-forward — refit на всех событиях до $t$, trade событие $t+1$ — и полная обработка, включая purging, embargo, соотношение эффективности walk-forward и степень деградации, есть в [walk-forward оптимизации](/en/blog/post/walk-forward-optimization). Две вещи специфичны для этого оценщика.
+
+Во-первых, **окна событий перекрываются**. Если окно ковариат перед событием $t+1$ содержит окно результата события $t$, fold'ы делят наблюдения, и out-of-sample результат загрязнен. Purge перекрывающиеся окна прежде, чем посчитаете один номер PnL; при механически частой обработке вроде flip funding это может удалить существенную долю событий.
+
+Во-вторых, **честный split должен быть перерисован при каждом refit**. Перенос той же партиции $\mathcal{I}_{\text{split}}$/$\mathcal{I}_{\text{est}}$ через fold'ы реинтродуцирует ровно ту самую утечку выбора структуры, от которой существует честность, потому что вновь добавленные события приземляются в партицию, выбранную со знанием старых.
+
+Затем запустите event-level out-of-sample PnL через обычные ворота — [PBO](/en/blog/post/probability-backtest-overfitting-pbo) и [deflated Sharpe ratio](/en/blog/post/deflated-sharpe-multiple-testing) — прежде чем верить во что-либо.
+
+### Издержки
+
+CATE сигнал оценивается так же, как любой другой событийный сигнал: вычтите ожидаемый half-spread из $|\hat{\tau}|$ перед фильтром no-trade и sizing down в тонких книгах. Количественные версии — закон корневого воздействия и fitted cost curves в [слippage cost моделях](/en/blog/post/slippage-cost-models-backtest), cost-aware фильтр no-trade в [конформном прогнозировании](/en/blog/post/conformal-prediction-trading), и учет исполнения в [implementation shortfall и TCA](/en/blog/post/implementation-shortfall-tca-execution) — все переносится без изменений.
+
+Единственное, что не переносится: shelf-life CATE сигнала ограничена окном события, поэтому издержки амортизируются на фиксированный короткий период удержания, а не на открытый. Непрерывно удерживаемый сигнал платит спред один раз и зарабатывает, пока edge сохраняется; этот платит его на каждом событии. Выживет ли edge — это эмпирический вопрос о вашем конкретном событии и вашей конкретной вселенной, и это первое, что нужно проверить, потому что это может убить стратегию до того, как любой causal machinery будет иметь значение.
+
+## Заключение
+
+Causal forests оценивают другой объект, чем остальная часть toolkit этого блога. Не "что вернет этот актив", а "насколько это событие сдвинуло этот актив относительно контрфакта, где оно не стреляло". Машина, делающая это оценимым — разделы, максимизирующие гетерогенность, честная оценка, представление весов адаптивного ядра и интервалы infinitesimal jackknife — не имеет аналога в обычном обучении с учителем, и предположения, которые нужны (unconfoundedness, overlap, SUTVA), достаточно сильны, что они должны быть протестированы, а не утверждены.
+
+Чего нет в этой статье — это результат. Каждое число выше — плейсхолдер. Против стандарта, установленного [честным негативом](/en/blog/post/honest-negative-no-robust-edge) и [deflated Sharpe](/en/blog/post/deflated-sharpe-multiple-testing), метод без измеренного распределения CATE, BLP $\alpha_1$ с p-value, диагностикой overlap и PnL out-of-sample, ограниченным DSR/PBO — это туториал, а не находка. Эти числа — следующая работа; негативный результат стоит публикации.
+
+## Ссылки
+
+1. Athey, S., Imbens, G.W. "Recursive Partitioning for Heterogeneous Causal Effects." *PNAS*, 113(27), 7353-7360 (2016).
+2. Wager, S., Athey, S. "Estimation and Inference of Heterogeneous Treatment Effects using Random Forests." *JASA*, 113(523), 1228-1242 (2018). [arXiv:1510.04342](https://arxiv.org/abs/1510.04342)
+3. Athey, S., Tibshirani, J., Wager, S. "Generalized Random Forests." *Annals of Statistics*, 47(2), 1148-1178 (2019).
+4. Chernozhukov, V., et al. "Double/Debiased Machine Learning for Treatment and Structural Parameters." *The Econometrics Journal*, 21(1), C1-C68 (2018).
+5. Chernozhukov, V., Demirer, M., Duflo, E., Fernandez-Val, I. "Generic Machine Learning Inference on Heterogeneous Treatment Effects in Randomized Experiments." (2018). [arXiv:1712.04802](https://arxiv.org/abs/1712.04802)
+6. Battocchi, K., et al. "EconML: A Python Package for ML-Based Heterogeneous Treatment Effects Estimation." Microsoft Research (2019). [GitHub](https://github.com/py-why/EconML)

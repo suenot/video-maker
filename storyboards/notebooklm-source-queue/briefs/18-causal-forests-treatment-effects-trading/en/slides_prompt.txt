@@ -1,0 +1,34 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article causal-forests-treatment-effects-trading EN 95517fcdf1c7". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English. Use English throughout. Keep mathematical symbols, units, code identifiers, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — From Average to Heterogeneous Effects
+2. H3 — The Average Treatment Effect
+3. H3 — The Conditional Average Treatment Effect
+4. H3 — Why Not Just Use Linear Interaction Models?
+5. H2 — Causal Forests: The Algorithm
+6. H3 — Causal Trees
+7. H3 — Honest Estimation
+8. H3 — From Trees to Forests
+9. H3 — Asymptotic Theory
+10. H2 — The Double Machine Learning Connection
+11. H2 — Trading Application: Event Impact Heterogeneity
+12. H3 — Setup
+13. H3 — The Trading Signal
+14. H2 — Python Implementation with EconML
+15. H3 — Interpreting the CATE Surface
+16. H2 — Key Assumptions and Diagnostics
+17. H3 — 1. Unconfoundedness (Selection on Observables)
+18. H3 — 2. Overlap (Positivity)
+19. H3 — 3. SUTVA (Stable Unit Treatment Value Assumption)
+20. H2 — Beyond Binary Treatments
+21. H2 — Practical Considerations
+22. H3 — Is the Heterogeneity Real?
+23. H3 — Sample Size
+24. H3 — Walk-Forward, With Two Wrinkles
+25. H3 — Costs
+26. H2 — Conclusion
+27. H2 — References
+
+Distinguish conditional prediction mu(x) from ATE and CATE tau(x), binary treatment versus potential outcomes, and event impact relative to the missing counterfactual. Keep linear-interaction limitations, causal-tree split score for effect heterogeneity, disjoint honest structure/estimation samples, forest aggregation and adaptive leaf-cooccurrence weights. Explain asymptotic pointwise CATE intervals and their different estimand/guarantee from finite-sample marginal conformal outcome intervals. Preserve DML outcome/propensity residualization, cross-fitting, orthogonality, and the n^-1/4 versus n^-1/2 conditions as source claims. In the trading setup keep coin-event units, event indicator, abnormal cumulative return (CAR) after a pre-event market model rather than raw returns, effect modifiers X and confounders W, and event-window decision timing. Present the EconML CausalForestDML code and 95% interval as an illustrative workflow, not a measured result; distinguish heterogeneity importance from outcome importance and warn about unsupported covariate combinations in marginal plots. Keep unconfoundedness/selection on observables, Rosenbaum Gamma sensitivity, overlap/propensity trimming with reported retention, and SUTVA/no interference distinct; crypto liquidation contagion threatens SUTVA. Continuous treatment effects have basis-point units, including the article's 0-to-25 bps example. Preserve BLP alpha_0 versus alpha_1 calibration/null, RScorer versus constant-effect baseline, sample-size interval widths, anchored walk-forward, purging overlapping event windows, redrawing honest splits, DSR/PBO, half-spread/execution costs and short event shelf life. The article explicitly lacks real CATE, diagnostic and PnL results; every TODO remains unmeasured and no causal trading edge may be claimed. Flag its stale publication-sequencing comment for editor.
+
+Preserve substantive coverage, equations, symbols, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, biographical, research, financial, company-specific and mutable assertions remain attributed article claims pending human editorial and primary-source review. Formula and causal-assumption review is pending. Do not add outside facts, guaranteed returns or investment advice. Chinese regional terminology and Mandarin pronunciation await human review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams and tables only as supported by the source. Keep on-slide text in the requested locale apart from technical identifiers. End with its conclusion, citation or references.
