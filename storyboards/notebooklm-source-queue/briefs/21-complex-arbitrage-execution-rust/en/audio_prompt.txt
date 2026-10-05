@@ -1,0 +1,17 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article complex-arbitrage-execution-rust EN fa4c29b69332". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English. Use English throughout. Keep mathematical symbols, formula signs, units, code/API identifiers, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 1. Latency Optimization: Beyond the Kernel
+2. H3 — 1.1 io_uring and Network Bypassing
+3. H3 — 1.2 simd-json and Zero-Copy Deserialization
+4. H2 — 2. Lock-Free Order Books: No Mutexes
+5. H2 — 3. LMAX Disruptor: A Lock-Free Ring Buffer
+6. H2 — 4. Slippage Modeling: Layers of Certainty
+7. H2 — 5. Atomic Multi-Leg Execution: The Type-State Pattern
+8. H2 — 6. Risk Management: Kill Switches and Circuit Breakers
+9. H2 — 7. Performance Budget
+10. H2 — Conclusion
+
+Treat the edition's zero/near-zero syscall io_uring and network-bypass wording as source claims pending technical review. Preserve simd-json parsing, crossbeam-skiplist O(log n), atomic price/quantity fields and Reverse bid ordering, the 64-byte ring-buffer pipeline, and LOB/Kyle lambda/Amihud ILLIQ at their source horizons. Coherent snapshots, concurrency, backpressure, code definitions, crate versions and benchmark methodology need reviewer checks; no snippet is certified compiled or production-ready. Type-state checks local program transitions, while exchanges cannot provide atomic cross-venue fills; leg risk, partial fills, confirmations, cancellation, recovery, compensation and exposure remain real. Preserve the three circuit-breaker levels and source thresholds as illustrative policy, not universal safeguards. Preserve the edition's 0.5–2 ms incoming/outgoing network legs, 2–10 microsecond parse/book, 5–15 microsecond strategy/risk and stated 2–6 ms total as an unmeasured, environment-specific budget whose arithmetic requires review. The nanosecond, 2–4x and zero-copy claims need benchmarks and primary technical review. Do not claim an observed latency, safe execution or deployable engine. Review the linked HFT execution engine separately; repository availability and behavior have not been verified here.
+
+Preserve substantive coverage, equations, formula signs, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, research, financial, exchange/API, performance and mutable assertions remain attributed source claims pending human editorial, formula and primary-source review. Do not add outside facts, guaranteed returns, risk-free claims, investment advice, measured benchmarks or production validation. Chinese regional terminology and Mandarin pronunciation await human review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use natural spoken narration or dialogue in the requested locale. Explain formulas, variables, units, tables and code in words without requesting on-screen text. Distinguish source claims from verified facts when speaking. End with its conclusion and references if present.

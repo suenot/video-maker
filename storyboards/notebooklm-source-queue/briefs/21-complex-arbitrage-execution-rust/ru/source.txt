@@ -1,0 +1,719 @@
+MM article complex-arbitrage-execution-rust RU ce888ba5ac7e
+
+---
+title: "Исполнение сложного арбитража на Rust: от наносекунд до атомарных мультилег"
+description: "Как выжать максимум производительности из Rust для исполнения мультилег-арбитража: io_uring, lock-free стаканы, LMAX Disruptor, SIMD, type-state машины и arena-аллокаторы. Часть 6 серии «Сложные цепочки арбитража между фьючерсами и спотом»."
+tags: ["Rust", "арбитраж", "HFT", "low-latency", "lock-free", "SIMD", "алготрейдинг", "мультилег", "исполнение ордеров"]
+date: "2026-02-28"
+lang: "ru"
+image: "/images/blog/complex-arbitrage-execution-rust.webp"
+slug: "complex-arbitrage-execution-rust"
+authors: ["suenot"]
+---
+
+# Исполнение сложного арбитража на Rust: от наносекунд до атомарных мультилег
+
+![Исполнение арбитража на Rust](/images/blog/complex-arbitrage-execution-rust.webp)
+*Архитектура ultra-low-latency системы исполнения мультилег-арбитража: от приёма рыночных данных до отправки ордеров за 2-6 мс.*
+
+Представьте дирижёра, который управляет оркестром из пяти бирж одновременно. Каждый инструмент играет свою партию, и между первой нотой на скрипке и последним аккордом на контрабасе не должно пройти больше нескольких миллисекунд. Одна фальшивая нота — и арбитражная возможность превращается в убыток: заполненный лег на одной бирже и убежавшая цена на другой.
+
+Это шестая часть серии «Сложные цепочки арбитража между фьючерсами и спотом», и она самая практическая. Мы спустимся на уровень байтов, кэш-линий и атомарных операций. Каждый раздел — рабочий Rust-код, который можно адаптировать для своей системы.
+
+Исследования показывают: арбитражные спреды в крипте живут 200-800 мс. При общем времени исполнения ниже 50 мс hit rate достигает 82%, а выше 150 мс — падает до 31%. Каждая микросекунда на счету.
+
+## Оптимизация latency: от ядра ОС до парсинга
+
+### io_uring и AF_XDP: обход сетевого стека
+
+**io_uring** предоставляет асинхронный I/O через shared-memory кольца между user-space и ядром — после инициализации операции не требуют syscall:
+
+```rust
+use io_uring::IoUring;
+
+struct UringReader {
+    ring: IoUring,
+    buffers: Vec<Vec<u8>>, // Пре-аллоцированные буферы: один на биржу
+}
+
+impl UringReader {
+    fn new(num_exchanges: usize) -> std::io::Result<Self> {
+        Ok(Self {
+            ring: IoUring::new(256)?,
+            buffers: (0..num_exchanges).map(|_| vec![0u8; 65536]).collect(),
+        })
+    }
+
+    /// Один syscall — чтение со всех бирж разом
+    fn submit_batch(&mut self) -> std::io::Result<usize> {
+        // Формируем batch read-операций в submission queue
+        // Каждый CQE возвращает exchange_idx через user_data
+        self.ring.submit()
+    }
+}
+```
+
+**AF_XDP** — eBPF-программа перенаправляет пакеты прямо в user-space через UMEM-буферы (Single Producer / Single Consumer кольца), давая latency близкую к DPDK без эксклюзивного владения NIC.
+
+Рекомендация для крипто-арбитража: AF_XDP или io_uring. DPDK избыточен — биржи общаются через WebSocket/HTTPS, а не raw-протоколы.
+
+### simd-json и zero-copy десериализация
+
+Большинство бирж отдают JSON. **simd-json** использует SIMD-инструкции процессора для параллельного разбора, давая 2-4x ускорение:
+
+```rust
+use simd_json;
+use serde::Deserialize;
+
+#[derive(Deserialize)]
+struct DepthUpdate {
+    #[serde(rename = "b")]
+    bids: Vec<[String; 2]>,
+    #[serde(rename = "a")]
+    asks: Vec<[String; 2]>,
+    #[serde(rename = "E")]
+    timestamp: u64,
+}
+
+/// simd-json модифицирует буфер in-place — поэтому &mut
+fn parse_update(raw: &mut [u8]) -> Result<DepthUpdate, simd_json::Error> {
+    simd_json::from_slice(raw)
+}
+```
+
+Между потоками данные передаём через **rkyv** — zero-copy сериализация, где «десериализация» это просто каст указателя:
+
+```rust
+use rkyv::{Archive, Deserialize, Serialize};
+
+#[derive(Archive, Deserialize, Serialize)]
+struct OrderBookSnapshot {
+    exchange_id: u8,
+    symbol_id: u16,
+    timestamp_ns: u64,
+    bids: Vec<PriceQty>,
+    asks: Vec<PriceQty>,
+}
+
+#[derive(Archive, Deserialize, Serialize)]
+struct PriceQty {
+    price: u64,    // Fixed-point: price * 10^8
+    quantity: u64,
+}
+
+// Сериализация — один раз; доступ — ноль аллокаций
+let bytes = rkyv::to_bytes::<OrderBookSnapshot, 4096>(&snapshot)?;
+let archived = rkyv::check_archived_root::<OrderBookSnapshot>(&bytes)?;
+println!("Best bid: {}", archived.bids[0].price); // Прямой доступ
+```
+
+### SIMD для кросс-биржевого сравнения цен
+
+```rust
+#![feature(portable_simd)]
+use std::simd::{f64x4, SimdFloat, SimdPartialOrd};
+
+/// Поиск арбитража: 4 пары bid/ask за одну SIMD-инструкцию
+fn find_arbitrage(bids: f64x4, asks: f64x4) -> u64 {
+    let spreads = bids - asks;
+    let threshold = f64x4::splat(0.001); // 0.1% минимум
+    spreads.simd_gt(threshold).to_bitmask()
+}
+```
+
+Вертикальные SIMD-операции в 2.7x быстрее горизонтальных — структурируйте данные под поэлементную обработку. На stable Rust используйте крейт `packed_simd2`.
+
+![Ускорение SIMD](/images/blog/simd-price-comparison.webp)
+*SIMD обрабатывает 4-8 ценовых пар одной инструкцией, давая пропорциональное ускорение при сканировании арбитражных возможностей.*
+
+## Lock-free стаканы: без мьютексов
+
+### crossbeam-skiplist и ArcSwap
+
+При миллионах обновлений в секунду мьютекс на стакане — главный bottleneck. Concurrent skip list даёт O(log n) поиск без блокировок:
+
+```rust
+use std::sync::atomic::{AtomicU64, Ordering};
+use std::cmp::Reverse;
+use crossbeam_skiplist::SkipMap;
+
+struct PriceLevel {
+    price: AtomicU64,
+    total_qty: AtomicU64,
+    order_count: AtomicU64,
+}
+
+struct LockFreeOrderBook {
+    bids: SkipMap<Reverse<u64>, PriceLevel>,
+    asks: SkipMap<u64, PriceLevel>,
+}
+
+impl LockFreeOrderBook {
+    fn update_bid(&self, price: u64, qty: u64) {
+        if let Some(entry) = self.bids.get(&Reverse(price)) {
+            entry.value().total_qty.store(qty, Ordering::Release);
+        } else {
+            self.bids.insert(Reverse(price), PriceLevel {
+                price: AtomicU64::new(price),
+                total_qty: AtomicU64::new(qty),
+                order_count: AtomicU64::new(1),
+            });
+        }
+    }
+
+    fn best_bid(&self) -> Option<(u64, u64)> {
+        self.bids.front().map(|e| (
+            e.value().price.load(Ordering::Acquire),
+            e.value().total_qty.load(Ordering::Acquire),
+        ))
+    }
+}
+```
+
+Для случая «один писатель, много читателей» — паттерн **ArcSwap**: атомарная подмена иммутабельного снапшота без блокировок:
+
+```rust
+use arc_swap::ArcSwap;
+use std::sync::Arc;
+
+struct OrderBookView {
+    best_bid: u64,
+    best_ask: u64,
+    bid_depth: Vec<(u64, u64)>,
+    ask_depth: Vec<(u64, u64)>,
+    sequence: u64,
+}
+
+struct SharedBook {
+    current: ArcSwap<OrderBookView>,
+}
+
+impl SharedBook {
+    /// Писатель: атомарная подмена снапшота
+    fn publish(&self, view: OrderBookView) {
+        self.current.store(Arc::new(view));
+    }
+
+    /// Читатель: текущий снапшот без блокировок
+    fn load(&self) -> arc_swap::Guard<Arc<OrderBookView>> {
+        self.current.load()
+    }
+}
+```
+
+Между потоками данные передаём через **SPSC-очереди** (`rtrb` — real-time ring buffer), спроектированные для аудио и трейдинга:
+
+```rust
+use rtrb::RingBuffer;
+
+let (mut producer, mut consumer) = RingBuffer::new(65536);
+
+// Продюсер: push никогда не блокируется
+producer.push(MarketDataUpdate { /* ... */ }).ok();
+
+// Потребитель: spin-loop для минимальной latency
+while let Ok(update) = consumer.pop() {
+    orderbook.apply(update);
+}
+```
+
+## LMAX Disruptor: конвейер на кольцевом буфере
+
+Пре-аллоцированный ring buffer с выравниванием по кэш-линиям (64 байта) — сердце конвейера обработки:
+
+```rust
+/// Событие, выровненное по кэш-линии (избегаем false sharing)
+#[repr(C, align(64))]
+#[derive(Default)]
+struct MarketEvent {
+    event_type: u8,
+    exchange_id: u8,
+    symbol_id: u16,
+    _pad: u32,
+    timestamp_ns: u64,
+    bid_price: u64,
+    bid_qty: u64,
+    ask_price: u64,
+    ask_qty: u64,
+    _padding: [u8; 16], // До 64 байт
+}
+```
+
+Конвейер через барьеры: **стакан обновляется** -> **стратегия + риск** (параллельно) -> **логирование**. Все потребители видят одно событие без копирования. BusySpin wait strategy для минимальной latency.
+
+```rust
+let mut disruptor = DisruptorBuilder::new(|| MarketEvent::default(), 65536)
+    .with_wait_strategy(BusySpinWaitStrategy)
+    .with_barrier(|s| { s.handle_events(OrderBookUpdater::new()); })
+    .with_barrier(|s| {
+        s.handle_events(StrategyEngine::new());
+        s.handle_events(RiskMonitor::new());
+    })
+    .build();
+
+// Публикация — горячий путь, ноль аллокаций
+disruptor.publish(|event, _seq| {
+    event.exchange_id = 0;
+    event.bid_price = 50000_00000000;
+    event.ask_price = 50001_00000000;
+});
+```
+
+![Архитектура Disruptor](/images/blog/disruptor-pipeline.webp)
+*Конвейер LMAX Disruptor: один кольцевой буфер, несколько потребителей через барьеры. Ноль аллокаций, ноль false sharing.*
+
+## Smart Order Routing и моделирование проскальзывания
+
+### Оптимальное разделение ордера
+
+```rust
+struct VenueLiquidity {
+    exchange_id: u8,
+    available_qty: f64,
+    effective_price: f64,
+    fee_rate: f64,
+    fill_probability: f64,
+}
+
+fn compute_optimal_split(total_qty: f64, venues: &mut [VenueLiquidity]) -> Vec<(u8, f64)> {
+    venues.sort_by(|a, b| {
+        let ca = a.effective_price * (1.0 + a.fee_rate);
+        let cb = b.effective_price * (1.0 + b.fee_rate);
+        ca.partial_cmp(&cb).unwrap()
+    });
+
+    let mut remaining = total_qty;
+    venues.iter()
+        .take_while(|_| remaining > 0.0)
+        .map(|v| {
+            let fill = remaining.min(v.available_qty * v.fill_probability);
+            remaining -= fill;
+            (v.exchange_id, fill)
+        })
+        .collect()
+}
+```
+
+### Almgren-Chriss: оптимальная траектория исполнения
+
+Модель разделяет издержки на **временный импакт** (рассеивается) и **перманентный** (навсегда сдвигает цену):
+
+```rust
+struct AlmgrenChriss {
+    sigma: f64,    // Волатильность
+    eta: f64,      // Коэфф. временного импакта
+    gamma: f64,    // Коэфф. перманентного импакта
+    lambda: f64,   // Отвращение к риску
+    tau: f64,      // Время исполнения
+    n_slices: usize,
+}
+
+impl AlmgrenChriss {
+    fn optimal_trajectory(&self, total: f64) -> Vec<f64> {
+        let kappa = (self.lambda * self.sigma.powi(2) / self.eta).sqrt();
+        let dt = self.tau / self.n_slices as f64;
+        let positions: Vec<f64> = (0..self.n_slices)
+            .map(|j| total * (kappa * (self.tau - j as f64 * dt)).sinh()
+                            / (kappa * self.tau).sinh())
+            .collect();
+        // Конвертируем позиции в размеры сделок
+        (0..self.n_slices)
+            .map(|j| positions[j] - positions.get(j + 1).unwrap_or(&0.0))
+            .collect()
+    }
+}
+```
+
+### Kyle's Lambda и Amihud ILLIQ
+
+**Kyle's lambda** — ценовой импакт на единицу ордерного потока (OLS-регрессия `delta_p = lambda * signed_volume`). **Amihud ILLIQ** — практичный прокси, требующий только дневные данные:
+
+```rust
+struct AmihudEstimator {
+    window_days: usize,
+    daily_returns: VecDeque<f64>,
+    daily_volumes: VecDeque<f64>,
+}
+
+impl AmihudEstimator {
+    fn illiq(&self) -> f64 {
+        let n = self.daily_returns.len() as f64;
+        if n == 0.0 { return f64::MAX; }
+        self.daily_returns.iter().zip(self.daily_volumes.iter())
+            .map(|(r, v)| if *v == 0.0 { 0.0 } else { r.abs() / v })
+            .sum::<f64>() / n
+    }
+}
+```
+
+Мы используем все три модели совместно: анализ глубины стакана для моментальной оценки (микросекунды), Kyle's lambda на тиковых данных для динамической коррекции (миллисекунды), Amihud — для долгосрочного мониторинга режимов ликвидности.
+
+![Моделирование проскальзывания](/images/blog/slippage-modeling-layers.webp)
+*Три уровня моделирования: мгновенный анализ стакана, Kyle's Lambda на тиковых данных, Amihud ILLIQ на дневных.*
+
+## Атомарное исполнение мультилег: type-state паттерн
+
+Главный вызов: сделки на разных биржах не могут быть атомарными. **Leg risk** — заполнился один лег, а другой нет. Система типов Rust позволяет сделать невозможные переходы ошибками компиляции.
+
+### Type-state: компилятор как гарант
+
+```rust
+use std::marker::PhantomData;
+
+// Состояния — типы. Невалидные переходы не компилируются.
+struct Idle;
+struct Validating;
+struct ExecutingLeg;
+struct AwaitingConfirmation { leg_index: usize }
+struct FullyFilled;
+struct RollingBack;
+
+struct Execution<State> {
+    trade_id: u64,
+    legs: Vec<TradeLeg>,
+    fills: Vec<Option<Fill>>,
+    _state: PhantomData<State>,
+}
+
+impl<S> Execution<S> {
+    fn transition<T>(self) -> Execution<T> {
+        Execution {
+            trade_id: self.trade_id, legs: self.legs,
+            fills: self.fills, _state: PhantomData,
+        }
+    }
+}
+
+impl Execution<Idle> {
+    fn validate(self) -> Result<Execution<Validating>, String> {
+        // Проверка балансов, цен, лимитов
+        Ok(self.transition())
+    }
+}
+
+impl Execution<Validating> {
+    fn start(self) -> Execution<ExecutingLeg> { self.transition() }
+}
+
+impl Execution<AwaitingConfirmation> {
+    fn leg_filled(mut self, fill: Fill) -> ConfirmResult {
+        self.fills[fill.leg_index] = Some(fill);
+        if self.fills.iter().all(|f| f.is_some()) {
+            ConfirmResult::Done(self.transition())
+        } else {
+            ConfirmResult::NextLeg(self.transition())
+        }
+    }
+    fn leg_failed(self) -> Execution<RollingBack> { self.transition() }
+}
+
+enum ConfirmResult {
+    Done(Execution<FullyFilled>),
+    NextLeg(Execution<ExecutingLeg>),
+}
+
+// exec.validate()  из состояния RollingBack — ОШИБКА КОМПИЛЯЦИИ!
+```
+
+### Гибридная стратегия: secure hardest leg first
+
+```rust
+async fn execute_hybrid(legs: &mut [TradeLeg]) -> MultiLegResult {
+    // Сортируем: самый рискованный лег первым
+    legs.sort_by(|a, b| b.risk_score.partial_cmp(&a.risk_score).unwrap());
+
+    // Фаза 1: пессимистично — ждём подтверждения первого лега
+    let first = submit_and_wait(&legs[0]).await?;
+
+    // Фаза 2: оптимистично — остальные параллельно
+    let rest: Vec<_> = legs[1..].iter().map(|l| submit_order(l)).collect();
+    let results = futures::future::join_all(rest).await;
+
+    // Обработка частичных заполнений...
+    handle_results(first, results)
+}
+```
+
+При частичном заполнении применяем каскад стратегий:
+
+```rust
+enum PartialFillAction {
+    Retry { max_attempts: u32 },
+    RerouteToVenue { venue_id: u8 },
+    HedgeCorrelated { symbol: String, ratio: f64 },
+    EmergencyUnwind,
+}
+
+fn handle_partial_fill(exposure_usd: f64, max_exposure: f64) -> PartialFillAction {
+    if exposure_usd.abs() > max_exposure {
+        return PartialFillAction::EmergencyUnwind;
+    }
+    // Retry -> reroute -> hedge -> unwind (в порядке приоритета)
+    PartialFillAction::Retry { max_attempts: 3 }
+}
+```
+
+**Fill-or-Kill (FOK)** ордера исключают частичное заполнение, но снижают fill rate. Мы используем FOK для самого рискованного лега, а для остальных — лимитные ордера с допуском.
+
+## Риск-менеджмент во время исполнения
+
+### Kill switch и circuit breakers
+
+```rust
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
+
+struct RiskEngine {
+    max_loss_per_trade: f64,
+    max_daily_loss: f64,
+    max_exposure: f64,
+    kill_switch: Arc<AtomicBool>,
+}
+
+impl RiskEngine {
+    /// Пре-трейд проверка — микросекунды
+    fn pre_trade_check(&self, order_value: f64) -> Result<(), &str> {
+        if self.kill_switch.load(Ordering::Acquire) {
+            return Err("kill switch active");
+        }
+        if order_value > self.max_exposure {
+            return Err("exposure limit");
+        }
+        Ok(())
+    }
+
+    fn activate_kill_switch(&self, reason: &str) {
+        eprintln!("KILL SWITCH: {}", reason);
+        self.kill_switch.store(true, Ordering::Release);
+    }
+}
+```
+
+Трёхуровневый **circuit breaker** адаптирован для крипто-арбитража:
+
+```rust
+#[derive(Debug)]
+enum BreakerState {
+    Normal,
+    Paused { until: Instant, trigger: String },   // Слой 1
+    Halted { until: Instant, trigger: String },    // Слой 2
+    Shutdown { trigger: String },                  // Слой 3
+}
+
+fn evaluate_breakers(btc_5m_pct: f64, btc_1h_pct: f64, btc_24h_pct: f64) -> BreakerState {
+    if btc_24h_pct < -20.0 {
+        return BreakerState::Shutdown {
+            trigger: format!("BTC -{}% за 24ч", btc_24h_pct.abs()),
+        };
+    }
+    if btc_1h_pct < -15.0 {
+        return BreakerState::Halted {
+            until: Instant::now() + Duration::from_secs(900),
+            trigger: format!("BTC -{}% за 1ч", btc_1h_pct.abs()),
+        };
+    }
+    if btc_5m_pct.abs() > 5.0 {
+        return BreakerState::Paused {
+            until: Instant::now() + Duration::from_secs(300),
+            trigger: format!("Волатильность {}% за 5мин", btc_5m_pct.abs()),
+        };
+    }
+    BreakerState::Normal
+}
+```
+
+Real-time **PnL трекер** обновляет mark-to-market и проверяет drawdown на каждом тике. При превышении порога — автоматическая активация kill switch.
+
+![Уровни circuit breaker](/images/blog/circuit-breaker-layers.webp)
+*Трёхуровневая защита: от 5-минутной паузы при локальном всплеске до полной остановки при глобальном крахе.*
+
+## Память: arena-аллокаторы и jemalloc
+
+### bumpalo: сброс за O(1)
+
+```rust
+use bumpalo::Bump;
+
+struct TickProcessor {
+    arena: Bump, // 1 MB пре-аллоцированной памяти
+}
+
+impl TickProcessor {
+    fn process_tick(&mut self, prices: &[f64]) {
+        let spreads = self.arena.alloc_slice_fill_default::<f64>(prices.len());
+        // ... вычисления в арене ...
+        self.arena.reset(); // O(1) — просто сброс указателя
+    }
+}
+```
+
+**jemalloc** как глобальный аллокатор — одна строка в коде, но существенное ускорение:
+
+```rust
+use tikv_jemallocator::Jemalloc;
+
+#[global_allocator]
+static GLOBAL: Jemalloc = Jemalloc;
+// Thread-local кэши, size-class bins, минимум фрагментации
+```
+
+| Компонент | Аллокатор | Причина |
+|-----------|-----------|---------|
+| Горячий путь | bumpalo | Сброс за O(1) каждый тик |
+| Уровни стакана | Пре-аллоцированный пул | Фиксированный максимум |
+| Объекты ордеров | Object pool + free list | Частый alloc/dealloc |
+| Логирование | jemalloc | Общее назначение |
+
+## Бенчмаркинг: criterion и TSC-гистограммы
+
+```rust
+use criterion::{criterion_group, criterion_main, Criterion, black_box};
+
+fn bench_orderbook(c: &mut Criterion) {
+    let book = LockFreeOrderBook::new();
+    c.bench_function("bid_update", |b| {
+        b.iter(|| book.update_bid(black_box(50000_00000000), black_box(1_50000000)))
+    });
+}
+
+criterion_group!(benches, bench_orderbook);
+criterion_main!(benches);
+```
+
+Для наносекундной точности — аппаратный **TSC** (Time Stamp Counter) процессора:
+
+```rust
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::_rdtsc;
+
+struct LatencyHistogram {
+    buckets: [u64; 1000], // Микросекундные бакеты 0-999us
+    overflow: u64,
+    count: u64,
+    sum: u64,
+    tsc_freq: u64,
+}
+
+impl LatencyHistogram {
+    fn record(&mut self, start_tsc: u64, end_tsc: u64) {
+        let micros = (end_tsc - start_tsc) * 1_000_000 / self.tsc_freq;
+        self.count += 1;
+        self.sum += micros;
+        if micros < 1000 { self.buckets[micros as usize] += 1; }
+        else { self.overflow += 1; }
+    }
+
+    fn percentile(&self, p: f64) -> u64 {
+        let target = (self.count as f64 * p) as u64;
+        let mut cum = 0;
+        for (us, &cnt) in self.buckets.iter().enumerate() {
+            cum += cnt;
+            if cum >= target { return us as u64; }
+        }
+        999
+    }
+}
+```
+
+**Flamegraph** через `cargo flamegraph` визуализирует горячие функции — ищите широкие плато (JSON-парсинг, хэш-вычисления, аллокации).
+
+![Flamegraph профиль](/images/blog/flamegraph-trading-system.webp)
+*Flamegraph торговой системы: широкие плато показывают, где тратится время.*
+
+## Интегрированная архитектура
+
+```
+  Binance ◄──► WS ──► ┌──────────┐     ┌──────────┐
+  OKX     ◄──► WS ──► │Disruptor │────►│Стратегия │
+  Bybit   ◄──► WS ──► │Ring Buf  │────►│  + Риск  │
+                       └──────────┘     └────┬─────┘
+  Агрегированные стаканы ◄──────────────────►│
+  (lock-free, rkyv)                    ┌─────▼─────┐
+  Event Store ◄────────────────────────│ SOR + Exec│
+  (CQRS, append-only)                 │(TypeState) │
+                                       └───────────┘
+```
+
+Привязка потоков к **CPU-ядрам** для стабильного cache locality:
+
+```rust
+use core_affinity::CoreId;
+use tokio::runtime::Builder;
+use std::sync::{Arc, Mutex};
+
+fn create_trading_runtime(cores: &[usize]) -> tokio::runtime::Runtime {
+    let ids: Vec<CoreId> = cores.iter().map(|&id| CoreId { id }).collect();
+    let iter = Arc::new(Mutex::new(ids.into_iter()));
+
+    Builder::new_multi_thread()
+        .worker_threads(cores.len())
+        .on_thread_start(move || {
+            if let Some(id) = iter.lock().unwrap().next() {
+                core_affinity::set_for_current(id);
+            }
+        })
+        .enable_all()
+        .build()
+        .unwrap()
+}
+// Ядра 0-1: ОС, 2: данные, 3: стаканы, 4: стратегия,
+// 5: исполнение, 6: риск, 7: логи
+```
+
+**Latency budget**: сеть 0.5-2 мс, парсинг 1-5 мкс, стакан 0.5-2 мкс, арбитраж 1-5 мкс, риск 0.5-1 мкс, сеть 0.5-2 мс. **Итого: 2-6 мс** (доминирует сетевой RTT).
+
+Ключевой инсайт: для крипто-арбитража сетевой RTT к бирже (2-4 мс) доминирует в латентном бюджете. Оптимизация внутренней обработки ниже ~10 мкс даёт убывающую отдачу. Три главных направления оптимизации:
+
+1. **Co-location** — размещение серверов в том же AWS-регионе, что и биржа (ap-northeast-1 для Binance, us-east-1 для Coinbase)
+2. **Параллельная отправка** всех легов — сокращает общее время исполнения мультилег-арбитража
+3. **Устранение джиттера** — ноль GC, ноль аллокаций на горячем пути, привязка к ядрам, huge pages для снижения TLB misses
+
+### Рекомендуемые зависимости Cargo
+
+```toml
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+tokio-tungstenite = "0.24"
+serde = { version = "1", features = ["derive"] }
+simd-json = "0.14"
+rkyv = "0.8"
+crossbeam = "0.8"
+crossbeam-skiplist = "0.1"
+arc-swap = "1"
+rtrb = "0.3"
+tikv-jemallocator = "0.6"
+bumpalo = "3"
+core_affinity = "0.8"
+tracing = "0.1"
+
+[dev-dependencies]
+criterion = "0.5"
+```
+
+В следующей части серии мы погрузимся в мониторинг и операционное управление продакшен-системой: распределённые трейсы, метрики, алерты и post-mortem анализ исполнений.
+
+## Полезные ссылки
+
+1. [OrderBook-rs: Lock-Free Order Book in Rust](https://github.com/joaquinbejar/OrderBook-rs)
+2. [rkyv: Zero-Copy Deserialization Framework](https://github.com/rkyv/rkyv)
+3. [disruptor-rs: LMAX Disruptor Pattern in Rust](https://github.com/khaledyassin/disruptor-rs)
+4. [Pretty State Machine Patterns in Rust](https://hoverbear.org/blog/rust-state-machine-pattern/)
+5. [Deep Dive into IS: The Almgren-Chriss Framework](https://medium.com/@anboto_labs/deep-dive-into-is-the-almgren-chriss-framework-be45a1bde831)
+6. [Optimal Execution of Portfolio Transactions (Almgren & Chriss)](https://www.smallake.kr/wp-content/uploads/2016/03/optliq.pdf)
+7. [Illiquidity and Stock Returns (Amihud)](https://www.cis.upenn.edu/~mkearns/finread/amihud.pdf)
+8. [Mastering Multi-Leg Algos in Crypto](https://www.talos.com/insights/mastering-multi-leg-algos-advanced-execution-strategies-in-crypto-markets)
+9. [Optimize Tick-to-Trade Latency on AWS](https://aws.amazon.com/blogs/web3/optimize-tick-to-trade-latency-for-digital-assets-exchanges-and-trading-platforms-on-aws/)
+10. [Rust SIMD Performance Guide](https://rust-lang.github.io/packed_simd/perf-guide/vert-hor-ops.html)
+
+## Цитирование
+
+```bibtex
+@software{soloviov2026complexarbitrageexecutionrust,
+  author = {Soloviov, Eugen},
+  title = {Исполнение сложного арбитража на Rust: от наносекунд до атомарных мультилег},
+  year = {2026},
+  url = {https://marketmaker.cc/ru/blog/post/complex-arbitrage-execution-rust},
+  version = {0.1.0},
+  description = {Как выжать максимум производительности из Rust для исполнения мультилег-арбитража: io_uring, lock-free стаканы, LMAX Disruptor, SIMD, type-state машины и arena-аллокаторы.}
+}
+```

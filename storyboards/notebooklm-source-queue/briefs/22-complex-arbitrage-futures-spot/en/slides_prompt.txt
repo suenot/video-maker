@@ -1,0 +1,16 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article complex-arbitrage-futures-spot EN 1cce761ff956". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English. Use English throughout. Keep mathematical symbols, formula signs, units, code/API identifiers, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 1. The Core Concept: Basis and Convergence
+2. H3 — 1.1 Cash-and-Carry
+3. H2 — 2. Perpetual Futures and Funding Rates
+4. H3 — 2.1 Funding Arbitrage
+5. H2 — 3. DeFi-CeFi Arbitrage: The New Frontier
+6. H3 — 3.1 The Chain
+7. H3 — 3.2 Cross-Chain Complexity
+8. H2 — 4. Execution Risk: Leg Risk and Liquidation
+9. H2 — 5. Conclusion
+
+Keep basis F-S, convergence at delivery/settlement as a contract-dependent theoretical relation, long spot plus short dated future cash-and-carry, and annualized basis-yield arithmetic. The article’s exact $2,000 profit, MUST converge and risk-free wording ignores fees, borrowing, funding, settlement rules, basis, collateral, tax, execution and counterparty risk; frame each as a simplified source example, never guaranteed income. For perps distinguish dated expiry from ongoing positive/negative funding direction, variable funding, 0.01% per eight hours and about 11% simple annualization as illustrative article arithmetic, not a forecast; delta-neutral is not no-risk. Preserve long-spot/short-perp and cross-platform funding signs, collateral/liquidation exposure, and the difference between an annualized nominal rate and realized net return. Cover CeFi/DEX discrepancy, pre-funded inventory versus bridge delay/finality, RPC/API failures, gas and slippage, MEV, chain/reorg/smart-contract and venue risks, plus one-leg execution failure. Rust snippets are pseudocode with missing definitions/controls, not validated trading systems. Do not endorse any current funding, yield, exchange support or investment result.
+
+Preserve substantive coverage, equations, formula signs, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, research, financial, exchange/API, performance and mutable assertions remain attributed source claims pending human editorial, formula and primary-source review. Do not add outside facts, guaranteed returns, risk-free claims, investment advice, measured benchmarks or production validation. Chinese regional terminology and Mandarin pronunciation await human review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams, code and tables only as supported by the source. Keep on-slide text in the requested locale apart from technical identifiers. End with its conclusion, citations or references if present.

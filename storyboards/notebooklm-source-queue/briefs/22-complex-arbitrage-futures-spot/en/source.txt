@@ -1,0 +1,102 @@
+MM article complex-arbitrage-futures-spot EN 1cce761ff956
+
+---
+title: "Futures-Spot Arbitrage: From Cash-and-Carry to DeFi-CeFi"
+description: "How funding rates, basis, and the convergence of decentralized and centralized markets create risk-free opportunities for capital in the crypto market."
+tags: ["arbitrage", "futures", "spot", "cash-and-carry", "funding rate", "basis", "DeFi", "CeFi", "rust", "deltaneutral"]
+date: "2026-02-24"
+lang: "en"
+image: "/images/blog/complex-arbitrage-futures-spot.webp"
+slug: "complex-arbitrage-futures-spot"
+authors: ["suenot"]
+---
+
+# Futures-Spot Arbitrage: From Cash-and-Carry to DeFi-CeFi
+
+*Part 2 of the series "Complex Arbitrage Chains Between Futures and Spot"*
+
+In the previous part, we discussed how graph algorithms find complex paths for asset swaps. But the cryptocurrency market offers another dimension of profit—the price difference between the same asset on different types of markets: Spot and Futures.
+
+This is the world of **delta-neutral strategies**, where the trader's profit does not depend on whether the market goes up or down.
+
+![Futures-Spot Arbitrage Visualization](/images/blog/complex-arbitrage-futures-spot.webp)
+*A visualization showing the bridge between spot markets and derivatives. One side shows spot candles, the other shows futures order books and funding rates.*
+
+## 1. The Core Concept: Basis and Convergence
+
+At its heart, futures-spot arbitrage relies on the **Basis**—the difference between the futures price ($F$) and the spot price ($S$):
+$$\text{Basis} = F - S$$
+
+On the expiration date of a futures contract, the futures price MUST equal the spot price ($F = S$). This is called **Convergence**.
+
+### 1.1 Cash-and-Carry
+The most classic strategy:
+1. **Buy Spot:** Buy 1 BTC at $50,000.
+2. **Sell Futures:** Sell 1 BTC December Futures at $52,000.
+3. **Wait:** In December, you deliver the BTC. Your profit is exactly $2,000, regardless of the BTC price.
+
+In Rust, we track these spreads across exchanges to find the highest annualized return:
+
+```rust
+fn calculate_annualized_yield(basis: f64, spot_price: f64, days_to_expiry: f64) -> f64 {
+    let yield_pct = basis / spot_price;
+    (yield_pct / days_to_expiry) * 365.0 * 100.0
+}
+```
+
+## 2. Perpetual Futures and Funding Rates
+
+The most popular instrument in crypto is the **Perpetual Future** (Perp), which never expires. To keep the Perp price close to the Spot price, exchanges use a **Funding Rate**.
+
+- **Positive Funding:** Longs pay Shorts. Usually happens in a bull market.
+- **Negative Funding:** Shorts pay Longs. Happens in a bear market.
+
+### 2.1 Funding Arbitrage
+If the funding rate is 0.01% every 8 hours (about 11% APR), you can:
+1. **Buy Spot** (1 BTC).
+2. **Short Perp** (1 BTC).
+3. **Collect Funding:** You receive 0.01% of the position value three times a day.
+
+This is virtually risk-free income, provided you can manage the liquidation risk of your short position.
+
+## 3. DeFi-CeFi Arbitrage: The New Frontier
+
+With the rise of Decentralized Exchanges (DEXs) like dYdX or Hyperliquid and Automated Market Makers (AMMs) like Uniswap, a new type of chain has emerged.
+
+### 3.1 The Chain
+1. **Detect Discrepancy:** BTC Spot on Binance is $50,000, but BTC Perp on a DEX is $50,500 with a huge funding rate.
+2. **Execute:** Buy on Binance (CeFi), Short on DEX (DeFi).
+3. **Optimize:** Use a "Bridge" to move collateral if needed, or maintain balances on both sides.
+
+### 3.2 Cross-Chain Complexity
+DeFi-CeFi arbitrage adds "Gas Fees" and "L1/L2 Latency" to our previous graph model. Your Rust bot now needs to talk to Ethereum/Solana RPC nodes and Binance API simultaneously.
+
+```rust
+async fn monitor_funding(dex_client: &DexClient, cefi_client: &CefiClient) {
+    let dex_funding = dex_client.get_funding_rate("BTC-USD").await;
+    let cefi_funding = cefi_client.get_funding_rate("BTC-USDT").await;
+    
+    let spread = dex_funding - cefi_funding;
+    if spread > THRESHOLD {
+        execute_trade().await;
+    }
+}
+```
+
+## 4. Execution Risk: Leg Risk and Liquidation
+
+While the strategy is "Delta-Neutral" (no market direction risk), it is not "No-Risk."
+
+- **Leg Risk:** You buy the spot, but by the time you try to short the future, the price has moved, and the spread is gone.
+- **Liquidation Risk:** If the price doubles, your short position might be liquidated if you don't have enough collateral, even though your spot position is in profit.
+- **Exchange Risk:** What if the exchange goes down or gets hacked?
+
+## 5. Conclusion
+
+Futures-spot arbitrage is the "institutional" side of crypto. It requires more capital and better risk management than simple asset swaps, but it scales much better.
+
+In the next part, we will dive into **Vine Copulas**, a mathematical tool used to model the complex dependencies between dozens of different assets and their derivatives simultaneously.
+
+---
+
+*Maximizing carry? Explore our [Delta Neutral Strategy Engine on GitHub](https://github.com/marketmaker-cc/delta-neutral-core).*

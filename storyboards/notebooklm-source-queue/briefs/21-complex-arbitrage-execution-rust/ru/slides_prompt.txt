@@ -1,0 +1,30 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article complex-arbitrage-execution-rust RU ce888ba5ac7e". It is the complete published ru article snapshot. Do not merge another language edition or outside facts. Output language: Russian. Use Russian throughout, preserving exact source headings and mathematical symbols. Keep mathematical symbols, formula signs, units, code/API identifiers, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — Оптимизация latency: от ядра ОС до парсинга
+2. H3 — io_uring и AF_XDP: обход сетевого стека
+3. H3 — simd-json и zero-copy десериализация
+4. H3 — SIMD для кросс-биржевого сравнения цен
+5. H2 — Lock-free стаканы: без мьютексов
+6. H3 — crossbeam-skiplist и ArcSwap
+7. H2 — LMAX Disruptor: конвейер на кольцевом буфере
+8. H2 — Smart Order Routing и моделирование проскальзывания
+9. H3 — Оптимальное разделение ордера
+10. H3 — Almgren-Chriss: оптимальная траектория исполнения
+11. H3 — Kyle's Lambda и Amihud ILLIQ
+12. H2 — Атомарное исполнение мультилег: type-state паттерн
+13. H3 — Type-state: компилятор как гарант
+14. H3 — Гибридная стратегия: secure hardest leg first
+15. H2 — Риск-менеджмент во время исполнения
+16. H3 — Kill switch и circuit breakers
+17. H2 — Память: arena-аллокаторы и jemalloc
+18. H3 — bumpalo: сброс за O(1)
+19. H2 — Бенчмаркинг: criterion и TSC-гистограммы
+20. H2 — Интегрированная архитектура
+21. H3 — Рекомендуемые зависимости Cargo
+22. H2 — Полезные ссылки
+23. H2 — Цитирование
+
+Distinguish io_uring shared operating-system I/O rings from AF_XDP packet redirection; the edition's zero-syscall wording, kernel-bypass comparison and WebSocket/TLS path require technical review. Preserve simd-json in-place mutable-buffer parsing, rkyv, SIMD price comparison, skiplist atomic fields and bid/ask ordering, ArcSwap snapshots and ring-buffer barriers as source proposals. Coherent snapshots, races, backpressure, code definitions, crate versions and benchmark methodology need reviewer checks; no snippet is certified compiled or production-ready. Cover Kyle lambda versus Amihud ILLIQ at their source horizons. Type-state checks local program transitions, while exchanges cannot provide atomic cross-venue fills; leg risk, partial fills, confirmations, cancellation, recovery, compensation and exposure remain real. Preserve the three circuit-breaker levels and source thresholds as illustrative policy, not universal safeguards. Preserve this Russian edition's 0.5–2 ms incoming/outgoing network legs, 1–5 microsecond parsing, 0.5–2 microsecond book processing, 1–5 microsecond arbitrage, 0.5–1 microsecond risk checks and stated 2–6 ms total as an unmeasured, environment-specific budget whose arithmetic requires review. The 200–800 ms spread lifetime, 82%/31% hit rates, nanosecond, 2–4x, 2.7x and zero-copy assertions remain unverified source claims. Do not claim an observed latency, safe execution or deployable engine. The Russian edition is materially expanded beyond the other locales; follow all 23 native H2/H3 in sequence. Keep io_uring versus AF_XDP, SIMD, crossbeam-skiplist plus ArcSwap, rkyv, ring-buffer ordering, Smart Order Routing venue split and fill probability, Almgren-Chriss temporary/permanent impact, Kyle/Amihud, secure-hardest-leg-first and hedging failures, risk engine, bumpalo/jemalloc, criterion/TSC benchmarking, integrated CPU-affinity architecture and Cargo dependency list. Review sign/units, use of f64 or atomic price representation, compileability, race/overflow/partial-fill handling and benchmark methodology. Neither sample code nor quoted speedup is verified here.
+
+Preserve substantive coverage, equations, formula signs, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, research, financial, exchange/API, performance and mutable assertions remain attributed source claims pending human editorial, formula and primary-source review. Do not add outside facts, guaranteed returns, risk-free claims, investment advice, measured benchmarks or production validation. Chinese regional terminology and Mandarin pronunciation await human review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams, code and tables only as supported by the source. Keep on-slide text in the requested locale apart from technical identifiers. End with its conclusion, citations or references if present.

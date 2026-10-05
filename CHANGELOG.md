@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Freeze eight separate EN/RU/Mainland Simplified/Taiwan Traditional Rust execution and futures-spot arbitrage briefs with exact published article bytes, edition-specific ordered prompts and hashes, including the expanded Russian sections; retain external duplicate checks, latency/code claims, cross-venue atomicity, numerical inconsistencies and carry/funding risks for editorial review.
 - Complete the English CCXT Pro and child-order execution PDF/audio pairs and save the Russian child-order deck with verified original hashes and integrity evidence; bind separate Taiwan Traditional requests and defer its Mainland Simplified source failure with retained notebook/upload intent, diagnostics and a finite retry while independent briefs proceed.
 - Save complete Mainland Simplified/Taiwan Traditional CCXT Pro PDF/audio pairs and English audio with verified original hashes and integrity evidence; bind separate English/Russian child-order execution requests, preserving existing scheduled artifacts and the displayed quota reset before further browser work.
 - Resume the unsubmitted CCXT Pro English Deep Dive after the recorded quota reset and bind separate Mainland Simplified/Taiwan Traditional PDF/audio requests with explicit output variants; preserve the existing EN/RU scheduled artifacts and frozen sources while clearing the resolved customization error.

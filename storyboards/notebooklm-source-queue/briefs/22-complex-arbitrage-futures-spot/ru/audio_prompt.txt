@@ -1,0 +1,45 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article complex-arbitrage-futures-spot RU 68411678f816". It is the complete published ru article snapshot. Do not merge another language edition or outside facts. Output language: Russian. Use Russian throughout, preserving exact source headings and mathematical symbols. Keep mathematical symbols, formula signs, units, code/API identifiers, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — Cash-and-Carry: классика, проверенная веками
+2. H3 — Классический cash-and-carry
+3. H3 — Reverse cash-and-carry: когда рынок в бэквордации
+4. H3 — Влияние BTC ETF на сжатие базиса
+5. H2 — Funding Rate Арбитраж: деньги каждые 8 часов
+6. H3 — Механика funding rate
+7. H3 — Механизмы funding rate на разных платформах
+8. H3 — Стратегия Long Spot + Short Perp
+9. H3 — Предсказание funding rate с помощью ML
+10. H3 — Kelly Criterion для размера позиции
+11. H3 — Межбиржевой дифференциал funding rate
+12. H2 — Календарные спреды: время — деньги
+13. H3 — Спред ближнего и дальнего месяца
+14. H3 — Roll Yield: захват при переходе между контрактами
+15. H3 — Моделирование терм-структуры: адаптация Nelson-Siegel
+16. H3 — Z-Score для входа и выхода
+17. H2 — Межбиржевой фьючерсный арбитраж
+18. H3 — Один актив — разные биржи
+19. H3 — Маржинальная эффективность и ликвидационный риск
+20. H2 — Опционно-фьючерсно-спотовые цепочки
+21. H3 — Нарушения пут-колл паритета
+22. H3 — Conversion и Reversal
+23. H3 — Box Spread: синтетическая безрисковая позиция
+24. H3 — Арбитраж волатильности: IV vs RV
+25. H2 — DeFi-CeFi Арбитраж: новый фронтир
+26. H3 — CEX-DEX ценовой лаг
+27. H3 — MEV: борьба за позицию в блоке
+28. H3 — CEX фьючерсы vs DeFi перпы
+29. H3 — Flash Loan цепочки
+30. H3 — Yield Farming vs Funding Rate
+31. H2 — Risk Management Framework
+32. H3 — Таксономия рисков
+33. H3 — Позиционирование с VaR
+34. H3 — Матрица стратегий: что выбрать
+35. H2 — Архитектура на Rust: как собрать всё вместе
+36. H2 — Заключение
+37. H2 — Полезные ссылки
+38. H2 — Цитирование
+
+Keep basis F-S, dated delivery/settlement convergence as a contract-dependent theoretical relation, long spot plus short dated future cash-and-carry, and the edition's $95,000/$97,375/90-day example: $2,375 gross basis, 2.5%, approximately 10.14% simple annualized yield. Its guaranteed-profit and risk-free wording omits fees, borrowing, funding, settlement rules, basis, collateral, execution and counterparty risk; frame these as simplified source examples, never guaranteed income. For perps distinguish absence of expiry from ongoing positive/negative funding direction and variable funding. Preserve this edition's 0.015% per eight hours and 16.43% simple annualization as dated article arithmetic, not a forecast or compounded APY. Preserve long-spot/short-perp and perp-perp funding signs, platform intervals, collateral/liquidation exposure, and nominal versus realized net return. Cover CeFi/DEX discrepancy, pre-funded inventory versus bridge delay/finality, RPC/API failures, gas and slippage, MEV, chain/reorg/smart-contract and venue risks, plus one-leg execution failure. Rust snippets are illustrative and uncompiled/unvalidated, with missing definitions and controls. Do not endorse any current funding, yield, exchange support or investment result. The Russian edition is materially expanded beyond the other locales; follow all 38 native H2/H3 in sequence. Cover reverse cash-and-carry, dated ETF/basis/OI claims, funding platform formulas and interval units, ML prediction and Sharpe claims, Kelly fraction and half-Kelly caveat, perp-perp funding differential with both fee/funding signs, calendar far-minus-near and annualization, roll yield sign, Nelson-Siegel term structure, Z-score entry/exit, cross-exchange margin and liquidation formula, put-call parity/conversion/reversal/box spread, IV-versus-RV gamma P&L, CEX-DEX/MEV/flash-loan/yield rotation, VaR allocation and operational margin triggers, and the Rust multi-strategy architecture. Put-call, liquidation, calendar/roll and Kelly equations and worked examples require primary quantitative review; do not silently fix the source or depict direction/sign as certified. ETF, basis, OI, 31%/Sharpe 2.3, 10–25%/15–30% yields, fee/interest rates, 2024–2025 exchange and DeFi figures are dated article assertions. A flash loan may be atomic inside one chain transaction, not across CeFi, bridges and venues; no zero-capital/no-risk claim. The source’s VaR/margin thresholds are examples, not safety guarantees. Flag the written short-liquidation IM/L term versus its numerical example, option premium/payoff/discounting and gamma-position signs, flash-loan example size/fees, and the yield-rotation use of a lending supply APY as a borrowing cost. These need quantitative review before endorsement; preserve equations and examples without silently repairing them.
+
+Preserve substantive coverage, equations, formula signs, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, research, financial, exchange/API, performance and mutable assertions remain attributed source claims pending human editorial, formula and primary-source review. Do not add outside facts, guaranteed returns, risk-free claims, investment advice, measured benchmarks or production validation. Chinese regional terminology and Mandarin pronunciation await human review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use natural spoken narration or dialogue in the requested locale. Explain formulas, variables, units, tables and code in words without requesting on-screen text. Distinguish source claims from verified facts when speaking. End with its conclusion and references if present.

@@ -1,0 +1,117 @@
+MM article complex-arbitrage-execution-rust EN fa4c29b69332
+
+---
+title: "Complex Arbitrage Execution in Rust: From Nanoseconds to Atomic Multi-Legs"
+description: "How to squeeze maximum performance out of Rust for multi-leg arbitrage execution: io_uring, lock-free order books, LMAX Disruptor, SIMD, type-state machines, and arena allocators."
+tags: ["Rust", "arbitrage", "HFT", "low-latency", "lock-free", "SIMD", "algotrading", "multileg", "order execution"]
+date: "2026-02-28"
+lang: "en"
+image: "/images/blog/complex-arbitrage-execution-rust.webp"
+slug: "complex-arbitrage-execution-rust"
+authors: ["suenot"]
+---
+
+# Complex Arbitrage Execution in Rust: From Nanoseconds to Atomic Multi-Legs
+
+*Part 6 of the series "Complex Arbitrage Chains Between Futures and Spot"*
+
+Imagine a conductor leading an orchestra of five exchanges simultaneously. Every instrument plays its part, and not more than a few milliseconds should pass between the first note and the last. One false note—and an arbitrage opportunity turns into a loss: a filled leg on one exchange and a vanished price on another.
+
+This is the sixth part of the series "Complex Arbitrage Chains Between Futures and Spot," and it's the most practical. We descend to the level of bytes, cache lines, and atomic operations.
+
+![Arbitrage Execution in Rust](/images/blog/complex-arbitrage-execution-rust.webp)
+*Architecture of an ultra-low-latency execution system for multi-leg arbitrage: from market data reception to order submission in 2-6 ms.*
+
+## 1. Latency Optimization: Beyond the Kernel
+
+To achieve sub-millisecond precision, we need to bypass traditional bottlenecks.
+
+### 1.1 io_uring and Network Bypassing
+**io_uring** provides asynchronous I/O via shared-memory rings between user-space and the kernel. Once initialized, operations like reading from multiple WebSockets require zero syscalls.
+
+```rust
+use io_uring::IoUring;
+
+struct UringReader {
+    ring: IoUring,
+    buffers: Vec<Vec<u8>>, // Pre-allocated buffers: one per exchange
+}
+```
+
+### 1.2 simd-json and Zero-Copy Deserialization
+Most exchanges use JSON. **simd-json** uses SIMD instructions for parallel parsing, providing a 2-4x speedup over standard parsers.
+
+## 2. Lock-Free Order Books: No Mutexes
+
+In an HFT environment, a Mutex on an order book is a massive bottleneck. We use **crossbeam-skiplist** for $O(\log n)$ search without locks:
+
+```rust
+use std::sync::atomic::{AtomicU64, Ordering};
+use crossbeam_skiplist::SkipMap;
+
+struct PriceLevel {
+    price: AtomicU64,
+    total_qty: AtomicU64,
+}
+
+struct LockFreeOrderBook {
+    bids: SkipMap<Reverse<u64>, PriceLevel>,
+    asks: SkipMap<u64, PriceLevel>,
+}
+```
+
+## 3. LMAX Disruptor: A Lock-Free Ring Buffer
+
+A pre-allocated ring buffer with cache-line alignment (64 bytes) is the heart of the execution pipeline. It allows market data to flow through the **OrderBook Updater**, **Strategy Engine**, and **Risk Monitor** in parallel with zero copies.
+
+## 4. Slippage Modeling: Layers of Certainty
+
+We model slippage using three layers:
+1. **Instant LOB Analysis:** Real-time analysis of the Limit Order Book (microseconds).
+2. **Kyle's Lambda:** Price impact per unit of order flow (milliseconds).
+3. **Amihud ILLIQ:** Long-term liquidity monitoring (days).
+
+## 5. Atomic Multi-Leg Execution: The Type-State Pattern
+
+A multi-leg arbitrage strategy is never atomic. One leg might fill while others fail. We use Rust's **Type-State Pattern** to make invalid state transitions errors at compile-time.
+
+```rust
+// States as types. Invalid transitions won't compile.
+struct Idle;
+struct Validating;
+struct ExecutingLeg;
+struct FullyFilled;
+struct RollingBack;
+
+struct Execution<State> {
+    trade_id: u64,
+    legs: Vec<TradeLeg>,
+    _state: PhantomData<State>,
+}
+```
+
+## 6. Risk Management: Kill Switches and Circuit Breakers
+
+A three-level **circuit breaker** protects the system from catastrophic market movements:
+1. **Paused:** 5-minute pause for local volatility spikes.
+2. **Halted:** 15-minute halt for large 1-hour drops.
+3. **Shutdown:** Full system shutdown if BTC drops 20% in 24 hours.
+
+## 7. Performance Budget
+
+With optimized Rust code, our latency budget looks like this:
+- **Network In (AWS ap-northeast-1):** 0.5 - 2 ms
+- **Parsing/OrderBook:** 2 - 10 μs
+- **Strategy/Risk:** 5 - 15 μs
+- **Network Out:** 0.5 - 2 ms
+**TOTAL: 2 - 6 ms**
+
+## Conclusion
+
+Rust is the perfect language for complex arbitrage execution. It provides the low-level control of C++ with the safety guarantees required for financial systems.
+
+This concludes our series on "Complex Arbitrage Chains." From graph algorithms and copulas to machine learning and nanosecond execution, you now have the blueprint for building a professional-grade cryptocurrency arbitrage system.
+
+---
+
+*Ready to execute at scale? Clone our [HFT Execution Engine on GitHub](https://github.com/marketmaker-cc/hft-engine-rust).*
