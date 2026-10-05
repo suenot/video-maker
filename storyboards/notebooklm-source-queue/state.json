@@ -6093,7 +6093,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "generating",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nEnglish\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 11:51."
@@ -6108,8 +6108,8 @@
           "source_id": "dda148d5-fae7-4248-a380-8ce2ef0d5f5e",
           "submission_mode": "later",
           "artifact_id": "b87cb49b-bbe8-40ce-b0b8-958505067d71",
-          "card_text": "tablet\nCausal Forests for Trading Treatment Effects\nScheduled for after 12pm\nmore_vert",
-          "observed_at": "2026-10-05T08:05:02.961945+00:00"
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T08:19:37.055662+00:00"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -6177,7 +6177,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "301925d479a58c7122bc5334fd04a44932db79c3dea248fe27ef6975d393151d",
           "requested_at": "2026-10-05T08:05:41.245489+00:00",
@@ -6187,11 +6187,18 @@
           "source_id": "aa40f995-8d4b-4cb0-8667-44d03e2c8d61",
           "submission_mode": "now",
           "artifact_id": "fd5ed924-3316-4900-9f28-2543ce489995",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T08:05:45.823312+00:00"
+          "card_text": "tablet\nUnread\nCausal Forests for Trading\n1 source · 4m ago\nmore_vert",
+          "observed_at": "2026-10-05T08:19:43.685543+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/causal-forests-treatment-effects-trading/ru/slides.pdf",
+          "sha256": "2549402d1605b41fe41bc44e33aad50e824d5e4b0637ffa1a89977f72d4d3431",
+          "bytes": 16019047,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T08:19:49.791155+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "fd5ed924-3316-4900-9f28-2543ce489995"
           ],
@@ -6203,8 +6210,15 @@
           "source_id": "aa40f995-8d4b-4cb0-8667-44d03e2c8d61",
           "submission_mode": "now",
           "artifact_id": "19d2b3cd-17dd-49f6-8b60-e820ef58423e",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T08:06:01.995003+00:00"
+          "card_text": "audio_spark\nUnread\nПричинно-следственные леса в трейдинге\n14:40 · Deep Dive · 1 source · 5m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T08:19:50.825101+00:00",
+          "duration_seconds": 880.45424,
+          "path": "input/notebooklm-sources/causal-forests-treatment-effects-trading/ru/audio.m4a",
+          "sha256": "f501e22c4ec374f881ee1641ef67f44fb453331064357ccb7433238742d6f3ef",
+          "bytes": 28337302,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T08:20:02.300023+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -6249,7 +6263,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "d6f897845680d90abd0bc9191cf13953aa4c4eedc52798abc45423f36dfa7af3",
           "requested_at": "2026-10-05T08:06:29.267060+00:00",
@@ -6259,11 +6273,18 @@
           "source_id": "e0529f7a-b0bc-4e47-b367-957b8b9fe234",
           "submission_mode": "now",
           "artifact_id": "7e9ed9d6-014c-4041-aef6-7ac516eea116",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T08:06:33.839416+00:00"
+          "card_text": "tablet\nUnread\n交易中的因果森林\n1 source · 4m ago\nmore_vert",
+          "observed_at": "2026-10-05T08:20:08.952817+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/causal-forests-treatment-effects-trading/zh-CN/slides.pdf",
+          "sha256": "11a01244e681c26eabf0ecb1429bd9bbf67d6d24daac4605c5751d912ea2dc36",
+          "bytes": 19381405,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T08:20:14.498456+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "7e9ed9d6-014c-4041-aef6-7ac516eea116"
           ],
@@ -6275,8 +6296,15 @@
           "source_id": "e0529f7a-b0bc-4e47-b367-957b8b9fe234",
           "submission_mode": "now",
           "artifact_id": "1a32f15d-70bf-4dda-90c1-f28c04052548",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T08:06:49.117614+00:00"
+          "card_text": "audio_spark\nUnread\n量化交易中的因果森林\n17:36 · Deep Dive · 1 source · 5m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T08:20:15.529328+00:00",
+          "duration_seconds": 1056.531156,
+          "path": "input/notebooklm-sources/causal-forests-treatment-effects-trading/zh-CN/audio.m4a",
+          "sha256": "11f6e0a1bab655a2ba962cab95be30d521390cbcb4d20ad27028e954480ebc29",
+          "bytes": 34004068,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T08:20:29.028752+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -6308,9 +6336,81 @@
       "selected_source_ids": [
         "e0529f7a-b0bc-4e47-b367-957b8b9fe234"
       ]
+    },
+    "causal-forests-treatment-effects-trading:zh-TW": {
+      "slug": "causal-forests-treatment-effects-trading",
+      "language": "zh-TW",
+      "article_sha256": "5a30b5c8dcaac405d3f0ba236bb9285b8b4f02f55ad1ec0b4ed9e7bf149e521f",
+      "input_hashes": {
+        "article": "5a30b5c8dcaac405d3f0ba236bb9285b8b4f02f55ad1ec0b4ed9e7bf149e521f",
+        "source_text": "9c847d4b0aa13874799b0ee9cb853f3a802b1add9f7e8d5e934fb8d64c8e3576",
+        "slides_prompt": "2e091f8dc8e33ba106edae3da43b3703091e244311d8dcec82ac7c32bfe67ada",
+        "audio_prompt": "e369a8f8b4d0d0e48e773c692248907e1414d72943f7c258ce8df2fd5feb62b9"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "2e091f8dc8e33ba106edae3da43b3703091e244311d8dcec82ac7c32bfe67ada",
+          "requested_at": "2026-10-05T08:20:54.863212+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "7735ae68-b20d-435c-89c1-206077145089",
+          "submission_mode": "now",
+          "artifact_id": "2d7f2169-3717-43cd-a18a-4cceadfd5fb0",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T08:20:59.433027+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "2d7f2169-3717-43cd-a18a-4cceadfd5fb0"
+          ],
+          "prompt_sha256": "e369a8f8b4d0d0e48e773c692248907e1414d72943f7c258ce8df2fd5feb62b9",
+          "requested_at": "2026-10-05T08:21:10.944480+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "7735ae68-b20d-435c-89c1-206077145089",
+          "submission_mode": "now",
+          "artifact_id": "9db67faa-45bc-4432-b9b8-4c03f5f0db7a",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T08:21:15.505984+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T08:20:29.045041+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T08:20:35.531954+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/causal-forests-treatment-effects-trading-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "0fb43cc99fc11e36639b8f7f7bb64d0b72fff6833ad5265d8f060d005af8d13e",
+        "baseline_count": 328,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T08:20:36.634633+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/82d1c6da-bb66-4636-9d0b-390d6307e55a",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T08:20:40.772554+00:00",
+        "sha256": "9c847d4b0aa13874799b0ee9cb853f3a802b1add9f7e8d5e934fb8d64c8e3576",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T08:20:48.505207+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "7735ae68-b20d-435c-89c1-206077145089",
+      "source_title": "MM article causal-forests-treatment-effects-trading ZH-TW 5a30b5c8dcaa",
+      "source_sha256": "9c847d4b0aa13874799b0ee9cb853f3a802b1add9f7e8d5e934fb8d64c8e3576",
+      "state": "source_ready",
+      "source_display_name": "MM article causal-forests-treatment-effects-tradi…",
+      "selected_source_ids": [
+        "7735ae68-b20d-435c-89c1-206077145089"
+      ]
     }
   },
-  "checked_at": "2026-10-05T08:06:49.125875+00:00",
+  "checked_at": "2026-10-05T08:21:15.511224+00:00",
   "browser_geometry_requested": {
     "width": 1995,
     "height": 1290,
