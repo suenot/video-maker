@@ -6559,7 +6559,7 @@
           "editorial_review": "pending"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Strategy Selection\n+ Beginner Guide\n+ Developer Best-Practices\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 16:51."
@@ -6576,8 +6576,15 @@
           "source_id": "c1b6e81f-f71d-4f8a-adf8-02ff6c91d135",
           "submission_mode": "later",
           "artifact_id": "a1d0cd5c-ee24-430d-8ce2-f93f53908813",
-          "card_text": "audio_spark\nCCXT WebSocket Orderbooks\nScheduled for after 3am\nmore_vert",
-          "observed_at": "2026-10-05T23:03:58.091357+00:00"
+          "card_text": "audio_spark\nUnread\nРеальная работа WebSocket методов CCXT Pro\n14:52 · Deep Dive · 1 source · 1m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T23:18:32.652612+00:00",
+          "duration_seconds": 892.203537,
+          "path": "input/notebooklm-sources/ccxt-pro-websocket-orderbook-methods/ru/audio.m4a",
+          "sha256": "eae4c0d4cfa5f56a4804e5cf8c98734656d43e2cd98898348e88e329eee2fd95",
+          "bytes": 28715420,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T23:18:44.726238+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -7246,7 +7253,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 02:51."
@@ -7261,8 +7268,15 @@
           "source_id": "77a4f38d-52cf-48c0-8f85-219bbb220701",
           "submission_mode": "later",
           "artifact_id": "a99a8a3e-7186-4830-8de8-fb7bcd4db994",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T23:05:05.290424+00:00"
+          "card_text": "tablet\nUnread\nUltra-Low-Latency Rust Arbitrage Engine\n1 source · 10m ago\nmore_vert",
+          "observed_at": "2026-10-05T23:18:51.605957+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/complex-arbitrage-execution-rust/ru/slides.pdf",
+          "sha256": "71ce37e1a2e235912f95cf451be45c556036054c660cfa003a521c4e0c9e278e",
+          "bytes": 13597304,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T23:18:58.262228+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -7330,7 +7344,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "b72aaa8e3bd4d434b32d5a3da9b8a4c4451fec9922efbda7f81e1c02cc1e9dc4",
           "requested_at": "2026-10-05T23:05:50.724611+00:00",
@@ -7340,11 +7354,18 @@
           "source_id": "973db790-9f94-4ee2-a80a-79a4d1d53c8b",
           "submission_mode": "now",
           "artifact_id": "3eb80e42-479a-421b-ae36-55ddd4066834",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T23:05:55.287022+00:00"
+          "card_text": "tablet\nUnread\nRust高频套利架构\n1 source · 1m ago\nmore_vert",
+          "observed_at": "2026-10-05T23:19:04.860264+00:00",
+          "pages": 13,
+          "path": "input/notebooklm-sources/complex-arbitrage-execution-rust/zh-CN/slides.pdf",
+          "sha256": "408137dc97a484cfcc5c623217a621c57cba0a638f3a47eaed02dea585f24095",
+          "bytes": 13929955,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T23:19:08.749607+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "3eb80e42-479a-421b-ae36-55ddd4066834"
           ],
@@ -7356,8 +7377,15 @@
           "source_id": "973db790-9f94-4ee2-a80a-79a4d1d53c8b",
           "submission_mode": "now",
           "artifact_id": "a4ad386f-f8cc-4370-9644-0a973de65299",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T23:06:13.508773+00:00"
+          "card_text": "audio_spark\nUnread\nRust毫秒级套利\n17:42 · Deep Dive · 1 source · 5m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T23:19:09.787507+00:00",
+          "duration_seconds": 1062.243265,
+          "path": "input/notebooklm-sources/complex-arbitrage-execution-rust/zh-CN/audio.m4a",
+          "sha256": "b1534766a6ccff719797437cfa585ffd5f7ba7d29c84201f07f9b3223d3d0e50",
+          "bytes": 34187955,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T23:19:20.651193+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -7402,7 +7430,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "77b09c94a7472cb79eab13359e801065cc13d3fe5de245dc4e61776da4f0d6fd",
           "requested_at": "2026-10-05T23:06:42.126408+00:00",
@@ -7412,11 +7440,18 @@
           "source_id": "30118af1-ae97-425e-94c7-7768a00ee94a",
           "submission_mode": "now",
           "artifact_id": "79529ef8-71a9-4342-ad46-4fcf997444fd",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T23:06:46.698391+00:00"
+          "card_text": "tablet\nUnread\nRust Ultra Low Latency Arbitrage Blueprint\n1 source · 5m ago\nmore_vert",
+          "observed_at": "2026-10-05T23:19:27.278794+00:00",
+          "pages": 11,
+          "path": "input/notebooklm-sources/complex-arbitrage-execution-rust/zh-TW/slides.pdf",
+          "sha256": "ba83f7ad91d5b44825533711a20f77d67be4eda284f1dfa25e3a1bf88aebc842",
+          "bytes": 12261134,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T23:19:31.108675+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "79529ef8-71a9-4342-ad46-4fcf997444fd"
           ],
@@ -7428,8 +7463,15 @@
           "source_id": "30118af1-ae97-425e-94c7-7768a00ee94a",
           "submission_mode": "now",
           "artifact_id": "36b2f6cb-6a7c-4a34-8374-2329e596e6f4",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T23:07:04.770227+00:00"
+          "card_text": "audio_spark\nUnread\nRust兩毫秒套利\n17:33 · Deep Dive · 1 source · 3m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-05T23:19:32.142172+00:00",
+          "duration_seconds": 1053.326803,
+          "path": "input/notebooklm-sources/complex-arbitrage-execution-rust/zh-TW/audio.m4a",
+          "sha256": "d1e0751ee023e2eee0adcab52fb004ffd382c89b17c42f7d2c7a8d80b5099e39",
+          "bytes": 33900976,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-05T23:19:49.499291+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -7461,9 +7503,163 @@
       "selected_source_ids": [
         "30118af1-ae97-425e-94c7-7768a00ee94a"
       ]
+    },
+    "complex-arbitrage-futures-spot:en": {
+      "slug": "complex-arbitrage-futures-spot",
+      "language": "en",
+      "article_sha256": "1cce761ff956065f63d91b6ef47400f28b3aeeaa3765b4b24f5b6b2093f18253",
+      "input_hashes": {
+        "article": "1cce761ff956065f63d91b6ef47400f28b3aeeaa3765b4b24f5b6b2093f18253",
+        "source_text": "49a9c5e9d55dcbfd190b4a6e9c6c820cbb840bee4d1873de66e0e2d930a85be0",
+        "slides_prompt": "c8b09bc348ab6a3cdc03a124f0060eac460878c665f02053f18816c8678ceae7",
+        "audio_prompt": "8680fb4f2220a9cf33c21306e8d596b9d3ac318923dce4451e4a354bf053db45"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "c8b09bc348ab6a3cdc03a124f0060eac460878c665f02053f18816c8678ceae7",
+          "requested_at": "2026-10-05T23:20:14.163336+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "8be384a4-cc2f-4d90-af0b-3a2db1a7d3c8",
+          "submission_mode": "now",
+          "artifact_id": "d2c323b7-e381-4c51-b2aa-47fa7109ca78",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-05T23:20:18.767671+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "d2c323b7-e381-4c51-b2aa-47fa7109ca78"
+          ],
+          "prompt_sha256": "8680fb4f2220a9cf33c21306e8d596b9d3ac318923dce4451e4a354bf053db45",
+          "requested_at": "2026-10-05T23:20:26.133718+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "8be384a4-cc2f-4d90-af0b-3a2db1a7d3c8",
+          "submission_mode": "now",
+          "artifact_id": "5b5df7f5-d20c-4d2b-9293-b7fe334f1d19",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-05T23:20:30.697830+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T23:19:49.517032+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T23:19:56.608931+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-futures-spot-en-notebook-baseline.json",
+        "baseline_sha256": "41e63287827e4f5d711758ae94dd98e1dc28031f48ef847471d7b979e5c1a44d",
+        "baseline_count": 341,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T23:19:58.700662+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/4f4ea450-df84-4fcc-a4dc-848bb94de8fc",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T23:20:02.770746+00:00",
+        "sha256": "49a9c5e9d55dcbfd190b4a6e9c6c820cbb840bee4d1873de66e0e2d930a85be0",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T23:20:10.807657+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "8be384a4-cc2f-4d90-af0b-3a2db1a7d3c8",
+      "source_title": "MM article complex-arbitrage-futures-spot EN 1cce761ff956",
+      "source_sha256": "49a9c5e9d55dcbfd190b4a6e9c6c820cbb840bee4d1873de66e0e2d930a85be0",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-futures-spot EN 1cce…",
+      "selected_source_ids": [
+        "8be384a4-cc2f-4d90-af0b-3a2db1a7d3c8"
+      ]
+    },
+    "complex-arbitrage-futures-spot:ru": {
+      "slug": "complex-arbitrage-futures-spot",
+      "language": "ru",
+      "article_sha256": "68411678f816d17c457fa51637cd55427b2634dd47fac29e7adc6faa97e415e5",
+      "input_hashes": {
+        "article": "68411678f816d17c457fa51637cd55427b2634dd47fac29e7adc6faa97e415e5",
+        "source_text": "dc49fff68ff2a815a690559f37725ae7c3648643228874ae52a8bad4dd1703d0",
+        "slides_prompt": "14d295f94f2a901157ec79829358a3391fe6e0b1052183150216ac6462042457",
+        "audio_prompt": "3f97a34dc65b36e078b43df7ef3fea6a02ff8dd3e46460f67fe9303dc0e934bf"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 07:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "14d295f94f2a901157ec79829358a3391fe6e0b1052183150216ac6462042457",
+          "requested_at": "2026-10-05T23:20:58.617821+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "281e5c37-a111-480c-a59d-17f7e01147f9",
+          "submission_mode": "later",
+          "artifact_id": "04bf652e-cf89-4a14-8f4e-ce96d4dd8867",
+          "card_text": "tablet\nАрбитраж фьючерсы-спот: от cash-and-carry до DeFi-CeFi цепочек\nScheduled for after 7am\nmore_vert",
+          "observed_at": "2026-10-05T23:21:03.174502+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Beginner Strategy\n+ Risk Management\n+ Technical Deep-Dive\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 07:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "04bf652e-cf89-4a14-8f4e-ce96d4dd8867"
+          ],
+          "prompt_sha256": "3f97a34dc65b36e078b43df7ef3fea6a02ff8dd3e46460f67fe9303dc0e934bf",
+          "requested_at": "2026-10-05T23:21:16.423464+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "281e5c37-a111-480c-a59d-17f7e01147f9",
+          "submission_mode": "later",
+          "artifact_id": "a9fd85e3-5c57-4ba8-a31c-ec04a620aece",
+          "card_text": "audio_spark\nАрбитраж фьючерсы-спот: от cash-and-carry до DeFi-CeFi цепочек\nScheduled for after 8am\nmore_vert",
+          "observed_at": "2026-10-05T23:21:20.977777+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-05T23:20:30.724633+00:00",
+      "notebook_intent": {
+        "at": "2026-10-05T23:20:38.008181+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-futures-spot-ru-notebook-baseline.json",
+        "baseline_sha256": "b63a5ff4331b9e3cf88f35216b6352d9f92fa9974449713e686f0c32de50d7e0",
+        "baseline_count": 342,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-05T23:20:39.097300+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/cc9c4451-a093-4bfb-b1df-1376f0fa30d2",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-05T23:20:43.114248+00:00",
+        "sha256": "dc49fff68ff2a815a690559f37725ae7c3648643228874ae52a8bad4dd1703d0",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-05T23:20:51.463446+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "281e5c37-a111-480c-a59d-17f7e01147f9",
+      "source_title": "MM article complex-arbitrage-futures-spot RU 68411678f816",
+      "source_sha256": "dc49fff68ff2a815a690559f37725ae7c3648643228874ae52a8bad4dd1703d0",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-futures-spot RU 6841…",
+      "selected_source_ids": [
+        "281e5c37-a111-480c-a59d-17f7e01147f9"
+      ]
     }
   },
-  "checked_at": "2026-10-05T23:07:04.778363+00:00",
+  "checked_at": "2026-10-05T23:21:21.002752+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
@@ -7480,10 +7676,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "AI usage limit reached. All features will be available after 02:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 07:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-05T18:22:33.330890+00:00",
-    "not_before": "2026-10-05T22:51:00+00:00"
+    "observed_at": "2026-10-05T23:21:21.002742+00:00",
+    "not_before": "2026-10-06T03:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
