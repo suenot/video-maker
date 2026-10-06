@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Save the complete English futures-spot PDF/audio originals with verified hashes and integrity evidence; bind separate Mainland Simplified/Taiwan Traditional requests with explicit Chinese variants while preserving the existing Russian generating/scheduled artifact IDs.
 - Complete all four CCXT Pro and Rust execution PDF/audio locale pairs with verified original hashes and integrity evidence; bind separate English/Russian futures-spot requests from the full frozen articles while retaining existing identities, scheduled Russian artifacts and the displayed quota reset before further browser work.
 - Complete the Mainland Simplified child-order execution and English Rust execution PDF/audio pairs, and save the Russian CCXT Pro deck and Rust audio with verified original hashes and integrity evidence; bind separate Mainland Simplified/Taiwan Traditional Rust requests using explicit Chinese variants while preserving all existing notebook, source and artifact identities.
 - Complete the Russian and Taiwan Traditional child-order execution PDF/audio pairs with verified original hashes and integrity evidence; recover its Mainland Simplified source in the same notebook after empty-source/artifact reconciliation, archive the prior upload intent and bind explicit Simplified requests, then bind separate Rust execution EN/RU requests while retaining the new all-feature quota reset and all existing identities.

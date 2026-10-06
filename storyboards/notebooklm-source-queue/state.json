@@ -7516,7 +7516,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "c8b09bc348ab6a3cdc03a124f0060eac460878c665f02053f18816c8678ceae7",
           "requested_at": "2026-10-05T23:20:14.163336+00:00",
@@ -7526,11 +7526,18 @@
           "source_id": "8be384a4-cc2f-4d90-af0b-3a2db1a7d3c8",
           "submission_mode": "now",
           "artifact_id": "d2c323b7-e381-4c51-b2aa-47fa7109ca78",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-05T23:20:18.767671+00:00"
+          "card_text": "tablet\nUnread\nFutures-Spot Arbitrage\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-06T04:03:30.501437+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/complex-arbitrage-futures-spot/en/slides.pdf",
+          "sha256": "1d547b3bac4493d4546ad14adfe357f6521da8a0c0ccf673581250e38f5fcc0a",
+          "bytes": 12611741,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-06T04:03:36.993111+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "d2c323b7-e381-4c51-b2aa-47fa7109ca78"
           ],
@@ -7542,8 +7549,15 @@
           "source_id": "8be384a4-cc2f-4d90-af0b-3a2db1a7d3c8",
           "submission_mode": "now",
           "artifact_id": "5b5df7f5-d20c-4d2b-9293-b7fe334f1d19",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-05T23:20:30.697830+00:00"
+          "card_text": "audio_spark\nUnread\nThe Crypto Funding Arbitrage Trap\n15:31 · Deep Dive · 1 source · 4h ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-06T04:03:38.028010+00:00",
+          "duration_seconds": 931.67746,
+          "path": "input/notebooklm-sources/complex-arbitrage-futures-spot/en/audio.m4a",
+          "sha256": "dcf486e0122f617915459f9dfa5b3c7fd2a11bab8afc67f441a6d4ca3e4a598a",
+          "bytes": 29985849,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-06T04:03:51.546272+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -7588,7 +7602,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "generating",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 07:51."
@@ -7603,8 +7617,8 @@
           "source_id": "281e5c37-a111-480c-a59d-17f7e01147f9",
           "submission_mode": "later",
           "artifact_id": "04bf652e-cf89-4a14-8f4e-ce96d4dd8867",
-          "card_text": "tablet\nАрбитраж фьючерсы-спот: от cash-and-carry до DeFi-CeFi цепочек\nScheduled for after 7am\nmore_vert",
-          "observed_at": "2026-10-05T23:21:03.174502+00:00"
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-06T04:03:58.162613+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -7625,7 +7639,7 @@
           "submission_mode": "later",
           "artifact_id": "a9fd85e3-5c57-4ba8-a31c-ec04a620aece",
           "card_text": "audio_spark\nАрбитраж фьючерсы-спот: от cash-and-carry до DeFi-CeFi цепочек\nScheduled for after 8am\nmore_vert",
-          "observed_at": "2026-10-05T23:21:20.977777+00:00"
+          "observed_at": "2026-10-06T04:03:59.183123+00:00"
         }
       },
       "admission_state": "admitted",
@@ -7657,9 +7671,153 @@
       "selected_source_ids": [
         "281e5c37-a111-480c-a59d-17f7e01147f9"
       ]
+    },
+    "complex-arbitrage-futures-spot:zh-CN": {
+      "slug": "complex-arbitrage-futures-spot",
+      "language": "zh-CN",
+      "article_sha256": "01104845647c626e5b3a9ed283c95e728c0fd54cde8a11878880a62ec1bb78fa",
+      "input_hashes": {
+        "article": "01104845647c626e5b3a9ed283c95e728c0fd54cde8a11878880a62ec1bb78fa",
+        "source_text": "65063168b8fc7da97ab4e61bf0f75194d65ce664e26c3be5d5c39d7a59737a21",
+        "slides_prompt": "95a28d957e4d1f6db758faafaebab04b5ebd9d63cfe4f3c57065575b999caf86",
+        "audio_prompt": "18f70176659ab6be0e2d286309e2eaac9f8dae04cf57a3d6eec77dee9317476a"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "95a28d957e4d1f6db758faafaebab04b5ebd9d63cfe4f3c57065575b999caf86",
+          "requested_at": "2026-10-06T04:04:26.644035+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "cc425bda-dd6d-410a-a12b-952ff8ff2ce2",
+          "submission_mode": "now",
+          "artifact_id": "737b64a8-071e-47ff-b038-236b9b52499a",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-06T04:04:31.208672+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "737b64a8-071e-47ff-b038-236b9b52499a"
+          ],
+          "prompt_sha256": "18f70176659ab6be0e2d286309e2eaac9f8dae04cf57a3d6eec77dee9317476a",
+          "requested_at": "2026-10-06T04:04:44.691356+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "cc425bda-dd6d-410a-a12b-952ff8ff2ce2",
+          "submission_mode": "now",
+          "artifact_id": "0d3509e2-dd12-4922-a55c-063cfe32c501",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-06T04:04:49.254667+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-06T04:03:59.204756+00:00",
+      "notebook_intent": {
+        "at": "2026-10-06T04:04:06.579065+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-futures-spot-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "2c89c822556996177bda397a192c8b85e2cf8dcfba12e7979702a2913b8db61c",
+        "baseline_count": 343,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-06T04:04:07.672831+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/664fb346-122c-458a-8346-e87532284d65",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-06T04:04:11.675378+00:00",
+        "sha256": "65063168b8fc7da97ab4e61bf0f75194d65ce664e26c3be5d5c39d7a59737a21",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-06T04:04:19.634725+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "cc425bda-dd6d-410a-a12b-952ff8ff2ce2",
+      "source_title": "MM article complex-arbitrage-futures-spot ZH-CN 01104845647c",
+      "source_sha256": "65063168b8fc7da97ab4e61bf0f75194d65ce664e26c3be5d5c39d7a59737a21",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-futures-spot ZH-CN 0…",
+      "selected_source_ids": [
+        "cc425bda-dd6d-410a-a12b-952ff8ff2ce2"
+      ]
+    },
+    "complex-arbitrage-futures-spot:zh-TW": {
+      "slug": "complex-arbitrage-futures-spot",
+      "language": "zh-TW",
+      "article_sha256": "54f1259037309f1d22f8f11d3d676de3e75c7bb74fc700078c36866674bf874b",
+      "input_hashes": {
+        "article": "54f1259037309f1d22f8f11d3d676de3e75c7bb74fc700078c36866674bf874b",
+        "source_text": "01953e87d61399c02727e0858ba5e7182d1943102ac9b693422656a130f53cfc",
+        "slides_prompt": "66ac6bceffdccaedd62f94a04de4ae35682b73476ff42389fc3750af63372b24",
+        "audio_prompt": "ef8340426e18f0515ac504f61e45012c10bd8c790e80e04efb7ee677c1ad87cc"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "66ac6bceffdccaedd62f94a04de4ae35682b73476ff42389fc3750af63372b24",
+          "requested_at": "2026-10-06T04:05:17.668549+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "b90d82b6-700c-4f27-86f9-1371cc015f19",
+          "submission_mode": "now",
+          "artifact_id": "e1b7cd90-7160-4854-a12e-f680d96b86e9",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-06T04:05:22.233136+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "e1b7cd90-7160-4854-a12e-f680d96b86e9"
+          ],
+          "prompt_sha256": "ef8340426e18f0515ac504f61e45012c10bd8c790e80e04efb7ee677c1ad87cc",
+          "requested_at": "2026-10-06T04:05:35.790608+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "b90d82b6-700c-4f27-86f9-1371cc015f19",
+          "submission_mode": "now",
+          "artifact_id": "d5f78602-9be0-464e-88c9-81518e834924",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-06T04:05:40.349821+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-06T04:04:49.273647+00:00",
+      "notebook_intent": {
+        "at": "2026-10-06T04:04:56.511745+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-futures-spot-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "451c2db9644205faf25f1bedbad0faa75cd89f1524ad6ae2be3a435177f9cc57",
+        "baseline_count": 344,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-06T04:04:57.604314+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/3ad416e7-6739-4268-ac32-b7db7a0defd1",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-06T04:05:01.654994+00:00",
+        "sha256": "01953e87d61399c02727e0858ba5e7182d1943102ac9b693422656a130f53cfc",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-06T04:05:09.619971+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "b90d82b6-700c-4f27-86f9-1371cc015f19",
+      "source_title": "MM article complex-arbitrage-futures-spot ZH-TW 54f125903730",
+      "source_sha256": "01953e87d61399c02727e0858ba5e7182d1943102ac9b693422656a130f53cfc",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-futures-spot ZH-TW 5…",
+      "selected_source_ids": [
+        "b90d82b6-700c-4f27-86f9-1371cc015f19"
+      ]
     }
   },
-  "checked_at": "2026-10-05T23:21:21.002752+00:00",
+  "checked_at": "2026-10-06T04:05:40.358305+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
