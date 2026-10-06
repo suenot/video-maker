@@ -7972,7 +7972,7 @@
           "submission_mode": "later",
           "artifact_id": "dadc5968-19ce-45bc-ac6a-f046e9ba976f",
           "card_text": "tablet\nGraph Algorithms for Crypto Arbitrage Detection\nScheduled for after 1pm\nmore_vert",
-          "observed_at": "2026-10-06T09:04:48.871197+00:00"
+          "observed_at": "2026-10-06T09:18:47.369433+00:00"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -8054,7 +8054,7 @@
           "submission_mode": "later",
           "artifact_id": "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72",
           "card_text": "tablet\n套利检测的图算法：从 Bellman-Ford 到 RICH\nScheduled for after 9pm\nmore_vert",
-          "observed_at": "2026-10-06T09:05:38.797543+00:00"
+          "observed_at": "2026-10-06T09:18:54.019953+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -8073,7 +8073,7 @@
           "submission_mode": "later",
           "artifact_id": "8d94d8f8-29f8-4300-8a11-42df39e16f03",
           "card_text": "audio_spark\n套利检测的图算法：从 Bellman-Ford 到 RICH\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-06T09:05:56.530750+00:00"
+          "observed_at": "2026-10-06T09:18:55.050412+00:00"
         }
       },
       "admission_state": "admitted",
@@ -8132,7 +8132,7 @@
           "submission_mode": "later",
           "artifact_id": "9e57dc7e-28e2-4333-a612-64fa73b35a55",
           "card_text": "tablet\n加密貨幣套利的圖演算法\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-06T09:06:29.555878+00:00"
+          "observed_at": "2026-10-06T09:19:01.720088+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -8151,7 +8151,7 @@
           "submission_mode": "later",
           "artifact_id": "4de25cf5-6b6c-4a87-b982-5576e5febca3",
           "card_text": "audio_spark\n加密貨幣套利的圖演算法\nScheduled for after 9pm\nmore_vert",
-          "observed_at": "2026-10-06T09:06:47.175218+00:00"
+          "observed_at": "2026-10-06T09:19:02.760058+00:00"
         }
       },
       "admission_state": "admitted",
@@ -8183,9 +8183,89 @@
       "selected_source_ids": [
         "e3b70682-500f-441d-a88b-9eb5aaa41e1f"
       ]
+    },
+    "complex-arbitrage-ml-approaches:en": {
+      "slug": "complex-arbitrage-ml-approaches",
+      "language": "en",
+      "article_sha256": "b1190dc128525848a969ef42818e600f6a08bf838bde4e4ea7b5ff1d00742bb7",
+      "input_hashes": {
+        "article": "b1190dc128525848a969ef42818e600f6a08bf838bde4e4ea7b5ff1d00742bb7",
+        "source_text": "d9b39e6387061612d0b59cdcfa93f718d361ef5aa0fcd4c7c62692cb693bb3dc",
+        "slides_prompt": "1bcb9835ac6e787f2602719bb46d2ab9087a9a2f2370f3e7b15ca1c35b5378e8",
+        "audio_prompt": "dafc4d21c8f1a86caa2af83069676101bef0a78a4aedb7596975e6888bbad8b7"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nEnglish\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "1bcb9835ac6e787f2602719bb46d2ab9087a9a2f2370f3e7b15ca1c35b5378e8",
+          "requested_at": "2026-10-06T09:19:25.669995+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "9edb96af-63b1-4a63-93bd-2116f41cf1eb",
+          "submission_mode": "later",
+          "artifact_id": "53e7b066-bdb7-4a51-a103-42c01cd9f95a",
+          "card_text": "tablet\nMachine Learning Approaches for Complex Arbitrage Systems\nScheduled for after 9pm\nmore_vert",
+          "observed_at": "2026-10-06T09:19:30.237659+00:00"
+        },
+        "audio": {
+          "state": "not_submitted"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-06T09:19:02.791062+00:00",
+      "notebook_intent": {
+        "at": "2026-10-06T09:19:09.157304+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-notebook-baseline.json",
+        "baseline_sha256": "05b5d50c79258b620bf487dab6312be9399effe1e94d3d3cc4d5481180780bd0",
+        "baseline_count": 349,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-06T09:19:10.256744+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/324f9135-0a3f-4115-a9d2-18fd18fff936",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-06T09:19:14.281666+00:00",
+        "sha256": "d9b39e6387061612d0b59cdcfa93f718d361ef5aa0fcd4c7c62692cb693bb3dc",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-06T09:19:22.276819+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "9edb96af-63b1-4a63-93bd-2116f41cf1eb",
+      "source_title": "MM article complex-arbitrage-ml-approaches EN b1190dc12852",
+      "source_sha256": "d9b39e6387061612d0b59cdcfa93f718d361ef5aa0fcd4c7c62692cb693bb3dc",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-ml-approaches EN b11…",
+      "selected_source_ids": [
+        "9edb96af-63b1-4a63-93bd-2116f41cf1eb"
+      ],
+      "last_error": {
+        "type": "RuntimeError",
+        "message": "No enabled generation control; no submission attempted",
+        "at": "2026-10-06T09:19:40.097386+00:00",
+        "stage": "artifacts",
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261006T091940103440Z-error.png",
+            "sha256": "3799601d49866c6e64bdc075b327627823c8249f88dd8b874f156ba0279997ef"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261006T091940103440Z-controls.json",
+            "sha256": "0b4ee3558de7c5cde07bb085e72849cd073810987ca42606e451d77905437573"
+          }
+        },
+        "retry_not_before": "2026-10-06T13:51:00+00:00",
+        "next_safe_step": "After the displayed global quota reset, verify the saved account and frozen input hashes, reconcile this exact notebook/source and all current artifact IDs, preserve the existing scheduled deck, and submit only the never-dispatched English Deep Dive audio if no matching audio artifact has appeared. Keep browser closed until the reset; continue independent local work."
+      }
     }
   },
-  "checked_at": "2026-10-06T09:06:47.184149+00:00",
+  "checked_at": "2026-10-06T09:19:40.341648+00:00",
   "browser_geometry_requested": {
     "width": 1995,
     "height": 1290,
@@ -8202,10 +8282,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "AI usage limit reached. All features will be available after 12:51.",
+    "notice": "AI usage limit reached. All features will be available after 17:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-06T04:20:53.327822+00:00",
-    "not_before": "2026-10-06T08:51:00+00:00"
+    "observed_at": "2026-10-06T09:19:40.341640+00:00",
+    "not_before": "2026-10-06T13:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
