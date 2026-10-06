@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Complete the Mainland Simplified/Taiwan Traditional futures-spot PDF/audio pairs and save the Russian deck with verified original hashes and integrity evidence; bind separate graph-algorithm EN/RU requests to frozen full articles while preserving the existing Russian futures audio identity and the displayed all-feature quota reset.
 - Freeze eight separate EN/RU/Mainland Simplified/Taiwan Traditional graph-algorithm and ML-arbitrage briefs with exact published article bytes, edition-specific ordered prompts and input hashes, including the expanded Russian sections; retain external duplicate checks, conflicting RICH descriptions, metric definitions, research/code claims and performance arithmetic for editorial review.
 - Save the complete English futures-spot PDF/audio originals with verified hashes and integrity evidence; bind separate Mainland Simplified/Taiwan Traditional requests with explicit Chinese variants while preserving the existing Russian generating/scheduled artifact IDs.
 - Complete all four CCXT Pro and Rust execution PDF/audio locale pairs with verified original hashes and integrity evidence; bind separate English/Russian futures-spot requests from the full frozen articles while retaining existing identities, scheduled Russian artifacts and the displayed quota reset before further browser work.
