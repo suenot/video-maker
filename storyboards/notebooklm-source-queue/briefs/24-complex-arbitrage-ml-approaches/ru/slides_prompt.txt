@@ -1,0 +1,42 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article complex-arbitrage-ml-approaches RU c6c40ba1e459". It is the complete published ru article snapshot. Do not merge another language edition or outside facts. Output language: Russian. Use Russian throughout, preserving exact source headings and mathematical symbols. Keep mathematical symbols, formula signs, units, code/API identifiers, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — Графовые нейросети: когда рынок — это граф
+2. H3 — Почему графы — естественное представление
+3. H3 — GraphSAGE с edge fusion: прорыв на реальных данных
+4. H3 — Temporal Graph Networks: когда граф живёт и дышит
+5. H2 — Трансформеры: внимание — это всё, что вам нужно
+6. H3 — Multi-head attention для мультибиржевого слияния
+7. H3 — TFT-GNN: гибрид, который побеждает обоих
+8. H3 — Cross-attention между спотом и фьючерсами
+9. H2 — Reinforcement Learning: агент, который учится торговать
+10. H3 — DQN для дискретных решений
+11. H3 — SAC и 142% годовых с мультиагентным RL
+12. H3 — Reward shaping: чтобы агент не стал казиношником
+13. H2 — Байесовские методы: неопределённость как преимущество
+14. H3 — Гауссовские процессы для кривых базиса
+15. H3 — BOCPD: когда рынок меняет правила
+16. H3 — Thompson Sampling: исследуй умно
+17. H2 — Обнаружение аномалий как поиск арбитража
+18. H3 — Автокодировщики и Isolation Forest
+19. H3 — CUSUM и EWMA: промышленный контроль для спредов
+20. H2 — Онлайн-обучение: адаптация в реальном времени
+21. H3 — Multi-armed bandits для выбора биржи
+22. H3 — Exponential Weights и FTRL
+23. H3 — Meta-Learning: быстрая адаптация к новому режиму
+24. H2 — Генетические и эволюционные подходы
+25. H3 — Genetic Programming: эволюция торговых правил
+26. H3 — NSGA-II: когда целей несколько
+27. H2 — Интегрированная архитектура: как всё соединить
+28. H2 — Экосистема ML на Rust
+29. H3 — Фреймворки глубокого обучения
+30. H3 — Статистические библиотеки
+31. H3 — Путь внедрения
+32. H2 — Практические рекомендации
+33. H2 — Что дальше
+34. H2 — Полезные ссылки
+35. H2 — Цитирование
+
+This Russian article is a much longer independent edition. Follow its own complete section order: graph representation; GraphSAGE edge fusion and Temporal Graph Networks; transformer, TFT-GNN and spot/futures cross-attention; DQN and SAC/multi-agent RL with reward shaping; Gaussian Processes, BOCPD and Thompson Sampling; anomaly detection and CUSUM/EWMA; bandits, Exponential Weights/FTRL and meta-learning; genetic programming and NSGA-II; integrated Rust pipeline, ecosystem, implementation path, practical recommendations and references. Attribute its GraphSAGE F1=0.90, AUC=0.94, recall=0.92 and 78 ms CPU claims, the TFT-GNN 11/12 periods and 10/50/90% quantile example, spot/futures MAPE 0.70% and 58.18% return, DQN November 2025 +4.7% versus market -11%, SAC/multi-agent 142% versus 12% annual returns, 3x GP profitability, and ONNX/INT8 speedups as source claims. The article equates F1=0.90 with precision ("9 of 10") and recall=0.92 with "less than 8% missed"; review statistical definitions, denominators, dataset, period, costs, leakage, and backtest/live provenance. Its GNN 78 ms CPU result and illustrative <7.5 ms sum of different pipeline stages require hardware, concurrency, measurement and provenance reconciliation. Its statement that the 142% comparison is "not a backtest bug" lacks visible validation evidence; preserve as article rhetoric, never endorsement. GP posterior variance is not guaranteed out-of-distribution detection; attention weights do not prove causality or executable profit; CEX/DEX/bridge legs cannot be assumed atomic. Preserve reward, risk and drawdown caveats; explain the source code and Rust libraries as illustrative, uncompiled and API-version dependent. Keep "12x", 142%/12%, <8 ms, "sub-millisecond", quantization 2-4x and 100+ spread deployment suggestions as article assertions pending quantitative and primary-source review.
+
+Preserve substantive coverage, equations, formula signs, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, research, financial, exchange/API, performance and mutable assertions remain attributed source claims pending human editorial, mathematical, source-code, quantitative and primary-source review. Do not add outside facts, guaranteed returns, risk-free claims, investment advice, measured benchmarks or production validation. Chinese regional terminology and Mandarin pronunciation await human editorial and listening review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams, code and tables only as supported by the source. Keep on-slide text in the requested locale apart from technical identifiers. End with its conclusion, citations or references if present.

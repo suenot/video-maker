@@ -1,0 +1,100 @@
+MM article complex-arbitrage-ml-approaches EN b1190dc12852
+
+---
+title: "GNN, Transformers, and RL for Arbitrage: When Neural Networks Learn to Trade"
+description: "How graph neural networks find arbitrage chains in 78 ms, why RL agents show 142% annual returns against 12% for rule-based bots, and how to build an integrated system in Rust."
+tags: ["arbitrage", "machine learning", "GNN", "transformers", "reinforcement learning", "Rust", "bayesian methods", "online learning", "futures", "spot"]
+date: "2026-02-27"
+lang: "en"
+image: "/images/blog/complex-arbitrage-ml-approaches.webp"
+slug: "complex-arbitrage-ml-approaches"
+authors: ["suenot"]
+---
+
+# GNN, Transformers, and RL for Arbitrage: When Neural Networks Learn to Trade
+
+*Part 5 of the series "Complex Arbitrage Chains Between Futures and Spot"*
+
+Imagine a chess grandmaster who, instead of a board, sees ten exchanges with hundreds of trading pairs, and instead of 32 pieces, sees thousands of orders updated every millisecond. Classical algorithms like Bellman-Ford honestly traverse the graph, but by the time they find a profitable cycle, the window of opportunity has already closed. We need another approach—not just algorithmic, but *learned*.
+
+In this article, we explore how modern ML methods turn the chaotic multi-exchange market into a structured task. Graph Neural Networks (GNNs), Transformers, and Reinforcement Learning (RL) agents are redefining what's possible in the world of arbitrage.
+
+![Overview of ML Methods for Arbitrage](/images/blog/complex-arbitrage-ml-approaches.webp)
+*Landscape of ML approaches for arbitrage detection and execution: from graph neural networks to evolutionary algorithms.*
+
+![Graph Neural Network architecture for financial market analysis](/images/blog/ml-approaches-gnn-architecture.webp)
+
+## 1. Graph Neural Networks: When the Market is a Graph
+
+The multi-exchange crypto market is a graph by its nature. **Nodes** are assets (BTC, ETH, SOL) or "asset-exchange" pairs. **Edges** are trading links weighted by spreads, volumes, fees, and latencies.
+
+Classical Bellman-Ford solves the task in $O(V \times E)$. **Graph Neural Networks (GNN)** learn to *recognize patterns* preceding arbitrage opportunities, similar to a taxi driver's "intuition" for where a traffic jam will be.
+
+### 1.1 GraphSAGE with Edge Fusion
+Using **GraphSAGE** with a custom edge fusion module, researchers achieved:
+- **F1-score: 0.90**—9 out of 10 predicted opportunities are real.
+- **Inference: 78 ms on CPU**—fast enough for many arbitrage windows.
+
+```rust
+use burn::prelude::*;
+use burn::nn::{Linear, LinearConfig, Relu};
+
+#[derive(Module, Debug)]
+pub struct EdgeFusionModule<B: Backend> {
+    fc1: Linear<B>,
+    fc2: Linear<B>,
+    fc_out: Linear<B>,
+    relu: Relu,
+}
+```
+
+## 2. Transformers: Attention is All You Need
+
+If GNNs work with market *structure*, Transformers work with *data streams*. **Multi-head self-attention** captures dependencies across assets and exchanges without needing to explicitly define who influences whom.
+
+### 2.1 Multi-Head Attention for Multi-Exchange Fusion
+The weights of the attention mechanism show *which exchanges are most informative* for predicting the price on the target exchange. A surge in attention weight between two exchanges is often a signal of an impending arbitrage opportunity.
+
+![Reinforcement learning agent-environment loop for trading](/images/blog/ml-approaches-rl-loop.webp)
+
+## 3. Reinforcement Learning: The Agent that Learns to Trade
+
+**Reinforcement Learning (RL)** naturally fits the arbitrage problem. The state is the order books, positions, and balances. The action is what to trade, where, and in what volume. The reward is the profit or loss.
+
+### 3.1 142% Annual Returns
+The most impressive result is **Multi-Agent RL** for competitive arbitrage on DEXs. By coordinating specialized agents (CEX-DEX, Cross-Chain, and Triangular), researchers achieved **142% annual returns against 12% for rule-based bots**.
+
+## 4. Bayesian Methods: Uncertainty as an Advantage
+
+**Bayesian Online Changepoint Detection (BOCPD)** detects regime changes in real-time. When the market "rules" change, the model recognizes it and tells the strategy to pause and recalibrate.
+
+```rust
+/// Regime change detector based on BOCPD
+pub struct BocpdDetector {
+    lambda: f64,                         // P(changepoint) = 1/lambda
+    run_length_probs: Vec<f64>,          // run length distribution
+}
+```
+
+![Integrated ML pipeline: GNN → Transformer → RL → execution](/images/blog/ml-approaches-integrated-pipeline.webp)
+
+## 5. Integrated Architecture: Putting It All Together
+
+True power comes from integration. An integrated pipeline on Rust looks like this:
+1. **Feature Engineering:** Order book features, spreads, CUSUM/EWMA monitoring.
+2. **Detection:** GNNs and Autoencoders finding anomalies.
+3. **Signal Fusion:** Transformers merging cross-exchange and spot-futures data.
+4. **Execution:** RL agents determining optimal size and timing.
+5. **Risk:** Bayesian sizing and Gaussian Process boundaries.
+
+**Total Latency Budget:** With Rust and ONNX Runtime, a total pipeline latency of **< 7.5 ms** is achievable.
+
+## 6. Conclusion
+
+ML in arbitrage is not a silver bullet, but an arsenal of tools. GNNs see the structure, Transformers merge the data, RL executes, and Bayesian methods manage the uncertainty.
+
+In the final part of this series, we will look at the **Rust Implementation** details of such a system, focusing on nanosecond precision and atomic multi-leg execution.
+
+---
+
+*Training your own agents? Check our [Rust ML Trading Framework on GitHub](https://github.com/marketmaker-cc/burn-trade-core).*

@@ -1,0 +1,160 @@
+MM article complex-arbitrage-graph-algorithms EN e8c18d495609
+
+---
+title: "Graph Algorithms for Arbitrage Detection: From Bellman-Ford to RICH"
+description: "How negative cycles, multi-asset graphs, and the RICH algorithm identify arbitrage opportunities in the deep cryptocurrency market with sub-millisecond precision."
+tags: ["arbitrage", "graph algorithms", "Bellman-Ford", "RICH", "rust", "cryptocurrency", "optimization", "negative cycles"]
+date: "2026-02-23"
+lang: "en"
+image: "/images/blog/complex-arbitrage-graph-algorithms.webp"
+slug: "complex-arbitrage-graph-algorithms"
+authors: ["suenot"]
+---
+
+# Graph Algorithms for Arbitrage Detection: From Bellman-Ford to RICH
+
+*Part 1 of the series "Complex Arbitrage Chains Between Futures and Spot"*
+
+Imagine the cryptocurrency market as a living, breathing organism where thousands of prices change every second across hundreds of exchanges. In this chaos, temporary price discrepancies arise—"inefficiencies"—that allow for risk-free profit. This is arbitrage. But we are not talking about simple two-step swaps. We are diving into complex multi-asset chains where a profit might only be found by jumping from BTC to ETH, then to SOL, then to USDT, and finally back to BTC.
+
+How do we find these chains among millions of possibilities in real-time? The answer lies in Graph Theory.
+
+In this article, we will traverse the path from classical algorithms to cutting-edge academic research, implementing everything in Rust for maximum performance.
+
+![Complex Cryptocurrency Arbitrage Graph](/images/blog/complex-arbitrage-graph-algorithms.webp)
+*A high-tech visualization of an arbitrage graph: nodes represent assets, and edges represent trading pairs. A highlighted cycle represents a detected profitable opportunity.*
+
+## 1. The Market as a Graph
+
+To apply graph algorithms, we must first represent the market correctly.
+
+### 1.1 Vertices and Edges
+- **Vertices (Nodes):** Assets (BTC, ETH, USDT, etc.).
+- **Edges (Links):** Trading pairs (BTC/USDT, ETH/BTC).
+- **Weights:** The exchange rate.
+
+If we have a rate $R(i, j)$ (how much of asset $j$ we get for 1 unit of asset $i$), an arbitrage opportunity exists if a cycle $(i_1, i_2, \dots, i_k, i_1)$ produces:
+$$R(i_1, i_2) \times R(i_2, i_3) \times \dots \times R(i_k, i_1) > 1$$
+
+### 1.2 From Multiplication to Addition
+Computers are much faster at adding than multiplying, and most shortest-path algorithms are designed for sums. We use a simple mathematical trick: the logarithm.
+Since $\ln(a \times b) = \ln(a) + \ln(b)$, the condition becomes:
+$$\ln(R_1) + \ln(R_2) + \dots + \ln(R_k) > 0$$
+Or, by flipping the sign to find a **negative cycle**:
+$$(-\ln(R_1)) + (-\ln(R_2)) + \dots + (-\ln(R_k)) < 0$$
+
+Now, every edge has a weight $w = -\ln(R)$. Our task is to find a cycle with a negative total weight.
+
+## 2. Classical Approach: Bellman-Ford
+
+The Bellman-Ford algorithm is the "Hello World" of arbitrage detection. It is designed to find shortest paths and can naturally detect negative cycles.
+
+### 2.1 The Algorithm in Rust
+Using the `petgraph` crate, we can implement this efficiently:
+
+```rust
+use petgraph::graph::{DiGraph, NodeIndex};
+use petgraph::algo::bellman_ford;
+
+fn find_arbitrage_bellman_ford(
+    graph: &DiGraph<&str, f64>, 
+    start_node: NodeIndex
+) -> Option<Vec<NodeIndex>> {
+    // Bellman-Ford returns distances or an error if a negative cycle is found
+    match bellman_ford(graph, start_node) {
+        Ok(_) => None, // No negative cycles
+        Err(error) => {
+            // In a real implementation, we would reconstruct the cycle 
+            // using the predecessor map from the error
+            println!("Arbitrage detected!");
+            None 
+        }
+    }
+}
+```
+
+### 2.2 Complexity and Limitations
+Bellman-Ford runs in $O(V \times E)$, where $V$ is the number of assets and $E$ is the number of trading pairs.
+- **Pros:** Guarantees finding a cycle if it exists.
+- **Cons:** Too slow for High-Frequency Trading (HFT) when the number of assets grows. It also only finds *one* cycle at a time.
+
+## 3. SPFA: A Faster Alternative
+
+The **Shortest Path Faster Algorithm (SPFA)** is an optimized version of Bellman-Ford that uses a queue to avoid redundant calculations.
+
+```rust
+use std::collections::VecDeque;
+
+fn spfa_negative_cycle(n: usize, adj: &Vec<Vec<(usize, f64)>>) -> bool {
+    let mut dist = vec![0.0; n];
+    let mut count = vec![0; n];
+    let mut in_queue = vec![false; n];
+    let mut queue = VecDeque::new();
+
+    for i in 0..n {
+        in_queue[i] = true;
+        queue.push_back(i);
+    }
+
+    while let Some(u) = queue.pop_front() {
+        in_queue[u] = false;
+        for &(v, weight) in &adj[u] {
+            if dist[v] > dist[u] + weight {
+                dist[v] = dist[u] + weight;
+                count[v] = count[u] + 1;
+                if count[v] >= n {
+                    return true; // Negative cycle detected
+                }
+                if !in_queue[v] {
+                    queue.push_back(v);
+                    in_queue[v] = true;
+                }
+            }
+        }
+    }
+    false
+}
+```
+In practice, SPFA often runs in $O(k \times E)$ where $k \ll V$, making it much faster for sparse market graphs.
+
+## 4. Modern Research: The RICH Algorithm
+
+In 2024, researchers proposed the **RICH (Rapid Identification of Cyclic High-profitability)** algorithm. Unlike Bellman-Ford, RICH is specifically optimized for financial graphs where:
+1. The graph is small to medium-sized (hundreds of assets).
+2. Weights change every millisecond.
+3. We need to find the *most* profitable cycle, not just *any* cycle.
+
+### 4.1 Key Innovations of RICH
+- **Pruning:** It immediately discards paths that cannot possibly lead to a profitable cycle based on the current best-known path.
+- **Layered Search:** It searches for cycles of increasing length (3-legs, 4-legs, 5-legs) using bitmask optimizations.
+- **Incremental Updates:** Instead of re-running the full algorithm, it only updates the parts of the graph affected by a price change.
+
+## 5. Implementation Challenges: Fees and Liquidity
+
+Real trading is not free. A multi-leg cycle $(A \to B \to C \to A)$ incurs three separate trading fees.
+
+### 5.1 Incorporating Fees
+We must adjust our edge weights:
+$$w = -\ln(R \times (1 - \text{fee}))$$
+This significantly prunes the graph, as many theoretical cycles are killed by the cost of execution.
+
+### 5.2 Liquidity and Slippage
+As you buy more of an asset, the price goes up (slippage). A cycle that looks profitable for $100 might be a loss for $10,000.
+Advanced graph models use **parametric weights**, where $w$ is a function of the volume $V$. This turns the problem from a simple shortest-path search into a **Convex Optimization** problem on a graph.
+
+## 6. Why Rust?
+
+In the world of arbitrage, 100 microseconds is the difference between profit and a "skipped" opportunity.
+- **Memory Safety:** No garbage collector pauses (GC) that could freeze the bot at a critical moment.
+- **Zero-Cost Abstractions:** We can use high-level graph structures without losing the performance of raw pointers.
+- **Concurrency:** Rust's "Fearless Concurrency" allows us to parse WebSocket feeds from 10 exchanges in parallel and update the shared graph safely.
+
+## Conclusion
+
+Graph algorithms are the engine behind modern crypto arbitrage. While Bellman-Ford provides the foundation, modern systems use optimized variants like SPFA or specialized algorithms like RICH.
+
+In the next part of this series, we will look at **Futures-Spot Arbitrage**, where we expand our graph from simple asset swaps to include funding rates and cash-and-carry strategies.
+
+---
+
+*Are you building low-latency trading systems? Check our [Open Source Rust HFT Template](https://github.com/marketmaker-cc/hft-rust-core).*

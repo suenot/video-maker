@@ -1,0 +1,100 @@
+MM article complex-arbitrage-ml-approaches ZH-TW d9d0490c2fda
+
+---
+title: "用於套利的 GNN、Transformer 與 RL：當神經網路學會交易"
+description: "圖神經網路如何在 78 毫秒內找到套利鏈，為什麼 RL 智慧體顯示 142% 的年化收益率（而基於規則的機器人僅為 12%），以及如何在 Rust 中構建整合系統。"
+tags: ["套利", "機器學習", "GNN", "Transformer", "強化學習", "Rust", "貝葉斯方法", "線上學習", "期貨", "現貨"]
+date: "2026-02-27"
+lang: "zh-Hant"
+image: "/images/blog/complex-arbitrage-ml-approaches.webp"
+slug: "complex-arbitrage-ml-approaches"
+authors: ["suenot"]
+---
+
+# 用於套利的 GNN、Transformer 與 RL：當神經網路學會交易
+
+*《期貨與現貨之間的複雜套利鏈》系列第 5 部分*
+
+想像一位國際象棋大師，他看到的不是棋盤，而是十個交易所和數百個交易對；看到的不是 32 顆棋子，而是每毫秒都在更新的數千個訂單。Bellman-Ford 等經典演算法誠實地遍歷圖，但當它們找到獲利迴圈時，機會視窗往往已經關閉。我們需要另一種方法——不僅是演算法上的，而且是*學習型*的。
+
+在本文中，我們將探討現代機器學習（ML）方法如何將混亂的多交易所市場轉化為結構化任務。圖神經網路（GNN）、Transformer 和強化學習（RL）智慧體正在重新定義套利世界的可能性。
+
+![用於套利的機器學習方法概述](/images/blog/complex-arbitrage-ml-approaches.webp)
+*用於套利檢測和執行的機器學習方法圖景：從圖神經網路到進化演算法。*
+
+![用於金融市場分析的圖神經網路架構](/images/blog/ml-approaches-gnn-architecture.webp)
+
+## 1. 圖神經網路：當市場是一個圖
+
+多交易所加密市場本質上是一個圖。**節點（Nodes）**是資產（BTC、ETH、SOL）或“資產-交易所”對。**邊（Edges）**是交易連結，按價差、交易量、手續費和延遲進行加權。
+
+經典演算法 Bellman-Ford 以 $O(V \times E)$ 的複雜度解決任務。**圖神經網路 (GNN)** 則學會*識別*套利機會之前的*模式*，類似於計程車司機對哪裡會發生交通擁堵的“直覺”。
+
+### 1.1 帶有邊融合的 GraphSAGE
+使用帶有自定義邊融合（Edge fusion）模組的 **GraphSAGE**，研究人員實現了：
+- **F1 分數：0.90**——10 個預測機會中有 9 個是真實的。
+- **推理時間：在 CPU 上為 78 毫秒**——對於許多套利視窗來說足夠快。
+
+```rust
+use burn::prelude::*;
+use burn::nn::{Linear, LinearConfig, Relu};
+
+#[derive(Module, Debug)]
+pub struct EdgeFusionModule<B: Backend> {
+    fc1: Linear<B>,
+    fc2: Linear<B>,
+    fc_out: Linear<B>,
+    relu: Relu,
+}
+```
+
+## 2. Transformers：注意力就是一切
+
+如果由於 GNN 處理的是市場*結構*，那麼 Transformer 處理的就是*資料流*。**多頭自注意力（Multi-head self-attention）機制**可以捕捉資產和交易所之間的依賴關係，而無需明確定義誰影響誰。
+
+### 2.1 用於多交易所融合的多頭注意力
+注意力機制的權重顯示了*哪些交易所資訊最豐富*，以便預測目標交易所的價格。兩個交易所之間注意力權重的激增通常是即將出現套利機會的訊號。
+
+![交易強化學習智慧體-環境迴圈](/images/blog/ml-approaches-rl-loop.webp)
+
+## 3. 強化學習：學會交易的智慧體
+
+**強化學習 (RL)** 自然地擬合了套利問題。狀態（State）是訂單簿、持倉和餘額。行動（Action）是交易什麼、在哪裡交易以及交易多少。獎勵（Reward）是盈利或虧損。
+
+### 3.1 142% 的年化收益率
+最令人印象深刻的結果是用於 DEX 上競爭性套利的**多智慧體強化學習（Multi-Agent RL）**。通過協調專業智慧體（CEX-DEX、跨鏈和三角套利），研究人員實現了 **142% 的年化收益率，而基於規則的機器人僅為 12%**。
+
+## 4. 貝葉斯方法：將不確定性視為優勢
+
+**貝葉斯線上突變點檢測（BOCPD）**即時檢測機制變化。當市場“規則”改變時，模型會識別出來，並告訴策略暫停並重新校準。
+
+```rust
+/// 基于 BOCPD 的机制变化检测器
+pub struct BocpdDetector {
+    lambda: f64,                         // P(changepoint) = 1/lambda
+    run_length_probs: Vec<f64>,          // 运行长度分布
+}
+```
+
+![整合ML管道：GNN → Transformer → RL → 執行](/images/blog/ml-approaches-integrated-pipeline.webp)
+
+## 5. 整合架構：將一切整合在一起
+
+真正的力量來自整合。在 Rust 上的整合流水線如下：
+1. **特徵工程：** 訂單簿特徵、價差、CUSUM/EWMA 監控。
+2. **檢測：** GNN 和自動編碼器尋找異常。
+3. **訊號融合：** Transformer 合併跨交易所和期現資料。
+4. **執行：** RL 智慧體確定最佳規模和時機。
+5. **風險管理：** 貝葉斯倉位管理和高斯過程（Gaussian Process）邊界。
+
+**總延遲預算：** 通過 Rust 和 ONNX Runtime，可以實現 **< 7.5 毫秒** 的總流水線延遲。
+
+## 6. 結論
+
+套利中的機器學習不是萬能鑰匙，而是一套工具箱。GNN 觀察結構，Transformer 合併資料，RL 執行，貝葉斯方法管理不確定性。
+
+在本系列的最後一部分中，我們將研究此類系統的 **Rust 實現**細節，重點關注納秒級精度和原子化多步執行。
+
+---
+
+*正在訓練你自己的智慧體？請在 GitHub 上檢視我們的 [Rust 機器學習交易框架](https://github.com/marketmaker-cc/burn-trade-core)。*

@@ -1,0 +1,41 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article complex-arbitrage-graph-algorithms RU eca381d097c5". It is the complete published ru article snapshot. Do not merge another language edition or outside facts. Output language: Russian. Use Russian throughout, preserving exact source headings and mathematical symbols. Keep mathematical symbols, formula signs, units, code/API identifiers, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — Ключевая идея: арбитраж как отрицательный цикл
+2. H3 — Учёт комиссий
+3. H2 — Bellman-Ford: классика, проверенная временем
+4. H3 — Техника виртуального суперисточника
+5. H3 — Реализация на Rust
+6. H2 — SPFA: когда Bellman-Ford слишком медленный
+7. H3 — Детектирование отрицательных циклов в SPFA
+8. H3 — SLF и LLL: тонкая настройка очереди
+9. H2 — RICH: революция в обнаружении арбитража (VLDB 2025)
+10. H3 — Техника раскраски (Color-Coding)
+11. H3 — Динамическое программирование в RICH
+12. H3 — Почему RICH даёт 32x ускорение
+13. H2 — Line Graph + MMBF: 23,868 путей вместо 19
+14. H3 — Что такое линейный граф
+15. H3 — Почему это прорыв
+16. H2 — K кратчайших путей: ранжирование возможностей
+17. H2 — Построение мультиинструментального графа
+18. H3 — Кросс-биржевая структура
+19. H3 — Моделирование инструментов
+20. H3 — Учёт ликвидности
+21. H2 — Обновления в реальном времени
+22. H3 — Инкрементальные обновления рёбер
+23. H3 — Пакетная обработка обновлений
+24. H3 — Конкурентные структуры данных в Rust
+25. H2 — Практическое руководство: какой алгоритм когда использовать
+26. H3 — Матрица решений
+27. H3 — Сравнение сложностей
+28. H3 — Практические бенчмарки
+29. H3 — Честное предупреждение
+30. H2 — Что дальше
+31. H2 — Полезные ссылки
+32. H2 — Цитирование
+
+This Russian article is a much longer independent edition. Follow every native subsection, including the BTC/USDT=50000, ETH/BTC=0.06, USDT→ETH=1/3001 log-weight example and the 0.1% per leg / approximately 0.3% three-leg fee threshold; keep directions, units and signs as written and flag its rounded zero-sum example for mathematical review. Cover virtual-super-source Bellman-Ford O(VE) versus naive O(V²E), predecessor/cycle reconstruction and 1e-10 tolerance, SPFA queue/path-length and SLF/LLL tuning with O(VE) worst case, and RICH k-hop most-negative-cycle, color-coding k!/k^k, k=5 ~3.8%, 32 trials, bitmask DP, 32.69x claim, k=5 / 500 vertices / 2000 edges arithmetic and complexity table. The 32-trial miss-probability language and algorithmic/benchmark arithmetic need independent mathematical and research review; do not present them as guarantees. Separately explain line graph + MMBF, its 23,868 versus 19 paths source comparison, K-shortest ranking and combinatorial growth, multi-instrument/cross-exchange graph, order-book depth and volume-dependent effective rates, real-time incremental/batch updates and Rust concurrent data structures. Include the decision matrix, latency table and honest warning: stale sequential API quotes, 0.05–0.087% opportunities versus fees, cited 34,429 ETH revenue / 8,458 ETH gas, 85% three-leg DEX claim, futures basis/liquidation/funding risk. The Russian edition cites RICH at VLDB 2025 whereas the EN/CN/TW editions say 2024; preserve its own claim and flag cross-edition date reconciliation. All code, benchmarks, exchange behavior, source references and performance comparisons are article assertions pending technical and primary-source review.
+
+Editorial flags specific to this Russian edition: its RICH expansion and VLDB 2025 date differ from the shorter editions. For k=5, k!/k^k is about 3.84% and 32 independent attempts leave about 28.6% miss probability, so do not turn the source’s "exponentially small" phrase into an assurance. Its RICH DP pseudocode tests a negative path before adding the closing edge; the stated O(2^k V E) bound and 64,000-transition worked example omit different factors and require review. The benchmark table calls <50 microseconds "Sub-microsecond HFT", a unit mismatch. Cross-venue transfer weights, fees and latency units, futures basis approximations, and every-eight-hour funding assumptions need quantitative and venue-specific review. Preserve the published text and present all of these as unresolved source issues.
+
+Preserve substantive coverage, equations, formula signs, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, research, financial, exchange/API, performance and mutable assertions remain attributed source claims pending human editorial, mathematical, source-code, quantitative and primary-source review. Do not add outside facts, guaranteed returns, risk-free claims, investment advice, measured benchmarks or production validation. Chinese regional terminology and Mandarin pronunciation await human editorial and listening review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams, code and tables only as supported by the source. Keep on-slide text in the requested locale apart from technical identifiers. End with its conclusion, citations or references if present.

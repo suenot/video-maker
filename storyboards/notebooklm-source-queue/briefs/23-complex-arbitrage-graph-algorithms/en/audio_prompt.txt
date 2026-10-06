@@ -1,0 +1,21 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article complex-arbitrage-graph-algorithms EN e8c18d495609". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English. Use English throughout. Keep mathematical symbols, formula signs, units, code/API identifiers, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 1. The Market as a Graph
+2. H3 — 1.1 Vertices and Edges
+3. H3 — 1.2 From Multiplication to Addition
+4. H2 — 2. Classical Approach: Bellman-Ford
+5. H3 — 2.1 The Algorithm in Rust
+6. H3 — 2.2 Complexity and Limitations
+7. H2 — 3. SPFA: A Faster Alternative
+8. H2 — 4. Modern Research: The RICH Algorithm
+9. H3 — 4.1 Key Innovations of RICH
+10. H2 — 5. Implementation Challenges: Fees and Liquidity
+11. H3 — 5.1 Incorporating Fees
+12. H3 — 5.2 Liquidity and Slippage
+13. H2 — 6. Why Rust?
+14. H2 — Conclusion
+
+Keep the directed asset/pair graph, multiplicative cycle condition product R > 1, and sign-preserving conversion w = -ln(R) to a negative cycle. Explain Bellman-Ford O(V E) and its one-source limitation, the petgraph example, SPFA queue behavior, the article’s practical O(k E) claim, RICH pruning/layered short-cycle search/incremental updates, fee-adjusted w = -ln(R(1-fee)), order-book liquidity, volume-dependent slippage, and the Rust rationale. The source calls arbitrage risk-free, dates RICH to 2024, and suggests 100 microseconds as a latency boundary; treat these as source wording or dated claims, not certified facts. The petgraph snippet prints detection but returns None even on the error path and does not reconstruct the cycle; label it illustrative, incomplete and uncompiled. SPFA practical speed is not a worst-case bound, and volume-dependent weights alone do not prove the optimization problem convex. A negative mathematical cycle is not executable net profit: include stale quotes, fees, market depth, slippage, order sequencing, venue/counterparty and operational risks. Do not assert that the research, Rust API, benchmark or code has been independently verified.
+
+Preserve substantive coverage, equations, formula signs, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, research, financial, exchange/API, performance and mutable assertions remain attributed source claims pending human editorial, mathematical, source-code, quantitative and primary-source review. Do not add outside facts, guaranteed returns, risk-free claims, investment advice, measured benchmarks or production validation. Chinese regional terminology and Mandarin pronunciation await human editorial and listening review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use natural spoken narration or dialogue in the requested locale. Explain formulas, variables, units, tables and code in words without requesting on-screen text. Distinguish source claims from verified facts when speaking. End with its conclusion and references if present.

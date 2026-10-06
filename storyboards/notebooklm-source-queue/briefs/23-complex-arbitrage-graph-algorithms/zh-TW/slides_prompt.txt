@@ -1,0 +1,21 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article complex-arbitrage-graph-algorithms ZH-TW 61041d7bcd7c". It is the complete published zh-Hant article snapshot. Do not merge another language edition or outside facts. Output language: Traditional Chinese for Taiwan (zh-TW; Hant), not generic Chinese. Use Taiwan terminology contextually: 委託簿, 圖演算法, 負環, 手續費, 滑價, 期貨, 現貨 and 強制平倉風險. Preserve exact localized source headings in the outline. Speak Taiwan Mandarin (Guoyu) for audio, not Taiwanese Hokkien; regional terminology and pronunciation require editorial listening review. Keep mathematical symbols, formula signs, units, code/API identifiers, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 1. 作為圖的市場
+2. H3 — 1.1 頂點和邊
+3. H3 — 1.2 從乘法到加法
+4. H2 — 2. 經典方法：Bellman-Ford
+5. H3 — 2.1 Rust 中的演算法
+6. H3 — 2.2 複雜度和侷限性
+7. H2 — 3. SPFA：更快的替代方案
+8. H2 — 4. 現代研究：RICH 演算法
+9. H3 — 4.1 RICH 的主要創新
+10. H2 — 5. 實現挑戰：手續費與流動性
+11. H3 — 5.1 納入費用
+12. H3 — 5.2 流動性與滑點
+13. H2 — 6. 為什麼選擇 Rust？
+14. H2 — 結論
+
+Keep the localized directed asset graph, cycle-rate product > 1, w = -ln(R) negative-cycle conversion, Bellman-Ford O(V E), illustrative petgraph snippet, SPFA queue and practical-speed claim, the source’s 2024 RICH description, fee-adjusted w = -ln(R(1-fee)), liquidity/slippage, and Rust latency/concurrency rationale. The source’s risk-free and sub-millisecond language is illustrative article rhetoric, not an execution guarantee. The petgraph error branch returns None without reconstructing a cycle; mark it incomplete and uncompiled. SPFA practical complexity is not a worst-case bound; volume-dependent weights do not alone prove convexity. The RICH year differs from the expanded Russian edition’s VLDB 2025 account, pending source and date reconciliation. Include stale prices, fees, liquidity, slippage, one-leg execution and venue risks; preserve source figures and formulas for editorial, mathematical and code review.
+
+Preserve substantive coverage, equations, formula signs, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, research, financial, exchange/API, performance and mutable assertions remain attributed source claims pending human editorial, mathematical, source-code, quantitative and primary-source review. Do not add outside facts, guaranteed returns, risk-free claims, investment advice, measured benchmarks or production validation. Chinese regional terminology and Mandarin pronunciation await human editorial and listening review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams, code and tables only as supported by the source. Keep on-slide text in the requested locale apart from technical identifiers. End with its conclusion, citations or references if present.

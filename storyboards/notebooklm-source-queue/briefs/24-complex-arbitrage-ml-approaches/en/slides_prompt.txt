@@ -1,0 +1,16 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article complex-arbitrage-ml-approaches EN b1190dc12852". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English. Use English throughout. Keep mathematical symbols, formula signs, units, code/API identifiers, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 1. Graph Neural Networks: When the Market is a Graph
+2. H3 — 1.1 GraphSAGE with Edge Fusion
+3. H2 — 2. Transformers: Attention is All You Need
+4. H3 — 2.1 Multi-Head Attention for Multi-Exchange Fusion
+5. H2 — 3. Reinforcement Learning: The Agent that Learns to Trade
+6. H3 — 3.1 142% Annual Returns
+7. H2 — 4. Bayesian Methods: Uncertainty as an Advantage
+8. H2 — 5. Integrated Architecture: Putting It All Together
+9. H2 — 6. Conclusion
+
+Keep the graph nodes/asset-exchange edges and Bellman-Ford O(V E) contrast; GraphSAGE edge fusion with source F1=0.90 and 78 ms CPU inference; attention across exchanges; RL state/action/reward and source 142% versus 12% annual-return comparison; BOCPD and its Rust struct; and the five-stage Rust pipeline with its source <7.5 ms total latency budget. F1 is not the same statistic as precision, so the article’s "9 out of 10 predicted opportunities" interpretation needs editorial review. The 78 ms CPU result and <7.5 ms total pipeline describe different hardware/stages or assumptions that the source does not reconcile; do not combine them into a verified end-to-end benchmark. Treat 142% versus 12%, attention weights as an arbitrage signal, and any future multi-leg atomic execution as unverified source claims, not live results or guarantees. Rust code fragments are illustrative and uncompiled; request source attribution, dataset, backtest/live distinction, costs, leakage controls and statistical uncertainty before endorsing performance.
+
+Preserve substantive coverage, equations, formula signs, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, research, financial, exchange/API, performance and mutable assertions remain attributed source claims pending human editorial, mathematical, source-code, quantitative and primary-source review. Do not add outside facts, guaranteed returns, risk-free claims, investment advice, measured benchmarks or production validation. Chinese regional terminology and Mandarin pronunciation await human editorial and listening review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams, code and tables only as supported by the source. Keep on-slide text in the requested locale apart from technical identifiers. End with its conclusion, citations or references if present.

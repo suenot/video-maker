@@ -1,0 +1,16 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article complex-arbitrage-ml-approaches ZH-CN 9e845e690325". It is the complete published zh article snapshot. Do not merge another language edition or outside facts. Output language: Simplified Chinese for Mainland China (zh-CN; Hans), not generic Chinese. Use Mainland terminology contextually: 订单簿, 图神经网络, 期货, 现货, 强化学习, 滑点 and 强制平仓风险. Preserve exact localized source headings in the outline. Speak Mainland Mandarin (Putonghua) for audio; regional terminology and pronunciation require editorial listening review. Keep mathematical symbols, formula signs, units, code/API identifiers, citations and proper names exact.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 1. 图神经网络：当市场是一个图
+2. H3 — 1.1 带有边融合的 GraphSAGE
+3. H2 — 2. Transformers：注意力就是一切
+4. H3 — 2.1 用于多交易所融合的多头注意力
+5. H2 — 3. 强化学习：学会交易的智能体
+6. H3 — 3.1 142% 的年化收益率
+7. H2 — 4. 贝叶斯方法：将不确定性视为优势
+8. H2 — 5. 集成架构：将一切整合在一起
+9. H2 — 6. 结论
+
+Keep the localized graph nodes and asset-exchange edges, Bellman-Ford O(V E) contrast, GraphSAGE edge fusion and source F1=0.90 / 78 ms CPU numbers, transformer attention, RL state/action/reward and source 142% versus 12% annual-return comparison, BOCPD, and the five-stage Rust pipeline with source <7.5 ms latency assertion. F1=0.90 does not directly mean 9 of 10 predicted opportunities; flag that article interpretation for statistical review. The 78 ms CPU inference and <7.5 ms whole-pipeline claim need separate hardware, benchmark and provenance reconciliation. Do not turn attention weights into a proven causal/profitable signal or imply CEX/DEX/bridge legs are atomic. Performance, returns, code/API support, costs, leakage control and data period require editorial, quantitative and primary-source review; code is illustrative, not compiled or validated.
+
+Preserve substantive coverage, equations, formula signs, units, examples, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently change article claims or source headings. Historical, numerical, research, financial, exchange/API, performance and mutable assertions remain attributed source claims pending human editorial, mathematical, source-code, quantitative and primary-source review. Do not add outside facts, guaranteed returns, risk-free claims, investment advice, measured benchmarks or production validation. Chinese regional terminology and Mandarin pronunciation await human editorial and listening review. External NotebookLM notebook/source/artifact duplicates are not checked before submission; target-channel duplicates are not checked before final production. Do not imply either is cleared.
+Use enough readable slides for every major and material subsection. Show equations, variables, units, diagrams, code and tables only as supported by the source. Keep on-slide text in the requested locale apart from technical identifiers. End with its conclusion, citations or references if present.

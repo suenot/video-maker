@@ -1,0 +1,159 @@
+MM article complex-arbitrage-graph-algorithms ZH-TW 61041d7bcd7c
+
+---
+title: "套利檢測的圖演算法：從 Bellman-Ford 到 RICH"
+description: "負環、多資產圖以及 RICH 演算法如何以亞毫秒級的精度在深層加密貨幣市場中識別套利機會。"
+tags: ["套利", "圖演算法", "Bellman-Ford", "RICH", "rust", "加密貨幣", "最佳化", "負環"]
+date: "2026-02-23"
+lang: "zh-Hant"
+image: "/images/blog/complex-arbitrage-graph-algorithms.webp"
+slug: "complex-arbitrage-graph-algorithms"
+authors: ["suenot"]
+---
+
+# 套利檢測的圖演算法：從 Bellman-Ford 到 RICH
+
+*《期貨與現貨之間的複雜套利鏈》系列第 1 部分*
+
+想像一下，加密貨幣市場是一個活生生的有機體，每秒鐘在數百個交易所中有成千上萬的價格在變化。在這種混亂中，會出現暫時的價格差異——“低效”——這使得無風險獲利成為可能。這就是套利。但我們談論的不是簡單的兩步交換。我們正在深入研究複雜的多資產鏈，其中只有通過從 BTC 跳到 ETH，然後到 SOL，接著到 USDT，最後回到 BTC，才能發現利潤。
+
+如何在即時數百萬種可能性中找到這些鏈條？答案就在圖論（Graph Theory）中。
+
+在本文中，我們將走過從經典演算法到最前沿學術研究的路徑，並在 Rust 中實現所有內容以獲得最佳效能。
+
+![複雜的加密貨幣套利圖](/images/blog/complex-arbitrage-graph-algorithms.webp)
+*套利圖的高科技視覺化：節點代表資產，邊代表交易對。突出顯示的迴圈代表檢測到的獲利機會。*
+
+## 1. 作為圖的市場
+
+要應用圖演算法，我們必須首先正確地表示市場。
+
+### 1.1 頂點和邊
+- **頂點（節點）：** 資產（BTC、ETH、USDT 等）。
+- **邊（連結）：** 交易對（BTC/USDT、ETH/BTC）。
+- **權重：** 匯率。
+
+如果我們有一個匯率 $R(i, j)$（一個單位資產 $i$ 可以兌換多少資產 $j$），如果一個迴圈 $(i_1, i_2, \dots, i_k, i_1)$ 滿足以下條件，則存在套利機會：
+$$R(i_1, i_2) \times R(i_2, i_3) \times \dots \times R(i_k, i_1) > 1$$
+
+### 1.2 從乘法到加法
+計算機在加法方面的速度遠高於乘法，而且大多數最短路徑演算法都是為和而設計的。我們使用一個簡單的數學技巧：對數。
+由於 $\ln(a \times b) = \ln(a) + \ln(b)$，條件變為：
+$$\ln(R_1) + \ln(R_2) + \dots + \ln(R_k) > 0$$
+或者，通過翻轉符號來尋找**負環**：
+$$(-\ln(R_1)) + (-\ln(R_2)) + \dots + (-\ln(R_k)) < 0$$
+
+現在，每條邊都有一個權重 $w = -\ln(R)$。我們的任務是找到一個總權重為負的迴圈。
+
+## 2. 經典方法：Bellman-Ford
+
+Bellman-Ford 演算法是套利檢測的入門級演算法。它旨在尋找最短路徑，並能自然地檢測負環。
+
+### 2.1 Rust 中的演算法
+使用 `petgraph` crate，我們可以高效地實現它：
+
+```rust
+use petgraph::graph::{DiGraph, NodeIndex};
+use petgraph::algo::bellman_ford;
+
+fn find_arbitrage_bellman_ford(
+    graph: &DiGraph<&str, f64>, 
+    start_node: NodeIndex
+) -> Option<Vec<NodeIndex>> {
+    // Bellman-Ford 返回距离，如果发现负环则返回错误
+    match bellman_ford(graph, start_node) {
+        Ok(_) => None, // 无负环
+        Err(error) => {
+            // 在实际实现中，我们会使用错误中的前驱映射来重建循环
+            println!("检测到套利机会！");
+            None 
+        }
+    }
+}
+```
+
+### 2.2 複雜度和侷限性
+Bellman-Ford 的執行時間為 $O(V \times E)$，其中 $V$ 是資產數量，$E$ 是交易對數量。
+- **優點：** 保證如果存在迴圈，一定能找到。
+- **缺點：** 當資產數量增加時，對於高頻交易（HFT）來說太慢了。而且它一次只能找到*一個*迴圈。
+
+## 3. SPFA：更快的替代方案
+
+**最短路徑快速演算法 (SPFA)** 是 Bellman-Ford 的最佳化版本，它使用佇列來避免冗餘計算。
+
+```rust
+use std::collections::VecDeque;
+
+fn spfa_negative_cycle(n: usize, adj: &Vec<Vec<(usize, f64)>>) -> bool {
+    let mut dist = vec![0.0; n];
+    let mut count = vec![0; n];
+    let mut in_queue = vec![false; n];
+    let mut queue = VecDeque::new();
+
+    for i in 0..n {
+        in_queue[i] = true;
+        queue.push_back(i);
+    }
+
+    while let Some(u) = queue.pop_front() {
+        in_queue[u] = false;
+        for &(v, weight) in &adj[u] {
+            if dist[v] > dist[u] + weight {
+                dist[v] = dist[u] + weight;
+                count[v] = count[u] + 1;
+                if count[v] >= n {
+                    return true; // 检测到负环
+                }
+                if !in_queue[v] {
+                    queue.push_back(v);
+                    in_queue[v] = true;
+                }
+            }
+        }
+    }
+    false
+}
+```
+在實踐中，SPFA 的執行時間通常為 $O(k \times E)$，其中 $k \ll V$，這使得它在稀疏的市場圖中速度快得多。
+
+## 4. 現代研究：RICH 演算法
+
+2024年，研究人員提出了 **RICH (快速識別迴圈高收益)** 演算法。與 Bellman-Ford 不同，RICH 專門針對金融圖進行了最佳化，其中：
+1. 圖由中小型資產（數百個）組成。
+2. 權重每毫秒都在變化。
+3. 我們需要尋找*最高*利潤的迴圈，而不僅僅是*任何*迴圈。
+
+### 4.1 RICH 的主要創新
+- **剪枝：** 它根據當前已知的最佳路徑，立即丟棄不可能導致獲利迴圈的路徑。
+- **分層搜尋：** 它使用位掩碼最佳化搜尋遞增長度的迴圈（3步、4步、5步）。
+- **增量更新：** RICH 不會重新執行完整演算法，而只更新受價格變化影響的圖部分。
+
+## 5. 實現挑戰：手續費與流動性
+
+真正的交易不是免費的。多步迴圈 $(A \to B \to C \to A)$ 會產生三次單獨的交易費。
+
+### 5.1 納入費用
+我們必須調整邊的權重：
+$$w = -\ln(R \times (1 - \text{fee}))$$
+這極立地修剪了圖，因為許多理論上的迴圈都被執行成本殺死了。
+
+### 5.2 流動性與滑點
+隨著購買資產數量的增加，價格會上漲（滑點）。對於 100 美元表現獲利的迴圈，在 10,000 美元時可能會虧損。
+高階圖模型使用**參數權重**，其中 $w$ 是交易量 $V$ 的函數。這把問題從簡單的最短路徑搜尋變成了圖上的**凸最佳化**（Convex Optimization）問題。
+
+## 6. 為什麼選擇 Rust？
+
+在套利的世界裡，100 微秒就是利潤與“錯過”機會之間的差別。
+- **記憶體安全：** 記憶體安全，避免機器人在關鍵時刻凍結。
+- **零成本抽象：** 我們可以使用高階圖結構而不會犧牲原始指標的效能。
+- **併發性：** Rust 的“無畏併發”允許我們並行解析來自 10 個交易所的 WebSocket 推送，並安全地更新共享圖。
+
+## 結論
+
+圖演算法是現代加密套利的引擎。雖然 Bellman-Ford 奠定了基礎，但現代系統使用 SPFA 等最佳化變體或 RICH 等專業演算法。
+
+在本系列的下一部分中，我們將研究**期貨-現貨套利**，我們將把圖從簡單的資產交換擴充到包含資金費率和期現套利策略。
+
+---
+
+*你正在構建低延遲交易系統嗎？請檢視我們的 [開源 Rust HFT 模板](https://github.com/marketmaker-cc/hft-rust-core)。*
