@@ -7628,7 +7628,7 @@
           "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Beginner Strategy\n+ Risk Management\n+ Technical Deep-Dive\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 07:51."
@@ -7645,8 +7645,15 @@
           "source_id": "281e5c37-a111-480c-a59d-17f7e01147f9",
           "submission_mode": "later",
           "artifact_id": "a9fd85e3-5c57-4ba8-a31c-ec04a620aece",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-06T04:18:35.599980+00:00"
+          "card_text": "audio_spark\nUnread\nАрбитраж криптовалют от фьючерсов до DeFi\n19:16 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-06T09:03:50.749888+00:00",
+          "duration_seconds": 1156.841361,
+          "path": "input/notebooklm-sources/complex-arbitrage-futures-spot/ru/audio.m4a",
+          "sha256": "59291829f2045dbf9176f9ff02aa46477dbb833461eeba6fe678f20e52066bb2",
+          "bytes": 37232434,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-06T09:04:04.857195+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -7863,7 +7870,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "852b2145b9ef79d8f1271376100373f7295839743eead877b22506aa55620a73",
           "requested_at": "2026-10-06T04:19:45.593613+00:00",
@@ -7873,11 +7880,18 @@
           "source_id": "5f6bd8fe-2cef-406f-9f74-76d39699e028",
           "submission_mode": "now",
           "artifact_id": "0afc713c-4815-4657-97bd-243fd4c42b58",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-06T04:19:50.141793+00:00"
+          "card_text": "tablet\nUnread\nGraph Algorithms for Crypto Arbitrage\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-06T09:04:11.551781+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/complex-arbitrage-graph-algorithms/en/slides.pdf",
+          "sha256": "aa577372ab99c56f733dfd3397b55980450b4fd88b24995f2658b5e089de5d2d",
+          "bytes": 14281675,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-06T09:04:18.253472+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "0afc713c-4815-4657-97bd-243fd4c42b58"
           ],
@@ -7889,8 +7903,15 @@
           "source_id": "5f6bd8fe-2cef-406f-9f74-76d39699e028",
           "submission_mode": "now",
           "artifact_id": "515c1834-9920-4e8e-95b8-b076354808d2",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-06T04:20:02.082113+00:00"
+          "card_text": "audio_spark\nUnread\nGraph Algorithms for Crypto Arbitrage Detection\n23:05 · Deep Dive · 1 source · 4h ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-06T09:04:19.291621+00:00",
+          "duration_seconds": 1385.882993,
+          "path": "input/notebooklm-sources/complex-arbitrage-graph-algorithms/en/audio.m4a",
+          "sha256": "05c65de95376531c2530da8438665dea2a7e5e4c1ce12143e41a84380daf0b07",
+          "bytes": 44603890,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-06T09:04:42.157160+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -7951,10 +7972,10 @@
           "submission_mode": "later",
           "artifact_id": "dadc5968-19ce-45bc-ac6a-f046e9ba976f",
           "card_text": "tablet\nGraph Algorithms for Crypto Arbitrage Detection\nScheduled for after 1pm\nmore_vert",
-          "observed_at": "2026-10-06T04:20:35.567261+00:00"
+          "observed_at": "2026-10-06T09:04:48.871197+00:00"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "dadc5968-19ce-45bc-ac6a-f046e9ba976f"
           ],
@@ -7966,8 +7987,15 @@
           "source_id": "fa301b4d-bed8-4642-a9ab-879ae0718dca",
           "submission_mode": "now",
           "artifact_id": "d12f6dd0-befb-4c6d-895d-d364e34193e6",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-06T04:20:53.306342+00:00"
+          "card_text": "audio_spark\nUnread\nКриптоарбитраж как отрицательный цикл на графе\n16:55 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-06T09:04:49.901658+00:00",
+          "duration_seconds": 1015.640816,
+          "path": "input/notebooklm-sources/complex-arbitrage-graph-algorithms/ru/audio.m4a",
+          "sha256": "44c11943f320845f1d0bd3a71a5b256c2854000161560e59f78d04bc96155f5e",
+          "bytes": 32688069,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-06T09:05:05.922826+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -7999,21 +8027,177 @@
       "selected_source_ids": [
         "fa301b4d-bed8-4642-a9ab-879ae0718dca"
       ]
+    },
+    "complex-arbitrage-graph-algorithms:zh-CN": {
+      "slug": "complex-arbitrage-graph-algorithms",
+      "language": "zh-CN",
+      "article_sha256": "6debcf8844352f1427343888fd3895cd046f3974da40f2f3f78f789376ca9d69",
+      "input_hashes": {
+        "article": "6debcf8844352f1427343888fd3895cd046f3974da40f2f3f78f789376ca9d69",
+        "source_text": "7d6879c550af74cbcac120f97021fe8b9c45d4a114a94e9bf762df89d21862c8",
+        "slides_prompt": "09f4c3119cf53d9fcc68523827962ce1f37d910c9eb84272f99e6cb6df534469",
+        "audio_prompt": "72e8e70b348e79fdbe211aa401a5ff815b1bbed3a1f3abc0e78bb70ff2c194d0"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "09f4c3119cf53d9fcc68523827962ce1f37d910c9eb84272f99e6cb6df534469",
+          "requested_at": "2026-10-06T09:05:34.239944+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
+          "submission_mode": "later",
+          "artifact_id": "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72",
+          "card_text": "tablet\n套利检测的图算法：从 Bellman-Ford 到 RICH\nScheduled for after 9pm\nmore_vert",
+          "observed_at": "2026-10-06T09:05:38.797543+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Algorithm Comparison\n+ HFT Developer Perspective\n+ Practical Market Challenges\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72"
+          ],
+          "prompt_sha256": "72e8e70b348e79fdbe211aa401a5ff815b1bbed3a1f3abc0e78bb70ff2c194d0",
+          "requested_at": "2026-10-06T09:05:51.971959+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
+          "submission_mode": "later",
+          "artifact_id": "8d94d8f8-29f8-4300-8a11-42df39e16f03",
+          "card_text": "audio_spark\n套利检测的图算法：从 Bellman-Ford 到 RICH\nScheduled for after 8pm\nmore_vert",
+          "observed_at": "2026-10-06T09:05:56.530750+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-06T09:05:05.951021+00:00",
+      "notebook_intent": {
+        "at": "2026-10-06T09:05:13.117053+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "c92c9cdf9ba1cdd04d4410b44e924a24493d4c2e00d1dbaf0c767f895989a95e",
+        "baseline_count": 347,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-06T09:05:14.207493+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/df53affe-b3b9-45f2-a7a9-f5ecb3616b0e",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-06T09:05:18.234500+00:00",
+        "sha256": "7d6879c550af74cbcac120f97021fe8b9c45d4a114a94e9bf762df89d21862c8",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-06T09:05:26.179739+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
+      "source_title": "MM article complex-arbitrage-graph-algorithms ZH-CN 6debcf884435",
+      "source_sha256": "7d6879c550af74cbcac120f97021fe8b9c45d4a114a94e9bf762df89d21862c8",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-graph-algorithms ZH-…",
+      "selected_source_ids": [
+        "16db2874-c2a5-4aa3-8738-59bcb71f7723"
+      ]
+    },
+    "complex-arbitrage-graph-algorithms:zh-TW": {
+      "slug": "complex-arbitrage-graph-algorithms",
+      "language": "zh-TW",
+      "article_sha256": "61041d7bcd7c8de17321c96f547216516b8ebc5e4d87e5bb78e9ced80401f49e",
+      "input_hashes": {
+        "article": "61041d7bcd7c8de17321c96f547216516b8ebc5e4d87e5bb78e9ced80401f49e",
+        "source_text": "4d2b78124294119d5a22dba71a1cf4aa235e98207c2fdae80d06602c133cffec",
+        "slides_prompt": "24edf7c181e36a6e2cea7f12110e684860c7e1065954e4f6b50853d98404f11f",
+        "audio_prompt": "3bb18eed085e4c07a40c92c394b0c7e067e4824311df2b4bef530266d792f253"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "24edf7c181e36a6e2cea7f12110e684860c7e1065954e4f6b50853d98404f11f",
+          "requested_at": "2026-10-06T09:06:24.999367+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
+          "submission_mode": "later",
+          "artifact_id": "9e57dc7e-28e2-4333-a612-64fa73b35a55",
+          "card_text": "tablet\n加密貨幣套利的圖演算法\nScheduled for after 8pm\nmore_vert",
+          "observed_at": "2026-10-06T09:06:29.555878+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Algorithm Evolution\n+ HFT Developer Perspective\n+ Practical Market Constraints\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "9e57dc7e-28e2-4333-a612-64fa73b35a55"
+          ],
+          "prompt_sha256": "3bb18eed085e4c07a40c92c394b0c7e067e4824311df2b4bef530266d792f253",
+          "requested_at": "2026-10-06T09:06:42.619602+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
+          "submission_mode": "later",
+          "artifact_id": "4de25cf5-6b6c-4a87-b982-5576e5febca3",
+          "card_text": "audio_spark\n加密貨幣套利的圖演算法\nScheduled for after 9pm\nmore_vert",
+          "observed_at": "2026-10-06T09:06:47.175218+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-06T09:05:56.562158+00:00",
+      "notebook_intent": {
+        "at": "2026-10-06T09:06:04.020922+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "1a626b28de3b19d0b26c9dcac84a857d70cb75cc761192381132624008f16f5b",
+        "baseline_count": 348,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-06T09:06:05.122477+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/8da668d0-f257-47b8-a955-ba28a744038b",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-06T09:06:09.170853+00:00",
+        "sha256": "4d2b78124294119d5a22dba71a1cf4aa235e98207c2fdae80d06602c133cffec",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-06T09:06:17.175893+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
+      "source_title": "MM article complex-arbitrage-graph-algorithms ZH-TW 61041d7bcd7c",
+      "source_sha256": "4d2b78124294119d5a22dba71a1cf4aa235e98207c2fdae80d06602c133cffec",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-graph-algorithms ZH-…",
+      "selected_source_ids": [
+        "e3b70682-500f-441d-a88b-9eb5aaa41e1f"
+      ]
     }
   },
-  "checked_at": "2026-10-06T04:20:53.327832+00:00",
+  "checked_at": "2026-10-06T09:06:47.184149+00:00",
   "browser_geometry_requested": {
-    "width": 1997,
+    "width": 1995,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 59,
+    "x": 61,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1997,
+    "outer_width": 1995,
     "outer_height": 1290,
-    "inner_width": 1957,
+    "inner_width": 1955,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
