@@ -1,0 +1,15 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article complex-arbitrage-vine-copulas EN fe23a1961c56". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English. Use English throughout. Keep copula, marginal distribution, tail dependence, conditional probability, C-Vine, D-Vine, R-Vine, Clayton, Frank, MLE, rayon and argmin precise. Preserve mathematical symbols, formula signs, units, code/API identifiers, citations and proper names exactly as in the source.
+Follow every H2 and H3 section in this exact sequence, preserving nested order and the exact source headings:
+1. H2 — 1. Beyond Correlation
+2. H3 — 1.1 What is a Copula?
+3. H3 — 1.2 From Pairwise to Vine
+4. H2 — 2. Structure of the Vine
+5. H3 — 2.1 Implementing Bivariate Copulas in Rust
+6. H2 — 3. Arbitrage Signal Generation
+7. H2 — 4. The Computational Challenge
+8. H2 — 5. Conclusion
+
+Article-specific coverage and review: The BTC down 5% / altcoin down 10% illustration and the 50-asset model are article examples, not measured observations. P < 0.001 is a conditional-tail observation, not proof of executable mispricing, trade direction, mean reversion or profit; require out-of-sample validation, multiple-testing and marginal/model checks, and fees, slippage and execution risk. Rust Clayton and Frank formulas need domain, theta=0, u/v boundary and numerical-stability review. Matrix, VineStructure and fit_root_node are undefined here, f64 cannot be used with max_by_key as shown, and enumerating C-Vine roots is not a full R-Vine fit. Do not call these snippets compiled code or a production implementation.
+
+Preserve substantive coverage, formulas, units, examples, diagrams, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently alter article claims or headings. Historical, numerical, mathematical, research, financial, code/API, performance and mutable assertions remain attributed article claims pending human editorial, mathematical, source-code, quantitative and primary-source checking. Do not add outside facts, guaranteed returns, risk-free claims, investment advice, measured benchmarks or production validation. External NotebookLM notebook/source/artifact duplicates are not_checked and pending reconciliation before submission; target-channel duplicates are not_checked and pending reconciliation before final production. Do not imply either is cleared.
+Use natural spoken narration or dialogue in the requested locale. Explain equations, variables, units, tables and code in words. Distinguish source claims from verified facts when speaking. End with the source conclusion, references and citation block where present.

@@ -1,0 +1,173 @@
+MM article complex-arbitrage-vector-matrix EN d3a1bb13b47f
+
+---
+title: "Matrices, Tensors, and Tropical Algebra: Linear Algebra for Arbitrage Detection"
+description: "How the matrix of exchange rates, eigenvalues, tropical algebra, and tensor decompositions turn cryptocurrency market chaos into clear arbitrage signals."
+tags: ["arbitrage", "linear algebra", "tropical algebra", "matrices", "tensors", "rust", "cryptocurrency", "optimization", "PCA", "eigenvalues"]
+date: "2026-02-26"
+lang: "en"
+image: "/images/blog/complex-arbitrage-vector-matrix.webp"
+slug: "complex-arbitrage-vector-matrix"
+authors: ["suenot"]
+---
+
+# Matrices, Tensors, and Tropical Algebra: Linear Algebra for Arbitrage Detection
+
+*Part 4 of the series "Complex Arbitrage Chains Between Futures and Spot"*
+
+Imagine a massive hall where hundreds of traders exchange currencies simultaneously. Each has their own rates, fees, and quirks. You stand in the center with a notebook, trying to find an exchange route that brings profit: dollars to euros, euros to yen, yen back to dollars—and walk out with more than you started. It's easy to get lost. But if you write all the rates in a table—a matrix—suddenly the chaos gains structure. The eigenvalues of this matrix will tell you if there is arbitrage. Tropical algebra will find the optimal route. And tensor decompositions will reveal patterns invisible to the naked eye.
+
+In this article, we will journey from a simple exchange rate table to advanced multi-dimensional analysis methods—and every step will be supported by an implementation in Rust.
+
+![Exchange Rate Matrix and Arbitrage Cycles](/images/blog/complex-arbitrage-vector-matrix.webp)
+*Visualization of the exchange rate matrix between cryptocurrencies: graph edges represent trading pairs, and the highlighted cycle represents a detected arbitrage opportunity.*
+
+![Exchange rate matrix with eigenvalue spectral decomposition](/images/blog/vector-matrix-exchange-rates.webp)
+
+## 1. The Exchange Rate Matrix: The Foundation
+
+### 1.1 From Chaos to Table
+Suppose we have `n` assets: BTC, ETH, USDT, SOL, etc. Each pair can be exchanged at a certain rate. The **Exchange Rate Matrix** `R` is an `n × n` table where the element `R[i][j]` shows how many units of asset `j` we get for one unit of asset `i`.
+
+Properties of a well-formed matrix:
+- **Diagonal**: `R[i][i] = 1`—exchanging an asset for itself changes nothing.
+- **Positivity**: `R[i][j] > 0` for all pairs.
+- **Reciprocity** (in an ideal market): `R[i][j] * R[j][i] = 1`.
+
+In Rust, we can represent this using `nalgebra`:
+
+```rust
+use nalgebra::DMatrix;
+
+/// Builds an exchange rate matrix from a set of trading pairs
+fn build_exchange_rate_matrix(
+    assets: &[&str],
+    rates: &[((usize, usize), f64)],
+) -> DMatrix<f64> {
+    let n = assets.len();
+    let mut matrix = DMatrix::from_element(n, n, 0.0);
+
+    // Diagonal: exchange for self = 1
+    for i in 0..n {
+        matrix[(i, i)] = 1.0;
+    }
+
+    // Fill known rates
+    for &((i, j), rate) in rates {
+        matrix[(i, j)] = rate;
+        // Reciprocal rate (if there is no direct one)
+        if matrix[(j, i)] == 0.0 {
+            matrix[(j, i)] = 1.0 / rate;
+        }
+    }
+
+    matrix
+}
+```
+
+### 1.2 The No-Arbitrage Condition
+Here is the key theorem on which everything else is built.
+
+**Theorem.** A market is free of arbitrage if and only if for any cycle of assets `(i₁, i₂, ..., iₖ, i₁)`, the product of exchange rates along the cycle is equal to one:
+```
+R[i₁][i₂] * R[i₂][i₃] * ... * R[iₖ][i₁] = 1
+```
+
+Equivalent formulation: A matrix `R` is arbitrage-free if and only if its **rank is 1** (in a multiplicative sense). This means there exists a price vector `p = (p₁, p₂, ..., pₙ)` such that:
+```
+R[i][j] = pj / pi   for all i, j
+```
+
+The matrix `R` decomposes as an outer product `R = (1/p) * pᵀ`—and this is a rank-1 matrix. If the actual matrix deviates from rank 1—there is an arbitrage opportunity hiding somewhere.
+
+## 2. The Eigenvalue Method: Arbitrage in O(n³)
+
+### 2.1 Ming Ma's Theorem
+One of the most elegant approaches to arbitrage detection was proposed by Ming Ma in 2007. The idea is brilliantly simple.
+
+**Theorem (Ming Ma).** Let `R` be an `n × n` exchange rate matrix. If the market is arbitrage-free, then:
+1. The largest eigenvalue `λ_max = n`.
+2. All other eigenvalues are equal to zero.
+3. The corresponding eigenvector `v` represents the equilibrium prices.
+
+**Why does it work?** An arbitrage-free matrix has rank 1, and its trace (the sum of diagonal elements) equals `n` (because each `R[i][i] = 1`). For a rank-1 matrix, the only non-zero eigenvalue equals the trace. Therefore, `λ_max = n`.
+
+Arbitrage criterion: **Arbitrage exists if and only if `λ_max > n`**. The deviation `δ = λ_max - n` quantitatively estimates the scale of the arbitrage opportunity.
+
+![Tropical (max-plus) algebra visualization](/images/blog/vector-matrix-tropical-algebra.webp)
+
+## 3. Tropical (Max-Plus) Algebra: The Most Elegant Method
+
+### 3.1 When Addition Becomes Maximum
+This is perhaps the most beautiful find in our study. **Tropical algebra** is an algebraic system where familiar operations are redefined:
+- **"Addition"**: `a ⊕ b = max(a, b)`
+- **"Multiplication"**: `a ⊗ b = a + b`
+
+Matrix multiplication in this algebra automatically searches for the path with the maximum sum of weights. This is exactly what is needed to find the most profitable arbitrage cycle.
+
+### 3.2 Tropical Eigenvalue and Arbitrage
+Take the log-matrix of rates `L[i][j] = ln(R[i][j])`. Calculate the **tropical eigenvalue** `λ` of matrix `L`.
+
+**Theorem.** `λ > 0` if and only if arbitrage exists. Moreover, `exp(λ)` is the profit multiplier of the best cycle.
+
+```rust
+/// Tropical (max-plus) matrix multiplication
+fn tropical_matmul(a: &DMatrix<f64>, b: &DMatrix<f64>) -> DMatrix<f64> {
+    let n = a.nrows();
+    let m = b.ncols();
+    let k = a.ncols();
+    let mut result = DMatrix::from_element(n, m, f64::NEG_INFINITY);
+
+    for i in 0..n {
+        for j in 0..m {
+            for l in 0..k {
+                // Tropical multiplication: max instead of sum, + instead of *
+                let val = a[(i, l)] + b[(l, j)];
+                if val > result[(i, j)] {
+                    result[(i, j)] = val;
+                }
+            }
+        }
+    }
+    result
+}
+```
+
+## 4. PCA and Factor Models: Statistical Arbitrage
+
+Moving from deterministic arbitrage (direct price discrepancies) to **statistical arbitrage**—finding systematic deviations from a factor model.
+
+**Principal Component Analysis (PCA)** decomposes asset returns into systematic factors and idiosyncratic residuals:
+```
+ri(t) = αi + Σk βik * Fk(t) + εi(t)
+```
+where `Fk(t)` is the k-th factor, `βik` is the loading, and `εi(t)` is the residual—the **arbitrage signal**.
+
+### 4.1 Random Matrix Theory (RMT)
+Key question: how many factors to keep? The **Marchenko-Pastur distribution** describes the spectrum of eigenvalues for a random covariance matrix. Eigenvalues above the upper bound $λ_+$ carry **real signals**, while those inside the bound are **noise**.
+
+![3D tensor visualization for multi-dimensional arbitrage](/images/blog/vector-matrix-tensor-3d.webp)
+
+## 5. Tensor Methods: The Third Dimension of Arbitrage
+
+Cryptocurrency arbitrage involves multiple dimensions simultaneously. The matrix of rates is just a 2D slice. The real picture is a **Tensor**:
+```
+T(a, e, i) = price/rate for asset a on exchange e for instrument i
+```
+
+**Dimensions:**
+- **Mode 1 (Assets):** BTC, ETH, SOL, ...
+- **Mode 2 (Exchanges):** Binance, Kraken, Coinbase, ...
+- **Mode 3 (Instruments):** Spot, Perpetual, Futures, ...
+
+**CP-Decomposition (CANDECOMP/PARAFAC)** factorizes the tensor into a sum of rank-1 tensors. Residuals `T - T_approx` reveal anomalies where specific price/exchange/instrument combinations are mispriced relative to the overall market factor structure.
+
+## Conclusion
+
+From simple tables to multi-dimensional tensors, linear algebra provides a formal language for the cryptocurrency market. Rust allows us to execute these complex models with the speed required for HFT.
+
+In the next part, we will explore **GNN, Transformers, and RL for Arbitrage**, looking at how neural networks learn to trade.
+
+---
+
+*Crunching high-dimensional signals? Check our [Tensor-Based Trading Engine on GitHub](https://github.com/marketmaker-cc/tensor-trade-rust).*

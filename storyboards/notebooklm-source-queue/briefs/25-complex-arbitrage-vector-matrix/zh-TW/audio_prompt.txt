@@ -1,0 +1,19 @@
+Create a separate NotebookLM Deep Dive audio overview. Use only the attached source named "MM article complex-arbitrage-vector-matrix ZH-TW 21c9a8202f2e". It is the complete published zh-Hant article snapshot. Do not merge another language edition or outside facts. Output language: Traditional Chinese for Taiwan (zh-TW; Hant), not generic Chinese. Use this terminology contextually: 匯率矩陣、特徵值、負權重迴圈、熱帶（Max-Plus）代數、主成分分析、張量、委託簿、現貨、永續合約、期貨、手續費和滑價. Preserve exact localized headings, mathematical symbols, formula signs, units, code/API identifiers, citations and proper names. Use the published Traditional text and Taiwan financial terminology; audio should be Taiwan Mandarin (Guoyu), not Taiwanese Hokkien. Some Rust comments and formula glosses in the published zh-Hant article are Simplified Chinese; flag regional-script consistency for editorial review and do not alter the frozen source. Regional terminology and Mandarin pronunciation remain pending human editorial and listening review.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 1. 匯率矩陣：基礎
+2. H3 — 1.1 從混亂到表格
+3. H3 — 1.2 無套利條件
+4. H2 — 2. 特徵值方法：O(n³) 複雜度的套利檢測
+5. H3 — 2.1 Ming Ma 定理
+6. H2 — 3. 熱帶（Max-Plus）代數：最優雅的方法
+7. H3 — 3.1 當加法變成取最大值
+8. H3 — 3.2 熱帶特徵值與套利
+9. H2 — 4. 主成分分析 (PCA) 與因子模型：統計套利
+10. H3 — 4.1 隨機矩陣理論 (RMT)
+11. H2 — 5. 張量方法：套利的第三個維度
+12. H2 — 結論
+
+Maintain R[i][j] as units of asset j per unit i; explain the reciprocal idealization, cycle product = 1, rank-one factorization R=(1/p)pᵀ, λ_max=n and δ=λ_max−n as source claims. Flag whether the claimed λ_max>n iff arbitrage criterion needs assumptions about complete positive rate matrices and executable bid/ask quotes. Tropical λ is the maximum log cycle mean: exp(λ) is a per-edge geometric-mean factor, whereas a k-edge cycle multiplies by exp(kλ); flag the article's unqualified “best-cycle profit multiplier” wording for mathematical review. Keep max-plus multiplication code and O(n³) claim, PCA return-factor equation, Marchenko–Pastur λ_+ claim, tensor T(asset, exchange, instrument), CP decomposition, and residual anomalies. Explain that residuals and eigenvalue thresholds alone do not establish executable profit after fees, liquidity, slippage, timing and venue risk.  Review that an unquoted rate edge initialized to zero and a reciprocal filled by 1/rate are not executable market quotes. Under R[i][j]=p_j/p_i, check whether the stated right eigenvector represents prices or reciprocal-price convention; do not silently relabel it. Review the complete positive reciprocal frictionless-matrix assumptions behind cycle product = 1, rank one and the λ_max > n criterion. The article's broad Rust/HFT speed and named research claims need sources; examples and code are illustrative.
+
+Preserve substantive coverage, equations, signs, variable definitions, units, worked examples, code fragments, tables, limitations, risks, citations and references from this exact language edition. Do not silently repair article claims or present illustrative Rust as compiled, tested or production code. Historical, research, numerical, mathematical, complexity, financial, performance and software/API claims remain attributed article claims pending human editorial, quantitative and primary-source checking. Do not add outside facts, benchmark measurements, investment advice, guaranteed returns or risk-free language. External NotebookLM notebook/source/artifact duplicates are not_checked and require reconciliation before submission; target-channel duplicates are not_checked and require reconciliation before final production.
+Use natural spoken narration or dialogue in the requested locale. Explain equations, signs, variables, units, examples, code and tables in words; avoid asking for on-screen text. Distinguish article claims from verified facts when speaking. End with the article conclusion and its links or references.

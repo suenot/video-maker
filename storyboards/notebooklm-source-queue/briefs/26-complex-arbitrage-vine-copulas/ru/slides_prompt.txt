@@ -1,0 +1,54 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article complex-arbitrage-vine-copulas RU f89c7f9fd7f8". It is the complete published ru article snapshot. Do not merge another language edition or outside facts. Output language: Russian. Use natural Russian throughout. Preserve source terminology: копула, маргинальные распределения, нижняя/верхняя хвостовая зависимость, условная вероятность, C-Vine, D-Vine, R-Vine, h-функция, MPI, CMPI, коинтеграция, GARCH-EVT-Copula, VaR and CVaR. Preserve mathematical symbols, formula signs, units, code/API identifiers, citations and proper names exactly as in the source.
+Follow every H2 and H3 section in this exact sequence, preserving nested order and the exact source headings:
+1. H2 — Что такое копулы и почему они важны
+2. H3 — Проблема линейной корреляции
+3. H3 — Копула: отделяем структуру зависимости от маргиналов
+4. H2 — Теорема Склара: фундамент копульного подхода
+5. H3 — Формальная формулировка
+6. H3 — Почему это революционно для арбитража
+7. H2 — Семейства копул: какую выбрать и когда
+8. H3 — Гауссова копула
+9. H3 — Копула Стьюдента (Student-t)
+10. H3 — Копула Клейтона (Clayton)
+11. H3 — Копула Гумбеля (Gumbel)
+12. H3 — Сводная таблица свойств
+13. H3 — Хвостовая зависимость: почему это критически важно
+14. H2 — Vine-копулы: декомпозиция на двумерные блоки
+15. H3 — Проблема проклятия размерности
+16. H3 — Ключевая идея: дерево парных копул
+17. H3 — Для четырёх активов (типичная арбитражная когорта)
+18. H3 — h-функция: сердце vine-копулы
+19. H2 — C-Vine, D-Vine, R-Vine: типы vine-структур
+20. H3 — C-Vine (каноническая vine)
+21. H3 — D-Vine (рисуемая vine)
+22. H3 — R-Vine (регулярная vine)
+23. H2 — Алгоритм Диссманна: автоматический выбор структуры
+24. H3 — Общий принцип
+25. H3 — Пошаговый алгоритм
+26. H3 — Усечение vine-копулы
+27. H2 — Применение к арбитражу: торговые сигналы
+28. H3 — Стратегия C-Vine: один против всех
+29. H3 — Формирование когорты
+30. H3 — Условная вероятность как торговый сигнал
+31. H3 — Индекс ошибочной оценки (MPI и CMPI)
+32. H3 — Эмпирические результаты
+33. H3 — Многоногий арбитраж с vine-копулами
+34. H2 — Коинтеграция + копулы: сильнее вместе
+35. H3 — Зачем объединять оба подхода
+36. H3 — Пайплайн: коинтеграция для отбора, копулы для торговли
+37. H2 — GARCH-EVT-Copula: количественная оценка экстремальных рисков
+38. H2 — Динамические копулы: зависимости, меняющиеся во времени
+39. H2 — Реализация на Rust: ключевые структуры данных
+40. H3 — Трейт BivariateCopula
+41. H3 — Реализация копулы Клейтона
+42. H3 — Перечисление семейств и vine-модель
+43. H3 — Оптимизация производительности
+44. H2 — Полный пайплайн арбитражной стратегии
+45. H2 — Заключение: от теории к практике
+46. H2 — Полезные ссылки
+47. H2 — Цитирование
+
+Article-specific coverage and review: Keep Russian-edition-only depth: Sklar theorem and joint-density product; Gaussian, Student-t, Clayton, Gumbel and Frank family formulas/table; tail-dependence definitions; three- and four-variable pair-copula decompositions and h-function; C/D/R structures, Dissmann tree selection, Kendall tau, AIC/MLE and truncation; cohort pseudo-observations, conditional probability, MPI/CMPI and Bollinger thresholds; the cited S&P 500 1992–2015 9.25% annual return, Sharpe 1.12 and 6.57% drawdown; multi-leg/basis ideas, cointegration and KSS/Johansen, GARCH-EVT-Copula, DCC/regimes, Rust structs and Clayton implementation, performance table, full pipeline, stress example, references and BibTeX. Treat all numerical, research and performance figures as source claims. The source’s d=10 R-Vine count (~3.5 × 10^18) needs a fresh arithmetic and primary-source check; the O(d² × T) structure-selection claim does not include the separate family/MLE iteration costs stated later. The source’s lambda_L=0.65 is an asymptotic tail-dependence parameter, so the asserted ~65% probability at a fixed first-percentile BTC shock needs verification. The 0.5 conditional-CDF split is not itself a validated valuation or profitable/reverting trade signal. Check the continuous-marginal condition on Sklar uniqueness, conditioning/truncation assumptions, and the .max(0.0).powf(negative) edge case in Rust. The ~0.1 ms, 5–30 s and ~50 ms timing claims lack a stated benchmark setup. Verify study attribution, sample, costs, slippage, data leakage, multiple testing, out-of-sample results and crypto transferability. Do not treat code/API names as compiled or implementation-complete.
+
+Preserve substantive coverage, formulas, units, examples, diagrams, code, tables, limitations, risks, quotations and references from this exact language edition. Do not silently alter article claims or headings. Historical, numerical, mathematical, research, financial, code/API, performance and mutable assertions remain attributed article claims pending human editorial, mathematical, source-code, quantitative and primary-source checking. Do not add outside facts, guaranteed returns, risk-free claims, investment advice, measured benchmarks or production validation. External NotebookLM notebook/source/artifact duplicates are not_checked and pending reconciliation before submission; target-channel duplicates are not_checked and pending reconciliation before final production. Do not imply either is cleared.
+Use enough readable slides for every material section. Show equations, variables, units, diagrams, code and tables only as supported by this source. Keep on-slide text in the requested locale apart from technical identifiers. End with the source conclusion, references and citation block where present.

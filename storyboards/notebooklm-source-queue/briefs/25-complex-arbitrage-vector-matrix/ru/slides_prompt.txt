@@ -1,0 +1,50 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article complex-arbitrage-vector-matrix RU 99dc77b66725". It is the complete published ru article snapshot. Do not merge another language edition or outside facts. Output language: Russian. Use this terminology contextually: матрица обменных курсов, собственное значение, лог-курсы, отрицательный цикл, тропическая алгебра, стакан заявок, проскальзывание, спот, фьючерс и риск ликвидации. Preserve exact localized headings, mathematical symbols, formula signs, units, code/API identifiers, citations and proper names.
+Follow every H2 and H3 section in this exact sequence and preserve nested order:
+1. H2 — 1. Матрица обменных курсов: фундамент всего
+2. H3 — 1.1 От хаоса к таблице
+3. H3 — 1.2 Условие отсутствия арбитража
+4. H2 — 2. Метод собственных значений: арбитраж за O(n³)
+5. H3 — 2.1 Теорема Минга Ма
+6. H3 — 2.2 Полный алгоритм обнаружения
+7. H2 — 3. Матричный логарифм: мост к Bellman-Ford
+8. H3 — 3.1 Из умножения — в сложение
+9. H3 — 3.2 Floyd-Warshall: все циклы за раз
+10. H2 — 4. Тропическая (Max-Plus) алгебра: самый элегантный метод
+11. H3 — 4.1 Когда сложение становится максимумом
+12. H3 — 4.2 Тропическое собственное значение и арбитраж
+13. H3 — 4.3 Алгоритм: тропические степени матрицы
+14. H3 — 4.4 Аналогия: тропическая алгебра как GPS для арбитража
+15. H2 — 5. Линейное программирование: оптимальный размер сделок
+16. H3 — 5.1 LP-формулировка
+17. H3 — 5.2 Двойственность LP и условие no-arbitrage
+18. H3 — 5.3 Сетевая формулировка (Network Flow)
+19. H2 — 6. PCA и факторные модели: статистический арбитраж
+20. H3 — 6.1 Факторная декомпозиция доходностей
+21. H3 — 6.2 Теория случайных матриц: фильтрация шума
+22. H3 — 6.3 Остаточная альфа как сигнал арбитража
+23. H2 — 7. Asset Embeddings (Asset2Vec): активы как векторы
+24. H3 — 7.1 Идея
+25. H3 — 7.2 Метрики расстояния для обнаружения мисприсинга
+26. H2 — 8. Тензорные методы: третье измерение арбитража
+27. H3 — 8.1 3D-тензор рынка
+28. H3 — 8.2 CP-разложение (CANDECOMP/PARAFAC)
+29. H3 — 8.3 Tucker-разложение
+30. H2 — 9. Выпуклая оптимизация: арбитраж с контролем риска
+31. H3 — 9.1 SOCP: коническое программирование второго порядка
+32. H3 — 9.2 DEX-арбитраж как выпуклая задача
+33. H3 — 9.3 Робастная оптимизация
+34. H2 — 10. Экосистема Rust: практический инструментарий
+35. H3 — 10.1 Основные крейты линейной алгебры
+36. H3 — 10.2 Солверы оптимизации
+37. H3 — 10.3 Графы и разреженные матрицы
+38. H3 — 10.4 Рекомендуемая архитектура
+39. H3 — 10.5 Целевые показатели производительности
+40. H2 — Заключение
+41. H2 — Полезные ссылки
+42. H2 — Цитирование
+43. H2 — Источники
+
+This RU edition alone also covers Bellman-Ford with L=-ln(R), Floyd-Warshall, tropical matrix powers, LP sizing/duality/network flow, PCA/RMT/OU residual trading, Asset2Vec, CP and Tucker tensor decompositions, SOCP/CFMM/robust optimization, the Rust crate stack, architecture, target-latency table and 20 sources. Keep every one in its original section order; do not transfer them to shorter editions. Flag concrete issues for editorial review: the Bellman-Ford sample pushes only a start index instead of reconstructing a cycle, while Floyd-Warshall's negative diagonal signals a negative cycle and does not enumerate all cycles or establish exact executable profit; the Rust LP, CP-ALS and SOCP samples contain placeholders. The RMT example has n/T=100/250=0.4, but that ratio does not establish that 40% of eigenvalues are noise. The Asset2Vec text signal formula subtracts a price-ratio quotient from cosine similarity, while the Rust function multiplies cosine similarity by a price deviation; review formula/code mismatch and units. The OU threshold ln(κ/c) needs dimensionally consistent inputs and a real derivation.  Review that an unquoted rate edge initialized to zero and a reciprocal filled by 1/rate are not executable market quotes. Under R[i][j]=p_j/p_i, check whether the stated right eigenvector represents prices or reciprocal-price convention; do not silently relabel it. Review the complete positive reciprocal frictionless-matrix assumptions behind cycle product = 1, rank one and the λ_max > n criterion. Keep the O(n²) per-iteration cost of power iteration distinct from its total iterations.   The tropical eigenvalue λ is a maximum log cycle mean, so exp(λ) is a per-edge geometric-mean factor, while a k-edge cycle gives exp(kλ); review the source wording that calls exp(λ) the best full-cycle profit multiplier. Route length and transaction costs still matter. Review that tropical repeated squaring changes exact-k path semantics and does not automatically optimize all bounded lengths. The cited 4D embedding >50% versus 15% comparison requires primary-source and sample-metric review. The conclusion's O(n²) power-iteration result omits iteration count. Preserve source complexity wording as an attributed claim. The latency table includes PCA <10 ms and CP <50 ms, so the blanket submillisecond statement needs scoped measurement and foreground/background separation; microsecond matrix/eigenvalue and <1 ms LP claims need hardware, workload and source evidence. The source calls SOCP O(n^3.5) and a solver typically 10–30 iterations; treat both as unverified complexity/performance claims. Preserve the mathematical signs and the distinction between log-rate convention in Bellman-Ford and max-plus sections.
+
+Preserve substantive coverage, equations, signs, variable definitions, units, worked examples, code fragments, tables, limitations, risks, citations and references from this exact language edition. Do not silently repair article claims or present illustrative Rust as compiled, tested or production code. Historical, research, numerical, mathematical, complexity, financial, performance and software/API claims remain attributed article claims pending human editorial, quantitative and primary-source checking. Do not add outside facts, benchmark measurements, investment advice, guaranteed returns or risk-free language. External NotebookLM notebook/source/artifact duplicates are not_checked and require reconciliation before submission; target-channel duplicates are not_checked and require reconciliation before final production.
+Use enough readable slides to cover each major and material subsection. Show equations, diagrams, code and tables only as supported by this source; label unverified source figures as claims. Use the requested locale for on-slide text, except technical identifiers. End with the article conclusion and its links or references.
