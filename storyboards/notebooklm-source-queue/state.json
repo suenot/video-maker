@@ -8030,28 +8030,59 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-07T10:00:35.670151+00:00",
+        "at": "2026-10-07T10:31:30.221872+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-ru-20261007T100035679387Z-error.png",
-            "sha256": "a24715ef1a7890f109a283ab9d6d150bbc7ac585f10a56d3eb4108c7c7164c55"
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-ru-20261007T103130230243Z-error.png",
+            "sha256": "fd30a5bd8223c9de6041cd4f07adcf6324c03364c9f6c4b8c8314bb4f5b48a25"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-ru-20261007T100035679387Z-controls.json",
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-ru-20261007T103130230243Z-controls.json",
             "sha256": "920cf2cd07f850070f3b47eeefc4d93d79eb0f49cefdb8d450c034be4ec341b5"
           }
         },
-        "retry_not_before": "2026-10-07T10:15:35.904445+00:00",
-        "next_safe_step": "After the saved retry deadline, verify the same account, notebook, source and frozen inputs, then match the visible server-failure card to the retained artifact ID. Keep the existing ID and request evidence; do not delete or repeat Generate while the failed-card identity is unresolved. Any deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
+        "retry_not_before": "2026-10-07T10:46:30.448146+00:00",
+        "next_safe_step": "After the saved retry deadline, use the same verified account and permanent notebook/source with unchanged frozen hashes for a read-only identity inspection. Inspect the full failed artifact-library-item DOM attributes and, if needed, observed notebook read responses to recover the exact failed artifact IDs; the current extractor requires artifact-labels IDs. Preserve every saved artifact ID and request. Do not delete or repeat Generate while failure identity is unresolved. A deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
         "ui_observation": {
-          "kind": "slides",
-          "failure_text": "Slide Deck generation failed. Try a new one.",
+          "kinds": [
+            "slides"
+          ],
+          "failure_texts": [
+            "Slide Deck generation failed. Try a new one."
+          ],
           "single_source_visible": true,
-          "failed_card_identity": "not reconciled to retained artifact ID; preserve binding until a live exact-ID check",
-          "screenshot_reviewed_at": "2026-10-07T10:04:06.333035+00:00"
+          "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
+          "screenshot_reviewed_at": "2026-10-07T10:34:06.968972+00:00"
         }
-      }
+      },
+      "error_history": [
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-07T10:00:35.670151+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-ru-20261007T100035679387Z-error.png",
+              "sha256": "a24715ef1a7890f109a283ab9d6d150bbc7ac585f10a56d3eb4108c7c7164c55"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-ru-20261007T100035679387Z-controls.json",
+              "sha256": "920cf2cd07f850070f3b47eeefc4d93d79eb0f49cefdb8d450c034be4ec341b5"
+            }
+          },
+          "retry_not_before": "2026-10-07T10:15:35.904445+00:00",
+          "next_safe_step": "After the saved retry deadline, verify the same account, notebook, source and frozen inputs, then match the visible server-failure card to the retained artifact ID. Keep the existing ID and request evidence; do not delete or repeat Generate while the failed-card identity is unresolved. Any deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
+          "ui_observation": {
+            "kind": "slides",
+            "failure_text": "Slide Deck generation failed. Try a new one.",
+            "single_source_visible": true,
+            "failed_card_identity": "not reconciled to retained artifact ID; preserve binding until a live exact-ID check",
+            "screenshot_reviewed_at": "2026-10-07T10:04:06.333035+00:00"
+          }
+        }
+      ]
     },
     "complex-arbitrage-graph-algorithms:zh-CN": {
       "slug": "complex-arbitrage-graph-algorithms",
@@ -8065,7 +8096,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "submission_unknown",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8133,28 +8164,61 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-07T10:00:44.666879+00:00",
+        "at": "2026-10-07T10:31:38.190622+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-CN-20261007T100044674915Z-error.png",
-            "sha256": "2d0b1ca1e784f983a23349fe0b96c0e100a8e2df7b39f4cc2fc548c9a7a4099b"
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-CN-20261007T103138199221Z-error.png",
+            "sha256": "a15fb0576aaf873be865f18beb4e64b37d75869cf07bc7378a6088d0dd5a697e"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-CN-20261007T100044674915Z-controls.json",
-            "sha256": "d996f75db7ad5e8f875f31c7c1c86fb666cbf3f658ed0b4793271c802cb68881"
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-CN-20261007T103138199221Z-controls.json",
+            "sha256": "1d7214af075fa9ab9aea189c181d644eab9679996f8c8994d90bc3ee218c0f50"
           }
         },
-        "retry_not_before": "2026-10-07T10:15:44.865578+00:00",
-        "next_safe_step": "After the saved retry deadline, verify the same account, notebook, source and frozen inputs, then match the visible server-failure card to the retained artifact ID. Keep the existing ID and request evidence; do not delete or repeat Generate while the failed-card identity is unresolved. Any deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
+        "retry_not_before": "2026-10-07T10:46:38.367873+00:00",
+        "next_safe_step": "After the saved retry deadline, use the same verified account and permanent notebook/source with unchanged frozen hashes for a read-only identity inspection. Inspect the full failed artifact-library-item DOM attributes and, if needed, observed notebook read responses to recover the exact failed artifact IDs; the current extractor requires artifact-labels IDs. Preserve every saved artifact ID and request. Do not delete or repeat Generate while failure identity is unresolved. A deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
         "ui_observation": {
-          "kind": "audio",
-          "failure_text": "Audio Overview generation failed. Try a new one.",
+          "kinds": [
+            "slides",
+            "audio"
+          ],
+          "failure_texts": [
+            "Slide Deck generation failed. Try a new one.",
+            "Audio Overview generation failed. Try a new one."
+          ],
           "single_source_visible": true,
-          "failed_card_identity": "not reconciled to retained artifact ID; preserve binding until a live exact-ID check",
-          "screenshot_reviewed_at": "2026-10-07T10:04:06.333701+00:00"
+          "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
+          "screenshot_reviewed_at": "2026-10-07T10:34:06.969665+00:00"
         }
-      }
+      },
+      "error_history": [
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-07T10:00:44.666879+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-CN-20261007T100044674915Z-error.png",
+              "sha256": "2d0b1ca1e784f983a23349fe0b96c0e100a8e2df7b39f4cc2fc548c9a7a4099b"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-CN-20261007T100044674915Z-controls.json",
+              "sha256": "d996f75db7ad5e8f875f31c7c1c86fb666cbf3f658ed0b4793271c802cb68881"
+            }
+          },
+          "retry_not_before": "2026-10-07T10:15:44.865578+00:00",
+          "next_safe_step": "After the saved retry deadline, verify the same account, notebook, source and frozen inputs, then match the visible server-failure card to the retained artifact ID. Keep the existing ID and request evidence; do not delete or repeat Generate while the failed-card identity is unresolved. Any deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
+          "ui_observation": {
+            "kind": "audio",
+            "failure_text": "Audio Overview generation failed. Try a new one.",
+            "single_source_visible": true,
+            "failed_card_identity": "not reconciled to retained artifact ID; preserve binding until a live exact-ID check",
+            "screenshot_reviewed_at": "2026-10-07T10:04:06.333701+00:00"
+          }
+        }
+      ]
     },
     "complex-arbitrage-graph-algorithms:zh-TW": {
       "slug": "complex-arbitrage-graph-algorithms",
@@ -8168,7 +8232,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "submission_unknown",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8236,28 +8300,61 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-07T10:15:25.697364+00:00",
+        "at": "2026-10-07T10:31:46.048234+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261007T101525704277Z-error.png",
-            "sha256": "1616e0e7bad570e738d37b5d9e022d999c01a3e56aeead2551526c965562a7bd"
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261007T103146055860Z-error.png",
+            "sha256": "c71f43898b6036c2d565196bdba2468fc6c1aed282bd5def2c62a905d3e00375"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261007T101525704277Z-controls.json",
-            "sha256": "d996f75db7ad5e8f875f31c7c1c86fb666cbf3f658ed0b4793271c802cb68881"
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261007T103146055860Z-controls.json",
+            "sha256": "1d7214af075fa9ab9aea189c181d644eab9679996f8c8994d90bc3ee218c0f50"
           }
         },
-        "retry_not_before": "2026-10-07T10:30:25.953008+00:00",
-        "next_safe_step": "After the saved retry deadline, verify the same account, notebook, source and frozen inputs, then match the visible server-failure card to the retained artifact ID. Keep the existing ID and request evidence; do not delete or repeat Generate while the failed-card identity is unresolved. Any deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
+        "retry_not_before": "2026-10-07T10:46:46.211681+00:00",
+        "next_safe_step": "After the saved retry deadline, use the same verified account and permanent notebook/source with unchanged frozen hashes for a read-only identity inspection. Inspect the full failed artifact-library-item DOM attributes and, if needed, observed notebook read responses to recover the exact failed artifact IDs; the current extractor requires artifact-labels IDs. Preserve every saved artifact ID and request. Do not delete or repeat Generate while failure identity is unresolved. A deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
         "ui_observation": {
-          "kind": "audio",
-          "failure_text": "Audio Overview generation failed. Try a new one.",
+          "kinds": [
+            "slides",
+            "audio"
+          ],
+          "failure_texts": [
+            "Slide Deck generation failed. Try a new one.",
+            "Audio Overview generation failed. Try a new one."
+          ],
           "single_source_visible": true,
-          "failed_card_identity": "not reconciled to retained artifact ID; preserve binding until a live exact-ID check",
-          "screenshot_reviewed_at": "2026-10-07T10:17:04.519641+00:00"
+          "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
+          "screenshot_reviewed_at": "2026-10-07T10:34:06.970107+00:00"
         }
-      }
+      },
+      "error_history": [
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-07T10:15:25.697364+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261007T101525704277Z-error.png",
+              "sha256": "1616e0e7bad570e738d37b5d9e022d999c01a3e56aeead2551526c965562a7bd"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261007T101525704277Z-controls.json",
+              "sha256": "d996f75db7ad5e8f875f31c7c1c86fb666cbf3f658ed0b4793271c802cb68881"
+            }
+          },
+          "retry_not_before": "2026-10-07T10:30:25.953008+00:00",
+          "next_safe_step": "After the saved retry deadline, verify the same account, notebook, source and frozen inputs, then match the visible server-failure card to the retained artifact ID. Keep the existing ID and request evidence; do not delete or repeat Generate while the failed-card identity is unresolved. Any deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
+          "ui_observation": {
+            "kind": "audio",
+            "failure_text": "Audio Overview generation failed. Try a new one.",
+            "single_source_visible": true,
+            "failed_card_identity": "not reconciled to retained artifact ID; preserve binding until a live exact-ID check",
+            "screenshot_reviewed_at": "2026-10-07T10:17:04.519641+00:00"
+          }
+        }
+      ]
     },
     "complex-arbitrage-ml-approaches:en": {
       "slug": "complex-arbitrage-ml-approaches",
@@ -8271,7 +8368,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "submission_unknown",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nEnglish\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8427,7 +8524,36 @@
           "retry_not_before": "2026-10-07T09:51:00+00:00",
           "next_safe_step": "After the newly displayed global quota reset, verify the saved account and frozen input hashes, reconcile this exact notebook/source and all current artifact IDs, preserve the existing scheduled deck, and submit only the never-dispatched English Deep Dive audio if no matching audio artifact has appeared. Keep browser closed until the reset; continue independent local work."
         }
-      ]
+      ],
+      "last_error": {
+        "type": "RuntimeError",
+        "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+        "at": "2026-10-07T10:31:53.977562+00:00",
+        "stage": "artifacts",
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261007T103153985903Z-error.png",
+            "sha256": "1c3a6c1409ffad28827006b310d7a5868347ed2aa4a31a1cd76ae7176b395099"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261007T103153985903Z-controls.json",
+            "sha256": "cc79e55a06d81aa66942ea3cce185a5ac845fde36684ab807a1152deb71ad1d8"
+          }
+        },
+        "retry_not_before": "2026-10-07T10:46:54.142293+00:00",
+        "next_safe_step": "After the saved retry deadline, use the same verified account and permanent notebook/source with unchanged frozen hashes for a read-only identity inspection. Inspect the full failed artifact-library-item DOM attributes and, if needed, observed notebook read responses to recover the exact failed artifact IDs; the current extractor requires artifact-labels IDs. Preserve every saved artifact ID and request. Do not delete or repeat Generate while failure identity is unresolved. A deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
+        "ui_observation": {
+          "kinds": [
+            "slides"
+          ],
+          "failure_texts": [
+            "Slide Deck generation failed. Try a new one."
+          ],
+          "single_source_visible": true,
+          "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
+          "screenshot_reviewed_at": "2026-10-07T10:34:06.970538+00:00"
+        }
+      }
     },
     "complex-arbitrage-ml-approaches:ru": {
       "slug": "complex-arbitrage-ml-approaches",
@@ -8455,7 +8581,7 @@
           "submission_mode": "later",
           "artifact_id": "f0e0698f-575b-4024-ad18-ba510d7efec0",
           "card_text": "tablet\nMachine Learning Approaches for Complex Arbitrage\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-07T10:15:41.586842+00:00"
+          "observed_at": "2026-10-07T10:32:01.842942+00:00"
         },
         "audio": {
           "state": "not_submitted"
@@ -8492,7 +8618,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-07T10:15:41.594200+00:00",
+  "checked_at": "2026-10-07T10:32:01.853999+00:00",
   "browser_geometry_requested": {
     "width": 1994,
     "height": 1290,
