@@ -122,6 +122,21 @@ def classify(text):
     return "ready" if "more_vert" in text else "unknown"
 
 
+async def dismiss_rebrand_dialog(page):
+    # A substring match for "OK" also matches "Create notebook". Never use
+    # header controls to dismiss a dialog that is not present.
+    dialogs = page.get_by_role("dialog")
+    visible = [dialogs.nth(i) for i in range(await dialogs.count()) if await dialogs.nth(i).is_visible()]
+    if len(visible) != 1:
+        return
+    if "gemini notebook" not in (await visible[0].inner_text()).casefold():
+        return
+    button = visible[0].get_by_role("button", name="Let's go", exact=True)
+    if await button.count() == 1 and await button.is_visible() and await button.is_enabled():
+        await button.click(timeout=3000)
+        await page.wait_for_timeout(1000)
+
+
 def reconcile(artifact, cards, kind, *, bind_new=False):
     if artifact.get("artifact_id"):
         matches = [c for c in cards if c["id"] == artifact["artifact_id"]]
@@ -270,7 +285,7 @@ class Runner:
         await self.nlm.goto_retry(page, "https://notebook.google.com/")
         await page.wait_for_timeout(4000)
         await self.account(page)
-        await self.nlm._dismiss_rebrand_dialog(page)
+        await dismiss_rebrand_dialog(page)
         return await page.locator("project-button").evaluate_all('els=>els.map(e=>({title:e.querySelector(".project-button-title")?.textContent.trim(),href:e.querySelector("a[href*=\\"/notebook/\\"]")?.getAttribute("href")})).filter(e=>e.href)')
 
     async def notebook(self, page, brief, job):
@@ -710,6 +725,11 @@ class Runner:
                         artifact = job["artifacts"].setdefault(kind, {"state": "not_submitted"})
                         if artifact["state"] == "downloaded_pending_editorial_review":
                             continue
+                        if artifact["state"] == "failed" and artifact.get("failure_evidence"):
+                            # Failed cards may omit their UUID from the DOM.
+                            # Keep an independently verified failure bound to its
+                            # original ID until a deliberate recovery is chosen.
+                            continue
                         if artifact["state"] == "not_submitted":
                             active = sum(a.get("state") in ACTIVE for j in self.state["jobs"].values() for a in j.get("artifacts", {}).values())
                             if active >= self.args.max_active:
@@ -722,7 +742,8 @@ class Runner:
                             raise RuntimeError("Artifact submission unresolved; inspect saved evidence before more generation")
                         if artifact["state"] == "ready":
                             await self.download(page, brief, artifact, kind)
-                    job.pop("last_error", None)
+                    if job.get("last_error") and not any(a.get("state") == "failed" for a in job["artifacts"].values()):
+                        job.setdefault("error_history", []).append(job.pop("last_error"))
                 except Exception as error:
                     if job.get("last_error"):
                         job.setdefault("error_history", []).append(copy.deepcopy(job["last_error"]))

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Confirm six graph/English ML generation failures against exact retained artifact IDs and observed artifact-list responses, keeping their requests and finite recovery deadlines; bind Russian ML audio, the separate Mainland Simplified pair and Taiwan Traditional deck while retaining its never-submitted audio and the displayed 18:51 Tbilisi all-feature reset. Preserve all 179 verified originals and record the verified removal of two empty diagnostic notebooks.
 - Schedule the previously blocked English ML-arbitrage audio and admit its separate Russian notebook/full source and slide request with verified frozen hashes; retain the six graph-algorithm and English ML artifact IDs after visible server generation failures, with hashed diagnostics and finite retry, while preserving all 179 verified originals and the resolved English quota-error history.
 - Reconcile all six scheduled graph/ML artifact IDs after the saved quota resets and retain the never-submitted English ML audio with hashed diagnostics, archived prior errors and finite retry at NotebookLM's latest displayed all-feature reset, 13:51 Tbilisi on 2026-10-07; verify all 179 downloaded originals before returning to local-only checks.
 - Bind the scheduled English ML-arbitrage deck to its permanent notebook/source IDs and frozen inputs; retain its never-submitted Deep Dive audio, hashed diagnostics and finite retry at the displayed all-feature quota reset, preserving existing scheduled graph artifacts and all verified originals.
@@ -83,6 +84,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bind NotebookLM production to the designated Gaia Camoufox account and record account verification before source generation.
 - Preserve the rejected bilingual order-types Blueprint package for provenance; record the user's quality rejection and the recovered existing NotebookLM PDF/audio flow before further production.
 - Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
+
+## [1.2.10] - 2026-10-07
+
+### Fixed
+
+- Dismiss Gemini Notebook rebranding only through one identified visible dialog and its exact enabled "Let's go" button, preventing the label "OK" from activating "Create notebook" or confirming an unrelated dialog.
+- Retain independently verified failed artifact identities when NotebookLM omits them from failed cards, freeing active capacity for independent jobs without repeating their Generate requests; preserve resolved job errors in history.
 
 ## [1.2.9] - 2026-10-04
 

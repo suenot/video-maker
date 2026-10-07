@@ -141,6 +141,12 @@ blocks retain their existing global guards.
 If a job's saved failure includes `retry_not_before`, skip that job until its
 deadline while allowing other eligible source jobs to proceed. Preserve its
 failure evidence and all bound identities during this wait.
+Failed cards can omit their artifact IDs from the page. An exact saved ID
+confirmed as failed by an observed artifact-list response and matching failure
+card retains `failure_evidence` and its original request. Keep this verified
+failure out of active capacity; preserve the full old artifact/request in
+history before choosing any deliberate replacement. Its state alone never
+authorizes another Generate click.
 If every prepared brief is complete or deferred until a future retry deadline,
 verify downloaded originals locally and return before reading profile settings
 or opening Camoufox. A new brief, unfinished artifact or expired retry deadline

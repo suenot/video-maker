@@ -7956,7 +7956,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "submission_unknown",
+          "state": "failed",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 12:51."
@@ -7971,8 +7971,20 @@
           "source_id": "fa301b4d-bed8-4642-a9ab-879ae0718dca",
           "submission_mode": "later",
           "artifact_id": "dadc5968-19ce-45bc-ac6a-f046e9ba976f",
-          "card_text": "tablet\nGraph Algorithms for Crypto Arbitrage Detection\nScheduled for after 9am\nmore_vert",
-          "observed_at": "2026-10-07T04:59:50.721516+00:00"
+          "card_text": "error\nSlide Deck generation failed. Try a new one.\nDelete",
+          "observed_at": "2026-10-07T11:03:50.573646+00:00",
+          "failure_evidence": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
+            "notebook": "https://notebook.google.com/notebook/a24278ed-ee4f-4382-aa34-3f0cc5bd264b",
+            "source_id": "fa301b4d-bed8-4642-a9ab-879ae0718dca",
+            "artifact_id": "dadc5968-19ce-45bc-ac6a-f046e9ba976f",
+            "rpc_id": "gArtLc",
+            "artifact_type": 8,
+            "server_status": 4,
+            "account_guard": "passed",
+            "observed_at": "2026-10-07T11:03:50.573646+00:00"
+          }
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -8028,33 +8040,18 @@
         "fa301b4d-bed8-4642-a9ab-879ae0718dca"
       ],
       "last_error": {
-        "type": "RuntimeError",
-        "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-07T10:31:30.221872+00:00",
+        "type": "ConfirmedArtifactGenerationFailure",
+        "message": "Bound server artifacts failed generation; original identities and requests retained.",
+        "at": "2026-10-07T11:13:18.399694+00:00",
         "stage": "artifacts",
+        "retry_not_before": "2026-10-07T11:28:18.399876+00:00",
         "evidence": {
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-ru-20261007T103130230243Z-error.png",
-            "sha256": "fd30a5bd8223c9de6041cd4f07adcf6324c03364c9f6c4b8c8314bb4f5b48a25"
-          },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-ru-20261007T103130230243Z-controls.json",
-            "sha256": "920cf2cd07f850070f3b47eeefc4d93d79eb0f49cefdb8d450c034be4ec341b5"
+          "identity_inspection": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2"
           }
         },
-        "retry_not_before": "2026-10-07T10:46:30.448146+00:00",
-        "next_safe_step": "After the saved retry deadline, use the same verified account and permanent notebook/source with unchanged frozen hashes for a read-only identity inspection. Inspect the full failed artifact-library-item DOM attributes and, if needed, observed notebook read responses to recover the exact failed artifact IDs; the current extractor requires artifact-labels IDs. Preserve every saved artifact ID and request. Do not delete or repeat Generate while failure identity is unresolved. A deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
-        "ui_observation": {
-          "kinds": [
-            "slides"
-          ],
-          "failure_texts": [
-            "Slide Deck generation failed. Try a new one."
-          ],
-          "single_source_visible": true,
-          "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
-          "screenshot_reviewed_at": "2026-10-07T10:34:06.968972+00:00"
-        }
+        "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
       },
       "error_history": [
         {
@@ -8081,6 +8078,35 @@
             "failed_card_identity": "not reconciled to retained artifact ID; preserve binding until a live exact-ID check",
             "screenshot_reviewed_at": "2026-10-07T10:04:06.333035+00:00"
           }
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-07T10:31:30.221872+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-ru-20261007T103130230243Z-error.png",
+              "sha256": "fd30a5bd8223c9de6041cd4f07adcf6324c03364c9f6c4b8c8314bb4f5b48a25"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-ru-20261007T103130230243Z-controls.json",
+              "sha256": "920cf2cd07f850070f3b47eeefc4d93d79eb0f49cefdb8d450c034be4ec341b5"
+            }
+          },
+          "retry_not_before": "2026-10-07T10:46:30.448146+00:00",
+          "next_safe_step": "After the saved retry deadline, use the same verified account and permanent notebook/source with unchanged frozen hashes for a read-only identity inspection. Inspect the full failed artifact-library-item DOM attributes and, if needed, observed notebook read responses to recover the exact failed artifact IDs; the current extractor requires artifact-labels IDs. Preserve every saved artifact ID and request. Do not delete or repeat Generate while failure identity is unresolved. A deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
+          "ui_observation": {
+            "kinds": [
+              "slides"
+            ],
+            "failure_texts": [
+              "Slide Deck generation failed. Try a new one."
+            ],
+            "single_source_visible": true,
+            "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
+            "screenshot_reviewed_at": "2026-10-07T10:34:06.968972+00:00"
+          }
         }
       ]
     },
@@ -8096,7 +8122,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "submission_unknown",
+          "state": "failed",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8109,11 +8135,23 @@
           "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
           "submission_mode": "later",
           "artifact_id": "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72",
-          "card_text": "tablet\n套利检测的图算法：从 Bellman-Ford 到 RICH\nScheduled for after 2pm\nmore_vert",
-          "observed_at": "2026-10-07T10:00:43.621345+00:00"
+          "card_text": "error\nSlide Deck generation failed. Try a new one.\nDelete",
+          "observed_at": "2026-10-07T11:03:50.573646+00:00",
+          "failure_evidence": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
+            "notebook": "https://notebook.google.com/notebook/df53affe-b3b9-45f2-a7a9-f5ecb3616b0e",
+            "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
+            "artifact_id": "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72",
+            "rpc_id": "gArtLc",
+            "artifact_type": 8,
+            "server_status": 4,
+            "account_guard": "passed",
+            "observed_at": "2026-10-07T11:03:50.573646+00:00"
+          }
         },
         "audio": {
-          "state": "submission_unknown",
+          "state": "failed",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Algorithm Comparison\n+ HFT Developer Perspective\n+ Practical Market Challenges\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8128,8 +8166,20 @@
           "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
           "submission_mode": "later",
           "artifact_id": "8d94d8f8-29f8-4300-8a11-42df39e16f03",
-          "card_text": "audio_spark\n套利检测的图算法：从 Bellman-Ford 到 RICH\nScheduled for after 9am\nmore_vert",
-          "observed_at": "2026-10-07T04:59:58.429796+00:00"
+          "card_text": "error\nAudio Overview generation failed. Try a new one.\nDelete",
+          "observed_at": "2026-10-07T11:03:50.573646+00:00",
+          "failure_evidence": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
+            "notebook": "https://notebook.google.com/notebook/df53affe-b3b9-45f2-a7a9-f5ecb3616b0e",
+            "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
+            "artifact_id": "8d94d8f8-29f8-4300-8a11-42df39e16f03",
+            "rpc_id": "gArtLc",
+            "artifact_type": 1,
+            "server_status": 4,
+            "account_guard": "passed",
+            "observed_at": "2026-10-07T11:03:50.573646+00:00"
+          }
         }
       },
       "admission_state": "admitted",
@@ -8162,35 +8212,18 @@
         "16db2874-c2a5-4aa3-8738-59bcb71f7723"
       ],
       "last_error": {
-        "type": "RuntimeError",
-        "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-07T10:31:38.190622+00:00",
+        "type": "ConfirmedArtifactGenerationFailure",
+        "message": "Bound server artifacts failed generation; original identities and requests retained.",
+        "at": "2026-10-07T11:13:18.400088+00:00",
         "stage": "artifacts",
+        "retry_not_before": "2026-10-07T11:28:18.400091+00:00",
         "evidence": {
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-CN-20261007T103138199221Z-error.png",
-            "sha256": "a15fb0576aaf873be865f18beb4e64b37d75869cf07bc7378a6088d0dd5a697e"
-          },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-CN-20261007T103138199221Z-controls.json",
-            "sha256": "1d7214af075fa9ab9aea189c181d644eab9679996f8c8994d90bc3ee218c0f50"
+          "identity_inspection": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2"
           }
         },
-        "retry_not_before": "2026-10-07T10:46:38.367873+00:00",
-        "next_safe_step": "After the saved retry deadline, use the same verified account and permanent notebook/source with unchanged frozen hashes for a read-only identity inspection. Inspect the full failed artifact-library-item DOM attributes and, if needed, observed notebook read responses to recover the exact failed artifact IDs; the current extractor requires artifact-labels IDs. Preserve every saved artifact ID and request. Do not delete or repeat Generate while failure identity is unresolved. A deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
-        "ui_observation": {
-          "kinds": [
-            "slides",
-            "audio"
-          ],
-          "failure_texts": [
-            "Slide Deck generation failed. Try a new one.",
-            "Audio Overview generation failed. Try a new one."
-          ],
-          "single_source_visible": true,
-          "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
-          "screenshot_reviewed_at": "2026-10-07T10:34:06.969665+00:00"
-        }
+        "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
       },
       "error_history": [
         {
@@ -8217,6 +8250,37 @@
             "failed_card_identity": "not reconciled to retained artifact ID; preserve binding until a live exact-ID check",
             "screenshot_reviewed_at": "2026-10-07T10:04:06.333701+00:00"
           }
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-07T10:31:38.190622+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-CN-20261007T103138199221Z-error.png",
+              "sha256": "a15fb0576aaf873be865f18beb4e64b37d75869cf07bc7378a6088d0dd5a697e"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-CN-20261007T103138199221Z-controls.json",
+              "sha256": "1d7214af075fa9ab9aea189c181d644eab9679996f8c8994d90bc3ee218c0f50"
+            }
+          },
+          "retry_not_before": "2026-10-07T10:46:38.367873+00:00",
+          "next_safe_step": "After the saved retry deadline, use the same verified account and permanent notebook/source with unchanged frozen hashes for a read-only identity inspection. Inspect the full failed artifact-library-item DOM attributes and, if needed, observed notebook read responses to recover the exact failed artifact IDs; the current extractor requires artifact-labels IDs. Preserve every saved artifact ID and request. Do not delete or repeat Generate while failure identity is unresolved. A deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
+          "ui_observation": {
+            "kinds": [
+              "slides",
+              "audio"
+            ],
+            "failure_texts": [
+              "Slide Deck generation failed. Try a new one.",
+              "Audio Overview generation failed. Try a new one."
+            ],
+            "single_source_visible": true,
+            "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
+            "screenshot_reviewed_at": "2026-10-07T10:34:06.969665+00:00"
+          }
         }
       ]
     },
@@ -8232,7 +8296,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "submission_unknown",
+          "state": "failed",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8245,11 +8309,23 @@
           "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
           "submission_mode": "later",
           "artifact_id": "9e57dc7e-28e2-4333-a612-64fa73b35a55",
-          "card_text": "tablet\n加密貨幣套利的圖演算法\nScheduled for after 2pm\nmore_vert",
-          "observed_at": "2026-10-07T10:15:24.666798+00:00"
+          "card_text": "error\nSlide Deck generation failed. Try a new one.\nDelete",
+          "observed_at": "2026-10-07T11:03:50.573646+00:00",
+          "failure_evidence": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
+            "notebook": "https://notebook.google.com/notebook/8da668d0-f257-47b8-a955-ba28a744038b",
+            "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
+            "artifact_id": "9e57dc7e-28e2-4333-a612-64fa73b35a55",
+            "rpc_id": "gArtLc",
+            "artifact_type": 8,
+            "server_status": 4,
+            "account_guard": "passed",
+            "observed_at": "2026-10-07T11:03:50.573646+00:00"
+          }
         },
         "audio": {
-          "state": "submission_unknown",
+          "state": "failed",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Algorithm Evolution\n+ HFT Developer Perspective\n+ Practical Market Constraints\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8264,8 +8340,20 @@
           "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
           "submission_mode": "later",
           "artifact_id": "4de25cf5-6b6c-4a87-b982-5576e5febca3",
-          "card_text": "audio_spark\n加密貨幣套利的圖演算法\nScheduled for after 2pm\nmore_vert",
-          "observed_at": "2026-10-07T10:00:53.615008+00:00"
+          "card_text": "error\nAudio Overview generation failed. Try a new one.\nDelete",
+          "observed_at": "2026-10-07T11:03:50.573646+00:00",
+          "failure_evidence": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
+            "notebook": "https://notebook.google.com/notebook/8da668d0-f257-47b8-a955-ba28a744038b",
+            "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
+            "artifact_id": "4de25cf5-6b6c-4a87-b982-5576e5febca3",
+            "rpc_id": "gArtLc",
+            "artifact_type": 1,
+            "server_status": 4,
+            "account_guard": "passed",
+            "observed_at": "2026-10-07T11:03:50.573646+00:00"
+          }
         }
       },
       "admission_state": "admitted",
@@ -8298,35 +8386,18 @@
         "e3b70682-500f-441d-a88b-9eb5aaa41e1f"
       ],
       "last_error": {
-        "type": "RuntimeError",
-        "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-07T10:31:46.048234+00:00",
+        "type": "ConfirmedArtifactGenerationFailure",
+        "message": "Bound server artifacts failed generation; original identities and requests retained.",
+        "at": "2026-10-07T11:13:18.400209+00:00",
         "stage": "artifacts",
+        "retry_not_before": "2026-10-07T11:28:18.400211+00:00",
         "evidence": {
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261007T103146055860Z-error.png",
-            "sha256": "c71f43898b6036c2d565196bdba2468fc6c1aed282bd5def2c62a905d3e00375"
-          },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261007T103146055860Z-controls.json",
-            "sha256": "1d7214af075fa9ab9aea189c181d644eab9679996f8c8994d90bc3ee218c0f50"
+          "identity_inspection": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2"
           }
         },
-        "retry_not_before": "2026-10-07T10:46:46.211681+00:00",
-        "next_safe_step": "After the saved retry deadline, use the same verified account and permanent notebook/source with unchanged frozen hashes for a read-only identity inspection. Inspect the full failed artifact-library-item DOM attributes and, if needed, observed notebook read responses to recover the exact failed artifact IDs; the current extractor requires artifact-labels IDs. Preserve every saved artifact ID and request. Do not delete or repeat Generate while failure identity is unresolved. A deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
-        "ui_observation": {
-          "kinds": [
-            "slides",
-            "audio"
-          ],
-          "failure_texts": [
-            "Slide Deck generation failed. Try a new one.",
-            "Audio Overview generation failed. Try a new one."
-          ],
-          "single_source_visible": true,
-          "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
-          "screenshot_reviewed_at": "2026-10-07T10:34:06.970107+00:00"
-        }
+        "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
       },
       "error_history": [
         {
@@ -8353,6 +8424,37 @@
             "failed_card_identity": "not reconciled to retained artifact ID; preserve binding until a live exact-ID check",
             "screenshot_reviewed_at": "2026-10-07T10:17:04.519641+00:00"
           }
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-07T10:31:46.048234+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261007T103146055860Z-error.png",
+              "sha256": "c71f43898b6036c2d565196bdba2468fc6c1aed282bd5def2c62a905d3e00375"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261007T103146055860Z-controls.json",
+              "sha256": "1d7214af075fa9ab9aea189c181d644eab9679996f8c8994d90bc3ee218c0f50"
+            }
+          },
+          "retry_not_before": "2026-10-07T10:46:46.211681+00:00",
+          "next_safe_step": "After the saved retry deadline, use the same verified account and permanent notebook/source with unchanged frozen hashes for a read-only identity inspection. Inspect the full failed artifact-library-item DOM attributes and, if needed, observed notebook read responses to recover the exact failed artifact IDs; the current extractor requires artifact-labels IDs. Preserve every saved artifact ID and request. Do not delete or repeat Generate while failure identity is unresolved. A deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
+          "ui_observation": {
+            "kinds": [
+              "slides",
+              "audio"
+            ],
+            "failure_texts": [
+              "Slide Deck generation failed. Try a new one.",
+              "Audio Overview generation failed. Try a new one."
+            ],
+            "single_source_visible": true,
+            "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
+            "screenshot_reviewed_at": "2026-10-07T10:34:06.970107+00:00"
+          }
         }
       ]
     },
@@ -8368,7 +8470,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "submission_unknown",
+          "state": "failed",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nEnglish\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8381,8 +8483,20 @@
           "source_id": "9edb96af-63b1-4a63-93bd-2116f41cf1eb",
           "submission_mode": "later",
           "artifact_id": "53e7b066-bdb7-4a51-a103-42c01cd9f95a",
-          "card_text": "tablet\nMachine Learning Approaches for Complex Arbitrage Systems\nScheduled for after 2pm\nmore_vert",
-          "observed_at": "2026-10-07T10:15:33.646114+00:00"
+          "card_text": "error\nSlide Deck generation failed. Try a new one.\nDelete",
+          "observed_at": "2026-10-07T11:03:50.573646+00:00",
+          "failure_evidence": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
+            "notebook": "https://notebook.google.com/notebook/324f9135-0a3f-4115-a9d2-18fd18fff936",
+            "source_id": "9edb96af-63b1-4a63-93bd-2116f41cf1eb",
+            "artifact_id": "53e7b066-bdb7-4a51-a103-42c01cd9f95a",
+            "rpc_id": "gArtLc",
+            "artifact_type": 8,
+            "server_status": 4,
+            "account_guard": "passed",
+            "observed_at": "2026-10-07T11:03:50.573646+00:00"
+          }
         },
         "audio": {
           "state": "scheduled",
@@ -8523,36 +8637,50 @@
           },
           "retry_not_before": "2026-10-07T09:51:00+00:00",
           "next_safe_step": "After the newly displayed global quota reset, verify the saved account and frozen input hashes, reconcile this exact notebook/source and all current artifact IDs, preserve the existing scheduled deck, and submit only the never-dispatched English Deep Dive audio if no matching audio artifact has appeared. Keep browser closed until the reset; continue independent local work."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-07T10:31:53.977562+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261007T103153985903Z-error.png",
+              "sha256": "1c3a6c1409ffad28827006b310d7a5868347ed2aa4a31a1cd76ae7176b395099"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261007T103153985903Z-controls.json",
+              "sha256": "cc79e55a06d81aa66942ea3cce185a5ac845fde36684ab807a1152deb71ad1d8"
+            }
+          },
+          "retry_not_before": "2026-10-07T10:46:54.142293+00:00",
+          "next_safe_step": "After the saved retry deadline, use the same verified account and permanent notebook/source with unchanged frozen hashes for a read-only identity inspection. Inspect the full failed artifact-library-item DOM attributes and, if needed, observed notebook read responses to recover the exact failed artifact IDs; the current extractor requires artifact-labels IDs. Preserve every saved artifact ID and request. Do not delete or repeat Generate while failure identity is unresolved. A deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
+          "ui_observation": {
+            "kinds": [
+              "slides"
+            ],
+            "failure_texts": [
+              "Slide Deck generation failed. Try a new one."
+            ],
+            "single_source_visible": true,
+            "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
+            "screenshot_reviewed_at": "2026-10-07T10:34:06.970538+00:00"
+          }
         }
       ],
       "last_error": {
-        "type": "RuntimeError",
-        "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-07T10:31:53.977562+00:00",
+        "type": "ConfirmedArtifactGenerationFailure",
+        "message": "Bound server artifacts failed generation; original identities and requests retained.",
+        "at": "2026-10-07T11:13:18.400288+00:00",
         "stage": "artifacts",
+        "retry_not_before": "2026-10-07T11:28:18.400291+00:00",
         "evidence": {
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261007T103153985903Z-error.png",
-            "sha256": "1c3a6c1409ffad28827006b310d7a5868347ed2aa4a31a1cd76ae7176b395099"
-          },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261007T103153985903Z-controls.json",
-            "sha256": "cc79e55a06d81aa66942ea3cce185a5ac845fde36684ab807a1152deb71ad1d8"
+          "identity_inspection": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2"
           }
         },
-        "retry_not_before": "2026-10-07T10:46:54.142293+00:00",
-        "next_safe_step": "After the saved retry deadline, use the same verified account and permanent notebook/source with unchanged frozen hashes for a read-only identity inspection. Inspect the full failed artifact-library-item DOM attributes and, if needed, observed notebook read responses to recover the exact failed artifact IDs; the current extractor requires artifact-labels IDs. Preserve every saved artifact ID and request. Do not delete or repeat Generate while failure identity is unresolved. A deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
-        "ui_observation": {
-          "kinds": [
-            "slides"
-          ],
-          "failure_texts": [
-            "Slide Deck generation failed. Try a new one."
-          ],
-          "single_source_visible": true,
-          "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
-          "screenshot_reviewed_at": "2026-10-07T10:34:06.970538+00:00"
-        }
+        "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
       }
     },
     "complex-arbitrage-ml-approaches:ru": {
@@ -8581,10 +8709,26 @@
           "submission_mode": "later",
           "artifact_id": "f0e0698f-575b-4024-ad18-ba510d7efec0",
           "card_text": "tablet\nMachine Learning Approaches for Complex Arbitrage\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-07T10:46:19.520686+00:00"
+          "observed_at": "2026-10-07T11:18:39.960170+00:00"
         },
         "audio": {
-          "state": "not_submitted"
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Technical Deep Dive\n+ Strategy Comparison\n+ Beginner Overview\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "f0e0698f-575b-4024-ad18-ba510d7efec0"
+          ],
+          "prompt_sha256": "ea969778a7394aec4bf84615b35a14a5383ca1f1c7d093db649c11e8109cd5ed",
+          "requested_at": "2026-10-07T11:18:52.015469+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "4c88d1d5-b98c-4564-855f-0c426d535599",
+          "submission_mode": "later",
+          "artifact_id": "6ae8ae13-0cc2-47d7-b215-38b8b26b418b",
+          "card_text": "audio_spark\nMachine Learning Approaches for Complex Arbitrage\nScheduled for after 8pm\nmore_vert",
+          "observed_at": "2026-10-07T11:18:56.578245+00:00"
         }
       },
       "admission_state": "admitted",
@@ -8616,9 +8760,167 @@
       "selected_source_ids": [
         "4c88d1d5-b98c-4564-855f-0c426d535599"
       ]
+    },
+    "complex-arbitrage-ml-approaches:zh-CN": {
+      "slug": "complex-arbitrage-ml-approaches",
+      "language": "zh-CN",
+      "article_sha256": "9e845e69032567dc392054df4cede5fe320c234bf5727d584223522800a5234b",
+      "input_hashes": {
+        "article": "9e845e69032567dc392054df4cede5fe320c234bf5727d584223522800a5234b",
+        "source_text": "6c7fd901e91841c9f308203bf820062a51c7899429afa00b230104b43a83248f",
+        "slides_prompt": "137ab0b3c4d0aa7ee111d41bbf48ffe1fa497c434882cc5e4119793d415df78c",
+        "audio_prompt": "acd004a02c191bab71e4b9755fe9c38780cbea842f983e6c81dc8595a7d6b9a2"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "137ab0b3c4d0aa7ee111d41bbf48ffe1fa497c434882cc5e4119793d415df78c",
+          "requested_at": "2026-10-07T11:19:21.160864+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "80a237d4-af0d-4ab8-98d5-16270590e044",
+          "submission_mode": "later",
+          "artifact_id": "a639a876-6f33-4ec2-8b85-d3bcce47fdaa",
+          "card_text": "tablet\n神经网络套利：GNN、Transformer 与强化学习的交易实战\nScheduled for after 8pm\nmore_vert",
+          "observed_at": "2026-10-07T11:19:25.717976+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Beginner Overview\n+ Technical Deep Dive\n+ Practical Strategy\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "a639a876-6f33-4ec2-8b85-d3bcce47fdaa"
+          ],
+          "prompt_sha256": "acd004a02c191bab71e4b9755fe9c38780cbea842f983e6c81dc8595a7d6b9a2",
+          "requested_at": "2026-10-07T11:19:37.558560+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "80a237d4-af0d-4ab8-98d5-16270590e044",
+          "submission_mode": "later",
+          "artifact_id": "cf5177cf-757e-47f1-add5-789d6be433fa",
+          "card_text": "audio_spark\n神经网络套利：GNN、Transformer 与强化学习的交易实战\nScheduled for after 8pm\nmore_vert",
+          "observed_at": "2026-10-07T11:19:42.115916+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-07T11:18:56.614198+00:00",
+      "notebook_intent": {
+        "at": "2026-10-07T11:19:01.265372+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "1b4dc2d11230b0a64af021542837cca3ac05f3efe3df8cc0dc62f6cc38111b92",
+        "baseline_count": 351,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-07T11:19:02.405115+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/d38c54bd-85da-451d-93b1-afff753d1e5e",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-07T11:19:06.497157+00:00",
+        "sha256": "6c7fd901e91841c9f308203bf820062a51c7899429afa00b230104b43a83248f",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-07T11:19:14.040156+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "80a237d4-af0d-4ab8-98d5-16270590e044",
+      "source_title": "MM article complex-arbitrage-ml-approaches ZH-CN 9e845e690325",
+      "source_sha256": "6c7fd901e91841c9f308203bf820062a51c7899429afa00b230104b43a83248f",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-ml-approaches ZH-CN …",
+      "selected_source_ids": [
+        "80a237d4-af0d-4ab8-98d5-16270590e044"
+      ]
+    },
+    "complex-arbitrage-ml-approaches:zh-TW": {
+      "slug": "complex-arbitrage-ml-approaches",
+      "language": "zh-TW",
+      "article_sha256": "d9d0490c2fda4bf7296c9a8f2bfee6319a6ff6992dcb2a770a1a790b58faa80b",
+      "input_hashes": {
+        "article": "d9d0490c2fda4bf7296c9a8f2bfee6319a6ff6992dcb2a770a1a790b58faa80b",
+        "source_text": "0338eaf46f54934049e92f403d88c76be8ebd3a58f8b955fe8d1afa7393ede79",
+        "slides_prompt": "da33e95b30b4ab436341b8ed54ed663e78daff6199573e4d64ab3f3b933c5f6b",
+        "audio_prompt": "f20b537770faa73c5b431dff4251a54aecf36412bbee5d0ecddd9ca9384835aa"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "da33e95b30b4ab436341b8ed54ed663e78daff6199573e4d64ab3f3b933c5f6b",
+          "requested_at": "2026-10-07T11:20:06.542744+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "d8ab206a-9aab-4042-8d82-1ab55d3d1cf0",
+          "submission_mode": "later",
+          "artifact_id": "e4dbdf34-c726-43cf-8506-df60a5470fb2",
+          "card_text": "tablet\n神經網路套利：GNN、Transformer 與強化學習\nScheduled for after 8pm\nmore_vert",
+          "observed_at": "2026-10-07T11:20:11.103591+00:00"
+        },
+        "audio": {
+          "state": "not_submitted"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-07T11:19:42.146977+00:00",
+      "notebook_intent": {
+        "at": "2026-10-07T11:19:46.696627+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-zh-TW-notebook-baseline.json",
+        "baseline_sha256": "f12c7932316a38a6e6dc958b2a6bda0938221d2d594c3b6fbc1b081c6a625800",
+        "baseline_count": 352,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-07T11:19:47.802786+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/2f66705f-3459-496c-9185-c197d771c64f",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-07T11:19:51.829558+00:00",
+        "sha256": "0338eaf46f54934049e92f403d88c76be8ebd3a58f8b955fe8d1afa7393ede79",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-07T11:19:59.417495+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "d8ab206a-9aab-4042-8d82-1ab55d3d1cf0",
+      "source_title": "MM article complex-arbitrage-ml-approaches ZH-TW d9d0490c2fda",
+      "source_sha256": "0338eaf46f54934049e92f403d88c76be8ebd3a58f8b955fe8d1afa7393ede79",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-ml-approaches ZH-TW …",
+      "selected_source_ids": [
+        "d8ab206a-9aab-4042-8d82-1ab55d3d1cf0"
+      ],
+      "last_error": {
+        "type": "RuntimeError",
+        "message": "Requested language not retained",
+        "at": "2026-10-07T11:20:25.148298+00:00",
+        "stage": "artifacts",
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-zh-TW-20261007T112025164150Z-error.png",
+            "sha256": "d4d15046a2fe1f017cf8bb4150a04041d651715609c41227d9adc2d958ed3c98"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-zh-TW-20261007T112025164150Z-controls.json",
+            "sha256": "afd5ccff3cb99c555e7ee6c88168497a8cd159d3e5212a38c2c9d612a1228e7b"
+          }
+        },
+        "retry_not_before": "2026-10-07T14:51:00+00:00",
+        "next_safe_step": "After the displayed all-feature reset, verify the same permanent Taiwan notebook/source and existing scheduled slide ID. Resume only the never-dispatched Deep Dive audio with an explicitly retained Traditional Chinese selection, unchanged frozen hashes and one selected source. The saved screenshot shows English selected and Generate later disabled; no audio Generate action was dispatched. Keep all confirmed failed and scheduled artifact identities."
+      }
     }
   },
-  "checked_at": "2026-10-07T10:46:19.527170+00:00",
+  "checked_at": "2026-10-07T11:20:25.475520+00:00",
   "browser_geometry_requested": {
     "width": 1994,
     "height": 1290,
@@ -8635,15 +8937,34 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "AI usage limit reached. All features will be available after 13:51.",
+    "notice": "AI usage limit reached. All features will be available after 18:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-07T05:00:23.060210+00:00",
-    "not_before": "2026-10-07T09:51:00+00:00"
+    "observed_at": "2026-10-07T11:20:25.475509+00:00",
+    "not_before": "2026-10-07T14:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
     "authorized_at": "2026-10-03T20:07:07.797622+00:00",
     "authorized_by": "direct human instruction in this chat",
     "instruction": "Повторить неопределенную загрузку; после сна восстанавливать работу автоматически без повторного разрешения. Ошибка отдельного задания не останавливает независимые статьи."
-  }
+  },
+  "maintenance_history": [
+    {
+      "at": "2026-10-07T11:18:27.243715+00:00",
+      "type": "diagnostic_rebrand_handler_cleanup",
+      "cause": "A broad OK substring selector matched Create notebook during two diagnostic attempts. The local worker now uses one visible dialog and exact enabled button labels.",
+      "own_empty_notebook_ids": [
+        "c680b7e7-5f2a-4821-b460-42436f35c37e",
+        "f6f935b6-9516-4f9f-9ab4-8b91ed436e25"
+      ],
+      "account": "poebyte@gmail.com",
+      "source_count_per_notebook": 0,
+      "artifact_count_per_notebook": 0,
+      "deleted_and_absent_after_home_reload": true,
+      "evidence": {
+        "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-empty-notebook-cleanup.json",
+        "sha256": "990ba24b2a2908d51d9cc327899f19c2c4cb6198a857fea41307ca02ebf3df16"
+      }
+    }
+  ]
 }
