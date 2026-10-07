@@ -7971,8 +7971,8 @@
           "source_id": "fa301b4d-bed8-4642-a9ab-879ae0718dca",
           "submission_mode": "later",
           "artifact_id": "dadc5968-19ce-45bc-ac6a-f046e9ba976f",
-          "card_text": "tablet\nGraph Algorithms for Crypto Arbitrage Detection\nScheduled for after 3am\nmore_vert",
-          "observed_at": "2026-10-06T19:01:35.535300+00:00"
+          "card_text": "tablet\nGraph Algorithms for Crypto Arbitrage Detection\nScheduled for after 9am\nmore_vert",
+          "observed_at": "2026-10-07T00:00:07.820229+00:00"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -8053,8 +8053,8 @@
           "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
           "submission_mode": "later",
           "artifact_id": "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72",
-          "card_text": "tablet\n套利检测的图算法：从 Bellman-Ford 到 RICH\nScheduled for after 11pm\nmore_vert",
-          "observed_at": "2026-10-06T19:01:42.216458+00:00"
+          "card_text": "tablet\n套利检测的图算法：从 Bellman-Ford 到 RICH\nScheduled for after 4am\nmore_vert",
+          "observed_at": "2026-10-07T00:00:14.687710+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -8072,8 +8072,8 @@
           "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
           "submission_mode": "later",
           "artifact_id": "8d94d8f8-29f8-4300-8a11-42df39e16f03",
-          "card_text": "audio_spark\n套利检测的图算法：从 Bellman-Ford 到 RICH\nScheduled for after 11pm\nmore_vert",
-          "observed_at": "2026-10-06T19:01:43.256184+00:00"
+          "card_text": "audio_spark\n套利检测的图算法：从 Bellman-Ford 到 RICH\nScheduled for after 4am\nmore_vert",
+          "observed_at": "2026-10-07T00:00:15.724054+00:00"
         }
       },
       "admission_state": "admitted",
@@ -8132,7 +8132,7 @@
           "submission_mode": "later",
           "artifact_id": "9e57dc7e-28e2-4333-a612-64fa73b35a55",
           "card_text": "tablet\n加密貨幣套利的圖演算法\nScheduled for after 4am\nmore_vert",
-          "observed_at": "2026-10-06T19:01:49.958194+00:00"
+          "observed_at": "2026-10-07T00:00:22.587780+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -8150,8 +8150,8 @@
           "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
           "submission_mode": "later",
           "artifact_id": "4de25cf5-6b6c-4a87-b982-5576e5febca3",
-          "card_text": "audio_spark\n加密貨幣套利的圖演算法\nScheduled for after 11pm\nmore_vert",
-          "observed_at": "2026-10-06T19:01:50.995420+00:00"
+          "card_text": "audio_spark\n加密貨幣套利的圖演算法\nScheduled for after 4am\nmore_vert",
+          "observed_at": "2026-10-07T00:00:23.625286+00:00"
         }
       },
       "admission_state": "admitted",
@@ -8210,7 +8210,7 @@
           "submission_mode": "later",
           "artifact_id": "53e7b066-bdb7-4a51-a103-42c01cd9f95a",
           "card_text": "tablet\nMachine Learning Approaches for Complex Arbitrage Systems\nScheduled for after 4am\nmore_vert",
-          "observed_at": "2026-10-06T19:01:57.674664+00:00"
+          "observed_at": "2026-10-07T00:00:30.448304+00:00"
         },
         "audio": {
           "state": "not_submitted"
@@ -8248,19 +8248,19 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "No enabled generation control; no submission attempted",
-        "at": "2026-10-06T19:02:07.737375+00:00",
+        "at": "2026-10-07T00:00:40.316679+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261006T190207743494Z-error.png",
-            "sha256": "a1b1dba8763f9f7d5563e4b864b36073ba7fe9681b192ab04e2eafceb3346a49"
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261007T000040322955Z-error.png",
+            "sha256": "f1790f8d04dc776e658a1b7f8f35eb976cadb51515c86af9eeca15081d0ba0f6"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261006T190207743494Z-controls.json",
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261007T000040322955Z-controls.json",
             "sha256": "0b4ee3558de7c5cde07bb085e72849cd073810987ca42606e451d77905437573"
           }
         },
-        "retry_not_before": "2026-10-06T23:51:00+00:00",
+        "retry_not_before": "2026-10-07T04:51:00+00:00",
         "next_safe_step": "After the newly displayed global quota reset, verify the saved account and frozen input hashes, reconcile this exact notebook/source and all current artifact IDs, preserve the existing scheduled deck, and submit only the never-dispatched English Deep Dive audio if no matching audio artifact has appeared. Keep browser closed until the reset; continue independent local work."
       },
       "error_history": [
@@ -8299,31 +8299,49 @@
           },
           "retry_not_before": "2026-10-06T18:51:00+00:00",
           "next_safe_step": "After the newly displayed global quota reset, verify the saved account and frozen input hashes, reconcile this exact notebook/source and all current artifact IDs, preserve the existing scheduled deck, and submit only the never-dispatched English Deep Dive audio if no matching audio artifact has appeared. Keep browser closed until the reset; continue independent local work."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "No enabled generation control; no submission attempted",
+          "at": "2026-10-06T19:02:07.737375+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261006T190207743494Z-error.png",
+              "sha256": "a1b1dba8763f9f7d5563e4b864b36073ba7fe9681b192ab04e2eafceb3346a49"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-en-20261006T190207743494Z-controls.json",
+              "sha256": "0b4ee3558de7c5cde07bb085e72849cd073810987ca42606e451d77905437573"
+            }
+          },
+          "retry_not_before": "2026-10-06T23:51:00+00:00",
+          "next_safe_step": "After the newly displayed global quota reset, verify the saved account and frozen input hashes, reconcile this exact notebook/source and all current artifact IDs, preserve the existing scheduled deck, and submit only the never-dispatched English Deep Dive audio if no matching audio artifact has appeared. Keep browser closed until the reset; continue independent local work."
         }
       ]
     }
   },
-  "checked_at": "2026-10-06T19:02:08.010455+00:00",
+  "checked_at": "2026-10-07T00:00:40.621494+00:00",
   "browser_geometry_requested": {
-    "width": 1998,
+    "width": 1994,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 58,
+    "x": 62,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1998,
+    "outer_width": 1994,
     "outer_height": 1290,
-    "inner_width": 1958,
+    "inner_width": 1954,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "AI usage limit reached. All features will be available after 03:51.",
+    "notice": "AI usage limit reached. All features will be available after 08:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-06T19:02:08.010446+00:00",
-    "not_before": "2026-10-06T23:51:00+00:00"
+    "observed_at": "2026-10-07T00:00:40.621485+00:00",
+    "not_before": "2026-10-07T04:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
