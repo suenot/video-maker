@@ -8182,10 +8182,10 @@
           "submission_mode": "later",
           "artifact_id": "9e57dc7e-28e2-4333-a612-64fa73b35a55",
           "card_text": "tablet\n加密貨幣套利的圖演算法\nScheduled for after 2pm\nmore_vert",
-          "observed_at": "2026-10-07T10:00:52.577699+00:00"
+          "observed_at": "2026-10-07T10:15:24.666798+00:00"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "submission_unknown",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Algorithm Evolution\n+ HFT Developer Perspective\n+ Practical Market Constraints\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8232,7 +8232,32 @@
       "source_display_name": "MM article complex-arbitrage-graph-algorithms ZH-…",
       "selected_source_ids": [
         "e3b70682-500f-441d-a88b-9eb5aaa41e1f"
-      ]
+      ],
+      "last_error": {
+        "type": "RuntimeError",
+        "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+        "at": "2026-10-07T10:15:25.697364+00:00",
+        "stage": "artifacts",
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261007T101525704277Z-error.png",
+            "sha256": "1616e0e7bad570e738d37b5d9e022d999c01a3e56aeead2551526c965562a7bd"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261007T101525704277Z-controls.json",
+            "sha256": "d996f75db7ad5e8f875f31c7c1c86fb666cbf3f658ed0b4793271c802cb68881"
+          }
+        },
+        "retry_not_before": "2026-10-07T10:30:25.953008+00:00",
+        "next_safe_step": "After the saved retry deadline, verify the same account, notebook, source and frozen inputs, then match the visible server-failure card to the retained artifact ID. Keep the existing ID and request evidence; do not delete or repeat Generate while the failed-card identity is unresolved. Any deliberate replacement must archive the old artifact and request first. Continue independent jobs within the active-artifact limit.",
+        "ui_observation": {
+          "kind": "audio",
+          "failure_text": "Audio Overview generation failed. Try a new one.",
+          "single_source_visible": true,
+          "failed_card_identity": "not reconciled to retained artifact ID; preserve binding until a live exact-ID check",
+          "screenshot_reviewed_at": "2026-10-07T10:17:04.519641+00:00"
+        }
+      }
     },
     "complex-arbitrage-ml-approaches:en": {
       "slug": "complex-arbitrage-ml-approaches",
@@ -8260,7 +8285,7 @@
           "submission_mode": "later",
           "artifact_id": "53e7b066-bdb7-4a51-a103-42c01cd9f95a",
           "card_text": "tablet\nMachine Learning Approaches for Complex Arbitrage Systems\nScheduled for after 2pm\nmore_vert",
-          "observed_at": "2026-10-07T10:01:00.262892+00:00"
+          "observed_at": "2026-10-07T10:15:33.646114+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -8279,7 +8304,7 @@
           "submission_mode": "later",
           "artifact_id": "0e49d25f-7246-4d94-a616-3fc8533cfc1c",
           "card_text": "audio_spark\nMachine Learning Approaches for Complex Arbitrage Systems\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-07T10:01:11.680066+00:00"
+          "observed_at": "2026-10-07T10:15:34.669417+00:00"
         }
       },
       "admission_state": "admitted",
@@ -8430,7 +8455,7 @@
           "submission_mode": "later",
           "artifact_id": "f0e0698f-575b-4024-ad18-ba510d7efec0",
           "card_text": "tablet\nMachine Learning Approaches for Complex Arbitrage\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-07T10:01:42.416646+00:00"
+          "observed_at": "2026-10-07T10:15:41.586842+00:00"
         },
         "audio": {
           "state": "not_submitted"
@@ -8467,19 +8492,19 @@
       ]
     }
   },
-  "checked_at": "2026-10-07T10:01:42.427667+00:00",
+  "checked_at": "2026-10-07T10:15:41.594200+00:00",
   "browser_geometry_requested": {
-    "width": 1995,
+    "width": 1994,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 61,
+    "x": 62,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1995,
+    "outer_width": 1994,
     "outer_height": 1290,
-    "inner_width": 1955,
+    "inner_width": 1954,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
