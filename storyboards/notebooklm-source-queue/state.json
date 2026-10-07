@@ -8515,7 +8515,7 @@
           "submission_mode": "later",
           "artifact_id": "0e49d25f-7246-4d94-a616-3fc8533cfc1c",
           "card_text": "audio_spark\nMachine Learning Approaches for Complex Arbitrage Systems\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-07T10:15:34.669417+00:00"
+          "observed_at": "2026-10-07T15:05:53.637136+00:00"
         }
       },
       "admission_state": "admitted",
@@ -8709,7 +8709,7 @@
           "submission_mode": "later",
           "artifact_id": "f0e0698f-575b-4024-ad18-ba510d7efec0",
           "card_text": "tablet\nMachine Learning Approaches for Complex Arbitrage\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-07T11:18:39.960170+00:00"
+          "observed_at": "2026-10-07T15:06:00.313054+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -8728,7 +8728,7 @@
           "submission_mode": "later",
           "artifact_id": "6ae8ae13-0cc2-47d7-b215-38b8b26b418b",
           "card_text": "audio_spark\nMachine Learning Approaches for Complex Arbitrage\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-07T11:18:56.578245+00:00"
+          "observed_at": "2026-10-07T15:06:01.349371+00:00"
         }
       },
       "admission_state": "admitted",
@@ -8787,7 +8787,7 @@
           "submission_mode": "later",
           "artifact_id": "a639a876-6f33-4ec2-8b85-d3bcce47fdaa",
           "card_text": "tablet\n神经网络套利：GNN、Transformer 与强化学习的交易实战\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-07T11:19:25.717976+00:00"
+          "observed_at": "2026-10-07T15:06:08.473101+00:00"
         },
         "audio": {
           "state": "scheduled",
@@ -8806,7 +8806,7 @@
           "submission_mode": "later",
           "artifact_id": "cf5177cf-757e-47f1-add5-789d6be433fa",
           "card_text": "audio_spark\n神经网络套利：GNN、Transformer 与强化学习的交易实战\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-07T11:19:42.115916+00:00"
+          "observed_at": "2026-10-07T15:06:09.500735+00:00"
         }
       },
       "admission_state": "admitted",
@@ -8865,7 +8865,7 @@
           "submission_mode": "later",
           "artifact_id": "e4dbdf34-c726-43cf-8506-df60a5470fb2",
           "card_text": "tablet\n神經網路套利：GNN、Transformer 與強化學習\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-07T11:20:11.103591+00:00"
+          "observed_at": "2026-10-07T15:06:16.661026+00:00"
         },
         "audio": {
           "state": "not_submitted"
@@ -8903,44 +8903,64 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Requested language not retained",
-        "at": "2026-10-07T11:20:25.148298+00:00",
+        "at": "2026-10-07T15:06:29.888003+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-zh-TW-20261007T112025164150Z-error.png",
-            "sha256": "d4d15046a2fe1f017cf8bb4150a04041d651715609c41227d9adc2d958ed3c98"
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-zh-TW-20261007T150629901410Z-error.png",
+            "sha256": "019add53c992c24fd3576f4dcc18d41023cf38b5d5022ec9fd3ccd365607a3fc"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-zh-TW-20261007T112025164150Z-controls.json",
-            "sha256": "afd5ccff3cb99c555e7ee6c88168497a8cd159d3e5212a38c2c9d612a1228e7b"
+            "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-zh-TW-20261007T150629901410Z-controls.json",
+            "sha256": "43e932bef69cf0dbd9636b0f652135293957cdb0b147fe8304ab1bf1438f2bcb"
           }
         },
-        "retry_not_before": "2026-10-07T14:51:00+00:00",
-        "next_safe_step": "After the displayed all-feature reset, verify the same permanent Taiwan notebook/source and existing scheduled slide ID. Resume only the never-dispatched Deep Dive audio with an explicitly retained Traditional Chinese selection, unchanged frozen hashes and one selected source. The saved screenshot shows English selected and Generate later disabled; no audio Generate action was dispatched. Keep all confirmed failed and scheduled artifact identities."
-      }
+        "retry_not_before": "2026-10-07T19:51:00+00:00",
+        "next_safe_step": "After the displayed all-feature reset, verify the same permanent notebook/source IDs, frozen input hashes and existing scheduled Traditional deck. Resume only this never-submitted Deep Dive audio after explicit Chinese (Traditional) selection remains retained, one exact source is selected and Default length is verified; do not repeat any existing Generate request."
+      },
+      "error_history": [
+        {
+          "type": "RuntimeError",
+          "message": "Requested language not retained",
+          "at": "2026-10-07T11:20:25.148298+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-zh-TW-20261007T112025164150Z-error.png",
+              "sha256": "d4d15046a2fe1f017cf8bb4150a04041d651715609c41227d9adc2d958ed3c98"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-ml-approaches-zh-TW-20261007T112025164150Z-controls.json",
+              "sha256": "afd5ccff3cb99c555e7ee6c88168497a8cd159d3e5212a38c2c9d612a1228e7b"
+            }
+          },
+          "retry_not_before": "2026-10-07T14:51:00+00:00",
+          "next_safe_step": "After the displayed all-feature reset, verify the same permanent Taiwan notebook/source and existing scheduled slide ID. Resume only the never-dispatched Deep Dive audio with an explicitly retained Traditional Chinese selection, unchanged frozen hashes and one selected source. The saved screenshot shows English selected and Generate later disabled; no audio Generate action was dispatched. Keep all confirmed failed and scheduled artifact identities."
+        }
+      ]
     }
   },
-  "checked_at": "2026-10-07T11:20:25.475520+00:00",
+  "checked_at": "2026-10-07T15:06:30.249589+00:00",
   "browser_geometry_requested": {
-    "width": 1994,
+    "width": 1995,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 62,
+    "x": 61,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1994,
+    "outer_width": 1995,
     "outer_height": 1290,
-    "inner_width": 1954,
+    "inner_width": 1955,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "AI usage limit reached. All features will be available after 18:51.",
+    "notice": "AI usage limit reached. All features will be available after 23:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-07T11:20:25.475509+00:00",
-    "not_before": "2026-10-07T14:51:00+00:00"
+    "observed_at": "2026-10-07T15:06:30.249580+00:00",
+    "not_before": "2026-10-07T19:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
