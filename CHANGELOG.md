@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Schedule the previously blocked English ML-arbitrage audio and admit its separate Russian notebook/full source and slide request with verified frozen hashes; retain the graph-algorithm Russian deck and Mainland Simplified audio IDs after visible server generation failures, with hashed diagnostics and finite retry, while preserving all 179 verified originals and the resolved English quota-error history.
 - Reconcile all six scheduled graph/ML artifact IDs after the saved quota resets and retain the never-submitted English ML audio with hashed diagnostics, archived prior errors and finite retry at NotebookLM's latest displayed all-feature reset, 13:51 Tbilisi on 2026-10-07; verify all 179 downloaded originals before returning to local-only checks.
 - Bind the scheduled English ML-arbitrage deck to its permanent notebook/source IDs and frozen inputs; retain its never-submitted Deep Dive audio, hashed diagnostics and finite retry at the displayed all-feature quota reset, preserving existing scheduled graph artifacts and all verified originals.
 - Complete all four futures-spot PDF/audio locale pairs and the English graph-algorithm pair, and save its Russian audio with verified original hashes and integrity evidence; bind separate Mainland Simplified/Taiwan Traditional graph requests using explicit output variants while preserving all existing identities and the scheduled Russian deck.
