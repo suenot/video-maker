@@ -8515,7 +8515,7 @@
           "submission_mode": "later",
           "artifact_id": "0e49d25f-7246-4d94-a616-3fc8533cfc1c",
           "card_text": "audio_spark\nMachine Learning Approaches for Complex Arbitrage Systems\nScheduled for after 12am\nmore_vert",
-          "observed_at": "2026-10-07T19:58:33.948137+00:00"
+          "observed_at": "2026-10-07T20:13:54.888115+00:00"
         }
       },
       "admission_state": "admitted",
@@ -9032,7 +9032,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-07T20:00:03.477478+00:00",
+  "checked_at": "2026-10-07T20:13:54.923100+00:00",
   "browser_geometry_requested": {
     "width": 1994,
     "height": 1290,
@@ -9049,10 +9049,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "AI usage limit reached. All features will be available after 23:51.",
+    "notice": "You're getting close to your AI usage limit. Limit resets at 04:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-07T15:06:30.249580+00:00",
-    "not_before": "2026-10-07T19:51:00+00:00"
+    "observed_at": "2026-10-07T20:13:54.923090+00:00",
+    "not_before": "2026-10-08T00:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
