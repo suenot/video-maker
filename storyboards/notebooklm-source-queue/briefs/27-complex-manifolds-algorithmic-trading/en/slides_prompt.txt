@@ -1,0 +1,29 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article complex-manifolds-algorithmic-trading EN ee3ae6cc2970". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English. Use English throughout. Distinguish complex manifolds, real or Riemannian manifolds, manifold learning, and topological data analysis. Preserve ℂⁿ, φ, t-SNE, UMAP, Takens, Vietoris–Rips, HRP, Kobayashi and code/API identifiers precisely. Preserve mathematical symbols, formula signs, units, citations and proper names exactly as in the source.
+Follow every H2 and H3 section in this exact sequence, preserving nested order and the exact source headings (even where editorial terminology corrections are requested in output):
+1. H2 — Introduction: Why Market Geometry Matters
+2. H2 — 1. Theoretical Foundations: Why Complex Manifolds?
+3. H3 — 1.1 Local ℂⁿ-Structure of Markets
+4. H3 — 1.2 Renaissance Proportions in N-Dimensional Space
+5. H2 — 2. Algorithm 1: Regime Detection via Phase Space Reconstruction
+6. H3 — 2.1 Manifold Learning-based Phase Space Reconstruction (MLPSR)
+7. H3 — 2.2 Topological Structure Visualization
+8. H2 — 3. Algorithm 2: Factor Clustering with t-SNE on Complex Manifolds
+9. H3 — 3.1 Complex t-SNE for Financial Data
+10. H2 — 4. Geometric Portfolio Optimization on Riemannian Manifolds
+11. H3 — 4.1 Covariance Metric and Geodesics
+12. H2 — 5. Practical Implementation Tips
+13. H3 — 5.1 Data Flow and Performance
+14. H3 — 5.2 Risk Monitoring System
+15. H2 — 6. Results and Performance Analysis
+16. H3 — 6.1 Backtest Results
+17. H3 — 6.2 Market Regime Analysis
+18. H2 — Conclusion
+19. H2 — Citation
+20. H2 — References
+
+
+
+Article-specific editorial review: A complex price-plus-volume coordinate does not by itself establish a complex manifold, holomorphic atlas, analytic indicators or a market-specific Kobayashi metric. The displayed transition formula has domain/singularity assumptions; the finite-difference expression labeled Kobayashi curvature is not demonstrated to be that geometric object, and its magnitude cannot have the negative sign asserted in the risk prose. The golden-ratio relation/filter, sub-second pattern claim, phase preservation from cosine t-SNE, crash prediction and regime detection are hypotheses or source claims, not established market facts. Takens embedding, persistent homology, t-SNE/KMeans and portfolio clustering need data shape, parameter, leakage, temporal alignment and statistical checks; the persistence.max() > 90th-percentile rule mixes homology dimensions and may be almost tautological. Covariance and arccos correlation do not alone establish the claimed Riemannian geodesics or global HRP risk minimum; the abs(correlation) distance, Ward linkage assumptions and optimizer/weight code need validation. The code is illustrative, not confirmed runnable or production ready. The 15-ETF 2020–2024 table (24.7% vs 18.3% return, Sharpe 1.42 vs 1.08, drawdown -8.2% vs -15.4%, volatility 9.8% vs 15.4%), 500 ms updates and threshold 0.02 have no supplied data, benchmark protocol or cost model: attribute them to the article pending source data, implementation, out-of-sample, transaction-cost and primary-source review. Never imply guaranteed profitability.
+
+Preserve substantive coverage, equations, variables, units, examples, diagrams, code, tables, risks, limitations, conclusion, citation and references from this exact language edition. Do not silently alter source claims or headings. Historical, mathematical, research, financial, code/API, performance and mutable claims remain attributed article claims pending human editorial, mathematical, source-code, quantitative and primary-source verification. Do not add outside facts, measured benchmarks, investment advice, risk-free claims or production validation. External NotebookLM notebook/source/artifact duplicates are not_checked and pending reconciliation before submission; target-channel duplicates are not_checked and pending reconciliation before final production. Do not imply either is cleared.
+Use enough readable slides for every material section. Show equations, variables, units, diagrams, code and tables only as supported by this source. Keep on-slide explanation in the requested locale apart from exact quotations and technical identifiers. End with this edition’s conclusion, citation and references.

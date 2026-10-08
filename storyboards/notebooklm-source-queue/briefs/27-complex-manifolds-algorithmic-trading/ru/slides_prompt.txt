@@ -1,0 +1,31 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article complex-manifolds-algorithmic-trading RU 455624b202c2". It is the complete published ru article snapshot. Do not merge another language edition or outside facts. Output language: Russian. Use natural Russian throughout, without treating this expanded article as a translation of the English edition. Distinguish комплексное многообразие, риманово многообразие, обучение на многообразиях и топологический анализ данных. Preserve ℂⁿ, φ, t-SNE, UMAP, Takens, Vietoris–Rips, HRP, Kobayashi and code/API identifiers precisely. Preserve mathematical symbols, formula signs, units, citations and proper names exactly as in the source.
+Follow every H2 and H3 section in this exact sequence, preserving nested order and the exact source headings (even where editorial terminology corrections are requested in output):
+1. H2 — Введение: почему геометрия рынков важна
+2. H2 — 1. Теоретические основы: почему именно комплексные многообразия?
+3. H3 — 1.1 Локальная ℂⁿ-структура рынка
+4. H3 — 1.2 Ренессансные пропорции в N-мерном пространстве
+5. H2 — 2. Алгоритм 1: обнаружение режимов через реконструкцию фазового пространства
+6. H3 — 2.1 Manifold Learning-based Phase Space Reconstruction (MLPSR)
+7. H3 — 2.2 Визуализация топологической структуры
+8. H2 — 3. Алгоритм 2: кластеризация факторов t-SNE на комплексном многообразии
+9. H3 — 3.1 Комплексная t-SNE для финансовых данных
+10. H2 — 4. Геометрическая оптимизация портфеля на римановом многообразии
+11. H3 — 4.1 Метрика ковариации и геодезические
+12. H2 — 5. Практическая реализация: полная торговая система
+13. H3 — 5.1 Интеграция всех компонентов
+14. H2 — 6. Практические советы по внедрению
+15. H3 — 6.1 Оптимизация производительности
+16. H3 — 6.2 Мониторинг и контроль рисков
+17. H2 — 7. Результаты и производительность
+18. H3 — 7.1 Бэктест на реальных данных
+19. H3 — 7.2 Анализ режимов рынка
+20. H2 — Заключение
+21. H2 — Цитирование
+22. H2 — Источники
+
+
+
+Article-specific editorial review: A complex price-plus-volume coordinate does not by itself establish a complex manifold, holomorphic atlas, analytic indicators or a market-specific Kobayashi metric. The displayed transition formula has domain/singularity assumptions; the finite-difference expression labeled Kobayashi curvature is not demonstrated to be that geometric object, and its magnitude cannot have the negative sign asserted in the risk prose. The golden-ratio relation/filter, sub-second pattern claim, phase preservation from cosine t-SNE, crash prediction and regime detection are hypotheses or source claims, not established market facts. Takens embedding, persistent homology, t-SNE/KMeans and portfolio clustering need data shape, parameter, leakage, temporal alignment and statistical checks; the persistence.max() > 90th-percentile rule mixes homology dimensions and may be almost tautological. Covariance and arccos correlation do not alone establish the claimed Riemannian geodesics or global HRP risk minimum; the abs(correlation) distance, Ward linkage assumptions and optimizer/weight code need validation. The code is illustrative, not confirmed runnable or production ready. The 15-ETF 2020–2024 table (24.7% vs 18.3% return, Sharpe 1.42 vs 1.08, drawdown -8.2% vs -15.4%, volatility 9.8% vs 15.4%), 500 ms updates and threshold 0.02 have no supplied data, benchmark protocol or cost model: attribute them to the article pending source data, implementation, out-of-sample, transaction-cost and primary-source review. Never imply guaranteed profitability. Preserve Russian-only material in full: generate_cluster_signals, calculate_hrp_weights recursive bisection, ComplexManifoldTradingSystem integration and backtest, 0.4/0.4/0.2 signal weights and initial capital 100000, GPU/CuPy and asyncio/aiohttp examples, separate implementation section, seven numbered sections, and Russian references/citation. Flag cluster mask/return-row alignment, signal timing/lookahead, missing or placeholder API functions, simplified drawdown computation and return/Sharpe definitions for code and quantitative review.
+
+Preserve substantive coverage, equations, variables, units, examples, diagrams, code, tables, risks, limitations, conclusion, citation and references from this exact language edition. Do not silently alter source claims or headings. Historical, mathematical, research, financial, code/API, performance and mutable claims remain attributed article claims pending human editorial, mathematical, source-code, quantitative and primary-source verification. Do not add outside facts, measured benchmarks, investment advice, risk-free claims or production validation. External NotebookLM notebook/source/artifact duplicates are not_checked and pending reconciliation before submission; target-channel duplicates are not_checked and pending reconciliation before final production. Do not imply either is cleared.
+Use enough readable slides for every material section. Show equations, variables, units, diagrams, code and tables only as supported by this source. Keep on-slide explanation in the requested locale apart from exact quotations and technical identifiers. End with this edition’s conclusion, citation and references.

@@ -1,0 +1,29 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article complex-manifolds-algorithmic-trading ZH-TW 76649f23cf82". It is the complete published zh-Hant article snapshot. Do not merge another language edition or outside facts. Output language: Traditional Chinese for Taiwan (zh-TW; Hant). Use Taiwan Traditional Chinese throughout. For audio, speak Taiwan Mandarin (Guoyu). Use 複流形, 資料, 演算法, 最佳化 and 市場狀態 for market regimes. The source mistranslates regime as 制度: quote its exact headings in the outline but render the concept as 市場狀態 in the deck and narration. Preserve ℂⁿ, φ, t-SNE, UMAP, Takens, Vietoris–Rips, HRP, Kobayashi and code/API identifiers precisely. Its Python comments and BibTeX remain partly Simplified in the frozen source; localize explanatory output while leaving the source untouched. Regional terminology and Mandarin pronunciation need human editorial and listening review. Before Generate, explicitly select Chinese (Traditional), not generic Chinese. Preserve mathematical symbols, formula signs, units, citations and proper names exactly as in the source.
+Follow every H2 and H3 section in this exact sequence, preserving nested order and the exact source headings (even where editorial terminology corrections are requested in output):
+1. H2 — 引言：市場幾何學的重要性
+2. H2 — 1. 理論基礎：為什麼選擇複流形？
+3. H3 — 1.1 市場的區域性ℂⁿ-結構
+4. H3 — 1.2 N維空間中的文藝復興比例
+5. H2 — 2. 演算法1：通過相空間重構進行制度檢測
+6. H3 — 2.1 基於流形學習的相空間重構（MLPSR）
+7. H3 — 2.2 拓撲結構視覺化
+8. H2 — 3. 演算法2：複流形上的t-SNE因子聚類
+9. H3 — 3.1 金融資料的復t-SNE
+10. H2 — 4. 黎曼流形上的幾何投資組合最佳化
+11. H3 — 4.1 協方差度量和測地線
+12. H2 — 5. 實際實施技巧
+13. H3 — 5.1 資料流和效能
+14. H3 — 5.2 風險監控系統
+15. H2 — 6. 結果和效能分析
+16. H3 — 6.1 回測結果
+17. H3 — 6.2 市場制度分析
+18. H2 — 結論
+19. H2 — 引用
+20. H2 — 參考文獻
+
+
+
+Article-specific editorial review: A complex price-plus-volume coordinate does not by itself establish a complex manifold, holomorphic atlas, analytic indicators or a market-specific Kobayashi metric. The displayed transition formula has domain/singularity assumptions; the finite-difference expression labeled Kobayashi curvature is not demonstrated to be that geometric object, and its magnitude cannot have the negative sign asserted in the risk prose. The golden-ratio relation/filter, sub-second pattern claim, phase preservation from cosine t-SNE, crash prediction and regime detection are hypotheses or source claims, not established market facts. Takens embedding, persistent homology, t-SNE/KMeans and portfolio clustering need data shape, parameter, leakage, temporal alignment and statistical checks; the persistence.max() > 90th-percentile rule mixes homology dimensions and may be almost tautological. Covariance and arccos correlation do not alone establish the claimed Riemannian geodesics or global HRP risk minimum; the abs(correlation) distance, Ward linkage assumptions and optimizer/weight code need validation. The code is illustrative, not confirmed runnable or production ready. The 15-ETF 2020–2024 table (24.7% vs 18.3% return, Sharpe 1.42 vs 1.08, drawdown -8.2% vs -15.4%, volatility 9.8% vs 15.4%), 500 ms updates and threshold 0.02 have no supplied data, benchmark protocol or cost model: attribute them to the article pending source data, implementation, out-of-sample, transaction-cost and primary-source review. Never imply guaranteed profitability.
+
+Preserve substantive coverage, equations, variables, units, examples, diagrams, code, tables, risks, limitations, conclusion, citation and references from this exact language edition. Do not silently alter source claims or headings. Historical, mathematical, research, financial, code/API, performance and mutable claims remain attributed article claims pending human editorial, mathematical, source-code, quantitative and primary-source verification. Do not add outside facts, measured benchmarks, investment advice, risk-free claims or production validation. External NotebookLM notebook/source/artifact duplicates are not_checked and pending reconciliation before submission; target-channel duplicates are not_checked and pending reconciliation before final production. Do not imply either is cleared.
+Use enough readable slides for every material section. Show equations, variables, units, diagrams, code and tables only as supported by this source. Keep on-slide explanation in the requested locale apart from exact quotations and technical identifiers. End with this edition’s conclusion, citation and references.
