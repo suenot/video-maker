@@ -8499,7 +8499,7 @@
           }
         },
         "audio": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nEnglish\nLength\nShort\nDefault\nLong\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Technical Deep Dive\n+ Beginner Overview\n+ Implementation Strategy\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8514,8 +8514,15 @@
           "source_id": "9edb96af-63b1-4a63-93bd-2116f41cf1eb",
           "submission_mode": "later",
           "artifact_id": "0e49d25f-7246-4d94-a616-3fc8533cfc1c",
-          "card_text": "audio_spark\nMachine Learning Approaches for Complex Arbitrage Systems\nScheduled for after 12am\nmore_vert",
-          "observed_at": "2026-10-07T20:13:54.888115+00:00"
+          "card_text": "audio_spark\nUnread\nNeural Networks for High Frequency Crypto Arbitrage\n19:59 · Deep Dive · 1 source · 4h ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T00:58:41.526900+00:00",
+          "duration_seconds": 1199.728617,
+          "path": "input/notebooklm-sources/complex-arbitrage-ml-approaches/en/audio.m4a",
+          "sha256": "4277a67f2b6837612ea63379709b4ac4875b267e9ba9ce019c2b7cc1e14065b3",
+          "bytes": 38612794,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T00:59:01.681661+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -8695,7 +8702,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8708,11 +8715,18 @@
           "source_id": "4c88d1d5-b98c-4564-855f-0c426d535599",
           "submission_mode": "later",
           "artifact_id": "f0e0698f-575b-4024-ad18-ba510d7efec0",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-07T19:58:40.605601+00:00"
+          "card_text": "tablet\nUnread\nNeural Arbitrage Architecture\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-08T00:59:08.309053+00:00",
+          "pages": 13,
+          "path": "input/notebooklm-sources/complex-arbitrage-ml-approaches/ru/slides.pdf",
+          "sha256": "34d0aba7a558e6b6b636d85514ba8829faebb91acfb732c67228e96c04dbac68",
+          "bytes": 16527175,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T00:59:16.145494+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Technical Deep Dive\n+ Strategy Comparison\n+ Beginner Overview\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8727,8 +8741,15 @@
           "source_id": "4c88d1d5-b98c-4564-855f-0c426d535599",
           "submission_mode": "later",
           "artifact_id": "6ae8ae13-0cc2-47d7-b215-38b8b26b418b",
-          "card_text": "audio_spark\nMachine Learning Approaches for Complex Arbitrage\nScheduled for after 12am\nmore_vert",
-          "observed_at": "2026-10-07T19:58:41.643209+00:00"
+          "card_text": "audio_spark\nUnread\nИИ и Rust для сверхбыстрого криптоарбитража\n14:32 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T00:59:17.180131+00:00",
+          "duration_seconds": 872.930975,
+          "path": "input/notebooklm-sources/complex-arbitrage-ml-approaches/ru/audio.m4a",
+          "sha256": "e8f4fd4ab168ffa784999a276e862377fde3bfe8b97b2da9a70ab12525613cdc",
+          "bytes": 28095146,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T00:59:30.491971+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -8773,7 +8794,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8786,8 +8807,15 @@
           "source_id": "80a237d4-af0d-4ab8-98d5-16270590e044",
           "submission_mode": "later",
           "artifact_id": "a639a876-6f33-4ec2-8b85-d3bcce47fdaa",
-          "card_text": "tablet\n神经网络套利：GNN、Transformer 与强化学习的交易实战\nScheduled for after 12am\nmore_vert",
-          "observed_at": "2026-10-07T19:58:48.292449+00:00"
+          "card_text": "tablet\nUnread\nNeural Arbitrage Architecture\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-08T00:59:37.106044+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/complex-arbitrage-ml-approaches/zh-CN/slides.pdf",
+          "sha256": "2bf4156876337eec69cf9bd39ace82cee5f829d02ee62791eb10e6509e4890f4",
+          "bytes": 14350107,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T00:59:41.797474+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -8858,7 +8886,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [],
           "browser_timezone": "Asia/Tbilisi",
@@ -8871,11 +8899,18 @@
           "source_id": "d8ab206a-9aab-4042-8d82-1ab55d3d1cf0",
           "submission_mode": "later",
           "artifact_id": "e4dbdf34-c726-43cf-8506-df60a5470fb2",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-07T19:59:10.201813+00:00"
+          "card_text": "tablet\nUnread\nQuant ML Arbitrage Blueprint\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-08T00:59:48.391445+00:00",
+          "pages": 12,
+          "path": "input/notebooklm-sources/complex-arbitrage-ml-approaches/zh-TW/slides.pdf",
+          "sha256": "37c7dc4eeed9a9827b4629eeb8e29e80e52ba7b9843187a9e6d2d6690664b906",
+          "bytes": 12177842,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T00:59:52.175155+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "e4dbdf34-c726-43cf-8506-df60a5470fb2"
           ],
@@ -8887,8 +8922,15 @@
           "source_id": "d8ab206a-9aab-4042-8d82-1ab55d3d1cf0",
           "submission_mode": "now",
           "artifact_id": "08057e1a-9b64-477f-b70d-20b3c2c35f88",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-07T19:59:26.557231+00:00"
+          "card_text": "audio_spark\nUnread\nAI加密套利\n12:51 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T00:59:53.211769+00:00",
+          "duration_seconds": 771.041814,
+          "path": "input/notebooklm-sources/complex-arbitrage-ml-approaches/zh-TW/audio.m4a",
+          "sha256": "ed7e6893fdbeaef3926ef8ee6f8d4a2fdaa697af7000c4d53fb57660aa88d727",
+          "bytes": 24815981,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T01:00:04.467109+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -8971,7 +9013,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "0c2feebed06925cefb07ad68854554679f7a0f2ea689e3e52c94a2db312b7732",
           "requested_at": "2026-10-07T19:59:47.915383+00:00",
@@ -8981,11 +9023,18 @@
           "source_id": "589d7a09-be4d-4c53-a0f0-aecc6955c5fa",
           "submission_mode": "now",
           "artifact_id": "4221b1bd-05ab-45a7-88d8-06810d63cead",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-07T19:59:52.483378+00:00"
+          "card_text": "tablet\nUnread\nLinear Algebra for Arbitrage Detection\n1 source · 4h ago\nmore_vert",
+          "observed_at": "2026-10-08T01:00:11.091909+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/complex-arbitrage-vector-matrix/en/slides.pdf",
+          "sha256": "3af2477ba38704f06d53d45dd41ecd69fc5967f6442cfc63e79be96ad4a9c3ca",
+          "bytes": 12265369,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T01:00:15.306235+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "4221b1bd-05ab-45a7-88d8-06810d63cead"
           ],
@@ -8997,8 +9046,15 @@
           "source_id": "589d7a09-be4d-4c53-a0f0-aecc6955c5fa",
           "submission_mode": "now",
           "artifact_id": "1b1575c4-14b0-46c8-abfc-11edb5cb8f3c",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-07T20:00:03.470285+00:00"
+          "card_text": "audio_spark\nUnread\nLinear Algebra for Crypto Arbitrage\n23:32 · Deep Dive · 1 source · 4h ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T01:00:16.343490+00:00",
+          "duration_seconds": 1412.167982,
+          "path": "input/notebooklm-sources/complex-arbitrage-vector-matrix/en/audio.m4a",
+          "sha256": "005c875f3477d14e07d9b53930e4e8d151fd06e2f64fe30ecea2996b61aca5f7",
+          "bytes": 45449886,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T01:00:39.776768+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -9030,21 +9086,165 @@
       "selected_source_ids": [
         "589d7a09-be4d-4c53-a0f0-aecc6955c5fa"
       ]
+    },
+    "complex-arbitrage-vector-matrix:ru": {
+      "slug": "complex-arbitrage-vector-matrix",
+      "language": "ru",
+      "article_sha256": "99dc77b667256a430fa7c69ab6aa49b36af1a4fff556a7e7d0b600f65e53f14b",
+      "input_hashes": {
+        "article": "99dc77b667256a430fa7c69ab6aa49b36af1a4fff556a7e7d0b600f65e53f14b",
+        "source_text": "a24cea1039455f9368b4fa83357c111c11f342b50a4622c36209676cd2f72d42",
+        "slides_prompt": "346fa0fab565605fe26c74c24f7ae43fe090538c18eef1f5da9a7e3fb63ae9a8",
+        "audio_prompt": "163a5678a72db1f2743b52a05b0e83dd01aeee9035b4f59e2c5ffb120a0f1d92"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "346fa0fab565605fe26c74c24f7ae43fe090538c18eef1f5da9a7e3fb63ae9a8",
+          "requested_at": "2026-10-08T01:01:04.046513+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "a8e7c472-edc0-4865-8dfd-0ade54316ec8",
+          "submission_mode": "now",
+          "artifact_id": "e02ead9b-0c6d-43cb-8447-17df69e04016",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T01:01:08.616345+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "e02ead9b-0c6d-43cb-8447-17df69e04016"
+          ],
+          "prompt_sha256": "163a5678a72db1f2743b52a05b0e83dd01aeee9035b4f59e2c5ffb120a0f1d92",
+          "requested_at": "2026-10-08T01:01:21.291102+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "a8e7c472-edc0-4865-8dfd-0ade54316ec8",
+          "submission_mode": "now",
+          "artifact_id": "2193e8a9-f4cd-4f0c-9e6c-c6e680615976",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-08T01:01:25.857820+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-08T01:00:39.800670+00:00",
+      "notebook_intent": {
+        "at": "2026-10-08T01:00:44.328935+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-vector-matrix-ru-notebook-baseline.json",
+        "baseline_sha256": "0e0bc3aae6f2664c4f48ed094d2f57eba36d5c814201b6858224535f4b816f92",
+        "baseline_count": 354,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-08T01:00:45.429213+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/4828cb21-9d2d-49ef-9fe7-49fcde937a33",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-08T01:00:49.461789+00:00",
+        "sha256": "a24cea1039455f9368b4fa83357c111c11f342b50a4622c36209676cd2f72d42",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-08T01:00:57.297108+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "a8e7c472-edc0-4865-8dfd-0ade54316ec8",
+      "source_title": "MM article complex-arbitrage-vector-matrix RU 99dc77b66725",
+      "source_sha256": "a24cea1039455f9368b4fa83357c111c11f342b50a4622c36209676cd2f72d42",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-vector-matrix RU 99d…",
+      "selected_source_ids": [
+        "a8e7c472-edc0-4865-8dfd-0ade54316ec8"
+      ]
+    },
+    "complex-arbitrage-vector-matrix:zh-CN": {
+      "slug": "complex-arbitrage-vector-matrix",
+      "language": "zh-CN",
+      "article_sha256": "bcf1a92e53719ddee28bb52aca0f7fc212b430a6590543f56580e8f158726f2a",
+      "input_hashes": {
+        "article": "bcf1a92e53719ddee28bb52aca0f7fc212b430a6590543f56580e8f158726f2a",
+        "source_text": "b6cc314242e3750eaeef294b26c84328b29d6f16639e573f09c3838cc96e4b67",
+        "slides_prompt": "83b11b61f8df62f199bd16f1890f12149f7462ed1647a2c8df583153e096a04d",
+        "audio_prompt": "d54c991c0bab1fda842aa783dfc094b300279dc4f22c906445a914d83406cfae"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "83b11b61f8df62f199bd16f1890f12149f7462ed1647a2c8df583153e096a04d",
+          "requested_at": "2026-10-08T01:01:51.015740+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "e7083f2f-5d86-42bb-870f-2e23a92c198c",
+          "submission_mode": "now",
+          "artifact_id": "9d80ad83-211b-4dab-80d4-9c2d898281db",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T01:01:55.586234+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "9d80ad83-211b-4dab-80d4-9c2d898281db"
+          ],
+          "prompt_sha256": "d54c991c0bab1fda842aa783dfc094b300279dc4f22c906445a914d83406cfae",
+          "requested_at": "2026-10-08T01:02:08.430238+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "e7083f2f-5d86-42bb-870f-2e23a92c198c",
+          "submission_mode": "now",
+          "artifact_id": "47adce36-1007-4dde-8b70-072dcb4bb5be",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-08T01:02:13.001996+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-08T01:01:25.880270+00:00",
+      "notebook_intent": {
+        "at": "2026-10-08T01:01:30.426697+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-vector-matrix-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "83d9a8e7679b8e18bfbcac0801a35357202316d171eabb0b6479a0ca7b4d5103",
+        "baseline_count": 355,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-08T01:01:31.532686+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/e4f329a0-5bf5-4e40-ad8f-3b1d75e30313",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-08T01:01:35.545117+00:00",
+        "sha256": "b6cc314242e3750eaeef294b26c84328b29d6f16639e573f09c3838cc96e4b67",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-08T01:01:43.284760+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "e7083f2f-5d86-42bb-870f-2e23a92c198c",
+      "source_title": "MM article complex-arbitrage-vector-matrix ZH-CN bcf1a92e5371",
+      "source_sha256": "b6cc314242e3750eaeef294b26c84328b29d6f16639e573f09c3838cc96e4b67",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-vector-matrix ZH-CN …",
+      "selected_source_ids": [
+        "e7083f2f-5d86-42bb-870f-2e23a92c198c"
+      ]
     }
   },
-  "checked_at": "2026-10-07T20:13:54.923100+00:00",
+  "checked_at": "2026-10-08T01:02:13.013426+00:00",
   "browser_geometry_requested": {
-    "width": 1994,
+    "width": 1995,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 62,
+    "x": 61,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1994,
+    "outer_width": 1995,
     "outer_height": 1290,
-    "inner_width": 1954,
+    "inner_width": 1955,
     "inner_height": 1200,
     "device_pixel_ratio": 2
   },
