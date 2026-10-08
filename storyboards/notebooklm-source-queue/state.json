@@ -10876,7 +10876,7 @@
           "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ System Architecture\n+ Data Reliability\n+ Practical Usage\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 00:51."
@@ -10893,8 +10893,15 @@
           "source_id": "d91a3f05-0a60-4a5f-a1df-8a8e28d96cf1",
           "submission_mode": "later",
           "artifact_id": "21b45c2b-e4db-40f2-902a-e3f3fb627787",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-08T21:09:49.806495+00:00"
+          "card_text": "audio_spark\nUnread\n開源LLM股票分析系統\n10:54 · Deep Dive · 1 source · 12m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T21:24:50.559974+00:00",
+          "duration_seconds": 654.291882,
+          "path": "input/notebooklm-sources/daily-stock-analysis-review/zh-TW/audio.m4a",
+          "sha256": "45e5d618f7a526776444acf861d13393105b98406835c22b05518e1ecfd6892d",
+          "bytes": 21058479,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T21:25:06.460670+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -10928,7 +10935,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-08T21:09:49.816301+00:00",
+  "checked_at": "2026-10-08T21:25:06.469407+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
