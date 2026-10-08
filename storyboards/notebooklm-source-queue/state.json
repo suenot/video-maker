@@ -8448,7 +8448,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "generating",
           "replacement_intent": {
             "prior_artifact_id": "9e57dc7e-28e2-4333-a612-64fa73b35a55",
             "chosen_at": "2026-10-08T01:15:41.678946+00:00",
@@ -8473,8 +8473,8 @@
           "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
           "submission_mode": "later",
           "artifact_id": "3f066b07-bba2-4d60-b49b-73cfae26a88a",
-          "card_text": "tablet\n加密貨幣套利的圖演算法\nScheduled for after 4pm\nmore_vert",
-          "observed_at": "2026-10-08T11:47:47.824234+00:00"
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T12:10:35.572465+00:00"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -10000,7 +10000,7 @@
           "submission_mode": "later",
           "artifact_id": "9cf40bee-8a2e-4e1f-b438-75df7cd93e27",
           "card_text": "audio_spark\n高维加密套利中的 Vine Copulas 建模\nScheduled for after 4pm\nmore_vert",
-          "observed_at": "2026-10-08T11:48:43.976687+00:00"
+          "observed_at": "2026-10-08T12:10:45.675849+00:00"
         }
       },
       "admission_state": "admitted",
@@ -10424,7 +10424,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-08T11:52:24.633163+00:00",
+  "checked_at": "2026-10-08T12:10:45.709215+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
@@ -10441,10 +10441,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 14:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 19:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-08T06:19:45.868506+00:00",
-    "not_before": "2026-10-08T10:51:00+00:00"
+    "observed_at": "2026-10-08T12:10:45.709205+00:00",
+    "not_before": "2026-10-08T15:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
