@@ -10790,7 +10790,7 @@
           "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "0c28e2e4-e2ce-48be-8e2c-f313811319bc"
           ],
@@ -10802,8 +10802,15 @@
           "source_id": "cc7aff61-f5f2-47bb-96ad-751cfba500b8",
           "submission_mode": "now",
           "artifact_id": "0a1edd76-c4aa-45b5-89a2-8772650ca768",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-08T17:57:37.081798+00:00"
+          "card_text": "audio_spark\nUnread\n专治炒股上头的AI\n15:30 · Deep Dive · 1 source · 2h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T20:54:51.163478+00:00",
+          "duration_seconds": 930.562902,
+          "path": "input/notebooklm-sources/daily-stock-analysis-review/zh-CN/audio.m4a",
+          "sha256": "505522efaceab6f28522c2918ac05117b99b47e83c305ea6c20d93dfa61ec7c6",
+          "bytes": 29949991,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T20:55:02.086521+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -10848,7 +10855,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "6939bcc1702cd0dae5bf06eee84206746b97c1a34ea597d6716078b7fd244aa8",
           "requested_at": "2026-10-08T17:58:03.819176+00:00",
@@ -10858,8 +10865,15 @@
           "source_id": "d91a3f05-0a60-4a5f-a1df-8a8e28d96cf1",
           "submission_mode": "now",
           "artifact_id": "12eb1f88-b537-4e66-9824-e8c64bd0e0b6",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-08T17:58:08.391010+00:00"
+          "card_text": "tablet\nUnread\nAI Stock Decision System Blueprint\n1 source · 2h ago\nmore_vert",
+          "observed_at": "2026-10-08T20:55:08.903978+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/daily-stock-analysis-review/zh-TW/slides.pdf",
+          "sha256": "e7b451884c789ac6a01b5abf9960d8da63171532ff7f3e371e11cf7664e18e09",
+          "bytes": 13764526,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T20:55:15.582027+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
           "state": "scheduled",
@@ -10880,7 +10894,7 @@
           "submission_mode": "later",
           "artifact_id": "21b45c2b-e4db-40f2-902a-e3f3fb627787",
           "card_text": "audio_spark\nAI股票分析與決策儀表盤系統\nScheduled for after 1am\nmore_vert",
-          "observed_at": "2026-10-08T17:58:31.749271+00:00"
+          "observed_at": "2026-10-08T20:55:16.616090+00:00"
         }
       },
       "admission_state": "admitted",
@@ -10914,7 +10928,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-08T17:58:31.781277+00:00",
+  "checked_at": "2026-10-08T20:55:16.624390+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
