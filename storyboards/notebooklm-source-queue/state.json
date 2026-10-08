@@ -8474,10 +8474,10 @@
           "submission_mode": "later",
           "artifact_id": "3f066b07-bba2-4d60-b49b-73cfae26a88a",
           "card_text": "tablet\n加密貨幣套利的圖演算法\nScheduled for after 10am\nmore_vert",
-          "observed_at": "2026-10-08T05:59:05.748211+00:00"
+          "observed_at": "2026-10-08T06:16:50.003525+00:00"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "replacement_intent": {
             "prior_artifact_id": "4de25cf5-6b6c-4a87-b982-5576e5febca3",
             "chosen_at": "2026-10-08T01:15:41.678946+00:00",
@@ -8499,8 +8499,15 @@
           "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
           "submission_mode": "now",
           "artifact_id": "47949f20-637c-4669-a9d8-a6b0e850ed63",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-08T05:59:23.410392+00:00"
+          "card_text": "audio_spark\nUnread\n加密貨幣套利的圖演算法\n11:03 · Deep Dive · 1 source · 9m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T06:16:51.041324+00:00",
+          "duration_seconds": 663.695964,
+          "path": "input/notebooklm-sources/complex-arbitrage-graph-algorithms/zh-TW/audio.m4a",
+          "sha256": "b064af16aedc6c4362e44dcbb06ff31ec9b0aa8e2f9ed4c323c406062f401df3",
+          "bytes": 21361145,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T06:17:05.878371+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -8713,7 +8720,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "replacement_intent": {
             "prior_artifact_id": "53e7b066-bdb7-4a51-a103-42c01cd9f95a",
             "chosen_at": "2026-10-08T01:15:41.678946+00:00",
@@ -8735,8 +8742,15 @@
           "source_id": "9edb96af-63b1-4a63-93bd-2116f41cf1eb",
           "submission_mode": "now",
           "artifact_id": "1fd29448-8118-4609-b31e-8b142a9c7025",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-08T05:59:36.878365+00:00"
+          "card_text": "tablet\nUnread\nMachine Learning for Complex Arbitrage\n1 source · 10m ago\nmore_vert",
+          "observed_at": "2026-10-08T06:17:12.532005+00:00",
+          "pages": 10,
+          "path": "input/notebooklm-sources/complex-arbitrage-ml-approaches/en/slides.pdf",
+          "sha256": "d8ab784de7349764be30568870221bf642e4ff11ed131e8cf5d6e200f8f630c6",
+          "bytes": 9343661,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T06:17:17.932687+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -9559,7 +9573,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "238c3d9a9d9f9b7bedb87186fbbbc51777e1b0b4946b34ee3ec3969deadb904f",
           "requested_at": "2026-10-08T06:00:57.888086+00:00",
@@ -9569,11 +9583,18 @@
           "source_id": "1fe6aafd-32cb-42da-9d47-81c35067b19d",
           "submission_mode": "now",
           "artifact_id": "f18c5cdd-25de-47fd-a5c5-58bd9805ddae",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-08T06:01:02.457871+00:00"
+          "card_text": "tablet\nUnread\nLinear Algebra for Crypto Arbitrage\n1 source · 8m ago\nmore_vert",
+          "observed_at": "2026-10-08T06:17:24.722508+00:00",
+          "pages": 13,
+          "path": "input/notebooklm-sources/complex-arbitrage-vector-matrix/zh-TW/slides.pdf",
+          "sha256": "b94e341e848fcf7b9f24ef7a80275278c4b2463d8dbf4a2c0dff11b4789c05f3",
+          "bytes": 14539585,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T06:17:29.087307+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "f18c5cdd-25de-47fd-a5c5-58bd9805ddae"
           ],
@@ -9585,8 +9606,15 @@
           "source_id": "1fe6aafd-32cb-42da-9d47-81c35067b19d",
           "submission_mode": "now",
           "artifact_id": "5f7efd61-5ce1-4438-901e-910d98c31e45",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-08T06:01:19.880236+00:00"
+          "card_text": "audio_spark\nUnread\n矩陣與張量套利\n12:37 · Deep Dive · 1 source · 7m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T06:17:30.118029+00:00",
+          "duration_seconds": 757.318821,
+          "path": "input/notebooklm-sources/complex-arbitrage-vector-matrix/zh-TW/audio.m4a",
+          "sha256": "dcad89ec059777c50744192a34ae09baf89bf8efe7d2b972a3a1ebc0a9d27a7d",
+          "bytes": 24374249,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T06:17:40.389942+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -9631,7 +9659,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "26f20d3945719161034aea9148141b55839fc3a545e063f09dfea8da845a4982",
           "requested_at": "2026-10-08T06:01:40.676914+00:00",
@@ -9641,11 +9669,18 @@
           "source_id": "3f830d96-3e2a-4ec9-afa6-47705b7bd4c5",
           "submission_mode": "now",
           "artifact_id": "0e2f1851-5ec5-4308-b40a-f07e2da908c0",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-08T06:01:45.259435+00:00"
+          "card_text": "tablet\nUnread\nVine Copulas for Crypto Arbitrage\n1 source · 10m ago\nmore_vert",
+          "observed_at": "2026-10-08T06:17:47.043301+00:00",
+          "pages": 10,
+          "path": "input/notebooklm-sources/complex-arbitrage-vine-copulas/en/slides.pdf",
+          "sha256": "1aac06159aed229efa5e0d05cf21a320850ae4569220105705761259206d10b3",
+          "bytes": 11692895,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T06:17:50.821224+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "0e2f1851-5ec5-4308-b40a-f07e2da908c0"
           ],
@@ -9657,8 +9692,15 @@
           "source_id": "3f830d96-3e2a-4ec9-afa6-47705b7bd4c5",
           "submission_mode": "now",
           "artifact_id": "a83f5b13-b337-48bc-9fef-27be56d81cce",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-08T06:01:56.935504+00:00"
+          "card_text": "audio_spark\nUnread\nVine Copulas for Crypto Arbitrage\n21:24 · Deep Dive · 1 source · 7m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T06:17:51.860359+00:00",
+          "duration_seconds": 1284.133152,
+          "path": "input/notebooklm-sources/complex-arbitrage-vine-copulas/en/audio.m4a",
+          "sha256": "4013baa98220f65b723cce11b247f0a3702a1ca575d9f97869a07606906acb56",
+          "bytes": 41329207,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T06:18:13.451767+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -9690,9 +9732,158 @@
       "selected_source_ids": [
         "3f830d96-3e2a-4ec9-afa6-47705b7bd4c5"
       ]
+    },
+    "complex-arbitrage-vine-copulas:ru": {
+      "slug": "complex-arbitrage-vine-copulas",
+      "language": "ru",
+      "article_sha256": "f89c7f9fd7f8c8db02bc5b14fca4a3b5a82e637b5b9a476522c981d0f0e52ab6",
+      "input_hashes": {
+        "article": "f89c7f9fd7f8c8db02bc5b14fca4a3b5a82e637b5b9a476522c981d0f0e52ab6",
+        "source_text": "f2568a9bc288633f8bf476c221bbe9225da06f9650cc7765e7e4a43fbd4c1cd3",
+        "slides_prompt": "9aa192eda8c10768542f5ec98b96cb952a8eecade29c11885119d20a4432024e",
+        "audio_prompt": "41c4a1d9e4f48f7eab0b5b89cc980a40e2f988baff47485a52a29d52e6c51b1e"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "9aa192eda8c10768542f5ec98b96cb952a8eecade29c11885119d20a4432024e",
+          "requested_at": "2026-10-08T06:18:37.195588+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "3b4d1371-03a5-4053-b563-2bacade7eed2",
+          "submission_mode": "now",
+          "artifact_id": "aefeedec-c7ed-4d53-b24c-011e4cc090a9",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T06:18:41.763529+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "aefeedec-c7ed-4d53-b24c-011e4cc090a9"
+          ],
+          "prompt_sha256": "41c4a1d9e4f48f7eab0b5b89cc980a40e2f988baff47485a52a29d52e6c51b1e",
+          "requested_at": "2026-10-08T06:18:52.433224+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "3b4d1371-03a5-4053-b563-2bacade7eed2",
+          "submission_mode": "now",
+          "artifact_id": "37ee62d1-656f-4a09-bfdb-5be9c4add040",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-08T06:18:57.001856+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-08T06:18:13.476389+00:00",
+      "notebook_intent": {
+        "at": "2026-10-08T06:18:18.036456+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-ru-notebook-baseline.json",
+        "baseline_sha256": "07040304bdbdcf833c2c9f4ef663cb67ae88201410785ec15d6d4a800d614610",
+        "baseline_count": 358,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-08T06:18:19.141961+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/0c3fe4f7-fee6-4dc3-9a64-0da567d4b695",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-08T06:18:23.152632+00:00",
+        "sha256": "f2568a9bc288633f8bf476c221bbe9225da06f9650cc7765e7e4a43fbd4c1cd3",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-08T06:18:30.764100+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "3b4d1371-03a5-4053-b563-2bacade7eed2",
+      "source_title": "MM article complex-arbitrage-vine-copulas RU f89c7f9fd7f8",
+      "source_sha256": "f2568a9bc288633f8bf476c221bbe9225da06f9650cc7765e7e4a43fbd4c1cd3",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-vine-copulas RU f89c…",
+      "selected_source_ids": [
+        "3b4d1371-03a5-4053-b563-2bacade7eed2"
+      ]
+    },
+    "complex-arbitrage-vine-copulas:zh-CN": {
+      "slug": "complex-arbitrage-vine-copulas",
+      "language": "zh-CN",
+      "article_sha256": "0af46a211765ffa2f6363b70a3dc09e7c6e0c03f443cd0ccb16a23646ea22840",
+      "input_hashes": {
+        "article": "0af46a211765ffa2f6363b70a3dc09e7c6e0c03f443cd0ccb16a23646ea22840",
+        "source_text": "9be134b3d947d13abaf7313addf8aef675ab30d2f4fb02b13743ba8c10f75676",
+        "slides_prompt": "0c1a1fab24692b7462094cd7a6c9154e4c2cda5ede24c8ddc91c38023c4b74be",
+        "audio_prompt": "e3772bbb4eb29ec8782d4264e539ada5dd49d9427d25c7c81de6dbfb1127eca4"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "0c1a1fab24692b7462094cd7a6c9154e4c2cda5ede24c8ddc91c38023c4b74be",
+          "requested_at": "2026-10-08T06:19:21.635723+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "e18fc8ba-3112-4e50-b439-884bccb79a82",
+          "submission_mode": "now",
+          "artifact_id": "bc601bac-b89a-4288-92ea-f833800c8efc",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T06:19:26.201132+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Beginner Overview\n+ Technical Strategy\n+ Practical Workflow\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 14:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "bc601bac-b89a-4288-92ea-f833800c8efc"
+          ],
+          "prompt_sha256": "e3772bbb4eb29ec8782d4264e539ada5dd49d9427d25c7c81de6dbfb1127eca4",
+          "requested_at": "2026-10-08T06:19:41.299234+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "e18fc8ba-3112-4e50-b439-884bccb79a82",
+          "submission_mode": "later",
+          "artifact_id": "9cf40bee-8a2e-4e1f-b438-75df7cd93e27",
+          "card_text": "audio_spark\n高维加密套利中的 Vine Copulas 建模\nScheduled for after 4pm\nmore_vert",
+          "observed_at": "2026-10-08T06:19:45.847860+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-08T06:18:57.034603+00:00",
+      "notebook_intent": {
+        "at": "2026-10-08T06:19:01.549954+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-zh-CN-notebook-baseline.json",
+        "baseline_sha256": "e9a28ecf32e9c5d14408897f08f5896e1bce1d930374db79fed13a08abb50ac0",
+        "baseline_count": 359,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-08T06:19:02.652095+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/23cf09e5-ed8f-4040-8f30-b6a6b9c6106b",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-08T06:19:06.791185+00:00",
+        "sha256": "9be134b3d947d13abaf7313addf8aef675ab30d2f4fb02b13743ba8c10f75676",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-08T06:19:14.340805+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "e18fc8ba-3112-4e50-b439-884bccb79a82",
+      "source_title": "MM article complex-arbitrage-vine-copulas ZH-CN 0af46a211765",
+      "source_sha256": "9be134b3d947d13abaf7313addf8aef675ab30d2f4fb02b13743ba8c10f75676",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-arbitrage-vine-copulas ZH-CN 0…",
+      "selected_source_ids": [
+        "e18fc8ba-3112-4e50-b439-884bccb79a82"
+      ]
     }
   },
-  "checked_at": "2026-10-08T06:01:56.947375+00:00",
+  "checked_at": "2026-10-08T06:19:45.868516+00:00",
   "browser_geometry_requested": {
     "width": 1995,
     "height": 1290,
@@ -9709,10 +9900,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 09:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 14:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-08T01:16:58.042753+00:00",
-    "not_before": "2026-10-08T05:51:00+00:00"
+    "observed_at": "2026-10-08T06:19:45.868506+00:00",
+    "not_before": "2026-10-08T10:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
