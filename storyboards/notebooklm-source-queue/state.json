@@ -10105,7 +10105,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "ready",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "8127678127cd44d6895a4d7d7d3b93646c882231c580e2dcc6a72911a36ddce9",
           "requested_at": "2026-10-08T11:48:56.968470+00:00",
@@ -10116,10 +10116,17 @@
           "submission_mode": "now",
           "artifact_id": "63b71f18-f60b-4ce8-865d-a67b72dfcd7c",
           "card_text": "tablet\nUnread\nVine Copulas in Crypto Arbitrage\n1 source · 5h ago\nmore_vert",
-          "observed_at": "2026-10-08T17:24:22.557676+00:00"
+          "observed_at": "2026-10-08T17:54:28.674519+00:00",
+          "pages": 10,
+          "path": "input/notebooklm-sources/complex-arbitrage-vine-copulas/zh-TW/slides.pdf",
+          "sha256": "fa938348a72160c6a82851f4324894ed2fb1a96172fd69cfafbb725c4a8869b6",
+          "bytes": 9466456,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T17:54:35.467662+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "63b71f18-f60b-4ce8-865d-a67b72dfcd7c"
           ],
@@ -10131,8 +10138,15 @@
           "source_id": "d6e9d932-ba56-4c9b-80ff-d80b42205a46",
           "submission_mode": "now",
           "artifact_id": "700d3016-83ec-4aaf-84ff-bf8ed8ef801c",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-08T11:49:16.918795+00:00"
+          "card_text": "audio_spark\nUnread\n藤蔓Copula加密統計套利\n13:36 · Deep Dive · 1 source · 5h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T17:54:36.501052+00:00",
+          "duration_seconds": 816.924444,
+          "path": "input/notebooklm-sources/complex-arbitrage-vine-copulas/zh-TW/audio.m4a",
+          "sha256": "07024088a5c55cbb248c9fcba5ce514070df14f59ea8898324b39d539b375588",
+          "bytes": 26292593,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T17:55:00.048439+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -10204,24 +10218,26 @@
       "selected_source_ids": [
         "d6e9d932-ba56-4c9b-80ff-d80b42205a46"
       ],
-      "last_error": {
-        "type": "TimeoutError",
-        "message": "TimeoutError",
-        "at": "2026-10-08T17:31:50.019440+00:00",
-        "stage": "artifacts",
-        "evidence": {
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-zh-TW-20261008T173150031966Z-error.png",
-            "sha256": "2611019b95de014366f339e86fe42012c5265163197465e48bb92459ac0ed465"
+      "error_history": [
+        {
+          "type": "TimeoutError",
+          "message": "TimeoutError",
+          "at": "2026-10-08T17:31:50.019440+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-zh-TW-20261008T173150031966Z-error.png",
+              "sha256": "2611019b95de014366f339e86fe42012c5265163197465e48bb92459ac0ed465"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-zh-TW-20261008T173150031966Z-controls.json",
+              "sha256": "aaf85a1a1a405ebebd6a9385b39cf9cb2c733871f15647d7d393a41c82a810a0"
+            }
           },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-zh-TW-20261008T173150031966Z-controls.json",
-            "sha256": "aaf85a1a1a405ebebd6a9385b39cf9cb2c733871f15647d7d393a41c82a810a0"
-          }
-        },
-        "retry_not_before": "2026-10-08T17:46:50.320625+00:00",
-        "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
-      }
+          "retry_not_before": "2026-10-08T17:46:50.320625+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        }
+      ]
     },
     "complex-manifolds-algorithmic-trading:en": {
       "slug": "complex-manifolds-algorithmic-trading",
@@ -10495,7 +10511,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "cccd2edefe6176877a2f967409b9193a1ae382588b0fcc46fef35a34c4346539",
           "requested_at": "2026-10-08T17:33:30.788563+00:00",
@@ -10505,11 +10521,18 @@
           "source_id": "fb9a5f36-a5a1-4f5d-982a-1faa5ab52831",
           "submission_mode": "now",
           "artifact_id": "61dee409-8032-49a1-a48e-007c517c5265",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-08T17:38:16.887420+00:00"
+          "card_text": "tablet\nUnread\n金融市場幾何學\n1 source · 11m ago\nmore_vert",
+          "observed_at": "2026-10-08T17:55:06.935812+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/complex-manifolds-algorithmic-trading/zh-TW/slides.pdf",
+          "sha256": "b984d6b8febc5d753b17f31834ef31777194e04bb3ffca7941cf59048dd37d07",
+          "bytes": 15040352,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T17:55:17.868791+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "61dee409-8032-49a1-a48e-007c517c5265"
           ],
@@ -10521,8 +10544,15 @@
           "source_id": "fb9a5f36-a5a1-4f5d-982a-1faa5ab52831",
           "submission_mode": "now",
           "artifact_id": "1cf2f0f8-d132-49dc-8d01-492c9785b801",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-08T17:38:17.912789+00:00"
+          "card_text": "audio_spark\nUnread\n複流形市場幾何學\n15:03 · Deep Dive · 1 source · 9m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T17:55:18.902489+00:00",
+          "duration_seconds": 903.558095,
+          "path": "input/notebooklm-sources/complex-manifolds-algorithmic-trading/zh-TW/audio.m4a",
+          "sha256": "71ba646d9819fb14ae30c4d495b2ba32aac43c13f08d3612e6d7b1bc64403b4a",
+          "bytes": 29080838,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T17:55:34.100747+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -10567,7 +10597,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "704cca49a2f9d6e465fc654452f9d79af796786b27ce3ea5f746ec472ac34ce3",
           "requested_at": "2026-10-08T17:34:18.793376+00:00",
@@ -10577,11 +10607,18 @@
           "source_id": "29666e85-9187-47f7-8828-17b56824c48b",
           "submission_mode": "now",
           "artifact_id": "50c5576f-ff5b-4f57-93d5-f4ea21a9b2ce",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-08T17:38:24.554404+00:00"
+          "card_text": "tablet\nUnread\nAI Daily Stock Analysis System\n1 source · 14m ago\nmore_vert",
+          "observed_at": "2026-10-08T17:55:40.933987+00:00",
+          "pages": 11,
+          "path": "input/notebooklm-sources/daily-stock-analysis-review/en/slides.pdf",
+          "sha256": "f1a91b8fa2c0e34af283ec9a97aef888a7817b227adb29c71851c92d1e1798ee",
+          "bytes": 9234842,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T17:55:47.532473+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "50c5576f-ff5b-4f57-93d5-f4ea21a9b2ce"
           ],
@@ -10593,8 +10630,15 @@
           "source_id": "29666e85-9187-47f7-8828-17b56824c48b",
           "submission_mode": "now",
           "artifact_id": "d5a04b87-11b9-4820-b9ce-e6371cebd121",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-08T17:38:25.578862+00:00"
+          "card_text": "audio_spark\nUnread\nAutomating Daily Stock Research with LLMs\n23:19 · Deep Dive · 1 source · 11m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T17:55:48.568347+00:00",
+          "duration_seconds": 1399.977506,
+          "path": "input/notebooklm-sources/daily-stock-analysis-review/en/audio.m4a",
+          "sha256": "727a56379bd0d71de731ae819a24b988364c0f4b4abf652291fdee02ca714d3e",
+          "bytes": 45057575,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T17:56:20.526316+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -10639,7 +10683,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "80de081bb2d5d4630cdeeadb3307c2889838f47cc94ba9ff0214df35bfe85719",
           "requested_at": "2026-10-08T17:38:49.684462+00:00",
@@ -10649,11 +10693,18 @@
           "source_id": "2c224516-ffe9-4d67-a5b6-8e72ce46bdcf",
           "submission_mode": "now",
           "artifact_id": "0cff107e-a3c5-457f-9778-da7b78aa3f48",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-08T17:38:54.258889+00:00"
+          "card_text": "tablet\nUnread\nAI Stock Analyst System\n1 source · 11m ago\nmore_vert",
+          "observed_at": "2026-10-08T17:56:27.327330+00:00",
+          "pages": 9,
+          "path": "input/notebooklm-sources/daily-stock-analysis-review/ru/slides.pdf",
+          "sha256": "21021de90f8af49c5dce487cb93e422712253a272a8335278e6ee986d83189f2",
+          "bytes": 7417813,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T17:56:32.422824+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "0cff107e-a3c5-457f-9778-da7b78aa3f48"
           ],
@@ -10665,8 +10716,15 @@
           "source_id": "2c224516-ffe9-4d67-a5b6-8e72ce46bdcf",
           "submission_mode": "now",
           "artifact_id": "25c492b1-45c4-436a-abdc-6e17eb545367",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-08T17:39:09.634113+00:00"
+          "card_text": "audio_spark\nUnread\nИИ аналитик акций без галлюцинаций\n19:38 · Deep Dive · 1 source · 8m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T17:56:33.455221+00:00",
+          "duration_seconds": 1178.412698,
+          "path": "input/notebooklm-sources/daily-stock-analysis-review/ru/audio.m4a",
+          "sha256": "4ee12850a8381f2e9433647466b445a53e273ee451bafdc817d471132c7b94e7",
+          "bytes": 37926781,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T17:56:58.644649+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -10711,7 +10769,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "7e18702e812d9875e2d4df55583449118b17a9ca56df0a29e838a1f027ceb0a2",
           "requested_at": "2026-10-08T17:39:37.243469+00:00",
@@ -10721,11 +10779,31 @@
           "source_id": "cc7aff61-f5f2-47bb-96ad-751cfba500b8",
           "submission_mode": "now",
           "artifact_id": "0c28e2e4-e2ce-48be-8e2c-f313811319bc",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-08T17:39:41.809291+00:00"
+          "card_text": "tablet\nUnread\nAI 股票决策中枢架构解析\n1 source · 10m ago\nmore_vert",
+          "observed_at": "2026-10-08T17:57:05.312063+00:00",
+          "pages": 12,
+          "path": "input/notebooklm-sources/daily-stock-analysis-review/zh-CN/slides.pdf",
+          "sha256": "d271afc8213f77295c0f9db38023190d827c5640c1410e4dd546118ac9c356c7",
+          "bytes": 10415679,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T17:57:09.398447+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "not_submitted"
+          "state": "generating",
+          "baseline_ids": [
+            "0c28e2e4-e2ce-48be-8e2c-f313811319bc"
+          ],
+          "prompt_sha256": "20e5a99cfa186e375ceefba1b91f665dd1ed4b943fb7ad5da226e9e469d3b7a8",
+          "requested_at": "2026-10-08T17:57:32.481876+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "cc7aff61-f5f2-47bb-96ad-751cfba500b8",
+          "submission_mode": "now",
+          "artifact_id": "0a1edd76-c4aa-45b5-89a2-8772650ca768",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-08T17:57:37.081798+00:00"
         }
       },
       "admission_state": "admitted",
@@ -10757,9 +10835,86 @@
       "selected_source_ids": [
         "cc7aff61-f5f2-47bb-96ad-751cfba500b8"
       ]
+    },
+    "daily-stock-analysis-review:zh-TW": {
+      "slug": "daily-stock-analysis-review",
+      "language": "zh-TW",
+      "article_sha256": "23fb8a2d6c59abc83fb2b30355d2538377743bf6c7d9795992a5b616f07d53d7",
+      "input_hashes": {
+        "article": "23fb8a2d6c59abc83fb2b30355d2538377743bf6c7d9795992a5b616f07d53d7",
+        "source_text": "e37f1a7807350ee1ff45c7b3d49ea0a1bc910349dafd8a789c5ed9479d04c584",
+        "slides_prompt": "6939bcc1702cd0dae5bf06eee84206746b97c1a34ea597d6716078b7fd244aa8",
+        "audio_prompt": "8ad03cc97a9716ecaa852895e8175f0eac6fa22039540ec1df77bc5ed24f7ac6"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "6939bcc1702cd0dae5bf06eee84206746b97c1a34ea597d6716078b7fd244aa8",
+          "requested_at": "2026-10-08T17:58:03.819176+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "d91a3f05-0a60-4a5f-a1df-8a8e28d96cf1",
+          "submission_mode": "now",
+          "artifact_id": "12eb1f88-b537-4e66-9824-e8c64bd0e0b6",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T17:58:08.391010+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ System Architecture\n+ Data Reliability\n+ Practical Usage\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 00:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "12eb1f88-b537-4e66-9824-e8c64bd0e0b6"
+          ],
+          "prompt_sha256": "8ad03cc97a9716ecaa852895e8175f0eac6fa22039540ec1df77bc5ed24f7ac6",
+          "requested_at": "2026-10-08T17:58:27.199327+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "d91a3f05-0a60-4a5f-a1df-8a8e28d96cf1",
+          "submission_mode": "later",
+          "artifact_id": "21b45c2b-e4db-40f2-902a-e3f3fb627787",
+          "card_text": "audio_spark\nAI股票分析與決策儀表盤系統\nScheduled for after 1am\nmore_vert",
+          "observed_at": "2026-10-08T17:58:31.749271+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-08T17:57:37.107712+00:00",
+      "notebook_intent": {
+        "at": "2026-10-08T17:57:41.959156+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/daily-stock-analysis-review-zh-TW-20261008T175741958460Z-notebook-baseline.json",
+        "baseline_sha256": "0d130b11ee25e91d6f3a9e727617b48f7528109098cc3e2476defa756c314b82",
+        "baseline_count": 368,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-08T17:57:43.112616+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/2cad37b3-7b7f-4319-8853-3c4079d08a2c",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-08T17:57:47.171328+00:00",
+        "sha256": "e37f1a7807350ee1ff45c7b3d49ea0a1bc910349dafd8a789c5ed9479d04c584",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-08T17:57:56.688754+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "d91a3f05-0a60-4a5f-a1df-8a8e28d96cf1",
+      "source_title": "MM article daily-stock-analysis-review ZH-TW 23fb8a2d6c59",
+      "source_sha256": "e37f1a7807350ee1ff45c7b3d49ea0a1bc910349dafd8a789c5ed9479d04c584",
+      "state": "source_ready",
+      "source_display_name": "MM article daily-stock-analysis-review ZH-TW 23fb…",
+      "selected_source_ids": [
+        "d91a3f05-0a60-4a5f-a1df-8a8e28d96cf1"
+      ]
     }
   },
-  "checked_at": "2026-10-08T17:39:41.819635+00:00",
+  "checked_at": "2026-10-08T17:58:31.781277+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
@@ -10776,10 +10931,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 19:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 00:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-08T12:10:45.709205+00:00",
-    "not_before": "2026-10-08T15:51:00+00:00"
+    "observed_at": "2026-10-08T17:58:31.781263+00:00",
+    "not_before": "2026-10-08T20:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
