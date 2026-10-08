@@ -8474,7 +8474,7 @@
           "submission_mode": "later",
           "artifact_id": "3f066b07-bba2-4d60-b49b-73cfae26a88a",
           "card_text": "tablet\n加密貨幣套利的圖演算法\nScheduled for after 4pm\nmore_vert",
-          "observed_at": "2026-10-08T10:58:04.736999+00:00"
+          "observed_at": "2026-10-08T11:47:47.824234+00:00"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -8609,6 +8609,50 @@
             }
           },
           "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Bound source ID unavailable",
+          "at": "2026-10-08T11:27:35.057983+00:00",
+          "stage": "source",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261008T112735066132Z-error.png",
+              "sha256": "d6b99e27f656c693a22b8b367e0b0444b7b863418971226ec1f18e6f75e89669"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261008T112735066132Z-controls.json",
+              "sha256": "c4aaa91c16ec25e22ee1ecd3314eb6bfb136ecdaab3f80c3d0ab3d6df0162b57"
+            }
+          },
+          "retry_not_before": "2026-10-08T11:42:35.264361+00:00",
+          "next_safe_step": "After retry_not_before, wait for loaded notebook chrome and all visible Loading Notebook labels to disappear in this same saved permanent notebook; reverify account and exact URL, then reconcile the retained source/artifact IDs. Do not re-upload the source or repeat Generate from an empty loading shell.",
+          "observed_condition": "visible_Loading_Notebook_shell; source absence not established"
+        },
+        {
+          "at": "2026-10-08T11:54:12.952026+00:00",
+          "reason": "resolved_after_loaded_notebook_identity_reconciliation",
+          "error": {
+            "type": "RuntimeError",
+            "message": "Bound source ID unavailable",
+            "at": "2026-10-08T11:27:35.057983+00:00",
+            "stage": "source",
+            "evidence": {
+              "screenshot": {
+                "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261008T112735066132Z-error.png",
+                "sha256": "d6b99e27f656c693a22b8b367e0b0444b7b863418971226ec1f18e6f75e89669"
+              },
+              "controls": {
+                "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261008T112735066132Z-controls.json",
+                "sha256": "c4aaa91c16ec25e22ee1ecd3314eb6bfb136ecdaab3f80c3d0ab3d6df0162b57"
+              }
+            },
+            "retry_not_before": "2026-10-08T11:42:35.264361+00:00",
+            "next_safe_step": "After retry_not_before, wait for loaded notebook chrome and all visible Loading Notebook labels to disappear in this same saved permanent notebook; reverify account and exact URL, then reconcile the retained source/artifact IDs. Do not re-upload the source or repeat Generate from an empty loading shell.",
+            "observed_condition": "visible_Loading_Notebook_shell; source absence not established"
+          },
+          "retained_notebook": "https://notebook.google.com/notebook/8da668d0-f257-47b8-a955-ba28a744038b",
+          "retained_source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f"
         }
       ],
       "artifact_history": [
@@ -8706,26 +8750,7 @@
             "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
           }
         }
-      ],
-      "last_error": {
-        "type": "RuntimeError",
-        "message": "Bound source ID unavailable",
-        "at": "2026-10-08T11:27:35.057983+00:00",
-        "stage": "source",
-        "evidence": {
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261008T112735066132Z-error.png",
-            "sha256": "d6b99e27f656c693a22b8b367e0b0444b7b863418971226ec1f18e6f75e89669"
-          },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-graph-algorithms-zh-TW-20261008T112735066132Z-controls.json",
-            "sha256": "c4aaa91c16ec25e22ee1ecd3314eb6bfb136ecdaab3f80c3d0ab3d6df0162b57"
-          }
-        },
-        "retry_not_before": "2026-10-08T11:42:35.264361+00:00",
-        "next_safe_step": "After retry_not_before, wait for loaded notebook chrome and all visible Loading Notebook labels to disappear in this same saved permanent notebook; reverify account and exact URL, then reconcile the retained source/artifact IDs. Do not re-upload the source or repeat Generate from an empty loading shell.",
-        "observed_condition": "visible_Loading_Notebook_shell; source absence not established"
-      }
+      ]
     },
     "complex-arbitrage-ml-approaches:en": {
       "slug": "complex-arbitrage-ml-approaches",
@@ -9785,7 +9810,7 @@
           "editorial_review": "pending"
         },
         "audio": {
-          "state": "ready",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "aefeedec-c7ed-4d53-b24c-011e4cc090a9"
           ],
@@ -9797,8 +9822,15 @@
           "source_id": "3b4d1371-03a5-4053-b563-2bacade7eed2",
           "submission_mode": "now",
           "artifact_id": "37ee62d1-656f-4a09-bfdb-5be9c4add040",
-          "card_text": "audio_spark\nUnread\nVine-копулы в арбитраже криптовалют\n24:21 · Deep Dive · 1 source · 4h ago\nplay_arrow\nmore_vert",
-          "observed_at": "2026-10-08T10:59:23.241747+00:00"
+          "card_text": "audio_spark\nUnread\nVine-копулы в арбитраже криптовалют\n24:21 · Deep Dive · 1 source · 5h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T11:47:54.904825+00:00",
+          "duration_seconds": 1461.208526,
+          "path": "input/notebooklm-sources/complex-arbitrage-vine-copulas/ru/audio.m4a",
+          "sha256": "90628bd0bfb9baa9fdba54ab3bc273f0ac43f2889ef6a99cfce863f23f51718e",
+          "bytes": 47028211,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T11:48:33.880757+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -9830,25 +9862,6 @@
       "selected_source_ids": [
         "3b4d1371-03a5-4053-b563-2bacade7eed2"
       ],
-      "last_error": {
-        "type": "RuntimeError",
-        "message": "Bound source ID unavailable",
-        "at": "2026-10-08T11:28:24.850870+00:00",
-        "stage": "source",
-        "evidence": {
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-ru-20261008T112824859323Z-error.png",
-            "sha256": "ec492ea552406e77ff39de776c6c70e92fc271a0b2f864ce5a1b47c70da0912a"
-          },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-ru-20261008T112824859323Z-controls.json",
-            "sha256": "9b27902e9fa3d52635ce0e24a20025c983fbc4ed60e784285bc9fa655b0d2598"
-          }
-        },
-        "retry_not_before": "2026-10-08T11:43:24.989703+00:00",
-        "next_safe_step": "After retry_not_before, wait for loaded notebook chrome and all visible Loading Notebook labels to disappear in this same saved permanent notebook; reverify account and exact URL, then reconcile the retained source/artifact IDs. Do not re-upload the source or repeat Generate from an empty loading shell.",
-        "observed_condition": "visible_Loading_Notebook_shell; source absence not established"
-      },
       "error_history": [
         {
           "type": "TimeoutError",
@@ -9889,6 +9902,50 @@
             "retry_not_before": "2026-10-08T11:17:26.541043+00:00",
             "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
           }
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Bound source ID unavailable",
+          "at": "2026-10-08T11:28:24.850870+00:00",
+          "stage": "source",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-ru-20261008T112824859323Z-error.png",
+              "sha256": "ec492ea552406e77ff39de776c6c70e92fc271a0b2f864ce5a1b47c70da0912a"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-ru-20261008T112824859323Z-controls.json",
+              "sha256": "9b27902e9fa3d52635ce0e24a20025c983fbc4ed60e784285bc9fa655b0d2598"
+            }
+          },
+          "retry_not_before": "2026-10-08T11:43:24.989703+00:00",
+          "next_safe_step": "After retry_not_before, wait for loaded notebook chrome and all visible Loading Notebook labels to disappear in this same saved permanent notebook; reverify account and exact URL, then reconcile the retained source/artifact IDs. Do not re-upload the source or repeat Generate from an empty loading shell.",
+          "observed_condition": "visible_Loading_Notebook_shell; source absence not established"
+        },
+        {
+          "at": "2026-10-08T11:54:12.953129+00:00",
+          "reason": "resolved_after_loaded_notebook_identity_reconciliation",
+          "error": {
+            "type": "RuntimeError",
+            "message": "Bound source ID unavailable",
+            "at": "2026-10-08T11:28:24.850870+00:00",
+            "stage": "source",
+            "evidence": {
+              "screenshot": {
+                "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-ru-20261008T112824859323Z-error.png",
+                "sha256": "ec492ea552406e77ff39de776c6c70e92fc271a0b2f864ce5a1b47c70da0912a"
+              },
+              "controls": {
+                "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-ru-20261008T112824859323Z-controls.json",
+                "sha256": "9b27902e9fa3d52635ce0e24a20025c983fbc4ed60e784285bc9fa655b0d2598"
+              }
+            },
+            "retry_not_before": "2026-10-08T11:43:24.989703+00:00",
+            "next_safe_step": "After retry_not_before, wait for loaded notebook chrome and all visible Loading Notebook labels to disappear in this same saved permanent notebook; reverify account and exact URL, then reconcile the retained source/artifact IDs. Do not re-upload the source or repeat Generate from an empty loading shell.",
+            "observed_condition": "visible_Loading_Notebook_shell; source absence not established"
+          },
+          "retained_notebook": "https://notebook.google.com/notebook/0c3fe4f7-fee6-4dc3-9a64-0da567d4b695",
+          "retained_source_id": "3b4d1371-03a5-4053-b563-2bacade7eed2"
         }
       ]
     },
@@ -9943,7 +10000,7 @@
           "submission_mode": "later",
           "artifact_id": "9cf40bee-8a2e-4e1f-b438-75df7cd93e27",
           "card_text": "audio_spark\n高维加密套利中的 Vine Copulas 建模\nScheduled for after 4pm\nmore_vert",
-          "observed_at": "2026-10-08T11:03:21.046623+00:00"
+          "observed_at": "2026-10-08T11:48:43.976687+00:00"
         }
       },
       "admission_state": "admitted",
@@ -9975,25 +10032,52 @@
       "selected_source_ids": [
         "e18fc8ba-3112-4e50-b439-884bccb79a82"
       ],
-      "last_error": {
-        "type": "RuntimeError",
-        "message": "Bound source ID unavailable",
-        "at": "2026-10-08T11:28:41.090462+00:00",
-        "stage": "source",
-        "evidence": {
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-zh-CN-20261008T112841098663Z-error.png",
-            "sha256": "04147188e364dcd29470be7c95992a7cd0e88e55c8397ecdb59f15183f905b8e"
+      "error_history": [
+        {
+          "type": "RuntimeError",
+          "message": "Bound source ID unavailable",
+          "at": "2026-10-08T11:28:41.090462+00:00",
+          "stage": "source",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-zh-CN-20261008T112841098663Z-error.png",
+              "sha256": "04147188e364dcd29470be7c95992a7cd0e88e55c8397ecdb59f15183f905b8e"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-zh-CN-20261008T112841098663Z-controls.json",
+              "sha256": "9b27902e9fa3d52635ce0e24a20025c983fbc4ed60e784285bc9fa655b0d2598"
+            }
           },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-zh-CN-20261008T112841098663Z-controls.json",
-            "sha256": "9b27902e9fa3d52635ce0e24a20025c983fbc4ed60e784285bc9fa655b0d2598"
-          }
+          "retry_not_before": "2026-10-08T11:43:41.232287+00:00",
+          "next_safe_step": "After retry_not_before, wait for loaded notebook chrome and all visible Loading Notebook labels to disappear in this same saved permanent notebook; reverify account and exact URL, then reconcile the retained source/artifact IDs. Do not re-upload the source or repeat Generate from an empty loading shell.",
+          "observed_condition": "visible_Loading_Notebook_shell; source absence not established"
         },
-        "retry_not_before": "2026-10-08T11:43:41.232287+00:00",
-        "next_safe_step": "After retry_not_before, wait for loaded notebook chrome and all visible Loading Notebook labels to disappear in this same saved permanent notebook; reverify account and exact URL, then reconcile the retained source/artifact IDs. Do not re-upload the source or repeat Generate from an empty loading shell.",
-        "observed_condition": "visible_Loading_Notebook_shell; source absence not established"
-      }
+        {
+          "at": "2026-10-08T11:54:12.953780+00:00",
+          "reason": "resolved_after_loaded_notebook_identity_reconciliation",
+          "error": {
+            "type": "RuntimeError",
+            "message": "Bound source ID unavailable",
+            "at": "2026-10-08T11:28:41.090462+00:00",
+            "stage": "source",
+            "evidence": {
+              "screenshot": {
+                "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-zh-CN-20261008T112841098663Z-error.png",
+                "sha256": "04147188e364dcd29470be7c95992a7cd0e88e55c8397ecdb59f15183f905b8e"
+              },
+              "controls": {
+                "path": "temp/notebooklm-source-queue/complex-arbitrage-vine-copulas-zh-CN-20261008T112841098663Z-controls.json",
+                "sha256": "9b27902e9fa3d52635ce0e24a20025c983fbc4ed60e784285bc9fa655b0d2598"
+              }
+            },
+            "retry_not_before": "2026-10-08T11:43:41.232287+00:00",
+            "next_safe_step": "After retry_not_before, wait for loaded notebook chrome and all visible Loading Notebook labels to disappear in this same saved permanent notebook; reverify account and exact URL, then reconcile the retained source/artifact IDs. Do not re-upload the source or repeat Generate from an empty loading shell.",
+            "observed_condition": "visible_Loading_Notebook_shell; source absence not established"
+          },
+          "retained_notebook": "https://notebook.google.com/notebook/23cf09e5-ed8f-4040-8f30-b6a6b9c6106b",
+          "retained_source_id": "e18fc8ba-3112-4e50-b439-884bccb79a82"
+        }
+      ]
     },
     "complex-arbitrage-vine-copulas:zh-TW": {
       "slug": "complex-arbitrage-vine-copulas",
@@ -10005,7 +10089,38 @@
         "slides_prompt": "8127678127cd44d6895a4d7d7d3b93646c882231c580e2dcc6a72911a36ddce9",
         "audio_prompt": "a74b865e5b647dd58d6793f10c54332b9eaf32c048ca3b1aee3d7d57894ac9de"
       },
-      "artifacts": {},
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "8127678127cd44d6895a4d7d7d3b93646c882231c580e2dcc6a72911a36ddce9",
+          "requested_at": "2026-10-08T11:48:56.968470+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "d6e9d932-ba56-4c9b-80ff-d80b42205a46",
+          "submission_mode": "now",
+          "artifact_id": "63b71f18-f60b-4ce8-865d-a67b72dfcd7c",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T11:49:01.530924+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "63b71f18-f60b-4ce8-865d-a67b72dfcd7c"
+          ],
+          "prompt_sha256": "a74b865e5b647dd58d6793f10c54332b9eaf32c048ca3b1aee3d7d57894ac9de",
+          "requested_at": "2026-10-08T11:49:12.355651+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "d6e9d932-ba56-4c9b-80ff-d80b42205a46",
+          "submission_mode": "now",
+          "artifact_id": "700d3016-83ec-4aaf-84ff-bf8ed8ef801c",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-08T11:49:16.918795+00:00"
+        }
+      },
       "admission_state": "admitted",
       "admitted_at": "2026-10-08T11:03:21.077684+00:00",
       "notebook_intent_history": [
@@ -10061,12 +10176,20 @@
         "at": "2026-10-08T11:29:09.799012+00:00",
         "sha256": "21e4c4339866d8546b1b18648a1a8b6a465fe2dc963d600ffd3107003207cf4a",
         "baseline_ids": [],
-        "dispatch_state": "dispatch_unknown"
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-08T11:48:50.700705+00:00"
       },
       "temporary_source_ids": [
         "pending_upload_doc_id_AF8CF8ED-1DB7-4F2E-8FBA-712DAF6DC7DB"
       ],
-      "state": "source_processing"
+      "state": "source_ready",
+      "source_id": "d6e9d932-ba56-4c9b-80ff-d80b42205a46",
+      "source_title": "MM article complex-arbitrage-vine-copulas ZH-TW 3e062c83f0a0",
+      "source_sha256": "21e4c4339866d8546b1b18648a1a8b6a465fe2dc963d600ffd3107003207cf4a",
+      "source_display_name": "MM article complex-arbitrage-vine-copulas ZH-TW 3…",
+      "selected_source_ids": [
+        "d6e9d932-ba56-4c9b-80ff-d80b42205a46"
+      ]
     },
     "complex-manifolds-algorithmic-trading:en": {
       "slug": "complex-manifolds-algorithmic-trading",
@@ -10080,7 +10203,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "b99586c2278778f82fe1cb14ae4291cd5a7884dfac27e91f5d94d81d09b90bda",
           "requested_at": "2026-10-08T11:29:42.156417+00:00",
@@ -10090,11 +10213,18 @@
           "source_id": "8579ba11-30b0-4580-b003-28dca9ae85bc",
           "submission_mode": "now",
           "artifact_id": "7a48144f-afb8-4066-be31-b40022d18732",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-08T11:29:46.726097+00:00"
+          "card_text": "tablet\nUnread\nFinancial Market Geometry\n1 source · 11m ago\nmore_vert",
+          "observed_at": "2026-10-08T11:49:25.149131+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/complex-manifolds-algorithmic-trading/en/slides.pdf",
+          "sha256": "44a0c1203885a14a657b1c5f8167a556f6cc78ac3a3852e150047a793fc66acc",
+          "bytes": 15847505,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T11:49:39.711873+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "7a48144f-afb8-4066-be31-b40022d18732"
           ],
@@ -10106,8 +10236,15 @@
           "source_id": "8579ba11-30b0-4580-b003-28dca9ae85bc",
           "submission_mode": "now",
           "artifact_id": "5a5628c6-3a20-4fea-adfd-27cf3b5fd7dc",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-08T11:29:58.107766+00:00"
+          "card_text": "audio_spark\nUnread\nPredicting Market Crashes with Complex Manifolds\n16:57 · Deep Dive · 1 source · 11m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-08T11:49:40.752022+00:00",
+          "duration_seconds": 1017.335873,
+          "path": "input/notebooklm-sources/complex-manifolds-algorithmic-trading/en/audio.m4a",
+          "sha256": "9f2c978a414a4bffd917accbd7f9274fe31f86f3dd988f0c2d8f8e0ce0e5fb0e",
+          "bytes": 32742602,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-08T11:50:07.498849+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -10150,7 +10287,38 @@
         "slides_prompt": "1836e580f78bc8a6755b2d3e88dc88df0eada0b1fc6e4111ba131493b7f87847",
         "audio_prompt": "41b4fde748a9b4b7819fe9c8ec1e7838a270b44bbeb02598c72e08dc1a304a88"
       },
-      "artifacts": {},
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "1836e580f78bc8a6755b2d3e88dc88df0eada0b1fc6e4111ba131493b7f87847",
+          "requested_at": "2026-10-08T11:50:21.914314+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "ae765cfb-fd8f-43f5-aeff-b57dcaf5f9f6",
+          "submission_mode": "now",
+          "artifact_id": "6c8a2887-d13f-4201-97db-e0766c0d5754",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T11:50:26.481916+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "6c8a2887-d13f-4201-97db-e0766c0d5754"
+          ],
+          "prompt_sha256": "41b4fde748a9b4b7819fe9c8ec1e7838a270b44bbeb02598c72e08dc1a304a88",
+          "requested_at": "2026-10-08T11:50:46.502801+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "ae765cfb-fd8f-43f5-aeff-b57dcaf5f9f6",
+          "submission_mode": "now",
+          "artifact_id": "78b62ae7-de29-43c3-862e-a846536ced49",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-08T11:50:52.593866+00:00"
+        }
+      },
       "admission_state": "admitted",
       "admitted_at": "2026-10-08T11:29:58.134507+00:00",
       "notebook_intent": {
@@ -10168,15 +10336,95 @@
         "at": "2026-10-08T11:30:17.365278+00:00",
         "sha256": "a5f7eeba80a6bb34a5397e9d44c1e01e70fe6df7d45040416c8e8ba1d2bb654a",
         "baseline_ids": [],
-        "dispatch_state": "dispatch_unknown"
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-08T11:50:14.664230+00:00"
       },
       "temporary_source_ids": [
         "pending_upload_doc_id_B4DC3369-D2B8-405C-94DB-81871793975D"
       ],
-      "state": "source_processing"
+      "state": "source_ready",
+      "source_id": "ae765cfb-fd8f-43f5-aeff-b57dcaf5f9f6",
+      "source_title": "MM article complex-manifolds-algorithmic-trading RU 455624b202c2",
+      "source_sha256": "a5f7eeba80a6bb34a5397e9d44c1e01e70fe6df7d45040416c8e8ba1d2bb654a",
+      "source_display_name": "MM article complex-manifolds-algorithmic-trading …",
+      "selected_source_ids": [
+        "ae765cfb-fd8f-43f5-aeff-b57dcaf5f9f6"
+      ]
+    },
+    "complex-manifolds-algorithmic-trading:zh-CN": {
+      "slug": "complex-manifolds-algorithmic-trading",
+      "language": "zh-CN",
+      "article_sha256": "94a5a482832d452e57967b3dcfe03f80157805fc23e9d32adc81fc4fca13e563",
+      "input_hashes": {
+        "article": "94a5a482832d452e57967b3dcfe03f80157805fc23e9d32adc81fc4fca13e563",
+        "source_text": "9af4b81bf505a0aeea5792ed6a40e58fd84795cc3076c643afb8f41bc9eec165",
+        "slides_prompt": "9e2d740596dfcb720de4d6429e72ac65f11aa42e8f04070513d7a67654cdafb8",
+        "audio_prompt": "a8284dafcdb3dbcb5b70695576556fba7f8fa61d058c5ff95c19d38f7400fc2e"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "9e2d740596dfcb720de4d6429e72ac65f11aa42e8f04070513d7a67654cdafb8",
+          "requested_at": "2026-10-08T11:51:34.471671+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "a97d286d-1cea-4db7-8bb0-324ed5566eb8",
+          "submission_mode": "now",
+          "artifact_id": "a5d323cf-33c4-47f7-be81-b554e5837b53",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T11:51:40.573540+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "a5d323cf-33c4-47f7-be81-b554e5837b53"
+          ],
+          "prompt_sha256": "a8284dafcdb3dbcb5b70695576556fba7f8fa61d058c5ff95c19d38f7400fc2e",
+          "requested_at": "2026-10-08T11:52:06.258814+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "a97d286d-1cea-4db7-8bb0-324ed5566eb8",
+          "submission_mode": "now",
+          "artifact_id": "d8884e66-2085-4158-a2b1-b8c0ad7f1e6b",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-08T11:52:24.625390+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-08T11:50:52.625627+00:00",
+      "notebook_intent": {
+        "at": "2026-10-08T11:50:59.057665+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/complex-manifolds-algorithmic-trading-zh-CN-20261008T115059054647Z-notebook-baseline.json",
+        "baseline_sha256": "d9c88817996890d5370d4486a787cfa3e0b378b26cc7e95064ea58869c4ece8a",
+        "baseline_count": 363,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-08T11:51:01.189398+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/d40273d9-9695-42fa-bf8c-295d4457c4d3",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-08T11:51:10.874959+00:00",
+        "sha256": "9af4b81bf505a0aeea5792ed6a40e58fd84795cc3076c643afb8f41bc9eec165",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-08T11:51:19.981216+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "a97d286d-1cea-4db7-8bb0-324ed5566eb8",
+      "source_title": "MM article complex-manifolds-algorithmic-trading ZH-CN 94a5a482832d",
+      "source_sha256": "9af4b81bf505a0aeea5792ed6a40e58fd84795cc3076c643afb8f41bc9eec165",
+      "state": "source_ready",
+      "source_display_name": "MM article complex-manifolds-algorithmic-trading …",
+      "selected_source_ids": [
+        "a97d286d-1cea-4db7-8bb0-324ed5566eb8"
+      ]
     }
   },
-  "checked_at": "2026-10-08T11:30:28.996687+00:00",
+  "checked_at": "2026-10-08T11:52:24.633163+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
