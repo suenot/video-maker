@@ -7956,35 +7956,30 @@
       },
       "artifacts": {
         "slides": {
-          "state": "failed",
-          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
-          "quota_reset_display": [
-            "You're almost at your AI usage limit. Limit resets at 12:51."
+          "state": "generating",
+          "replacement_intent": {
+            "prior_artifact_id": "dadc5968-19ce-45bc-ac6a-f046e9ba976f",
+            "chosen_at": "2026-10-08T01:15:41.678946+00:00",
+            "reason": "confirmed_failed_replacement",
+            "history_index": 0,
+            "fresh_identity_evidence": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-08T011218Z-identity-inspection.json",
+              "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
+            }
+          },
+          "baseline_ids": [
+            "d12f6dd0-befb-4c6d-895d-d364e34193e6"
           ],
-          "browser_timezone": "Asia/Tbilisi",
-          "baseline_ids": [],
           "prompt_sha256": "d81ea4331bad66749677057b98717f92db90c4a72c1828a93d05d8702ee85dce",
-          "requested_at": "2026-10-06T04:20:31.008007+00:00",
+          "requested_at": "2026-10-08T01:16:00.431501+00:00",
           "language_selection": [
             "русский"
           ],
           "source_id": "fa301b4d-bed8-4642-a9ab-879ae0718dca",
-          "submission_mode": "later",
-          "artifact_id": "dadc5968-19ce-45bc-ac6a-f046e9ba976f",
-          "card_text": "error\nSlide Deck generation failed. Try a new one.\nDelete",
-          "observed_at": "2026-10-07T11:03:50.573646+00:00",
-          "failure_evidence": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
-            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
-            "notebook": "https://notebook.google.com/notebook/a24278ed-ee4f-4382-aa34-3f0cc5bd264b",
-            "source_id": "fa301b4d-bed8-4642-a9ab-879ae0718dca",
-            "artifact_id": "dadc5968-19ce-45bc-ac6a-f046e9ba976f",
-            "rpc_id": "gArtLc",
-            "artifact_type": 8,
-            "server_status": 4,
-            "account_guard": "passed",
-            "observed_at": "2026-10-07T11:03:50.573646+00:00"
-          }
+          "submission_mode": "now",
+          "artifact_id": "bd07836b-e67b-4ca6-8589-90b9e56c848a",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T01:16:05.001723+00:00"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -8039,20 +8034,6 @@
       "selected_source_ids": [
         "fa301b4d-bed8-4642-a9ab-879ae0718dca"
       ],
-      "last_error": {
-        "type": "ConfirmedArtifactGenerationFailure",
-        "message": "Bound server artifacts failed generation; original identities and requests retained.",
-        "at": "2026-10-07T11:13:18.399694+00:00",
-        "stage": "artifacts",
-        "retry_not_before": "2026-10-07T11:28:18.399876+00:00",
-        "evidence": {
-          "identity_inspection": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
-            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2"
-          }
-        },
-        "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
-      },
       "error_history": [
         {
           "type": "RuntimeError",
@@ -8107,6 +8088,70 @@
             "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
             "screenshot_reviewed_at": "2026-10-07T10:34:06.968972+00:00"
           }
+        },
+        {
+          "type": "ConfirmedArtifactGenerationFailure",
+          "message": "Bound server artifacts failed generation; original identities and requests retained.",
+          "at": "2026-10-07T11:13:18.399694+00:00",
+          "stage": "artifacts",
+          "retry_not_before": "2026-10-07T11:28:18.399876+00:00",
+          "evidence": {
+            "identity_inspection": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+              "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2"
+            }
+          },
+          "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
+        }
+      ],
+      "artifact_history": [
+        {
+          "kind": "slides",
+          "artifact": {
+            "state": "failed",
+            "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+            "quota_reset_display": [
+              "You're almost at your AI usage limit. Limit resets at 12:51."
+            ],
+            "browser_timezone": "Asia/Tbilisi",
+            "baseline_ids": [],
+            "prompt_sha256": "d81ea4331bad66749677057b98717f92db90c4a72c1828a93d05d8702ee85dce",
+            "requested_at": "2026-10-06T04:20:31.008007+00:00",
+            "language_selection": [
+              "русский"
+            ],
+            "source_id": "fa301b4d-bed8-4642-a9ab-879ae0718dca",
+            "submission_mode": "later",
+            "artifact_id": "dadc5968-19ce-45bc-ac6a-f046e9ba976f",
+            "card_text": "error\nSlide Deck generation failed. Try a new one.\nDelete",
+            "observed_at": "2026-10-07T11:03:50.573646+00:00",
+            "failure_evidence": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+              "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
+              "notebook": "https://notebook.google.com/notebook/a24278ed-ee4f-4382-aa34-3f0cc5bd264b",
+              "source_id": "fa301b4d-bed8-4642-a9ab-879ae0718dca",
+              "artifact_id": "dadc5968-19ce-45bc-ac6a-f046e9ba976f",
+              "rpc_id": "gArtLc",
+              "artifact_type": 8,
+              "server_status": 4,
+              "account_guard": "passed",
+              "observed_at": "2026-10-07T11:03:50.573646+00:00"
+            }
+          },
+          "at": "2026-10-08T01:15:41.678946+00:00",
+          "reason": "confirmed_failed_replacement",
+          "notebook": "https://notebook.google.com/notebook/a24278ed-ee4f-4382-aa34-3f0cc5bd264b",
+          "source_id": "fa301b4d-bed8-4642-a9ab-879ae0718dca",
+          "input_hashes": {
+            "article": "eca381d097c5750197466df01606ec30026ecded0f4d1544de1bc33de7a570f3",
+            "source_text": "290d2726bec780135342c01dd79cb983782c35d5de90f5c5a621f1a77f192dae",
+            "slides_prompt": "d81ea4331bad66749677057b98717f92db90c4a72c1828a93d05d8702ee85dce",
+            "audio_prompt": "9c37271830e146921cccbe3fce6dd485b783d1b1f659827a9949763b339df184"
+          },
+          "fresh_identity_evidence": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-08T011218Z-identity-inspection.json",
+            "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
+          }
         }
       ]
     },
@@ -8122,64 +8167,54 @@
       },
       "artifacts": {
         "slides": {
-          "state": "failed",
-          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
-          "quota_reset_display": [],
-          "browser_timezone": "Asia/Tbilisi",
+          "state": "generating",
+          "replacement_intent": {
+            "prior_artifact_id": "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72",
+            "chosen_at": "2026-10-08T01:15:41.678946+00:00",
+            "reason": "confirmed_failed_replacement",
+            "history_index": 0,
+            "fresh_identity_evidence": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-08T011218Z-identity-inspection.json",
+              "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
+            }
+          },
           "baseline_ids": [],
           "prompt_sha256": "09f4c3119cf53d9fcc68523827962ce1f37d910c9eb84272f99e6cb6df534469",
-          "requested_at": "2026-10-06T09:05:34.239944+00:00",
+          "requested_at": "2026-10-08T01:16:18.339189+00:00",
           "language_selection": [
             "中文（简体）"
           ],
           "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
-          "submission_mode": "later",
-          "artifact_id": "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72",
-          "card_text": "error\nSlide Deck generation failed. Try a new one.\nDelete",
-          "observed_at": "2026-10-07T11:03:50.573646+00:00",
-          "failure_evidence": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
-            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
-            "notebook": "https://notebook.google.com/notebook/df53affe-b3b9-45f2-a7a9-f5ecb3616b0e",
-            "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
-            "artifact_id": "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72",
-            "rpc_id": "gArtLc",
-            "artifact_type": 8,
-            "server_status": 4,
-            "account_guard": "passed",
-            "observed_at": "2026-10-07T11:03:50.573646+00:00"
-          }
+          "submission_mode": "now",
+          "artifact_id": "6690237d-9fee-458f-8abb-cb2965f3ad5d",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T01:16:22.894035+00:00"
         },
         "audio": {
-          "state": "failed",
-          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Algorithm Comparison\n+ HFT Developer Perspective\n+ Practical Market Challenges\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
-          "quota_reset_display": [],
-          "browser_timezone": "Asia/Tbilisi",
+          "state": "generating",
+          "replacement_intent": {
+            "prior_artifact_id": "8d94d8f8-29f8-4300-8a11-42df39e16f03",
+            "chosen_at": "2026-10-08T01:15:41.678946+00:00",
+            "reason": "confirmed_failed_replacement",
+            "history_index": 1,
+            "fresh_identity_evidence": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-08T011218Z-identity-inspection.json",
+              "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
+            }
+          },
           "baseline_ids": [
-            "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72"
+            "6690237d-9fee-458f-8abb-cb2965f3ad5d"
           ],
           "prompt_sha256": "72e8e70b348e79fdbe211aa401a5ff815b1bbed3a1f3abc0e78bb70ff2c194d0",
-          "requested_at": "2026-10-06T09:05:51.971959+00:00",
+          "requested_at": "2026-10-08T01:16:35.581693+00:00",
           "language_selection": [
             "中文（简体）"
           ],
           "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
-          "submission_mode": "later",
-          "artifact_id": "8d94d8f8-29f8-4300-8a11-42df39e16f03",
-          "card_text": "error\nAudio Overview generation failed. Try a new one.\nDelete",
-          "observed_at": "2026-10-07T11:03:50.573646+00:00",
-          "failure_evidence": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
-            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
-            "notebook": "https://notebook.google.com/notebook/df53affe-b3b9-45f2-a7a9-f5ecb3616b0e",
-            "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
-            "artifact_id": "8d94d8f8-29f8-4300-8a11-42df39e16f03",
-            "rpc_id": "gArtLc",
-            "artifact_type": 1,
-            "server_status": 4,
-            "account_guard": "passed",
-            "observed_at": "2026-10-07T11:03:50.573646+00:00"
-          }
+          "submission_mode": "now",
+          "artifact_id": "4405943f-4c83-42a0-ab1e-7f23d17b1c47",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-08T01:16:40.162833+00:00"
         }
       },
       "admission_state": "admitted",
@@ -8211,20 +8246,6 @@
       "selected_source_ids": [
         "16db2874-c2a5-4aa3-8738-59bcb71f7723"
       ],
-      "last_error": {
-        "type": "ConfirmedArtifactGenerationFailure",
-        "message": "Bound server artifacts failed generation; original identities and requests retained.",
-        "at": "2026-10-07T11:13:18.400088+00:00",
-        "stage": "artifacts",
-        "retry_not_before": "2026-10-07T11:28:18.400091+00:00",
-        "evidence": {
-          "identity_inspection": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
-            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2"
-          }
-        },
-        "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
-      },
       "error_history": [
         {
           "type": "RuntimeError",
@@ -8281,6 +8302,116 @@
             "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
             "screenshot_reviewed_at": "2026-10-07T10:34:06.969665+00:00"
           }
+        },
+        {
+          "type": "ConfirmedArtifactGenerationFailure",
+          "message": "Bound server artifacts failed generation; original identities and requests retained.",
+          "at": "2026-10-07T11:13:18.400088+00:00",
+          "stage": "artifacts",
+          "retry_not_before": "2026-10-07T11:28:18.400091+00:00",
+          "evidence": {
+            "identity_inspection": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+              "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2"
+            }
+          },
+          "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
+        }
+      ],
+      "artifact_history": [
+        {
+          "kind": "slides",
+          "artifact": {
+            "state": "failed",
+            "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+            "quota_reset_display": [],
+            "browser_timezone": "Asia/Tbilisi",
+            "baseline_ids": [],
+            "prompt_sha256": "09f4c3119cf53d9fcc68523827962ce1f37d910c9eb84272f99e6cb6df534469",
+            "requested_at": "2026-10-06T09:05:34.239944+00:00",
+            "language_selection": [
+              "中文（简体）"
+            ],
+            "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
+            "submission_mode": "later",
+            "artifact_id": "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72",
+            "card_text": "error\nSlide Deck generation failed. Try a new one.\nDelete",
+            "observed_at": "2026-10-07T11:03:50.573646+00:00",
+            "failure_evidence": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+              "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
+              "notebook": "https://notebook.google.com/notebook/df53affe-b3b9-45f2-a7a9-f5ecb3616b0e",
+              "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
+              "artifact_id": "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72",
+              "rpc_id": "gArtLc",
+              "artifact_type": 8,
+              "server_status": 4,
+              "account_guard": "passed",
+              "observed_at": "2026-10-07T11:03:50.573646+00:00"
+            }
+          },
+          "at": "2026-10-08T01:15:41.678946+00:00",
+          "reason": "confirmed_failed_replacement",
+          "notebook": "https://notebook.google.com/notebook/df53affe-b3b9-45f2-a7a9-f5ecb3616b0e",
+          "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
+          "input_hashes": {
+            "article": "6debcf8844352f1427343888fd3895cd046f3974da40f2f3f78f789376ca9d69",
+            "source_text": "7d6879c550af74cbcac120f97021fe8b9c45d4a114a94e9bf762df89d21862c8",
+            "slides_prompt": "09f4c3119cf53d9fcc68523827962ce1f37d910c9eb84272f99e6cb6df534469",
+            "audio_prompt": "72e8e70b348e79fdbe211aa401a5ff815b1bbed3a1f3abc0e78bb70ff2c194d0"
+          },
+          "fresh_identity_evidence": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-08T011218Z-identity-inspection.json",
+            "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
+          }
+        },
+        {
+          "kind": "audio",
+          "artifact": {
+            "state": "failed",
+            "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Algorithm Comparison\n+ HFT Developer Perspective\n+ Practical Market Challenges\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+            "quota_reset_display": [],
+            "browser_timezone": "Asia/Tbilisi",
+            "baseline_ids": [
+              "ba5ad9c5-2076-42e9-8bed-ca81f6b97a72"
+            ],
+            "prompt_sha256": "72e8e70b348e79fdbe211aa401a5ff815b1bbed3a1f3abc0e78bb70ff2c194d0",
+            "requested_at": "2026-10-06T09:05:51.971959+00:00",
+            "language_selection": [
+              "中文（简体）"
+            ],
+            "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
+            "submission_mode": "later",
+            "artifact_id": "8d94d8f8-29f8-4300-8a11-42df39e16f03",
+            "card_text": "error\nAudio Overview generation failed. Try a new one.\nDelete",
+            "observed_at": "2026-10-07T11:03:50.573646+00:00",
+            "failure_evidence": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+              "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
+              "notebook": "https://notebook.google.com/notebook/df53affe-b3b9-45f2-a7a9-f5ecb3616b0e",
+              "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
+              "artifact_id": "8d94d8f8-29f8-4300-8a11-42df39e16f03",
+              "rpc_id": "gArtLc",
+              "artifact_type": 1,
+              "server_status": 4,
+              "account_guard": "passed",
+              "observed_at": "2026-10-07T11:03:50.573646+00:00"
+            }
+          },
+          "at": "2026-10-08T01:15:41.678946+00:00",
+          "reason": "confirmed_failed_replacement",
+          "notebook": "https://notebook.google.com/notebook/df53affe-b3b9-45f2-a7a9-f5ecb3616b0e",
+          "source_id": "16db2874-c2a5-4aa3-8738-59bcb71f7723",
+          "input_hashes": {
+            "article": "6debcf8844352f1427343888fd3895cd046f3974da40f2f3f78f789376ca9d69",
+            "source_text": "7d6879c550af74cbcac120f97021fe8b9c45d4a114a94e9bf762df89d21862c8",
+            "slides_prompt": "09f4c3119cf53d9fcc68523827962ce1f37d910c9eb84272f99e6cb6df534469",
+            "audio_prompt": "72e8e70b348e79fdbe211aa401a5ff815b1bbed3a1f3abc0e78bb70ff2c194d0"
+          },
+          "fresh_identity_evidence": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-08T011218Z-identity-inspection.json",
+            "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
+          }
         }
       ]
     },
@@ -8296,63 +8427,45 @@
       },
       "artifacts": {
         "slides": {
-          "state": "failed",
+          "state": "scheduled",
+          "replacement_intent": {
+            "prior_artifact_id": "9e57dc7e-28e2-4333-a612-64fa73b35a55",
+            "chosen_at": "2026-10-08T01:15:41.678946+00:00",
+            "reason": "confirmed_failed_replacement",
+            "history_index": 0,
+            "fresh_identity_evidence": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-08T011218Z-identity-inspection.json",
+              "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
+            }
+          },
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
-          "quota_reset_display": [],
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 09:51."
+          ],
           "browser_timezone": "Asia/Tbilisi",
           "baseline_ids": [],
           "prompt_sha256": "24edf7c181e36a6e2cea7f12110e684860c7e1065954e4f6b50853d98404f11f",
-          "requested_at": "2026-10-06T09:06:24.999367+00:00",
+          "requested_at": "2026-10-08T01:16:53.454625+00:00",
           "language_selection": [
             "中文（繁體）"
           ],
           "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
           "submission_mode": "later",
-          "artifact_id": "9e57dc7e-28e2-4333-a612-64fa73b35a55",
-          "card_text": "error\nSlide Deck generation failed. Try a new one.\nDelete",
-          "observed_at": "2026-10-07T11:03:50.573646+00:00",
-          "failure_evidence": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
-            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
-            "notebook": "https://notebook.google.com/notebook/8da668d0-f257-47b8-a955-ba28a744038b",
-            "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
-            "artifact_id": "9e57dc7e-28e2-4333-a612-64fa73b35a55",
-            "rpc_id": "gArtLc",
-            "artifact_type": 8,
-            "server_status": 4,
-            "account_guard": "passed",
-            "observed_at": "2026-10-07T11:03:50.573646+00:00"
-          }
+          "artifact_id": "3f066b07-bba2-4d60-b49b-73cfae26a88a",
+          "card_text": "tablet\n加密貨幣套利的圖演算法\nScheduled for after 10am\nmore_vert",
+          "observed_at": "2026-10-08T01:16:58.014594+00:00"
         },
         "audio": {
-          "state": "failed",
-          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Algorithm Evolution\n+ HFT Developer Perspective\n+ Practical Market Constraints\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
-          "quota_reset_display": [],
-          "browser_timezone": "Asia/Tbilisi",
-          "baseline_ids": [
-            "9e57dc7e-28e2-4333-a612-64fa73b35a55"
-          ],
-          "prompt_sha256": "3bb18eed085e4c07a40c92c394b0c7e067e4824311df2b4bef530266d792f253",
-          "requested_at": "2026-10-06T09:06:42.619602+00:00",
-          "language_selection": [
-            "中文（繁體）"
-          ],
-          "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
-          "submission_mode": "later",
-          "artifact_id": "4de25cf5-6b6c-4a87-b982-5576e5febca3",
-          "card_text": "error\nAudio Overview generation failed. Try a new one.\nDelete",
-          "observed_at": "2026-10-07T11:03:50.573646+00:00",
-          "failure_evidence": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
-            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
-            "notebook": "https://notebook.google.com/notebook/8da668d0-f257-47b8-a955-ba28a744038b",
-            "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
-            "artifact_id": "4de25cf5-6b6c-4a87-b982-5576e5febca3",
-            "rpc_id": "gArtLc",
-            "artifact_type": 1,
-            "server_status": 4,
-            "account_guard": "passed",
-            "observed_at": "2026-10-07T11:03:50.573646+00:00"
+          "state": "not_submitted",
+          "replacement_intent": {
+            "prior_artifact_id": "4de25cf5-6b6c-4a87-b982-5576e5febca3",
+            "chosen_at": "2026-10-08T01:15:41.678946+00:00",
+            "reason": "confirmed_failed_replacement",
+            "history_index": 1,
+            "fresh_identity_evidence": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-08T011218Z-identity-inspection.json",
+              "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
+            }
           }
         }
       },
@@ -8385,20 +8498,6 @@
       "selected_source_ids": [
         "e3b70682-500f-441d-a88b-9eb5aaa41e1f"
       ],
-      "last_error": {
-        "type": "ConfirmedArtifactGenerationFailure",
-        "message": "Bound server artifacts failed generation; original identities and requests retained.",
-        "at": "2026-10-07T11:13:18.400209+00:00",
-        "stage": "artifacts",
-        "retry_not_before": "2026-10-07T11:28:18.400211+00:00",
-        "evidence": {
-          "identity_inspection": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
-            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2"
-          }
-        },
-        "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
-      },
       "error_history": [
         {
           "type": "RuntimeError",
@@ -8455,6 +8554,116 @@
             "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
             "screenshot_reviewed_at": "2026-10-07T10:34:06.970107+00:00"
           }
+        },
+        {
+          "type": "ConfirmedArtifactGenerationFailure",
+          "message": "Bound server artifacts failed generation; original identities and requests retained.",
+          "at": "2026-10-07T11:13:18.400209+00:00",
+          "stage": "artifacts",
+          "retry_not_before": "2026-10-07T11:28:18.400211+00:00",
+          "evidence": {
+            "identity_inspection": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+              "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2"
+            }
+          },
+          "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
+        }
+      ],
+      "artifact_history": [
+        {
+          "kind": "slides",
+          "artifact": {
+            "state": "failed",
+            "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+            "quota_reset_display": [],
+            "browser_timezone": "Asia/Tbilisi",
+            "baseline_ids": [],
+            "prompt_sha256": "24edf7c181e36a6e2cea7f12110e684860c7e1065954e4f6b50853d98404f11f",
+            "requested_at": "2026-10-06T09:06:24.999367+00:00",
+            "language_selection": [
+              "中文（繁體）"
+            ],
+            "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
+            "submission_mode": "later",
+            "artifact_id": "9e57dc7e-28e2-4333-a612-64fa73b35a55",
+            "card_text": "error\nSlide Deck generation failed. Try a new one.\nDelete",
+            "observed_at": "2026-10-07T11:03:50.573646+00:00",
+            "failure_evidence": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+              "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
+              "notebook": "https://notebook.google.com/notebook/8da668d0-f257-47b8-a955-ba28a744038b",
+              "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
+              "artifact_id": "9e57dc7e-28e2-4333-a612-64fa73b35a55",
+              "rpc_id": "gArtLc",
+              "artifact_type": 8,
+              "server_status": 4,
+              "account_guard": "passed",
+              "observed_at": "2026-10-07T11:03:50.573646+00:00"
+            }
+          },
+          "at": "2026-10-08T01:15:41.678946+00:00",
+          "reason": "confirmed_failed_replacement",
+          "notebook": "https://notebook.google.com/notebook/8da668d0-f257-47b8-a955-ba28a744038b",
+          "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
+          "input_hashes": {
+            "article": "61041d7bcd7c8de17321c96f547216516b8ebc5e4d87e5bb78e9ced80401f49e",
+            "source_text": "4d2b78124294119d5a22dba71a1cf4aa235e98207c2fdae80d06602c133cffec",
+            "slides_prompt": "24edf7c181e36a6e2cea7f12110e684860c7e1065954e4f6b50853d98404f11f",
+            "audio_prompt": "3bb18eed085e4c07a40c92c394b0c7e067e4824311df2b4bef530266d792f253"
+          },
+          "fresh_identity_evidence": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-08T011218Z-identity-inspection.json",
+            "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
+          }
+        },
+        {
+          "kind": "audio",
+          "artifact": {
+            "state": "failed",
+            "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（繁體）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Algorithm Evolution\n+ HFT Developer Perspective\n+ Practical Market Constraints\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+            "quota_reset_display": [],
+            "browser_timezone": "Asia/Tbilisi",
+            "baseline_ids": [
+              "9e57dc7e-28e2-4333-a612-64fa73b35a55"
+            ],
+            "prompt_sha256": "3bb18eed085e4c07a40c92c394b0c7e067e4824311df2b4bef530266d792f253",
+            "requested_at": "2026-10-06T09:06:42.619602+00:00",
+            "language_selection": [
+              "中文（繁體）"
+            ],
+            "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
+            "submission_mode": "later",
+            "artifact_id": "4de25cf5-6b6c-4a87-b982-5576e5febca3",
+            "card_text": "error\nAudio Overview generation failed. Try a new one.\nDelete",
+            "observed_at": "2026-10-07T11:03:50.573646+00:00",
+            "failure_evidence": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+              "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
+              "notebook": "https://notebook.google.com/notebook/8da668d0-f257-47b8-a955-ba28a744038b",
+              "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
+              "artifact_id": "4de25cf5-6b6c-4a87-b982-5576e5febca3",
+              "rpc_id": "gArtLc",
+              "artifact_type": 1,
+              "server_status": 4,
+              "account_guard": "passed",
+              "observed_at": "2026-10-07T11:03:50.573646+00:00"
+            }
+          },
+          "at": "2026-10-08T01:15:41.678946+00:00",
+          "reason": "confirmed_failed_replacement",
+          "notebook": "https://notebook.google.com/notebook/8da668d0-f257-47b8-a955-ba28a744038b",
+          "source_id": "e3b70682-500f-441d-a88b-9eb5aaa41e1f",
+          "input_hashes": {
+            "article": "61041d7bcd7c8de17321c96f547216516b8ebc5e4d87e5bb78e9ced80401f49e",
+            "source_text": "4d2b78124294119d5a22dba71a1cf4aa235e98207c2fdae80d06602c133cffec",
+            "slides_prompt": "24edf7c181e36a6e2cea7f12110e684860c7e1065954e4f6b50853d98404f11f",
+            "audio_prompt": "3bb18eed085e4c07a40c92c394b0c7e067e4824311df2b4bef530266d792f253"
+          },
+          "fresh_identity_evidence": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-08T011218Z-identity-inspection.json",
+            "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
+          }
         }
       ]
     },
@@ -8470,32 +8679,16 @@
       },
       "artifacts": {
         "slides": {
-          "state": "failed",
-          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nEnglish\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
-          "quota_reset_display": [],
-          "browser_timezone": "Asia/Tbilisi",
-          "baseline_ids": [],
-          "prompt_sha256": "1bcb9835ac6e787f2602719bb46d2ab9087a9a2f2370f3e7b15ca1c35b5378e8",
-          "requested_at": "2026-10-06T09:19:25.669995+00:00",
-          "language_selection": [
-            "English"
-          ],
-          "source_id": "9edb96af-63b1-4a63-93bd-2116f41cf1eb",
-          "submission_mode": "later",
-          "artifact_id": "53e7b066-bdb7-4a51-a103-42c01cd9f95a",
-          "card_text": "error\nSlide Deck generation failed. Try a new one.\nDelete",
-          "observed_at": "2026-10-07T11:03:50.573646+00:00",
-          "failure_evidence": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
-            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
-            "notebook": "https://notebook.google.com/notebook/324f9135-0a3f-4115-a9d2-18fd18fff936",
-            "source_id": "9edb96af-63b1-4a63-93bd-2116f41cf1eb",
-            "artifact_id": "53e7b066-bdb7-4a51-a103-42c01cd9f95a",
-            "rpc_id": "gArtLc",
-            "artifact_type": 8,
-            "server_status": 4,
-            "account_guard": "passed",
-            "observed_at": "2026-10-07T11:03:50.573646+00:00"
+          "state": "not_submitted",
+          "replacement_intent": {
+            "prior_artifact_id": "53e7b066-bdb7-4a51-a103-42c01cd9f95a",
+            "chosen_at": "2026-10-08T01:15:41.678946+00:00",
+            "reason": "confirmed_failed_replacement",
+            "history_index": 0,
+            "fresh_identity_evidence": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-08T011218Z-identity-inspection.json",
+              "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
+            }
           }
         },
         "audio": {
@@ -8673,22 +8866,70 @@
             "failed_card_identity": "not reconciled to retained artifact IDs; the current card extractor requires artifact-labels IDs",
             "screenshot_reviewed_at": "2026-10-07T10:34:06.970538+00:00"
           }
+        },
+        {
+          "type": "ConfirmedArtifactGenerationFailure",
+          "message": "Bound server artifacts failed generation; original identities and requests retained.",
+          "at": "2026-10-07T11:13:18.400288+00:00",
+          "stage": "artifacts",
+          "retry_not_before": "2026-10-07T11:28:18.400291+00:00",
+          "evidence": {
+            "identity_inspection": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+              "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2"
+            }
+          },
+          "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
         }
       ],
-      "last_error": {
-        "type": "ConfirmedArtifactGenerationFailure",
-        "message": "Bound server artifacts failed generation; original identities and requests retained.",
-        "at": "2026-10-07T11:13:18.400288+00:00",
-        "stage": "artifacts",
-        "retry_not_before": "2026-10-07T11:28:18.400291+00:00",
-        "evidence": {
-          "identity_inspection": {
-            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
-            "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2"
+      "artifact_history": [
+        {
+          "kind": "slides",
+          "artifact": {
+            "state": "failed",
+            "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\nEnglish\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+            "quota_reset_display": [],
+            "browser_timezone": "Asia/Tbilisi",
+            "baseline_ids": [],
+            "prompt_sha256": "1bcb9835ac6e787f2602719bb46d2ab9087a9a2f2370f3e7b15ca1c35b5378e8",
+            "requested_at": "2026-10-06T09:19:25.669995+00:00",
+            "language_selection": [
+              "English"
+            ],
+            "source_id": "9edb96af-63b1-4a63-93bd-2116f41cf1eb",
+            "submission_mode": "later",
+            "artifact_id": "53e7b066-bdb7-4a51-a103-42c01cd9f95a",
+            "card_text": "error\nSlide Deck generation failed. Try a new one.\nDelete",
+            "observed_at": "2026-10-07T11:03:50.573646+00:00",
+            "failure_evidence": {
+              "path": "temp/notebooklm-source-queue/heartbeat-2026-10-07T105915Z-identity-inspection.json",
+              "sha256": "4c6148d927550e38bdd9185144ba04a94608a0cd32085c7173c5e9992e8efca2",
+              "notebook": "https://notebook.google.com/notebook/324f9135-0a3f-4115-a9d2-18fd18fff936",
+              "source_id": "9edb96af-63b1-4a63-93bd-2116f41cf1eb",
+              "artifact_id": "53e7b066-bdb7-4a51-a103-42c01cd9f95a",
+              "rpc_id": "gArtLc",
+              "artifact_type": 8,
+              "server_status": 4,
+              "account_guard": "passed",
+              "observed_at": "2026-10-07T11:03:50.573646+00:00"
+            }
+          },
+          "at": "2026-10-08T01:15:41.678946+00:00",
+          "reason": "confirmed_failed_replacement",
+          "notebook": "https://notebook.google.com/notebook/324f9135-0a3f-4115-a9d2-18fd18fff936",
+          "source_id": "9edb96af-63b1-4a63-93bd-2116f41cf1eb",
+          "input_hashes": {
+            "article": "b1190dc128525848a969ef42818e600f6a08bf838bde4e4ea7b5ff1d00742bb7",
+            "source_text": "d9b39e6387061612d0b59cdcfa93f718d361ef5aa0fcd4c7c62692cb693bb3dc",
+            "slides_prompt": "1bcb9835ac6e787f2602719bb46d2ab9087a9a2f2370f3e7b15ca1c35b5378e8",
+            "audio_prompt": "dafc4d21c8f1a86caa2af83069676101bef0a78a4aedb7596975e6888bbad8b7"
+          },
+          "fresh_identity_evidence": {
+            "path": "temp/notebooklm-source-queue/heartbeat-2026-10-08T011218Z-identity-inspection.json",
+            "sha256": "d7065367d0d400fc20cf149c9b121daa174374caaa0f272a2c2d074a601dfad6"
           }
-        },
-        "next_safe_step": "Choose a deliberate replacement for each exact confirmed failed artifact after backoff, preserving its full request in artifact history; do not repeat scheduled or unknown Generate actions. Independent jobs may proceed."
-      }
+        }
+      ]
     },
     "complex-arbitrage-ml-approaches:ru": {
       "slug": "complex-arbitrage-ml-approaches",
@@ -9232,7 +9473,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-08T01:02:13.013426+00:00",
+  "checked_at": "2026-10-08T01:16:58.042762+00:00",
   "browser_geometry_requested": {
     "width": 1995,
     "height": 1290,
@@ -9249,10 +9490,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're getting close to your AI usage limit. Limit resets at 04:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 09:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-07T20:13:54.923090+00:00",
-    "not_before": "2026-10-08T00:51:00+00:00"
+    "observed_at": "2026-10-08T01:16:58.042753+00:00",
+    "not_before": "2026-10-08T05:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,

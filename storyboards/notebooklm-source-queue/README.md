@@ -147,6 +147,16 @@ card retains `failure_evidence` and its original request. Keep this verified
 failure out of active capacity; preserve the full old artifact/request in
 history before choosing any deliberate replacement. Its state alone never
 authorizes another Generate click.
+A deliberate replacement requires fresh failure evidence tied to the exact
+artifact type/ID, expected account, permanent notebook/source IDs and unchanged
+frozen hashes. Store the full old artifact/request in the job's
+`artifact_history`, with `reason: confirmed_failed_replacement` and the hashed
+identity evidence; archive the previous error unchanged. The new stage starts
+as `not_submitted` with a `replacement_intent` pointing to that history entry.
+Only the chosen failed stage may receive a new Generate request, after normal
+source/language checks and within the active cap. A quota or full cap leaves
+this replacement unsent; generating, scheduled and uncertain requests retain
+their current identities.
 If every prepared brief is complete or deferred until a future retry deadline,
 verify downloaded originals locally and return before reading profile settings
 or opening Camoufox. A new brief, unfinished artifact or expired retry deadline
