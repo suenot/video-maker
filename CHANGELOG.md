@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Save the Russian/Mainland Simplified Vine-copula slide originals with passing integrity and all 203 original hashes verified. Preserve the ready Russian audio after a download timeout and the Taiwan notebook attempt before dispatch with diagnostics and finite retries; retain both existing scheduled artifacts without another Generate request.
 - Complete the English ML-arbitrage, Taiwan Traditional matrix/tensor and English Vine-copula PDF/audio pairs, and save Taiwan graph audio, with 201 verified originals and 100 complete locale pairs. Bind separate Russian/Mainland Simplified Vine-copula requests to full frozen articles and verified languages, preserving all previous identities and failed-request histories; retain the five active artifacts and NotebookLM's displayed 14:51 Tbilisi reset on 2026-10-08 before local-only waiting.
 - Complete the Russian/Mainland Simplified graph-algorithm and matrix/tensor PDF/audio pairs with 195 verified originals; bind the two remaining confirmed-failure replacements for Taiwan graph audio and English ML slides, preserving every full failed-request history and the existing Taiwan scheduled deck. Admit separate Taiwan Traditional matrix and English Vine-copula pairs from the full frozen articles with verified languages, staying within eight active artifacts.
 - Reconfirm six graph/English ML failures against fresh exact artifact-list responses and immutable sources; preserve every full failed request in artifact history before binding four deliberate replacements, including explicit Simplified/Traditional variants. Retain the two unsent replacements, four prior matrix requests and all 188 verified originals, with eight active artifacts and NotebookLM's displayed 09:51 Tbilisi reset on 2026-10-08 before local-only waiting.
@@ -92,6 +93,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bind NotebookLM production to the designated Gaia Camoufox account and record account verification before source generation.
 - Preserve the rejected bilingual order-types Blueprint package for provenance; record the user's quality rejection and the recovered existing NotebookLM PDF/audio flow before further production.
 - Record the continuous NotebookLM article-video queue and the same-chat progress/recovery policy, including Camoufox-only operation and duplicate checks.
+
+## [1.2.11] - 2026-10-08
+
+### Fixed
+
+- Wait for notebook-home loading to finish and its unique creation control to be visible/enabled, then reverify the account before recording notebook IDs. Give each fresh baseline its own file and preserve the invalid loading-page baseline from the undispatched Taiwan Vine-copula attempt in history so its next attempt can take a verified baseline without repeating a creation action or overwriting evidence.
 
 ## [1.2.10] - 2026-10-07
 

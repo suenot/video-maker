@@ -286,6 +286,12 @@ class Runner:
         await page.wait_for_timeout(4000)
         await self.account(page)
         await dismiss_rebrand_dialog(page)
+        await page.get_by_text("Loading your Notebooks...", exact=True).wait_for(state="hidden", timeout=60000)
+        create = page.get_by_role("button", name="New notebook", exact=True)
+        await create.wait_for(state="visible", timeout=60000)
+        if await create.count() != 1 or not await create.is_enabled():
+            raise RuntimeError("Notebook home is not ready for a reliable ID baseline")
+        await self.account(page)
         return await page.locator("project-button").evaluate_all('els=>els.map(e=>({title:e.querySelector(".project-button-title")?.textContent.trim(),href:e.querySelector("a[href*=\\"/notebook/\\"]")?.getAttribute("href")})).filter(e=>e.href)')
 
     async def notebook(self, page, brief, job):
@@ -318,7 +324,7 @@ class Runner:
                 raise RuntimeError("Interrupted notebook creation requires binding its saved candidate; no duplicate creation")
             intent["pre_click_recovery_verified_at"] = now()
         else:
-            baseline_path = RUNTIME / (brief["slug"] + "-" + brief["language"] + "-notebook-baseline.json")
+            baseline_path = RUNTIME / (brief["slug"] + "-" + brief["language"] + "-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ") + "-notebook-baseline.json")
             save_json(baseline_path, [n["href"] for n in notebooks])
             baseline_path.chmod(0o600)
             job["notebook_intent"] = {"at": now(), "baseline_path": str(baseline_path.relative_to(ROOT)), "baseline_sha256": sha(baseline_path), "baseline_count": len(notebooks), "dispatch_state": "not_dispatched"}

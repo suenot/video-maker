@@ -69,6 +69,14 @@ article priority within each group.
 NotebookLM server generation continues between local checks. Local scheduled
 checks require the Codex app and this Mac to be running.
 
+Before collecting home notebook IDs, wait for the loading message to disappear
+and the unique `New notebook` control to be visible and enabled, then reverify
+the expected account. A loading-page empty list is not a valid creation baseline.
+For a verified failure before dispatch from that invalid list, preserve the full
+intent, hash-matched baseline and diagnostic error in `notebook_intent_history`
+before taking a fresh baseline on a later pass. Each fresh baseline uses its own
+timestamped file so the archived baseline remains intact. Never discard a dispatched or
+uncertain creation intent this way.
 Notebook creation records its dispatch state before the single action. A saved
 failure before dispatch can resume only when the hash-matched notebook-ID
 baseline is unchanged; an uncertain dispatch or changed baseline still blocks
