@@ -10506,7 +10506,7 @@
           "submission_mode": "now",
           "artifact_id": "61dee409-8032-49a1-a48e-007c517c5265",
           "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-08T17:33:35.355474+00:00"
+          "observed_at": "2026-10-08T17:38:16.887420+00:00"
         },
         "audio": {
           "state": "generating",
@@ -10522,7 +10522,7 @@
           "submission_mode": "now",
           "artifact_id": "1cf2f0f8-d132-49dc-8d01-492c9785b801",
           "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-08T17:33:57.630366+00:00"
+          "observed_at": "2026-10-08T17:38:17.912789+00:00"
         }
       },
       "admission_state": "admitted",
@@ -10578,7 +10578,7 @@
           "submission_mode": "now",
           "artifact_id": "50c5576f-ff5b-4f57-93d5-f4ea21a9b2ce",
           "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-08T17:34:23.359249+00:00"
+          "observed_at": "2026-10-08T17:38:24.554404+00:00"
         },
         "audio": {
           "state": "generating",
@@ -10594,7 +10594,7 @@
           "submission_mode": "now",
           "artifact_id": "d5a04b87-11b9-4820-b9ce-e6371cebd121",
           "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-08T17:34:44.952632+00:00"
+          "observed_at": "2026-10-08T17:38:25.578862+00:00"
         }
       },
       "admission_state": "admitted",
@@ -10626,9 +10626,140 @@
       "selected_source_ids": [
         "29666e85-9187-47f7-8828-17b56824c48b"
       ]
+    },
+    "daily-stock-analysis-review:ru": {
+      "slug": "daily-stock-analysis-review",
+      "language": "ru",
+      "article_sha256": "63e9004d49946ee33eb156d52c2b411965672f1f6e8ec371911d1976b5553410",
+      "input_hashes": {
+        "article": "63e9004d49946ee33eb156d52c2b411965672f1f6e8ec371911d1976b5553410",
+        "source_text": "65699cf37450eb7768ed32b5a9e59b08dba39ecd7e05814b8eae42064bb77fa6",
+        "slides_prompt": "80de081bb2d5d4630cdeeadb3307c2889838f47cc94ba9ff0214df35bfe85719",
+        "audio_prompt": "9eecef8c81774dd2131591a8ffc5f93201d1d3dfd152feaf6953048298b3d0dd"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "80de081bb2d5d4630cdeeadb3307c2889838f47cc94ba9ff0214df35bfe85719",
+          "requested_at": "2026-10-08T17:38:49.684462+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "2c224516-ffe9-4d67-a5b6-8e72ce46bdcf",
+          "submission_mode": "now",
+          "artifact_id": "0cff107e-a3c5-457f-9778-da7b78aa3f48",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T17:38:54.258889+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "0cff107e-a3c5-457f-9778-da7b78aa3f48"
+          ],
+          "prompt_sha256": "9eecef8c81774dd2131591a8ffc5f93201d1d3dfd152feaf6953048298b3d0dd",
+          "requested_at": "2026-10-08T17:39:05.057316+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "2c224516-ffe9-4d67-a5b6-8e72ce46bdcf",
+          "submission_mode": "now",
+          "artifact_id": "25c492b1-45c4-436a-abdc-6e17eb545367",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-08T17:39:09.634113+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-08T17:38:25.604704+00:00",
+      "notebook_intent": {
+        "at": "2026-10-08T17:38:30.620301+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/daily-stock-analysis-review-ru-20261008T173830619401Z-notebook-baseline.json",
+        "baseline_sha256": "a87fa3ae885783ee5ae1f7c07d8a22f59d37b6dcea5981e7606477ffe95157fa",
+        "baseline_count": 366,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-08T17:38:31.753766+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/5304ace6-a811-4e4b-8733-c5497f9cab16",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-08T17:38:35.825826+00:00",
+        "sha256": "65699cf37450eb7768ed32b5a9e59b08dba39ecd7e05814b8eae42064bb77fa6",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-08T17:38:43.379256+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "2c224516-ffe9-4d67-a5b6-8e72ce46bdcf",
+      "source_title": "MM article daily-stock-analysis-review RU 63e9004d4994",
+      "source_sha256": "65699cf37450eb7768ed32b5a9e59b08dba39ecd7e05814b8eae42064bb77fa6",
+      "state": "source_ready",
+      "source_display_name": "MM article daily-stock-analysis-review RU 63e9004…",
+      "selected_source_ids": [
+        "2c224516-ffe9-4d67-a5b6-8e72ce46bdcf"
+      ]
+    },
+    "daily-stock-analysis-review:zh-CN": {
+      "slug": "daily-stock-analysis-review",
+      "language": "zh-CN",
+      "article_sha256": "50f88b6fbb507133e9db0b91e83840ad92a591238aaa313be946008a5e6a6698",
+      "input_hashes": {
+        "article": "50f88b6fbb507133e9db0b91e83840ad92a591238aaa313be946008a5e6a6698",
+        "source_text": "a61abe29dbd13521d0ae33418c502b5ec66d1a32fd739ce6392f30c5194db927",
+        "slides_prompt": "7e18702e812d9875e2d4df55583449118b17a9ca56df0a29e838a1f027ceb0a2",
+        "audio_prompt": "20e5a99cfa186e375ceefba1b91f665dd1ed4b943fb7ad5da226e9e469d3b7a8"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "7e18702e812d9875e2d4df55583449118b17a9ca56df0a29e838a1f027ceb0a2",
+          "requested_at": "2026-10-08T17:39:37.243469+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "cc7aff61-f5f2-47bb-96ad-751cfba500b8",
+          "submission_mode": "now",
+          "artifact_id": "0c28e2e4-e2ce-48be-8e2c-f313811319bc",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-08T17:39:41.809291+00:00"
+        },
+        "audio": {
+          "state": "not_submitted"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-08T17:39:09.664861+00:00",
+      "notebook_intent": {
+        "at": "2026-10-08T17:39:14.617921+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/daily-stock-analysis-review-zh-CN-20261008T173914617184Z-notebook-baseline.json",
+        "baseline_sha256": "d235578cbd3d120254627e2c08ed695c80fb2596ddbf22d8f5bcc2ae27561426",
+        "baseline_count": 367,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-08T17:39:15.750019+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/3814fd3f-1170-4900-91e2-fa5cba498968",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-08T17:39:19.808226+00:00",
+        "sha256": "a61abe29dbd13521d0ae33418c502b5ec66d1a32fd739ce6392f30c5194db927",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-08T17:39:27.312868+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "cc7aff61-f5f2-47bb-96ad-751cfba500b8",
+      "source_title": "MM article daily-stock-analysis-review ZH-CN 50f88b6fbb50",
+      "source_sha256": "a61abe29dbd13521d0ae33418c502b5ec66d1a32fd739ce6392f30c5194db927",
+      "state": "source_ready",
+      "source_display_name": "MM article daily-stock-analysis-review ZH-CN 50f8…",
+      "selected_source_ids": [
+        "cc7aff61-f5f2-47bb-96ad-751cfba500b8"
+      ]
     }
   },
-  "checked_at": "2026-10-08T17:34:44.960984+00:00",
+  "checked_at": "2026-10-08T17:39:41.819635+00:00",
   "browser_geometry_requested": {
     "width": 1997,
     "height": 1290,
