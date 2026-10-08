@@ -84,6 +84,12 @@ creation and retains candidates for reconciliation.
 The `/notebook/creating` route is temporary. Require a permanent notebook UUID
 before binding, navigation or source insertion; an unfinished creation retains
 its dispatch intent and must be reconciled against the saved notebook-ID baseline.
+After navigation to an existing or newly created permanent notebook, wait up to
+60 seconds for its visible `Share notebook` control and the disappearance of all
+visible `Loading Notebook...` labels, then reverify the exact notebook URL and
+expected account before inspecting source or artifact IDs. A loading shell's
+empty source list is not evidence that a bound source disappeared or that a new
+upload is safe. A timeout preserves the job's IDs and intents for its finite retry.
 
 Before a submission, save the source-ID and artifact-ID baselines. Source
 names may be shortened by NotebookLM: bind a uniquely added source ID and

@@ -301,7 +301,7 @@ class Runner:
             await page.bring_to_front()
             await self.nlm.goto_retry(page, job["notebook"])
             await page.wait_for_timeout(4000)
-            await self.account(page)
+            await self.notebook_ready(page, job["notebook"])
             return
         notebooks = await self.home(page)
         matches = [n for n in notebooks if n["title"] in (brief["notebook_title"], brief["source_title"])]
@@ -352,9 +352,27 @@ class Runner:
         self.save()
         await self.nlm.goto_retry(page, job["notebook"])
         await page.wait_for_timeout(2500)
-        await self.account(page)
+        await self.notebook_ready(page, job["notebook"])
         job.update(account_guard="passed", browser="saved_camoufox")
         self.save()
+
+    async def notebook_ready(self, page, notebook):
+        expected = permanent_notebook_url(notebook)
+        if not expected or permanent_notebook_url(page.url) != expected:
+            raise RuntimeError("Notebook navigation does not match its saved permanent ID")
+        await self.account(page)
+        # Loaded notebook chrome includes Share; the loading shell exposes neither
+        # its real sources nor artifacts, even though the account is visible.
+        await page.wait_for_function("""() => {
+            const visible = e => e.getClientRects().length > 0;
+            const shares = [...document.querySelectorAll('button[aria-label="Share notebook"]')].filter(visible);
+            const loading = [...document.querySelectorAll('body *')].some(e =>
+                visible(e) && e.textContent.trim() === 'Loading Notebook...');
+            return shares.length === 1 && !loading;
+        }""", timeout=60000)
+        if permanent_notebook_url(page.url) != expected:
+            raise RuntimeError("Notebook identity changed while its data was loading")
+        await self.account(page)
 
     async def source(self, page, brief, job):
         if job["input_hashes"] != self.input_hashes(brief):
