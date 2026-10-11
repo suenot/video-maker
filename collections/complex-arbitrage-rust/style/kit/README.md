@@ -49,6 +49,6 @@ It uses plain browser JS with no modules. Each file attaches to the global `CK` 
 - **Pure function of time.** Draw everything inside `render(t)` from `t` alone. No `Math.random`, `Date.now` or `performance.now`, and no state carried between frames (`K.lens` is written and read inside the same frame).
 - **Boil vs smooth.** Contours read `K.bf` (12 fps). Camera, positions and text read `t` directly.
 - **Appear parameter.** Every explainer takes `a` from 0 to 1 and pops with a back ease. Feed it `K.inv(at(bar, beat), at(bar, beat) + 0.4, t)` so pops land on the beat.
-- **Retime to music** by setting `K.G.BPM` / `K.G.OFFSET` before the timeline is built. Never hard-code seconds in a scene.
+- **Retime to music** by setting `K.G.BPM` and `K.G.BARS` (measured downbeats) before any `K.at` call. Never hard-code seconds in a scene.
 - **Localised text** belongs in DOM elements fed by HyperFrames variables. The canvas world holds tickers, numbers and icons only.
 - Long episodes: split the film into scene functions (`drawScene3(t)`), and select by time in `render`. Use diegetic transitions (iris, wave wipe) as in `intro/src/70_render.js`.

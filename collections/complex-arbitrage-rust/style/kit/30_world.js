@@ -196,7 +196,7 @@ var CK = window.CK || (window.CK = {});
 
   /* ---------------- SHIP (side view) ----------------
      local units: waterline y = 0, deck y = -60, hull 360 long, faces +x.
-     opt: dir (+1/-1), rock (deg), coins (pile count), sail (billow 0..1),
+     opt: dir (+1/-1), rock (deg), coins (pile count), sail (billow 0..1), emblem (callback(ctx, x, y) for the sail mark),
           crab (callback(ctx) drawing the crab at deck origin [-95, -60]) */
   K.SHIP = { deckY: -60, crabX: -95, pileX: 95, funnelX: -20, mastX: 40 };
   K.ship = function (ctx, x, y, s, opt) {
@@ -217,7 +217,7 @@ var CK = window.CK || (window.CK = {});
     const b = 26 * o.sail + 4 * Math.sin(K.now * 2.1);
     const sail = [[46, -312], [100, -308 - 2], [160, -300], [160 + b * 0.6, -220], [158 + b * 0.2, -136], [100, -132], [46, -136], [46 + b * 0.25, -224]];
     K.shape(ctx, sail, { fill: P.sail, w: 4.5, boil: 1.6, seed: S + 4, shade: { color: P.sailShade, dx: -16, dy: 0 } });
-    K.cog(ctx, 104 + b * 0.25, -222, 30, P.rust, S + 5);
+    if (o.emblem) o.emblem(ctx, 104 + b * 0.25, -222); else K.cog(ctx, 104 + b * 0.25, -222, 30, P.rust, S + 5);
     /* flag on top */
     const fl = []; for (let i = 0; i <= 5; i++) { const u = i / 5; fl.push([40 + u * 60, -330 + Math.sin(K.now * 7 + u * 4) * 6 * u]); }
     for (let i = 5; i >= 0; i--) { const u = i / 5; fl.push([40 + u * 60, -300 + Math.sin(K.now * 7 + u * 4 + 0.4) * 6 * u]); }

@@ -70,23 +70,40 @@ var CK = window.CK || (window.CK = {});
     return (t) => { const o = {}; names.forEach((k) => (o[k] = sp[k](t))); return o; };
   }
 
-  /* ---------- beat grid (retime to the real song by changing BPM/OFFSET) ---------- */
-  const G = { BPM: 120, OFFSET: 0, BEATS_PER_ACCENT: 4 };
+  /* ---------- beat grid (retime to the real song by changing BPM/OFFSET or BARS) ----------
+     BARS: optional list of measured downbeat times (seconds). Songs cut from
+     several takes drift a few ms per splice, so measured downbeats beat a
+     single OFFSET. Past the list, bars extrapolate at BPM. */
+  const G = { BPM: 120, OFFSET: 0, BEATS_PER_ACCENT: 4, BARS: null };
   const beatLen = () => 60 / G.BPM;
-  /* time of bar b (0-based, an "accent" = 4 beats = 2 s at 120 BPM) plus beat k */
-  const at = (bar, beat) => G.OFFSET + (bar * G.BEATS_PER_ACCENT + (beat || 0)) * beatLen();
+  const barLen = () => beatLen() * G.BEATS_PER_ACCENT;
+  function barStart(b) {
+    const B = G.BARS;
+    if (!B || !B.length) return G.OFFSET + b * barLen();
+    if (b < 0) return B[0] + b * barLen();
+    if (b < B.length) return B[b];
+    return B[B.length - 1] + (b - B.length + 1) * barLen();
+  }
+  /* time of bar b (0-based, an "accent" = 4 beats) plus beat k (fractional ok) */
+  const at = (bar, beat) => barStart(Math.floor(bar)) + ((bar - Math.floor(bar)) * G.BEATS_PER_ACCENT + (beat || 0)) * beatLen();
+  /* index of the bar containing t (-1 before the first downbeat) */
+  function barAt(t) {
+    if (t < barStart(0)) return -1;
+    let b = 0; while (barStart(b + 1) <= t) b++;
+    return b;
+  }
   /* 1 on the beat, decaying to 0 before the next beat (k = sharpness) */
   function pulse(t, everyBeats, k) {
-    const L = beatLen() * (everyBeats || 1), x = t - G.OFFSET;
-    if (x < 0) return 0;
+    const b = barAt(t); if (b < 0) return 0;
+    const L = beatLen() * (everyBeats || 1), x = t - barStart(b);
     return Math.exp(-(k || 7) * ((x % L) / L));
   }
-  const beatIndex = (t) => Math.floor((t - G.OFFSET) / beatLen());
+  const beatIndex = (t) => { const b = barAt(t); return b < 0 ? -1 : b * G.BEATS_PER_ACCENT + Math.floor((t - barStart(b)) / beatLen()); };
 
   /* ---------- line boil clock: drawings change 12 times per second ---------- */
   const BOIL_FPS = 12;
   const boilFrame = (t) => Math.floor(t * BOIL_FPS);
 
   Object.assign(K, { clamp, lerp, inv, ss, f1, f2, E, tw, mulberry, hash, hs, vnoise, fbm, mkSpline, mkTrack,
-    G, beatLen, at, pulse, beatIndex, BOIL_FPS, boilFrame, TAU: Math.PI * 2 });
+    G, beatLen, barLen, barStart, barAt, at, pulse, beatIndex, BOIL_FPS, boilFrame, TAU: Math.PI * 2 });
 })(CK);

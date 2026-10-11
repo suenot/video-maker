@@ -1,12 +1,42 @@
 /* ============================================================
    INTRO 10 SETUP: variables, title DOM, world data, timing (beat grid)
-   Song: sea shanty ~120 BPM. 1 bar = 4 beats = 2 s. 10 bars = 20 s.
-   All story times are written as K.at(bar, beat) so a retime to the real
-   song is K.G.BPM / K.G.OFFSET only.
+   Song: song_20s.m4a, sea shanty ~126 BPM (beat 0.476 s, bar 1.906 s).
+   0.00-4.43 instrumental; 4.43 chorus: "Heave ho, the cycle flows" /
+   8.2 "Graph and matrix, the Rust-crab knows" / 11.9 "Futures, spot and
+   copula sea" / 15.7 "Complex arbitrage, sail with me!"; 19.3-20.1 fade.
+   All story times are K.at(bar, beat) on the measured downbeats below.
    ============================================================ */
 const K = CK, P = K.P, at = K.at;
-const DUR = 20;
+K.G.BPM = 126;
+K.G.BARS = [0.60, 2.51, 4.43, 6.33, 8.24, 10.14, 12.05, 13.96, 15.86, 17.77, 19.68];
+const DUR = 20.1;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+
+/* ---------- story beats (on the song's downbeats) ---------- */
+const T = {
+  shipIn: [0, at(0, 3)],          /* 0 - 2.03 ship sails in (instrumental) */
+  spyUp: at(1, 0),                /* 2.51 crab raises the spyglass */
+  spot: at(1, 1.5),               /* 3.22 eyes pop: "!" */
+  iris: [at(1, 2), at(2, 0)],     /* 3.46 - 4.43 iris into the chart, lands on the chorus */
+  loopDraw: at(2, 0),             /* 4.43 "Heave ho, the cycle flows": the loop routes draw */
+  hot: at(2, 2),                  /* 5.38 loop glows */
+  others: at(2, 2.5),             /* the other routes draw, dimmed */
+  lap1: [at(2, 3), at(3, 3.5)],   /* 5.86 - 7.99, legs of 1.5 beats */
+  matrix: at(4, 0),               /* 8.24 "Graph and matrix": the rates fly into a matrix */
+  fly: at(4, 1),                  /* first tag leaves the map */
+  knows: at(5, 0.5),              /* 10.38 "the Rust-crab knows": crab points at the loop cells */
+  irisOut: [at(5, 3), at(6, 0)],  /* 11.57 - 12.05 iris closes on the ship */
+  twoShips: at(6, 0),             /* 12.05 "Futures, spot": a second ship alongside */
+  basis: at(6, 2),                /* 13.0 rope + basis tag between the ships */
+  swell: at(7, 0),                /* 13.96 "copula sea": both ships ride one swell */
+  wipe: [at(7, 2.4), at(8, 0)],   /* 15.10 - 15.86 wave wipe to the title set */
+  banner: [at(8, 0), at(8, 1.2)], /* 15.86 title hit: "Complex arbitrage, sail with me!" */
+  letters: at(8, 0.4),
+  jump: at(8, 2),
+  snap: [at(9, 0), at(9, 1)],
+  medals: at(9, 0),
+  hatTip: at(9, 2),
+};
 
 /* ---------- variables (title text, language) ---------- */
 const VARS = Object.assign({ title: "Complex Arbitrage|in Rust", lang: "en" },
@@ -41,42 +71,26 @@ const TITLE_LN = Array.from(titleEl.querySelectorAll(".ln"));
 
 /* ---------- chart-view world: currency islands (graph nodes) and routes (edges) ---------- */
 const NODES = {
-  USDT: { x: 300, y: 900, c: P.USDT, seed: 11, lighthouse: true, palms: 1, pop: at(2, 2) },
-  BTC: { x: 1350, y: 380, c: P.BTC, seed: 23, palms: 2, pop: at(1, 3) },
-  ETH: { x: 2300, y: 880, c: P.ETH, seed: 37, palms: 2, pop: at(2, 3) },
-  SOL: { x: 1480, y: 1440, c: P.SOL, seed: 41, palms: 1, pop: at(3, 0) },
-  EUR: { x: 520, y: 1620, c: P.EUR, seed: 53, palms: 2, pop: at(3, 1) },
+  USDT: { x: 300, y: 900, c: P.USDT, seed: 11, lighthouse: true, palms: 1, pop: at(1, 3) },
+  BTC: { x: 1350, y: 380, c: P.BTC, seed: 23, palms: 2, pop: at(1, 1.5) },
+  ETH: { x: 2300, y: 880, c: P.ETH, seed: 37, palms: 2, pop: at(1, 3.5) },
+  SOL: { x: 1480, y: 1440, c: P.SOL, seed: 41, palms: 1, pop: at(2, 1) },
+  EUR: { x: 520, y: 1620, c: P.EUR, seed: 53, palms: 2, pop: at(2, 1.5) },
 };
 const NODE_S = 0.9;
 /* rate on each route: price of the second asset in the first */
+const EB = (k) => T.loopDraw + k * K.beatLen() / 2;
 const EDGES = [
-  ["USDT", "BTC", "62 000", -70, at(3, 0)],
-  ["BTC", "ETH", "0.0525", -70, at(3, 0.5)],
-  ["ETH", "USDT", "3 270", -60, at(3, 1)],
-  ["USDT", "SOL", "148.2", 60, at(3, 1.5)],
-  ["SOL", "ETH", "0.0453", 60, at(3, 2)],
-  ["BTC", "SOL", "418.6", 50, at(3, 2.5), 0.72],
-  ["EUR", "USDT", "1.084", 40, at(3, 3)],
-  ["EUR", "SOL", "136.9", -40, at(3, 3.5)],
+  ["USDT", "BTC", "62 000", -70, EB(0)],
+  ["BTC", "ETH", "0.0525", -70, EB(1)],
+  ["ETH", "USDT", "3 270", -60, EB(2)],
+  ["USDT", "SOL", "148.2", 60, EB(5)],
+  ["SOL", "ETH", "0.0453", 60, EB(6)],
+  ["BTC", "SOL", "418.6", 50, EB(7), 0.72],
+  ["EUR", "USDT", "1.084", 40, EB(8)],
+  ["EUR", "SOL", "136.9", -40, EB(9)],
 ];
 const LOOP = [0, 1, 2]; /* indices of the profitable cycle in EDGES */
 /* the cargo: 1 USDT -> BTC -> ETH -> USDT */
-const HOLD = ["1.0000 USDT", "0.0000161 BTC", "0.000307 ETH", "1.0046 USDT", "0.0000162 BTC", "0.000310 ETH", "1.0092 USDT"];
+const HOLD = ["1.0000 USDT", "0.0000161 BTC", "0.000307 ETH", "1.0046 USDT"];
 
-/* ---------- story beats (seconds via the grid) ---------- */
-const T = {
-  shipIn: [0, at(0, 3.6)],
-  spyUp: at(1, 0),          /* 2.0 crab raises the spyglass */
-  spot: at(1, 2),           /* 3.0 eyes pop: "!" */
-  iris: [at(1, 3.2), at(2, 1.2)], /* 3.6 - 4.6 spyglass iris into the chart */
-  hot: at(4, 0),            /* 8.0 the triangle lights up */
-  lap1: [at(4, 1), at(5, 3)],     /* 8.5 - 11.5 */
-  lap2: [at(6, 0), at(6, 3.6)],   /* 12.0 - 13.8 */
-  wipe: [at(7, 1.4), at(7, 3.4)], /* 14.7 - 15.7 wave wipe to the title set */
-  banner: [at(7, 3.2), at(8, 0.8)],
-  letters: at(8, 0),
-  jump: at(8, 0),
-  snap: [at(8, 2), at(8, 3)],
-  medals: at(8, 2),
-  hatTip: at(9, 0),
-};

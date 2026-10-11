@@ -1,6 +1,6 @@
 # Intro review log
 
-The intro is 20.0 s, 1920x1080, 30 fps, silent. It runs on a beat grid at 120 BPM (1 bar = 2 s).
+The intro is 20.1 s, 1920x1080, 30 fps, with the song muxed in (`song_20s.m4a`, about 126 BPM). There is also a silent copy of each render.
 Each round comes from snapshots I looked at (`tools/snap.sh`, 12 to 17 frames, plus full-resolution crops).
 
 ## Round 1 (first build)
@@ -26,9 +26,18 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, 12 to 17 frames, p
 - zh-CN / zh-TW: "Rust" was set in Noto Sans. Rubik is now first in the stack, with CJK glyphs falling back to Noto Sans SC / TC 900.
 - `check`: canvas edge and title-overlap infos are intentional (full-bleed art, letters dropping mid-flight). The canvas is marked `data-layout-allow-overflow` and the title `data-layout-allow-overlap`. Lint has 0 errors; contrast passes 22/22.
 
+## Round 4 (retimed to the real song)
+- The beat grid now uses the measured downbeats (`K.G.BARS`), so every pop and transition lands on the song.
+- Each sung line got its own picture:
+  - 4.43 s, "cycle flows": the loop routes draw first, the loop glows on beat 3, and the ship sails one lap that pays +0.46 %.
+  - 8.24 s, "graph and matrix": every route's rate flies out of the map into a 5x5 rate matrix. At 10.38 s ("the Rust-crab knows") the crab pops up and the three loop cells glow.
+  - 12.05 s, "futures, spot and copula sea": an iris closes on our ship and opens on two ships, ours (spot, cog sail) and an hourglass ship (futures). A gold basis rope with "+0.8 %" joins them, and at 13.96 s one swell lifts both ships.
+  - 15.86 s, "sail with me!": the banner unrolls on the downbeat.
+- Bug: the first build was all blank, because `T` was used before its definition in `10_setup.js`. Moved; the console error now also prints on the canvas.
+- Matrix shot: the ETH island sat under the matrix board. The camera now goes to z 0.42, with the triangle in the left half.
+
 ## Known weaknesses
 - The crab's legs are simple 3-point limbs: readable, but less refined than the body and claws.
-- At 13 s the cargo plank shows "ETH" while the gain line still says "+0.46 %", because the gain updates only when the ship reaches USDT. This is correct but subtle.
+- In the matrix shot the map tags are about 19 px. They are context only; the matrix shows the same numbers at 26 px.
 - The title-card crab is about 220 px wide. It is charming, but secondary to the banner.
-- The timing follows a 120 BPM grid, not the real song yet. To retime, set `K.G.BPM` / `K.G.OFFSET` in `src/10_setup.js`.
-- Two lint warnings remain: the file is large (it is built from the kit, by design), and there is an audio file without an element (the song is muxed later, and another agent owns `song_*`).
+- One lint warning remains: the file is large, because it is built from the kit by design.
