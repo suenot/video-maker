@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[{"id":"title","type":"string","label":"Title (| = line break)","default":"Complex Arbitrage|in Rust"},{"id":"lang","type":"string","label":"Language: en, ru, zh-CN, zh-TW","default":"en"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Complex Arbitrage in Rust: intro</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+/*__FONTS__*/
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #1d6a86; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #1d6a86; }
+      #cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      #title { position: absolute; left: 0; top: 0; width: 1920px; height: 0; pointer-events: none; }
+      #title .ln { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap; line-height: 1; }
+      #title .ch { display: inline-block; will-change: transform, opacity; }
+      #title .l0 { font-family: "Rubik", "CJK SC", "CJK TC", sans-serif; font-weight: 900; color: #2b1d16; letter-spacing: -0.01em; }
+      #title .l1 { font-family: "Rubik", "CJK SC", "CJK TC", sans-serif; font-weight: 900; color: #e0632a; -webkit-text-stroke: 7px #2b1d16; paint-order: stroke fill; letter-spacing: 0.01em; }
+      #title.cjk-sc .ln { font-family: "Rubik", "CJK SC", sans-serif; }
+      #title.cjk-tc .ln { font-family: "Rubik", "CJK TC", sans-serif; }
+      #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
+      #preload .r5 { font-family: "Rubik"; font-weight: 500; }
+      #preload .r8 { font-family: "Rubik"; font-weight: 800; }
+      #preload .r9 { font-family: "Rubik"; font-weight: 900; }
+      #preload .m5 { font-family: "JetBrains Mono"; font-weight: 500; }
+      #preload .m7 { font-family: "JetBrains Mono"; font-weight: 700; }
+      #preload .sc { font-family: "CJK SC"; font-weight: 900; }
+      #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      #vig { background: radial-gradient(95% 85% at 50% 48%, rgba(0, 0, 0, 0) 62%, rgba(20, 10, 4, 0.42) 100%); }
+      #grain { opacity: 0.13; mix-blend-mode: multiply; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div id="title" data-layout-allow-overlap></div>
+      <div class="ov" id="vig"></div>
+      <div class="ov" id="grain"></div>
+      <div id="preload"><span class="r5">Aa Бб 0</span><span class="r8">Aa Бб 0</span><span class="r9">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span><span class="sc">复杂套利</span><span class="tc">複雜套利</span></div>
+    </div>
+    <script>
+(function () {
+/*__SCRIPT__*/
+})();
+    </script>
+  </body>
+</html>

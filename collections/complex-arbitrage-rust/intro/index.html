@@ -1,0 +1,1560 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[{"id":"title","type":"string","label":"Title (| = line break)","default":"Complex Arbitrage|in Rust"},{"id":"lang","type":"string","label":"Language: en, ru, zh-CN, zh-TW","default":"en"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Complex Arbitrage in Rust: intro</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Rubik"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Rubik-500-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Rubik"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Rubik-500-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Rubik"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Rubik-500-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Rubik"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Rubik-500-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Rubik"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Rubik-800-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Rubik"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Rubik-800-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Rubik"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Rubik-800-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Rubik"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Rubik-800-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Rubik"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/Rubik-900-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Rubik"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/Rubik-900-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Rubik"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/Rubik-900-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Rubik"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/Rubik-900-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "JetBrains Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/JetBrainsMono-500-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "JetBrains Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/JetBrainsMono-500-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "JetBrains Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/JetBrainsMono-500-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "JetBrains Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/JetBrainsMono-500-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "JetBrains Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/JetBrainsMono-700-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "JetBrains Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/JetBrainsMono-700-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "JetBrains Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/JetBrainsMono-700-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "JetBrains Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/JetBrainsMono-700-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "CJK SC"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/NotoSansSC-900-subset.woff2") format("woff2"); }
+@font-face { font-family: "CJK TC"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/NotoSansTC-900-subset.woff2") format("woff2"); }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #1d6a86; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #1d6a86; }
+      #cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      #title { position: absolute; left: 0; top: 0; width: 1920px; height: 0; pointer-events: none; }
+      #title .ln { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap; line-height: 1; }
+      #title .ch { display: inline-block; will-change: transform, opacity; }
+      #title .l0 { font-family: "Rubik", "CJK SC", "CJK TC", sans-serif; font-weight: 900; color: #2b1d16; letter-spacing: -0.01em; }
+      #title .l1 { font-family: "Rubik", "CJK SC", "CJK TC", sans-serif; font-weight: 900; color: #e0632a; -webkit-text-stroke: 7px #2b1d16; paint-order: stroke fill; letter-spacing: 0.01em; }
+      #title.cjk-sc .ln { font-family: "Rubik", "CJK SC", sans-serif; }
+      #title.cjk-tc .ln { font-family: "Rubik", "CJK TC", sans-serif; }
+      #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
+      #preload .r5 { font-family: "Rubik"; font-weight: 500; }
+      #preload .r8 { font-family: "Rubik"; font-weight: 800; }
+      #preload .r9 { font-family: "Rubik"; font-weight: 900; }
+      #preload .m5 { font-family: "JetBrains Mono"; font-weight: 500; }
+      #preload .m7 { font-family: "JetBrains Mono"; font-weight: 700; }
+      #preload .sc { font-family: "CJK SC"; font-weight: 900; }
+      #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      #vig { background: radial-gradient(95% 85% at 50% 48%, rgba(0, 0, 0, 0) 62%, rgba(20, 10, 4, 0.42) 100%); }
+      #grain { opacity: 0.13; mix-blend-mode: multiply; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div id="title" data-layout-allow-overlap></div>
+      <div class="ov" id="vig"></div>
+      <div class="ov" id="grain"></div>
+      <div id="preload"><span class="r5">Aa Бб 0</span><span class="r8">Aa Бб 0</span><span class="r9">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span><span class="sc">复杂套利</span><span class="tc">複雜套利</span></div>
+    </div>
+    <script>
+(function () {
+/* ============================================================
+   KIT 00 CORE: math, seeded random, noise, splines, beat grid, boil clock
+   Every frame is a pure function of time t (seconds). No Math.random,
+   no Date.now, no performance.now anywhere in the kit.
+   ============================================================ */
+var CK = window.CK || (window.CK = {});
+(function (K) {
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const inv = (a, b, v) => clamp((v - a) / (b - a), 0, 1);
+  const ss = (a, b, t) => { const u = inv(a, b, t); return u * u * (3 - 2 * u); };
+  const f1 = (n) => Math.round(n * 10) / 10;
+  const f2 = (n) => Math.round(n * 100) / 100;
+
+  /* eases (u in 0..1) */
+  const E = {
+    inOut: (u) => u * u * (3 - 2 * u),
+    out3: (u) => 1 - Math.pow(1 - u, 3),
+    in3: (u) => u * u * u,
+    back: (u, s) => { s = s == null ? 1.7 : s; const v = u - 1; return 1 + v * v * ((s + 1) * v + s); },
+    elastic: (u) => (u <= 0 ? 0 : u >= 1 ? 1 : Math.pow(2, -9 * u) * Math.sin((u * 10 - 0.75) * (2 * Math.PI) / 3) + 1),
+  };
+  /* tween value from a to b during [t0, t1] with an ease */
+  const tw = (t, t0, t1, a, b, ease) => lerp(a, b, (ease || E.inOut)(inv(t0, t1, t)));
+
+  /* seeded PRNG (mulberry32) */
+  function mulberry(seed) {
+    let s = seed | 0;
+    return function () {
+      s = (s + 0x6d2b79f5) | 0;
+      let q = Math.imul(s ^ (s >>> 15), 1 | s);
+      q = (q + Math.imul(q ^ (q >>> 7), 61 | q)) ^ q;
+      return ((q ^ (q >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  /* stateless hash -> [0,1) for (i, seed) */
+  function hash(i, s) {
+    let h = (Math.imul(i | 0, 374761393) + Math.imul(s | 0, 668265263)) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+  }
+  const hs = (i, s) => hash(i, s) * 2 - 1; /* signed */
+  function vnoise(x, s) { const i = Math.floor(x), f = x - i, u = f * f * (3 - 2 * f); return lerp(hash(i, s), hash(i + 1, s), u); }
+  function fbm(x, s, oct) { let a = 0.5, v = 0, fr = 1, n = 0; for (let k = 0; k < (oct || 3); k++) { v += a * vnoise(x * fr, s + k * 17); n += a; a *= 0.5; fr *= 2.03; } return v / n; }
+
+  /* monotone cubic Hermite spline through [[t, v], ...] (no overshoot) */
+  function mkSpline(pts) {
+    const n = pts.length, T = pts.map((p) => p[0]), V = pts.map((p) => p[1]);
+    if (n === 1) return () => V[0];
+    const d = [], m = new Array(n).fill(0);
+    for (let i = 0; i < n - 1; i++) d[i] = (V[i + 1] - V[i]) / (T[i + 1] - T[i]);
+    m[0] = d[0]; m[n - 1] = d[n - 2];
+    for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2;
+    for (let i = 0; i < n - 1; i++) {
+      if (d[i] === 0) { m[i] = 0; m[i + 1] = 0; continue; }
+      const a = m[i] / d[i], b = m[i + 1] / d[i], s = a * a + b * b;
+      if (s > 9) { const tau = 3 / Math.sqrt(s); m[i] = tau * a * d[i]; m[i + 1] = tau * b * d[i]; }
+    }
+    return function (x) {
+      x = clamp(x, T[0], T[n - 1]);
+      let i = 0; while (i < n - 2 && x >= T[i + 1]) i++;
+      const h = T[i + 1] - T[i], u = (x - T[i]) / h, u2 = u * u, u3 = u2 * u;
+      return (2 * u3 - 3 * u2 + 1) * V[i] + (u3 - 2 * u2 + u) * h * m[i] + (-2 * u3 + 3 * u2) * V[i + 1] + (u3 - u2) * h * m[i + 1];
+    };
+  }
+  /* keys: [[t, {a:.., b:..}], ...] -> fn(t) -> {a, b} (one spline per channel) */
+  function mkTrack(keys) {
+    const names = Object.keys(keys[0][1]), sp = {};
+    names.forEach((k) => { sp[k] = mkSpline(keys.map((q) => [q[0], q[1][k]])); });
+    return (t) => { const o = {}; names.forEach((k) => (o[k] = sp[k](t))); return o; };
+  }
+
+  /* ---------- beat grid (retime to the real song by changing BPM/OFFSET) ---------- */
+  const G = { BPM: 120, OFFSET: 0, BEATS_PER_ACCENT: 4 };
+  const beatLen = () => 60 / G.BPM;
+  /* time of bar b (0-based, an "accent" = 4 beats = 2 s at 120 BPM) plus beat k */
+  const at = (bar, beat) => G.OFFSET + (bar * G.BEATS_PER_ACCENT + (beat || 0)) * beatLen();
+  /* 1 on the beat, decaying to 0 before the next beat (k = sharpness) */
+  function pulse(t, everyBeats, k) {
+    const L = beatLen() * (everyBeats || 1), x = t - G.OFFSET;
+    if (x < 0) return 0;
+    return Math.exp(-(k || 7) * ((x % L) / L));
+  }
+  const beatIndex = (t) => Math.floor((t - G.OFFSET) / beatLen());
+
+  /* ---------- line boil clock: drawings change 12 times per second ---------- */
+  const BOIL_FPS = 12;
+  const boilFrame = (t) => Math.floor(t * BOIL_FPS);
+
+  Object.assign(K, { clamp, lerp, inv, ss, f1, f2, E, tw, mulberry, hash, hs, vnoise, fbm, mkSpline, mkTrack,
+    G, beatLen, at, pulse, beatIndex, BOIL_FPS, boilFrame, TAU: Math.PI * 2 });
+})(CK);
+
+/* ============================================================
+   KIT 05 PALETTE + TYPE: the only place colours and fonts are defined.
+   STYLE.md documents the same values; change both together.
+   ============================================================ */
+var CK = window.CK || (window.CK = {});
+(function (K) {
+  K.P = {
+    ink: "#2b1d16",        /* all outlines and dark type */
+    inkSoft: "#5a4334",    /* hatching, secondary lines */
+    paper: "#f6e8c8",      /* parchment boards, banner, cream type */
+    paperShade: "#e2cc9c",
+    /* crab */
+    rust: "#e0632a", rustDark: "#a8401c", rustLight: "#f79a5c", belly: "#f6b57e",
+    eye: "#fffaf0", pupil: "#1d130e",
+    capNavy: "#26364f", capNavyDark: "#17223a", gold: "#ffc53d", goldDark: "#c98a12",
+    /* ship */
+    iron: "#526777", ironDark: "#33424f", ironLight: "#7f96a6", rivet: "#c9d6dd",
+    wood: "#9a6236", woodDark: "#6b3f22", sail: "#f3e6c6", sailShade: "#d9c59a", waterline: "#c2412a",
+    /* sea + sky */
+    skyTop: "#6fc0d6", skyMid: "#a9dcdc", skyLow: "#fde6b3", sun: "#ffd166", sunGlow: "#fff2c2",
+    cloud: "#fffaf0", cloudShade: "#d7ecec",
+    seaFar: "#5fb3c4", seaMid: "#2f8fa8", seaDeep: "#1d6a86", seaNight: "#16506a", foam: "#f7f3e6",
+    /* land */
+    sand: "#f2d38d", sandDark: "#d4ac5e", grass: "#73b351", grassDark: "#4c8a39", rock: "#9a8a78", palm: "#3f8a3a", trunk: "#8a5a32",
+    /* data / explainer */
+    route: "#fff7e0",       /* a plain graph edge (rope) */
+    profit: "#ffc93c",      /* the winning cycle, gains */
+    profitGlow: "#fff1a8",
+    loss: "#d64545",        /* losing edges, negative numbers */
+    chalk: "#f6f1e3",       /* type on dark boards */
+    board: "#3b2b22",       /* dark wooden board (formula, code) */
+    boardEdge: "#5b4232",
+    /* assets: one colour per currency island */
+    BTC: "#f39b2c", ETH: "#7b83eb", USDT: "#26a17b", SOL: "#a25ddc", EUR: "#3a6ea5", BNB: "#e8b923", USD: "#5b9b4a",
+  };
+  K.FONT = {
+    display: '"Rubik", "CJK SC", "CJK TC", sans-serif',  /* titles, labels (weights 800/900) */
+    text: '"Rubik", "CJK SC", "CJK TC", sans-serif',     /* body, numbers (500) */
+    mono: '"JetBrains Mono", monospace',                 /* code, tables of numbers */
+    cjk: { "zh-CN": '"CJK SC", "Rubik", sans-serif', "zh-TW": '"CJK TC", "Rubik", sans-serif' },
+  };
+})(CK);
+
+/* ============================================================
+   KIT 10 INK: hand-drawn canvas primitives + the camera.
+   - K.begin(ctx, t, cam) once per frame; everything after reads K.now / K.bf.
+   - Contours "boil": vertices jitter by a hash of (vertex, seed, boil frame),
+     so the drawing changes 12x per second and is identical on every seek.
+   - Strokes are broken (small gaps) and slightly vary in width.
+   - Line widths are world units but never thinner than MIN_PX on screen.
+   ============================================================ */
+var CK = window.CK || (window.CK = {});
+(function (K) {
+  const { hs, hash, clamp } = K;
+  K.MIN_PX = 2.0;
+  K.now = 0; K.bf = 0; K.zoom = 1;
+
+  /* ---------- camera: world -> screen. cam = {x, y, z, rot} (centre, zoom, degrees) ---------- */
+  K.W = 1920; K.H = 1080;
+  K.begin = function (ctx, t, cam) {
+    K.ctx = ctx; K.now = t; K.bf = K.boilFrame(t); K.cam = cam; K.zoom = cam.z;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.lineJoin = "round"; ctx.lineCap = "round";
+  };
+  /* apply camera with an optional parallax factor p (1 = world plane, 0 = fixed to screen) */
+  K.applyCam = function (ctx, p) {
+    p = p == null ? 1 : p;
+    const c = K.cam, z = 1 + (c.z - 1) * p;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.translate(K.W / 2, K.H / 2);
+    if (c.rot) ctx.rotate((c.rot * Math.PI) / 180 * p);
+    ctx.scale(z, z);
+    ctx.translate(-c.x * p, -c.y * p);
+    K.zoom = z;
+  };
+  K.screen = function (ctx) { ctx.setTransform(1, 0, 0, 1, 0, 0); K.zoom = 1; };
+  K.toScreen = function (x, y) {
+    const c = K.cam, r = ((c.rot || 0) * Math.PI) / 180, dx = (x - c.x) * c.z, dy = (y - c.y) * c.z;
+    return [K.W / 2 + dx * Math.cos(r) - dy * Math.sin(r), K.H / 2 + dx * Math.sin(r) + dy * Math.cos(r)];
+  };
+  /* current transform scale (works inside nested save/translate/scale) */
+  const curScale = (ctx) => { const m = ctx.getTransform(); return Math.sqrt(m.a * m.a + m.b * m.b) || 1; };
+  K.lw = (ctx, w) => Math.max(w, K.MIN_PX / curScale(ctx));
+
+  /* ---------- point generators ---------- */
+  K.ellipsePts = function (cx, cy, rx, ry, n, rot) {
+    const out = [], r = rot || 0, cr = Math.cos(r), sr = Math.sin(r);
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * K.TAU, x = Math.cos(a) * rx, y = Math.sin(a) * ry;
+      out.push([cx + x * cr - y * sr, cy + x * sr + y * cr]);
+    }
+    return out;
+  };
+  /* irregular closed blob (islands, clouds): fixed by seed, not by time */
+  K.blobPts = function (cx, cy, rx, ry, n, seed, irr) {
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * K.TAU, k = 1 + (irr || 0.18) * (K.fbm(i * 0.9, seed, 2) * 2 - 1);
+      out.push([cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]);
+    }
+    return out;
+  };
+  K.rectPts = function (x, y, w, h, n) {
+    n = n || 3; const out = [];
+    for (let i = 0; i < n; i++) out.push([x + (w * i) / n, y]);
+    for (let i = 0; i < n; i++) out.push([x + w, y + (h * i) / n]);
+    for (let i = 0; i < n; i++) out.push([x + w - (w * i) / n, y + h]);
+    for (let i = 0; i < n; i++) out.push([x, y + h - (h * i) / n]);
+    return out;
+  };
+
+  /* ---------- boil ---------- */
+  /* jitter each vertex by amp (world units); frame-stepped at 12 fps */
+  K.boil = function (pts, seed, amp, frameOverride) {
+    const f = frameOverride == null ? K.bf : frameOverride, s = (seed | 0) + f * 7919;
+    return pts.map((p, i) => [p[0] + hs(i * 2 + 1, s) * amp, p[1] + hs(i * 2 + 2, s) * amp]);
+  };
+
+  /* ---------- smooth path through points (Catmull-Rom -> Bezier) ---------- */
+  function segs(pts, closed) {
+    const n = pts.length, out = [];
+    const P = (i) => (closed ? pts[(i + n) % n] : pts[clamp(i, 0, n - 1)]);
+    const last = closed ? n : n - 1;
+    for (let i = 0; i < last; i++) {
+      const p0 = P(i - 1), p1 = P(i), p2 = P(i + 1), p3 = P(i + 2);
+      out.push([p1, [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6], [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6], p2]);
+    }
+    return out;
+  }
+  K.pathOf = function (ctx, pts, closed) {
+    const S = segs(pts, closed);
+    ctx.beginPath(); ctx.moveTo(S[0][0][0], S[0][0][1]);
+    S.forEach((s) => ctx.bezierCurveTo(s[1][0], s[1][1], s[2][0], s[2][1], s[3][0], s[3][1]));
+    if (closed) ctx.closePath();
+  };
+  /* broken, width-varying ink stroke along the smooth path */
+  K.inkStroke = function (ctx, pts, closed, w, color, seed, gapP) {
+    const S = segs(pts, closed), s = (seed | 0) + K.bf * 31;
+    const base = K.lw(ctx, w);
+    ctx.strokeStyle = color;
+    let open = false;
+    for (let i = 0; i < S.length; i++) {
+      const gap = S.length > 6 && hash(i, s) < (gapP == null ? 0.07 : gapP);
+      if (gap) { if (open) { ctx.stroke(); open = false; } continue; }
+      if (!open) { ctx.beginPath(); ctx.moveTo(S[i][0][0], S[i][0][1]); ctx.lineWidth = base * (0.86 + 0.28 * hash(i + 99, s)); open = true; }
+      ctx.bezierCurveTo(S[i][1][0], S[i][1][1], S[i][2][0], S[i][2][1], S[i][3][0], S[i][3][1]);
+    }
+    if (open) ctx.stroke();
+  };
+
+  /* ---------- hatching: parallel boiled strokes clipped to a path ---------- */
+  K.hatch = function (ctx, pts, opt) {
+    const o = Object.assign({ ang: -0.9, gap: 10, w: 1.6, color: K.P.inkSoft, alpha: 0.55, seed: 3, amp: 1.2, closed: true }, opt || {});
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    pts.forEach((p) => { x0 = Math.min(x0, p[0]); y0 = Math.min(y0, p[1]); x1 = Math.max(x1, p[0]); y1 = Math.max(y1, p[1]); });
+    const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, R = Math.hypot(x1 - x0, y1 - y0) / 2 + 4;
+    ctx.save(); K.pathOf(ctx, pts, o.closed); ctx.clip();
+    ctx.globalAlpha *= o.alpha; ctx.strokeStyle = o.color; ctx.lineWidth = K.lw(ctx, o.w);
+    const ca = Math.cos(o.ang), sa = Math.sin(o.ang), s = o.seed + K.bf * 13;
+    ctx.beginPath();
+    for (let d = -R, i = 0; d <= R; d += o.gap, i++) {
+      const j = hs(i, s) * o.amp, L = R * (0.85 + 0.15 * hash(i + 7, s));
+      const px = cx - sa * (d + j), py = cy + ca * (d + j);
+      ctx.moveTo(px - ca * L, py - sa * L); ctx.lineTo(px + ca * L + hs(i + 3, s) * o.amp, py + sa * L + hs(i + 5, s) * o.amp);
+    }
+    ctx.stroke(); ctx.restore();
+  };
+
+  /* ---------- the workhorse: filled, hatched, boiled, ink-outlined shape ----------
+     opt: fill, stroke (default ink), w (outline width), boil (amp), seed,
+          hatch (object for K.hatch, or null), shade ({color, dx, dy}: inner shadow band),
+          gap (break probability), closed (default true), alpha */
+  K.shape = function (ctx, pts, opt) {
+    const o = Object.assign({ stroke: K.P.ink, w: 4, boil: 1.6, seed: 1, closed: true }, opt || {});
+    const bp = o.boil ? K.boil(pts, o.seed, o.boil) : pts;
+    const fp = o.boil ? K.boil(pts, o.seed + 500, o.boil * 0.5) : pts;
+    ctx.save();
+    if (o.alpha != null) ctx.globalAlpha *= o.alpha;
+    if (o.fill && o.closed !== false) {
+      K.pathOf(ctx, fp, true); ctx.fillStyle = o.fill; ctx.fill();
+      if (o.shade) { /* flat shadow band: the shape minus its own offset copy */
+        const op = fp.map((p) => [p[0] + (o.shade.dx || 0), p[1] + (o.shade.dy || 0)]);
+        ctx.save(); K.pathOf(ctx, fp, true); ctx.clip();
+        ctx.beginPath(); ctx.rect(-1e5, -1e5, 2e5, 2e5);
+        const seg = segs(op, true); ctx.moveTo(seg[0][0][0], seg[0][0][1]);
+        seg.forEach((s) => ctx.bezierCurveTo(s[1][0], s[1][1], s[2][0], s[2][1], s[3][0], s[3][1]));
+        ctx.closePath(); ctx.fillStyle = o.shade.color; ctx.fill("evenodd");
+        ctx.restore();
+      }
+      if (o.hatch) K.hatch(ctx, fp, Object.assign({ seed: o.seed + 9 }, o.hatch));
+    }
+    if (o.stroke && o.w > 0) K.inkStroke(ctx, bp, o.closed !== false, o.w, o.stroke, o.seed, o.gap);
+    ctx.restore();
+  };
+  /* open boiled line (ropes, cracks, motion lines) */
+  K.line = function (ctx, pts, opt) {
+    K.shape(ctx, pts, Object.assign({ closed: false, fill: null, gap: 0.04 }, opt || {}));
+  };
+  K.dot = function (ctx, x, y, r, fill, stroke, w, seed) {
+    K.shape(ctx, K.ellipsePts(x, y, r, r, 10), { fill, stroke: stroke === undefined ? K.P.ink : stroke, w: w || 2.5, boil: r * 0.06 + 0.4, seed: seed || 5, gap: 0 });
+  };
+
+  /* ---------- text: stable (never boils), ink outline under fill ---------- */
+  K.text = function (ctx, str, x, y, opt) {
+    const o = Object.assign({ size: 40, weight: 800, font: K.FONT.display, fill: K.P.ink, stroke: null, w: 0, align: "center", base: "middle", alpha: 1, track: 0 }, opt || {});
+    ctx.save(); ctx.globalAlpha *= o.alpha;
+    ctx.font = `${o.weight} ${o.size}px ${o.font}`; ctx.textAlign = o.align; ctx.textBaseline = o.base;
+    if (o.track) ctx.letterSpacing = o.track + "px";
+    if (o.stroke && o.w) { ctx.lineJoin = "round"; ctx.strokeStyle = o.stroke; ctx.lineWidth = o.w; ctx.strokeText(str, x, y); }
+    ctx.fillStyle = o.fill; ctx.fillText(str, x, y);
+    ctx.restore();
+  };
+  K.textW = function (ctx, str, size, weight, font) {
+    ctx.save(); ctx.font = `${weight || 800} ${size}px ${font || K.FONT.display}`; const w = ctx.measureText(str).width; ctx.restore(); return w;
+  };
+
+  /* ---------- glow (additive soft disc), used for route light and sun ---------- */
+  K.glow = function (ctx, x, y, r, color, a) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, color); g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.save(); ctx.globalAlpha *= a == null ? 1 : a; ctx.globalCompositeOperation = "lighter";
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, K.TAU); ctx.fill(); ctx.restore();
+  };
+})(CK);
+
+/* ============================================================
+   KIT 30 WORLD: sky, sea, clouds, islands, ship, coins, smoke, gulls.
+   All draw functions take (ctx, ...) in the current transform and read
+   K.now (continuous time) and K.bf (12 fps boil frame).
+   Two sets share these parts:
+     side view  (sideSky / sideSea: horizon, big ship, the crab close up)
+     chart view (chartSea: the sea seen from above, islands = graph nodes)
+   ============================================================ */
+var CK = window.CK || (window.CK = {});
+(function (K) {
+  const P = K.P, { hash, hs, clamp, lerp } = K;
+
+  /* ---------------- SIDE VIEW ---------------- */
+  /* sky gradient + sun + drifting clouds. horizon = screen y of the horizon */
+  K.sideSky = function (ctx, horizon, opt) {
+    const o = Object.assign({ sunX: 1480, sunY: 250, warm: 0, drift: 0 }, opt || {});
+    const g = ctx.createLinearGradient(0, 0, 0, horizon);
+    /* warm = golden hour: keep the top blue, warm only the lower sky (mixing blue into orange goes grey) */
+    g.addColorStop(0, mix(P.skyTop, "#8fd0dc", o.warm * 0.4));
+    g.addColorStop(0.55, mix(P.skyMid, "#fff0c8", o.warm * 0.8));
+    g.addColorStop(1, mix(P.skyLow, "#ffcf86", o.warm));
+    ctx.fillStyle = g; ctx.fillRect(-10, -10, K.W + 20, horizon + 12);
+    /* sun: glow + boiled disc + slow rays */
+    K.glow(ctx, o.sunX, o.sunY, 260, "rgba(255,240,190,0.9)", 0.55);
+    ctx.save(); ctx.translate(o.sunX, o.sunY); ctx.rotate(K.now * 0.12);
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * K.TAU, r0 = 92, r1 = 130 + 14 * (i % 2);
+      K.line(ctx, [[Math.cos(a) * r0, Math.sin(a) * r0], [Math.cos(a) * r1, Math.sin(a) * r1]], { stroke: P.gold, w: 6, boil: 1.5, seed: 40 + i, gap: 0 });
+    }
+    ctx.restore();
+    K.shape(ctx, K.ellipsePts(o.sunX, o.sunY, 72, 72, 18), { fill: P.sun, w: 4.5, boil: 1.6, seed: 31, shade: { color: "#f7b84a", dx: -10, dy: -10 } });
+    /* clouds */
+    const C = [[220, 150, 1.0, 1], [760, 95, 0.75, 2], [1150, 210, 0.9, 3], [1760, 130, 0.7, 4], [-200, 230, 0.8, 5]];
+    C.forEach((c) => {
+      const x = ((c[0] + (K.now * 14 + o.drift) * c[2]) % 2300) - 150;
+      K.cloud(ctx, x, c[1], c[2], c[3]);
+    });
+  };
+  K.cloud = function (ctx, x, y, s, seed) {
+    /* cumulus = outline of a union of 5 circles (polar ray cast), flat bottom */
+    const C = [];
+    for (let i = 0; i < 5; i++) { const u = i / 4 - 0.5; C.push([u * 190 * s, -(30 + 34 * Math.cos(u * 2.6) + 12 * hash(i, seed)) * s * 0.7, (40 + 26 * Math.cos(u * 2.4) + 10 * hash(i + 9, seed)) * s]); }
+    const pts = [];
+    for (let i = 0; i < 40; i++) {
+      const a = (i / 40) * K.TAU, dx = Math.cos(a), dy = Math.sin(a);
+      let r = 0;
+      C.forEach((c) => { const b = dx * c[0] + dy * c[1], q = c[0] * c[0] + c[1] * c[1] - c[2] * c[2], disc = b * b - q; if (disc >= 0) r = Math.max(r, b + Math.sqrt(disc)); });
+      pts.push([x + dx * r, Math.min(y + dy * r, y + 14 * s)]);
+    }
+    K.shape(ctx, pts, { fill: P.cloud, w: 3.5, boil: 1.6, seed: 70 + seed, shade: { color: P.cloudShade, dx: 10 * s, dy: -16 * s }, gap: 0.06 });
+  };
+  /* horizon islands far away (silhouettes) */
+  K.farIsland = function (ctx, x, y, w, h, seed) {
+    const pts = [[x - w / 2, y]];
+    for (let i = 1; i < 8; i++) { const u = i / 8; pts.push([x - w / 2 + w * u, y - h * Math.sin(u * Math.PI) * (0.75 + 0.35 * hash(i, seed))]); }
+    pts.push([x + w / 2, y]);
+    K.shape(ctx, pts, { fill: "#7fb6a8", stroke: "#4f7f78", w: 3, boil: 1.2, seed: 90 + seed });
+    K.palm(ctx, x - w * 0.12, y - h * 0.8, 0.45, seed, "#4f8f7c");
+  };
+  /* sea from horizon down; layered wave rows (layer speed = parallax) */
+  K.sideSea = function (ctx, horizon, opt) {
+    const o = Object.assign({ pan: 0, warm: 0 }, opt || {});
+    const g = ctx.createLinearGradient(0, horizon, 0, K.H);
+    g.addColorStop(0, mix(P.seaFar, "#e0a46e", o.warm * 0.35)); g.addColorStop(0.45, P.seaMid); g.addColorStop(1, P.seaDeep);
+    ctx.fillStyle = g; ctx.fillRect(-10, horizon, K.W + 20, K.H - horizon + 10);
+    K.line(ctx, [[-20, horizon], [K.W * 0.5, horizon + 1], [K.W + 20, horizon]], { stroke: P.ink, w: 3, boil: 0.8, seed: 12 });
+    /* sun glitter on far water */
+    for (let i = 0; i < 14; i++) {
+      const x = 1480 + hs(i, 4) * 160 * (1 + i / 10), y = horizon + 14 + i * 9, l = 26 - i;
+      if (hash(i + K.bf, 9) < 0.7) K.line(ctx, [[x - l, y], [x + l, y]], { stroke: P.sunGlow, w: 3, boil: 1, seed: i, gap: 0, alpha: 0.85 });
+    }
+  };
+  /* one row of cartoon wave crests (draw in front-to-back order for depth) */
+  K.waveRow = function (ctx, y, opt) {
+    const o = Object.assign({ amp: 10, len: 120, speed: 30, pan: 0, color: P.seaMid, crest: P.foam, w: 3.5, seed: 1, fill: true, bottom: K.H + 20 }, opt || {});
+    const off = (K.now * o.speed + o.pan) % o.len, pts = [];
+    for (let x = -o.len - off; x <= K.W + o.len; x += o.len / 6) {
+      const u = ((x + off) / o.len) * K.TAU;
+      pts.push([x, y - o.amp * (0.6 * Math.sin(u) + 0.4 * Math.sin(u * 2 + 1.3))]);
+    }
+    if (o.fill) {
+      const poly = pts.concat([[K.W + o.len, o.bottom], [-o.len, o.bottom]]);
+      K.pathOf(ctx, K.boil(poly, o.seed, 1.2), true); ctx.fillStyle = o.color; ctx.fill();
+    }
+    K.line(ctx, pts, { stroke: o.crest, w: o.w, boil: 1.4, seed: o.seed + 3, gap: 0.12 });
+    /* little foam ticks on crests */
+    for (let i = 0; i < pts.length; i += 6) {
+      const p = pts[i]; K.line(ctx, [[p[0] - 12, p[1] + 9], [p[0] + 2, p[1] + 3], [p[0] + 14, p[1] + 8]], { stroke: o.crest, w: o.w * 0.7, boil: 1.2, seed: o.seed + i, gap: 0, alpha: 0.8 });
+    }
+  };
+
+  /* ---------------- CHART VIEW (sea seen from above) ---------------- */
+  /* fills the visible world rect with sea + scattered wave marks. call after K.applyCam */
+  K.chartSea = function (ctx, opt) {
+    const o = Object.assign({ seed: 5, cell: 170, color: P.seaMid }, opt || {});
+    const c = K.cam, hw = K.W / 2 / c.z + 300, hh = K.H / 2 / c.z + 300;
+    const x0 = c.x - hw, x1 = c.x + hw, y0 = c.y - hh, y1 = c.y + hh;
+    ctx.fillStyle = o.color; ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+    /* soft depth patches */
+    for (let i = 0; i < 9; i++) {
+      const px = hash(i, 77) * 3600 - 600, py = hash(i, 78) * 2400 - 300;
+      ctx.save(); ctx.globalAlpha = 0.18; K.pathOf(ctx, K.blobPts(px, py, 380, 260, 12, i, 0.3), true); ctx.fillStyle = P.seaDeep; ctx.fill(); ctx.restore();
+    }
+    /* wave marks on a jittered grid, only inside the view */
+    const g = o.cell, i0 = Math.floor(x0 / g), i1 = Math.ceil(x1 / g), j0 = Math.floor(y0 / g), j1 = Math.ceil(y1 / g);
+    for (let i = i0; i <= i1; i++) for (let j = j0; j <= j1; j++) {
+      const h = hash(i * 131 + j, o.seed); if (h < 0.45) continue;
+      const x = i * g + hs(i + j * 7, 3) * g * 0.4 + Math.sin(K.now * 0.9 + i) * 10, y = j * g + hs(i * 5 + j, 4) * g * 0.35;
+      const l = 26 + 18 * hash(i + j, 6), bob = Math.sin(K.now * 2.2 + i * 1.7 + j) * 4;
+      K.line(ctx, [[x - l, y + bob], [x - l / 2, y - 7 + bob], [x, y + bob], [x + l / 2, y - 7 + bob], [x + l, y + bob]], { stroke: P.foam, w: 3, boil: 1.4, seed: i * 17 + j, gap: 0, alpha: 0.55 });
+    }
+  };
+
+  /* ---------------- ISLAND (chart view): also the graph node ---------------- */
+  /* s = scale, pop = appear 0..1 (overshoot allowed) */
+  K.island = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ seed: 1, palms: 2, pop: 1, lighthouse: false }, opt || {});
+    if (o.pop <= 0.001) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s * o.pop, s * o.pop);
+    /* foam ring + shallow water */
+    const ring = K.blobPts(0, 18, 250, 120, 22, o.seed, 0.12);
+    ctx.save(); ctx.globalAlpha = 0.45; K.pathOf(ctx, ring, true); ctx.fillStyle = "#7fd0d3"; ctx.fill(); ctx.restore();
+    const r2 = ring.map((p, i) => [p[0] * (1 + 0.03 * Math.sin(K.now * 2 + i)), p[1] * (1 + 0.03 * Math.sin(K.now * 2 + i))]);
+    K.line(ctx, r2.concat([r2[0]]), { stroke: P.foam, w: 4, boil: 2, seed: o.seed + 4, gap: 0.2, alpha: 0.9 });
+    /* sand + grass dome */
+    K.shape(ctx, K.blobPts(0, 10, 200, 92, 18, o.seed + 1, 0.14), { fill: P.sand, w: 5, boil: 1.8, seed: o.seed + 2, shade: { color: P.sandDark, dx: 0, dy: -18 } });
+    K.shape(ctx, K.blobPts(-10, -14, 140, 62, 16, o.seed + 3, 0.16), { fill: P.grass, w: 4.5, boil: 1.8, seed: o.seed + 5, shade: { color: P.grassDark, dx: 10, dy: -16 }, hatch: { ang: -0.6, gap: 14, alpha: 0.25, color: P.grassDark } });
+    /* rocks */
+    K.shape(ctx, K.blobPts(120, 30, 26, 18, 9, o.seed + 6, 0.2), { fill: P.rock, w: 3.5, boil: 1.2, seed: o.seed + 7 });
+    if (o.lighthouse) K.lighthouse(ctx, 70, -30, 0.9);
+    for (let i = 0; i < o.palms; i++) K.palm(ctx, -70 + i * 70, -30 - 10 * (i % 2), 0.85 + 0.15 * (i % 2), o.seed + i * 3, P.palm);
+    /* pier */
+    K.shape(ctx, K.rectPts(-200, 30, 70, 14, 2), { fill: P.wood, w: 3, boil: 1, seed: o.seed + 8 });
+    ctx.restore();
+  };
+  K.palm = function (ctx, x, y, s, seed, leaf) {
+    const sway = Math.sin(K.now * 1.5 + seed) * 4;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    const trunk = [[0, 0], [4 + sway * 0.2, -30], [10 + sway * 0.5, -60], [16 + sway, -88]];
+    K.line(ctx, trunk, { stroke: P.ink, w: 13, boil: 1, seed, gap: 0 });
+    K.line(ctx, trunk, { stroke: P.trunk, w: 7, boil: 1, seed, gap: 0 });
+    for (let i = 0; i < 5; i++) {
+      const a = -Math.PI / 2 + (i - 2) * 0.75 + Math.sin(K.now * 1.7 + i + seed) * 0.06, L = 48;
+      const tx = 16 + sway, ty = -88, ex = tx + Math.cos(a) * L, ey = ty + Math.sin(a) * L * 0.6 + 18;
+      const mx = tx + Math.cos(a) * L * 0.5, my = ty + Math.sin(a) * L * 0.5 - 6;
+      K.shape(ctx, [[tx, ty], [mx - Math.sin(a) * 9, my + Math.cos(a) * 9 * 0.4], [ex, ey], [mx + Math.sin(a) * 4, my - 6]], { fill: leaf || P.palm, w: 3, boil: 1.2, seed: seed * 7 + i, gap: 0 });
+    }
+    ctx.restore();
+  };
+  K.lighthouse = function (ctx, x, y, s) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    K.shape(ctx, [[-22, 0], [-14, -110], [14, -110], [22, 0]], { fill: P.paper, w: 4, boil: 1.2, seed: 61 });
+    K.shape(ctx, [[-19, -30], [-17, -52], [17, -52], [19, -30]], { fill: P.loss, w: 3, boil: 1, seed: 62 });
+    K.shape(ctx, [[-17, -74], [-15, -94], [15, -94], [17, -74]], { fill: P.loss, w: 3, boil: 1, seed: 63 });
+    K.shape(ctx, K.rectPts(-14, -132, 28, 22, 2), { fill: P.gold, w: 3.5, boil: 1, seed: 64 });
+    K.shape(ctx, [[-20, -132], [0, -152], [20, -132]], { fill: P.ink, w: 3, boil: 1, seed: 65 });
+    const a = K.now * 2.4;
+    ctx.save(); ctx.globalAlpha = 0.28; ctx.fillStyle = P.profitGlow; ctx.beginPath(); ctx.moveTo(0, -121);
+    ctx.lineTo(Math.cos(a) * 260, -121 + Math.sin(a) * 40 - 30); ctx.lineTo(Math.cos(a) * 260, -121 + Math.sin(a) * 40 + 30); ctx.fill(); ctx.restore();
+    ctx.restore();
+  };
+
+  /* ---------------- COINS ---------------- */
+  /* a coin seen at 3/4: face ellipse + rim. label optional. spin 0..1 squashes the face */
+  K.coin = function (ctx, x, y, r, opt) {
+    const o = Object.assign({ color: P.gold, label: "", spin: 0, seed: 1, labelColor: P.ink, size: null }, opt || {});
+    const sx = Math.max(0.08, Math.abs(Math.cos(o.spin * Math.PI)));
+    ctx.save(); ctx.translate(x, y); ctx.scale(sx, 1);
+    K.shape(ctx, K.ellipsePts(0, 4, r, r * 0.92, 16), { fill: shade(o.color, -0.28), w: 3.5, boil: 0.9, seed: o.seed });
+    K.shape(ctx, K.ellipsePts(0, 0, r, r * 0.92, 16), { fill: o.color, w: 3.5, boil: 0.9, seed: o.seed + 1, shade: { color: shade(o.color, -0.14), dx: -r * 0.16, dy: -r * 0.16 } });
+    K.line(ctx, K.ellipsePts(0, 0, r * 0.74, r * 0.68, 14).concat([[r * 0.74, 0]]), { stroke: shade(o.color, -0.3), w: 2.5, boil: 0.8, seed: o.seed + 2, gap: 0.25 });
+    if (o.label && sx > 0.4) K.text(ctx, o.label, 0, 2, { size: o.size || r * 0.56, weight: 900, fill: o.labelColor });
+    ctx.restore();
+  };
+  /* small plain gold coin for piles and splashes */
+  K.goldBit = function (ctx, x, y, r, seed, tilt) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(tilt || 0);
+    K.shape(ctx, K.ellipsePts(0, 0, r, r * 0.42, 12), { fill: P.gold, w: 2.5, boil: 0.6, seed, gap: 0, shade: { color: P.goldDark, dx: 0, dy: -r * 0.18 } });
+    ctx.restore();
+  };
+  /* a heap of n coins inside a w-wide footprint, deterministic layout */
+  K.coinPile = function (ctx, x, y, n, w, seed) {
+    for (let i = 0; i < n; i++) {
+      const row = Math.floor(Math.sqrt(i * 1.6)), across = Math.max(1, 6 - row);
+      const cx = x + (hs(i, seed) * 0.5) * (w * across / 6), cy = y - row * 9 - hash(i, seed + 1) * 4;
+      K.goldBit(ctx, cx, cy, 14, seed + i, hs(i, seed + 2) * 0.25);
+    }
+  };
+  /* sparkle star */
+  K.sparkle = function (ctx, x, y, r, a, seed) {
+    if (a <= 0) return;
+    const pts = [];
+    for (let i = 0; i < 8; i++) { const ang = (i / 8) * K.TAU - Math.PI / 2, rr = i % 2 ? r * 0.32 : r; pts.push([x + Math.cos(ang) * rr, y + Math.sin(ang) * rr]); }
+    K.shape(ctx, pts, { fill: P.profitGlow, w: 3, boil: 0.8, seed: seed || 3, alpha: a, gap: 0 });
+  };
+
+  /* ---------------- SHIP (side view) ----------------
+     local units: waterline y = 0, deck y = -60, hull 360 long, faces +x.
+     opt: dir (+1/-1), rock (deg), coins (pile count), sail (billow 0..1),
+          crab (callback(ctx) drawing the crab at deck origin [-95, -60]) */
+  K.SHIP = { deckY: -60, crabX: -95, pileX: 95, funnelX: -20, mastX: 40 };
+  K.ship = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ dir: 1, rock: 0, coins: 0, sail: 1, crab: null, smoke: 0, flagColor: P.rust, seed: 200 }, opt || {});
+    const S = o.seed;
+    ctx.save(); ctx.translate(x, y); ctx.rotate((o.rock * Math.PI) / 180); ctx.scale(s * o.dir, s);
+    /* funnel + smoke puffs (puff born on each beat) */
+    K.shape(ctx, K.rectPts(-38, -150, 36, 92, 2), { fill: P.ironDark, w: 4, boil: 1, seed: S + 1 });
+    K.shape(ctx, K.rectPts(-42, -150, 44, 16, 2), { fill: P.rust, w: 4, boil: 1, seed: S + 2 });
+    for (let k = 0; k < 4; k++) {
+      const age = ((K.now - K.G.OFFSET) % (K.beatLen() * 2)) / (K.beatLen() * 2) + k; /* 0..4 beats-pairs old */
+      const sx = -20 + age * 46 + Math.sin(age * 2 + k) * 6, sy = -168 - age * 34, r = 10 + age * 9;
+      K.shape(ctx, K.blobPts(sx, sy, r, r * 0.8, 9, S + 10 + k, 0.2), { fill: "#e9e4da", stroke: P.inkSoft, w: 3, boil: 1.2, seed: S + 20 + k, alpha: clamp(1 - age / 4, 0, 1) * 0.95 });
+    }
+    /* mast + sail */
+    K.line(ctx, [[40, -60], [40, -330]], { stroke: P.ink, w: 12, boil: 0.8, seed: S + 3, gap: 0 });
+    K.line(ctx, [[40, -60], [40, -330]], { stroke: P.woodDark, w: 6, boil: 0.8, seed: S + 3, gap: 0 });
+    const b = 26 * o.sail + 4 * Math.sin(K.now * 2.1);
+    const sail = [[46, -312], [100, -308 - 2], [160, -300], [160 + b * 0.6, -220], [158 + b * 0.2, -136], [100, -132], [46, -136], [46 + b * 0.25, -224]];
+    K.shape(ctx, sail, { fill: P.sail, w: 4.5, boil: 1.6, seed: S + 4, shade: { color: P.sailShade, dx: -16, dy: 0 } });
+    K.cog(ctx, 104 + b * 0.25, -222, 30, P.rust, S + 5);
+    /* flag on top */
+    const fl = []; for (let i = 0; i <= 5; i++) { const u = i / 5; fl.push([40 + u * 60, -330 + Math.sin(K.now * 7 + u * 4) * 6 * u]); }
+    for (let i = 5; i >= 0; i--) { const u = i / 5; fl.push([40 + u * 60, -300 + Math.sin(K.now * 7 + u * 4 + 0.4) * 6 * u]); }
+    K.shape(ctx, fl, { fill: o.flagColor, w: 3.5, boil: 1, seed: S + 6 });
+    /* deck rail */
+    K.line(ctx, [[-175, -84], [150, -84]], { stroke: P.ink, w: 5, boil: 1, seed: S + 7 });
+    for (let i = 0; i < 12; i++) K.line(ctx, [[-170 + i * 28, -60], [-170 + i * 28, -84]], { stroke: P.ink, w: 3.5, boil: 0.8, seed: S + 30 + i, gap: 0 });
+    /* coins on deck (behind hull edge) */
+    if (o.coins > 0) K.coinPile(ctx, 95, -64, Math.round(o.coins), 110, S + 40);
+    /* crab stands behind the hull top edge */
+    /* helm wheel (behind the crab) */
+    K.wheel(ctx, -168, -100, 26, S + 8);
+    if (o.crab) { ctx.save(); ctx.translate(-95, -60); o.crab(ctx); ctx.restore(); }
+    /* hull */
+    const hull = [[-182, -66], [-150, -60], [100, -60], [178, -78], [160, -30], [120, 10], [60, 24], [-120, 24], [-165, 0]];
+    K.shape(ctx, hull, { fill: P.iron, w: 6, boil: 1.4, seed: S + 9, shade: { color: P.ironDark, dx: 0, dy: -22 }, hatch: { ang: -0.8, gap: 13, alpha: 0.18, color: P.ink } });
+    /* waterline band */
+    K.line(ctx, [[-160, -6], [-100, 2], [60, 4], [134, -2]], { stroke: P.waterline, w: 9, boil: 1, seed: S + 11, gap: 0 });
+    /* plate seams + rivets */
+    for (let i = 0; i < 6; i++) K.line(ctx, [[-110 + i * 48, -58], [-112 + i * 48, 18]], { stroke: P.ironDark, w: 2.5, boil: 1, seed: S + 50 + i, gap: 0.3 });
+    for (let i = 0; i < 15; i++) K.dot(ctx, -150 + i * 21, -46, 3.2, P.rivet, P.ink, 1.6, S + 60 + i);
+    /* portholes */
+    [-60, 10, 80].forEach((px, i) => {
+      K.shape(ctx, K.ellipsePts(px, -24, 13, 13, 12), { fill: "#bfe6ec", w: 4, boil: 0.8, seed: S + 70 + i, shade: { color: "#8cc6d2", dx: 4, dy: 4 } });
+      K.line(ctx, K.ellipsePts(px, -24, 17, 17, 12).concat([[px + 17, -24]]), { stroke: P.rivet, w: 2.5, boil: 0.6, seed: S + 80 + i, gap: 0.3 });
+    });
+    ctx.restore();
+  };
+  K.wheel = function (ctx, x, y, r, seed) {
+    const a = Math.sin(K.now * 0.9) * 0.4;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(a);
+    for (let i = 0; i < 8; i++) { const ang = (i / 8) * K.TAU; K.line(ctx, [[0, 0], [Math.cos(ang) * r * 1.35, Math.sin(ang) * r * 1.35]], { stroke: P.woodDark, w: 5, boil: 0.6, seed: seed + i, gap: 0 }); }
+    K.line(ctx, K.ellipsePts(0, 0, r, r, 14).concat([[r, 0]]), { stroke: P.ink, w: 9, boil: 0.8, seed, gap: 0 });
+    K.line(ctx, K.ellipsePts(0, 0, r, r, 14).concat([[r, 0]]), { stroke: P.wood, w: 5, boil: 0.8, seed, gap: 0 });
+    ctx.restore();
+    K.line(ctx, [[x, y], [x + 8, y + 40]], { stroke: P.woodDark, w: 7, boil: 0.6, seed: seed + 20, gap: 0 });
+  };
+  /* gear emblem (Rust-y cog), r = outer radius */
+  K.cog = function (ctx, x, y, r, color, seed) {
+    const pts = [], n = 10;
+    for (let i = 0; i < n * 4; i++) {
+      const a = (i / (n * 4)) * K.TAU, tooth = i % 4 < 2 ? 1 : 0.78;
+      pts.push([x + Math.cos(a) * r * tooth, y + Math.sin(a) * r * tooth]);
+    }
+    K.shape(ctx, pts, { fill: color, w: 3.5, boil: 0.9, seed, gap: 0.05 });
+    K.shape(ctx, K.ellipsePts(x, y, r * 0.38, r * 0.38, 10), { fill: P.sail, w: 3, boil: 0.8, seed: seed + 1, gap: 0 });
+  };
+
+  /* small ship for the chart view (top-down-ish 3/4), heading = radians */
+  K.miniShip = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ heading: 0, coins: 0, crab: null }, opt || {});
+    const flip = Math.cos(o.heading) < 0 ? -1 : 1;
+    /* wake */
+    ctx.save(); ctx.translate(x, y);
+    const back = o.heading + Math.PI;
+    for (let i = 1; i <= 4; i++) {
+      const d = i * 34 * s, sp = (10 + i * 7) * s;
+      const cx = Math.cos(back) * d, cy = Math.sin(back) * d, nx = -Math.sin(back) * sp, ny = Math.cos(back) * sp;
+      K.line(ctx, [[cx + nx, cy + ny], [cx + nx * 0.4 + Math.cos(back) * 8, cy + ny * 0.4]], { stroke: P.foam, w: 3, boil: 1, seed: 300 + i, gap: 0, alpha: 1 - i / 5 });
+      K.line(ctx, [[cx - nx, cy - ny], [cx - nx * 0.4 + Math.cos(back) * 8, cy - ny * 0.4]], { stroke: P.foam, w: 3, boil: 1, seed: 310 + i, gap: 0, alpha: 1 - i / 5 });
+    }
+    ctx.restore();
+    K.ship(ctx, x, y + 6 * s, s, { dir: flip, rock: Math.sin(K.now * 2.4) * 3, coins: o.coins, crab: o.crab, sail: 0.8 });
+  };
+
+  /* ---------------- GULL ---------------- */
+  K.gull = function (ctx, x, y, s, phase) {
+    const f = Math.sin(K.now * 9 + phase) * 0.5 + 0.5;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    K.line(ctx, [[-30, -6 - 14 * f], [-14, -2 - 4 * f], [0, 4], [14, -2 - 4 * f], [30, -6 - 14 * f]], { stroke: P.ink, w: 4.5, boil: 1, seed: 400 + phase, gap: 0 });
+    ctx.restore();
+  };
+
+  /* ---------------- colour helpers ---------------- */
+  function hexRgb(h) { h = h.replace("#", ""); return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]; }
+  function rgbHex(c) { return "#" + c.map((v) => Math.round(clamp(v, 0, 255)).toString(16).padStart(2, "0")).join(""); }
+  function mix(a, b, u) { const A = hexRgb(a), B = hexRgb(b); return rgbHex([lerp(A[0], B[0], u), lerp(A[1], B[1], u), lerp(A[2], B[2], u)]); }
+  function shade(a, k) { return k < 0 ? mix(a, "#000000", -k) : mix(a, "#ffffff", k); }
+  K.mix = mix; K.shadeC = shade;
+})(CK);
+
+/* ============================================================
+   KIT 40 CRAB: "Captain Ferrous", the arbitrage crab.
+   Local space: feet on y = 0, body centre (0, -62), faces the viewer.
+   Proportions (scale 1): body 132 x 84, eye stalks 34, eyes r 18,
+   arms 2 x 34 (two-bone IK), claw 30 long. 6 legs, 22 tall.
+   Pose state (all optional):
+     squash     -1..1  (+ = squashed wide, - = stretched tall), volume kept
+     lean       deg    whole body tilt around the feet
+     hop        px     lift off the ground (legs dangle)
+     look       [dx, dy] pupils, -1..1
+     blink      0..1   (1 = closed)
+     mouth      "smile" | "open" | "grin" | "o"
+     clawL/R    { x, y, open 0..1, rot }  target of the claw tip in local space
+     hat        true | false,  hatTip deg, hatLift px
+     hold       "spyglass" in right claw
+     legWalk    phase (radians) for walking legs; 0 = standing
+   ============================================================ */
+var CK = window.CK || (window.CK = {});
+(function (K) {
+  const P = K.P, { clamp } = K;
+
+  /* two-bone IK: shoulder S, target T, lengths a,b, bend +1/-1 -> elbow, end */
+  K.ik2 = function (S, T, a, b, bend) {
+    let dx = T[0] - S[0], dy = T[1] - S[1], d = Math.hypot(dx, dy);
+    const dm = clamp(d, Math.abs(a - b) + 0.01, a + b - 0.01);
+    if (d < 1e-6) { dx = 1; dy = 0; d = 1; }
+    const ux = dx / d, uy = dy / d;
+    const ca = clamp((a * a + dm * dm - b * b) / (2 * a * dm), -1, 1), A = Math.acos(ca) * (bend || 1);
+    const ex = S[0] + a * (ux * Math.cos(A) - uy * Math.sin(A)), ey = S[1] + a * (ux * Math.sin(A) + uy * Math.cos(A));
+    const tx = S[0] + ux * dm, ty = S[1] + uy * dm;
+    return { elbow: [ex, ey], end: [tx, ty] };
+  };
+  /* outlined limb: ink stroke then colour stroke on top */
+  K.limb = function (ctx, pts, w, color, seed) {
+    K.line(ctx, pts, { stroke: P.ink, w: w + 7, boil: 1, seed, gap: 0 });
+    K.line(ctx, pts, { stroke: color, w, boil: 1, seed, gap: 0 });
+  };
+  /* claw: two pincers around the tip, pointing along angle ang */
+  K.claw = function (ctx, x, y, ang, open, s, seed, flip) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(s, s * (flip || 1));
+    const o = 0.15 + 0.55 * clamp(open, 0, 1);
+    /* palm */
+    K.shape(ctx, K.ellipsePts(-6, 0, 22, 18, 12), { fill: P.rust, w: 4.5, boil: 1, seed, shade: { color: P.rustDark, dx: 0, dy: -6 } });
+    /* upper pincer (big) */
+    ctx.save(); ctx.translate(8, -6); ctx.rotate(-o);
+    K.shape(ctx, [[0, 4], [10, -10], [30, -12], [44, -2], [30, -2], [14, 6]], { fill: P.rust, w: 4.5, boil: 1, seed: seed + 1, shade: { color: P.rustLight, dx: 0, dy: 5 } });
+    ctx.restore();
+    /* lower pincer */
+    ctx.save(); ctx.translate(8, 6); ctx.rotate(o * 0.8);
+    K.shape(ctx, [[0, -4], [12, 8], [30, 8], [38, 0], [24, 0], [12, -4]], { fill: P.rust, w: 4.5, boil: 1, seed: seed + 2 });
+    ctx.restore();
+    ctx.restore();
+  };
+
+  K.crab = function (ctx, x, y, s, st) {
+    st = st || {};
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk; /* keep volume */
+    const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1);
+    const seed = st.seed || 500;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    /* legs: 3 per side, feet on the ground, hips under the body */
+    const bodyY = -62 * syk - hop;
+    for (let side = -1; side <= 1; side += 2) for (let i = 0; i < 3; i++) {
+      const ph = (st.legWalk || 0) + i * 2.1 + (side > 0 ? Math.PI : 0);
+      const lift = st.legWalk ? Math.max(0, Math.sin(ph)) * 10 : 0;
+      const hx = side * (34 + i * 14) * sxk, hy = bodyY + 24 * syk;
+      const air = clamp(hop / 40, 0, 1); /* in the air the legs tuck in under the body */
+      const fx = side * (60 + i * 17 - 22 * air) + (st.legWalk ? Math.cos(ph) * 6 : 0), fy = -lift - hop - 16 * air;
+      const kx = side * (68 + i * 15) * (0.85 + 0.15 * sxk), ky = hy - 6 + i * 3; /* knee arches above the hip, like a real crab */
+      K.limb(ctx, [[hx, hy], [kx, ky], [fx, fy]], 7, P.rustDark, seed + side * 10 + i);
+    }
+    ctx.save(); ctx.translate(0, bodyY); ctx.scale(sxk, syk);
+    /* eye stalks + eyes (behind the hat, in front of nothing) */
+    const eyeY = -82 - (st.eyeUp || 0), eyes = [-1, 1].map((sd) => [sd * 44 + sd * 2 * Math.sin(K.now * 3 + sd), eyeY]);
+    eyes.forEach((e, i) => K.limb(ctx, [[e[0] * 0.66, -34], [e[0] * 0.9, -56], [e[0], e[1] + 12]], 8, P.rust, seed + 30 + i));
+    /* body */
+    const body = [];
+    for (let i = 0; i < 20; i++) {
+      const a = (i / 20) * K.TAU, c = Math.cos(a), sn = Math.sin(a);
+      const ry = sn > 0 ? 36 : 44; /* flatter belly, domed back */
+      body.push([c * 66 * (1 - 0.06 * Math.abs(sn)), sn * ry + (sn > 0 ? 0 : -4)]);
+    }
+    K.shape(ctx, body, { fill: P.rust, w: 5.5, boil: 1.4, seed: seed + 1, shade: { color: P.rustDark, dx: -10, dy: -12 }, hatch: { ang: 0.9, gap: 11, alpha: 0.2, color: P.rustDark } });
+    /* shell spots + belly */
+    K.shape(ctx, K.ellipsePts(0, 18, 38, 14, 12), { fill: P.belly, w: 3, boil: 1, seed: seed + 2, gap: 0.2 });
+    [[-36, -22, 7], [-22, -32, 5], [38, -18, 6]].forEach((d, i) => K.shape(ctx, K.ellipsePts(d[0], d[1], d[2], d[2] * 0.8, 8), { fill: P.rustLight, stroke: null, w: 0, boil: 0.6, seed: seed + 3 + i }));
+    /* cheeks */
+    [-1, 1].forEach((sd, i) => { ctx.save(); ctx.globalAlpha = 0.5; K.shape(ctx, K.ellipsePts(sd * 40, 4, 10, 6, 8), { fill: "#ff8f7a", stroke: null, w: 0, boil: 0.5, seed: seed + 8 + i }); ctx.restore(); });
+    /* mouth */
+    const m = st.mouth || "smile";
+    if (m === "smile") K.line(ctx, [[-22, 4], [-10, 14], [10, 14], [22, 4]], { stroke: P.ink, w: 4.5, boil: 0.9, seed: seed + 11, gap: 0 });
+    else if (m === "grin") K.shape(ctx, [[-26, 2], [26, 2], [14, 20], [0, 23], [-14, 20]], { fill: "#7a2a1a", w: 4, boil: 0.9, seed: seed + 12, gap: 0 });
+    else if (m === "open") K.shape(ctx, K.ellipsePts(0, 12, 14, 12, 10), { fill: "#7a2a1a", w: 4, boil: 0.9, seed: seed + 13, gap: 0 });
+    else if (m === "o") K.shape(ctx, K.ellipsePts(0, 12, 7, 8, 8), { fill: "#7a2a1a", w: 3.5, boil: 0.7, seed: seed + 14, gap: 0 });
+    /* hat (captain's cap) */
+    if (st.hat !== false) {
+      ctx.save(); ctx.translate(0, -40 - (st.hatLift || 0)); ctx.rotate(((st.hatTip || 0) * Math.PI) / 180); ctx.scale(0.82, 0.9);
+      K.shape(ctx, [[-34, 0], [-30, -24], [-12, -34], [16, -34], [32, -24], [36, 0]], { fill: P.capNavy, w: 4.5, boil: 1, seed: seed + 20, shade: { color: P.capNavyDark, dx: -8, dy: 0 } });
+      K.shape(ctx, [[-38, -2], [38, -2], [40, 8], [-40, 8]], { fill: P.paper, w: 4, boil: 0.8, seed: seed + 21 });
+      K.shape(ctx, [[8, 6], [50, 8], [44, 16], [6, 13]], { fill: P.ink, w: 3, boil: 0.8, seed: seed + 22 });
+      K.cog(ctx, 0, -16, 9, P.gold, seed + 23);
+      ctx.restore();
+    }
+    /* eyes */
+    eyes.forEach((e, i) => {
+      const r = 18, ry = r * (1 - 0.92 * blink);
+      K.shape(ctx, K.ellipsePts(e[0], e[1], r, Math.max(1.5, ry), 14), { fill: P.eye, w: 4, boil: 0.8, seed: seed + 40 + i, gap: 0 });
+      if (blink < 0.6) {
+        const px = e[0] + look[0] * 6, py = e[1] + look[1] * 5 * (1 - blink);
+        K.shape(ctx, K.ellipsePts(px, py, 8.5, 9.5 * (1 - blink), 10), { fill: P.pupil, stroke: null, w: 0, boil: 0.5, seed: seed + 44 + i });
+        K.shape(ctx, K.ellipsePts(px + 3, py - 4, 3, 3, 6), { fill: "#ffffff", stroke: null, w: 0, boil: 0.3, seed: seed + 46 + i });
+      } else K.line(ctx, [[e[0] - r, e[1]], [e[0], e[1] + 3], [e[0] + r, e[1]]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 48 + i, gap: 0 });
+      /* brow (expressive) */
+      const br = st.brow || 0;
+      K.line(ctx, [[e[0] - 14, e[1] - 26 - br * 6 + (i ? -br : br) * 2], [e[0] + 14, e[1] - 26 - br * 6 + (i ? br : -br) * 2]], { stroke: P.ink, w: 4.5, boil: 0.6, seed: seed + 50 + i, gap: 0 });
+    });
+    /* "!" surprise mark (language-neutral) */
+    if (st.exclaim > 0) {
+      const a = K.E.back(K.clamp(st.exclaim, 0, 1), 2.5);
+      ctx.save(); ctx.translate(92, -128); ctx.rotate(0.25); ctx.scale(a, a);
+      K.shape(ctx, [[-9, -52], [9, -52], [5, -10], [-5, -10]], { fill: P.gold, w: 4, boil: 1, seed: seed + 90, gap: 0 });
+      K.shape(ctx, K.ellipsePts(0, 4, 7, 7, 8), { fill: P.gold, w: 4, boil: 1, seed: seed + 91, gap: 0 });
+      ctx.restore();
+    }
+    ctx.restore();
+    /* arms: shoulders at body sides, IK to claw targets (unscaled space so claws do not squash) */
+    [["L", -1], ["R", 1]].forEach(([k, sd]) => {
+      const c = st["claw" + k] || { x: sd * 104, y: -40, open: 0.2 };
+      const S = [sd * 58 * sxk, bodyY + 4 * syk];
+      const r = K.ik2(S, [c.x, c.y - hop], 36, 34, sd > 0 ? 1 : -1);
+      K.limb(ctx, [S, r.elbow, r.end], 9, P.rust, seed + 60 + sd);
+      const ang = c.rot != null ? (c.rot * Math.PI) / 180 : Math.atan2(r.end[1] - r.elbow[1], r.end[0] - r.elbow[0]);
+      if (k === "R" && st.hold === "spyglass") K.spyglass(ctx, r.end[0], r.end[1], ang, seed + 70);
+      K.claw(ctx, r.end[0], r.end[1], ang, c.open == null ? 0.2 : c.open, 1.05, seed + 80 + sd * 5, sd < 0 ? -1 : 1);
+    });
+    ctx.restore();
+  };
+  K.spyglass = function (ctx, x, y, ang, seed) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+    K.shape(ctx, K.rectPts(-6, -9, 48, 18, 2), { fill: P.goldDark, w: 4, boil: 0.8, seed });
+    K.shape(ctx, K.rectPts(38, -12, 34, 24, 2), { fill: P.gold, w: 4, boil: 0.8, seed: seed + 1 });
+    K.shape(ctx, K.ellipsePts(73, 0, 5, 12, 8), { fill: "#bfe6ec", w: 3, boil: 0.5, seed: seed + 2 });
+    K.lens = ctx.getTransform().transformPoint(new DOMPoint(76, 0)); /* screen point of the lens (iris transitions) */
+    ctx.restore();
+  };
+
+  /* convenience: blink curve with seeded random blink times, 0..1 */
+  K.blinkAt = function (t, seed) {
+    let b = 0;
+    for (let i = 0; i < 12; i++) {
+      const tb = 0.8 + i * 1.9 + K.hash(i, seed || 7) * 1.1, d = t - tb;
+      if (d > 0 && d < 0.16) b = Math.max(b, Math.sin((d / 0.16) * Math.PI));
+    }
+    return b;
+  };
+})(CK);
+
+/* ============================================================
+   KIT 50 EXPLAINER: slide content as objects of the sea world.
+   Never draw a flat slide. Each primitive is a physical thing:
+     graph node  -> island with a currency coin flag      K.node
+     graph edge  -> sea route (rope of light) + rate flag K.edge
+     number sign -> wooden plank on a post               K.plank
+     table       -> parchment ledger                     K.ledger
+     formula     -> dark slate board in a wooden frame   K.slate
+     chart       -> chart painted on a sail-cloth        K.sailChart
+     bullets     -> harbour notice board                 K.notice
+     code        -> the captain's logbook                K.logbook
+     title       -> unrolling ribbon banner              K.banner
+   All take an `a` (appear 0..1) so they can pop in on a beat.
+   Text never boils; frames, ropes and paper edges do.
+   ============================================================ */
+var CK = window.CK || (window.CK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp, hash, hs } = K;
+  const popS = (a) => (a <= 0 ? 0 : a >= 1 ? 1 : K.E.back(a, 2.2));
+
+  /* ---------- graph node: island + coin flag ---------- */
+  K.node = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ label: "BTC", color: P.BTC, a: 1, seed: 1, palms: 2, lighthouse: false, hot: 0, coinY: -170, coinR: 88 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    K.island(ctx, x, y, s, { seed: o.seed, palms: o.palms, pop: a, lighthouse: o.lighthouse });
+    /* coin on a pole */
+    ctx.save(); ctx.translate(x, y); ctx.scale(s * a, s * a);
+    const bob = Math.sin(K.now * 2 + o.seed) * 5;
+    K.line(ctx, [[-120, 10], [-120, o.coinY + o.coinR * 0.6 + bob]], { stroke: P.ink, w: 7, boil: 0.8, seed: o.seed + 90, gap: 0 });
+    if (o.hot > 0) K.glow(ctx, -120, o.coinY + bob, 150, "rgba(255,220,120,0.95)", o.hot * 0.8);
+    K.coin(ctx, -120, o.coinY + bob, o.coinR, { color: o.color, label: o.label, seed: o.seed + 91, labelColor: P.paper, size: o.coinR * (o.label.length > 3 ? 0.42 : 0.52) });
+    ctx.restore();
+  };
+
+  /* ---------- graph edge: a sea route between two points ----------
+     p (draw progress), state "plain" | "hot" | "dim", bend (curvature, px),
+     label (rate text on a little flag), dir arrow at 60 % when hot */
+  K.edgePoint = function (A, B, bend, u) {
+    const mx = (A[0] + B[0]) / 2, my = (A[1] + B[1]) / 2, dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1;
+    const C = [mx - (dy / L) * bend, my + (dx / L) * bend];
+    const x = (1 - u) * (1 - u) * A[0] + 2 * (1 - u) * u * C[0] + u * u * B[0];
+    const y = (1 - u) * (1 - u) * A[1] + 2 * (1 - u) * u * C[1] + u * u * B[1];
+    const tx = 2 * (1 - u) * (C[0] - A[0]) + 2 * u * (B[0] - C[0]), ty = 2 * (1 - u) * (C[1] - A[1]) + 2 * u * (B[1] - C[1]);
+    return [x, y, Math.atan2(ty, tx)];
+  };
+  K.edge = function (ctx, A, B, opt) {
+    const o = Object.assign({ p: 1, state: "plain", bend: 60, label: "", seed: 1, trim: 120, labelA: 1, w: 7, labelSize: 30, lu: 0.5 }, opt || {});
+    if (o.p <= 0) return;
+    const L = Math.hypot(B[0] - A[0], B[1] - A[1]), u0 = clamp(o.trim / L, 0, 0.45), u1 = 1 - u0;
+    const N = 28, pts = [];
+    for (let i = 0; i <= N; i++) { const u = lerp(u0, u1, (i / N) * o.p); pts.push(K.edgePoint(A, B, o.bend, u)); }
+    const hot = o.state === "hot", dim = o.state === "dim";
+    const col = hot ? P.profit : P.route, alpha = dim ? 0.35 : 1;
+    if (hot) { ctx.save(); ctx.globalAlpha = 0.5; K.line(ctx, pts.map((q) => [q[0], q[1]]), { stroke: P.profitGlow, w: o.w * 3.2, boil: 1.5, seed: o.seed + 5, gap: 0 }); ctx.restore(); }
+    /* rope: ink underlay + dashed light on top, dashes flow along the route */
+    K.line(ctx, pts.map((q) => [q[0], q[1]]), { stroke: P.ink, w: o.w + 5, boil: 1.3, seed: o.seed, gap: 0, alpha });
+    const flow = K.now * (hot ? 3.2 : 0.8);
+    for (let i = 0; i < N * o.p; i++) {
+      if ((Math.floor(i - flow) % 2 + 2) % 2) continue;
+      const a = pts[i], b = pts[Math.min(i + 1, pts.length - 1)];
+      K.line(ctx, [[a[0], a[1]], [b[0], b[1]]], { stroke: col, w: o.w, boil: 1.0, seed: o.seed + i, gap: 0, alpha });
+    }
+    /* arrow head */
+    if (hot && o.p >= 1) {
+      const q = K.edgePoint(A, B, o.bend, lerp(u0, u1, 0.62));
+      ctx.save(); ctx.translate(q[0], q[1]); ctx.rotate(q[2]);
+      K.shape(ctx, [[18, 0], [-12, -14], [-6, 0], [-12, 14]], { fill: P.profit, w: 4, boil: 0.8, seed: o.seed + 7, gap: 0 });
+      ctx.restore();
+    }
+    /* rate flag at the middle */
+    if (o.label && o.p > 0.6) {
+      const la = clamp((o.p - 0.6) / 0.4, 0, 1) * o.labelA;
+      const q = K.edgePoint(A, B, o.bend, o.lu);
+      K.tag(ctx, q[0], q[1] - 6, o.label, { a: la * (dim ? 0.5 : 1), hot, seed: o.seed + 9, size: o.labelSize });
+    }
+  };
+  /* small paper tag with a number (edge weights, prices) */
+  K.tag = function (ctx, x, y, str, opt) {
+    const o = Object.assign({ a: 1, hot: false, size: 30, seed: 1, font: K.FONT.mono, weight: 700 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const w = K.textW(ctx, str, o.size, o.weight, o.font) + 26, h = o.size + 18;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a); ctx.rotate(hs(o.seed, 2) * 0.05);
+    K.shape(ctx, K.rectPts(-w / 2, -h / 2, w, h, 3), { fill: o.hot ? P.profit : P.paper, w: 3.5, boil: 1, seed: o.seed, shade: { color: o.hot ? P.goldDark : P.paperShade, dx: 0, dy: -5 } });
+    K.text(ctx, str, 0, 1, { size: o.size, weight: o.weight, font: o.font, fill: P.ink });
+    ctx.restore();
+  };
+
+  /* ---------- wooden plank sign on a post (big numbers, 1-3 short lines) ---------- */
+  K.plank = function (ctx, x, y, w, h, lines, opt) {
+    const o = Object.assign({ a: 1, size: 54, seed: 11, post: true, colors: [], font: K.FONT.mono, weight: 700 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a); ctx.rotate(Math.sin(K.now * 1.3 + o.seed) * 0.015);
+    if (o.post) K.limb(ctx, [[0, h / 2], [0, h / 2 + 120]], 12, P.woodDark, o.seed + 1);
+    K.shape(ctx, K.rectPts(-w / 2, -h / 2, w, h, 4), { fill: P.wood, w: 5, boil: 1.4, seed: o.seed, shade: { color: P.woodDark, dx: 0, dy: -10 }, hatch: { ang: 0.02, gap: 18, alpha: 0.25, color: P.woodDark } });
+    K.shape(ctx, K.rectPts(-w / 2 + 12, -h / 2 + 12, w - 24, h - 24, 4), { fill: P.paper, w: 3, boil: 1, seed: o.seed + 2 });
+    [[-w / 2 + 8, -h / 2 + 8], [w / 2 - 8, -h / 2 + 8], [-w / 2 + 8, h / 2 - 8], [w / 2 - 8, h / 2 - 8]].forEach((n, i) => K.dot(ctx, n[0], n[1], 4, P.rivet, P.ink, 1.5, o.seed + 5 + i));
+    const lh = o.size * 1.18, top = -((lines.length - 1) * lh) / 2;
+    lines.forEach((ln, i) => K.text(ctx, ln, 0, top + i * lh + 2, { size: o.size, weight: o.weight, font: o.font, fill: o.colors[i] || P.ink }));
+    ctx.restore();
+  };
+
+  /* ---------- parchment ledger (table) ----------
+     rows: array of arrays of strings; row 0 = header. hi = highlighted row index */
+  K.ledger = function (ctx, x, y, cols, rows, opt) {
+    const o = Object.assign({ a: 1, size: 30, rowH: 52, seed: 21, hi: -1, reveal: 1 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const w = cols.reduce((s, c) => s + c, 0) + 40, h = rows.length * o.rowH + 40;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    const edge = []; /* torn paper edge */
+    for (let i = 0; i <= 10; i++) edge.push([-w / 2 + (w * i) / 10, -h / 2 + hs(i, o.seed) * 4]);
+    for (let i = 0; i <= 6; i++) edge.push([w / 2 + hs(i + 20, o.seed) * 4, -h / 2 + (h * i) / 6]);
+    for (let i = 10; i >= 0; i--) edge.push([-w / 2 + (w * i) / 10, h / 2 + hs(i + 40, o.seed) * 4]);
+    for (let i = 6; i >= 0; i--) edge.push([-w / 2 + hs(i + 60, o.seed) * 4, -h / 2 + (h * i) / 6]);
+    K.shape(ctx, edge, { fill: P.paper, w: 4, boil: 1.2, seed: o.seed, shade: { color: P.paperShade, dx: -10, dy: -10 } });
+    const shown = Math.ceil(rows.length * o.reveal);
+    rows.slice(0, shown).forEach((r, ri) => {
+      const ry = -h / 2 + 20 + ri * o.rowH + o.rowH / 2;
+      if (ri === o.hi) { ctx.save(); ctx.globalAlpha = 0.55; K.shape(ctx, K.rectPts(-w / 2 + 12, ry - o.rowH / 2 + 4, w - 24, o.rowH - 8, 3), { fill: P.profit, stroke: null, w: 0, boil: 1, seed: o.seed + ri }); ctx.restore(); }
+      let cx = -w / 2 + 20;
+      r.forEach((cell, ci) => {
+        K.text(ctx, cell, cx + cols[ci] / 2, ry, { size: o.size, weight: ri === 0 ? 800 : 500, font: ri === 0 ? K.FONT.display : K.FONT.mono, fill: ri === 0 ? P.rustDark : P.ink });
+        cx += cols[ci];
+      });
+      if (ri === 0) K.line(ctx, [[-w / 2 + 16, ry + o.rowH / 2], [w / 2 - 16, ry + o.rowH / 2]], { stroke: P.ink, w: 3, boil: 1, seed: o.seed + 50 });
+    });
+    ctx.restore();
+  };
+
+  /* ---------- slate board (formulas, 1-3 lines, chalk type) ---------- */
+  K.slate = function (ctx, x, y, w, h, lines, opt) {
+    const o = Object.assign({ a: 1, size: 56, seed: 31, write: 1, font: K.FONT.mono }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    K.shape(ctx, K.rectPts(-w / 2 - 18, -h / 2 - 18, w + 36, h + 36, 4), { fill: P.wood, w: 5, boil: 1.3, seed: o.seed, shade: { color: P.woodDark, dx: -8, dy: -8 } });
+    K.shape(ctx, K.rectPts(-w / 2, -h / 2, w, h, 4), { fill: P.board, w: 4, boil: 1.1, seed: o.seed + 1 });
+    /* chalk smudges */
+    for (let i = 0; i < 6; i++) { ctx.save(); ctx.globalAlpha = 0.06; K.pathOf(ctx, K.blobPts(hs(i, o.seed) * w * 0.4, hs(i + 9, o.seed) * h * 0.3, 90, 30, 9, i, 0.3), true); ctx.fillStyle = P.chalk; ctx.fill(); ctx.restore(); }
+    const lh = o.size * 1.3, top = -((lines.length - 1) * lh) / 2;
+    lines.forEach((ln, i) => {
+      const str = typeof ln === "string" ? ln : ln.t, col = typeof ln === "string" ? P.chalk : ln.c || P.chalk;
+      const n = Math.floor(str.length * clamp(o.write * lines.length - i, 0, 1)); /* written letter by letter */
+      if (n > 0) K.text(ctx, str.slice(0, n), -w / 2 + 40, top + i * lh, { size: o.size, weight: 500, font: o.font, fill: col, align: "left" });
+    });
+    ctx.restore();
+  };
+
+  /* ---------- chart painted on a sail-cloth ----------
+     series: [{ data:[..], color, kind:"line"|"bar" }], draw = 0..1 progress, yMin/yMax */
+  K.sailChart = function (ctx, x, y, w, h, series, opt) {
+    const o = Object.assign({ a: 1, draw: 1, seed: 41, yMin: null, yMax: null, xLabels: [], title: "" }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    const billow = 10 * Math.sin(K.now * 1.6);
+    const cloth = [[-w / 2, -h / 2], [0, -h / 2 + 6], [w / 2, -h / 2], [w / 2 + billow, 0], [w / 2, h / 2], [0, h / 2 - 6], [-w / 2, h / 2], [-w / 2 + billow * 0.5, 0]];
+    K.shape(ctx, cloth, { fill: P.sail, w: 5, boil: 1.6, seed: o.seed, shade: { color: P.sailShade, dx: -18, dy: 0 } });
+    /* rings on the top edge */
+    for (let i = 0; i < 6; i++) K.dot(ctx, -w / 2 + 30 + (i * (w - 60)) / 5, -h / 2 + 2, 7, P.goldDark, P.ink, 2, o.seed + i);
+    const pl = -w / 2 + 70, pr = w / 2 - 40, pt = -h / 2 + (o.title ? 80 : 40), pb = h / 2 - 60;
+    if (o.title) K.text(ctx, o.title, 0, -h / 2 + 42, { size: 34, weight: 800, fill: P.ink });
+    K.line(ctx, [[pl, pt], [pl, pb]], { stroke: P.ink, w: 4, boil: 1, seed: o.seed + 9 }); /* two strokes: a smooth path would round the corner */
+    K.line(ctx, [[pl, pb], [pr, pb]], { stroke: P.ink, w: 4, boil: 1, seed: o.seed + 8 });
+    let mn = o.yMin, mx = o.yMax;
+    if (mn == null || mx == null) { const all = series.flatMap((s) => s.data); mn = mn == null ? Math.min(...all) : mn; mx = mx == null ? Math.max(...all) : mx; }
+    const X = (i, n) => pl + 20 + ((pr - pl - 40) * i) / Math.max(1, n - 1), Y = (v) => pb - ((v - mn) / (mx - mn || 1)) * (pb - pt);
+    series.forEach((s, si) => {
+      const n = s.data.length, k = o.draw * (n - 1);
+      if (s.kind === "bar") {
+        const bw = ((pr - pl) / n) * 0.55;
+        s.data.forEach((v, i) => { const g = clamp(o.draw * n - i, 0, 1); if (g <= 0) return; const top = lerp(pb, Y(v), K.E.back(g, 1.4)); K.shape(ctx, K.rectPts(X(i, n) - bw / 2, top, bw, pb - top, 2), { fill: s.color, w: 3.5, boil: 1, seed: o.seed + 20 + i, hatch: { ang: 0.8, gap: 9, alpha: 0.25 } }); });
+      } else {
+        const pts = [];
+        for (let i = 0; i <= Math.floor(k); i++) pts.push([X(i, n), Y(s.data[i])]);
+        const fr = k - Math.floor(k), i0 = Math.floor(k);
+        if (i0 < n - 1 && fr > 0) pts.push([lerp(X(i0, n), X(i0 + 1, n), fr), lerp(Y(s.data[i0]), Y(s.data[i0 + 1]), fr)]);
+        if (pts.length > 1) { K.line(ctx, pts, { stroke: P.ink, w: 10, boil: 1.2, seed: o.seed + 30 + si, gap: 0 }); K.line(ctx, pts, { stroke: s.color, w: 5.5, boil: 1.2, seed: o.seed + 30 + si, gap: 0 }); }
+        const head = pts[pts.length - 1]; if (head) K.dot(ctx, head[0], head[1], 8, s.color, P.ink, 3, o.seed + 40 + si);
+      }
+    });
+    o.xLabels.forEach((lb, i) => K.text(ctx, lb, X(i, o.xLabels.length), pb + 30, { size: 24, weight: 500, font: K.FONT.mono, fill: P.inkSoft }));
+    ctx.restore();
+  };
+
+  /* ---------- harbour notice board (bullets; each bullet pops on its own beat) ----------
+     items: strings; shown: number of items visible (fractional = popping) */
+  K.notice = function (ctx, x, y, w, items, opt) {
+    const o = Object.assign({ a: 1, size: 40, seed: 51, shown: 99, title: "", lineH: null }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const lh = o.lineH || o.size * 1.65, h = items.length * lh + (o.title ? 110 : 60);
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    K.limb(ctx, [[-w / 2 + 40, h / 2], [-w / 2 + 40, h / 2 + 140]], 14, P.woodDark, o.seed + 1);
+    K.limb(ctx, [[w / 2 - 40, h / 2], [w / 2 - 40, h / 2 + 140]], 14, P.woodDark, o.seed + 2);
+    K.shape(ctx, K.rectPts(-w / 2, -h / 2, w, h, 4), { fill: P.wood, w: 5, boil: 1.3, seed: o.seed, shade: { color: P.woodDark, dx: 0, dy: -12 } });
+    K.shape(ctx, K.rectPts(-w / 2 + 16, -h / 2 + 16, w - 32, h - 32, 4), { fill: P.paper, w: 3, boil: 1, seed: o.seed + 3 });
+    let yy = -h / 2 + 30 + lh / 2;
+    if (o.title) { K.text(ctx, o.title, 0, -h / 2 + 58, { size: o.size * 1.05, weight: 900, fill: P.rustDark }); yy += 50; }
+    items.forEach((it, i) => {
+      const g = clamp(o.shown - i, 0, 1); if (g <= 0) return;
+      const s = K.E.back(g, 2);
+      ctx.save(); ctx.translate(-w / 2 + 60, yy + i * lh); ctx.scale(s, s);
+      K.coin(ctx, 0, 0, o.size * 0.42, { color: P.gold, seed: o.seed + 10 + i });
+      K.text(ctx, it, o.size * 0.8, 2, { size: o.size, weight: 500, fill: P.ink, align: "left" });
+      ctx.restore();
+    });
+    ctx.restore();
+  };
+
+  /* ---------- captain's logbook (code snippet), Rust-ish highlighting ---------- */
+  const KW = /^(fn|let|mut|for|in|if|else|return|pub|struct|impl|use|match|while|loop|const|async|await|self|Self|where|break|continue)$/;
+  K.logbook = function (ctx, x, y, w, lines, opt) {
+    const o = Object.assign({ a: 1, size: 28, seed: 61, typed: 1 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const lh = o.size * 1.45, h = lines.length * lh + 80;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    K.shape(ctx, K.rectPts(-w / 2 - 14, -h / 2 - 10, w + 28, h + 24, 4), { fill: P.rustDark, w: 5, boil: 1.2, seed: o.seed }); /* leather cover */
+    K.shape(ctx, K.rectPts(-w / 2, -h / 2, w, h, 4), { fill: P.paper, w: 4, boil: 1.1, seed: o.seed + 1, shade: { color: P.paperShade, dx: 14, dy: 0 } });
+    K.line(ctx, [[0, -h / 2 + 6], [0, h / 2 - 6]], { stroke: P.paperShade, w: 3, boil: 1, seed: o.seed + 2, alpha: 0.4 });
+    ctx.save(); ctx.font = `500 ${o.size}px ${K.FONT.mono}`; const cw = ctx.measureText("M").width; ctx.restore();
+    const total = lines.reduce((s, l) => s + l.length, 0); let budget = Math.floor(total * o.typed);
+    lines.forEach((ln, i) => {
+      if (budget <= 0) return; const vis = ln.slice(0, budget); budget -= ln.length;
+      const yy = -h / 2 + 40 + lh / 2 + i * lh; let col = 0;
+      K.text(ctx, String(i + 1), -w / 2 + 28, yy, { size: o.size * 0.8, weight: 500, font: K.FONT.mono, fill: P.paperShade });
+      const toks = vis.match(/\/\/.*$|"[^"]*"?|[A-Za-z_][A-Za-z0-9_]*|[0-9][0-9_.]*|\s+|./g) || [];
+      toks.forEach((tk) => {
+        const c = tk.startsWith("//") ? "#8a7a66" : KW.test(tk) ? P.rustDark : /^[0-9]/.test(tk) ? P.EUR : tk.startsWith('"') ? P.USDT : P.ink;
+        K.text(ctx, tk, -w / 2 + 60 + col * cw, yy, { size: o.size, weight: KW.test(tk) ? 700 : 500, font: K.FONT.mono, fill: c, align: "left" });
+        col += tk.length;
+      });
+    });
+    ctx.restore();
+  };
+
+  /* ---------- ribbon banner (titles). u = unroll 0..1. returns the text box ---------- */
+  K.banner = function (ctx, cx, cy, w, h, u, opt) {
+    const o = Object.assign({ seed: 71, fill: P.paper, shade: P.paperShade, tail: P.rust, tailDark: P.rustDark }, opt || {});
+    if (u <= 0) return null;
+    const ww = w * K.E.out3(clamp(u, 0, 1)), wave = (xx) => Math.sin(xx * 0.006 + K.now * 1.4) * 8;
+    /* tails (behind) */
+    [-1, 1].forEach((sd, i) => {
+      const ex = cx + sd * ww / 2, tl = [[ex - sd * 40, cy - h / 2 + 30], [ex + sd * 90, cy - h / 2 + 34], [ex + sd * 50, cy + 10], [ex + sd * 100, cy + h / 2 + 44], [ex - sd * 40, cy + h / 2 + 30]];
+      K.shape(ctx, tl, { fill: o.tail, w: 5, boil: 1.4, seed: o.seed + 10 + i, shade: { color: o.tailDark, dx: 0, dy: -14 } });
+    });
+    /* main band with gentle wave */
+    const top = [], bot = [], N = 12;
+    for (let i = 0; i <= N; i++) { const xx = cx - ww / 2 + (ww * i) / N; top.push([xx, cy - h / 2 + wave(xx)]); bot.push([xx, cy + h / 2 + wave(xx)]); }
+    K.shape(ctx, top.concat(bot.reverse()), { fill: o.fill, w: 6, boil: 1.6, seed: o.seed, shade: { color: o.shade, dx: 0, dy: -16 } });
+    /* rolled ends */
+    [-1, 1].forEach((sd, i) => K.shape(ctx, K.ellipsePts(cx + sd * ww / 2, cy + wave(cx + sd * ww / 2), 26, h / 2 + 12, 14), { fill: o.shade, w: 5, boil: 1.2, seed: o.seed + 20 + i }));
+    return { x: cx - ww / 2, y: cy - h / 2, w: ww, h };
+  };
+})(CK);
+
+/* ============================================================
+   INTRO 10 SETUP: variables, title DOM, world data, timing (beat grid)
+   Song: sea shanty ~120 BPM. 1 bar = 4 beats = 2 s. 10 bars = 20 s.
+   All story times are written as K.at(bar, beat) so a retime to the real
+   song is K.G.BPM / K.G.OFFSET only.
+   ============================================================ */
+const K = CK, P = K.P, at = K.at;
+const DUR = 20;
+const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+
+/* ---------- variables (title text, language) ---------- */
+const VARS = Object.assign({ title: "Complex Arbitrage|in Rust", lang: "en" },
+  (window.__hyperframes && window.__hyperframes.getVariables && window.__hyperframes.getVariables()) || {});
+const LANG = VARS.lang || "en";
+const TITLE_LINES = String(VARS.title || "Complex Arbitrage|in Rust").split("|").map((s) => s.trim()).filter(Boolean);
+const IS_CJK = LANG === "zh-CN" || LANG === "zh-TW";
+
+/* ---------- title DOM: one span per character (letters drop in on the beat) ---------- */
+const titleEl = document.getElementById("title");
+if (LANG === "zh-CN") titleEl.classList.add("cjk-sc");
+if (LANG === "zh-TW") titleEl.classList.add("cjk-tc");
+/* font sizes chosen so the longest line fits the 1500 px banner (see STYLE.md, type table) */
+const longest = Math.max(...TITLE_LINES.map((s) => s.length));
+const WIDE = /[\u0400-\u04ff]/.test(VARS.title) ? 1840 : 1980; /* Cyrillic glyphs run ~7 % wider in Rubik 900 */
+const TITLE_SIZE = IS_CJK ? 150 : TITLE_LINES.length > 1 ? Math.min(124, Math.floor(WIDE / Math.max(10, longest))) : Math.min(110, Math.floor((WIDE + 320) / longest));
+const TITLE_CH = [];
+TITLE_LINES.forEach((ln, li) => {
+  const d = document.createElement("div");
+  d.className = "ln " + (li === TITLE_LINES.length - 1 && TITLE_LINES.length > 1 ? "l1" : "l0");
+  const size = li === 0 || TITLE_LINES.length === 1 ? TITLE_SIZE : Math.round(TITLE_SIZE * 0.82);
+  d.style.fontSize = size + "px";
+  d.dataset.size = size;
+  Array.from(ln).forEach((c) => {
+    const s = document.createElement("span");
+    s.className = "ch"; s.textContent = c === " " ? " " : c;
+    d.appendChild(s); TITLE_CH.push({ el: s, line: li, idx: TITLE_CH.length });
+  });
+  titleEl.appendChild(d);
+});
+const TITLE_LN = Array.from(titleEl.querySelectorAll(".ln"));
+
+/* ---------- chart-view world: currency islands (graph nodes) and routes (edges) ---------- */
+const NODES = {
+  USDT: { x: 300, y: 900, c: P.USDT, seed: 11, lighthouse: true, palms: 1, pop: at(2, 2) },
+  BTC: { x: 1350, y: 380, c: P.BTC, seed: 23, palms: 2, pop: at(1, 3) },
+  ETH: { x: 2300, y: 880, c: P.ETH, seed: 37, palms: 2, pop: at(2, 3) },
+  SOL: { x: 1480, y: 1440, c: P.SOL, seed: 41, palms: 1, pop: at(3, 0) },
+  EUR: { x: 520, y: 1620, c: P.EUR, seed: 53, palms: 2, pop: at(3, 1) },
+};
+const NODE_S = 0.9;
+/* rate on each route: price of the second asset in the first */
+const EDGES = [
+  ["USDT", "BTC", "62 000", -70, at(3, 0)],
+  ["BTC", "ETH", "0.0525", -70, at(3, 0.5)],
+  ["ETH", "USDT", "3 270", -60, at(3, 1)],
+  ["USDT", "SOL", "148.2", 60, at(3, 1.5)],
+  ["SOL", "ETH", "0.0453", 60, at(3, 2)],
+  ["BTC", "SOL", "418.6", 50, at(3, 2.5), 0.72],
+  ["EUR", "USDT", "1.084", 40, at(3, 3)],
+  ["EUR", "SOL", "136.9", -40, at(3, 3.5)],
+];
+const LOOP = [0, 1, 2]; /* indices of the profitable cycle in EDGES */
+/* the cargo: 1 USDT -> BTC -> ETH -> USDT */
+const HOLD = ["1.0000 USDT", "0.0000161 BTC", "0.000307 ETH", "1.0046 USDT", "0.0000162 BTC", "0.000310 ETH", "1.0092 USDT"];
+
+/* ---------- story beats (seconds via the grid) ---------- */
+const T = {
+  shipIn: [0, at(0, 3.6)],
+  spyUp: at(1, 0),          /* 2.0 crab raises the spyglass */
+  spot: at(1, 2),           /* 3.0 eyes pop: "!" */
+  iris: [at(1, 3.2), at(2, 1.2)], /* 3.6 - 4.6 spyglass iris into the chart */
+  hot: at(4, 0),            /* 8.0 the triangle lights up */
+  lap1: [at(4, 1), at(5, 3)],     /* 8.5 - 11.5 */
+  lap2: [at(6, 0), at(6, 3.6)],   /* 12.0 - 13.8 */
+  wipe: [at(7, 1.4), at(7, 3.4)], /* 14.7 - 15.7 wave wipe to the title set */
+  banner: [at(7, 3.2), at(8, 0.8)],
+  letters: at(8, 0),
+  jump: at(8, 0),
+  snap: [at(8, 2), at(8, 3)],
+  medals: at(8, 2),
+  hatTip: at(9, 0),
+};
+
+/* ============================================================
+   INTRO 20 SIDE SET: horizon, big ship, the crab close up.
+   Used twice: opening (0 - 4.6 s) and the title card (15 - 20 s).
+   ============================================================ */
+const pulseB = (t) => K.pulse(t, 1, 6);          /* every beat */
+const pulseA = (t) => K.pulse(t, 4, 5);          /* every accent (bar) */
+
+/* crab pose for the opening */
+function crabOpening(t) {
+  const st = { seed: 500, blink: K.blinkAt(t, 3), mouth: "smile", look: [0.2, 0] };
+  const bounce = pulseB(t);
+  st.squash = 0.1 * bounce - 0.04;
+  /* left claw on the helm wheel (local: wheel is 55 px behind the crab), right claw waves to the beat */
+  st.clawL = { x: -72, y: -42 + 4 * Math.sin(t * 3), open: 0.15 };
+  st.clawR = { x: 92, y: -70 - 18 * bounce, open: 0.3 + 0.4 * bounce };
+  st.look = [Math.sin(t * 1.3) * 0.8, -0.1];
+  /* anticipation then spyglass up */
+  const up = K.ss(T.spyUp - 0.25, T.spyUp + 0.2, t);
+  if (t > T.spyUp - 0.6) st.squash += 0.22 * K.ss(T.spyUp - 0.6, T.spyUp - 0.25, t) * (1 - up);
+  if (up > 0) {
+    st.hold = "spyglass";
+    st.clawR = { x: K.lerp(92, 38, up), y: K.lerp(-70, -150, up), open: 0.05, rot: K.lerp(-30, -14, up) };
+    st.look = [1, -0.6];
+    st.lean = -4 * up;
+  }
+  /* discovery: eyes pop, mouth open, a little hop */
+  const pop = K.ss(T.spot - 0.08, T.spot + 0.06, t) * (1 - K.ss(T.spot + 0.5, T.spot + 0.9, t));
+  if (t > T.spot - 0.1) {
+    st.blink = 0; st.exclaim = K.inv(T.spot - 0.05, T.spot + 0.2, t) * (1 - K.inv(T.spot + 0.9, T.spot + 1.1, t)); st.eyeUp = 20 * pop; st.brow = 1.5 * pop; st.mouth = pop > 0.3 ? "open" : "o";
+    st.hop = 18 * Math.max(0, Math.sin(K.inv(T.spot, T.spot + 0.35, t) * Math.PI));
+    st.squash -= 0.25 * pop;
+  }
+  return st;
+}
+
+/* crab pose for the title card */
+function crabTitle(t) {
+  const st = { seed: 500, blink: K.blinkAt(t, 9), mouth: "grin", look: [0.3, -0.5], squash: 0.08 * pulseB(t) - 0.03 };
+  st.clawL = { x: -96, y: -50 - 10 * pulseB(t), open: 0.25 };
+  st.clawR = { x: 96, y: -50 - 10 * pulseB(t + 0.25), open: 0.25 };
+  /* jump: crouch, stretch up, land squash */
+  const j0 = T.jump - 0.3, j1 = T.jump + 0.55;
+  if (t > j0 && t < j1 + 0.4) {
+    const crouch = K.ss(j0, T.jump, t) * (1 - K.ss(T.jump, T.jump + 0.05, t));
+    const air = K.inv(T.jump, j1, t), h = Math.sin(air * Math.PI);
+    st.squash += 0.35 * crouch - 0.35 * h * (air < 1 ? 1 : 0);
+    st.hop = 85 * h;
+    const land = K.inv(j1, j1 + 0.35, t);
+    if (land > 0 && land < 1) st.squash += 0.4 * Math.sin(land * Math.PI) * (1 - land);
+    st.clawL = { x: -100, y: -130 - 60 * h, open: 0.8 }; st.clawR = { x: 100, y: -130 - 60 * h, open: 0.8 };
+    st.mouth = "open"; st.look = [0, -1];
+  }
+  /* claw snap flourish on two beats: right claw high, snapping */
+  const s0 = T.snap[0] - 0.3, s1 = T.hatTip - 0.2;
+  if (t > s0 && t < s1) {
+    const r = K.ss(s0, T.snap[0], t) * (1 - K.ss(s1 - 0.3, s1, t));
+    const snapOpen = Math.min(K.inv(T.snap[0] - 0.2, T.snap[0], t) - K.inv(T.snap[0], T.snap[0] + 0.06, t) + K.inv(T.snap[1] - 0.2, T.snap[1], t) - K.inv(T.snap[1], T.snap[1] + 0.06, t), 1);
+    st.clawR = { x: K.lerp(96, 104, r), y: K.lerp(-50, -196, r), open: 0.1 + 0.85 * snapOpen, rot: K.lerp(0, -70, r) };
+    st.look = [0.9, -0.8]; st.lean = -5 * r;
+  }
+  /* hat tip with the left claw */
+  const h0 = T.hatTip - 0.2, h1 = T.hatTip + 0.9;
+  if (t > h0 && t < h1) {
+    const r = K.ss(h0, T.hatTip, t) * (1 - K.ss(h1 - 0.3, h1, t));
+    st.clawL = { x: K.lerp(-96, -66, r), y: K.lerp(-50, -146, r), open: 0.35, rot: K.lerp(180, -30, r) };
+    st.hatLift = 16 * r; st.hatTip = -16 * r; st.blink = Math.max(st.blink, r > 0.6 ? 1 : 0); st.mouth = "grin";
+  }
+  /* wave goodbye at the end */
+  if (t > T.hatTip + 1.1) {
+    const r = K.ss(T.hatTip + 1.1, T.hatTip + 1.4, t);
+    st.clawR = { x: 110 + 16 * Math.sin((t - T.hatTip) * 9) * r, y: K.lerp(-50, -170, r), open: 0.5, rot: -80 + 20 * Math.sin((t - T.hatTip) * 9) * r };
+  }
+  return st;
+}
+
+/* t: time; warm 0..1 (golden light for the title); opts: ship placement + push-in */
+function drawSide(t, o) {
+  const horizon = o.horizon;
+  K.screen(ctx);
+  ctx.save();
+  /* gentle push-in: scale around a focus point (sky moves at half rate = depth) */
+  const z = o.zoom || 1, fx = o.fx || 960, fy = o.fy || 600;
+  const camAt = (k) => { ctx.setTransform(1, 0, 0, 1, 0, 0); const zz = 1 + (z - 1) * k; ctx.translate(fx, fy); ctx.scale(zz, zz); ctx.translate(-fx, -fy); };
+  camAt(0.4);
+  K.sideSky(ctx, horizon, { warm: o.warm, drift: o.drift || 0 });
+  /* gulls */
+  for (let i = 0; i < 3; i++) {
+    const gx = ((t * (70 + i * 12) + i * 520) % 2400) - 240, gy = 170 + i * 60 + Math.sin(t * 1.5 + i) * 14;
+    K.gull(ctx, gx, gy, 0.9 - i * 0.15, i * 2);
+  }
+  camAt(0.7);
+  K.farIsland(ctx, 330, horizon, 320, 70, 1);
+  K.farIsland(ctx, 1240, horizon, 200, 44, 2);
+  K.sideSea(ctx, horizon, { warm: o.warm });
+  K.waveRow(ctx, horizon + 70, { amp: 6, len: 90, speed: 18, color: "#4aa3b8", w: 2.5, seed: 21, crest: "#e6f4ee" });
+  camAt(1);
+  K.waveRow(ctx, horizon + 190, { amp: 9, len: 140, speed: 32, color: P.seaMid, w: 3.2, seed: 22 });
+  /* the ship */
+  const bob = 7 * Math.sin(t * 2.2) - 6 * pulseA(t), rock = 2.4 * Math.sin(t * 1.6 + 0.4);
+  const crabFn = (c) => K.crab(c, 0, 0, o.crabS || 1, o.crab(t));
+  K.ship(ctx, o.shipX, o.shipY + bob, o.shipS, { rock, coins: o.coins || 0, crab: crabFn, sail: 1 });
+  /* coin glints on the pile */
+  if (o.coins) for (let i = 0; i < 3; i++) {
+    const ph = (t * 1.3 + i * 0.37) % 1, gx = o.shipX + o.shipS * (70 + 50 * K.hash(i, Math.floor(t * 1.3 + i * 0.37))), gy = o.shipY + bob - o.shipS * (90 + 30 * K.hash(i + 5, Math.floor(t * 1.3 + i * 0.37)));
+    K.sparkle(ctx, gx, gy, 22 * Math.sin(ph * Math.PI), Math.sin(ph * Math.PI), i);
+  }
+  /* front waves cover the hull bottom */
+  K.waveRow(ctx, o.shipY + 30, { amp: 12, len: 180, speed: 44, color: "#2a86a0", w: 4, seed: 23 });
+  K.waveRow(ctx, o.shipY + 110, { amp: 14, len: 220, speed: 60, color: P.seaDeep, w: 4.5, seed: 24 });
+  ctx.restore();
+}
+
+/* ============================================================
+   INTRO 30 CHART SET: the archipelago as a graph. Islands = currencies,
+   routes = exchange rates. The crab sails the profitable triangle twice.
+   ============================================================ */
+const EDGE_TRIM = 150, DOCK_TRIM = 175;
+const legDur1 = (T.lap1[1] - T.lap1[0]) / 3, legDur2 = (T.lap2[1] - T.lap2[0]) / 3;
+const ARRIVALS = [1, 2, 3].map((k) => T.lap1[0] + k * legDur1).concat([1, 2, 3].map((k) => T.lap2[0] + k * legDur2));
+const endsOf = (e) => [[NODES[e[0]].x, NODES[e[0]].y], [NODES[e[1]].x, NODES[e[1]].y]];
+
+/* ship position on the loop: {x, y, heading} */
+function shipAt(t) {
+  let leg = 0, v = 0;
+  if (t < T.lap1[0]) { leg = 0; v = 0; }
+  else if (t < T.lap1[1]) { const k = (t - T.lap1[0]) / legDur1; leg = Math.floor(k); v = k - leg; }
+  else if (t < T.lap2[0]) { leg = 2; v = 1; }
+  else if (t < T.lap2[1]) { const k = (t - T.lap2[0]) / legDur2; leg = Math.floor(k); v = k - leg; }
+  else { leg = 2; v = 1; }
+  leg = Math.min(leg, 2);
+  const e = EDGES[LOOP[leg]], [A, B] = endsOf(e), L = Math.hypot(B[0] - A[0], B[1] - A[1]);
+  const u0 = DOCK_TRIM / L, u = K.lerp(u0, 1 - u0, K.E.inOut(K.clamp(v, 0, 1)));
+  const p = K.edgePoint(A, B, e[3], u);
+  return { x: p[0] + 30, y: p[1] + 50, heading: p[2], moving: v > 0 && v < 1 };
+}
+const arrivedCount = (t) => ARRIVALS.filter((a) => t >= a).length;
+
+const camB = K.mkTrack([
+  [T.iris[0], { x: 1350, y: 250, z: 1.45 }],
+  [T.iris[1], { x: 1350, y: 330, z: 1.25 }],
+  [at(3, 0.4), { x: 1310, y: 930, z: 0.6 }],
+  [T.hot, { x: 1310, y: 900, z: 0.63 }],
+  [T.lap1[0] + 0.1, { x: 1300, y: 700, z: 0.74 }],
+  [T.lap2[0], { x: 1300, y: 690, z: 0.8 }],
+]);
+function camChart(t) {
+  const c = camB(t), s = shipAt(t), k = K.ss(T.lap2[1] - 0.6, T.lap2[1] + 0.5, t);
+  return { x: K.lerp(c.x, s.x - 10, k), y: K.lerp(c.y, s.y - 120, k), z: K.lerp(c.z, 2.3, k), rot: 0 };
+}
+
+/* crab pose in the chart view: at the helm, dancing once the money comes in */
+function crabChart(t) {
+  const b = pulseB(t), rich = K.ss(T.lap2[0], T.lap2[0] + 0.5, t);
+  const st = { seed: 500, blink: K.blinkAt(t, 5), mouth: rich > 0.5 ? "grin" : "smile", look: [0.6, -0.2], squash: 0.12 * b - 0.04 };
+  st.clawL = { x: -62, y: -44, open: 0.15 };
+  st.clawR = { x: 92, y: -70 - 18 * b, open: 0.3 + 0.4 * b };
+  if (rich > 0) {
+    st.clawL = { x: -100, y: K.lerp(-44, -150 - 20 * b, rich), open: 0.3 + 0.6 * b };
+    st.clawR = { x: 100, y: K.lerp(-70, -150 - 20 * K.pulse(t + 0.25, 1, 6), rich), open: 0.3 + 0.6 * b };
+    st.hop = 14 * b * rich; st.lean = 6 * Math.sin(t * Math.PI * 2) * rich;
+  }
+  return st;
+}
+
+function drawChart(t) {
+  const cam = camChart(t);
+  K.cam = cam; K.applyCam(ctx, 1);
+  K.chartSea(ctx, { seed: 5 });
+  const hotK = K.ss(T.hot - 0.1, T.hot + 0.3, t);
+  /* routes under islands */
+  EDGES.forEach((e, i) => {
+    const [A, B] = endsOf(e), inLoop = LOOP.indexOf(i) >= 0;
+    const p = K.E.out3(K.inv(e[4], e[4] + 0.7, t));
+    const state = hotK > 0.5 ? (inLoop ? "hot" : "dim") : "plain";
+    K.edge(ctx, A, B, { p, bend: e[3], label: e[2], seed: 100 + i * 13, trim: EDGE_TRIM, state, w: 10, labelSize: 46, lu: e[5] || 0.5 });
+  });
+  /* islands */
+  Object.keys(NODES).forEach((k, i) => {
+    const n = NODES[k], a = K.inv(n.pop - 0.05, n.pop + 0.45, t);
+    const hot = (k === "USDT" || k === "BTC" || k === "ETH") ? hotK * (0.7 + 0.3 * pulseB(t)) : 0;
+    const dim = (k === "SOL" || k === "EUR") ? 1 - 0.35 * hotK : 1;
+    ctx.save(); ctx.globalAlpha = dim;
+    K.node(ctx, n.x, n.y, NODE_S, { label: k, color: n.c, a, seed: n.seed, palms: n.palms, lighthouse: n.lighthouse, hot });
+    ctx.restore();
+  });
+  /* the ship */
+  const s = shipAt(t), n = arrivedCount(t);
+  K.miniShip(ctx, s.x, s.y, 0.6, { heading: s.heading, coins: Math.min(26, 3 + n * 4), crab: (c) => K.crab(c, 0, 0, 1, crabChart(t)) });
+  /* coin splash on every arrival */
+  ARRIVALS.forEach((ta, ai) => {
+    const d = t - ta; if (d < 0 || d > 0.9) return;
+    const sp = shipAt(ta);
+    for (let i = 0; i < 9; i++) {
+      const vx = K.hs(i, ai + 3) * 260, vy = -420 - 220 * K.hash(i, ai + 4);
+      K.goldBit(ctx, sp.x + vx * d, sp.y - 120 + vy * d + 700 * d * d, 16, ai * 20 + i, d * 9 + i);
+    }
+    K.sparkle(ctx, sp.x + 40, sp.y - 190, 40 * Math.sin(K.inv(0, 0.5, d) * Math.PI), 1, ai);
+  });
+  /* cargo plank: what we hold right now */
+  const plankA = K.inv(T.hot + 0.25, T.hot + 0.75, t);
+  if (plankA > 0) {
+    const bumpT = ARRIVALS.filter((a) => t >= a).pop(), bump = bumpT ? Math.exp(-8 * (t - bumpT)) : 0;
+    const gain = n >= 6 ? "+0.92 %" : n >= 3 ? "+0.46 %" : "";
+    ctx.save(); ctx.translate(1320, 640); ctx.scale(1 + 0.12 * bump, 1 + 0.12 * bump);
+    K.plank(ctx, 0, 0, 640, gain ? 190 : 130, gain ? [HOLD[n], gain] : [HOLD[n]], { a: plankA, size: 56, seed: 11, colors: [P.ink, "#2f8a3e"] });
+    ctx.restore();
+  }
+}
+
+/* ============================================================
+   INTRO 40 TITLE: banner + DOM title letters + six episode medallions.
+   The title text lives in the DOM (crisp type, variable per language);
+   the banner it sits on is canvas ink and follows the same wave.
+   ============================================================ */
+const BANNER = { cx: 960, cy: 215, w: 1520, h: 250 };
+const MEDAL_Y = 440, MEDAL_R = 48;
+
+/* six episode icons, language-free: graph, basis, matrix, copula, ML, execution */
+const ICONS = [
+  (c, r) => { const p = [[0, -r * 0.5], [r * 0.5, r * 0.35], [-r * 0.5, r * 0.35]]; K.line(c, p.concat([p[0]]), { stroke: P.ink, w: 3.5, boil: 0.6, seed: 1, gap: 0 }); p.forEach((q, i) => K.dot(c, q[0], q[1], r * 0.14, P.paper, P.ink, 2, 2 + i)); },
+  (c, r) => { K.shape(c, K.rectPts(-r * 0.45, -r * 0.1, r * 0.35, r * 0.5, 1), { fill: P.paper, w: 3, boil: 0.5, seed: 3 }); K.shape(c, K.rectPts(r * 0.1, -r * 0.45, r * 0.35, r * 0.85, 1), { fill: P.paper, w: 3, boil: 0.5, seed: 4 }); },
+  (c, r) => { for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) K.dot(c, (i - 1) * r * 0.32, (j - 1) * r * 0.32, r * 0.1, (i + j) % 2 ? P.paper : P.ink, P.ink, 2, 10 + i * 3 + j); },
+  (c, r) => { K.line(c, [[-r * 0.5, r * 0.4], [-r * 0.15, r * 0.25], [0, 0], [r * 0.15, -r * 0.25], [r * 0.5, -r * 0.4]], { stroke: P.ink, w: 3.5, boil: 0.6, seed: 20, gap: 0 }); K.line(c, [[-r * 0.5, -r * 0.4], [-r * 0.1, -r * 0.1], [r * 0.1, r * 0.1], [r * 0.5, r * 0.4]], { stroke: P.paper, w: 3.5, boil: 0.6, seed: 21, gap: 0 }); },
+  (c, r) => { const L = [[-r * 0.45, -r * 0.3], [-r * 0.45, r * 0.3]], M = [[0, -r * 0.42], [0, 0], [0, r * 0.42]], R = [[r * 0.45, 0]]; L.forEach((a) => M.forEach((b) => K.line(c, [a, b], { stroke: P.ink, w: 2, boil: 0.4, seed: 30, gap: 0 }))); M.forEach((a) => R.forEach((b) => K.line(c, [a, b], { stroke: P.ink, w: 2, boil: 0.4, seed: 31, gap: 0 }))); L.concat(M, R).forEach((q, i) => K.dot(c, q[0], q[1], r * 0.11, P.paper, P.ink, 2, 40 + i)); },
+  (c, r) => K.cog(c, 0, 0, r * 0.52, P.paper, 50),
+];
+const MEDAL_COLORS = [P.BTC, P.USDT, P.ETH, P.SOL, P.EUR, P.rust];
+
+function drawTitleCanvas(t) {
+  const u = K.inv(T.banner[0], T.banner[1], t);
+  K.screen(ctx);
+  const box = K.banner(ctx, BANNER.cx, BANNER.cy, BANNER.w, BANNER.h, u, { seed: 71 });
+  /* medallions pop on eighth notes after the snap */
+  for (let i = 0; i < 6; i++) {
+    const t0 = T.medals + i * K.beatLen() / 2, a = K.inv(t0, t0 + 0.35, t);
+    if (a <= 0) continue;
+    const s = K.E.back(a, 2.6), x = 960 + (i - 2.5) * 132, y = MEDAL_Y + 6 * Math.sin(t * 2.4 + i) - 10 * K.pulse(t - i * 0.08, 1, 6);
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    K.coin(ctx, 0, 0, MEDAL_R, { color: MEDAL_COLORS[i], seed: 600 + i * 7 });
+    ICONS[i](ctx, MEDAL_R);
+    ctx.restore();
+  }
+  /* snap sparkles near the raised claw */
+  [T.snap[0], T.snap[1]].forEach((ts, k) => {
+    const d = t - ts; if (d < 0 || d > 0.5) return;
+    for (let i = 0; i < 5; i++) {
+      const a = (i / 5) * K.TAU + k, r = 40 + 160 * d;
+      K.sparkle(ctx, SNAP_PT[0] + Math.cos(a) * r, SNAP_PT[1] + Math.sin(a) * r, 26 * (1 - d / 0.5), 1 - d / 0.5, i + k * 5);
+    }
+  });
+  return box;
+}
+/* screen point near the snapping claw (set by the title scene layout) */
+const SNAP_PT = [1000, 600];
+
+function layoutTitleDom(t) {
+  const u = K.inv(T.banner[0], T.banner[1], t);
+  titleEl.style.opacity = u > 0 ? "1" : "0";
+  if (u <= 0) return;
+  const n = TITLE_LN.length, sizes = TITLE_LN.map((d) => +d.dataset.size), gap = 10;
+  const total = sizes.reduce((a, b) => a + b, 0) + gap * (n - 1);
+  let y = BANNER.cy - total / 2 - 8 + Math.sin(BANNER.cx * 0.006 + t * 1.4) * 8;
+  TITLE_LN.forEach((d, i) => { d.style.top = y.toFixed(1) + "px"; y += sizes[i] + gap; });
+  TITLE_CH.forEach((c) => {
+    const t0 = T.letters + c.idx * 0.035, a = K.inv(t0, t0 + 0.42, t);
+    const yy = (1 - K.E.back(a, 2.4)) * -140, land = K.inv(t0 + 0.3, t0 + 0.55, t);
+    const sq = Math.sin(land * Math.PI) * 0.16 * (1 - land);
+    const beatHop = c.line === n - 1 ? -6 * K.pulse(t, 4, 6) * K.inv(T.letters + 1, T.letters + 1.2, t) : 0; /* whole line hops on the accent */
+    c.el.style.opacity = a > 0 ? Math.min(1, a * 3).toFixed(2) : "0";
+    c.el.style.transform = `translateY(${(yy + beatHop).toFixed(1)}px) scale(${(1 + sq).toFixed(3)}, ${(1 - sq).toFixed(3)})`;
+  });
+}
+
+/* ============================================================
+   INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
+   drives a proxy whose setter calls render(t).
+   0.0 - 4.6   side set: ship sails in, crab spots something (spyglass)
+   3.6 - 4.6   iris through the spyglass into the chart set
+   4.6 - 15.7  chart set: islands pop, routes draw, triangle glows, two laps
+   14.7 - 15.7 wave wipe back to the side set
+   15.0 - 20.0 title card: banner, letters, crab jump, snap, hat tip
+   ============================================================ */
+const SIDE_OPEN = (t) => ({
+  horizon: 600, warm: 0, zoom: K.tw(t, 0, 4.6, 1, 1.18, K.E.inOut), fx: 900, fy: 640,
+  shipX: K.tw(t, T.shipIn[0], T.shipIn[1], -520, 800, K.E.out3), shipY: 930, shipS: 1.6, crabS: 1.15, crab: crabOpening,
+});
+const SIDE_TITLE = (t) => ({
+  horizon: 640, warm: 0.7, zoom: K.tw(t, T.wipe[0], DUR, 1.06, 1.0, K.E.out3), fx: 960, fy: 700, drift: 600,
+  shipX: 960, shipY: 1000, shipS: 1.45, crabS: 1.22, crab: crabTitle, coins: 26,
+});
+
+function wipeFront(t) { return K.tw(t, T.wipe[0], T.wipe[1], -420, 2400, K.E.inOut); }
+function drawWaveFront(x) {
+  /* a tall curling wave sweeps right; left of it is already the next set */
+  const crest = [];
+  for (let i = 0; i <= 16; i++) { const y = -40 + (i / 16) * 1160; crest.push([x + 50 * Math.sin(y * 0.01 + K.now * 5) + 24 * Math.sin(y * 0.027 + 1), y]); }
+  const body = crest.concat(crest.slice().reverse().map((p) => [p[0] - 260, p[1]]));
+  K.shape(ctx, body, { fill: P.seaMid, w: 6, boil: 2, seed: 900, shade: { color: P.seaDeep, dx: -70, dy: 0 }, hatch: { ang: 1.35, gap: 26, alpha: 0.25, color: P.foam } });
+  K.line(ctx, crest, { stroke: P.foam, w: 26, boil: 2.4, seed: 901, gap: 0.05 });
+  K.line(ctx, crest.map((p) => [p[0] - 60, p[1]]), { stroke: "#bfe6ec", w: 8, boil: 2, seed: 902, gap: 0.3 });
+  for (let i = 0; i < 26; i++) {
+    const y = (i / 26) * 1100 + 10, c = crest[Math.min(16, Math.round(((y + 40) / 1160) * 16))];
+    const bx = c[0] + 22 + 46 * K.hash(i, 7) + 30 * Math.sin(K.now * 7 + i);
+    K.dot(ctx, bx, y + 10 * Math.sin(K.now * 5 + i), 9 + 14 * K.hash(i, 8), P.foam, P.ink, 3, 910 + i);
+  }
+}
+
+function render(t) {
+  try {
+    K.begin(ctx, t, { x: 0, y: 0, z: 1 });
+    titleEl.style.opacity = "0";
+    if (t < T.iris[1]) drawSide(t, SIDE_OPEN(t));
+    if (t >= T.iris[0] && t < T.wipe[1]) {
+      if (t < T.iris[1]) {
+        /* iris: the chart set seen through the spyglass lens */
+        const u = K.E.inOut(K.inv(T.iris[0], T.iris[1], t));
+        const lens = K.lens || { x: 1200, y: 400 };
+        const cx = K.lerp(lens.x, 960, u), cy = K.lerp(lens.y, 540, u), r = K.lerp(10, 1250, u);
+        K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, K.TAU); ctx.clip();
+        drawChart(t); ctx.restore();
+        K.screen(ctx);
+        ctx.save(); ctx.lineWidth = 22; ctx.strokeStyle = P.goldDark; ctx.beginPath(); ctx.arc(cx, cy, r + 8, 0, K.TAU); ctx.stroke();
+        ctx.lineWidth = 6; ctx.strokeStyle = P.ink; ctx.beginPath(); ctx.arc(cx, cy, r + 20, 0, K.TAU); ctx.stroke(); ctx.restore();
+      } else drawChart(t);
+    }
+    if (t >= T.wipe[0]) {
+      const x = wipeFront(t);
+      K.screen(ctx); ctx.save();
+      if (t < T.wipe[1]) { ctx.beginPath(); ctx.rect(-10, -10, x + 10, 1100); ctx.clip(); }
+      drawSide(t, SIDE_TITLE(t));
+      K.screen(ctx);
+      if (t >= T.banner[0]) drawTitleCanvas(t);
+      ctx.restore();
+      if (t < T.wipe[1]) { K.screen(ctx); drawWaveFront(x); }
+      layoutTitleDom(t);
+    }
+  } catch (err) {
+    /* never leave a black frame silently: draw the error so a snapshot shows it */
+    K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);
+  }
+  /* paper grain steps at the boil rate */
+  const f = K.boilFrame(t);
+  grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px";
+}
+
+const grainEl = document.getElementById("grain");
+grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .45  0 0 0 0 .35  0 0 0 1.4 -.2'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
+
+const TL = gsap.timeline({ paused: true });
+const drv = { _t: 0 };
+Object.defineProperty(drv, "t", { get() { return this._t; }, set(v) { this._t = v; render(v); } });
+TL.to(drv, { t: DUR, duration: DUR, ease: "none" }, 0);
+render(0);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(drv._t));
+window.__timelines["main"] = TL;
+window.__render = render;
+
+})();
+    </script>
+  </body>
+</html>

@@ -44,3 +44,12 @@ ingest/
 # Self-authored video pipeline
 build/
 selfmade/__pycache__/
+
+# Code-drawn collections: renders, preview frames and build copies stay local
+collections/**/renders/
+collections/**/snapshots/frame-*.png
+collections/**/snapshots/contact-sheet-*.jpg
+collections/**/snapshots/old/
+collections/complex-arbitrage-rust/intro/assets/
+collections/complex-arbitrage-rust/style/gallery/assets/
+collections/complex-arbitrage-rust/style/gallery/snapshots/
