@@ -83,6 +83,20 @@ Minimum readable size on screen: 24 px (multiply world sizes by the camera zoom)
 | Feet | tap shoes with white spats, `tapL/tapR` lift 0..1 on the beat |
 | Spring anchor | `K.penguinWaist(x, y, s, side, pose)` |
 
+### The co-host: Skip, the boater penguin (`K.penguin` + `K.hostPose("penguin")`)
+
+Episodes re-animate a two-voice conversation. **Dapper Dan = host A** (the explainer, the lower voice). **Skip = host B** (the curious co-host, the higher voice). Skip is the cheap-leg penguin from the act: the boater hat, an eager tapper, quick to be surprised and quick to ask "?". The top-hat penguin stays in the act as a prop character.
+
+| Feature | How |
+| --- | --- |
+| Talking | Dan: `talk` 0..1 opens a mouth with viseme-like shapes `a / e / o / m` that change at 8 Hz (`K.talkMouth`, upper teeth and a grey tongue). Skip: `talk` drops the lower beak (up to 22 px) over a dark mouth |
+| Listening | `K.hostPose` turns the listener toward the speaker and nods slowly (`nod`), scaled by the partner's loudness |
+| Gestures (`K.gesture`) | Dan: `point` (index finger, glove `open < 0`), `present`, `nod`, `surprise`, `think` (glove on chin + "?" bubble), `shrug`, `grin` (wink + hat tip), `wave`. Skip: `point` (flipper aimed with `aimL/aimR`, drawn in front), `nod`, `surprise` (gold "!" + jazz hands + hop), `think`, `shrug`, `flap`, `grin` |
+| Idle | breathing squash, seeded blinks, Dan's tail and sway, Skip's soft toe taps |
+| Duo (`K.duo`) | both hosts in screen space on a pool of light: Dan feet (330, 1045) at scale 1.05 (about 345 px tall), Skip 300 px to his right at scale 1.2 (about 325 px). `side: "right"` mirrors them to the bottom-right. Explainer props go in the other 2/3 of the frame |
+
+Hosts are storytellers: never smaller than 300 px tall in explainer scenes, always reacting. Point at the thing being explained when it appears (`pointCat` / `pointPen` in screen px). Skip can hold a prop out on a flipper (`carry: { who: "pen", draw(ctx, x, y) }`), such as a ticket with a P&L or a hang tag with a price.
+
 Animation rules:
 - Squash and stretch with volume kept: 0.07 - 0.08 on every beat, 0.3 - 0.4 on landings and the hit.
 - Anticipation before every big action: crouch before a hop, wind-up before a throw, a hand lifts before each bell strike.

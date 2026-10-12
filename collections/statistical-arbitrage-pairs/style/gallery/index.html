@@ -81,7 +81,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <canvas id="fx" width="1920" height="1080" data-layout-allow-overflow data-layout-allow-occlusion></canvas>
       <div class="ov" id="grain"></div>
@@ -867,6 +867,10 @@ var VK = window.VK || (window.VK = {});
      footL/R  {x, y}  shoe targets (defaults: standing)
      hatTip deg, hatLift px, hatInHand true (hat rides on the right glove)
      tail     phase offset, exclaim 0..1 ("!" card), seed
+     talk     0..1 loudness: talking mouth (overrides mouth while > 0.06)
+     viseme   "a" | "o" | "e" | "m" (optional; default cycles from the boil clock)
+     nod      0..1 head dips (listening), tilt deg head tilt, think 0..1 ("?" bubble)
+   Returns { head, gloveL, gloveR } in canvas device px (for props and pointing).
    ============================================================ */
 var VK = window.VK || (window.VK = {});
 (function (K) {
@@ -883,12 +887,15 @@ var VK = window.VK || (window.VK = {});
     return { elbow: [ex, ey], end: [S[0] + ux * dm, S[1] + uy * dm] };
   };
 
-  /* white cartoon glove at (x, y) pointing along ang; open 0 = fist, 1 = spread palm */
+  /* white cartoon glove at (x, y) pointing along ang; open 0 = fist, 1 = spread palm,
+     open < 0 = pointing (index finger out, the others curled) */
   K.glove = function (ctx, x, y, ang, open, s, seed, flip) {
     ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(s, s * (flip || 1));
+    const pointing = open != null && open < 0;
     const o = clamp(open == null ? 0.5 : open, 0, 1);
+    if (pointing) K.shape(ctx, K.roundPts(10, -16, 44, 14, 7), { fill: P.paper, w: 4, boil: 0.6, seed: seed + 8 });
     /* fingers (3 + thumb) */
-    for (let f = 0; f < 3; f++) {
+    for (let f = 0; f < 3 && !pointing; f++) {
       const fa = (f - 1) * (0.18 + 0.32 * o), len = 14 + 20 * o;
       const bx = 14, by = (f - 1) * 9;
       K.shape(ctx, K.ellipsePts(bx + Math.cos(fa) * len * 0.6, by + Math.sin(fa) * len * 0.6, len * 0.62 + 6, 8, 10, fa), { fill: P.paper, w: 4, boil: 0.6, seed: seed + f });
@@ -955,9 +962,10 @@ var VK = window.VK || (window.VK = {});
     [-74, -58].forEach((by, i) => K.dot(ctx, 0, by, 3.5, P.ink, P.ink, 1, seed + 22 + i));
     ctx.restore();
     /* head */
-    const hx = turn * 6, hy = hipY - 104 * syk - 70 * (1 + (syk - 1) * 0.6);
+    const nod = clamp(st.nod || 0, 0, 1);
+    const hx = turn * 6, hy = hipY - 104 * syk - 70 * (1 + (syk - 1) * 0.6) + 10 * nod;
     ctx.save(); ctx.translate(hx, hy); ctx.scale(lerp(1, sxk, 0.6), lerp(1, syk, 0.6));
-    ctx.rotate((turn * 4 + Math.sin(K.now * 2.1) * 1.5) * Math.PI / 180);
+    ctx.rotate((turn * 4 + Math.sin(K.now * 2.1) * 1.5 + (st.tilt || 0) + 7 * nod) * Math.PI / 180);
     /* ears (behind the hat) */
     [-1, 1].forEach((sd, i) => {
       const tw = sd === 1 && st.earTwitch ? st.earTwitch * 8 : 0;
@@ -977,8 +985,9 @@ var VK = window.VK || (window.VK = {});
     [-1, 1].forEach((sd, i) => K.line(ctx, [[fx + sd * 8, eyeY - 34 - brow * 8 + (i ? -brow : brow) * 3], [fx + sd * 34, eyeY - 40 - brow * 10]], { stroke: P.paper, w: 5, boil: 0.4, seed: seed + 60 + i }));
     /* nose + mouth */
     K.shape(ctx, K.ellipsePts(fx, 14, 11, 7, 10), { fill: P.ink, w: 3, boil: 0.4, seed: seed + 62, shine: { dx: 2, dy: 3, s: 0.6, a: 0.8 } });
-    const m = st.mouth || "smile";
-    if (m === "smile") K.line(ctx, [[fx - 26, 26], [fx - 12, 38], [fx, 30], [fx + 12, 38], [fx + 26, 26]], { stroke: P.ink, w: 4.5, boil: 0.5, seed: seed + 63 });
+    const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1);
+    if (talk > 0.06) K.talkMouth(ctx, fx, 26, talk, st.viseme, seed + 130, 1);
+    else if (m === "smile") K.line(ctx, [[fx - 26, 26], [fx - 12, 38], [fx, 30], [fx + 12, 38], [fx + 26, 26]], { stroke: P.ink, w: 4.5, boil: 0.5, seed: seed + 63 });
     else if (m === "sly") K.line(ctx, [[fx - 22, 32], [fx, 34], [fx + 18, 30], [fx + 30, 22]], { stroke: P.ink, w: 4.5, boil: 0.5, seed: seed + 64 });
     else if (m === "grin") { K.shape(ctx, [[fx - 32, 24], [fx + 32, 24], [fx + 18, 46], [fx, 50], [fx - 18, 46]], { fill: P.g1, w: 4, boil: 0.5, seed: seed + 65 }); K.shape(ctx, [[fx - 26, 26], [fx + 26, 26], [fx + 20, 32], [fx - 20, 32]], { fill: P.paper, stroke: null, w: 0, boil: 0.3, seed: seed + 66 }); }
     else if (m === "open") { K.shape(ctx, K.ellipsePts(fx, 38, 18, 15, 12), { fill: P.g1, w: 4, boil: 0.5, seed: seed + 67 }); K.shape(ctx, K.ellipsePts(fx, 46, 10, 5, 8), { fill: P.g3, stroke: null, w: 0, boil: 0.3, seed: seed + 68 }); }
@@ -998,6 +1007,7 @@ var VK = window.VK || (window.VK = {});
     K.dot(ctx, 0, 0, 8, P.paper, P.ink, 4, seed + 92);
     ctx.restore();
     /* arms: rubber hose with IK elbows, gloves in front */
+    const out = {};
     [["L", -1], ["R", 1]].forEach(([k, sd]) => {
       const g = st["glove" + k] || { x: sd * 74, y: -150, open: 0.4 };
       const S = [sd * 42 * sxk, hipY - 86 * syk];
@@ -1006,7 +1016,10 @@ var VK = window.VK || (window.VK = {});
       const ang = g.rot != null ? (g.rot * Math.PI) / 180 : Math.atan2(r.end[1] - r.elbow[1], r.end[0] - r.elbow[0]);
       if (k === "R" && st.hatInHand) { ctx.save(); ctx.translate(r.end[0] + 6, r.end[1] - 34); ctx.rotate((st.hatTip || -10) * Math.PI / 180); K.bowler(ctx, seed + 80); ctx.restore(); }
       K.glove(ctx, r.end[0], r.end[1], ang, g.open, 1.05, seed + 110 + sd * 10, sd < 0 ? -1 : 1);
+      const gp = ctx.getTransform().transformPoint(new DOMPoint(r.end[0] + Math.cos(ang) * 30, r.end[1] + Math.sin(ang) * 30));
+      out["glove" + k] = [gp.x, gp.y];
     });
+    if (st.think > 0) K.thought(ctx, 120, hy - 150, 1, st.think, "?", seed + 140);
     /* "!" on a little card (language-neutral) */
     if (st.exclaim > 0) {
       const a = K.E.back(clamp(st.exclaim, 0, 1), 2.4);
@@ -1015,8 +1028,10 @@ var VK = window.VK || (window.VK = {});
       K.dot(ctx, 0, 4, 8, P.gold, P.ink, 4.5, seed + 121);
       ctx.restore();
     }
+    const hp = ctx.getTransform().transformPoint(new DOMPoint(hx, hy));
     ctx.restore();
-    return { head: [x + hx * s, y + hy * s] };
+    out.head = [x + hx * s, y + hy * s]; out.headPx = [hp.x, hp.y];
+    return out;
   };
 
   /* blink curve with seeded blink times, 0..1 */
@@ -1041,6 +1056,12 @@ var VK = window.VK || (window.VK = {});
      flipL/flipR  deg: 0 = hanging at the side, 90 = straight out, 160 = up
      tapL/tapR    0..1 foot lift (toe-tap), hat "top" | "boater" | null,
      hatTip deg, heart 0..1 (a gold heart pops above), seed
+     talk     0..1 loudness: the lower beak drops (overrides beak while > 0.06)
+     aimL/aimR [x, y] local point: that flipper points at it and is drawn in
+              front of the body (pointing, waving, holding a prop)
+     nod 0..1 (face dips, listening), tilt deg (head tilt), brow -1..1.5,
+     exclaim 0..1 (gold "!"), think 0..1 ("?" bubble)
+   Returns { head, tipL, tipR } in canvas device px (flipper tips: carry props there).
    Waist anchor for the spring: K.penguinWaist(x, y, s, side).
    ============================================================ */
 var VK = window.VK || (window.VK = {});
@@ -1069,13 +1090,22 @@ var VK = window.VK || (window.VK = {});
       ctx.restore();
     });
     ctx.save(); ctx.translate(0, -hop - 20); ctx.scale(sxk, syk);
-    /* flippers behind the body edge */
-    [["L", -1], ["R", 1]].forEach(([k, sd], i) => {
-      const a = ((st["flip" + k] == null ? 8 : st["flip" + k]) * Math.PI) / 180;
-      ctx.save(); ctx.translate(sd * 58, -150); ctx.rotate(-sd * a);
+    /* flippers: hanging ones behind the body edge, aimed ones in front */
+    const out = {};
+    const flipper = (k, sd, i) => {
+      const aim = st["aim" + k];
+      let rot, len = 1;
+      if (aim) {
+        const dx = aim[0] / sxk - sd * 58, dy = (aim[1] + hop + 20) / syk + 150;
+        rot = Math.atan2(-dx, dy); len = clamp(Math.hypot(dx, dy) / 104, 0.85, 1.3);
+      } else rot = -sd * ((st["flip" + k] == null ? 8 : st["flip" + k]) * Math.PI) / 180;
+      ctx.save(); ctx.translate(sd * 58, -150); ctx.rotate(rot); ctx.scale(1, len);
       K.shape(ctx, [[sd * -4, -6], [sd * 16, 0], [sd * 20, 60], [sd * 10, 104], [sd * 2, 60]], { fill: P.ink, w: 5, boil: 0.7, seed: seed + 10 + i, shine: { dx: 0, dy: 6, s: 0.7, a: 0.45 } });
+      const tp = ctx.getTransform().transformPoint(new DOMPoint(sd * 10, 100));
+      out["tip" + k] = [tp.x, tp.y];
       ctx.restore();
-    });
+    };
+    [["L", -1], ["R", 1]].forEach(([k, sd], i) => { if (!st["aim" + k]) flipper(k, sd, i); });
     /* body: egg, black; white belly + face */
     const body = []; for (let i = 0; i < 20; i++) { const a = (i / 20) * K.TAU, sn = Math.sin(a); body.push([Math.cos(a) * (sn > 0 ? 76 : 64 - 10 * Math.max(0, -sn)), -112 + sn * (sn > 0 ? 96 : 128)]); }
     K.shape(ctx, body, { fill: P.ink, w: 5.5, boil: 1, seed: seed + 20, shine: { dx: 10, dy: 12, s: 0.84, a: 0.55 } });
@@ -1083,10 +1113,20 @@ var VK = window.VK || (window.VK = {});
     K.shape(ctx, belly, { fill: P.paper, w: 4, boil: 0.8, seed: seed + 21, shade: { color: P.g5, dx: 8, dy: -6 } });
     /* face mask (white spectacles patch) */
     K.shape(ctx, [[-46, -196], [-20, -214], [0, -204], [20, -214], [46, -196], [40, -170], [0, -160], [-40, -170]], { fill: P.paper, w: 4, boil: 0.7, seed: seed + 22 });
+    const nod = clamp(st.nod || 0, 0, 1);
+    ctx.save(); ctx.translate(0, -175); ctx.rotate(((st.tilt || 0) + 6 * nod) * Math.PI / 180); ctx.translate(0, 175 + 9 * nod);
     K.pieEye(ctx, -17, -190, 11, 17, look, st.blink, seed + 30);
     K.pieEye(ctx, 17, -190, 11, 17, look, st.blink, seed + 40);
+    const brow = st.brow || 0;
+    if (st.brow != null) [-1, 1].forEach((sd, i) => K.line(ctx, [[sd * 6, -222 - brow * 5 + (i ? -brow : brow) * 2], [sd * 28, -226 - brow * 7]], { stroke: P.paper, w: 4.5, boil: 0.4, seed: seed + 46 + i }));
     /* beak */
-    if (st.beak === "open") {
+    const talk = clamp(st.talk || 0, 0, 1);
+    if (talk > 0.06) {
+      const o = 22 * talk;
+      K.shape(ctx, K.ellipsePts(0, -154 + o * 0.45, 12, 3 + o * 0.5, 10), { fill: P.g1, w: 3, boil: 0.4, seed: seed + 53 });
+      K.shape(ctx, [[-15, -168], [15, -168], [0, -152]], { fill: P.g4, w: 4, boil: 0.5, seed: seed + 50 });
+      K.shape(ctx, [[-11, -153 + o], [11, -153 + o], [0, -139 + o * 0.8]], { fill: P.g4, w: 4, boil: 0.5, seed: seed + 51 });
+    } else if (st.beak === "open") {
       K.shape(ctx, [[-14, -168], [14, -168], [0, -150]], { fill: P.g4, w: 4, boil: 0.5, seed: seed + 50 });
       K.shape(ctx, [[-11, -150], [11, -150], [0, -136]], { fill: P.g4, w: 4, boil: 0.5, seed: seed + 51 });
     } else K.shape(ctx, [[-15, -168], [15, -168], [0, -142]], { fill: P.g4, w: 4, boil: 0.5, seed: seed + 52, shade: { color: P.g3, dx: 0, dy: -6 } });
@@ -1108,6 +1148,18 @@ var VK = window.VK || (window.VK = {});
       }
       ctx.restore();
     }
+    const hp = ctx.getTransform().transformPoint(new DOMPoint(0, -190));
+    out.head = [hp.x, hp.y];
+    ctx.restore(); /* face group */
+    [["L", -1], ["R", 1]].forEach(([k, sd], i) => { if (st["aim" + k]) flipper(k, sd, i); });
+    if (st.exclaim > 0) {
+      const a = K.E.back(clamp(st.exclaim, 0, 1), 2.4);
+      ctx.save(); ctx.translate(86, -290); ctx.rotate(0.2); ctx.scale(a, a);
+      K.shape(ctx, [[-9, -50], [9, -50], [5, -10], [-5, -10]], { fill: P.gold, w: 4.5, boil: 0.6, seed: seed + 75 });
+      K.dot(ctx, 0, 4, 7, P.gold, P.ink, 4.5, seed + 76);
+      ctx.restore();
+    }
+    if (st.think > 0) K.thought(ctx, 92, -300, 0.9, st.think, "?", seed + 78);
     ctx.restore();
     /* gold heart (the pair reunites) */
     if (st.heart > 0) {
@@ -1118,6 +1170,165 @@ var VK = window.VK || (window.VK = {});
       ctx.restore();
     }
     ctx.restore();
+    return out;
+  };
+})(VK);
+
+/* ============================================================
+   VAUDEVILLE KIT 47 HOSTS: the two storytellers of an episode.
+     Host A = Dapper Dan, the cat (the explainer, the lower voice)
+     Host B = Skip, the boater penguin (the curious co-host, the higher voice)
+   Episodes re-animate a two-voice conversation, so both hosts:
+     - talk:   mouth / beak opening from a 0..1 loudness value per frame,
+               with viseme-ish shapes (K.talkMouth) that change at 8 Hz;
+     - listen: look at the speaker and nod while the partner talks;
+     - act:    timed gestures {at, kind, dur, target} on top (K.gesture);
+     - idle:   breathe, blink, sway (never a frozen puppet).
+   K.hostPose(who, t, opt) builds a pose; K.duo(ctx, t, opt) places both
+   hosts LARGE in screen space (cat >= 330 px, penguin >= 320 px tall) on a
+   spot pool, beside the explainer props, and returns hand / head points so
+   a scene can point at things or hang a prop on a flipper.
+   All pure functions of t (no state between frames).
+   ============================================================ */
+var VK = window.VK || (window.VK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp, hash } = K;
+
+  /* ---------- talking mouth (cat): opening = talk, shape = viseme ---------- */
+  const VIS = ["a", "e", "o", "a", "m", "e", "a", "o"];
+  K.visemeAt = function (t, seed, talk) {
+    if (talk < 0.12) return "m";
+    return VIS[Math.floor(hash(Math.floor(t * 8), seed || 1) * VIS.length)];
+  };
+  K.talkMouth = function (ctx, x, y, talk, vis, seed, sc) {
+    const v = vis || K.visemeAt(K.now, seed, talk), t = clamp(talk, 0, 1);
+    ctx.save(); ctx.translate(x, y); ctx.scale(sc || 1, sc || 1);
+    if (v === "m") { K.line(ctx, [[-20, 2], [-6, 6], [6, 6], [20, 2]], { stroke: P.ink, w: 5, boil: 0.4, seed }); ctx.restore(); return; }
+    const w = v === "e" ? 28 + 4 * t : v === "o" ? 11 + 6 * t : 22 + 6 * t;
+    const h = v === "e" ? 3 + 10 * t : v === "o" ? 7 + 16 * t : 4 + 20 * t;
+    const pts = K.ellipsePts(0, h * 0.6, w, h, 14);
+    K.shape(ctx, pts, { fill: P.g1, w: 4, boil: 0.4, seed });
+    ctx.save(); K.pathOf(ctx, pts, true); ctx.clip();
+    if (v !== "o" && t > 0.3) { ctx.fillStyle = P.paper; ctx.fillRect(-w, -h * 0.5, w * 2, h * 0.45 + 2); } /* upper teeth */
+    ctx.fillStyle = P.g3; ctx.beginPath(); ctx.ellipse(0, h * 1.5, w * 0.6, h * 0.55, 0, 0, K.TAU); ctx.fill(); /* tongue */
+    ctx.restore(); ctx.restore();
+  };
+
+  /* ---------- thought bubble with a glyph ("?" for thinking) ---------- */
+  K.thought = function (ctx, x, y, s, a, glyph, seed) {
+    if (a <= 0) return;
+    const k = K.E.back(clamp(a, 0, 1), 2.2);
+    ctx.save(); ctx.translate(x, y); ctx.scale(s * k, s * k);
+    K.dot(ctx, -40, 58, 7, P.paper, P.ink, 3.5, seed + 1);
+    K.dot(ctx, -24, 36, 11, P.paper, P.ink, 3.5, seed + 2);
+    const cloud = []; for (let i = 0; i < 16; i++) { const an = (i / 16) * K.TAU, r = 40 + (i % 2 ? 6 : -2); cloud.push([Math.cos(an) * r * 1.15, -10 + Math.sin(an) * r * 0.9]); }
+    K.shape(ctx, cloud, { fill: P.paper, w: 4.5, boil: 0.7, seed, shade: { color: P.g5, dx: -6, dy: -6 } });
+    K.text(ctx, glyph || "?", 0, -8, { size: 54, weight: 900, font: K.FONT.display, fill: P.ink });
+    ctx.restore();
+  };
+
+  /* ---------- gestures: patch a pose with gesture `kind` at strength u (0..1) ----------
+     cat kinds:     point, nod, surprise, think, shrug, grin, wave, present
+     penguin kinds: point, nod, surprise, think, shrug, flap, grin
+     opt.target = [x, y] in the rig's local px (for point / present) */
+  K.gesture = function (who, kind, u, st, opt) {
+    if (u <= 0) return st;
+    const o = opt || {}, tg = o.target || (who === "cat" ? [190, -200] : [190, -170]), side = tg[0] < 0 ? "L" : "R";
+    const ph = o.phase || 0; /* 0..1 inside the gesture, for nods and waves */
+    if (who === "cat") {
+      if (kind === "point" || kind === "present") {
+        const g = { x: lerp(st["glove" + side] ? st["glove" + side].x : (side === "R" ? 74 : -74), tg[0], u), y: lerp(st["glove" + side] ? st["glove" + side].y : -150, tg[1], u), open: kind === "present" ? 1 : -1 };
+        st["glove" + side] = g; st.look = [side === "R" ? 1 : -1, clamp((tg[1] + 200) / 200, -1, 1)]; st.turn = (side === "R" ? 0.5 : -0.5) * u;
+        if (kind === "present") { st.mouth = "grin"; st.lean = (side === "R" ? 4 : -4) * u; }
+      } else if (kind === "nod") st.nod = Math.max(st.nod || 0, u * 0.5 * (1 - Math.cos(ph * K.TAU * 2)));
+      else if (kind === "surprise") { st.eyeUp = 10 * u; st.brow = 1.4 * u; st.blink = 0; if (!(st.talk > 0.06)) st.mouth = "o"; st.exclaim = u; st.squash = (st.squash || 0) - 0.15 * u; st.gloveL = { x: -110, y: -230 * u - 120 * (1 - u), open: 1 }; st.gloveR = { x: 110, y: -230 * u - 120 * (1 - u), open: 1 }; }
+      else if (kind === "think") { st.gloveR = { x: lerp(74, 44, u), y: lerp(-150, -222, u), open: 0.2, rot: -110 }; st.look = [0.6, -1]; st.think = u; st.brow = 0.6 * u; st.tilt = 8 * u; if (!(st.talk > 0.06)) st.mouth = "sly"; }
+      else if (kind === "shrug") { st.gloveL = { x: -130, y: -170, open: 1, rot: 200 }; st.gloveR = { x: 130, y: -170, open: 1, rot: -20 }; st.brow = 1.1 * u; st.tilt = -8 * u; st.squash = (st.squash || 0) + 0.08 * u; if (!(st.talk > 0.06)) st.mouth = "sly"; }
+      else if (kind === "grin") { st.mouth = "grin"; st.wink = u; st.hatTip = -14 * u; st.hatLift = 20 * u; }
+      else if (kind === "wave") st.gloveR = { x: 120 + 18 * Math.sin(ph * K.TAU * 3), y: -250, open: 1, rot: -70 + 25 * Math.sin(ph * K.TAU * 3) };
+    } else {
+      if (kind === "point") { st["aim" + side] = [lerp(side === "R" ? 90 : -90, tg[0], u), lerp(-60, tg[1], u)]; st.look = [side === "R" ? 1 : -1, clamp((tg[1] + 190) / 200, -1, 1)]; }
+      else if (kind === "nod") st.nod = Math.max(st.nod || 0, u * 0.5 * (1 - Math.cos(ph * K.TAU * 2)));
+      else if (kind === "surprise") { st.flipL = st.flipR = 140 * u; st.exclaim = u; st.brow = 1.4 * u; st.blink = 0; if (!(st.talk > 0.06)) st.beak = "open"; st.hop = (st.hop || 0) + 22 * Math.sin(Math.min(1, ph * 3) * Math.PI); }
+      else if (kind === "think") { st.aimR = [12, -150]; st.look = [0.5, -1]; st.think = u; st.tilt = 10 * u; st.brow = 0.5 * u; }
+      else if (kind === "shrug") { st.flipL = st.flipR = 70 * u; st.brow = 1 * u; st.tilt = -8 * u; }
+      else if (kind === "flap") { const f = 60 + 50 * Math.sin(ph * K.TAU * 4); st.flipL = st.flipR = f * u; st.hop = (st.hop || 0) + 10 * Math.abs(Math.sin(ph * K.TAU * 2)); }
+      else if (kind === "grin") { st.hatTip = -20 * u; st.blink = 0; st.squash = (st.squash || 0) + 0.06 * u; }
+    }
+    return st;
+  };
+
+  /* ---------- a host's pose at time t ----------
+     who "cat" | "penguin". opt:
+       talk         0..1 (own loudness this frame), partnerTalk 0..1
+       partnerDir   -1 | 1 (where the partner stands: look there while listening)
+       acts         [{ at, kind, dur, target }]  timed gestures (dur default 1.2 s)
+       point        [x, y] local target + pointAmt 0..1 (continuous pointing)
+       base         pose fields to start from (hat, seed, ...) */
+  K.hostPose = function (who, t, opt) {
+    const o = Object.assign({ talk: 0, partnerTalk: 0, partnerDir: who === "cat" ? 1 : -1, acts: [], seed: who === "cat" ? 800 : 950 }, opt || {});
+    const talk = clamp(o.talk, 0, 1), listen = clamp(o.partnerTalk, 0, 1) * (talk < 0.1 ? 1 : 0);
+    const breathe = Math.sin(t * 2.4 + (who === "cat" ? 0 : 1.7));
+    const st = Object.assign({ seed: o.seed, blink: K.blinkAt(t, o.seed % 97 + 3) }, o.base || {});
+    st.squash = (st.squash || 0) + 0.035 * breathe + 0.06 * talk * Math.sin(t * 11);
+    st.talk = talk;
+    if (who === "cat") {
+      st.turn = 0.3 * o.partnerDir; st.look = [0.5 * o.partnerDir, 0.1];
+      /* talking hands: the right glove beats with the loudness, the left rests */
+      const beat = Math.sin(t * 5.2) * 0.5 + 0.5;
+      st.gloveR = st.gloveR || { x: 96 + 12 * talk, y: -150 - 60 * talk * beat, open: 0.3 + 0.6 * talk, rot: -30 - 30 * talk };
+      st.gloveL = st.gloveL || { x: -80, y: -120 - 6 * breathe, open: 0.4 };
+      if (talk > 0.06) { st.turn = 0.15 * o.partnerDir; st.look = [0.2 * o.partnerDir, 0]; }
+      st.lean = (st.lean || 0) + 2 * Math.sin(t * 1.3);
+    } else {
+      st.hat = st.hat === undefined ? "boater" : st.hat;
+      st.look = [0.6 * o.partnerDir, 0];
+      st.flipL = st.flipL == null ? 12 + 6 * breathe : st.flipL; st.flipR = st.flipR == null ? 12 + 6 * breathe : st.flipR;
+      if (talk > 0.06) { st.flipL = 20 + 50 * talk * (0.5 + 0.5 * Math.sin(t * 6)); st.look = [0.2 * o.partnerDir, -0.1]; st.hop = 4 * talk * Math.abs(Math.sin(t * 6)); }
+      st.tapL = 0.25 * Math.max(0, Math.sin(t * 3.1)); st.tapR = 0.25 * Math.max(0, Math.sin(t * 3.1 + Math.PI));
+    }
+    /* listening: look at the speaker and nod slowly */
+    if (listen > 0.15) { st.nod = 0.45 * listen * (0.5 - 0.5 * Math.cos(t * K.TAU * 0.9)); st.look = [o.partnerDir, 0]; if (who === "cat") st.turn = 0.45 * o.partnerDir; }
+    if (o.point && (o.pointAmt == null || o.pointAmt > 0)) K.gesture(who, "point", o.pointAmt == null ? 1 : o.pointAmt, st, { target: o.point });
+    o.acts.forEach((a) => {
+      const d = a.dur || 1.2, u = K.ss(a.at, a.at + 0.25, t) * (1 - K.ss(a.at + d - 0.25, a.at + d, t));
+      if (u > 0) K.gesture(who, a.kind, u, st, { target: a.target, phase: K.inv(a.at, a.at + d, t) });
+    });
+    return st;
+  };
+
+  /* ---------- the duo: both hosts large, in screen space ----------
+     opt: side "left" (default) | "right", x, y (cat feet), gap (cat -> penguin),
+          cs / ps (scales), a (0..1 appear: they slide in from the wing),
+          cat / pen: hostPose() options, point targets in SCREEN px
+          (pointCat / pointPen), spot (pool of light under them), floor (stage lip),
+          carry { who: "pen" | "cat", hand: "R" | "L", draw(ctx, x, y) } a prop held out */
+  K.duo = function (ctx, t, opt) {
+    const o = Object.assign({ side: "left", y: 1045, cs: 1.05, ps: 1.2, gap: 300, a: 1, spot: true, floor: false }, opt || {});
+    const right = o.side === "right";
+    const cx = o.x != null ? o.x : right ? 1590 : 330;
+    const px = cx + (right ? -o.gap : o.gap);
+    const slide = (1 - K.E.out3(clamp(o.a, 0, 1))) * (right ? 700 : -700);
+    K.screen(ctx);
+    if (o.a <= 0) return null;
+    ctx.save(); ctx.translate(slide, 0);
+    if (o.floor) K.shape(ctx, K.rectPts(Math.min(cx, px) - 260, o.y - 6, Math.abs(px - cx) + 520, 60, 4), { fill: P.g2, w: 5, boil: 0.6, seed: 1900 });
+    if (o.spot) { ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.translate((cx + px) / 2, o.y - 4); ctx.scale(1, 0.2); K.glow(ctx, 0, 0, Math.abs(px - cx) / 2 + 300, "rgba(255,250,236,0.55)", 1); ctx.restore(); }
+    const toLocal = (p, x, s) => (p ? [(p[0] - x) / s, (p[1] - o.y) / s] : null);
+    const copt = Object.assign({ partnerDir: right ? -1 : 1 }, o.cat || {});
+    const popt = Object.assign({ partnerDir: right ? 1 : -1 }, o.pen || {});
+    if (o.pointCat) copt.point = toLocal(o.pointCat, cx, o.cs);
+    if (o.pointPen) popt.point = toLocal(o.pointPen, px, o.ps);
+    if (o.carry && o.carry.who === "pen") { popt.base = Object.assign({}, popt.base); popt.base["aim" + (o.carry.hand || "R")] = o.carry.aim || [(o.carry.hand === "L" ? -1 : 1) * 120, -150]; }
+    const cp = K.hostPose("cat", t, copt), pp = K.hostPose("penguin", t, popt);
+    const rp = K.penguin(ctx, px, o.y, o.ps, pp);
+    const rc = K.cat(ctx, cx, o.y, o.cs, cp);
+    if (o.carry) {
+      const pt = o.carry.who === "pen" ? rp["tip" + (o.carry.hand || "R")] : rc["glove" + (o.carry.hand || "R")];
+      if (pt) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); o.carry.draw(ctx, pt[0], pt[1]); ctx.restore(); }
+    }
+    ctx.restore();
+    return { cat: rc, pen: rp, catX: cx + slide, penX: px + slide };
   };
 })(VK);
 
@@ -1332,10 +1543,11 @@ var VK = window.VK || (window.VK = {});
 
 /* ============================================================
    GALLERY: every explainer primitive of the vaudeville kit on the stage.
-   Three 2-second pages. Rebuild + snapshot after kit changes:
-     python3 ../kit/tools/build.py . && npx hyperframes snapshot . --at 1.6,3.6,5.6
+   Five 2-second pages: props (3 pages), then the two hosts (talk, listen,
+   point, gestures, a carried prop). Rebuild + snapshot after kit changes:
+     python3 ../kit/tools/build.py . && npx hyperframes snapshot . --at 1.7,3.7,5.7,6.6,7.6,8.6,9.6
    ============================================================ */
-const K = VK, P = K.P, DUR = 6;
+const K = VK, P = K.P, DUR = 10;
 K.G.BPM = 150; K.G.BARS = null; K.G.OFFSET = 0;
 const ctx = document.getElementById("cv").getContext("2d"), fx = document.getElementById("fx").getContext("2d");
 const ap = (t, t0) => K.inv(t0, t0 + 0.4, t);
@@ -1367,11 +1579,27 @@ function page2(t) {
   K.coinRain(ctx, t, 4.5, { x0: 900, x1: 1800, n: 12 });
   K.cat(ctx, 1250, 1000, 0.8, { blink: K.blinkAt(t, 3), mouth: "grin", gloveR: { x: 120, y: -220, open: 1 }, gloveL: { x: -90, y: -140, open: 0.5 } });
 }
+/* synthetic loudness: a syllable flutter under a phrase envelope (episodes use the real envelope) */
+const voice = (t, t0, t1, f) => (t < t0 || t > t1 ? 0 : K.ss(t0, t0 + 0.15, t) * (1 - K.ss(t1 - 0.15, t1, t)) * (0.35 + 0.65 * Math.abs(Math.sin(t * (f || 9)))) * (0.75 + 0.25 * Math.sin(t * 2.3)));
+function page3(t) { /* 6-8: Dan explains, Skip listens, then Skip asks and points at the screen */
+  const S = [0.2, 0.8, 1.6, 2.3, 1.9, 1.1, 0.4, -0.3, -0.1, 0.3, 0.1];
+  K.screenChart(ctx, 1260, 380, 860, 400, [{ data: S, color: P.ink, w: 6 }], { a: ap(t, 6.05), yMin: -3, yMax: 3, title: "z-score", bands: [{ v: 2, color: P.gold, label: "+2\u03c3" }, { v: -2, color: P.gold, label: "\u22122\u03c3" }], marks: [{ i: 3, s: 0, label: "\u22121 \u25bc" }] });
+  const ct = voice(t, 6.0, 6.95, 9), pt = voice(t, 7.05, 8.0, 12);
+  K.duo(ctx, t, { side: "left", a: K.inv(6, 6.4, t), cat: { talk: ct, partnerTalk: pt }, pen: { talk: pt, partnerTalk: ct, acts: [{ at: 7.1, kind: "surprise", dur: 0.9 }] },
+    pointCat: t < 7 ? [1000, 330] : null, pointPen: t > 7.45 ? [1100, 250] : null });
+}
+function page4(t) { /* 8-10: gestures: Dan thinks, Skip carries a ticket, then a shrug and a grin */
+  K.intertitle(ctx, 1300, 320, 820, 260, ["half-life = ln 2 / \u03b8"], { a: ap(t, 8.05), write: K.inv(8.2, 9, t), size: 46 });
+  const ct = voice(t, 9.0, 9.95, 9), pt = voice(t, 8.05, 8.9, 12);
+  K.duo(ctx, t, { side: "left", cat: { talk: ct, partnerTalk: pt, acts: [{ at: 8.0, kind: "think", dur: 1.0 }, { at: 9.1, kind: "grin", dur: 0.9 }] },
+    pen: { talk: pt, partnerTalk: ct, acts: [{ at: 9.05, kind: "nod", dur: 0.95 }] },
+    carry: { who: "pen", hand: "R", aim: [150, -170], draw: (c, x, y) => K.ticket(c, x + 120, y - 40, 300, 130, [{ t: "+$310" }], { gold: true, size: 44 }) } });
+}
 function render(t) {
   K.begin(ctx, t, { x: 960, y: 540, z: 1 }); K.applyCam(ctx, 1);
   ctx.fillStyle = P.ink; ctx.fillRect(-200, -200, 2400, 1500);
   stage(t);
-  if (t < 2) page0(t); else if (t < 4) page1(t); else page2(t);
+  if (t < 2) page0(t); else if (t < 4) page1(t); else if (t < 6) page2(t); else if (t < 8) page3(t); else page4(t);
   K.begin(fx, t, K.cam); fx.clearRect(0, 0, K.W, K.H); K.film(fx, t);
 }
 const TL = gsap.timeline({ paused: true }), drv = { _t: 0 };

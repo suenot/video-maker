@@ -11,8 +11,9 @@ The architecture matches the crab kit (`complex-arbitrage-rust/style/kit`): core
 | `10_ink.js` | `begin(ctx, t, cam)` (also sets the film gate weave), `applyCam(ctx, parallax)`, `screen`, `toScreen`; `shape` (fill + shade band + shine crescent + even ink outline), `brush` (tapered ribbon), `line`, `hose` (rubber-hose limb), `dot`, `text` (never boils), `glow`, `twinkle`; point generators `ellipsePts`, `blobPts`, `rectPts`, `roundPts` |
 | `20_film.js` | the projector: `film(ctx, t)` (flicker, scratches, dust, hairs, vignette), `iris(ctx, cx, cy, r)`, `irisT` |
 | `30_stage.js` | the house: `backdrop`, `floor`, `footlights`, `curtain`, `valance`, `proscenium`, `bulbs`, `spot`, `piano` (keys, sheet music, tip jar), `stool`, `gauge` (the z-meter), `spring` (the spread), `coin`, `coinRain`, `bell`, `note` |
-| `40_cat.js` | `cat(ctx, x, y, s, pose)` (Dapper Dan) with squash/stretch, IK gloves (`ik2`), pie-cut eyes (`pieEye`), wink, mouths, bowler (`bowler`), hat in hand, tail, `!`; `glove`; `blinkAt(t, seed)` |
-| `45_penguin.js` | `penguin(ctx, x, y, s, pose)` (top hat = rich, boater = cheap), tap shoes, flippers, gold heart; `penguinWaist` (spring anchor) |
+| `40_cat.js` | `cat(ctx, x, y, s, pose)` (Dapper Dan, host A) with squash/stretch, IK gloves (`ik2`), pie-cut eyes (`pieEye`), wink, mouths, `talk` / `viseme`, `nod`, `tilt`, `think`, bowler (`bowler`), hat in hand, tail, `!`; returns `{head, headPx, gloveL, gloveR}`; `glove` (`open < 0` = pointing finger); `blinkAt(t, seed)` |
+| `45_penguin.js` | `penguin(ctx, x, y, s, pose)` (top hat = rich, boater = cheap and Skip, host B), tap shoes, flippers (`flipL/R` angles or `aimL/R` targets drawn in front), `talk` beak, `nod`, `tilt`, `brow`, `exclaim`, `think`, gold heart; returns `{head, tipL, tipR}`; `penguinWaist` (spring anchor) |
+| `47_hosts.js` | the two hosts of an episode: `talkMouth` (loudness + viseme mouth), `visemeAt`, `thought` ("?" bubble), `gesture(who, kind, u, pose, {target, phase})`, `hostPose(who, t, {talk, partnerTalk, partnerDir, acts, point, pointAmt, base})`, `duo(ctx, t, {side, x, y, cs, ps, gap, a, cat, pen, pointCat, pointPen, carry, spot, floor})` (returns heads, gloves and flipper tips in device px) |
 | `50_explainer.js` | slide content as props: `intertitle`, `easel`, `playbill`, `screenChart`, `ticket`, `hangTag`, `typewriter`, `marquee` |
 | `fonts/` | local woff2 (Playfair Display, Oswald, IBM Plex Mono, Noto Serif SC/TC subsets) plus `fonts.css`; refresh with `tools/fetch_fonts.py` |
 | `assets/logo.svg` | the marketmaker.cc mark (monochrome, `currentColor`); `build.py` inlines it where the shell has `<!--__LOGO__-->` |
@@ -45,7 +46,17 @@ The architecture matches the crab kit (`complex-arbitrage-rust/style/kit`): core
 4. Build, then check: `python3 style/kit/tools/build.py <project>` and `cd <project> && npx hyperframes lint && npx hyperframes check`.
 5. Snapshot and look at the frames (`intro/tools/snap.sh`, `intro/tools/snap_lang.sh` for a title in another language). Render with `intro/tools/render_all.sh` as a model.
 
-`style/gallery/` is a 6-second project that shows every explainer primitive on the stage. Rebuild and snapshot it after you change the kit.
+A two-host explainer shot, with loudness from the episode's narration sync (`talkA(g)`, `talkB(g)`):
+
+```js
+K.duo(ctx, g, { side: "left",
+  cat: { talk: talkA(g), partnerTalk: talkB(g), acts: [{ at: B.reveal, kind: "surprise", dur: 1.2 }] },
+  pen: { talk: talkB(g), partnerTalk: talkA(g), acts: [{ at: B.question, kind: "think", dur: 1.5 }] },
+  pointCat: [1200, 380],                       /* screen px: the thing being explained */
+  carry: { who: "pen", draw: (c, x, y) => K.hangTag(c, x + 60, y, "0.012") } });
+```
+
+`style/gallery/` is a 10-second project: three pages of explainer primitives on the stage, then two pages of the hosts talking, listening, pointing, thinking and carrying a prop. Rebuild and snapshot it after you change the kit.
 
 ## Rules the kit relies on
 

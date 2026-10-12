@@ -13,6 +13,10 @@
      footL/R  {x, y}  shoe targets (defaults: standing)
      hatTip deg, hatLift px, hatInHand true (hat rides on the right glove)
      tail     phase offset, exclaim 0..1 ("!" card), seed
+     talk     0..1 loudness: talking mouth (overrides mouth while > 0.06)
+     viseme   "a" | "o" | "e" | "m" (optional; default cycles from the boil clock)
+     nod      0..1 head dips (listening), tilt deg head tilt, think 0..1 ("?" bubble)
+   Returns { head, gloveL, gloveR } in canvas device px (for props and pointing).
    ============================================================ */
 var VK = window.VK || (window.VK = {});
 (function (K) {
@@ -29,12 +33,15 @@ var VK = window.VK || (window.VK = {});
     return { elbow: [ex, ey], end: [S[0] + ux * dm, S[1] + uy * dm] };
   };
 
-  /* white cartoon glove at (x, y) pointing along ang; open 0 = fist, 1 = spread palm */
+  /* white cartoon glove at (x, y) pointing along ang; open 0 = fist, 1 = spread palm,
+     open < 0 = pointing (index finger out, the others curled) */
   K.glove = function (ctx, x, y, ang, open, s, seed, flip) {
     ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(s, s * (flip || 1));
+    const pointing = open != null && open < 0;
     const o = clamp(open == null ? 0.5 : open, 0, 1);
+    if (pointing) K.shape(ctx, K.roundPts(10, -16, 44, 14, 7), { fill: P.paper, w: 4, boil: 0.6, seed: seed + 8 });
     /* fingers (3 + thumb) */
-    for (let f = 0; f < 3; f++) {
+    for (let f = 0; f < 3 && !pointing; f++) {
       const fa = (f - 1) * (0.18 + 0.32 * o), len = 14 + 20 * o;
       const bx = 14, by = (f - 1) * 9;
       K.shape(ctx, K.ellipsePts(bx + Math.cos(fa) * len * 0.6, by + Math.sin(fa) * len * 0.6, len * 0.62 + 6, 8, 10, fa), { fill: P.paper, w: 4, boil: 0.6, seed: seed + f });
@@ -101,9 +108,10 @@ var VK = window.VK || (window.VK = {});
     [-74, -58].forEach((by, i) => K.dot(ctx, 0, by, 3.5, P.ink, P.ink, 1, seed + 22 + i));
     ctx.restore();
     /* head */
-    const hx = turn * 6, hy = hipY - 104 * syk - 70 * (1 + (syk - 1) * 0.6);
+    const nod = clamp(st.nod || 0, 0, 1);
+    const hx = turn * 6, hy = hipY - 104 * syk - 70 * (1 + (syk - 1) * 0.6) + 10 * nod;
     ctx.save(); ctx.translate(hx, hy); ctx.scale(lerp(1, sxk, 0.6), lerp(1, syk, 0.6));
-    ctx.rotate((turn * 4 + Math.sin(K.now * 2.1) * 1.5) * Math.PI / 180);
+    ctx.rotate((turn * 4 + Math.sin(K.now * 2.1) * 1.5 + (st.tilt || 0) + 7 * nod) * Math.PI / 180);
     /* ears (behind the hat) */
     [-1, 1].forEach((sd, i) => {
       const tw = sd === 1 && st.earTwitch ? st.earTwitch * 8 : 0;
@@ -123,8 +131,9 @@ var VK = window.VK || (window.VK = {});
     [-1, 1].forEach((sd, i) => K.line(ctx, [[fx + sd * 8, eyeY - 34 - brow * 8 + (i ? -brow : brow) * 3], [fx + sd * 34, eyeY - 40 - brow * 10]], { stroke: P.paper, w: 5, boil: 0.4, seed: seed + 60 + i }));
     /* nose + mouth */
     K.shape(ctx, K.ellipsePts(fx, 14, 11, 7, 10), { fill: P.ink, w: 3, boil: 0.4, seed: seed + 62, shine: { dx: 2, dy: 3, s: 0.6, a: 0.8 } });
-    const m = st.mouth || "smile";
-    if (m === "smile") K.line(ctx, [[fx - 26, 26], [fx - 12, 38], [fx, 30], [fx + 12, 38], [fx + 26, 26]], { stroke: P.ink, w: 4.5, boil: 0.5, seed: seed + 63 });
+    const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1);
+    if (talk > 0.06) K.talkMouth(ctx, fx, 26, talk, st.viseme, seed + 130, 1);
+    else if (m === "smile") K.line(ctx, [[fx - 26, 26], [fx - 12, 38], [fx, 30], [fx + 12, 38], [fx + 26, 26]], { stroke: P.ink, w: 4.5, boil: 0.5, seed: seed + 63 });
     else if (m === "sly") K.line(ctx, [[fx - 22, 32], [fx, 34], [fx + 18, 30], [fx + 30, 22]], { stroke: P.ink, w: 4.5, boil: 0.5, seed: seed + 64 });
     else if (m === "grin") { K.shape(ctx, [[fx - 32, 24], [fx + 32, 24], [fx + 18, 46], [fx, 50], [fx - 18, 46]], { fill: P.g1, w: 4, boil: 0.5, seed: seed + 65 }); K.shape(ctx, [[fx - 26, 26], [fx + 26, 26], [fx + 20, 32], [fx - 20, 32]], { fill: P.paper, stroke: null, w: 0, boil: 0.3, seed: seed + 66 }); }
     else if (m === "open") { K.shape(ctx, K.ellipsePts(fx, 38, 18, 15, 12), { fill: P.g1, w: 4, boil: 0.5, seed: seed + 67 }); K.shape(ctx, K.ellipsePts(fx, 46, 10, 5, 8), { fill: P.g3, stroke: null, w: 0, boil: 0.3, seed: seed + 68 }); }
@@ -144,6 +153,7 @@ var VK = window.VK || (window.VK = {});
     K.dot(ctx, 0, 0, 8, P.paper, P.ink, 4, seed + 92);
     ctx.restore();
     /* arms: rubber hose with IK elbows, gloves in front */
+    const out = {};
     [["L", -1], ["R", 1]].forEach(([k, sd]) => {
       const g = st["glove" + k] || { x: sd * 74, y: -150, open: 0.4 };
       const S = [sd * 42 * sxk, hipY - 86 * syk];
@@ -152,7 +162,10 @@ var VK = window.VK || (window.VK = {});
       const ang = g.rot != null ? (g.rot * Math.PI) / 180 : Math.atan2(r.end[1] - r.elbow[1], r.end[0] - r.elbow[0]);
       if (k === "R" && st.hatInHand) { ctx.save(); ctx.translate(r.end[0] + 6, r.end[1] - 34); ctx.rotate((st.hatTip || -10) * Math.PI / 180); K.bowler(ctx, seed + 80); ctx.restore(); }
       K.glove(ctx, r.end[0], r.end[1], ang, g.open, 1.05, seed + 110 + sd * 10, sd < 0 ? -1 : 1);
+      const gp = ctx.getTransform().transformPoint(new DOMPoint(r.end[0] + Math.cos(ang) * 30, r.end[1] + Math.sin(ang) * 30));
+      out["glove" + k] = [gp.x, gp.y];
     });
+    if (st.think > 0) K.thought(ctx, 120, hy - 150, 1, st.think, "?", seed + 140);
     /* "!" on a little card (language-neutral) */
     if (st.exclaim > 0) {
       const a = K.E.back(clamp(st.exclaim, 0, 1), 2.4);
@@ -161,8 +174,10 @@ var VK = window.VK || (window.VK = {});
       K.dot(ctx, 0, 4, 8, P.gold, P.ink, 4.5, seed + 121);
       ctx.restore();
     }
+    const hp = ctx.getTransform().transformPoint(new DOMPoint(hx, hy));
     ctx.restore();
-    return { head: [x + hx * s, y + hy * s] };
+    out.head = [x + hx * s, y + hy * s]; out.headPx = [hp.x, hp.y];
+    return out;
   };
 
   /* blink curve with seeded blink times, 0..1 */
