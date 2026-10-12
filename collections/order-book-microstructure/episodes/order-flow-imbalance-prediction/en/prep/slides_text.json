@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "=e\nOrder Flow Imbalance:\n\nThe Cont-Kukanov-Stoikov\nDecomposition\n\nTurning raw limit order book updates\ninto signed predictive flow quantities.\n\nTarget Audience: Microstructure Researchers // System Focus: Event\nDecomposition, MLOFI, Signal Extraction\n\nGemini Notebook"
+    },
+    {
+      "page": 2,
+      "text": "The Contemporaneous R-Squared Fallacy\n\nThe Apples to Oranges Timeline\n\nTrack 1: OFI 50-65% R-squared (Decomposition) Price Change\nContemporaneous (Window k) (Window k)\n\nTrack 2: OFI 1-2% Variance (Forecast) Price Change\nPredictive (Window k) (Window k+1)\n\nComparing contemporaneous fits to daily return models is apples to oranges. Strictly\nlagged OFI regressions yield legitimate, but much smaller, predictive edges.\n\nGemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "PREMIUM, EDITORIAL QUANTITATIVE RESEARCH REPORT\n\nWhy Order Flow, Not Trades\n\nThe Invisible Iceberg of Market Flow\n\nMarket Buys (| \\ Market Sells\n\n(Consume resting asks) (Consume resting bids)\n\nThe Visible Tape\n\nCancellations New Limit Orders\n(Removing support/resistance) (Adding support/resistance)\n\nOrder-to-Trade Ratio\noften > 10:1\n\n= A continuous limit\norder book moves\nvia four\nmechanisms. Only\ntwo are actual\ntrades.\n\nTraditional volume\nmeasures miss the\ninvisible majority of\nprice-setting actions.\nOFI prices all four\nmechanisms on a\nsingle scale.\n\nA Gemini Not"
+    },
+    {
+      "page": 4,
+      "text": "PREMIUM, EDITORIAL QUANTITATIVE RESEARCH REPORT\n\nThe CKS Event Decomposition\n\nBid Side\nCount full new\nsize (+)\n\nSes b b\nen = Ips pb, Qn or Ip <p Qn-1\n\n+1 P= Pe iG? a OLay) Best bid price Count size\ntransition? change (A)\n\nee 2 S\nSubtract old\nsize (-)\n\nThe elegance of CKS is completeness. These three indicator branches cover every\npossible transition of the top of book, mapping every update to exactly one signed\nnumber using only two consecutive snapshots."
+    },
+    {
+      "page": 5,
+      "text": "PREMIUM, EDITORIAL QUANTITATIVE RESEARCH REPORT\n\nPrice Impact and Inverse Depth Scaling\n\nOver 10-second to 1-minute\nAP — -OFI intervals, mid-price change is\n[11,72] ar p O [11,72] ae regressed linearly on\naggregated OFI.\n\no\nw\n\nThe impact coefficient scales\ninversely with book depth. The\nsame flow pushes price further\nin a thin book. This relationship\ntransfers across venues without\nrefitting the level.\n\no\n_\n\n—\nOo\n—\n»\noO\n5.0.2\n&\n<8]\n=)\n‘co\nA.\n\nAverage Depth (D)\n\nA Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "Multi-Level Order Flow Imbalance (MLOFI)\n\nThe Stacked Vector Visual\n\nOFT”)\n\nOFT”\n= MLOFI,,\n\nOF)\n\nXu, Gould, and Howison (2019) extend the\nidentical three-branch formula to L levels. On\nNasdaq equities, each additional level adds\nout-of-sample R-squared up to level 10.\n\n<—— Top of Book dominates\n\nBo ([81| > [Bal >... > 16x)\n\nOpen Question for Crypto: Crypto books are\nthinner and churn heavily at depth. Levels 2-5\nmay add zero edge outside traditional equity\nstructures."
+    },
+    {
+      "page": 7,
+      "text": "Collapsing Collinearity via PCA\n\nL-level MLOFI vector\n(highly correlated layers,\n\n>@.8 correlation) c \\ ta ea\nQe\n\n=a El] a Pe\n\n\\ ed\n— a's 7\n\na PCT = | T a w is Leading eigenvector\nOFI aia MLOFTI of OFI covariance matrix\n| | /\n\n\\ |\nx \\ \\\n\ni Y \\\n\n~__\\\n\nFirst Principal Component (PC1)\n\nMechanics: Adjacent-level OFIs are highly correlated. PCA compresses this into a single, well-conditioned scalar.\n\nLiterature Result: Captures >89% of total variance on published equity results. Worth implementing to collapse collinearity.\n\ni Gemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "Trade Classification: Buy vs. Sell Initiated\n\nTrade Classification Matrix\nLee-Ready Algorithm Bulk Volume Classification (BVC)\n\nInput: Input:\nTick-level Trade/Quote data OHLCV Aggregated Bars\nLogic: Logic:\nQuote Rule (Trade > Mid = Buy), fallback\n\nto Tick Rule\n\nConstraint: Constraint:\nRequires microsecond/tick level data. Relies on the normal CDF for block\nReported Accuracy: 72-85% approximations. Functional without tick data.\n\nContext: OFI requires no trade classification. However, testing OFI against legacy flow\n\nmetrics requires reverse-engineering trade intent.\na a a aE ET STS (Sa\n\nfh Gemini Notebook"
+    },
+    {
+      "page": 9,
+      "text": "Diagnostic Matrix: What OFI Is Not\n\nStatic Order Book Order Flow Imbalance (OFI) | Trade Imbalance (Tl)\nImbalance (OBI)\n\nFocus: Focus: Focus:\nState Journey Execution\n‘Description: Description: Description:\nResting bids vs. resting asks. | Event tracking and transitions | Signed trade flow (volume-\n\nSnapshot only. between snapshots. weighted).\n\n|\n\nOrder Flow : : °\nImbalance (OF) Subsumption Insight:\nWhen OFI and Trade Imbalance (TI) are regressed jointly on\n\nmid-price changes, Tl becomes statistically insignificant. The\nevents that almost became trades carry the same information\n\nas those that did.\n\nTrade\nImbalance\n(TI)"
+    },
+    {
+      "page": 10,
+      "text": "Implementation Blueprint: The Core Calculator\n\nOFICalculator\n\nOrderBookSnapshot (Maintains state of MLOFI Vector\n\nprev_snapshot)\n\ndef compute_level_ofi(prev_price, curr_price, The calculator evaluates\nprev_size, curr_size, side): every level against the three\n\nioe CKS branches. The code\nif curr_price > prev_price:\nshowcases data flow\nreturn curr_size\n\n: (Snapshot —> Vector)\nelif curr_price < prev_price: fathalhion\n\nreturn -prev_size production-ready\nelse: optimized C++.\nreturn curr_size - prev_size\n\nGemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "Implementation Blueprint: Aggregation & Normalization\n\nOFlAggregator OFISignal\nMET nec tonstesl (Fixed Time Windows) (Rolling Z-Score)\n\nSystem Warning: Note what the\n‘delta_mid': X, aggregator emits: mlofi and\nEmilio twins > -Y. delta_mid over the SAME window.\n} This is the contemporaneous fit.\n\nTo achieve a predictive fit, window k’s OFI must be paired with window k+1’s delta_mid.\nNormalization uses a rolling z-score, but converting to a predicted return requires fitting\na venue-specific beta."
+    },
+    {
+      "page": 12,
+      "text": "Production Integration: Where OFI Plugs In\n\nLayer 1: Market Making (Fair Value Modeling)\n\nOFI serves as a predictive skew term\nfai d answering “where is price going?”,\nair — pml\nP =|P as Yflow -OFI z— Yinv’ 7 Sel, SSL the inventory term waco\nanswers “what can we afford to hold?”. High\n|OFI_z| acts as an adverse-selection trigger.\n\nLayer 2: Execution (Tactics Layer)\n\nOF is an input to the tactics layer’s\nfill-probability estimate. Crucially, the\ntactics layer should not re-derive\nurgency from its own view, avoiding\n\nFill Probability (p) competing controllers.\n\nGemini Notebook"
+    },
+    {
+      "page": 13,
+      "text": "Practical Limitations & Market Decay\n\nRisk Modules 1 Module 2\n\nSignal Decay Recalibration\n\neno HE\n\nNasdaq Crypto\n\nModule 3\n\nManipulation (Spoofing)\n\nSignal Strength\n\nMilliseconds to Seconds\n\n8 moves intraday with\ndepth. Fits from one asset\nclass will not transfer\nuntouched to another.\n\nThe model is blind to intent. It\nweights by size alone. A spoofer\nplacing/canceling size injects\ndirectly into the signal at full\nweight by construction.\n\nPredictive content decays\nrapidly. Aggregation windows\nare bets on the horizon.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 14,
+      "text": "System Blueprint: Core Axioms\n\nEmpirical Validation Needed |\nLiterature metrics cited are equities-\nbased. Lagged specifications must be\n\ntested on proprietary book data. =\n\nPCA Compression a\n\nMulti-level OFI adds edge, but\nextreme collinearity requires PCA\nreduction. |\n\n| | Event Decomposition Shae Subsumption S|\n1 OFI maps transitions (price/size), u. OFI subsumes Trade Imbalance.\nnot resting snapshot states. | = Cancellations are the missing TEMES |\nContemporaneous R-Squared *] i= Intent Blindness el\n50-65% explains same-interval moves. 2) Size-weighting creates inherent\nIt is not a forward forecast. Al & vulnerabilities to spoofing. |\n6\n\ni Sao ee\n\nReference: Cont, Kukanov & Stoikov (2014) | Xu, Gould & Howison (2019)\n\nGemini Notebook"
+    }
+  ]
+}
