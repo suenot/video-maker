@@ -14,7 +14,7 @@
 | ai-agents-trading | robot Beepo | 24.3 s done | done: analyst bot Ping, K.duo + episode layer 65_host.js |
 | modern-ml-trading | owl Strix | 26.6 s done | done: hummingbird Pico, K.duo |
 | order-book-microstructure | raccoon Tikki | 26.4 s done | done: gecko Gekko, K.duo |
-| execution-market-making | mouse Mr. Tick | 27.1 s done | in progress (pigeon) |
+| execution-market-making | mouse Mr. Tick | 27.1 s done | done: pigeon Dash, K.duo |
 | statistical-arbitrage-pairs | ragtime cat + penguins | 28.9 s done | done: penguin Skip, K.duo |
 | onchain-defi-quant | hamster Chef Nibbs | 30.8 s done | done: bee Bizzy, K.duo |
 | volatility-regimes | turtle Siggy | 31.0 s done; TODO: blank orange wipe frame ~25 s, near-empty frames 7 s and 13 s | done: seagull Gully, K.duo |
@@ -23,7 +23,7 @@
 
 - End card: done (19 s, 4 langs).
 - Episode prep (SCENES.md, hand-set slide timing, Whisper word timings): done for all 28 EN episodes in `<collection>/episodes/<slug>/en/prep/`. sync_slides auto-timing failed on every deck; timings are manual. Each SCENES.md lists NotebookLM errors with corrected content to draw.
-- Pilot episode `complex-arbitrage-rust/episodes/complex-arbitrage-graph-algorithms/en/episode/`: framework done (tools/, lib/, SCENE_GUIDE.md, assemble.py); slides 1-2 built (7 scenes, preview_en.mp4). In progress: slides 3-15 (4 packages), full render, and extraction of the framework into `collections/_framework/` (collection-agnostic, HOSTS.md adapter).
+- Pilot episode `complex-arbitrage-rust/episodes/complex-arbitrage-graph-algorithms/en/episode/`: framework done (tools/, lib/, SCENE_GUIDE.md, assemble.py); slides 1-2 built (7 scenes); preview_en.mp4 = intro 31.5 s + 344.9 s + end card 19 s = 394.2 s, -14.8 LUFS. In progress: slides 3-15 (4 packages), full render, and extraction of the framework into `collections/_framework/` (collection-agnostic, HOSTS.md adapter).
 - Article fixes found during prep: pushed to marketmaker-cc-landing (8 articles x 22 langs).
 
 ## Episode engine
