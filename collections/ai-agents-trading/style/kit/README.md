@@ -12,6 +12,7 @@ The architecture matches the crab kit (`complex-arbitrage-rust/style/kit`), so t
 | `20_pixel.js` | `ICONS` + `pix(ctx, name, x, y, cell, color)` pixel icons (eye, fork, bolt, brain, check, cross, up, down, heart, gear, lens, shield, chat, coin, rocket, branch, chart, team, globe, clock, play, harness, dollar); `seg7` / `seg7W` seven-segment digits |
 | `30_world.js` | `wall`, `floorGrid` (scrolling synthwave grid), `skyWindow` (striped sun + skyline, `dusk` 0..1), `wallScreen` (bezel monitor with a draw callback), `desk`, `cable` + `polyAt` (signal pulses), `ticket`, `ledTape`, `sparks`, `confetti` |
 | `40_robot.js` | `robot(ctx, x, y, s, pose)` for `lead` / `analyst` / `risk` / `trader`; `beepo` shortcut; coil legs, IK hose arms (`ik2`, `hose`, `mitt`, `coil`), CRT face with eyes / mouths / icons / custom screen, antenna bulb, props; `blinkAt`; `K.faceRect` (screen quad of the face, for dives) |
+| `45_cohost.js` | the talking duo for episodes: `ping` (Ping, host B: kind `cohost`), `hostPose(t, o)` (loudness-driven `speak` mouth, listening look + nods, gestures on accents, acts `point` `nod` `surprise` `think` `shrug` `cheer` `wave` `worry` `grin`, look-at, pointing, props), `duo(ctx, t, o)` (both hosts big in screen space with layouts `left` / `right` / `split` / `center`, neon pads, laser pointer; returns the `free` rect for props), `stage`, `toLocal`, `HOST_GEST`; plus in `40_robot.js`: `viseme(talk, t, seed)`, `VISEMES`, `hands`, `hoverLift` |
 | `50_explainer.js` | `node`, `edge` / `edgePoint` / `tag`, `scoreboard`, `termTable` (+ `termWindow`), `holo`, `monitorChart` + `plot` (line / bar / candle), `taskBoard`, `terminal`, `loopRing`, `neonSign`, `popS` |
 | `fonts/` | local woff2 (Russo One, Exo 2, IBM Plex Mono, Press Start 2P, CJK subsets) + `fonts.css`; refresh with `tools/fetch_fonts.py` |
 | `vendor/gsap.min.js` | GSAP 3.14.2 (local, no CDN) |
@@ -44,7 +45,32 @@ The architecture matches the crab kit (`complex-arbitrage-rust/style/kit`), so t
 4. Build, then check: `python3 style/kit/tools/build.py <project>` and `cd <project> && npx hyperframes lint && npx hyperframes check`.
 5. Snapshot and look at the frames (`intro/tools/snap.sh`). Render with `npx hyperframes render --quality high --output renders/x.mp4` (`intro/tools/render_all.sh` shows the per-language loop).
 
-`style/gallery/` is a 6-second project with every explainer primitive on two boards (snapshot at 2.5 s and 5.5 s). Rebuild and snapshot it after kit changes to catch regressions.
+`style/gallery/` is an 18-second project: every explainer primitive on boards A and B (snapshot at 2.5 s and 5.5 s), then the hosts: C (7.8 s) Beepo talks and laser-points while Ping listens, D (10.2 / 11.7 s) Ping talks, thinks, gets surprised and points while Beepo listens holding a ticket, E (14.5 s) Ping gestures, F (17.5 s) Beepo gestures, viseme mouths and Ping at 180 / 260 / 400 px. Rebuild and snapshot it after kit changes to catch regressions.
+
+## The hosts in an episode (Beepo = host A, Ping = host B)
+
+Host A is the explainer (the lower NotebookLM voice), host B the curious co-host (the higher voice). Everything is driven per frame by numbers, so any narration source works:
+
+```js
+/* in screen space, after the world and the props */
+K.screen(ctx);
+const d = K.duo(ctx, t, {
+  layout: "left",                       /* duo bottom-left, props in d.free (right) */
+  talkA: NR.talk(t, "a"), talkB: NR.talk(t, "b"), who: NR.who(t),   /* 0..1 loudness */
+  accentA: NR.accent(t, "a"), accentB: NR.accent(t, "b"),            /* gesture / nod pulses */
+  pointA: [1530, 330], pointAmtA: K.ss(cue - 0.3, cue, t), beamA: true,
+  actsB: [{ at: cue2, kind: "surprise", dur: 1.2 }],
+  holdA: { R: (c, ang) => K.ticket(c, 30, -10, 0.7, { sym: "NVDA" }) },
+});
+```
+
+`style/episode/65_host.js` wires the shared narration engine (`_episode/lib/60_narration.js`) into this for you: `HOST.duo(ctx, g, { reacts, preacts, point, pointAmt, ppoint, ppointAmt, layout })` (same option names as the crab collection), `HOST.beepoPose(g)` and `HOST.pingPose(g)` for solo shots.
+
+- Size: `duo` defaults to Beepo s 1.25 (about 370 px feet to head top, 430 with the antenna) and Ping at 0.82 of that. Never go below s 1 in explainer scenes (300 px).
+- Mouths: `mouth: "speak"` + `talk` 0..1 gives the viseme mouth (closed / e / a / o / u from `K.viseme`); `vis: K.VISEMES.o` forces a shape. The antenna bulb and the chest meter follow the voice too.
+- Listening: the silent host looks at the talker, leans in and nods on the talker's accents. Do not add your own nods unless a beat asks for one.
+- Pointing: `pointA` / `pointB` in screen px; the nearer arm reaches, the eyes follow, `beam` adds the neon laser line (pink from Beepo, cyan from Ping). Point at the thing being explained when it appears.
+- Carrying props: `holdA` / `holdB` take `{ R | L: "ticket" | "lens" | "shield" | "baton" | fn(ctx, ang, st) }`; the function draws any kit prop at the hand.
 
 ## Rules the kit relies on
 

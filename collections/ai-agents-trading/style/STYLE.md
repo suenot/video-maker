@@ -26,6 +26,7 @@ It must never read as the crab world: no paper, no sea, no brown pen line, no da
 | Beepo plastic | `shell` / `shellShade` / `shellDark` | `#e9ebff` / `#a3a8dc` / `#5d63a6` |
 | Screens, phosphor | `screen` / `phosphor` | `#04161f` / `#5dffd8` |
 | Analyst bot | `analyst` / `analystDark` | `#3fd0ff` / `#1f86b8` |
+| Ping's face phosphor | `pingGlow` | `#9ff4ff` |
 | Risk bot | `risk` / `riskDark` | `#ffb238` / `#c97a12` |
 | Trader bot | `trader` / `traderDark` | `#ff5fae` / `#c42b7f` |
 | Gain / loss / profit | `gain` `loss` `profit` | `#39ff9a` `#ff4d6d` `#ffe14d` |
@@ -80,6 +81,30 @@ Animation rules:
 - Blinks seeded about 1 per 2.1 s (`K.blinkAt`), forced open on surprise. Sleeping bots: `blink: 1`.
 - Always alive: beat bounce, antenna wobble, bulb on the beat, waveform mouth while singing, the boil.
 - `K.faceRect` gives the screen-space quad of the face screen: use it to dive into the face (the signature transition).
+
+## 5b. Ping, the co-host (host B), and the talking duo
+
+Episodes are two-voice conversations. **Beepo = host A**, the explainer (the lower voice). **Ping = host B**, the curious co-host (the higher voice): the cyan analyst promoted to the mic. Ping must read as a different character at a glance, even at 180 px:
+
+| Part | Ping (kind `cohost`) | Beepo (kind `lead`) |
+| --- | --- | --- |
+| Silhouette | dome head + dish antenna, **hovers** on a cyan jet (no legs), floor glow pool | box CRT head + coil spring antenna, coil legs and boots |
+| Face | **round** glowing eyes with pupils and highlights, line brows always on, round mouth with a pink tongue; ice-cyan phosphor `#9ff4ff` | square pixel eyes, pixel brows when `brow` is set, pixel mouth; mint phosphor `#5dffd8` |
+| Accessory | pink bow tie | none (the antenna bulb is the signature) |
+| Size | 0.82 of Beepo in `K.duo` | Beepo s 1.25: about 370 px to the head top |
+| Laser pointer | cyan | pink |
+
+Acting (all from `K.hostPose`, driven by per-frame loudness):
+- **Talking**: `speak` mouth (closed / e / a / o / u visemes about 8 per second, opening = loudness), antenna bulb and chest meter follow the voice, a gesture on each stressed word (hand up, palms out, hand to chest, sweep), brows lift on some.
+- **Listening**: look at the talker, lean in, tilt the head, nod on the talker's stressed words. A listener never freezes.
+- **Gestures** for both hosts: `point`, `nod`, `surprise` (wide eyes, "!", hop, hands up), `think` (mitt to the chin, look up, "?" bubble), `shrug`, `cheer`, `wave`, `worry`, `grin`.
+- **Idle**: breathing squash, slow sway, drifting look, seeded blinks (forever, not only for the first 30 s), Ping's hover bob.
+
+Placement (`K.duo`):
+- `left` (default): the duo bottom-left, Beepo on the inside next to the props (he explains and points), Ping on the outside. `right` mirrors it. `split` puts Beepo at the left edge and Ping at the right edge with the props between them. `center` is for conversation beats with no props.
+- Neon floor pads under both (pink for Beepo, cyan for Ping) ground them on any set.
+- `duo` returns `free`, the rect left for explainer props: at most two props in focus there.
+- The hosts are storytellers, never tiny in a corner: Beepo at s 1 or more in explainer scenes.
 
 ## 6. Camera and transitions
 

@@ -19,6 +19,7 @@ var AK = window.AK || (window.AK = {});
     /* robot plastics */
     shell: "#e9ebff", shellShade: "#a3a8dc", shellDark: "#5d63a6",
     screen: "#04161f", screenShade: "#0a2a36", phosphor: "#5dffd8", phosphorDim: "#1d7f74",
+    pingGlow: "#9ff4ff",   /* Ping's face phosphor (ice cyan; Beepo keeps mint) */
     metal: "#7c84b8", metalDark: "#454c85", rubber: "#2a2f63",
     /* team bots */
     analyst: "#3fd0ff", analystDark: "#1f86b8",

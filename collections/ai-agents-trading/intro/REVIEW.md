@@ -66,3 +66,23 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, 9 to 20 frames, pl
 - Loudness is -13.5 LUFS, single-pass loudnorm on a short clip.
 - Ticket text in the pipeline shot is about 24 px; it is context, not information.
 - One lint warning remains: the file is large, because it is built from the kit by design.
+
+## Sidekick co-host (kit, 2026-10-12)
+
+Ping (host B) is the cyan analyst promoted to co-host: it hovers, has round eyes and a bow tie, and its face glows ice-cyan. Beepo stays host A. Both hosts have a viseme mouth driven by loudness, a listening pose, gestures, a look-at target and a duo layout helper. The gallery was snapshotted at 2.5, 5.5, 7.8, 10.2, 11.7, 14.5 and 17.5 s.
+
+Round 1 (gallery C-F):
+- **Laser beam crossed Ping's face** in the `left` layout, because Beepo stood on the outside. Beepo now stands on the inside, next to the props, and Ping on the outside. The layout is mirrored for `right`.
+- **Ping's eyes and mouth were too small** to read at 260 px. Eye radius went from 2.1 to 2.45 cells and the mouth was enlarged.
+- **Ping's arms were dark blue on the navy room.** They now use the body cyan.
+- **Beepo's open visemes barely read.** The mouth height was raised and named `K.VISEMES` were added, so the strip now shows M / E / U / O / A.
+- **The worry hands covered Beepo's chest panel.** They now wring low. The cheer arms were moved wider so they no longer cover the face.
+- **The duo was a little small.** Default Beepo scale went from 1.15 to 1.25, about 370 px to the head top.
+
+Round 2:
+- Each host reads at a glance, from 180 px up to 400 px.
+- The beam lands cleanly on the chart peak, and the listener looks at the talker.
+- The think bubble and the "!" read clearly.
+- Boards A and B are unchanged.
+
+Intro regression: `snap.sh` was run at 6.5, 12.5, 15.5 and 20.5 s and compared with the old frames. The canvas is identical, apart from DOM-title antialiasing at 20.5 s. `K.blinkAt` now blinks for the whole length of an episode instead of stopping after about 30 s; the result is unchanged for t < 30 s.
