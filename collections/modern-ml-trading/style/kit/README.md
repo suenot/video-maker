@@ -13,12 +13,13 @@ The architecture matches the crab kit (`complex-arbitrage-rust/style/kit`), so t
 | `40_owl.js` | `owl(ctx, x, y, s, pose)` with squash/stretch, head `yaw` swivel and `tilt`, pie-cut eyes, blink / wink, brows, beak mouths, tufts, rubber-hose IK arms that stretch, gloves (`glove`) with props via `hold`; `blinkAt(t, seed)` |
 | `50_explainer.js` | `decoFrame`, `plate` + `plateMap`, `tube` / `tubePoint`, `tag`, `gauge`, `card`, `board`, `packets`, `typewriter`, `treePlant`, `netVine`, `marquee` |
 | `fonts/` | local woff2 (Oswald, Alegreya Sans, IBM Plex Mono, Noto Serif SC/TC subsets) plus `fonts.css`; refresh with `tools/fetch_fonts.py` |
+| `assets/logo.svg` | marketmaker.cc mark (`fill="currentColor"`), inlined by `build.py` at `<!--__LOGO__-->` |
 | `vendor/gsap.min.js` | GSAP 3.14.2 (local, no CDN) |
 
 ## Using the kit in an episode
 
 1. Create the project: `npx hyperframes init episodes/<slug>/video --non-interactive --example=blank`.
-2. Copy `intro/tools/shell.html` to `<project>/tools/shell.html`. Change `data-duration`, drop the title variables if you do not need them, and keep the `/*__FONTS__*/` and `/*__SCRIPT__*/` markers, the canvas, `#grain`, `#flick`, `#vig` and `#preload`.
+2. Copy `intro/tools/shell.html` to `<project>/tools/shell.html`. Change `data-duration`, drop the title variables if you do not need them, and keep the `/*__FONTS__*/`, `/*__SCRIPT__*/` and `<!--__LOGO__-->` markers, the canvas, `#grain`, `#flick`, `#vig`, `#logo` and `#preload`.
 3. Write scenes in `<project>/src/NN_*.js`. They are concatenated after the kit in name order inside one IIFE. A minimal scene:
 
    ```js

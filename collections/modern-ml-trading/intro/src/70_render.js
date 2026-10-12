@@ -1,18 +1,16 @@
 /* ============================================================
-   INTRO 70 RENDER: render(t) is the whole film (57.3 s, the full song).
+   INTRO 70 RENDER: render(t) is the whole film (26.6 s, the short song).
    One paused GSAP timeline drives a proxy whose setter calls render(t).
    0.0 - 3.6   deco iris opens on a dark lab; lamps flicker on; owl's back to us
-   3.63        band enters: head swivels to face us, waves
-   7.24 - 10.8 data seed tossed into the pot, data drizzle, sprout, data points
-   10.85-16.3  train-accuracy gauge, the vine creeps, a swing dance
-   17.2 - 19.9 "Fit it RIGHT, don't overfit": overfit vine -> snip -> smooth fit -> band
-   20.8 - 22.9 truck to the flasks: "Validate every little bit": ticks
-   23.5 - 28.9 leap to the garden: "Trees and nets ... Modern ML ... steal the show"
-   28.9        "An owl in a lab with a data seed": seed held high, wink
-   30.7 - 34.3 leap to the nursery: "Grows a little model on features to feed"
-   34.3 - 39.3 "Train it, test it, walk it forward", "No peeking", "keep the backtest clean"
-   39.7 - 45.1 back to the garden: prune, ticks, plants grow
-   45.13       marquee title; 46.94 bow; 48.74 medals; 50.5 swing dance; 55.96 final seed + wink
+   3.61        head swivels 180 to face us, waves; 5.41 train-accuracy gauge
+   7.22        a bar of swing dance
+   9.02 - 10.8 data seed tossed into the pot, data drizzle, sprout, data points
+   11.7 - 14.4 "Fit it RIGHT, don't overfit": overfit vine -> snip -> smooth fit -> band
+   15.3 - 16.2 truck to the flasks; "Validate every little bit": ticks
+   17.0 - 17.9 leap to the garden bench; "Trees and nets that learn and grow"
+   19.85       marquee title "Modern ML for Trading"; 21.65 "steal the show": bow, medals
+   23.46       "An owl in a lab with a data seed": seed held high, wink; 25.26 final hit
+   The marketmaker.cc plate (DOM, top-right) stays on screen the whole time.
    ============================================================ */
 function drawIris(t) {
   const u = K.inv(T.iris[0], T.iris[1], t);
@@ -58,9 +56,12 @@ function render(t) {
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);
   }
   drawFilm(t);
+  /* the marketmaker.cc plate: one small bounce on the second downbeat, then static */
+  const lb = t > K.at(1) ? Math.exp(-(t - K.at(1)) * 7) * Math.sin((t - K.at(1)) * 18) : 0;
+  logoEl.style.transform = `scale(${(1 + 0.08 * lb).toFixed(3)})`;
 }
 
-const grainEl = document.getElementById("grain"), flickEl = document.getElementById("flick");
+const grainEl = document.getElementById("grain"), flickEl = document.getElementById("flick"), logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .38  0 0 0 0 .22  0 0 0 1.5 -.25'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
 
 const TL = gsap.timeline({ paused: true });

@@ -90,9 +90,9 @@ Animation rules:
 
 ## 7. Timing (beat grid)
 
-- The theme is electro-swing at 133 BPM, and the intro runs the full song (57.3 s): beat 0.451 s, bar 1.804 s. Write times as `K.at(bar, beat)`.
-- Intro grid: the whole song (song_raw 1.95 - 59.2 s), 32 measured downbeats from `K.G.BARS = [0.021, 1.825, ...]` at 1.80443 s per bar (see `intro/src/10_setup.js`).
-- Each sung line has its own picture: "Fit it RIGHT" is the snip (18.07; the second chorus prunes wild twigs on 39.72), "Validate every little bit" is ticks on eighths, "Trees and nets" is the two plants growing, "Modern ML for Trading" is the plants blooming (first chorus) and the marquee drop (45.13, final chorus), "steal the show" is a spotlight bow, "an owl in a lab with a data seed" is the raised glowing seed, "grows a little model on features to feed" is feature pellets thrown into a nursery pot, "train it, test it, walk it forward" is train/test windows stepping on beats, "no peeking at the future" is a brass shutter and covered eyes, "keep the backtest clean" is a feather duster. Instrumental bars get the lamps flickering on, a train-accuracy gauge creeping into the red, and swing dances.
+- The theme is electro-swing at 133 BPM; the intro runs the whole short song (26.6 s): beat 0.451 s, bar 1.804 s. Write times as `K.at(bar, beat)`.
+- Intro grid: the short song (26.6 s: song_raw 7.385 - 32.66 s spliced on a downbeat to the real ending 57.893 - 59.25 s), 15 measured downbeats `K.G.BARS = [0.000, 1.804, ..., 25.262]` at 1.80443 s per bar.
+- Each sung line has its own picture: "Fit it RIGHT" is the snip on 12.63, "Validate every little bit" is ticks on eighths, "Trees and nets" is the two plants growing, "Modern ML for Trading" is the marquee drop on 19.85, "steal the show" is the spotlight bow, "an owl in a lab with a data seed" is the raised glowing seed, and the song's last hit is a ta-da hop. Instrumental bars get the lamps flickering on, the head swivel, a train-accuracy gauge (it climbs into the red while the vine overfits and drops after the snip) and a bar of swing dance.
 - Pops land on beats with a back-ease overshoot of 0.35 - 0.45 s; staggers are 1/2 or 1/4 beat; marquee bulbs chase on eighths.
 - Determinism: no `Math.random`, `Date.now` or `performance.now`. Seeded `hash` / `mulberry` only.
 
@@ -123,7 +123,11 @@ Layout rules for explainer shots:
 - Keep a 64 px safe margin; plates, cards and boards stay fully in frame while read.
 - Numbers on screen are the script's numbers. The drawing never invents data.
 
-## 9. Do / don't
+## 9. Brand mark
+
+The marketmaker.cc mark (`kit/assets/logo.svg`, monochrome `currentColor`) sits top-right for the whole intro: 48 px margin, a 96 px cream plate with a brass rim and an ink outline, the mark in ink plus the wordmark "marketmaker.cc" in Oswald 600 40 px. It is DOM (crisp, above the canvas, film grain and vignette), bounces once on the second downbeat, then stays still. `build.py` inlines the SVG at the `<!--__LOGO__-->` marker. The title marquee is shifted left (centre x 860) so nothing covers the plate.
+
+## 10. Do / don't
 
 Do: move through one lab with a camera; let the owl react to every reveal; land pops on beats; use green for generalisation, amber for out-of-sample, oxblood for overfit.
 Don't: draw flat slide cards; boil text; let the camera step at 12 fps; use neon or decorative gradients; put language-specific words in the drawn world (numbers, icons and code only), so one render path serves en, ru, zh-CN and zh-TW.

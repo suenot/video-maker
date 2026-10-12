@@ -30,17 +30,23 @@
       #preload .tc { font-family: "CJK TC"; font-weight: 900; }
       #vig { background: radial-gradient(80% 75% at 50% 46%, rgba(0, 0, 0, 0) 55%, rgba(38, 22, 8, 0.55) 100%); }
       #grain { opacity: 0.16; mix-blend-mode: multiply; }
+      /* marketmaker.cc mark: brass-rimmed cream plate, top-right, above every layer */
+      #logo { position: absolute; top: 48px; right: 48px; height: 96px; padding: 0 26px 0 18px; display: flex; align-items: center; gap: 14px;
+        background: #f4e9d0; border: 4px solid #c9963a; border-radius: 18px; box-shadow: 0 0 0 3px #1f2620, 0 6px 0 3px rgba(31, 38, 32, 0.35); color: #1f2620; transform-origin: 100% 0; }
+      #logo .mk { width: 66px; height: 66px; display: block; }
+      #logo .wm { font-family: "Oswald", sans-serif; font-weight: 600; font-size: 40px; letter-spacing: 0.02em; line-height: 1; color: #1f2620; }
       #flick { background: #3a2410; opacity: 0; mix-blend-mode: multiply; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="57.3" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="26.6" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div id="title" data-layout-allow-overlap></div>
       <div class="ov" id="vig"></div>
       <div class="ov" id="grain"></div>
       <div class="ov" id="flick"></div>
-      <audio id="song" src="song_full.m4a" data-start="0" data-duration="57.3" data-track-index="10" data-volume="1"></audio>
+      <div id="logo"><!--__LOGO__--><span class="wm">marketmaker.cc</span></div>
+      <audio id="song" src="song_short.m4a" data-start="0" data-duration="26.6" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="o6">Aa Бб 0</span><span class="o7">Aa Бб 0</span><span class="a5">Aa Бб 0</span><span class="a8">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m6">Aa 0</span><span class="sc">交易中的现代机器学习</span><span class="tc">交易中的現代機器學習</span></div>
     </div>
     <script>

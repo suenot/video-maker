@@ -1,19 +1,17 @@
 # Intro review log
 
-## Full-song version (57.3 s, current)
-The user asked for the intro to run the whole generated song. `song_full.m4a` = `song_raw.mp4` 1.95 - 59.2 s (leading silence trimmed, the song stops at 59.0), 0.5 s fade, loudnorm I = -14.6 target, measured -14.0 LUFS.
-Word times from whisper on the whole file and on 14-16 s segments: chorus 1 "Fit it right" 19.2 (raw), verse "An owl in a lab" 30.2, "Grows" 32.5, "Train it" 35.4, "No peeking" 37.9, chorus 2 "right" 41.6, "Trees" 45.2, outro after about 50 s. The 133 BPM grid fitted earlier holds over the whole song (32 downbeats).
-The 20 s material is reused, shifted 6 bars later; the new beats are the dark lab with lamps, a train-accuracy gauge, two swing dances, the bloom bow, station D (nursery pot fed with feature pellets, the walk-forward plate with a brass shutter and a feather duster), the second-chorus prune / ticks / growth, and the marquee on the final chorus.
+## Short-song version (26.6 s, current)
+User decisions: no 62 s intro; the intro runs the whole short song (20-30 s), with the marketmaker.cc mark top-right throughout. No `song_short_raw.mp4` had arrived, so I trimmed `song_raw.mp4` myself per UPDATE 3: 7.385 - 32.66 s (5 bars instrumental, the chorus, "an owl in a lab with a data seed") spliced on a downbeat to the song's real ending 57.893 - 59.25 s, 30 ms crossfade, 0.5 s fade, -14.0 LUFS. Word times are the whisper times found earlier ("RIGHT" lands on 12.63, "show" on 21.65).
+The 20 s story is reused 3 bars later; new beats: dark lab with flickering lamps, a train-accuracy gauge that climbs into the red with the overfit vine and drops after the snip, a bar of swing dance, a ta-da on the final hit. (A 57 s full-song build was made and dropped when the user changed the length.)
 
-### Round F1 (first full build, 57 frames at 1 fps)
-- Station D sat too close to the garden: the net-vine pot showed in the nursery shots and the nursery pot showed in the title wide. D moved +550 px; bench and wall extended.
-- The gauge readout was 23 px. The readout now has a minimum of 26 px and a wider box.
-### Round F2
-- The walk-forward windows were so wide that the shutter covered only a thin strip of the future. Train 0.36 -> 0.28, test 0.12 -> 0.10, steps 0.13 -> 0.11, at most 3 steps: the shutter now covers the last third.
-- Dust specks looked like data points. They are now pale sepia blobs that vanish under the duster.
-### Round F3 (gates)
-- `lint` 0 errors (1 size warning by design); `check` passed, contrast 18/18 AA, 2 layout infos (title letters mid-drop).
-- Known weaknesses: 0 - 3.6 s is a slow, dark opening (by design, the lamps come on with the band); the cover-eyes pose shows the gloves beside the eyes rather than over them; the net-vine tendrils stay thin in the wide shot.
+### Round S1 (26 frames at 1 fps)
+- 0 - 3.6 s: the back-turned owl was a still image for four frames. It now tinkers at the bench in time (arms, head tilt, a small hop on each beat).
+- The gauge was half off the left edge during the dance push-in. Gauge 230 -> 300, beakers moved right.
+### Round S2 (logo)
+- The marketmaker.cc plate (96 px, top-right) collided with the marquee's right bulbs. Marquee centre 960 -> 860, width 1320 -> 1140; title lines and medals follow `MQ.cx`. Title size cap 118 -> 110 (Cyrillic 1700 / chars), CJK 122 -> 98 to fit the narrower glass.
+### Round S3 (gates)
+- `lint` 0 errors (1 size warning by design); `check` passed.
+- Known weaknesses: the splice to the real ending has a short stop-time gap before the final hit; the logo mark is small next to the wordmark; net-vine tendrils are thin in the wide shot.
 
 ## 20 s version (superseded)
 
