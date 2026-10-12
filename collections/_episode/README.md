@@ -137,3 +137,21 @@ What the assembler does:
 - It runs a two-pass loudnorm to -14 LUFS and writes a contact sheet next to the output.
 
 Renders and audio are never committed.
+
+## 9. Resume plan (paused 2026-10-12)
+
+State: the engine and the crab collection layer are done. The pilot `complex-arbitrage-graph-algorithms/en` has s01a-s02c rendered (0-344.9 s). The last preview is `renders/preview_en.mp4`, 394.2 s: intro 31.5 s, scenes 344.9 s, end card 19 s.
+
+To resume, in order:
+1. **Pilot fixes (lead, small):**
+   - Move into the crab layer: a shared subscript-formula helper (copy it from `s02c_cycle_condition`) and a perch-only option on `HOST.duo` (the parrot is away, the perch stays).
+   - Fix the parrot perch covering the ETH island in s02a-s02c.
+2. **Pilot scene packages (one helper agent each, whole slides so cuts stay inside one builder):**
+   - A: s03 + s04 (345-592 s).
+   - B: s05 + s06 (592-781 s).
+   - C: s07-s10 (781-988 s).
+   - D: s11-s15 (988-1386 s). Split s13 off as a 5th package if it helps.
+   - E: re-stage s01a-s02c with big, involved hosts. They are pinned at s 1.15 now. Keep the cut frames shared between s01b/s01c and s02a/s02b/s02c, then re-render all 7.
+
+   After the packages, run `assemble.py` (full, with the end card), make the whole-episode contact sheet, and log a review round in the pilot's REVIEW.md.
+3. **Other collections:** for each collection, one collection-layer agent writes `<collection>/style/episode/` (see section 2.1, with the crab layer as the model) and does the smoke test. Then `init_episode.py` for each prepped episode, then scene builders in parallel (sections 3-7), all renders through `heavy_slot.sh`.
