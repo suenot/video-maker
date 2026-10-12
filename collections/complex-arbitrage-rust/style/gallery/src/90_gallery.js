@@ -14,7 +14,9 @@ function render(t) {
   K.logbook(ctx, 1520, 700, 600, ["fn profit(c: &[f64]) -> f64 {", "  // product of rates", "  c.iter().product::<f64>() - 1.0", "}"], { a: ap(t, 4), size: 24, typed: K.inv(2.2, 4.0, t) });
   K.plank(ctx, 980, 960, 420, 110, ["+0.46 %"], { a: ap(t, 5), size: 56, colors: ["#2f8a3e"], post: false });
   K.edge(ctx, [120, 960], [700, 960], { p: K.inv(2.5, 3.2, t), state: t > 3.5 ? "hot" : "plain", label: "3 270", labelSize: 34, bend: -50, trim: 40, seed: 7 });
-  K.crab(ctx, 1730, 1060, 0.9, { blink: K.blinkAt(t, 2), squash: 0.1 * K.pulse(t, 1, 6), clawR: { x: 100, y: -150 - 20 * K.pulse(t, 1, 6), open: 0.6 }, mouth: "grin" });
+  K.perch(ctx, 1440, 1060, 80, 731);
+  K.parrot(ctx, 1440, 980, 0.8, { blink: K.blinkAt(t, 5), talk: 0.5 + 0.5 * Math.sin(t * 9), wingR: 0.4 * K.pulse(t, 1, 6), look: [0.8, -0.2] });
+  K.crab(ctx, 1730, 1060, 0.9, { talk: 0.4 + 0.4 * Math.sin(t * 7), blink: K.blinkAt(t, 2), squash: 0.1 * K.pulse(t, 1, 6), clawR: { x: 100, y: -150 - 20 * K.pulse(t, 1, 6), open: 0.6 }, mouth: "grin" });
 }
 const TL = gsap.timeline({ paused: true });
 const drv = { _t: 0 };

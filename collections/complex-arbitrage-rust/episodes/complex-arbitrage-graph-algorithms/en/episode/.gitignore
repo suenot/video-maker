@@ -7,3 +7,4 @@ scenes/*/meta.json
 scenes/*/snapshots/*.png
 scenes/*/snapshots/snap.log
 renders/
+scenes/*/snapshots/contact-sheet*.jpg

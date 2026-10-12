@@ -218,6 +218,9 @@ var CK = window.CK || (window.CK = {});
     seaFar: "#5fb3c4", seaMid: "#2f8fa8", seaDeep: "#1d6a86", seaNight: "#16506a", foam: "#f7f3e6",
     /* land */
     sand: "#f2d38d", sandDark: "#d4ac5e", grass: "#73b351", grassDark: "#4c8a39", rock: "#9a8a78", palm: "#3f8a3a", trunk: "#8a5a32",
+    /* parrot (first mate, host B) */
+    parrot: "#5fbf4a", parrotDark: "#3c8a33", parrotLight: "#9ad97a", parrotWing: "#2f7fc0", parrotWingDark: "#1f5a8c",
+    parrotBelly: "#ffe08a", beak: "#efe2c0", beakDark: "#c9b98e", crest: "#f79a5c",
     /* data / explainer */
     route: "#fff7e0",       /* a plain graph edge (rope) */
     profit: "#ffc93c",      /* the winning cycle, gains */
@@ -730,8 +733,9 @@ var CK = window.CK || (window.CK = {});
      lean       deg    whole body tilt around the feet
      hop        px     lift off the ground (legs dangle)
      look       [dx, dy] pupils, -1..1
-     blink      0..1   (1 = closed)
+     blink      0..1   (1 = closed); wink 0..1 closes only the viewer-left eye
      mouth      "smile" | "open" | "grin" | "o"
+     talk       0..1   talking mouth opening (overrides mouth while > 0.06)
      clawL/R    { x, y, open 0..1, rot }  target of the claw tip in local space
      hat        true | false,  hatTip deg, hatLift px
      hold       "spyglass" in right claw
@@ -777,7 +781,7 @@ var CK = window.CK || (window.CK = {});
   K.crab = function (ctx, x, y, s, st) {
     st = st || {};
     const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk; /* keep volume */
-    const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1);
+    const hop = st.hop || 0, look = st.look || [0, 0], blinkAll = clamp(st.blink || 0, 0, 1);
     const seed = st.seed || 500;
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
     ctx.rotate(((st.lean || 0) * Math.PI) / 180);
@@ -810,8 +814,13 @@ var CK = window.CK || (window.CK = {});
     /* cheeks */
     [-1, 1].forEach((sd, i) => { ctx.save(); ctx.globalAlpha = 0.5; K.shape(ctx, K.ellipsePts(sd * 40, 4, 10, 6, 8), { fill: "#ff8f7a", stroke: null, w: 0, boil: 0.5, seed: seed + 8 + i }); ctx.restore(); });
     /* mouth */
-    const m = st.mouth || "smile";
-    if (m === "smile") K.line(ctx, [[-22, 4], [-10, 14], [10, 14], [22, 4]], { stroke: P.ink, w: 4.5, boil: 0.9, seed: seed + 11, gap: 0 });
+    const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1);
+    if (talk > 0.06) { /* talking: open mouth sized by loudness (narration sync) */
+      const mw = 12 + 9 * talk, mh = 3 + 14 * talk;
+      K.shape(ctx, [[-mw, 6], [-mw * 0.5, 6 - 2 * talk], [mw * 0.5, 6 - 2 * talk], [mw, 6], [mw * 0.6, 6 + mh], [0, 8 + mh * 1.05], [-mw * 0.6, 6 + mh]], { fill: "#7a2a1a", w: 4, boil: 0.9, seed: seed + 15, gap: 0 });
+      if (talk > 0.35) K.shape(ctx, K.ellipsePts(0, 6 + mh * 0.85, mw * 0.42, mh * 0.22, 8), { fill: "#e0705a", stroke: null, w: 0, boil: 0.4, seed: seed + 16 });
+    }
+    else if (m === "smile") K.line(ctx, [[-22, 4], [-10, 14], [10, 14], [22, 4]], { stroke: P.ink, w: 4.5, boil: 0.9, seed: seed + 11, gap: 0 });
     else if (m === "grin") K.shape(ctx, [[-26, 2], [26, 2], [14, 20], [0, 23], [-14, 20]], { fill: "#7a2a1a", w: 4, boil: 0.9, seed: seed + 12, gap: 0 });
     else if (m === "open") K.shape(ctx, K.ellipsePts(0, 12, 14, 12, 10), { fill: "#7a2a1a", w: 4, boil: 0.9, seed: seed + 13, gap: 0 });
     else if (m === "o") K.shape(ctx, K.ellipsePts(0, 12, 7, 8, 8), { fill: "#7a2a1a", w: 3.5, boil: 0.7, seed: seed + 14, gap: 0 });
@@ -826,6 +835,7 @@ var CK = window.CK || (window.CK = {});
     }
     /* eyes */
     eyes.forEach((e, i) => {
+      const blink = i === 0 ? Math.max(blinkAll, clamp(st.wink || 0, 0, 1)) : blinkAll; /* wink closes the viewer-left eye */
       const r = 18, ry = r * (1 - 0.92 * blink);
       K.shape(ctx, K.ellipsePts(e[0], e[1], r, Math.max(1.5, ry), 14), { fill: P.eye, w: 4, boil: 0.8, seed: seed + 40 + i, gap: 0 });
       if (blink < 0.6) {
@@ -868,13 +878,115 @@ var CK = window.CK || (window.CK = {});
   };
 
   /* convenience: blink curve with seeded random blink times, 0..1 */
+  /* works for any t (long episode scenes): only the slots around t are checked */
   K.blinkAt = function (t, seed) {
     let b = 0;
-    for (let i = 0; i < 12; i++) {
+    const i0 = Math.max(0, Math.floor((t - 0.8) / 1.9) - 1);
+    for (let i = i0; i < i0 + 3; i++) {
       const tb = 0.8 + i * 1.9 + K.hash(i, seed || 7) * 1.1, d = t - tb;
       if (d > 0 && d < 0.16) b = Math.max(b, Math.sin((d / 0.16) * Math.PI));
     }
     return b;
+  };
+})(CK);
+
+/* ============================================================
+   KIT 42 PARROT: "Pip", the first mate (episode co-host, host B).
+   Local space: feet grip a perch at y = 0, faces the viewer (3/4 body).
+   Proportions (scale 1): body 76 x 104, head r 36 at (0, -138),
+   beak 26 long, wings 34 x 84, tail 70. About 0.8x the crab's height.
+   Pose state (all optional):
+     squash   -1..1   volume kept (like the crab)
+     lean     deg     tilt around the feet
+     hop      px      lift off the perch
+     look     [dx, dy] pupils, -1..1
+     blink    0..1
+     talk     0..1    beak opening (narration sync)
+     wingL/R  0..1    wing raise (1 = straight up, a "point" or a flap)
+     brow     -1..1.5
+     exclaim  0..1    "!" pop
+     head     deg     head tilt (curious cock of the head)
+   ============================================================ */
+var CK = window.CK || (window.CK = {});
+(function (K) {
+  const P = K.P, { clamp } = K;
+
+  K.parrot = function (ctx, x, y, s, st) {
+    st = st || {};
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
+    const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1), talk = clamp(st.talk || 0, 0, 1);
+    const seed = st.seed || 700;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    /* tail: two long feathers hanging behind the perch */
+    [[-10, 1], [8, -1]].forEach((f, i) => {
+      const sw = Math.sin(K.now * 1.7 + i) * 4;
+      K.shape(ctx, [[f[0] - 9, -40 - hop], [f[0] + 9, -40 - hop], [f[0] + 8 + sw, 36], [f[0] + sw, 58], [f[0] - 8 + sw, 36]], { fill: i ? P.parrotWing : P.crest, w: 4, boil: 1, seed: seed + i, shade: { color: i ? P.parrotWingDark : P.rustDark, dx: 5, dy: 0 } });
+    });
+    /* feet on the perch */
+    [-1, 1].forEach((sd, i) => K.line(ctx, [[sd * 14, -14 - hop], [sd * 12, -2], [sd * 6, 4], [sd * 20, 4]], { stroke: P.inkSoft, w: 5, boil: 0.8, seed: seed + 5 + i, gap: 0 }));
+    ctx.save(); ctx.translate(0, -16 - hop); ctx.scale(sxk, syk);
+    /* wings (behind the body edge, raise around the shoulder) */
+    const wing = (sd, up, ws) => {
+      ctx.save(); ctx.translate(sd * 30, -78); ctx.rotate(-sd * up * 2.3);
+      const pts = [[0, -10], [sd * 14, -6], [sd * 20, 24], [sd * 16, 56], [sd * 6, 76], [-sd * 4, 58], [-sd * 6, 18]];
+      K.shape(ctx, pts, { fill: P.parrotDark, w: 4.5, boil: 1.1, seed: ws, shade: { color: P.parrotWing, dx: 0, dy: -24 } });
+      K.line(ctx, [[sd * 2, 40], [sd * 10, 50], [sd * 14, 40]], { stroke: P.ink, w: 2.5, boil: 0.8, seed: ws + 1, gap: 0 });
+      ctx.restore();
+    };
+    /* body */
+    K.shape(ctx, K.ellipsePts(0, -54, 38, 54, 16), { fill: P.parrot, w: 5, boil: 1.3, seed: seed + 10, shade: { color: P.parrotDark, dx: -9, dy: -8 }, hatch: { ang: 0.9, gap: 11, alpha: 0.18, color: P.parrotDark } });
+    K.shape(ctx, K.ellipsePts(3, -42, 24, 34, 12), { fill: P.parrotBelly, w: 3, boil: 1, seed: seed + 11, gap: 0.2 });
+    wing(-1, clamp(st.wingL || 0, 0, 1), seed + 20);
+    wing(1, clamp(st.wingR || 0, 0, 1), seed + 30);
+    /* navy neckerchief (matches the captain's cap) */
+    K.shape(ctx, [[-24, -100], [24, -100], [6, -80], [0, -70], [-6, -80]], { fill: P.capNavy, w: 3.5, boil: 0.9, seed: seed + 12, shade: { color: P.capNavyDark, dx: -5, dy: 0 } });
+    /* head */
+    ctx.save(); ctx.translate(0, -128); ctx.rotate(((st.head || 0) * Math.PI) / 180);
+    /* crest: three feathers that wobble */
+    for (let i = 0; i < 3; i++) {
+      const a = -0.5 + i * 0.4 + Math.sin(K.now * 2.3 + i) * 0.06, L = 34 + i * 4;
+      const bx = -6 + i * 6, by = -30;
+      K.shape(ctx, [[bx - 5, by], [bx + Math.sin(a) * L - 3, by - Math.cos(a) * L], [bx + Math.sin(a) * L + 6, by - Math.cos(a) * L + 4], [bx + 6, by]], { fill: P.crest, w: 3.5, boil: 0.9, seed: seed + 40 + i });
+    }
+    K.shape(ctx, K.ellipsePts(0, -8, 38, 35, 16), { fill: P.parrot, w: 5, boil: 1.1, seed: seed + 13, shade: { color: P.parrotDark, dx: -7, dy: -7 } });
+    /* face patch (pale, macaw-like) */
+    [-1, 1].forEach((sd, i) => K.shape(ctx, K.ellipsePts(sd * 14, -12, 15, 14, 10), { fill: "#f5f2e6", stroke: null, w: 0, boil: 0.6, seed: seed + 50 + i }));
+    /* eyes */
+    [-1, 1].forEach((sd, i) => {
+      const ex = sd * 14, ey = -14, r = 11, ry = r * (1 - 0.92 * blink);
+      K.shape(ctx, K.ellipsePts(ex, ey, r, Math.max(1.5, ry), 12), { fill: P.eye, w: 3.5, boil: 0.7, seed: seed + 60 + i, gap: 0 });
+      if (blink < 0.6) {
+        const px = ex + look[0] * 4, py = ey + look[1] * 4 * (1 - blink);
+        K.shape(ctx, K.ellipsePts(px, py, 5.5, 6.2 * (1 - blink), 8), { fill: P.pupil, stroke: null, w: 0, boil: 0.4, seed: seed + 62 + i });
+        K.shape(ctx, K.ellipsePts(px + 2, py - 3, 2, 2, 6), { fill: "#ffffff", stroke: null, w: 0, boil: 0.2, seed: seed + 64 + i });
+      } else K.line(ctx, [[ex - r, ey], [ex, ey + 2], [ex + r, ey]], { stroke: P.ink, w: 3.5, boil: 0.5, seed: seed + 66 + i, gap: 0 });
+      const br = st.brow || 0;
+      K.line(ctx, [[ex - 10, ey - 17 - br * 4 + sd * br * 2], [ex + 10, ey - 17 - br * 4 - sd * br * 2]], { stroke: P.ink, w: 3.5, boil: 0.5, seed: seed + 68 + i, gap: 0 });
+    });
+    /* beak: lower mandible drops with talk, hooked upper beak on top */
+    ctx.save(); ctx.translate(0, 2); ctx.rotate(0.05 + talk * 0.32);
+    K.shape(ctx, [[-9, 0], [9, 0], [6, 12 + talk * 4], [0, 15 + talk * 5], [-6, 12 + talk * 4]], { fill: P.beakDark, w: 3.5, boil: 0.7, seed: seed + 70, gap: 0 });
+    ctx.restore();
+    if (talk > 0.1) K.shape(ctx, K.ellipsePts(0, 8 + talk * 6, 6, 3 + talk * 4, 8), { fill: "#7a2a1a", stroke: null, w: 0, boil: 0.4, seed: seed + 71 });
+    K.shape(ctx, [[-13, -4], [0, -10], [13, -4], [10, 10], [2, 24 - talk * 4], [-2, 14], [-10, 6]], { fill: P.beak, w: 4, boil: 0.8, seed: seed + 72, gap: 0, shade: { color: P.beakDark, dx: 4, dy: 0 } });
+    /* "!" */
+    if (st.exclaim > 0) {
+      const a = K.E.back(clamp(st.exclaim, 0, 1), 2.5);
+      ctx.save(); ctx.translate(52, -60); ctx.rotate(0.25); ctx.scale(a * 0.8, a * 0.8);
+      K.shape(ctx, [[-9, -52], [9, -52], [5, -10], [-5, -10]], { fill: P.gold, w: 4, boil: 1, seed: seed + 90, gap: 0 });
+      K.shape(ctx, K.ellipsePts(0, 4, 7, 7, 8), { fill: P.gold, w: 4, boil: 1, seed: seed + 91, gap: 0 });
+      ctx.restore();
+    }
+    ctx.restore(); /* head */
+    ctx.restore(); /* body */
+    ctx.restore();
+  };
+
+  /* a wooden perch post (the parrot stands at its top, y - h) */
+  K.perch = function (ctx, x, y, h, seed) {
+    K.limb(ctx, [[x, y], [x, y - h]], 12, P.woodDark, seed || 730);
+    K.limb(ctx, [[x - 44, y - h], [x + 44, y - h]], 10, P.wood, (seed || 730) + 1);
   };
 })(CK);
 
@@ -914,7 +1026,8 @@ var CK = window.CK || (window.CK = {});
 
   /* ---------- graph edge: a sea route between two points ----------
      p (draw progress), state "plain" | "hot" | "dim", bend (curvature, px),
-     label (rate text on a little flag), dir arrow at 60 % when hot */
+     label (rate text on a little flag), lu (its position 0..1 along the route),
+     arrow 0..1 (direction arrow on plain routes; hot routes always have one), au (arrow position), arrowS (size) */
   K.edgePoint = function (A, B, bend, u) {
     const mx = (A[0] + B[0]) / 2, my = (A[1] + B[1]) / 2, dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1;
     const C = [mx - (dy / L) * bend, my + (dx / L) * bend];
@@ -924,7 +1037,7 @@ var CK = window.CK || (window.CK = {});
     return [x, y, Math.atan2(ty, tx)];
   };
   K.edge = function (ctx, A, B, opt) {
-    const o = Object.assign({ p: 1, state: "plain", bend: 60, label: "", seed: 1, trim: 120, labelA: 1, w: 7, labelSize: 30, lu: 0.5 }, opt || {});
+    const o = Object.assign({ p: 1, state: "plain", bend: 60, label: "", seed: 1, trim: 120, labelA: 1, w: 7, labelSize: 30, lu: 0.5, arrow: 0, au: 0.62, arrowS: 1 }, opt || {});
     if (o.p <= 0) return;
     const L = Math.hypot(B[0] - A[0], B[1] - A[1]), u0 = clamp(o.trim / L, 0, 0.45), u1 = 1 - u0;
     const N = 28, pts = [];
@@ -941,10 +1054,12 @@ var CK = window.CK || (window.CK = {});
       K.line(ctx, [[a[0], a[1]], [b[0], b[1]]], { stroke: col, w: o.w, boil: 1.0, seed: o.seed + i, gap: 0, alpha });
     }
     /* arrow head */
-    if (hot && o.p >= 1) {
-      const q = K.edgePoint(A, B, o.bend, lerp(u0, u1, 0.62));
-      ctx.save(); ctx.translate(q[0], q[1]); ctx.rotate(q[2]);
-      K.shape(ctx, [[18, 0], [-12, -14], [-6, 0], [-12, 14]], { fill: P.profit, w: 4, boil: 0.8, seed: o.seed + 7, gap: 0 });
+    /* arrow head: always on hot routes; on plain / dim routes when arrow > 0 (0..1 pops it in) */
+    const arr = hot ? 1 : o.arrow || 0;
+    if (arr > 0 && o.p >= 1) {
+      const q = K.edgePoint(A, B, o.bend, lerp(u0, u1, o.au)), as = popS(arr) * o.arrowS;
+      ctx.save(); ctx.translate(q[0], q[1]); ctx.rotate(q[2]); ctx.scale(as, as);
+      K.shape(ctx, [[18, 0], [-12, -14], [-6, 0], [-12, 14]], { fill: hot ? P.profit : P.route, w: 4, boil: 0.8, seed: o.seed + 7, gap: 0, alpha });
       ctx.restore();
     }
     /* rate flag at the middle */
@@ -1146,7 +1261,9 @@ function render(t) {
   K.logbook(ctx, 1520, 700, 600, ["fn profit(c: &[f64]) -> f64 {", "  // product of rates", "  c.iter().product::<f64>() - 1.0", "}"], { a: ap(t, 4), size: 24, typed: K.inv(2.2, 4.0, t) });
   K.plank(ctx, 980, 960, 420, 110, ["+0.46 %"], { a: ap(t, 5), size: 56, colors: ["#2f8a3e"], post: false });
   K.edge(ctx, [120, 960], [700, 960], { p: K.inv(2.5, 3.2, t), state: t > 3.5 ? "hot" : "plain", label: "3 270", labelSize: 34, bend: -50, trim: 40, seed: 7 });
-  K.crab(ctx, 1730, 1060, 0.9, { blink: K.blinkAt(t, 2), squash: 0.1 * K.pulse(t, 1, 6), clawR: { x: 100, y: -150 - 20 * K.pulse(t, 1, 6), open: 0.6 }, mouth: "grin" });
+  K.perch(ctx, 1440, 1060, 80, 731);
+  K.parrot(ctx, 1440, 980, 0.8, { blink: K.blinkAt(t, 5), talk: 0.5 + 0.5 * Math.sin(t * 9), wingR: 0.4 * K.pulse(t, 1, 6), look: [0.8, -0.2] });
+  K.crab(ctx, 1730, 1060, 0.9, { talk: 0.4 + 0.4 * Math.sin(t * 7), blink: K.blinkAt(t, 2), squash: 0.1 * K.pulse(t, 1, 6), clawR: { x: 100, y: -150 - 20 * K.pulse(t, 1, 6), open: 0.6 }, mouth: "grin" });
 }
 const TL = gsap.timeline({ paused: true });
 const drv = { _t: 0 };

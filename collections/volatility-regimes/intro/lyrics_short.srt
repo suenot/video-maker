@@ -1,0 +1,26 @@
+1
+00:00:00,000 --> 00:00:03,000
+♪
+
+2
+00:00:03,000 --> 00:00:06,000
+♪ [3.0:] Ride the calm ride the storm
+[6.0:] Every regime has its form ♪
+
+3
+00:00:06,000 --> 00:00:09,000
+♪ [3.0:] Ride the calm ride the storm
+[6.0:] Every regime has its form
+[9.0:] Measure the swell and read the sea ♪
+
+4
+00:00:09,000 --> 00:00:12,000
+♪ [6.0:] Every regime has its form
+[9.0:] Measure the swell and read the sea
+[12.0:] Volatility modeling and regimes ♪
+
+5
+00:00:12,000 --> 00:00:15,000
+♪ [9.0:] Measure the swell and read the sea
+[12.0:] Volatility modeling and regimes ♪
+

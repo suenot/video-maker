@@ -27,6 +27,8 @@ Slide content is always a **thing in this world**, never a flat slide (the rejec
 | Sky top / mid / low, sun | `skyTop` / `skyMid` / `skyLow` / `sun` | `#6fc0d6` / `#a9dcdc` / `#fde6b3` / `#ffd166` |
 | Sea far / mid / deep, foam | `seaFar` / `seaMid` / `seaDeep` / `foam` | `#5fb3c4` / `#2f8fa8` / `#1d6a86` / `#f7f3e6` |
 | Island sand / grass | `sand` / `grass` (+ `Dark`) | `#f2d38d` / `#73b351` |
+| Parrot body / dark / light / belly | `parrot` / `parrotDark` / `parrotLight` / `parrotBelly` | `#5fbf4a` / `#3c8a33` / `#9ad97a` / `#ffe08a` |
+| Parrot wing tips, beak, crest | `parrotWing` (`parrotWingDark`) / `beak` (`beakDark`) / `crest` | `#2f7fc0` (`#1f5a8c`) / `#efe2c0` (`#c9b98e`) / `#f79a5c` |
 | Loss, negative numbers | `loss` | `#d64545` |
 | Gain text on paper | (green) | `#2f8a3e` |
 | Dark board, chalk | `board` / `chalk` | `#3b2b22` / `#f6f1e3` |
@@ -80,6 +82,18 @@ Animation rules, as lessons from the rejected stiff `paper-cut-stopmotion` puppe
 - Blinks are seeded at about 1 per 1.9 s (`K.blinkAt`) and forced open during surprise.
 - Expressions: `mouth` smile, grin, open, o; `brow` -1..1.5; `eyeUp` for eye pops; and a `!` mark for discoveries.
 - Always something alive: a beat bounce, a claw sway, stalk wobble, the boil.
+
+### Pip the parrot (first mate, episode co-host)
+
+| Part | Value (scale 1, local px) |
+| --- | --- |
+| Body | 76 x 104 egg, leaf green `parrot` with a pale-gold belly, navy neckerchief matching the cap |
+| Head | r 36 at (0, -138), pale macaw face patches, eyes r 11, three `crest` feathers that wobble |
+| Beak | bone `beak`, hooked; the lower mandible drops with `talk` |
+| Wings / tail | `parrotDark` wings with `parrotWing` blue tips (raise 0..1 per side), two long tail feathers (crest orange, wing blue) |
+| Size | about 0.8x the crab; stands on `K.perch` (a post with a cross bar) |
+
+In episodes the crab is host A (the narrator who explains) and the parrot is host B (the curious one). `talk` (0..1) drives both mouths from the narration loudness. Gestures come on stressed words. The listener looks at the talker and nods.
 
 ## 6. Camera
 

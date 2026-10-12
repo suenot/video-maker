@@ -9,8 +9,9 @@ It uses plain browser JS with no modules. Each file attaches to the global `CK` 
 | `05_palette.js` | `CK.P` colours and `CK.FONT` stacks (the only place they are defined) |
 | `10_ink.js` | frame setup `begin(ctx, t, cam)`, the camera `applyCam(ctx, parallax)`, `toScreen`; `shape` (fill + shade band + hatch + boiled broken outline), `line`, `dot`, `hatch`, `text` (never boils), `glow`, and the point generators `ellipsePts`, `blobPts`, `rectPts` |
 | `30_world.js` | side set: `sideSky`, `sideSea`, `waveRow`, `cloud`, `farIsland`, `gull`; chart set: `chartSea`, `island`, `palm`, `lighthouse`; `ship` (iron, riveted, funnel, sail with cog, helm; it carries the crab via a callback), `miniShip` (with wake), `coin`, `goldBit`, `coinPile`, `sparkle`, `cog` |
-| `40_crab.js` | `crab(ctx, x, y, s, pose)` with squash/stretch, two-bone IK claws (`ik2`), blink, mouths, brows, eye pop, cap tip, hop with tucked legs, spyglass, `!`; `blinkAt(t, seed)`; `K.lens` (screen point of the spyglass, for iris transitions) |
-| `50_explainer.js` | slide content as world objects: `node`, `edge` / `edgePoint` / `tag`, `plank`, `ledger`, `slate`, `sailChart`, `notice`, `logbook`, `banner` |
+| `40_crab.js` | `crab(ctx, x, y, s, pose)` with squash/stretch, a `talk` mouth (0..1, narration sync), two-bone IK claws (`ik2`), blink, mouths, brows, eye pop, cap tip, hop with tucked legs, spyglass, `!`; `blinkAt(t, seed)`; `K.lens` (screen point of the spyglass, for iris transitions) |
+| `42_parrot.js` | `parrot(ctx, x, y, s, pose)` (Pip, the first mate: `talk`, `wingL/R`, `head` tilt, blink, `!`) and `perch` |
+| `50_explainer.js` | slide content as world objects: `node`, `edge` (optional `arrow` on plain routes) / `edgePoint` / `tag`, `plank`, `ledger`, `slate`, `sailChart`, `notice`, `logbook`, `banner` |
 | `fonts/` | local woff2 (Rubik, JetBrains Mono, CJK subsets) plus `fonts.css`; refresh with `tools/fetch_fonts.py` |
 | `vendor/gsap.min.js` | GSAP 3.14.2 (local, no CDN) |
 
