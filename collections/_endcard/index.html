@@ -1,0 +1,1636 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[{"id":"lang","type":"enum","label":"Language","default":"en","options":[{"value":"en","label":"English"},{"value":"ru","label":"Русский"},{"value":"zh-CN","label":"简体中文"},{"value":"zh-TW","label":"繁體中文"}]}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Marketmaker: end card</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Unbounded"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/Unbounded-700-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Unbounded"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/Unbounded-700-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Unbounded"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/Unbounded-700-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Unbounded"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/Unbounded-700-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Unbounded"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/Unbounded-900-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Unbounded"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/Unbounded-900-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Unbounded"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/Unbounded-900-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Unbounded"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/Unbounded-900-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Manrope"; font-weight: 600; font-display: block;
+  src: url("assets/fonts/Manrope-600-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Manrope"; font-weight: 600; font-display: block;
+  src: url("assets/fonts/Manrope-600-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Manrope"; font-weight: 600; font-display: block;
+  src: url("assets/fonts/Manrope-600-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Manrope"; font-weight: 600; font-display: block;
+  src: url("assets/fonts/Manrope-600-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Manrope"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Manrope-800-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Manrope"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Manrope-800-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Manrope"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Manrope-800-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Manrope"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Manrope-800-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Roboto Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/RobotoMono-500-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Roboto Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/RobotoMono-500-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Roboto Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/RobotoMono-500-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Roboto Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/RobotoMono-500-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Roboto Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/RobotoMono-700-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Roboto Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/RobotoMono-700-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Roboto Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/RobotoMono-700-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Roboto Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/RobotoMono-700-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "CJK SC"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/NotoSansSC-900-subset.woff2") format("woff2"); }
+@font-face { font-family: "CJK TC"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/NotoSansTC-900-subset.woff2") format("woff2"); }
+
+@font-face { font-family: "EC SC"; font-weight: 700; font-display: block; src: url("assets/fonts/EC-SC-700.woff2") format("woff2"); }
+@font-face { font-family: "EC SC"; font-weight: 900; font-display: block; src: url("assets/fonts/EC-SC-900.woff2") format("woff2"); }
+@font-face { font-family: "EC TC"; font-weight: 700; font-display: block; src: url("assets/fonts/EC-TC-700.woff2") format("woff2"); }
+@font-face { font-family: "EC TC"; font-weight: 900; font-display: block; src: url("assets/fonts/EC-TC-900.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #1460a8; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #1460a8; }
+      #cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
+      #preload .u9 { font-family: "Unbounded"; font-weight: 900; }
+      #preload .r6 { font-family: "Manrope"; font-weight: 600; }
+      #preload .r8 { font-family: "Manrope"; font-weight: 800; }
+      #preload .s7 { font-family: "EC SC"; font-weight: 700; }
+      #preload .s9 { font-family: "EC SC"; font-weight: 900; }
+      #preload .t7 { font-family: "EC TC"; font-weight: 700; }
+      #preload .t9 { font-family: "EC TC"; font-weight: 900; }
+      #vig { background: radial-gradient(110% 95% at 50% 45%, rgba(0, 0, 0, 0) 70%, rgba(6, 18, 52, 0.30) 100%); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="19" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div class="ov" id="vig"></div>
+      <audio id="bed" src="assets/bed.m4a" data-start="0" data-duration="19" data-track-index="10" data-volume="1"></audio>
+      <div id="preload"><span class="u9">Aa Бб — 0</span><span class="r6">Aa Бб 0</span><span class="r8">Aa Бб @ 0</span><span class="s7">简体中文感谢观看</span><span class="s9">简体中文感谢观看</span><span class="t7">繁體中文感謝觀看</span><span class="t9">繁體中文感謝觀看</span></div>
+    </div>
+    <script>
+(function () {
+/* ============================================================
+   KIT 00 CORE: math, seeded random, noise, splines, beat grid, boil clock
+   Every frame is a pure function of time t (seconds). No Math.random,
+   no Date.now, no performance.now anywhere in the kit.
+   ============================================================ */
+var MK = window.MK || (window.MK = {});
+(function (K) {
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const inv = (a, b, v) => clamp((v - a) / (b - a), 0, 1);
+  const ss = (a, b, t) => { const u = inv(a, b, t); return u * u * (3 - 2 * u); };
+  const f1 = (n) => Math.round(n * 10) / 10;
+  const f2 = (n) => Math.round(n * 100) / 100;
+
+  /* eases (u in 0..1) */
+  const E = {
+    inOut: (u) => u * u * (3 - 2 * u),
+    out3: (u) => 1 - Math.pow(1 - u, 3),
+    in3: (u) => u * u * u,
+    back: (u, s) => { s = s == null ? 1.7 : s; const v = u - 1; return 1 + v * v * ((s + 1) * v + s); },
+    elastic: (u) => (u <= 0 ? 0 : u >= 1 ? 1 : Math.pow(2, -9 * u) * Math.sin((u * 10 - 0.75) * (2 * Math.PI) / 3) + 1),
+  };
+  /* tween value from a to b during [t0, t1] with an ease */
+  const tw = (t, t0, t1, a, b, ease) => lerp(a, b, (ease || E.inOut)(inv(t0, t1, t)));
+
+  /* seeded PRNG (mulberry32) */
+  function mulberry(seed) {
+    let s = seed | 0;
+    return function () {
+      s = (s + 0x6d2b79f5) | 0;
+      let q = Math.imul(s ^ (s >>> 15), 1 | s);
+      q = (q + Math.imul(q ^ (q >>> 7), 61 | q)) ^ q;
+      return ((q ^ (q >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  /* stateless hash -> [0,1) for (i, seed) */
+  function hash(i, s) {
+    let h = (Math.imul(i | 0, 374761393) + Math.imul(s | 0, 668265263)) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+  }
+  const hs = (i, s) => hash(i, s) * 2 - 1; /* signed */
+  function vnoise(x, s) { const i = Math.floor(x), f = x - i, u = f * f * (3 - 2 * f); return lerp(hash(i, s), hash(i + 1, s), u); }
+  function fbm(x, s, oct) { let a = 0.5, v = 0, fr = 1, n = 0; for (let k = 0; k < (oct || 3); k++) { v += a * vnoise(x * fr, s + k * 17); n += a; a *= 0.5; fr *= 2.03; } return v / n; }
+
+  /* monotone cubic Hermite spline through [[t, v], ...] (no overshoot) */
+  function mkSpline(pts) {
+    const n = pts.length, T = pts.map((p) => p[0]), V = pts.map((p) => p[1]);
+    if (n === 1) return () => V[0];
+    const d = [], m = new Array(n).fill(0);
+    for (let i = 0; i < n - 1; i++) d[i] = (V[i + 1] - V[i]) / (T[i + 1] - T[i]);
+    m[0] = d[0]; m[n - 1] = d[n - 2];
+    for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2;
+    for (let i = 0; i < n - 1; i++) {
+      if (d[i] === 0) { m[i] = 0; m[i + 1] = 0; continue; }
+      const a = m[i] / d[i], b = m[i + 1] / d[i], s = a * a + b * b;
+      if (s > 9) { const tau = 3 / Math.sqrt(s); m[i] = tau * a * d[i]; m[i + 1] = tau * b * d[i]; }
+    }
+    return function (x) {
+      x = clamp(x, T[0], T[n - 1]);
+      let i = 0; while (i < n - 2 && x >= T[i + 1]) i++;
+      const h = T[i + 1] - T[i], u = (x - T[i]) / h, u2 = u * u, u3 = u2 * u;
+      return (2 * u3 - 3 * u2 + 1) * V[i] + (u3 - 2 * u2 + u) * h * m[i] + (-2 * u3 + 3 * u2) * V[i + 1] + (u3 - u2) * h * m[i + 1];
+    };
+  }
+  /* keys: [[t, {a:.., b:..}], ...] -> fn(t) -> {a, b} (one spline per channel) */
+  function mkTrack(keys) {
+    const names = Object.keys(keys[0][1]), sp = {};
+    names.forEach((k) => { sp[k] = mkSpline(keys.map((q) => [q[0], q[1][k]])); });
+    return (t) => { const o = {}; names.forEach((k) => (o[k] = sp[k](t))); return o; };
+  }
+
+  /* ---------- beat grid (retime to the real song by changing BPM/OFFSET or BARS) ----------
+     BARS: optional list of measured downbeat times (seconds). Songs cut from
+     several takes drift a few ms per splice, so measured downbeats beat a
+     single OFFSET. Past the list, bars extrapolate at BPM. */
+  const G = { BPM: 120, OFFSET: 0, BEATS_PER_ACCENT: 4, BARS: null };
+  const beatLen = () => 60 / G.BPM;
+  const barLen = () => beatLen() * G.BEATS_PER_ACCENT;
+  function barStart(b) {
+    const B = G.BARS;
+    if (!B || !B.length) return G.OFFSET + b * barLen();
+    if (b < 0) return B[0] + b * barLen();
+    if (b < B.length) return B[b];
+    return B[B.length - 1] + (b - B.length + 1) * barLen();
+  }
+  /* time of bar b (0-based, an "accent" = 4 beats) plus beat k (fractional ok) */
+  const at = (bar, beat) => barStart(Math.floor(bar)) + ((bar - Math.floor(bar)) * G.BEATS_PER_ACCENT + (beat || 0)) * beatLen();
+  /* index of the bar containing t (-1 before the first downbeat) */
+  function barAt(t) {
+    if (t < barStart(0)) return -1;
+    let b = 0; while (barStart(b + 1) <= t) b++;
+    return b;
+  }
+  /* 1 on the beat, decaying to 0 before the next beat (k = sharpness) */
+  function pulse(t, everyBeats, k) {
+    const b = barAt(t); if (b < 0) return 0;
+    const L = beatLen() * (everyBeats || 1), x = t - barStart(b);
+    return Math.exp(-(k || 7) * ((x % L) / L));
+  }
+  const beatIndex = (t) => { const b = barAt(t); return b < 0 ? -1 : b * G.BEATS_PER_ACCENT + Math.floor((t - barStart(b)) / beatLen()); };
+
+  /* ---------- line boil clock: drawings change 12 times per second ---------- */
+  const BOIL_FPS = 12;
+  const boilFrame = (t) => Math.floor(t * BOIL_FPS);
+
+  Object.assign(K, { clamp, lerp, inv, ss, f1, f2, E, tw, mulberry, hash, hs, vnoise, fbm, mkSpline, mkTrack,
+    G, beatLen, barLen, barStart, barAt, at, pulse, beatIndex, BOIL_FPS, boilFrame, TAU: Math.PI * 2 });
+})(MK);
+
+/* ============================================================
+   KIT 05 PALETTE + TYPE: the only place colours and fonts are defined.
+   STYLE.md documents the same values; change both together.
+   Art direction: bright flat-vector "modern editorial cartoon" under the sea.
+   Outlines are deep navy (never black), fills are flat, shading is a
+   flat band + halftone dots, highlights are flat light shapes.
+   ============================================================ */
+var MK = window.MK || (window.MK = {});
+(function (K) {
+  K.P = {
+    ink: "#14204a",        /* every outline and dark type (deep navy, not black) */
+    inkSoft: "#3a4a7a",    /* secondary lines, axis ticks */
+    cream: "#fff6e6",      /* boards, cards, light type */
+    creamShade: "#f3dfc0",
+    /* Octo, the market maker */
+    octo: "#ff6f91", octoDark: "#d94a74", octoLight: "#ffa3b8", sucker: "#ffd9e1",
+    eye: "#ffffff", pupil: "#14204a", glasses: "#ffd23f", glassesDark: "#d9a514", lens: "#c9f1ff",
+    blush: "#ff3d6e",
+    /* ocean */
+    deep: "#0b3d7a", mid: "#1460a8", shallow: "#1f8fd0", surface: "#5cc6ec", foam: "#e8fbff",
+    ray: "#b8f0ff",
+    /* reef */
+    sand: "#ffd89a", sandDark: "#e9b465", coral: "#ff7a59", coralDark: "#d9502f",
+    fan: "#b07cff", fanDark: "#7e4fe0", brain: "#ffb340", brainDark: "#e08a10",
+    kelp: "#19b39b", kelpDark: "#0d8a77", kelpLight: "#6fe3c8", rock: "#5a6fa8", rockDark: "#3d4f86",
+    shell: "#ffe3ec", shellDark: "#f2a7bd", pearl: "#ffffff",
+    /* fish traders (one colour per species) */
+    fishY: "#ffd23f", fishYDark: "#e0a800", fishT: "#21c7c0", fishTDark: "#0f9690",
+    fishO: "#ff9442", fishODark: "#e06a10", fishB: "#5b7cff", fishBDark: "#3a55d6",
+    /* data / explainer (semantic) */
+    bid: "#1fb5ff", bidDark: "#0b84c6",   /* buy side, demand */
+    ask: "#ff5c7a", askDark: "#d93556",   /* sell side, supply */
+    up: "#22c58b", upDark: "#12936a",     /* rising candle, gain */
+    down: "#ff5c5c", downDark: "#cc3434", /* falling candle, loss */
+    sun: "#ffd23f", sunDark: "#e0a800",   /* the spread, the highlight, the key term */
+    lilac: "#9b7bff",                     /* volatility, chaos, the attractor */
+    jaw: "#3d6bff", teeth: "#ff4f6d", lips: "#22c58b", /* Bill Williams Alligator lines */
+    board: "#0e2a5c", boardEdge: "#1f4a8c", chalk: "#f2f8ff", /* dark glass board (formulas, code) */
+    grid: "#2c5a9e",
+  };
+  K.FONT = {
+    display: '"Unbounded", "CJK SC", "CJK TC", sans-serif', /* titles, big labels (700/900) */
+    text: '"Manrope", "CJK SC", "CJK TC", sans-serif',      /* body, bullets (600/800) */
+    mono: '"Roboto Mono", monospace',                       /* numbers, code, tables (500/700) */
+    cjk: { "zh-CN": '"Unbounded", "CJK SC", sans-serif', "zh-TW": '"Unbounded", "CJK TC", sans-serif' },
+  };
+})(MK);
+
+/* ============================================================
+   KIT 10 INK: flat-vector canvas primitives + the camera.
+   - K.begin(ctx, t, cam) once per frame; everything after reads K.now / K.bf.
+   - Contours "breathe" (a soft boil): vertices drift by a hash of
+     (vertex, seed, boil frame) at 12 fps, with a small amplitude so lines
+     stay clean and editorial. Outlines are continuous (no broken strokes).
+   - Shading is flat: a shadow band (shape minus offset copy), an optional
+     flat highlight band, and optional halftone dots. No hatching.
+   - Line widths are world units but never thinner than MIN_PX on screen.
+   ============================================================ */
+var MK = window.MK || (window.MK = {});
+(function (K) {
+  const { hs, hash, clamp } = K;
+  K.MIN_PX = 2.0;
+  K.now = 0; K.bf = 0; K.zoom = 1;
+
+  /* ---------- camera: world -> screen. cam = {x, y, z, rot} (centre, zoom, degrees) ---------- */
+  K.W = 1920; K.H = 1080;
+  K.begin = function (ctx, t, cam) {
+    K.ctx = ctx; K.now = t; K.bf = K.boilFrame(t); K.cam = cam; K.zoom = cam.z;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.lineJoin = "round"; ctx.lineCap = "round";
+  };
+  /* apply camera with an optional parallax factor p (1 = world plane, 0 = fixed to screen) */
+  K.applyCam = function (ctx, p) {
+    p = p == null ? 1 : p;
+    const c = K.cam, z = 1 + (c.z - 1) * p;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.translate(K.W / 2, K.H / 2);
+    if (c.rot) ctx.rotate((c.rot * Math.PI) / 180 * p);
+    ctx.scale(z, z);
+    ctx.translate(-c.x * p, -c.y * p);
+    K.zoom = z;
+  };
+  K.screen = function (ctx) { ctx.setTransform(1, 0, 0, 1, 0, 0); K.zoom = 1; };
+  K.toScreen = function (x, y) {
+    const c = K.cam, r = ((c.rot || 0) * Math.PI) / 180, dx = (x - c.x) * c.z, dy = (y - c.y) * c.z;
+    return [K.W / 2 + dx * Math.cos(r) - dy * Math.sin(r), K.H / 2 + dx * Math.sin(r) + dy * Math.cos(r)];
+  };
+  const curScale = (ctx) => { const m = ctx.getTransform(); return Math.sqrt(m.a * m.a + m.b * m.b) || 1; };
+  K.lw = (ctx, w) => Math.max(w, K.MIN_PX / curScale(ctx));
+
+  /* ---------- point generators ---------- */
+  K.ellipsePts = function (cx, cy, rx, ry, n, rot) {
+    const out = [], r = rot || 0, cr = Math.cos(r), sr = Math.sin(r);
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * K.TAU, x = Math.cos(a) * rx, y = Math.sin(a) * ry;
+      out.push([cx + x * cr - y * sr, cy + x * sr + y * cr]);
+    }
+    return out;
+  };
+  K.blobPts = function (cx, cy, rx, ry, n, seed, irr) {
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * K.TAU, k = 1 + (irr || 0.18) * (K.fbm(i * 0.9, seed, 2) * 2 - 1);
+      out.push([cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]);
+    }
+    return out;
+  };
+  /* rounded rectangle as a point ring (editorial cards are always rounded) */
+  K.rrectPts = function (x, y, w, h, r, n) {
+    r = Math.min(r, w / 2, h / 2); n = Math.max(6, n || 6); const out = [];
+    const corner = (cx, cy, a0) => { for (let i = 0; i <= n; i++) { const a = a0 + (i / n) * (Math.PI / 2); out.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); } };
+    corner(x + w - r, y + r, -Math.PI / 2); corner(x + w - r, y + h - r, 0); corner(x + r, y + h - r, Math.PI / 2); corner(x + r, y + r, Math.PI);
+    out.sharp = true; /* straight edges: a spline would overshoot past the corners */
+    return out;
+  };
+  K.rectPts = function (x, y, w, h, n) {
+    n = n || 3; const out = [];
+    for (let i = 0; i < n; i++) out.push([x + (w * i) / n, y]);
+    for (let i = 0; i < n; i++) out.push([x + w, y + (h * i) / n]);
+    for (let i = 0; i < n; i++) out.push([x + w - (w * i) / n, y + h]);
+    for (let i = 0; i < n; i++) out.push([x, y + h - (h * i) / n]);
+    return out;
+  };
+
+  /* ---------- boil (soft) ---------- */
+  K.boil = function (pts, seed, amp, frameOverride) {
+    const f = frameOverride == null ? K.bf : frameOverride, s = (seed | 0) + f * 7919;
+    return pts.map((p, i) => [p[0] + hs(i * 2 + 1, s) * amp, p[1] + hs(i * 2 + 2, s) * amp]);
+  };
+
+  /* ---------- smooth path through points (Catmull-Rom -> Bezier) ---------- */
+  function segs(pts, closed, sharp) {
+    const n = pts.length, out = [];
+    const P = (i) => (closed ? pts[(i + n) % n] : pts[clamp(i, 0, n - 1)]);
+    const last = closed ? n : n - 1, k = sharp ? 0 : 1 / 6;
+    for (let i = 0; i < last; i++) {
+      const p0 = P(i - 1), p1 = P(i), p2 = P(i + 1), p3 = P(i + 2);
+      out.push([p1, [p1[0] + (p2[0] - p0[0]) * k, p1[1] + (p2[1] - p0[1]) * k], [p2[0] - (p3[0] - p1[0]) * k, p2[1] - (p3[1] - p1[1]) * k], p2]);
+    }
+    return out;
+  }
+  K.segs = segs;
+  K.pathOf = function (ctx, pts, closed, sharp) {
+    const S = segs(pts, closed, sharp);
+    ctx.beginPath(); ctx.moveTo(S[0][0][0], S[0][0][1]);
+    S.forEach((s) => ctx.bezierCurveTo(s[1][0], s[1][1], s[2][0], s[2][1], s[3][0], s[3][1]));
+    if (closed) ctx.closePath();
+  };
+  /* clean continuous stroke; width breathes very slightly per boil frame */
+  K.inkStroke = function (ctx, pts, closed, w, color, seed, sharp) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = K.lw(ctx, w) * (0.96 + 0.08 * hash(seed | 0, K.bf));
+    K.pathOf(ctx, pts, closed, sharp); ctx.stroke();
+  };
+
+  /* ---------- halftone: dot grid clipped to a path, dots grow along a direction ----------
+     opt: color, alpha, gap (dot pitch), r (max radius), ang (direction the dots grow toward), from/to (0..1 ramp) */
+  K.halftone = function (ctx, pts, opt) {
+    const o = Object.assign({ color: K.P.ink, alpha: 0.18, gap: 12, r: 3.4, ang: 0.8, from: 0.15, to: 1, closed: true }, opt || {});
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    pts.forEach((p) => { x0 = Math.min(x0, p[0]); y0 = Math.min(y0, p[1]); x1 = Math.max(x1, p[0]); y1 = Math.max(y1, p[1]); });
+    const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, R = Math.hypot(x1 - x0, y1 - y0) / 2 || 1;
+    const ca = Math.cos(o.ang), sa = Math.sin(o.ang);
+    ctx.save(); K.pathOf(ctx, pts, o.closed); ctx.clip();
+    ctx.globalAlpha *= o.alpha; ctx.fillStyle = o.color; ctx.beginPath();
+    let row = 0;
+    for (let y = y0 - o.gap; y <= y1 + o.gap; y += o.gap * 0.866, row++) {
+      for (let x = x0 - o.gap + (row % 2) * o.gap * 0.5; x <= x1 + o.gap; x += o.gap) {
+        const d = ((x - cx) * ca + (y - cy) * sa) / R * 0.5 + 0.5; /* 0 at the light side, 1 at the dark side */
+        const k = clamp((d - o.from) / (o.to - o.from), 0, 1), r = o.r * k;
+        if (r < 0.35) continue;
+        ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, K.TAU);
+      }
+    }
+    ctx.fill(); ctx.restore();
+  };
+
+  /* ---------- the workhorse: flat filled, outlined shape ----------
+     opt: fill, stroke (default ink), w (outline width), boil (amp), seed,
+          shade ({color, dx, dy}: shadow band = shape minus its offset copy),
+          hi ({color, dx, dy}: flat highlight band on the light side),
+          dots (object for K.halftone, or null), drop ({dx, dy, color}: flat sticker shadow),
+          closed (default true), sharp (straight segments), alpha */
+  K.shape = function (ctx, pts, opt) {
+    const o = Object.assign({ stroke: K.P.ink, w: 5, boil: 0.9, seed: 1, closed: true }, opt || {});
+    if (pts.sharp) o.sharp = true;
+    const bp = o.boil ? K.boil(pts, o.seed, o.boil) : pts;
+    ctx.save();
+    if (o.alpha != null) ctx.globalAlpha *= o.alpha;
+    if (o.drop && o.closed !== false) {
+      ctx.save(); ctx.translate(o.drop.dx || 0, o.drop.dy == null ? 10 : o.drop.dy);
+      K.pathOf(ctx, bp, true, o.sharp); ctx.fillStyle = o.drop.color || "rgba(10,30,80,0.28)"; ctx.fill(); ctx.restore();
+    }
+    if (o.fill && o.closed !== false) {
+      K.pathOf(ctx, bp, true, o.sharp); ctx.fillStyle = o.fill; ctx.fill();
+      const band = (b) => {
+        const op = bp.map((p) => [p[0] + (b.dx || 0), p[1] + (b.dy || 0)]);
+        ctx.save(); K.pathOf(ctx, bp, true, o.sharp); ctx.clip();
+        ctx.beginPath(); ctx.rect(-1e5, -1e5, 2e5, 2e5);
+        const seg = segs(op, true, o.sharp); ctx.moveTo(seg[0][0][0], seg[0][0][1]);
+        seg.forEach((s) => ctx.bezierCurveTo(s[1][0], s[1][1], s[2][0], s[2][1], s[3][0], s[3][1]));
+        ctx.closePath(); ctx.fillStyle = b.color; ctx.fill("evenodd");
+        ctx.restore();
+      };
+      if (o.shade) band(o.shade);
+      if (o.hi) band(o.hi);
+      if (o.dots) K.halftone(ctx, bp, o.dots);
+    }
+    if (o.stroke && o.w > 0) K.inkStroke(ctx, bp, o.closed !== false, o.w, o.stroke, o.seed, o.sharp);
+    ctx.restore();
+  };
+  K.line = function (ctx, pts, opt) {
+    K.shape(ctx, pts, Object.assign({ closed: false, fill: null }, opt || {}));
+  };
+  /* outlined tube: ink stroke, then a colour stroke on top (tentacles, kelp, pipes) */
+  K.tube = function (ctx, pts, w, color, seed, opt) {
+    const o = opt || {};
+    K.line(ctx, pts, { stroke: o.outline || K.P.ink, w: w + (o.ow || 9), boil: o.boil == null ? 0.7 : o.boil, seed });
+    K.line(ctx, pts, { stroke: color, w, boil: o.boil == null ? 0.7 : o.boil, seed });
+  };
+  K.dot = function (ctx, x, y, r, fill, stroke, w, seed) {
+    K.shape(ctx, K.ellipsePts(x, y, r, r, 12), { fill, stroke: stroke === undefined ? K.P.ink : stroke, w: w || 3, boil: r * 0.03 + 0.3, seed: seed || 5 });
+  };
+
+  /* ---------- text: stable (never boils) ---------- */
+  K.text = function (ctx, str, x, y, opt) {
+    const o = Object.assign({ size: 40, weight: 800, font: K.FONT.text, fill: K.P.ink, stroke: null, w: 0, align: "center", base: "middle", alpha: 1, track: 0 }, opt || {});
+    ctx.save(); ctx.globalAlpha *= o.alpha;
+    ctx.font = `${o.weight} ${o.size}px ${o.font}`; ctx.textAlign = o.align; ctx.textBaseline = o.base;
+    if (o.track) ctx.letterSpacing = o.track + "px";
+    if (o.stroke && o.w) { ctx.lineJoin = "round"; ctx.strokeStyle = o.stroke; ctx.lineWidth = o.w; ctx.strokeText(str, x, y); }
+    ctx.fillStyle = o.fill; ctx.fillText(str, x, y);
+    ctx.restore();
+  };
+  K.textW = function (ctx, str, size, weight, font) {
+    ctx.save(); ctx.font = `${weight || 800} ${size}px ${font || K.FONT.text}`; const w = ctx.measureText(str).width; ctx.restore(); return w;
+  };
+
+  /* ---------- soft light (additive disc): light rays, bubbles' sheen, the spread glow ---------- */
+  K.glow = function (ctx, x, y, r, color, a) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, color); g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.save(); ctx.globalAlpha *= a == null ? 1 : a; ctx.globalCompositeOperation = "lighter";
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, K.TAU); ctx.fill(); ctx.restore();
+  };
+})(MK);
+
+/* ============================================================
+   KIT 30 WORLD: the Coral Exchange, a stock exchange on a reef.
+   Water: flat colour bands (no smooth gradients), slanted light rays,
+   rising bubbles. Reef: sand, kelp, branch / fan / brain coral, rocks,
+   coral exchange towers with ticker strips, clam-shell trading desks.
+   Traders: fish of four species. Transitions: the octopus ink cloud.
+   Everything is drawn from t alone (K.now) and seeded shapes.
+   ============================================================ */
+var MK = window.MK || (window.MK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp, hash, hs } = K;
+
+  /* ---------- water: 6 flat bands with soft wavy borders (screen space) ----------
+     depth 0 = just under the surface (bright), 1 = deep reef (darker) */
+  const mix = (a, b, u) => {
+    const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
+    const r = Math.round(lerp((pa >> 16) & 255, (pb >> 16) & 255, u)), g = Math.round(lerp((pa >> 8) & 255, (pb >> 8) & 255, u)), bl = Math.round(lerp(pa & 255, pb & 255, u));
+    return "#" + ((1 << 24) | (r << 16) | (g << 8) | bl).toString(16).slice(1);
+  };
+  K.mix = mix;
+  K.ocean = function (ctx, opt) {
+    const o = Object.assign({ depth: 0.4, shift: 0 }, opt || {});
+    const top = mix(P.surface, P.shallow, o.depth), bot = mix(P.mid, P.deep, o.depth);
+    K.screen(ctx);
+    const N = 6;
+    for (let i = 0; i < N; i++) {
+      const y0 = (i / N) * 1080 - 20, c = mix(top, bot, i / (N - 1));
+      ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(-20, 1100);
+      for (let x = -20; x <= 1940; x += 60) ctx.lineTo(x, y0 + 14 * Math.sin(x * 0.004 + i * 1.7 + K.now * 0.6 + o.shift));
+      ctx.lineTo(1940, 1100); ctx.closePath(); ctx.fill();
+    }
+  };
+  /* slanted light rays from the surface, swaying (screen space, additive) */
+  K.rays = function (ctx, opt) {
+    const o = Object.assign({ a: 1, n: 7, x: 960, spread: 1700, len: 1250, ang: 0.28 }, opt || {});
+    K.screen(ctx); ctx.save(); ctx.globalCompositeOperation = "lighter";
+    for (let i = 0; i < o.n; i++) {
+      const sw = Math.sin(K.now * 0.5 + i * 1.9) * 0.05, x = o.x - o.spread / 2 + (i + 0.5) * (o.spread / o.n) + hs(i, 3) * 60;
+      const w0 = 30 + 50 * hash(i, 4), w1 = w0 * 3.2, a = o.ang + sw;
+      const ex = x - Math.sin(a) * o.len, ey = Math.cos(a) * o.len;
+      ctx.globalAlpha = o.a * (0.07 + 0.07 * hash(i, 5)) * (0.75 + 0.25 * Math.sin(K.now * 0.9 + i));
+      ctx.fillStyle = P.ray; ctx.beginPath();
+      ctx.moveTo(x - w0, -20); ctx.lineTo(x + w0, -20); ctx.lineTo(ex + w1, ey); ctx.lineTo(ex - w1, ey); ctx.closePath(); ctx.fill();
+    }
+    ctx.restore();
+  };
+  /* the water surface seen from below (wavy bright band with sun caustics) */
+  K.surface = function (ctx, y, opt) {
+    const o = Object.assign({ x0: -400, x1: 2400 }, opt || {});
+    const top = [];
+    for (let x = o.x0; x <= o.x1; x += 80) top.push([x, y + 16 * Math.sin(x * 0.006 + K.now * 1.6) + 8 * Math.sin(x * 0.017 - K.now * 2.2)]);
+    const sky = top.concat([[o.x1, y - 900], [o.x0, y - 900]]);
+    K.shape(ctx, sky, { fill: P.foam, stroke: P.ink, w: 5, boil: 0.8, seed: 7, hi: { color: "#ffffff", dx: 0, dy: 22 } });
+    K.line(ctx, top.map((p) => [p[0], p[1] + 26]), { stroke: P.ray, w: 6, boil: 1, seed: 8 });
+  };
+  K.sun = function (ctx, x, y, r) {
+    K.glow(ctx, x, y, r * 2.6, "rgba(255,240,170,0.9)", 0.6);
+    K.shape(ctx, K.ellipsePts(x, y, r, r, 20), { fill: P.sun, w: 5, boil: 0.8, seed: 9, hi: { color: "#fff3b0", dx: 8, dy: 8 } });
+  };
+
+  /* ---------- bubbles ---------- */
+  K.bubble = function (ctx, x, y, r, seed, a) {
+    ctx.save(); if (a != null) ctx.globalAlpha *= a;
+    K.shape(ctx, K.ellipsePts(x, y, r, r * (0.94 + 0.06 * Math.sin(K.now * 5 + seed)), 12), { fill: "rgba(232,251,255,0.22)", stroke: P.foam, w: Math.max(2.2, r * 0.16), boil: 0.4, seed });
+    K.shape(ctx, K.ellipsePts(x - r * 0.35, y - r * 0.38, r * 0.26, r * 0.16, 8, -0.6), { fill: "#ffffff", stroke: null, w: 0, boil: 0.2, seed: seed + 1 });
+    ctx.restore();
+  };
+  /* a field of rising bubbles in world space: x range, bottom, height; deterministic from t */
+  K.bubbles = function (ctx, opt) {
+    const o = Object.assign({ n: 26, x0: 0, x1: 1920, y0: 1100, h: 1300, speed: 90, rMin: 5, rMax: 18, seed: 31, a: 1 }, opt || {});
+    for (let i = 0; i < o.n; i++) {
+      const r = lerp(o.rMin, o.rMax, hash(i, o.seed) ** 2), sp = o.speed * (0.6 + 0.8 * hash(i, o.seed + 1));
+      const ph = (hash(i, o.seed + 2) * o.h + K.now * sp) % o.h;
+      const x = lerp(o.x0, o.x1, hash(i, o.seed + 3)) + 14 * Math.sin(K.now * 2 + i * 1.3);
+      K.bubble(ctx, x, o.y0 - ph, r, o.seed * 7 + i, o.a * clamp(ph / 80, 0, 1));
+    }
+  };
+  /* bubble burst: a ring of bubbles flying out from (x, y), age d in seconds */
+  K.bubbleBurst = function (ctx, x, y, d, opt) {
+    const o = Object.assign({ n: 10, r: 160, size: 14, seed: 41, dur: 0.8 }, opt || {});
+    if (d < 0 || d > o.dur) return;
+    const u = d / o.dur, e = K.E.out3(u);
+    for (let i = 0; i < o.n; i++) {
+      const a = (i / o.n) * K.TAU + hs(i, o.seed) * 0.4, rr = o.r * e * (0.7 + 0.5 * hash(i, o.seed + 1));
+      K.bubble(ctx, x + Math.cos(a) * rr, y + Math.sin(a) * rr - 60 * u, o.size * (0.6 + 0.6 * hash(i, o.seed + 2)) * (1 - 0.5 * u), o.seed + i, 1 - u * u);
+    }
+  };
+
+  /* ---------- sand floor (world): wavy top, flat colour, dotted texture ---------- */
+  K.sand = function (ctx, y, opt) {
+    const o = Object.assign({ x0: -600, x1: 3000, seed: 51, color: P.sand, dark: P.sandDark, amp: 26 }, opt || {});
+    const top = [];
+    for (let x = o.x0; x <= o.x1; x += 90) top.push([x, y + o.amp * Math.sin(x * 0.0035 + o.seed) + 10 * Math.sin(x * 0.011)]);
+    const pts = top.concat([[o.x1, y + 1400], [o.x0, y + 1400]]);
+    K.shape(ctx, pts, { fill: o.color, w: 5, boil: 0.7, seed: o.seed, shade: { color: o.dark, dx: 0, dy: -40 }, dots: { color: o.dark, alpha: 0.5, gap: 22, r: 3, ang: Math.PI / 2, from: 0.35 } });
+  };
+
+  /* ---------- kelp: a swaying ribbon tube with leaf blades ---------- */
+  K.kelp = function (ctx, x, y, h, opt) {
+    const o = Object.assign({ seed: 61, sway: 1, color: P.kelp, dark: P.kelpDark, w: 16 }, opt || {});
+    const N = 9, pts = [];
+    for (let i = 0; i <= N; i++) {
+      const u = i / N, bend = Math.sin(K.now * 1.1 + o.seed + u * 2.4) * 46 * u * u * o.sway;
+      pts.push([x + bend + hs(i, o.seed) * 6, y - h * u]);
+    }
+    K.tube(ctx, pts, o.w, o.color, o.seed);
+    for (let i = 2; i < N; i += 1) {
+      const p = pts[i], sd = i % 2 ? 1 : -1, L = 46 + 22 * hash(i, o.seed), a = sd * (0.9 + 0.2 * Math.sin(K.now * 1.4 + i));
+      const leaf = [[p[0], p[1]], [p[0] + sd * L * 0.5, p[1] - L * 0.55], [p[0] + Math.sin(a) * L, p[1] - Math.cos(a) * L * 0.4 - L * 0.4], [p[0] + sd * L * 0.3, p[1] - 6]];
+      K.shape(ctx, leaf, { fill: i % 3 ? o.color : P.kelpLight, w: 4, boil: 0.6, seed: o.seed + i * 3, shade: { color: o.dark, dx: sd * 6, dy: 4 } });
+    }
+  };
+
+  /* ---------- corals ---------- */
+  K.coralBranch = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ seed: 71, color: P.coral, dark: P.coralDark, depth: 3 }, opt || {});
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    const sway = Math.sin(K.now * 0.9 + o.seed) * 0.04;
+    const branch = (bx, by, ang, len, w, d, id) => {
+      const ex = bx + Math.sin(ang) * len, ey = by - Math.cos(ang) * len;
+      const mx = (bx + ex) / 2 + Math.cos(ang) * len * 0.12, my = (by + ey) / 2;
+      K.tube(ctx, [[bx, by], [mx, my], [ex, ey]], w, o.color, o.seed + id, { ow: 9 });
+      if (d <= 0) { K.dot(ctx, ex, ey, w * 0.55, o.color, P.ink, 4, o.seed + id + 50); return; }
+      branch(ex, ey, ang - 0.45 - 0.2 * hash(id, o.seed) + sway, len * 0.72, w * 0.8, d - 1, id * 2 + 1);
+      branch(ex, ey, ang + 0.4 + 0.2 * hash(id + 9, o.seed) + sway, len * 0.68, w * 0.8, d - 1, id * 2 + 2);
+    };
+    branch(0, 0, sway, 90, 30, o.depth, 1);
+    ctx.restore();
+  };
+  K.coralFan = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ seed: 81, color: P.fan, dark: P.fanDark }, opt || {});
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(Math.sin(K.now * 0.8 + o.seed) * 0.05);
+    const fan = [[0, 0]];
+    for (let i = 0; i <= 10; i++) { const a = -1.15 + (i / 10) * 2.3; fan.push([Math.sin(a) * 170, -Math.cos(a) * 190 - 20 * Math.sin(i * 1.7)]); }
+    K.shape(ctx, fan, { fill: o.color, w: 5, boil: 0.8, seed: o.seed, shade: { color: o.dark, dx: 14, dy: 10 }, dots: { color: P.ink, alpha: 0.18, gap: 14, r: 3.4, ang: 1.2 } });
+    for (let i = 1; i < 10; i++) { const a = -1.15 + (i / 10) * 2.3; K.line(ctx, [[0, -10], [Math.sin(a) * 90, -Math.cos(a) * 100], [Math.sin(a) * 160, -Math.cos(a) * 178]], { stroke: o.dark, w: 3, boil: 0.6, seed: o.seed + i }); }
+    K.tube(ctx, [[0, 0], [0, 26]], 16, o.dark, o.seed + 20);
+    ctx.restore();
+  };
+  K.brainCoral = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ seed: 91, color: P.brain, dark: P.brainDark }, opt || {});
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    const dome = []; for (let i = 0; i <= 14; i++) { const a = Math.PI + (i / 14) * Math.PI; dome.push([Math.cos(a) * 120, Math.sin(a) * 92]); }
+    K.shape(ctx, dome, { fill: o.color, w: 5, boil: 0.8, seed: o.seed, shade: { color: o.dark, dx: 16, dy: 0 }, hi: { color: "#ffd27a", dx: -10, dy: 14 } });
+    for (let k = 0; k < 4; k++) {
+      const pts = []; for (let i = 0; i <= 8; i++) { const u = i / 8; pts.push([-100 + 200 * u, -18 - k * 20 + 9 * Math.sin(u * 12 + k)]); }
+      ctx.save(); K.pathOf(ctx, dome, true); ctx.clip(); K.line(ctx, pts, { stroke: o.dark, w: 4, boil: 0.6, seed: o.seed + k }); ctx.restore();
+    }
+    ctx.restore();
+  };
+  K.rock = function (ctx, x, y, w, h, opt) {
+    const o = Object.assign({ seed: 101, color: P.rock, dark: P.rockDark }, opt || {});
+    const pts = K.blobPts(x, y - h * 0.45, w / 2, h / 2, 12, o.seed, 0.12).map((p) => [p[0], Math.min(p[1], y)]);
+    K.shape(ctx, pts, { fill: o.color, w: 5, boil: 0.7, seed: o.seed, shade: { color: o.dark, dx: 18, dy: 12 }, dots: { color: P.ink, alpha: 0.16, gap: 13, r: 3, ang: 0.6 } });
+  };
+  K.starfish = function (ctx, x, y, r, opt) {
+    const o = Object.assign({ seed: 111, color: P.brain, rot: 0 }, opt || {});
+    const pts = []; for (let i = 0; i < 10; i++) { const a = o.rot + (i / 10) * K.TAU - Math.PI / 2, rr = i % 2 ? r * 0.45 : r; pts.push([x + Math.cos(a) * rr, y + Math.sin(a) * rr]); }
+    K.shape(ctx, pts, { fill: o.color, w: 4, boil: 0.6, seed: o.seed, shade: { color: P.brainDark, dx: 5, dy: 5 } });
+  };
+
+  /* ---------- coral exchange tower: a rounded coral building with portholes and a ticker strip ----------
+     ticker: array of short strings (numbers only) scrolling along a dark LED band */
+  K.tower = function (ctx, x, y, w, h, opt) {
+    const o = Object.assign({ seed: 121, color: P.coral, dark: P.coralDark, ticker: null, tickColor: P.sun, windows: 3, cap: true }, opt || {});
+    const sway = Math.sin(K.now * 0.6 + o.seed) * 3;
+    const body = [];
+    for (let i = 0; i <= 8; i++) { const u = i / 8; body.push([x - w / 2 + 6 * Math.sin(u * 7 + o.seed) + sway * u, y - h * u]); }
+    const capPts = []; for (let i = 0; i <= 8; i++) { const a = Math.PI + (i / 8) * Math.PI; capPts.push([x + sway + Math.cos(a) * w / 2, y - h + Math.sin(a) * w * 0.35]); }
+    const right = []; for (let i = 8; i >= 0; i--) { const u = i / 8; right.push([x + w / 2 + 6 * Math.sin(u * 6 + o.seed + 2) + sway * u, y - h * u]); }
+    const pts = body.concat(o.cap ? capPts : [], right);
+    K.shape(ctx, pts, { fill: o.color, w: 5, boil: 0.8, seed: o.seed, shade: { color: o.dark, dx: -w * 0.22, dy: 0 }, dots: { color: P.ink, alpha: 0.14, gap: 14, r: 3.2, ang: 0 } });
+    /* polyps (dots) on the skin */
+    for (let i = 0; i < 7; i++) K.dot(ctx, x - w * 0.35 + w * 0.7 * hash(i, o.seed), y - h * (0.1 + 0.8 * hash(i + 5, o.seed)), 4 + 3 * hash(i + 9, o.seed), P.octoLight, null, 0, o.seed + i);
+    /* portholes */
+    for (let i = 0; i < o.windows; i++) {
+      const wy = y - h * (0.28 + (0.5 * i) / Math.max(1, o.windows - 1)) , wx = x + sway * 0.5;
+      K.shape(ctx, K.ellipsePts(wx, wy, w * 0.17, w * 0.17, 14), { fill: P.lens, w: 5, boil: 0.5, seed: o.seed + 20 + i, hi: { color: "#ffffff", dx: 6, dy: 6 } });
+      K.glow(ctx, wx, wy, w * 0.28, "rgba(255,240,160,0.8)", 0.25 + 0.15 * Math.sin(K.now * 2 + i));
+    }
+    /* ticker strip: dark band wrapping the tower with scrolling numbers */
+    if (o.ticker) {
+      const ty = y - h * 0.86, bh = 46;
+      const band = K.rrectPts(x - w / 2 - 14, ty - bh / 2, w + 28, bh, 12, 3);
+      K.shape(ctx, band, { fill: P.board, w: 4, boil: 0.5, seed: o.seed + 40 });
+      ctx.save(); K.pathOf(ctx, band, true); ctx.clip();
+      const str = o.ticker.join("   ") + "   ", tw = K.textW(ctx, str, 26, 700, K.FONT.mono), off = (K.now * 70 + hash(o.seed, 1) * tw) % tw;
+      for (let k = -1; k < 2; k++) K.text(ctx, str, x - w / 2 - off + k * tw, ty + 1, { size: 26, weight: 700, font: K.FONT.mono, fill: o.tickColor, align: "left" });
+      ctx.restore();
+    }
+  };
+
+  /* ---------- clam-shell trading desk (the octopus's booth). open 0..1 ---------- */
+  /* part: "back" (lid, behind the octopus), "front" (desk, in front), or "both" */
+  K.clamDesk = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ seed: 131, open: 1, pearl: true, part: "both" }, opt || {});
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    if (o.part !== "front") {
+    const shellPts = (up) => { const p = []; for (let i = 0; i <= 12; i++) { const a = Math.PI + (i / 12) * Math.PI; p.push([Math.cos(a) * 260, (up ? 1 : -0.55) * Math.sin(a) * 120 * (1 + 0.06 * Math.sin(i * 3.1))]); } return p; };
+    /* lid (back) */
+    ctx.save(); ctx.rotate(-0.0); ctx.translate(0, -10); ctx.scale(1, 0.25 + 0.75 * o.open);
+    K.shape(ctx, shellPts(true), { fill: P.shell, w: 5, boil: 0.7, seed: o.seed, shade: { color: P.shellDark, dx: 0, dy: 26 } });
+    for (let i = 1; i < 7; i++) { const a = Math.PI + (i / 7) * Math.PI; K.line(ctx, [[0, 0], [Math.cos(a) * 230, Math.sin(a) * 104]], { stroke: P.shellDark, w: 4, boil: 0.5, seed: o.seed + i }); }
+    ctx.restore();
+    }
+    if (o.part === "back") { ctx.restore(); return; }
+    /* desk front (lower shell) */
+    const front = []; for (let i = 0; i <= 12; i++) { const a = (i / 12) * Math.PI; front.push([Math.cos(a) * 280, Math.sin(a) * 110]); }
+    K.shape(ctx, front, { fill: P.shell, w: 6, boil: 0.7, seed: o.seed + 10, shade: { color: P.shellDark, dx: 0, dy: -30 }, dots: { color: P.octoDark, alpha: 0.18, gap: 14, r: 3.2, ang: Math.PI / 2 } });
+    for (let i = 1; i < 8; i++) { const a = (i / 8) * Math.PI; K.line(ctx, [[Math.cos(a) * 60, Math.sin(a) * 24], [Math.cos(a) * 250, Math.sin(a) * 98]], { stroke: P.shellDark, w: 4, boil: 0.5, seed: o.seed + 20 + i }); }
+    if (o.pearl) { K.glow(ctx, 0, 30, 70, "rgba(255,255,255,0.9)", 0.35); K.dot(ctx, 0, 30, 22, P.pearl, P.ink, 4, o.seed + 40); K.dot(ctx, -7, 23, 6, "#ffffff", null, 0, o.seed + 41); }
+    ctx.restore();
+  };
+
+  /* ---------- fish trader. dir +1 swims right. opt: species "Y" | "T" | "O" | "B", phase, mouth, card ---------- */
+  K.fish = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ species: "Y", dir: 1, seed: 141, mouth: "smile", blink: 0, look: [0, 0], fins: 1 }, opt || {});
+    const col = P["fish" + o.species], dark = P["fish" + o.species + "Dark"];
+    const ph = K.now * 9 + o.seed, wag = Math.sin(ph) * 0.28;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s * o.dir, s);
+    ctx.rotate(Math.sin(ph * 0.5) * 0.04);
+    /* tail */
+    ctx.save(); ctx.translate(-70, 0); ctx.rotate(wag);
+    K.shape(ctx, [[8, 0], [-46, -40], [-34, 0], [-46, 40]], { fill: dark, w: 5, boil: 0.6, seed: o.seed + 1 });
+    ctx.restore();
+    /* body: species shapes */
+    const ry = o.species === "B" ? 34 : o.species === "T" ? 50 : 44, rx = o.species === "B" ? 92 : 78;
+    const body = K.ellipsePts(0, 0, rx, ry, 18).map((p) => [p[0] + (p[0] > 0 ? 0 : 0), p[1] * (p[0] > 40 ? 0.9 : 1)]);
+    /* dorsal fin */
+    K.shape(ctx, [[-30, -ry + 6], [-6, -ry - 30 - 6 * Math.sin(ph * 0.7)], [26, -ry + 4]], { fill: dark, w: 4.5, boil: 0.6, seed: o.seed + 2 });
+    K.shape(ctx, body, { fill: col, w: 5.5, boil: 0.7, seed: o.seed + 3, shade: { color: dark, dx: 0, dy: -16 }, hi: { color: "#ffffff55", dx: 0, dy: 14 } });
+    /* stripes */
+    if (o.species === "Y" || o.species === "O") [-18, 12].forEach((sx, i) => { ctx.save(); K.pathOf(ctx, body, true); ctx.clip(); K.shape(ctx, K.rrectPts(sx - 8, -60, 16, 120, 8, 2), { fill: o.species === "O" ? P.cream : dark, w: 3.5, boil: 0.5, seed: o.seed + 4 + i }); ctx.restore(); });
+    /* pectoral fin flaps */
+    ctx.save(); ctx.translate(-4, 10); ctx.rotate(0.4 + Math.sin(ph * 1.3) * 0.35 * o.fins);
+    K.shape(ctx, [[0, 0], [-30, 14], [-22, 26]], { fill: dark, w: 4, boil: 0.5, seed: o.seed + 6 });
+    ctx.restore();
+    /* eye */
+    const ex = rx * 0.52, ey = -ry * 0.25;
+    K.shape(ctx, K.ellipsePts(ex, ey, 15, 15 * (1 - 0.9 * o.blink) + 1, 12), { fill: P.eye, w: 4, boil: 0.4, seed: o.seed + 7 });
+    if (o.blink < 0.5) K.dot(ctx, ex + 4 + o.look[0] * 4, ey + o.look[1] * 4, 7, P.pupil, null, 0, o.seed + 8);
+    /* mouth */
+    if (o.mouth === "o") K.shape(ctx, K.ellipsePts(rx - 6, 10, 7, 8, 8), { fill: P.ink, w: 3, boil: 0.4, seed: o.seed + 9 });
+    else K.line(ctx, [[rx - 26, 12], [rx - 14, 18], [rx - 4, 12]], { stroke: P.ink, w: 4, boil: 0.4, seed: o.seed + 9 });
+    ctx.restore();
+    /* a card carried in front (price quote the fish just took) */
+    if (o.card) K.card(ctx, x + o.dir * s * 160, y + s * 18, s * 0.62, Object.assign({ rot: o.dir * 0.12 }, o.card));
+  };
+
+  /* ---------- price card: rounded colour card with a number (bid / ask / plain) ---------- */
+  K.card = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ kind: "bid", text: "99.98", rot: 0, seed: 151, a: 1, icon: true }, opt || {});
+    const a = o.a >= 1 ? 1 : o.a <= 0 ? 0 : K.E.back(o.a, 2.2); if (a <= 0) return;
+    const fill = o.kind === "bid" ? P.bid : o.kind === "ask" ? P.ask : o.kind === "up" ? P.up : o.kind === "down" ? P.down : o.kind === "sun" ? P.sun : P.cream;
+    const dark = o.kind === "bid" ? P.bidDark : o.kind === "ask" ? P.askDark : o.kind === "up" ? P.upDark : o.kind === "down" ? P.downDark : o.kind === "sun" ? P.sunDark : P.creamShade;
+    const tc = o.kind === "plain" || o.kind === "sun" ? P.ink : "#ffffff";
+    ctx.save(); ctx.translate(x, y); ctx.rotate(o.rot); ctx.scale(s * a, s * a);
+    const w = Math.max(150, K.textW(ctx, o.text, 46, 700, K.FONT.mono) + (o.icon ? 84 : 44)), h = 84;
+    K.shape(ctx, K.rrectPts(-w / 2, -h / 2, w, h, 20, 3), { fill, w: 5, boil: 0.6, seed: o.seed, shade: { color: dark, dx: 0, dy: -10 }, drop: { dx: 0, dy: 9 } });
+    let tx = 0;
+    if (o.icon && (o.kind === "bid" || o.kind === "ask")) {
+      /* arrow: bid points down-in (we buy), ask points up-out (we sell) */
+      const ix = -w / 2 + 34, up = o.kind === "ask";
+      K.shape(ctx, up ? [[ix, -16], [ix + 15, 6], [ix - 15, 6]] : [[ix, 16], [ix + 15, -6], [ix - 15, -6]], { fill: "#ffffff", w: 3.5, boil: 0.4, seed: o.seed + 1, sharp: true });
+      tx = 20;
+    }
+    K.text(ctx, o.text, tx, 2, { size: 46, weight: 700, font: K.FONT.mono, fill: tc });
+    ctx.restore();
+  };
+
+  /* ---------- coins, pearls, sparkles ---------- */
+  K.coin = function (ctx, x, y, r, opt) {
+    const o = Object.assign({ color: P.sun, dark: P.sunDark, label: "", seed: 161, size: null, labelColor: P.ink, spin: 0 }, opt || {});
+    const sx = Math.max(0.12, Math.abs(Math.cos(o.spin)));
+    ctx.save(); ctx.translate(x, y); ctx.scale(sx, 1);
+    K.shape(ctx, K.ellipsePts(0, 0, r, r, 18), { fill: o.color, w: Math.max(3, r * 0.08), boil: 0.4 + r * 0.01, seed: o.seed, shade: { color: o.dark, dx: -r * 0.16, dy: -r * 0.16 } });
+    K.shape(ctx, K.ellipsePts(0, 0, r * 0.7, r * 0.7, 16), { fill: null, stroke: o.dark, w: Math.max(2, r * 0.05), boil: 0.4, seed: o.seed + 1 });
+    if (o.label) K.text(ctx, o.label, 0, r * 0.04, { size: o.size || r * 0.62, weight: 900, font: K.FONT.display, fill: o.labelColor });
+    ctx.restore();
+  };
+  K.sparkle = function (ctx, x, y, r, a, seed) {
+    if (a <= 0 || r <= 0) return;
+    ctx.save(); ctx.globalAlpha *= a; ctx.translate(x, y); ctx.rotate(hs(seed || 1, 3) * 0.4);
+    K.shape(ctx, [[0, -r], [r * 0.22, -r * 0.22], [r, 0], [r * 0.22, r * 0.22], [0, r], [-r * 0.22, r * 0.22], [-r, 0], [-r * 0.22, -r * 0.22]], { fill: P.sun, w: 3.5, boil: 0.4, seed: seed || 1, sharp: true });
+    ctx.restore();
+  };
+
+  /* ---------- octopus ink cloud (transition). grow 0..1 covers the screen at 1 ---------- */
+  K.inkCloud = function (ctx, cx, cy, grow, opt) {
+    const o = Object.assign({ seed: 171, color: "#1b1e3d", rim: P.lilac, maxR: 1500 }, opt || {});
+    if (grow <= 0) return;
+    const r = o.maxR * grow;
+    K.screen(ctx);
+    for (let k = 0; k < 9; k++) {
+      const a = (k / 9) * K.TAU + o.seed, d = r * 0.45 * (0.5 + 0.5 * hash(k, o.seed));
+      const pts = K.blobPts(cx + Math.cos(a) * d, cy + Math.sin(a) * d * 0.8, r * (0.55 + 0.2 * hash(k + 3, o.seed)), r * (0.5 + 0.2 * hash(k + 5, o.seed)), 14, o.seed + k, 0.22);
+      K.shape(ctx, pts, { fill: o.color, stroke: o.rim, w: 6, boil: 2, seed: o.seed + k * 13 });
+    }
+    K.shape(ctx, K.blobPts(cx, cy, r * 0.8, r * 0.7, 16, o.seed + 50, 0.2), { fill: o.color, stroke: null, w: 0, boil: 2, seed: o.seed + 60 });
+  };
+})(MK);
+
+/* ============================================================
+   KIT 40 OCTO: "Otto", the octopus market maker (the narrator).
+   Local space: arm tips rest on y = 0, head centre (0, -250), faces the viewer.
+   Proportions (scale 1): head 260 x 250, eyes r 30 behind round sunshine
+   glasses (rim r 42), arms 8 x ~300 long, 34 -> 7 wide, suckers on one side.
+   Pose state (all optional):
+     squash   -1..1  head squash (+ wide) / stretch (- tall), volume kept
+     lean     deg    whole-body tilt around the arm base
+     hop      px     lift (resting arms trail behind)
+     look     [dx, dy] pupils, -1..1
+     blink    0..1   wink 0..1 (viewer-left eye only)
+     mouth    "smile" | "grin" | "open" | "o" | "flat";  talk 0..1 overrides
+     brow     -1..1.5  (+ = raised)
+     glint    0..1   a light flash crosses the glasses
+     exclaim  0..1   "!" pops above the head
+     skin     { fill, dark, light }  colour shift (octopuses change colour)
+     wave     0..2   idle arm sway amount (default 1)
+     arms     [8] each null (rest pose) or { x, y, bend, curl, card: {kind, text, rot}, prop: fn(ctx, x, y, ang) }
+              x, y = tip target in local space; bend = sideways bow (px); curl = tip curl (rad)
+   Arms 0..7 go left to right. Arm bodies are drawn first, then the head
+   (it hides the arm roots), then everything held at the tips.
+   ============================================================ */
+var MK = window.MK || (window.MK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp, hash } = K;
+  const ROOT_Y = -128;
+  const ROOT_X = [-100, -72, -44, -15, 15, 44, 72, 100];
+  /* rest tips: a relaxed fan on the sea floor, outer arms curl outward */
+  const REST = [[-300, -10], [-232, 0], [-150, 4], [-58, 6], [58, 6], [150, 4], [232, 0], [300, -10]];
+  K.OCTO_REST = REST;
+
+  /* sample a cubic Bezier */
+  const cub = (a, b, c, d, u) => { const v = 1 - u; return [v * v * v * a[0] + 3 * v * v * u * b[0] + 3 * v * u * u * c[0] + u * u * u * d[0], v * v * v * a[1] + 3 * v * v * u * b[1] + 3 * v * u * u * c[1] + u * u * u * d[1]]; };
+
+  /* centre line of one arm: root -> tip, with bow and a curled tip */
+  function armLine(i, tip, bend, curl, wave, seed) {
+    const R = [ROOT_X[i], ROOT_Y], side = i < 4 ? -1 : 1;
+    const dx = tip[0] - R[0], dy = tip[1] - R[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L;
+    const w1 = Math.sin(K.now * 2.1 + i * 0.9 + seed) * 18 * wave, w2 = Math.sin(K.now * 2.6 + i * 1.3 + seed + 1) * 26 * wave;
+    const c1 = [R[0] + side * 26 + nx * w1 * 0.3, R[1] + 70];                 /* arms leave the head going down */
+    const c2 = [lerp(R[0], tip[0], 0.62) + nx * (bend + w2), lerp(R[1], tip[1], 0.62) + ny * (bend + w2)];
+    const pts = [];
+    for (let k = 0; k <= 16; k++) pts.push(cub(R, c1, c2, tip, k / 16));
+    /* tip curl: a short spiral continuing from the last direction */
+    if (Math.abs(curl) > 0.02) {
+      const a = pts[pts.length - 2], b = pts[pts.length - 1];
+      let ang = Math.atan2(b[1] - a[1], b[0] - a[0]), r = 26, x = b[0], y = b[1];
+      for (let k = 0; k < 6; k++) { ang += curl / 6 * 2.2; r *= 0.86; x += Math.cos(ang) * r * 0.55; y += Math.sin(ang) * r * 0.55; pts.push([x, y]); }
+    }
+    return pts;
+  }
+  /* tapered ribbon around a centre line; returns the outline and the per-point normals */
+  function ribbon(pts, w0, w1) {
+    const L = [], Rr = [], N = [], n = pts.length;
+    for (let k = 0; k < n; k++) {
+      const a = pts[Math.max(0, k - 1)], b = pts[Math.min(n - 1, k + 1)], dx = b[0] - a[0], dy = b[1] - a[1], d = Math.hypot(dx, dy) || 1;
+      const nx = -dy / d, ny = dx / d, w = lerp(w0, w1, Math.pow(k / (n - 1), 0.8)) / 2;
+      L.push([pts[k][0] + nx * w, pts[k][1] + ny * w]); Rr.push([pts[k][0] - nx * w, pts[k][1] - ny * w]); N.push([nx, ny, w]);
+    }
+    const tipP = pts[n - 1], tipR = N[n - 1][2];
+    const cap = [[tipP[0] + (tipP[0] - pts[n - 2][0]) * 0.4, tipP[1] + (tipP[1] - pts[n - 2][1]) * 0.4]];
+    return { outline: L.concat(cap, Rr.reverse()), N, tipR };
+  }
+
+  K.octo = function (ctx, x, y, s, st) {
+    st = st || {};
+    const sk = Object.assign({ fill: P.octo, dark: P.octoDark, light: P.octoLight }, st.skin || {});
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
+    const hop = st.hop || 0, wave = st.wave == null ? 1 : st.wave, seed = st.seed || 700;
+    const look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1);
+    ctx.save(); ctx.translate(x, y - hop); ctx.scale(s, s); ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    const tips = [];
+    /* ---- arms ---- */
+    const arms = st.arms || [];
+    const lines = [];
+    for (let i = 0; i < 8; i++) {
+      const a = arms[i];
+      let tip, bend, curl;
+      if (a) { tip = [a.x, a.y]; bend = a.bend || 0; curl = a.curl || 0; }
+      else {
+        const air = clamp(hop / 120, 0, 1); /* in the air resting arms trail down and in */
+        tip = [REST[i][0] * (1 - 0.35 * air), REST[i][1] + hop * 0.55 + 40 * air];
+        bend = (i < 4 ? 1 : -1) * 20; curl = (i < 4 ? -1 : 1) * 2.6;
+      }
+      lines.push({ i, pts: armLine(i, tip, bend, curl, a ? wave * 0.35 : wave, seed), held: a });
+    }
+    /* draw outer (back) arms first */
+    [0, 7, 1, 6, 2, 5, 3, 4].forEach((i) => {
+      const ln = lines[i], rb = ribbon(ln.pts, 56, 13);
+      K.shape(ctx, rb.outline, { fill: sk.fill, w: 5.5, boil: 0.7, seed: seed + 10 + i * 7, shade: { color: sk.dark, dx: (i < 4 ? 8 : -8), dy: -8 } });
+      /* suckers along the inner side */
+      const side = i < 4 ? -1 : 1;
+      for (let k = 4; k < ln.pts.length - 2; k += 2) {
+        const n = rb.N[k], r = Math.max(3, n[2] * 0.42), px = ln.pts[k][0] + n[0] * n[2] * 0.55 * side, py = ln.pts[k][1] + n[1] * n[2] * 0.55 * side;
+        K.shape(ctx, K.ellipsePts(px, py, r, r, 8), { fill: P.sucker, stroke: sk.dark, w: 2.4, boil: 0.3, seed: seed + 100 + i * 20 + k });
+      }
+      const p = ln.pts, q = p[p.length - 1], q0 = p[p.length - 2];
+      tips[i] = { x: q[0], y: q[1], ang: Math.atan2(q[1] - q0[1], q[0] - q0[0]), held: ln.held };
+    });
+    /* ---- head (with squash around the arm base) ---- */
+    ctx.save(); ctx.translate(0, ROOT_Y + 18); ctx.scale(sxk, syk); ctx.translate(0, -(ROOT_Y + 18));
+    const head = [];
+    for (let k = 0; k < 28; k++) {
+      const a = (k / 28) * K.TAU, c = Math.cos(a), sn = Math.sin(a);
+      const ry = sn < 0 ? 152 : 112, rx = sn < 0 ? 136 : 124 - 18 * sn; /* tall dome, slightly narrower base */
+      head.push([c * rx, -250 + sn * ry + (sn > 0 ? -18 * sn * sn : 0)]);
+    }
+    K.shape(ctx, head, { fill: sk.fill, w: 6, boil: 0.9, seed: seed + 1, shade: { color: sk.dark, dx: -22, dy: -18 }, hi: { color: sk.light, dx: 18, dy: 22 }, dots: { color: sk.dark, alpha: 0.35, gap: 15, r: 3.6, ang: 0.9, from: 0.55 } });
+    /* spots */
+    [[-70, -330, 13], [-40, -365, 8], [74, -320, 10], [46, -360, 6], [-92, -270, 7]].forEach((d, k) => K.shape(ctx, K.ellipsePts(d[0], d[1], d[2], d[2] * 0.85, 10), { fill: sk.light, stroke: null, w: 0, boil: 0.3, seed: seed + 20 + k }));
+    /* top highlight */
+    K.shape(ctx, K.ellipsePts(-52, -352, 30, 16, 10, -0.5), { fill: "#ffffff", stroke: null, w: 0, boil: 0.3, seed: seed + 26, alpha: 0.7 });
+    /* cheeks */
+    [-1, 1].forEach((sd, k) => K.shape(ctx, K.ellipsePts(sd * 92, -186, 20, 12, 10), { fill: P.blush, stroke: null, w: 0, boil: 0.3, seed: seed + 30 + k, alpha: 0.45 }));
+    /* mouth */
+    const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1), my = -168;
+    if (talk > 0.06) {
+      const mw = 16 + 10 * talk, mh = 4 + 20 * talk;
+      K.shape(ctx, [[-mw, my], [0, my - 2], [mw, my], [mw * 0.6, my + mh], [0, my + mh * 1.1], [-mw * 0.6, my + mh]], { fill: "#7a1f3d", w: 4.5, boil: 0.5, seed: seed + 40 });
+      if (talk > 0.3) K.shape(ctx, K.ellipsePts(0, my + mh * 0.8, mw * 0.4, mh * 0.22, 8), { fill: "#ff8fa8", stroke: null, w: 0, boil: 0.3, seed: seed + 41 });
+    } else if (m === "smile") K.line(ctx, [[-26, my - 4], [-12, my + 9], [12, my + 9], [26, my - 4]], { stroke: P.ink, w: 5, boil: 0.5, seed: seed + 42 });
+    else if (m === "grin") { K.shape(ctx, [[-32, my - 6], [32, my - 6], [18, my + 18], [0, my + 22], [-18, my + 18]], { fill: "#7a1f3d", w: 4.5, boil: 0.5, seed: seed + 43 }); K.shape(ctx, [[-24, my - 4], [24, my - 4], [20, my + 3], [-20, my + 3]], { fill: "#ffffff", stroke: null, w: 0, boil: 0.3, seed: seed + 44 }); }
+    else if (m === "open") K.shape(ctx, K.ellipsePts(0, my + 6, 18, 16, 12), { fill: "#7a1f3d", w: 4.5, boil: 0.5, seed: seed + 45 });
+    else if (m === "o") K.shape(ctx, K.ellipsePts(0, my + 4, 9, 11, 10), { fill: "#7a1f3d", w: 4, boil: 0.4, seed: seed + 46 });
+    else K.line(ctx, [[-18, my + 2], [18, my + 2]], { stroke: P.ink, w: 5, boil: 0.4, seed: seed + 47 });
+    /* eyes behind round glasses */
+    const EY = -236, EX = 52;
+    [-1, 1].forEach((sd, k) => {
+      const ex = sd * EX, b = k === 0 ? Math.max(blink, clamp(st.wink || 0, 0, 1)) : blink;
+      K.shape(ctx, K.ellipsePts(ex, EY, 31, 33, 16), { fill: P.eye, w: 4, boil: 0.4, seed: seed + 50 + k });
+      if (b < 0.95) {
+        const px = ex + look[0] * 11, py = EY + look[1] * 10 + b * 8;
+        ctx.save(); K.pathOf(ctx, K.ellipsePts(ex, EY, 31, 33, 16), true); ctx.clip();
+        K.shape(ctx, K.ellipsePts(px, py, 14, 15, 12), { fill: P.pupil, stroke: null, w: 0, boil: 0.3, seed: seed + 52 + k });
+        K.shape(ctx, K.ellipsePts(px + 5, py - 6, 5, 5, 8), { fill: "#ffffff", stroke: null, w: 0, boil: 0.2, seed: seed + 54 + k });
+        /* eyelid from the top */
+        if (b > 0.02) K.shape(ctx, [[ex - 40, EY - 40], [ex + 40, EY - 40], [ex + 40, EY - 33 + 66 * b], [ex - 40, EY - 33 + 66 * b]], { fill: sk.fill, stroke: P.ink, w: 4, boil: 0.3, seed: seed + 56 + k });
+        ctx.restore();
+      } else K.line(ctx, [[ex - 24, EY + 4], [ex, EY + 12], [ex + 24, EY + 4]], { stroke: P.ink, w: 5, boil: 0.4, seed: seed + 58 + k });
+      /* brow */
+      const br = st.brow || 0;
+      K.line(ctx, [[ex - 22, EY - 62 - br * 12 + sd * br * 3], [ex + 22, EY - 62 - br * 12 - sd * br * 3]], { stroke: P.ink, w: 6, boil: 0.4, seed: seed + 60 + k });
+    });
+    /* glasses: two rims + bridge + temples */
+    [-1, 1].forEach((sd, k) => {
+      const rim = K.ellipsePts(sd * EX, EY, 42, 42, 20);
+      ctx.save(); ctx.globalAlpha = 0.18; K.pathOf(ctx, rim, true); ctx.fillStyle = P.lens; ctx.fill(); ctx.restore();
+      K.line(ctx, rim.concat([rim[0]]), { stroke: P.ink, w: 15, boil: 0.4, seed: seed + 70 + k });
+      K.line(ctx, rim.concat([rim[0]]), { stroke: P.glasses, w: 8, boil: 0.4, seed: seed + 70 + k });
+      K.line(ctx, [[sd * (EX + 42), EY - 6], [sd * 128, EY - 16]], { stroke: P.ink, w: 7, boil: 0.4, seed: seed + 74 + k });
+    });
+    K.line(ctx, [[-12, EY - 6], [0, EY - 14], [12, EY - 6]], { stroke: P.ink, w: 12, boil: 0.3, seed: seed + 76 });
+    K.line(ctx, [[-12, EY - 6], [0, EY - 14], [12, EY - 6]], { stroke: P.glasses, w: 6, boil: 0.3, seed: seed + 76 });
+    if (st.glint > 0) { /* diagonal flash crossing both lenses */
+      const g = clamp(st.glint, 0, 1), gx = lerp(-120, 120, g);
+      [-1, 1].forEach((sd) => { ctx.save(); K.pathOf(ctx, K.ellipsePts(sd * EX, EY, 40, 40, 16), true); ctx.clip(); ctx.globalAlpha = 0.85 * Math.sin(g * Math.PI); ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.moveTo(gx - 20, EY - 60); ctx.lineTo(gx + 2, EY - 60); ctx.lineTo(gx - 40, EY + 60); ctx.lineTo(gx - 62, EY + 60); ctx.fill(); ctx.restore(); });
+    }
+    /* bow tie (the market maker dresses for work) */
+    K.shape(ctx, [[-4, -128], [-40, -146], [-44, -100], [-4, -114]], { fill: P.bid, w: 4.5, boil: 0.4, seed: seed + 80, shade: { color: P.bidDark, dx: 6, dy: 0 } });
+    K.shape(ctx, [[4, -128], [40, -146], [44, -100], [4, -114]], { fill: P.bid, w: 4.5, boil: 0.4, seed: seed + 81, shade: { color: P.bidDark, dx: -6, dy: 0 } });
+    K.dot(ctx, 0, -121, 10, P.sun, P.ink, 4, seed + 82);
+    /* "!" */
+    if (st.exclaim > 0) {
+      const a = K.E.back(clamp(st.exclaim, 0, 1), 2.5);
+      ctx.save(); ctx.translate(150, -430); ctx.rotate(0.22); ctx.scale(a, a);
+      K.shape(ctx, [[-11, -64], [11, -64], [6, -14], [-6, -14]], { fill: P.sun, w: 5, boil: 0.5, seed: seed + 90, sharp: true });
+      K.dot(ctx, 0, 6, 9, P.sun, P.ink, 5, seed + 91);
+      ctx.restore();
+    }
+    ctx.restore();
+    /* ---- held things on top ---- */
+    tips.forEach((tp, i) => {
+      const h = tp.held; if (!h) return;
+      if (h.card) K.card(ctx, tp.x + (h.card.dx || 0), tp.y + (h.card.dy == null ? -40 : h.card.dy), h.card.s || 0.9, Object.assign({ seed: seed + 200 + i * 3, rot: (h.card.rot == null ? (i < 4 ? -0.1 : 0.1) : h.card.rot) }, h.card));
+      if (h.prop) h.prop(ctx, tp.x, tp.y, tp.ang);
+      /* the arm tip wraps over the held thing */
+      if (h.card || h.wrap) K.tube(ctx, [[tp.x - Math.cos(tp.ang) * 22, tp.y - Math.sin(tp.ang) * 22], [tp.x, tp.y], [tp.x + 12 * (i < 4 ? -1 : 1), tp.y - 14]], 10, sk.fill, seed + 300 + i, { ow: 9 });
+    });
+    ctx.restore();
+    /* world-space tip positions for the scene (cards, contacts) */
+    K.octoTips = tips.map((tp) => tp && { x: x + (tp.x * s), y: y - hop + tp.y * s });
+  };
+
+  /* blink curve with seeded blink times, 0..1 (works for any t) */
+  K.blinkAt = function (t, seed) {
+    let b = 0;
+    const i0 = Math.max(0, Math.floor((t - 0.8) / 2.1) - 1);
+    for (let i = i0; i < i0 + 3; i++) {
+      const tb = 0.8 + i * 2.1 + K.hash(i, seed || 7) * 1.2, d = t - tb;
+      if (d > 0 && d < 0.18) b = Math.max(b, Math.sin((d / 0.18) * Math.PI));
+    }
+    return b;
+  };
+  /* skin presets: calm coral (default), volatile lilac, bullish mint, bearish red */
+  K.SKIN = {
+    calm: { fill: P.octo, dark: P.octoDark, light: P.octoLight },
+    chaos: { fill: "#a98bff", dark: "#7a5ce0", light: "#cdbcff" },
+    bull: { fill: "#4fd6a5", dark: "#22a67a", light: "#9ff0d0" },
+    bear: { fill: "#ff7272", dark: "#d94848", light: "#ffb0b0" },
+  };
+  K.skinMix = function (a, b, u) { return { fill: K.mix(a.fill, b.fill, u), dark: K.mix(a.dark, b.dark, u), light: K.mix(a.light, b.light, u) }; };
+})(MK);
+
+/* ============================================================
+   KIT 50 EXPLAINER: slide content as objects of the Coral Exchange.
+   Every primitive is a reef "screen": a rounded card with a navy outline,
+   a flat sticker shadow and a coloured header tab with three bubbles.
+     panel      -> the base card (cream or dark glass)          K.panel
+     chart      -> candles / lines / indicators / histogram     K.chart  (+ K.genCandles, K.sma, K.alligator, K.ao, K.fractals)
+     attractor  -> phase-space plot of a chaotic system         K.attractor
+     manifold   -> wireframe surface with a path on it          K.manifold
+     formula    -> dark glass board, typed letter by letter     K.formula
+     table      -> cream table, header strip, highlighted row   K.table
+     bullets    -> card of bullets, each pops on its beat       K.bullets
+     code       -> dark code card with syntax colours           K.code
+     book       -> order book ladder, spread in sunshine        K.book
+     badge      -> big number in a sunshine bubble              K.badge
+     titlePlate -> wavy coral plate behind a DOM title          K.titlePlate
+   All take `a` (appear 0..1, pops with a back ease) and draw progress
+   parameters, so pops land on beats. Text never boils.
+   ============================================================ */
+var MK = window.MK || (window.MK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp, hash, hs } = K;
+  const popS = (a) => (a <= 0 ? 0 : a >= 1 ? 1 : K.E.back(a, 2.2));
+  K.popS = popS;
+
+  /* ---------- base card. returns the inner content rect in local coords (centre 0,0) ---------- */
+  K.panel = function (ctx, w, h, opt) {
+    const o = Object.assign({ dark: false, tab: P.ask, title: "", seed: 201, titleSize: 30 }, opt || {});
+    const fill = o.dark ? P.board : P.cream, shade = o.dark ? "#0a2048" : P.creamShade;
+    K.shape(ctx, K.rrectPts(-w / 2, -h / 2, w, h, 28, 4), { fill, w: 6, boil: 0.7, seed: o.seed, shade: { color: shade, dx: 0, dy: -12 }, drop: { dx: 12, dy: 14 } });
+    const th = 58;
+    const tab = K.rrectPts(-w / 2, -h / 2, w, th, 28, 4).map((p) => [p[0], Math.min(p[1], -h / 2 + th)]); tab.sharp = true;
+    K.shape(ctx, tab, { fill: o.tab, w: 6, boil: 0.6, seed: o.seed + 1 });
+    [0, 1, 2].forEach((i) => K.dot(ctx, -w / 2 + 34 + i * 30, -h / 2 + th / 2, 9, i === 0 ? P.cream : i === 1 ? P.sun : P.kelpLight, P.ink, 3.5, o.seed + 2 + i));
+    if (o.title) K.text(ctx, o.title, -w / 2 + 132, -h / 2 + th / 2 + 2, { size: o.titleSize, weight: 800, font: K.FONT.text, fill: "#ffffff", align: "left" });
+    return { x0: -w / 2 + 28, y0: -h / 2 + th + 22, x1: w / 2 - 28, y1: h / 2 - 26 };
+  };
+  const enter = (ctx, x, y, a, rot) => { const s = popS(a); if (s <= 0) return false; ctx.save(); ctx.translate(x, y); ctx.rotate(rot || 0); ctx.scale(s, s); return true; };
+
+  /* ---------- data helpers (deterministic) ---------- */
+  K.genCandles = function (n, seed, start, vol, drift) {
+    const r = K.mulberry(seed || 1), out = []; let p = start || 100;
+    for (let i = 0; i < n; i++) {
+      const o = p, c = o + (r() - 0.5 + (drift || 0)) * (vol || 2) * 2;
+      const hi = Math.max(o, c) + r() * (vol || 2) * 0.7, lo = Math.min(o, c) - r() * (vol || 2) * 0.7;
+      out.push({ o, h: hi, l: lo, c }); p = c;
+    }
+    return out;
+  };
+  K.sma = function (v, n, shift) { const out = []; for (let i = 0; i < v.length; i++) { const j = i - (shift || 0); if (j < n - 1 || j >= v.length) { out.push(null); continue; } let s = 0; for (let k = 0; k < n; k++) s += v[j - k]; out.push(s / n); } return out; };
+  /* Bill Williams Alligator on median price: jaw 13/8, teeth 8/5, lips 5/3 (SMA used as the smoothing) */
+  K.alligator = function (cd) { const m = cd.map((c) => (c.h + c.l) / 2); return { jaw: K.sma(m, 13, 8), teeth: K.sma(m, 8, 5), lips: K.sma(m, 5, 3) }; };
+  /* Awesome Oscillator: SMA5 - SMA34 of median price (n may be short: uses min(34, n)) */
+  K.ao = function (cd, slow) { const m = cd.map((c) => (c.h + c.l) / 2), a = K.sma(m, 5), b = K.sma(m, slow || 34); return a.map((v, i) => (v == null || b[i] == null ? null : v - b[i])); };
+  /* Bill Williams fractals: a high with two lower highs on each side (up), mirror for lows */
+  K.fractals = function (cd) { const out = []; for (let i = 2; i < cd.length - 2; i++) { const h = cd[i].h, l = cd[i].l; if (h > cd[i - 1].h && h > cd[i - 2].h && h > cd[i + 1].h && h > cd[i + 2].h) out.push({ i, up: true }); if (l < cd[i - 1].l && l < cd[i - 2].l && l < cd[i + 1].l && l < cd[i + 2].l) out.push({ i, up: false }); } return out; };
+
+  /* ---------- chart: candles + overlay lines + markers + optional histogram ----------
+     opt: candles, lines [{data, color, w}], hist {data, frac}, fractals [{i, up}], marks [{i, v, kind: "buy"|"sell"}],
+          draw 0..1 (left -> right), yMin, yMax, title, tab, a, band {lo, hi} (a horizontal spread band) */
+  K.chart = function (ctx, x, y, w, h, opt) {
+    const o = Object.assign({ a: 1, draw: 1, candles: null, lines: [], hist: null, fractals: [], marks: [], seed: 211, title: "", tab: P.bid, band: null, rot: 0, dark: false }, opt || {});
+    if (!enter(ctx, x, y, o.a, o.rot)) return null;
+    const r = K.panel(ctx, w, h, { tab: o.tab, title: o.title, seed: o.seed, dark: o.dark });
+    const hf = o.hist ? (o.hist.frac || 0.28) : 0, gap = o.hist ? 18 : 0;
+    const px0 = r.x0 + 12, px1 = r.x1 - 12, py0 = r.y0 + 8, py1 = r.y1 - (r.y1 - r.y0) * hf - gap;
+    const n = o.candles ? o.candles.length : (o.lines[0] ? o.lines[0].data.length : 2);
+    let mn = o.yMin, mx = o.yMax;
+    if (mn == null || mx == null) {
+      const all = [];
+      if (o.candles) o.candles.forEach((c) => all.push(c.h, c.l));
+      o.lines.forEach((l) => l.data.forEach((v) => v != null && all.push(v)));
+      mn = mn == null ? Math.min(...all) : mn; mx = mx == null ? Math.max(...all) : mx; const pad = (mx - mn) * 0.08; mn -= pad; mx += pad;
+    }
+    const X = (i) => px0 + ((px1 - px0) * (i + 0.5)) / n, Y = (v) => py1 - ((v - mn) / (mx - mn || 1)) * (py1 - py0);
+    /* grid */
+    for (let k = 1; k < 4; k++) K.line(ctx, [[px0, lerp(py0, py1, k / 4)], [px1, lerp(py0, py1, k / 4)]], { stroke: o.dark ? P.grid : P.creamShade, w: 2.5, boil: 0.3, seed: o.seed + 10 + k });
+    const shown = o.draw * n;
+    if (o.band) { const b0 = Y(o.band.hi), b1 = Y(o.band.lo); ctx.save(); ctx.globalAlpha = 0.55; K.shape(ctx, K.rrectPts(px0, b0, px1 - px0, Math.max(6, b1 - b0), 6, 2), { fill: P.sun, stroke: null, w: 0, boil: 0.4, seed: o.seed + 19 }); ctx.restore(); }
+    if (o.candles) {
+      const bw = Math.max(6, ((px1 - px0) / n) * 0.56);
+      o.candles.forEach((c, i) => {
+        const g = clamp(shown - i, 0, 1); if (g <= 0) return;
+        const upC = c.c >= c.o, col = upC ? P.up : P.down, cx = X(i), e = K.E.back(g, 1.6);
+        const midV = (c.o + c.c) / 2, top = lerp(Y(midV), Y(Math.max(c.o, c.c)), e), bot = lerp(Y(midV), Y(Math.min(c.o, c.c)), e);
+        K.line(ctx, [[cx, lerp(Y(midV), Y(c.h), e)], [cx, lerp(Y(midV), Y(c.l), e)]], { stroke: P.ink, w: 3.5, boil: 0.3, seed: o.seed + 20 + i });
+        K.shape(ctx, K.rrectPts(cx - bw / 2, top, bw, Math.max(4, bot - top), 3, 1), { fill: col, w: 3.5, boil: 0.3, seed: o.seed + 60 + i });
+      });
+    }
+    o.lines.forEach((l, li) => {
+      const pts = [];
+      l.data.forEach((v, i) => { if (v == null || i > shown - 0.5) return; pts.push([X(i), Y(v)]); });
+      if (pts.length > 1) { K.line(ctx, pts, { stroke: P.ink, w: (l.w || 5) + 5, boil: 0.5, seed: o.seed + 120 + li }); K.line(ctx, pts, { stroke: l.color, w: l.w || 5, boil: 0.5, seed: o.seed + 120 + li }); }
+    });
+    o.fractals.forEach((f, k) => {
+      if (f.i > shown - 2.5 || !o.candles) return; const c = o.candles[f.i], g = clamp(shown - f.i - 2.5, 0, 1), s = K.E.back(g, 2.5);
+      const fx = X(f.i), fy = f.up ? Y(c.h) - 26 : Y(c.l) + 26;
+      ctx.save(); ctx.translate(fx, fy); ctx.scale(s, s);
+      K.shape(ctx, f.up ? [[0, -14], [12, 8], [-12, 8]] : [[0, 14], [12, -8], [-12, -8]], { fill: P.sun, w: 3.5, boil: 0.3, seed: o.seed + 200 + k, sharp: true });
+      ctx.restore();
+    });
+    o.marks.forEach((m, k) => {
+      if (m.i > shown - 0.5) return; const g = clamp(shown - m.i - 0.5, 0, 1);
+      K.card(ctx, X(m.i), Y(m.v) + (m.kind === "buy" ? 64 : -64), 0.55, { kind: m.kind === "buy" ? "bid" : "ask", text: m.text || m.v.toFixed(1), a: g, seed: o.seed + 240 + k, rot: 0 });
+      K.dot(ctx, X(m.i), Y(m.v), 10, m.kind === "buy" ? P.bid : P.ask, P.ink, 3.5, o.seed + 260 + k);
+    });
+    if (o.hist) {
+      const hy0 = py1 + gap, hy1 = r.y1, d = o.hist.data, amax = Math.max(...d.filter((v) => v != null).map(Math.abs)) || 1, z = (hy0 + hy1) / 2;
+      K.line(ctx, [[px0, z], [px1, z]], { stroke: o.dark ? P.grid : P.creamShade, w: 2.5, boil: 0.3, seed: o.seed + 300 });
+      const bw = Math.max(5, ((px1 - px0) / n) * 0.6);
+      d.forEach((v, i) => {
+        if (v == null) return; const g = clamp(shown - i, 0, 1); if (g <= 0) return;
+        const prev = d[i - 1], rising = prev == null || v >= prev, hh = (v / amax) * (hy1 - hy0) / 2 * K.E.back(g, 1.6);
+        K.shape(ctx, K.rectPts(X(i) - bw / 2, Math.min(z, z - hh), bw, Math.max(3, Math.abs(hh)), 1), { fill: rising ? P.up : P.down, w: 3, boil: 0.3, seed: o.seed + 320 + i, sharp: true });
+      });
+    }
+    ctx.restore();
+    return { X: (i) => x + X(i), Y: (v) => y + Y(v) };
+  };
+
+  /* ---------- attractor: Lorenz system integrated once (RK4, fixed step), projected with a yaw ----------
+     opt: draw 0..1, yaw (rad), a, title, color ramp from lilac to sunshine, head glow. Returns the head point. */
+  let LORENZ = null;
+  function lorenz() {
+    if (LORENZ) return LORENZ;
+    const s = 10, r = 28, b = 8 / 3, dt = 0.008, out = []; let p = [0.1, 0, 0];
+    const f = (q) => [s * (q[1] - q[0]), q[0] * (r - q[2]) - q[1], q[0] * q[1] - b * q[2]];
+    for (let i = 0; i < 4200; i++) {
+      const k1 = f(p), k2 = f(p.map((v, j) => v + (dt / 2) * k1[j])), k3 = f(p.map((v, j) => v + (dt / 2) * k2[j])), k4 = f(p.map((v, j) => v + dt * k3[j]));
+      p = p.map((v, j) => v + (dt / 6) * (k1[j] + 2 * k2[j] + 2 * k3[j] + k4[j]));
+      if (i > 200 && i % 2 === 0) out.push([p[0], p[1], p[2] - 25]);
+    }
+    return (LORENZ = out);
+  }
+  K.attractor = function (ctx, x, y, w, h, opt) {
+    const o = Object.assign({ a: 1, draw: 1, yaw: 0.5, pitch: 0.25, seed: 401, title: "", tab: P.lilac, rot: 0, scale: 1 }, opt || {});
+    if (!enter(ctx, x, y, o.a, o.rot)) return;
+    const r = K.panel(ctx, w, h, { dark: true, tab: o.tab, title: o.title, seed: o.seed });
+    const cx = (r.x0 + r.x1) / 2, cy = (r.y0 + r.y1) / 2, sc = Math.min(r.x1 - r.x0, r.y1 - r.y0) / 58 * o.scale;
+    const L = lorenz(), n = Math.floor(L.length * clamp(o.draw, 0, 1));
+    const cyw = Math.cos(o.yaw), syw = Math.sin(o.yaw), cp = Math.cos(o.pitch), sp = Math.sin(o.pitch);
+    const pr = (q) => { const X1 = q[0] * cyw - q[1] * syw, Y1 = q[0] * syw + q[1] * cyw; return [cx + X1 * sc, cy - (q[2] * cp - Y1 * sp) * sc]; };
+    ctx.save(); ctx.beginPath(); ctx.rect(r.x0, r.y0, r.x1 - r.x0, r.y1 - r.y0); ctx.clip();
+    ctx.lineWidth = K.lw(ctx, 3.2); ctx.lineCap = "round";
+    const step = 6;
+    for (let i = 1; i < n; i += step) {
+      const u = i / L.length; ctx.strokeStyle = K.mix(P.lilac, P.sun, Math.pow(u, 1.4)); ctx.globalAlpha = 0.55 + 0.45 * (i / Math.max(1, n));
+      ctx.beginPath(); const p0 = pr(L[i - 1]); ctx.moveTo(p0[0], p0[1]);
+      for (let k = i; k < Math.min(n, i + step + 1); k++) { const q = pr(L[k]); ctx.lineTo(q[0], q[1]); }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    let head = null;
+    if (n > 1) { const hq = pr(L[n - 1]); K.glow(ctx, hq[0], hq[1], 50, "rgba(255,230,120,0.9)", 0.9); K.dot(ctx, hq[0], hq[1], 10, P.sun, P.ink, 3.5, o.seed + 5); head = [x + hq[0], y + hq[1]]; }
+    ctx.restore();
+    ctx.restore();
+    return head; /* the moving point, in the caller's coordinates (no rotation / pop scale) */
+  };
+
+  /* ---------- manifold: wireframe surface z = f(u, v) with yaw; optional path on it ----------
+     opt: f(u, v) in [-1, 1]^2 -> height, yaw, tilt, draw (grid reveal), path [[u, v], ...], pathDraw 0..1 */
+  K.manifold = function (ctx, x, y, w, h, opt) {
+    const o = Object.assign({ a: 1, draw: 1, yaw: 0.6, tilt: 0.55, seed: 451, title: "", tab: P.kelp, f: (u, v) => 0.55 * (u * u - v * v) + 0.18 * Math.sin(3 * u) * Math.cos(2 * v), path: null, pathDraw: 1, n: 16, rot: 0, dark: true }, opt || {});
+    if (!enter(ctx, x, y, o.a, o.rot)) return;
+    const r = K.panel(ctx, w, h, { dark: o.dark, tab: o.tab, title: o.title, seed: o.seed });
+    const cx = (r.x0 + r.x1) / 2, cy = (r.y0 + r.y1) / 2 + 10, sc = Math.min(r.x1 - r.x0, (r.y1 - r.y0) * 1.3) * 0.36;
+    const cyw = Math.cos(o.yaw), syw = Math.sin(o.yaw), ct = Math.cos(o.tilt), st = Math.sin(o.tilt);
+    const pr = (u, v) => { const z = o.f(u, v), X1 = u * cyw - v * syw, Y1 = u * syw + v * cyw; return [cx + X1 * sc, cy + (Y1 * st - z * ct) * sc * 0.9, z]; };
+    const N = o.n, rows = Math.ceil(N * clamp(o.draw, 0, 1) + 0.001);
+    const lineCol = (z) => (z > 0 ? K.mix(P.sun, P.ask, clamp(z, 0, 1)) : K.mix(P.sun, P.bid, clamp(-z, 0, 1)));
+    for (let pass = 0; pass < 2; pass++) for (let i = 0; i <= N; i++) {
+      if (i > rows) continue;
+      const pts = []; for (let j = 0; j <= N; j++) { const a = -1 + (2 * i) / N, b = -1 + (2 * j) / N; pts.push(pass ? pr(b, a) : pr(a, b)); }
+      const zAvg = pts.reduce((s, q) => s + q[2], 0) / pts.length;
+      K.line(ctx, pts.map((q) => [q[0], q[1]]), { stroke: lineCol(zAvg), w: 3, boil: 0.4, seed: o.seed + pass * 50 + i });
+    }
+    if (o.path && o.pathDraw > 0) {
+      const k = Math.max(2, Math.floor(o.path.length * clamp(o.pathDraw, 0, 1))), pts = o.path.slice(0, k).map((q) => pr(q[0], q[1]));
+      K.line(ctx, pts.map((q) => [q[0], q[1]]), { stroke: P.ink, w: 13, boil: 0.5, seed: o.seed + 200 });
+      K.line(ctx, pts.map((q) => [q[0], q[1]]), { stroke: "#ffffff", w: 7, boil: 0.5, seed: o.seed + 200 });
+      const hq = pts[pts.length - 1]; K.glow(ctx, hq[0], hq[1], 40, "rgba(255,255,255,0.9)", 0.8); K.dot(ctx, hq[0], hq[1], 11, P.sun, P.ink, 3.5, o.seed + 201);
+    }
+    ctx.restore();
+  };
+
+  /* ---------- formula board: dark glass, lines typed letter by letter ----------
+     lines: strings or {t, c} (c = colour of the key line) */
+  K.formula = function (ctx, x, y, w, h, lines, opt) {
+    const o = Object.assign({ a: 1, size: 52, write: 1, seed: 501, title: "", tab: P.sun, font: K.FONT.mono, rot: 0, align: "left" }, opt || {});
+    if (!enter(ctx, x, y, o.a, o.rot)) return;
+    const r = K.panel(ctx, w, h, { dark: true, tab: o.tab, title: o.title, seed: o.seed });
+    const lh = o.size * 1.35, cy = (r.y0 + r.y1) / 2, top = cy - ((lines.length - 1) * lh) / 2;
+    lines.forEach((ln, i) => {
+      const str = typeof ln === "string" ? ln : ln.t, col = typeof ln === "string" ? P.chalk : ln.c || P.chalk;
+      const k = Math.floor(str.length * clamp(o.write * lines.length - i, 0, 1));
+      if (k <= 0) return;
+      const tx = o.align === "center" ? 0 : r.x0 + 24;
+      K.text(ctx, str.slice(0, k), tx, top + i * lh, { size: o.size, weight: 700, font: o.font, fill: col, align: o.align });
+      if (k < str.length) { const cw = K.textW(ctx, str.slice(0, k), o.size, 700, o.font); K.shape(ctx, K.rectPts((o.align === "center" ? cw / 2 : r.x0 + 24 + cw) + 4, top + i * lh - o.size * 0.42, o.size * 0.12, o.size * 0.84, 1), { fill: P.sun, stroke: null, w: 0, boil: 0 }); }
+    });
+    ctx.restore();
+  };
+
+  /* ---------- table: header strip in the tab colour, highlighted row in sunshine ---------- */
+  K.table = function (ctx, x, y, cols, rows, opt) {
+    const o = Object.assign({ a: 1, size: 32, rowH: 58, seed: 551, hi: -1, reveal: 1, title: "", tab: P.bid, colColors: [], rot: 0 }, opt || {});
+    const w = cols.reduce((s, c) => s + c, 0) + 56, h = rows.length * o.rowH + 58 + 48;
+    if (!enter(ctx, x, y, o.a, o.rot)) return;
+    const r = K.panel(ctx, w, h, { tab: o.tab, title: o.title, seed: o.seed });
+    const shown = rows.length * clamp(o.reveal, 0, 1);
+    rows.forEach((row, ri) => {
+      const g = clamp(shown - ri, 0, 1); if (g <= 0) return;
+      const ry = r.y0 + ri * o.rowH + o.rowH / 2 - 4;
+      if (ri === o.hi) K.shape(ctx, K.rrectPts(r.x0 - 6, ry - o.rowH / 2 + 4, r.x1 - r.x0 + 12, o.rowH - 8, 14, 2), { fill: P.sun, w: 3.5, boil: 0.4, seed: o.seed + 10 + ri });
+      let cx = r.x0;
+      row.forEach((cell, ci) => {
+        const head = ri === 0;
+        K.text(ctx, cell, cx + cols[ci] / 2, ry, { size: head ? o.size * 0.82 : o.size, weight: head ? 800 : 700, font: head ? K.FONT.text : K.FONT.mono, fill: head ? P.inkSoft : (o.colColors[ci] || P.ink), alpha: g });
+        cx += cols[ci];
+      });
+      if (ri === 0) K.line(ctx, [[r.x0, ry + o.rowH / 2], [r.x1, ry + o.rowH / 2]], { stroke: P.ink, w: 3.5, boil: 0.4, seed: o.seed + 50 });
+    });
+    ctx.restore();
+  };
+
+  /* ---------- bullet card: each bullet is a bubble that pops on its own beat ---------- */
+  K.bullets = function (ctx, x, y, w, items, opt) {
+    const o = Object.assign({ a: 1, size: 40, seed: 601, shown: 99, title: "", tab: P.kelp, lineH: null, rot: 0 }, opt || {});
+    const lh = o.lineH || o.size * 1.7, h = items.length * lh + 58 + 60;
+    if (!enter(ctx, x, y, o.a, o.rot)) return;
+    const r = K.panel(ctx, w, h, { tab: o.tab, title: o.title, seed: o.seed });
+    items.forEach((it, i) => {
+      const g = clamp(o.shown - i, 0, 1); if (g <= 0) return;
+      const s = K.E.back(g, 2.2), yy = r.y0 + lh / 2 + i * lh - 4;
+      ctx.save(); ctx.translate(r.x0 + 26, yy); ctx.scale(s, s);
+      K.dot(ctx, 0, 0, o.size * 0.3, [P.bid, P.ask, P.sun, P.kelp, P.lilac][i % 5], P.ink, 3.5, o.seed + 10 + i);
+      K.text(ctx, it, o.size * 0.75, 2, { size: o.size, weight: 700, font: K.FONT.text, fill: P.ink, align: "left" });
+      ctx.restore();
+    });
+    ctx.restore();
+  };
+
+  /* ---------- code card: dark glass, Python-ish highlighting, typed out ---------- */
+  const KW = /^(def|return|if|else|elif|for|in|while|import|from|as|class|lambda|and|or|not|None|True|False|fn|let|mut|pub|struct|impl|use|match|const|async|await)$/;
+  K.code = function (ctx, x, y, w, lines, opt) {
+    const o = Object.assign({ a: 1, size: 30, seed: 651, typed: 1, title: "", tab: P.fan, rot: 0 }, opt || {});
+    const lh = o.size * 1.5, h = lines.length * lh + 58 + 52;
+    if (!enter(ctx, x, y, o.a, o.rot)) return;
+    const r = K.panel(ctx, w, h, { dark: true, tab: o.tab, title: o.title, seed: o.seed });
+    ctx.save(); ctx.font = `500 ${o.size}px ${K.FONT.mono}`; const cw = ctx.measureText("M").width; ctx.restore();
+    const total = lines.reduce((s, l) => s + l.length, 0); let budget = Math.floor(total * clamp(o.typed, 0, 1));
+    lines.forEach((ln, i) => {
+      if (budget <= 0) return; const vis = ln.slice(0, budget); budget -= ln.length;
+      const yy = r.y0 + lh / 2 + i * lh - 4; let col = 0;
+      K.text(ctx, String(i + 1), r.x0 + 10, yy, { size: o.size * 0.8, weight: 500, font: K.FONT.mono, fill: P.grid, align: "left" });
+      const toks = vis.match(/#.*$|\/\/.*$|"[^"]*"?|'[^']*'?|[A-Za-z_][A-Za-z0-9_]*|[0-9][0-9_.]*|\s+|./g) || [];
+      toks.forEach((tk) => {
+        const c = tk.startsWith("#") || tk.startsWith("//") ? "#7f9cc9" : KW.test(tk) ? P.ask : /^[0-9]/.test(tk) ? P.sun : /^["']/.test(tk) ? P.kelpLight : /^[A-Za-z_]/.test(tk) ? P.chalk : P.bid;
+        K.text(ctx, tk, r.x0 + 56 + col * cw, yy, { size: o.size, weight: KW.test(tk) ? 700 : 500, font: K.FONT.mono, fill: c, align: "left" });
+        col += tk.length;
+      });
+    });
+    ctx.restore();
+  };
+
+  /* ---------- order book ladder: asks on top (coral), bids below (blue), the spread in sunshine ----------
+     levels: { asks: [[price, size], ...] best first, bids: [[price, size], ...] best first }
+     reveal 0..1 (levels pop from the middle out), spreadGlow 0..1 */
+  K.book = function (ctx, x, y, w, levels, opt) {
+    const o = Object.assign({ a: 1, reveal: 1, seed: 701, rowH: 62, size: 34, title: "", tab: P.ask, spreadGlow: 0, spreadText: "", rot: 0 }, opt || {});
+    const na = levels.asks.length, nb = levels.bids.length, h = (na + nb) * o.rowH + 74 + 58 + 40;
+    if (!enter(ctx, x, y, o.a, o.rot)) return null;
+    const r = K.panel(ctx, w, h, { tab: o.tab, title: o.title, seed: o.seed });
+    const maxS = Math.max(...levels.asks.concat(levels.bids).map((l) => l[1])), barW = (r.x1 - r.x0) * 0.5;
+    const midY = r.y0 + na * o.rowH + 37;
+    const row = (lv, k, side) => {
+      const order = k, g = clamp(o.reveal * Math.max(na, nb) - order, 0, 1); if (g <= 0) return;
+      const yy = side === "ask" ? midY - 37 - (k + 0.5) * o.rowH : midY + 37 + (k + 0.5) * o.rowH, e = K.E.back(g, 1.8);
+      const bw = (lv[1] / maxS) * barW * e, col = side === "ask" ? P.ask : P.bid;
+      K.shape(ctx, K.rrectPts(r.x1 - bw, yy - o.rowH * 0.36, Math.max(8, bw), o.rowH * 0.72, 10, 2), { fill: col, w: 3.5, boil: 0.4, seed: o.seed + (side === "ask" ? 10 : 40) + k, shade: { color: side === "ask" ? P.askDark : P.bidDark, dx: 0, dy: -6 } });
+      K.text(ctx, lv[0], r.x0 + 10, yy + 1, { size: o.size, weight: 700, font: K.FONT.mono, fill: side === "ask" ? P.askDark : P.bidDark, align: "left", alpha: g });
+      K.text(ctx, String(lv[1]), r.x1 - 14, yy + 1, { size: o.size * 0.8, weight: 700, font: K.FONT.mono, fill: "#ffffff", align: "right", alpha: g * (bw > 90 ? 1 : 0) });
+    };
+    levels.asks.forEach((lv, k) => row(lv, k, "ask"));
+    levels.bids.forEach((lv, k) => row(lv, k, "bid"));
+    /* spread band */
+    if (o.spreadGlow > 0) K.glow(ctx, 0, midY, w * 0.45, "rgba(255,220,90,0.9)", 0.35 * o.spreadGlow);
+    K.shape(ctx, K.rrectPts(r.x0 - 4, midY - 26, r.x1 - r.x0 + 8, 52, 18, 2), { fill: P.sun, w: 4, boil: 0.5, seed: o.seed + 90 });
+    if (o.spreadText) K.text(ctx, o.spreadText, 0, midY + 1, { size: o.size * 0.82, weight: 700, font: K.FONT.mono, fill: P.ink });
+    ctx.restore();
+    return { midY: y + midY };
+  };
+
+  /* ---------- badge: a big number in a sunshine bubble (bumps when it changes) ---------- */
+  K.badge = function (ctx, x, y, str, opt) {
+    const o = Object.assign({ a: 1, size: 64, seed: 751, color: P.sun, dark: P.sunDark, textColor: P.ink, bump: 0, font: K.FONT.mono }, opt || {});
+    const s = popS(o.a) * (1 + 0.12 * o.bump); if (s <= 0) return;
+    const w = K.textW(ctx, str, o.size, 700, o.font) + o.size * 1.1, h = o.size * 1.7;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(hs(o.seed, 1) * 0.05);
+    K.shape(ctx, K.rrectPts(-w / 2, -h / 2, w, h, h / 2, 4), { fill: o.color, w: 6, boil: 0.6, seed: o.seed, shade: { color: o.dark, dx: 0, dy: -12 }, drop: { dx: 8, dy: 10 } });
+    K.text(ctx, str, 0, 3, { size: o.size, weight: 700, font: o.font, fill: o.textColor });
+    ctx.restore();
+  };
+
+  /* ---------- title plate: a wavy-edged coral plate (u = grow 0..1). returns its box ---------- */
+  K.titlePlate = function (ctx, cx, cy, w, h, u, opt) {
+    const o = Object.assign({ seed: 801, fill: P.cream, shade: P.creamShade, rim: P.ask }, opt || {});
+    if (u <= 0) return null;
+    const e = K.E.back(clamp(u, 0, 1), 1.6), ww = w * e, hh = h * Math.min(1, e * 1.1);
+    const ring = (ox, oy, pad) => { const pts = []; const N = 40; for (let i = 0; i < N; i++) { const a = (i / N) * K.TAU, c = Math.cos(a), s = Math.sin(a); const k = Math.pow(Math.abs(c) ** 6 + Math.abs(s) ** 6, -1 / 6); pts.push([cx + ox + c * k * (ww / 2 + pad) + 6 * Math.sin(i * 2.3 + K.now * 1.6), cy + oy + s * k * (hh / 2 + pad) + 5 * Math.sin(i * 1.7 + K.now * 1.3)]); } return pts; };
+    K.shape(ctx, ring(0, 0, 26), { fill: o.rim, w: 6, boil: 0.8, seed: o.seed, drop: { dx: 14, dy: 18 }, shade: { color: P.askDark, dx: 0, dy: -14 } });
+    K.shape(ctx, ring(0, 0, 0), { fill: o.fill, w: 6, boil: 0.8, seed: o.seed + 1, shade: { color: o.shade, dx: 0, dy: -14 }, dots: { color: P.ask, alpha: 0.16, gap: 16, r: 3.6, ang: Math.PI / 2, from: 0.55 } });
+    return { x: cx - ww / 2, y: cy - hh / 2, w: ww, h: hh };
+  };
+})(MK);
+
+/* ============================================================
+   ENDCARD 05 LOGO: marketmaker.cc mark, path data copied from
+   marketmaker-cc-landing/public/logo.svg (1024 x 1024 viewBox, the path
+   space is translate(0, 1024) scale(0.1, -0.1)). Monochrome, any fill.
+   ============================================================ */
+const LOGO_D = "M4815 9964 c-22 -2 -92 -9 -155 -14 -1263 -113 -2506 -762 -3284 -1714 -595 -729 -940 -1541 -1053 -2481 -22 -188 -26 -815 -5 -990 74 -626 245 -1198 509 -1705 501 -960 1276 -1694 2272 -2154 645 -298 1302 -439 2046 -438 757 0 1402 147 2070 471 491 238 899 521 1264 876 813 789 1298 1766 1438 2896 22 181 25 761 5 964 -58 577 -200 1087 -439 1585 -113 236 -184 361 -334 585 -180 270 -349 476 -574 701 -368 369 -746 646 -1200 880 -563 290 -1104 452 -1745 520 -146 15 -715 28 -815 18z m837 -559 c1134 -135 2191 -733 2857 -1615 188 -249 385 -590 511 -885 132 -306 245 -719 294 -1071 37 -264 48 -690 26 -939 -123 -1364 -861 -2559 -2003 -3243 -299 -179 -487 -266 -777 -362 -836 -277 -1714 -292 -2579 -44 -119 35 -322 102 -330 110 -2 2 52 63 120 135 519 553 1099 890 1714 996 73 12 159 17 320 18 300 0 359 -12 924 -184 129 -39 263 -78 298 -86 187 -43 308 9 510 218 161 168 253 322 253 425 0 76 -23 127 -156 349 -209 348 -358 662 -426 897 -15 54 -39 167 -53 250 -14 83 -39 196 -57 250 -83 264 -268 406 -580 447 -54 7 -95 16 -92 20 9 16 120 50 187 59 152 19 326 -17 779 -159 531 -166 733 -192 993 -126 178 45 317 127 445 261 71 76 177 230 165 242 -2 3 -26 -9 -52 -26 -64 -41 -147 -77 -252 -109 -78 -24 -102 -27 -256 -27 -139 -1 -191 3 -285 22 -203 41 -423 109 -725 227 -654 254 -862 292 -1215 220 -188 -38 -298 -48 -371 -35 -35 6 -128 38 -208 70 -266 106 -461 155 -716 181 -163 16 -480 6 -658 -21 -265 -40 -601 -137 -916 -265 -86 -35 -244 -99 -351 -143 -205 -83 -335 -122 -435 -129 -71 -5 -90 5 -81 40 8 33 99 147 209 262 48 50 87 95 87 100 0 20 -24 35 -58 35 -49 0 -145 -54 -317 -180 -237 -173 -308 -199 -451 -166 -151 34 -520 172 -614 228 -63 39 -88 70 -96 119 -10 59 13 113 101 236 171 240 249 360 299 463 l51 105 0 210 c1 265 10 301 128 475 102 152 288 355 495 543 l74 66 -59 58 c-68 67 -88 119 -81 208 6 68 40 115 118 162 89 54 172 77 280 76 52 0 120 -5 152 -12 l56 -12 144 75 c268 140 477 214 835 296 304 69 480 127 700 230 208 98 430 246 593 394 l95 87 155 -5 c85 -3 212 -13 282 -21z m1016 -5082 c85 -41 130 -109 157 -240 8 -37 13 -68 12 -69 -1 -2 -48 19 -103 46 -121 59 -139 79 -136 164 0 32 -5 76 -12 97 -14 39 -13 40 8 33 11 -3 45 -17 74 -31z M2243 7035 c-92 -42 -196 -156 -205 -225 -4 -34 23 -37 94 -10 97 36 180 131 202 233 6 23 3 27 -16 27 -13 0 -47 -11 -75 -25z";
+
+/* ============================================================
+   ENDCARD 10 COPY: every string on the card, the channel list, the
+   contacts and their glyphs. The only file to edit when a link changes.
+   Chinese glyphs are subset into assets/fonts by tools/fetch_cjk.py,
+   which reads this file: re-run it after changing any Chinese text.
+   ============================================================ */
+const COPY = {
+  en: { head: "Thanks for watching — subscribe!", next: "Watch next", sub: "Subscribe" },
+  ru: { head: "Спасибо за просмотр — подписывайтесь!", next: "Смотрите дальше", sub: "Подписаться" },
+  "zh-CN": { head: "感谢观看，欢迎订阅！", next: "下一个视频", sub: "订阅" },
+  "zh-TW": { head: "感謝觀看，歡迎訂閱！", next: "下一部影片", sub: "訂閱" },
+};
+
+/* YouTube channels, in sign order: top-left, top-right, bottom-left, bottom-right */
+const CHANNELS = [
+  { lang: "en", label: "English", handle: "@marketmaker-cc" },
+  { lang: "zh-CN", label: "简体中文", handle: "@marketmaker-zh" },
+  { lang: "zh-TW", label: "繁體中文", handle: "@marketmaker-zh-hant" },
+  { lang: "ru", label: "Русский", handle: "@marketmaker-ru" },
+];
+
+/* glyphs: 24 x 24 SVG path data, stroked (s) and/or filled (f) in cream on a coloured disc */
+const ICON = {
+  web: { s: "M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z M3.4 9h17.2 M3.4 15h17.2 M12 3c-3.4 3.4-3.4 14.6 0 18 M12 3c3.4 3.4 3.4 14.6 0 18" },
+  mail: { s: "M3.5 6h17v12h-17z M4 6.6l8 6.4l8-6.4" },
+  plane: { s: "M20.5 4.2L3.3 11l5.4 2.1l9.1-6.3l-6.9 7.6v5.3l3-3.4l3.9 3z" },
+  x: { s: "M5 4.5l14 15 M19 4.5l-14 15" },
+  chat: { s: "M6.2 7.3c3.7-1.7 7.9-1.7 11.6 0c1.7 2.6 2.5 5.5 2.6 8.7c-1.7 1.3-3.3 2.1-5 2.5l-1-1.9c-1.6.4-3.2.4-4.8 0l-1 1.9c-1.7-.4-3.3-1.2-5-2.5c.1-3.2.9-6.1 2.6-8.7z", f: "M9.4 11.4a1.5 1.7 0 1 0 0.01 0z M14.6 11.4a1.5 1.7 0 1 0 0.01 0z" },
+  branch: { s: "M7 4a2 2 0 1 0 0.01 0z M7 16a2 2 0 1 0 0.01 0z M17 6.5a2 2 0 1 0 0.01 0z M7 8v8 M17 10.5c0 4.2-10 2-10 5.5" },
+  f: { s: "M15.6 4.2h-2.3a3 3 0 0 0-3 3V20.5 M7.4 11.2h7.4" },
+};
+
+/* contacts from the marketmaker.cc footer; tag = small pill after the text.
+   Order = reading order of the two panel rows (balanced widths): web, email, X,
+   Discord / both Telegrams, GitHub, Facebook. */
+const CONTACTS = [
+  { icon: "web", color: "kelp", text: "marketmaker.cc" },
+  { icon: "mail", color: "coral", text: "suenot@marketmaker.cc" },
+  { icon: "x", color: "ink", text: "x.com/suenot" },
+  { icon: "chat", color: "fan", text: "discord.com/invite/2PtuMAg" },
+  { icon: "plane", color: "bid", text: "t.me/suenot" },
+  { icon: "plane", color: "bid", text: "t.me/suenot_dev", tag: "RU" },
+  { icon: "branch", color: "inkSoft", text: "github.com/suenot" },
+  { icon: "f", color: "fishB", text: "facebook.com/soloviov.evgeniy" },
+];
+
+/* ============================================================
+   ENDCARD 20 SCENE: layout, drawing and the timeline.
+   One canvas, drawn as a pure function of t by the shared Coral Exchange
+   kit (collections/marketmaker-general/style/kit). 1920 x 1080, 19 s.
+
+   Layout (screen px):
+     header      y  40-130  logo + "marketmaker.cc"; fish swim on the right
+     headline    y 150-240  cream banner, localized (variable `lang`)
+     channels    x  40-1110 four YouTube signs held by Otto the octopus,
+                            the sign for `lang` is sun-yellow and bobs
+     YouTube     x 1150-1880 two calm slots for the end-screen elements:
+                            NEXT  video 640 x 360 at (1190, 290)
+                            SUB   subscribe circle r 116 at (1510, 770)
+                            nothing moves inside or over them after 2.4 s
+     contacts    y 900-1056 cream panel, eight chips in two rows
+   Story: 0-0.9 ink cloud clears; 0.2-2.6 everything pops in;
+   2.6-18.1 idle (waves, blinks, bobbing sign, fish); 18.1-19 fade out.
+   ============================================================ */
+const K = MK, P = K.P;
+const DUR = 19.0;
+const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+const ap = (t, t0, d) => K.inv(t0, t0 + (d || 0.4), t);   /* appear 0..1 from t0 */
+
+/* ---------- variables ---------- */
+const VARS = Object.assign({ lang: "en" },
+  (window.__hyperframes && window.__hyperframes.getVariables && window.__hyperframes.getVariables()) || {});
+const LANG = COPY[VARS.lang] ? VARS.lang : "en";
+const T = COPY[LANG];
+const CJK = { "zh-CN": '"EC SC"', "zh-TW": '"EC TC"' };
+const cjkFor = (lang) => CJK[lang] || '"EC SC"';
+const FT = (lang) => `"Manrope", ${cjkFor(lang)}, sans-serif`;      /* body text */
+const FD = (lang) => `"Unbounded", ${cjkFor(lang)}, sans-serif`;    /* display */
+
+/* ---------- layout ---------- */
+const SIGN_W = 440, SIGN_H = 134;
+const SIGNS = [
+  { x: 40, y: 292, side: -1 }, { x: 670, y: 292, side: 1 },
+  { x: 40, y: 468, side: -1 }, { x: 670, y: 468, side: 1 },
+];
+const NEXT = { x: 1190, y: 290, w: 640, h: 360 };
+const SUB = { x: 1510, y: 770, r: 116 };
+const PANEL = { x: 40, y: 900, w: 1840, h: 156 };
+const OCTO = { x: 575, y: 884, s: 0.74 };
+const HI = CHANNELS.findIndex((c) => c.lang === LANG);
+
+/* ---------- small drawing helpers ---------- */
+const pathCache = {};
+const path = (d) => pathCache[d] || (pathCache[d] = new Path2D(d));
+/* fit a string into maxW by shrinking the size, never below minSize */
+function fitSize(str, size, weight, font, maxW, minSize) {
+  const w = K.textW(ctx, str, size, weight, font);
+  return w <= maxW ? size : Math.max(minSize || 32, Math.floor(size * maxW / w));
+}
+/* a 24 x 24 glyph on a coloured disc */
+function glyph(x, y, r, name, color, a) {
+  const g = ICON[name];
+  K.shape(ctx, K.ellipsePts(x, y, r, r, 16), { fill: P[color], w: 4, boil: 0.35, seed: 900 + name.length * 7, alpha: a });
+  ctx.save(); ctx.globalAlpha *= a == null ? 1 : a;
+  const k = (r * 1.25) / 24;
+  ctx.translate(x - 12 * k, y - 12 * k); ctx.scale(k, k);
+  ctx.strokeStyle = P.cream; ctx.fillStyle = P.cream; ctx.lineWidth = 2.3; ctx.lineJoin = "round"; ctx.lineCap = "round";
+  if (g.s) ctx.stroke(path(g.s));
+  if (g.f) ctx.fill(path(g.f));
+  ctx.restore();
+}
+/* generic play-button glyph (rounded coral box + white triangle) */
+function playGlyph(x, y, w, a) {
+  const h = w * 0.7;
+  K.shape(ctx, K.rrectPts(x - w / 2, y - h / 2, w, h, h * 0.3, 3), { fill: P.ask, w: 4, boil: 0.35, seed: 931, alpha: a });
+  K.shape(ctx, [[x - w * 0.13, y - h * 0.25], [x + w * 0.2, y], [x - w * 0.13, y + h * 0.25]], { fill: "#ffffff", stroke: null, w: 0, boil: 0.2, seed: 932, sharp: true, alpha: a });
+}
+function logo(x, y, size, color) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(size / 1024, size / 1024); ctx.translate(0, 1024); ctx.scale(0.1, -0.1);
+  ctx.fillStyle = color; ctx.fill(path(LOGO_D)); ctx.restore();
+}
+/* pop: scale around a pivot with a back ease */
+function pop(a, px, py, fn) {
+  if (a <= 0) return;
+  const s = a >= 1 ? 1 : K.E.back(a, 2.0);
+  ctx.save(); ctx.translate(px, py); ctx.scale(s, s); ctx.translate(-px, -py);
+  ctx.globalAlpha *= K.clamp(a * 3, 0, 1); fn(); ctx.restore();
+}
+
+/* ---------- sign geometry over time (the highlighted sign bobs) ---------- */
+function signAt(i, t) {
+  const S = SIGNS[i], hi = i === HI;
+  const bob = hi ? 9 * Math.sin((t - 2.6) * 2.4) * K.ss(2.4, 3.2, t) : 3 * Math.sin(t * 1.3 + i * 1.7);
+  const tilt = hi ? 0.015 * Math.sin((t - 2.6) * 1.2) : 0;
+  return { x: S.x, y: S.y + bob, tilt, side: S.side, a: ap(t, 0.8 + i * 0.14, 0.5) };
+}
+/* where Otto's arm ends: hidden just behind the edge facing him */
+const grip = (g) => [g.side < 0 ? g.x + SIGN_W - 44 : g.x + 44, g.y + SIGN_H * 0.6];
+
+function drawSign(i, t) {
+  const c = CHANNELS[i], g = signAt(i, t), hi = i === HI;
+  const cx = g.x + SIGN_W / 2, cy = g.y + SIGN_H / 2;
+  pop(g.a, cx, cy + 40, () => {
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(g.tilt); ctx.translate(-cx, -cy);
+    K.shape(ctx, K.rrectPts(g.x, g.y, SIGN_W, SIGN_H, 26, 3), {
+      fill: hi ? P.sun : P.cream, w: hi ? 6 : 5, boil: 0.5, seed: 400 + i * 11,
+      shade: { color: hi ? P.sunDark : P.creamShade, dx: 0, dy: -10 }, drop: { dx: 0, dy: 10 },
+    });
+    /* language tab on the top edge */
+    const lw = K.textW(ctx, c.label, 32, 800, FT(c.lang)) + 40, tx = g.x + 22, ty = g.y - 24;
+    K.shape(ctx, K.rrectPts(tx, ty, lw, 46, 23, 3), { fill: hi ? P.ask : P.ink, w: 4, boil: 0.4, seed: 450 + i * 5 });
+    K.text(ctx, c.label, tx + lw / 2, ty + 24, { size: 32, weight: 800, font: FT(c.lang), fill: "#ffffff" });
+    /* row 1: play glyph + youtube.com/ */
+    playGlyph(g.x + 44, g.y + 52, 46);
+    K.text(ctx, "youtube.com/", g.x + 80, g.y + 52, { size: 32, weight: 600, font: FT("en"), fill: hi ? P.ink : P.inkSoft, align: "left" });
+    /* row 2: the handle, as large as fits */
+    const hs = fitSize(c.handle, 40, 800, FT("en"), SIGN_W - 44, 32);
+    K.text(ctx, c.handle, g.x + 22, g.y + 102, { size: hs, weight: 800, font: FT("en"), align: "left" });
+    ctx.restore();
+  });
+  if (hi && g.a >= 1) {
+    const sp = (t - 2.6) % 3.2;
+    K.sparkle(ctx, g.x + SIGN_W - 14, g.y + 4, 22 * Math.sin(K.clamp(sp / 0.7, 0, 1) * Math.PI), 1, 77);
+    K.sparkle(ctx, g.x + 18, g.y + SIGN_H - 6, 15 * Math.sin(K.clamp((sp - 0.35) / 0.6, 0, 1) * Math.PI), 1, 78);
+  }
+}
+
+/* ---------- Otto: four arms hold the signs, two wave, two rest ---------- */
+const HOLD = { 2: 0, 1: 2, 5: 1, 6: 3 };   /* arm index -> sign index */
+function octoPose(t) {
+  const rise = K.E.back(ap(t, 0.3, 0.7), 1.6), y = OCTO.y + (1 - rise) * 430;
+  const toLocal = (p) => [(p[0] - OCTO.x) / OCTO.s, (p[1] - y) / OCTO.s];
+  const arms = [];
+  for (let i = 0; i < 8; i++) {
+    if (HOLD[i] != null) {
+      const g = signAt(HOLD[i], t), q = toLocal(grip(g)), u = K.E.out3(ap(t, 0.8 + HOLD[i] * 0.14, 0.5));
+      const rest = K.OCTO_REST[i];
+      arms[i] = u <= 0 ? null : { x: K.lerp(rest[0], q[0], u), y: K.lerp(rest[1], q[1], u), bend: (i < 4 ? -1 : 1) * 26, curl: 0 };
+    } else if (i === 0 || i === 7) {
+      /* waves: an envelope of hello-bursts, the outer arms swing up and out */
+      const sd = i === 0 ? -1 : 1;
+      const burst = Math.max(K.ss(1.6, 2.2, t) * (1 - K.ss(4.4, 5.0, t)), K.ss(8.6, 9.1, t) * (1 - K.ss(10.6, 11.2, t)), K.ss(14.4, 14.9, t) * (1 - K.ss(16.4, 17.0, t)));
+      const sw = Math.sin(t * 7.0 + (sd > 0 ? 0 : 1.2));
+      arms[i] = { x: sd * (318 + 26 * burst * sw), y: K.lerp(-60, -330 - 40 * sw, burst), bend: sd * (30 - 40 * burst), curl: sd * (1.4 + 0.8 * burst * sw) };
+    } else arms[i] = null;
+  }
+  const lookTo = HI < 0 ? [0, 0] : [SIGNS[HI].side * 0.8, SIGNS[HI].y < 400 ? -0.7 : -0.2];
+  const lk = K.ss(3.0, 3.5, t) * (1 - K.ss(6.0, 6.5, t)) + K.ss(12.0, 12.5, t) * (1 - K.ss(14.0, 14.5, t));
+  const toSlot = K.ss(6.8, 7.3, t) * (1 - K.ss(8.4, 8.9, t));   /* glance at the next-video slot */
+  return {
+    y, arms,
+    st: {
+      blink: K.blinkAt(t, 11), mouth: t < 2.6 || (t > 8.6 && t < 11) ? "grin" : "smile",
+      look: [K.lerp(0, lookTo[0], lk) + toSlot, K.lerp(0, lookTo[1], lk) - 0.3 * toSlot],
+      glint: K.inv(3.2, 3.8, t) < 1 ? K.inv(3.2, 3.8, t) : K.inv(13.0, 13.6, t),
+      squash: 0.05 * Math.sin(t * 2.2) + (1 - rise) * -0.2, wave: 0.8, seed: 700, arms,
+      brow: 0.3 * K.ss(1.6, 2.0, t) * (1 - K.ss(3.0, 3.4, t)),
+    },
+  };
+}
+/* ---------- header ---------- */
+function drawHeader(t) {
+  const a = ap(t, 0.5, 0.5);
+  pop(a, 110, 86, () => {
+    K.shape(ctx, K.ellipsePts(110, 86, 50, 50, 20), { fill: P.cream, w: 5, boil: 0.4, seed: 601, shade: { color: P.creamShade, dx: -6, dy: -6 }, drop: { dx: 0, dy: 7 } });
+    logo(110 - 40, 86 - 40, 80, P.ink);
+  });
+  const aw = ap(t, 0.6, 0.5);
+  if (aw > 0) {
+    ctx.save(); ctx.globalAlpha *= K.clamp(aw * 2, 0, 1);
+    const dx = (1 - K.E.out3(aw)) * -40;
+    K.text(ctx, "marketmaker.cc", 186 + dx, 90, { size: 52, weight: 900, font: FD("en"), fill: P.cream, stroke: P.ink, w: 12, align: "left" });
+    ctx.restore();
+  }
+  /* headline banner: unrolls from the left */
+  const ab = ap(t, 0.75, 0.6);
+  if (ab > 0) {
+    const size = fitSize(T.head, 48, 900, FD(LANG), 1740, 34);
+    const tw = K.textW(ctx, T.head, size, 900, FD(LANG)), w = tw + 72, x = 40, y = 152, h = 88;
+    const u = K.E.out3(ab);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(x - 20, y - 20, (w + 40) * u, h + 50); ctx.clip();
+    K.shape(ctx, K.rrectPts(x, y, w, h, 24, 3), { fill: P.cream, w: 5, boil: 0.5, seed: 611, shade: { color: P.creamShade, dx: 0, dy: -10 }, drop: { dx: 0, dy: 9 } });
+    K.text(ctx, T.head, x + 36, y + h / 2 + 2, { size, weight: 900, font: FD(LANG), align: "left" });
+    ctx.restore();
+  }
+}
+
+/* ---------- YouTube end-screen slots (calm after 2.4 s) ---------- */
+function drawSlots(t) {
+  const ab = ap(t, 0.3, 0.6);
+  if (ab <= 0) return;
+  ctx.save(); ctx.globalAlpha *= ab;
+  K.shape(ctx, K.rrectPts(1150, 268, 730, 620, 34, 3), { fill: "rgba(14,42,92,0.55)", stroke: P.boardEdge, w: 5, boil: 0.3, seed: 621 });
+  ctx.restore();
+  const a1 = ap(t, 1.5, 0.5), a2 = ap(t, 1.7, 0.5);
+  if (a1 > 0) {
+    ctx.save(); ctx.globalAlpha *= a1;
+    const s = 0.94 + 0.06 * K.E.out3(a1), cx = NEXT.x + NEXT.w / 2, cy = NEXT.y + NEXT.h / 2;
+    ctx.translate(cx, cy); ctx.scale(s, s); ctx.translate(-cx, -cy);
+    ctx.fillStyle = "rgba(242,248,255,0.07)"; ctx.beginPath(); ctx.roundRect(NEXT.x, NEXT.y, NEXT.w, NEXT.h, 18); ctx.fill();
+    ctx.setLineDash([22, 16]); ctx.lineWidth = 5; ctx.strokeStyle = "rgba(242,248,255,0.55)"; ctx.stroke(); ctx.setLineDash([]);
+    playGlyph(cx, cy - 34, 96, 0.9);
+    K.text(ctx, T.next, cx, cy + 52, { size: fitSize(T.next, 40, 800, FT(LANG), NEXT.w - 60, 32), weight: 800, font: FT(LANG), fill: P.chalk });
+    ctx.restore();
+  }
+  if (a2 > 0) {
+    ctx.save(); ctx.globalAlpha *= a2;
+    const s = 0.94 + 0.06 * K.E.out3(a2);
+    ctx.translate(SUB.x, SUB.y); ctx.scale(s, s); ctx.translate(-SUB.x, -SUB.y);
+    ctx.fillStyle = "rgba(242,248,255,0.07)"; ctx.beginPath(); ctx.arc(SUB.x, SUB.y, SUB.r, 0, K.TAU); ctx.fill();
+    ctx.setLineDash([18, 14]); ctx.lineWidth = 5; ctx.strokeStyle = "rgba(242,248,255,0.55)"; ctx.stroke(); ctx.setLineDash([]);
+    K.text(ctx, T.sub, SUB.x, SUB.y + 2, { size: fitSize(T.sub, 36, 800, FT(LANG), SUB.r * 1.8, 32), weight: 800, font: FT(LANG), fill: P.chalk });
+    ctx.restore();
+  }
+}
+
+/* ---------- contacts panel: chips wrap into two centred rows ---------- */
+const CHIP = { r: 25, gap: 12, pad: 46, size: 32 };
+let chipRows = null;
+function layoutChips() {
+  const items = CONTACTS.map((c) => {
+    const tw = K.textW(ctx, c.text, CHIP.size, 800, FT("en"));
+    const tagW = c.tag ? K.textW(ctx, c.tag, CHIP.size, 800, FT("en")) + 26 + 10 : 0;
+    return Object.assign({ tw, tagW, w: CHIP.r * 2 + CHIP.gap + tw + tagW }, c);
+  });
+  /* two rows: pick the split that minimises the wider row, then shrink the gap to fit */
+  const maxW = PANEL.w - 60, sum = (r) => r.reduce((q, it) => q + it.w, 0);
+  let best = null;
+  for (let k = 1; k < items.length; k++) {
+    const r = [items.slice(0, k), items.slice(k)], m = Math.max(sum(r[0]) + (r[0].length - 1) * CHIP.pad, sum(r[1]) + (r[1].length - 1) * CHIP.pad);
+    if (!best || m < best.m) best = { m, r };
+  }
+  const rows = best.r;
+  const padOf = (r) => Math.min(CHIP.pad, (maxW - sum(r)) / Math.max(1, r.length - 1));
+  const wOf = (r) => sum(r) + (r.length - 1) * padOf(r);
+  let n = 0;
+  rows.forEach((r, ri) => {
+    let x = PANEL.x + (PANEL.w - wOf(r)) / 2;
+    r.forEach((it) => { it.x = x; it.y = PANEL.y + 44 + ri * 70; it.n = n++; x += it.w + padOf(r); });
+  });
+  chipRows = rows;
+}
+function drawPanel(t) {
+  const a = ap(t, 0.15, 0.6);
+  if (a <= 0) return;
+  const dy = (1 - K.E.out3(a)) * 220;
+  ctx.save(); ctx.translate(0, dy);
+  K.shape(ctx, K.rrectPts(PANEL.x, PANEL.y, PANEL.w, PANEL.h, 30, 3), { fill: P.cream, w: 5, boil: 0.5, seed: 631, shade: { color: P.creamShade, dx: 0, dy: -12 }, drop: { dx: 0, dy: 10 } });
+  if (!chipRows) layoutChips();
+  chipRows.forEach((r) => r.forEach((it) => {
+    const ac = ap(t, 1.2 + it.n * 0.08, 0.4);
+    if (ac <= 0) return;
+    /* one chip at a time gets a gentle nod (a slow roll call through the list) */
+    const k = Math.floor((t - 3) / 1.6), nod = t > 3 && (k % CONTACTS.length) === it.n ? Math.sin(((t - 3) % 1.6) / 1.6 * Math.PI) : 0;
+    pop(ac, it.x + CHIP.r, it.y, () => {
+      ctx.save(); ctx.translate(it.x + CHIP.r, it.y); ctx.rotate(-0.12 * nod); ctx.scale(1 + 0.1 * nod, 1 + 0.1 * nod); ctx.translate(-(it.x + CHIP.r), -it.y);
+      glyph(it.x + CHIP.r, it.y, CHIP.r, it.icon, it.color);
+      ctx.restore();
+      const tx = it.x + CHIP.r * 2 + CHIP.gap;
+      K.text(ctx, it.text, tx, it.y + 1, { size: CHIP.size, weight: 800, font: FT("en"), align: "left" });
+      if (it.tag) {
+        const px = tx + it.tw + 10, pw = it.tagW - 10;
+        K.shape(ctx, K.rrectPts(px, it.y - 21, pw, 42, 21, 3), { fill: P.bid, w: 3.5, boil: 0.3, seed: 641 });
+        K.text(ctx, it.tag, px + pw / 2, it.y + 1, { size: CHIP.size, weight: 800, font: FT("en"), fill: "#ffffff" });
+      }
+    });
+  }));
+  ctx.restore();
+}
+
+/* ---------- world ---------- */
+function drawWorld(t) {
+  K.ocean(ctx, { depth: 0.45 });
+  K.rays(ctx, { a: 0.8, x: 700, spread: 1500 });
+  K.applyCam(ctx, 1);
+  K.kelp(ctx, 1120, 960, 360, { seed: 4, sway: 0.6 });
+  K.kelp(ctx, 26, 960, 520, { seed: 8, sway: 0.8 });
+  K.sand(ctx, 905, {});
+  K.coralFan(ctx, 1030, 915, 0.55, {});
+  K.brainCoral(ctx, 120, 925, 0.6, {});
+  /* fish cross the empty top-right water, one after another (never over the slots) */
+  [[0.4, 12, 96, "Y", 0.55], [6.0, 13, 118, "T", 0.5], [11.4, 12, 92, "O", 0.55]].forEach(([t0, d, y, sp, s], k) => {
+    const u = (t - t0) / d; if (u < 0 || u > 1) return;
+    const x = K.lerp(2020, 780, u);
+    ctx.save(); ctx.globalAlpha *= K.clamp((x - 780) / 120, 0, 1);
+    K.fish(ctx, x, y + 8 * Math.sin(t * 2 + k), s, { species: sp, dir: -1 });
+    ctx.restore();
+  });
+  K.bubbles(ctx, { n: 14, x0: 0, x1: 1110, y0: 900, h: 760, speed: 60, rMax: 14, seed: 33 });
+}
+
+function render(t) {
+  K.begin(ctx, t, { x: 960, y: 540, z: 1 });
+  drawWorld(t);
+  K.screen(ctx);
+  drawSlots(t);
+  const o = octoPose(t);
+  K.octo(ctx, OCTO.x, o.y, OCTO.s, o.st);
+  for (let i = 0; i < 4; i++) drawSign(i, t);
+  drawPanel(t);
+  drawHeader(t);
+  /* bubble hello when Otto lands */
+  K.bubbleBurst(ctx, OCTO.x, OCTO.y - 200, t - 0.9, { n: 12, r: 220, size: 14 });
+  /* in: the octopus ink cloud clears; out: fade to deep navy */
+  K.inkCloud(ctx, OCTO.x, 760, Math.pow(1 - ap(t, 0, 0.8), 2), { maxR: 1900 });
+  const out = K.ss(18.1, 19.0, t);
+  if (out > 0) { K.screen(ctx); ctx.fillStyle = `rgba(10,18,48,${out})`; ctx.fillRect(0, 0, 1920, 1080); }
+}
+
+const TL = gsap.timeline({ paused: true });
+const drv = { _t: 0 };
+Object.defineProperty(drv, "t", { get() { return this._t; }, set(v) { this._t = v; render(v); } });
+TL.to(drv, { t: DUR, duration: DUR, ease: "none" }, 0);
+render(0);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { chipRows = null; render(drv._t); });
+window.__timelines["main"] = TL;
+
+})();
+    </script>
+  </body>
+</html>
