@@ -26,6 +26,12 @@
 - Pilot episode `complex-arbitrage-rust/episodes/complex-arbitrage-graph-algorithms/en/episode/`: framework done (tools/, lib/, SCENE_GUIDE.md, assemble.py); slides 1-2 built (7 scenes, preview_en.mp4). In progress: slides 3-15 (4 packages), full render, and extraction of the framework into `collections/_framework/` (collection-agnostic, HOSTS.md adapter).
 - Article fixes found during prep: pushed to marketmaker-cc-landing (8 articles x 22 langs).
 
+## Episode engine
+- Shared, collection-agnostic engine: `collections/_episode/` (README = builder guide, tools: init_episode.py, new_scene.sh, snap.sh, render_scene.sh, assemble.py).
+- Per collection a small layer in `<collection>/style/episode/` (65_host.js with HOST.duo, 66_signs.js, template); crab layer is the model. Each collection needs one "collection layer" agent (~1 h) before scene builders.
+- Hosts default s 1.55 (~30% of frame), must point/carry/react every 10-15 s.
+- Pilot remaining work: packages A s03-s04, B s05-s06, C s07-s10, D s11-s15, E re-stage s01a-s02c with big hosts.
+
 ## Next steps
 1. Finish pilot episode, show user the full episode_en.mp4.
 2. With `_framework/` + sidekicks ready: one episode director agent per episode (spawns scene helpers), EN first.
