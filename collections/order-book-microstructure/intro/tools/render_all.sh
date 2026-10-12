@@ -12,6 +12,6 @@ render() { # lang title
 }
 render en "Order Book &|Market Microstructure"
 render ru "Стакан и|микроструктура рынка"
-render zh-CN "订单簿与市场微观结构"
-render zh-TW "訂單簿與市場微觀結構"
+render zh-CN "订单簿与|市场微观结构"
+render zh-TW "訂單簿與|市場微觀結構"
 ls -la renders
