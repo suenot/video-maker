@@ -160,3 +160,6 @@ To resume, in order:
 
    After the packages, run `assemble.py` (full, with the end card), make the whole-episode contact sheet, and log a review round in the pilot's REVIEW.md.
 3. **Other collections:** for each collection, one collection-layer agent writes `<collection>/style/episode/` (see section 2.1, with the crab layer as the model) and does the smoke test. Then `init_episode.py` for each prepped episode, then scene builders in parallel (sections 3-7), all renders through `heavy_slot.sh`.
+
+## Subagent model rule (user, 2026-10-12)
+Every subagent you spawn (Agent tool) must pass `model: "sonnet"` and `effort: "medium"` (Sonnet 5.5, medium effort).

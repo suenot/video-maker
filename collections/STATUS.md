@@ -43,3 +43,5 @@
 - Briefs: INTRO_BRIEF.md, EPISODE_PREP_BRIEF.md, SIDEKICK_BRIEF.md.
 - Heavy jobs via `collections/tools/heavy_slot.sh <whisper|render> <cmd>` (2 whisper, 3 render slots).
 - Commit path-scoped: `git commit -m ... -- <paths>`; push with `git pull --rebase --autostash && git push`.
+
+- Subagent model rule (user): spawn all subagents with model sonnet (Sonnet 5.5), effort medium.
