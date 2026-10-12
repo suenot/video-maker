@@ -1,21 +1,21 @@
 /* ============================================================
-   INTRO 50 TITLE (bar 38 -> end): "Marketmaker! Marketmaker of the sand!"
+   INTRO 50 TITLE (bar 16 -> end): "Marketmaker! Marketmaker of the sand!"
    A wavy cream plate pops on the downbeat; the title letters (DOM, crisp,
    per-language) drop in on 32nd notes; the subtitle sits on a navy pill.
    Otto waves the eight-card fan below, fish swim behind, the last note winks.
    ============================================================ */
-const PLATE = { cx: 960, cy: 292, w: 1480, h: 340 };
-const T_PLATE = at(38, 0), T_LETTERS = at(38, 0.5), T_SUB = at(39, 0), T_WINK = at(40, 0);
+const PLATE = { cx: 960, cy: 345, w: 1300, h: 330 }; /* clear of the logo in the top-right corner */
+const T_PLATE = at(16, 0), T_LETTERS = at(16, 0.5), T_SUB = at(17, 0), T_WINK = at(18, 0);
 let SUB_W = 0;
 
 function titleSizes() {
   const w0 = K.textW(ctx, TITLE_LINES[0], 100, 900, '"Unbounded", "CJK SC", "CJK TC", sans-serif');
-  const s0 = Math.min(150, Math.floor((1240 / Math.max(1, w0)) * 100));
+  const s0 = Math.min(140, Math.floor((1140 / Math.max(1, w0)) * 100));
   let s1 = 0;
   if (TITLE_LINES[1]) {
     const f1 = IS_CJK ? (LANG === "zh-TW" ? '"Manrope", "CJK TC", sans-serif' : '"Manrope", "CJK SC", sans-serif') : '"Manrope", sans-serif';
     const w1 = K.textW(ctx, TITLE_LINES[1], 100, IS_CJK ? 900 : 800, f1);
-    s1 = Math.min(IS_CJK ? 66 : 58, Math.floor((1120 / Math.max(1, w1)) * 100));
+    s1 = Math.min(IS_CJK ? 66 : 56, Math.floor((1060 / Math.max(1, w1)) * 100));
     SUB_W = (w1 * s1) / 100;
   }
   return [s0, s1];

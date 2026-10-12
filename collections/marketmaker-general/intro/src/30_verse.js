@@ -1,5 +1,5 @@
 /* ============================================================
-   INTRO 30 VERSE: chorus 1 + verse (bars 0 - 20), all on the reef set.
+   INTRO 30 CHORUS: intro + chorus (bars 0 - 12), all on the reef set.
    Scenes are pure functions of t. Arm poses come from armTrack():
    keys [[t0, target | null, dur]] blend from the previous pose with a
    small back-ease overshoot; null = back to the resting fan.
@@ -65,7 +65,7 @@ function sc1(t) {
 }
 
 /* ---------- SC2 "Buy low, sell high" (bars 4 - 6): bid card low, ask card high ---------- */
-const cam2 = camTrack([[at(4), { x: 960, y: 640, z: 1.28 }], [at(6), { x: 960, y: 600, z: 1.36 }]]);
+const cam2 = camTrack([[at(4), { x: 960, y: 640, z: 1.28 }], [at(6), { x: 960, y: 620, z: 1.32 }]]);
 function sc2(t) {
   drawReef(t, cam2(t), {
     traffic: 4,
@@ -73,14 +73,14 @@ function sc2(t) {
       mouth: "grin", glint: K.inv(at(5, 2), at(5, 2) + 0.4, t), wink: t > at(5, 0) && t < at(5, 0.8) ? Math.sin(K.inv(at(5, 0), at(5, 0.8), t) * Math.PI) : 0,
       look: t < at(4, 2) ? [-0.8, 0.6] : [0.8, -0.6],
       arms: [null, armTrack(t, 1, [[at(4, 0), { x: -360, y: -90, bend: -30, card: { kind: "bid", text: BID, s: 1.05, a: ap(t, at(4, 0)), dy: -46 } }]]), null, null, null, null,
-        armTrack(t, 6, [[at(4, 2), { x: 370, y: -560, bend: 40, card: { kind: "ask", text: ASK, s: 1.05, a: ap(t, at(4, 2)), dy: -46 } }]]), null],
+        armTrack(t, 6, [[at(4, 2), { x: 340, y: -440, bend: 40, card: { kind: "ask", text: ASK, s: 1.05, a: ap(t, at(4, 2)), dy: -46 } }]]), null],
     }),
     front: () => {
       /* "low" and "high": a beat-bouncing arrow next to each card */
       K.applyCam(ctx, 1);
       const a1 = K.popS(ap(t, at(4, 1))), a2 = K.popS(ap(t, at(4, 3)));
       if (a1 > 0) arrowBadge(OCT.x - 600, OCT.y - 150 + 12 * K.pulse(t, 1, 5), a1, false);
-      if (a2 > 0) arrowBadge(OCT.x + 610, OCT.y - 620 - 12 * K.pulse(t, 1, 5), a2, true);
+      if (a2 > 0) arrowBadge(OCT.x + 600, OCT.y - 500 - 12 * K.pulse(t, 1, 5), a2, true);
     },
   });
 }
@@ -166,108 +166,6 @@ function sc5(t) {
         K.dot(ctx, DESK.x + Math.cos(a) * r * 1.3, DESK.y + 60 + Math.sin(a) * r * 0.35, (16 + 14 * K.hash(i, 8)) * (1 - land / 0.9), P.sand, P.ink, 3, 70 + i);
       }
       [at(10), at(11)].forEach((ts, k) => { const dd = t - ts; if (dd > 0 && dd < 0.5) for (let i = 0; i < 8; i++) { const a = (i / 8) * K.TAU + k; K.sparkle(ctx, OCT.x + Math.cos(a) * (300 + 500 * dd), OCT.y - 300 + Math.sin(a) * (200 + 300 * dd), 30 * (1 - dd / 0.5), 1 - dd / 0.5, 80 + i); } });
-    },
-  });
-}
-
-/* ---------- SC6 "Down on the reef where the coral exchange is" (bars 12 - 14): the exchange panorama ---------- */
-const cam6 = camTrack([[at(12), { x: -650, y: 470, z: 0.6 }], [at(13, 2), { x: 1500, y: 470, z: 0.62 }], [at(14), { x: 1150, y: 540, z: 0.86 }]]);
-function sc6(t) {
-  drawReef(t, cam6(t), {
-    traffic: 14, trafficY: -40,
-    octo: () => otto(t, { mouth: "smile", look: [-0.6, -0.3], arms: [null, null, null, null, null, null, null, armTrack(t, 7, [[at(13, 2), { x: 300, y: -520, bend: 60, curl: -1.5 }]])] }),
-  });
-}
-
-/* ---------- SC7 "An octopus quotes through the market's changes" (bars 14 - 16) ---------- */
-const PRICE = (() => {
-  const out = [], r = K.mulberry(77); let p = 100;
-  for (let i = 0; i < 56; i++) {
-    const vol = i < 14 ? 0.12 : i < 30 ? 0.75 : 0.3, drift = i < 14 ? 0 : i < 30 ? -0.08 : 0.35;
-    p += (r() - 0.5) * 2 * vol + drift; out.push(Math.round(p * 100) / 100);
-  }
-  return out;
-})();
-const cam7 = camTrack([[at(14), { x: 1150, y: 540, z: 0.86 }], [at(16), { x: 1180, y: 520, z: 0.9 }]]);
-const CH7 = { x: 1640, y: 470, w: 800, h: 560 };
-function sc7(t) {
-  const draw = K.inv(at(14, 0), at(15, 3.5), t), n = PRICE.length, i = Math.min(n - 1, Math.floor(draw * (n - 1))), p = PRICE[i];
-  /* regime colour: calm -> volatile (lilac) -> bull (mint) */
-  const r1 = K.inv(at(14, 2), at(14, 2.6), t), r2 = K.inv(at(15, 1), at(15, 1.6), t);
-  const skin = r2 > 0 ? K.skinMix(K.SKIN.chaos, K.SKIN.bull, r2) : K.skinMix(K.SKIN.calm, K.SKIN.chaos, r1);
-  const beatK = Math.max(0, K.beatIndex(t)); /* quotes refresh on every beat */
-  const qp = PRICE[Math.min(n - 1, Math.floor(K.inv(at(14, 0), at(15, 3.5), K.barStart(0) + beatK * K.beatLen()) * (n - 1)))] || 100;
-  drawReef(t, cam7(t), {
-    traffic: 5,
-    mid: () => {
-      K.applyCam(ctx, 1);
-      const lo = Math.min(...PRICE) - 0.5, hi = Math.max(...PRICE) + 0.5;
-      const res = K.chart(ctx, CH7.x, CH7.y, CH7.w, CH7.h, { a: ap(t, at(14, 0)), lines: [{ data: PRICE, color: r2 > 0 ? P.up : r1 > 0 ? P.lilac : P.bid, w: 6 }], draw, yMin: lo, yMax: hi, tab: P.kelp, band: { lo: p - 0.35, hi: p + 0.35 } });
-      if (res) { const hx = res.X(i), hy = res.Y(p); K.glow(ctx, hx, hy, 60, "rgba(255,230,120,0.9)", 0.6); K.dot(ctx, hx, hy, 12, P.sun, P.ink, 4, 91); sc7.head = [hx, hy]; }
-    },
-    octo: () => {
-      const hd = sc7.head || [CH7.x, CH7.y], tl = toLocal(hd[0] - 30, hd[1] + 20);
-      otto(t, { skin, mouth: r2 > 0 ? "grin" : r1 > 0 ? "o" : "smile", brow: r1 > 0 && r2 <= 0 ? 1.1 : 0.2, look: [0.9, -0.3],
-        arms: [null, { x: -360, y: -300, bend: -30, card: { kind: "bid", text: (qp - 0.02).toFixed(2), s: 0.85, dy: -40 } }, null, null, null, null,
-          { x: 120, y: -560, bend: -30, card: { kind: "ask", text: (qp + 0.02).toFixed(2), s: 0.85, dy: -40 } }, { x: Math.min(tl.x, 680), y: tl.y, bend: 60 }] });
-    },
-  });
-}
-
-/* ---------- SC8 "Bid with one arm and an ask with another" (bars 16 - 18): close-ups, whip pan ---------- */
-const cam8 = camTrack([[at(16), { x: 600, y: 520, z: 1.6 }], [at(16, 3.6), { x: 640, y: 520, z: 1.62 }], [at(17, 0.25), { x: 1300, y: 520, z: 1.62 }], [at(17, 2), { x: 1280, y: 520, z: 1.6 }], [at(17, 2.6), { x: 960, y: 560, z: 1.06 }], [at(18), { x: 960, y: 560, z: 1.04 }]]);
-function sc8(t) {
-  const bidOut = K.inv(at(16, 0), at(16, 0.4), t), askOut = K.inv(at(17, 0), at(17, 0.4), t);
-  drawReef(t, cam8(t), {
-    traffic: 3,
-    octo: () => otto(t, {
-      mouth: "grin", look: t < at(17) ? [-1, 0.1] : t < at(17, 2.4) ? [1, 0.1] : [0, -0.2], glint: K.inv(at(17, 2.6), at(17, 3.4), t),
-      arms: [null, armTrack(t, 1, [[at(16, 0), { x: -440, y: -330, bend: -50, card: { kind: "bid", text: BID, s: 1.1, a: bidOut, dy: -46 } }]]), null, null, null, null,
-        armTrack(t, 6, [[at(17, 0), { x: 440, y: -330, bend: 50, card: { kind: "ask", text: ASK, s: 1.1, a: askOut, dy: -46 } }]]), null],
-    }),
-    front: () => {
-      /* whip streaks during the pan */
-      const w = K.inv(at(16, 3.5), at(17, 0.3), t); if (w <= 0 || w >= 1) return;
-      K.screen(ctx); ctx.save(); ctx.globalAlpha = Math.sin(w * Math.PI) * 0.7;
-      for (let i = 0; i < 14; i++) K.line(ctx, [[-50 + 300 * K.hash(i, 1), 80 + i * 70], [700 + 1400 * K.hash(i, 2), 80 + i * 70]], { stroke: P.foam, w: 6 + 6 * K.hash(i, 3), boil: 1, seed: 120 + i });
-      ctx.restore();
-    },
-  });
-}
-
-/* ---------- SC9 "Eight arms on the book, one spread to cover!" (bars 18 - 20) ---------- */
-const cam9 = camTrack([[at(18), { x: 960, y: 560, z: 1.04 }], [at(18, 2), { x: 960, y: 500, z: 0.9 }], [at(20), { x: 960, y: 490, z: 0.92 }]]);
-const BOOK_BIDS = ["99.98", "99.96", "99.94", "99.92"], BOOK_ASKS = ["100.02", "100.04", "100.06", "100.08"];
-function sc9(t) {
-  const place = (k) => at(18, 1 + k * 0.5); /* one arm per 8th note from "arms" */
-  const cover = at(19, 2), cv2 = K.inv(cover, cover + 0.35, t);
-  drawReef(t, cam9(t), {
-    traffic: 4,
-    mid: () => {
-      K.applyCam(ctx, 1);
-      [[-1, P.bid], [1, P.ask]].forEach(([sd, c], j) => {
-        const a = ap(t, at(18, 0.5)); if (a <= 0) return;
-        ctx.save(); ctx.translate(OCT.x + sd * 520, OCT.y - 330); ctx.scale(K.popS(a), K.popS(a)); K.panel(ctx, 330, 600, { tab: c, seed: 140 + j }); ctx.restore();
-      });
-    },
-    octo: () => {
-      const arms = [];
-      for (let i = 0; i < 8; i++) {
-        const left = i < 4, k = left ? 3 - i : i - 4, order = left ? 2 * k : 2 * k + 1;
-        const tg = { x: (left ? -1 : 1) * 450, y: -520 + k * 118 + 40, bend: (left ? -1 : 1) * (40 + k * 20), card: { kind: left ? "bid" : "ask", text: left ? BOOK_BIDS[k] : BOOK_ASKS[k], s: 0.78, dy: 0, rot: 0, dx: (left ? -1 : 1) * 70 } };
-        arms[i] = armTrack(t, i, [[place(order), tg, 0.28]]);
-      }
-      otto(t, { mouth: cv2 > 0 ? "grin" : "open", brow: 0.6, wave: 0.3, arms, look: [0, -0.8], glint: K.inv(cover, cover + 0.5, t) });
-    },
-    front: () => {
-      if (cv2 <= 0) return;
-      K.applyCam(ctx, 1);
-      /* the spread: a sunshine arc from best bid to best ask over Otto's head */
-      const y0 = OCT.y - 520 + 40 - 40, xL = OCT.x - 410, xR = OCT.x + 410, top = y0 - 170 * K.E.back(cv2, 1.5);
-      const arc = []; for (let i = 0; i <= 16; i++) { const u = i / 16; arc.push([K.lerp(xL, xR, u), y0 - (top - y0) * -4 * u * (1 - u)]); }
-      K.glow(ctx, OCT.x, top, 300, "rgba(255,225,110,0.9)", 0.5 * (0.6 + 0.4 * K.pulse(t, 1)));
-      K.line(ctx, arc, { stroke: P.ink, w: 22, boil: 0.6, seed: 150 }); K.line(ctx, arc, { stroke: P.sun, w: 13, boil: 0.6, seed: 150 });
-      K.badge(ctx, OCT.x, top - 70, "0.04", { a: cv2, size: 56, bump: K.pulse(t, 2, 6) });
     },
   });
 }

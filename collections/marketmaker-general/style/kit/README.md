@@ -12,6 +12,7 @@ The architecture is the same as the crab kit (`complex-arbitrage-rust/style/kit/
 | `30_world.js` | `ocean` (flat bands), `rays`, `surface`, `sun`, `bubble` / `bubbles` / `bubbleBurst`, `sand`, `kelp`, `coralBranch`, `coralFan`, `brainCoral`, `rock`, `starfish`, `tower` (coral exchange tower with ticker strip), `clamDesk` (`part: back/front`), `fish` (4 species, can carry a card), `card` (bid / ask / up / down / sun / plain), `coin`, `sparkle`, `inkCloud`, `mix` |
 | `40_octo.js` | `octo(ctx, x, y, s, pose)`: Otto with 8 tapered sucker arms posed by tip targets, held cards/props, squash, hop, blink/wink, mouths, brows, glasses glint, `!`, skin colour shift; `OCTO_REST`, `octoTips` (world tips after a draw), `blinkAt`, `SKIN`, `skinMix` |
 | `50_explainer.js` | `panel`, `chart` (+ `genCandles`, `sma`, `alligator`, `ao`, `fractals`), `attractor`, `manifold`, `formula`, `table`, `bullets`, `code`, `book`, `badge`, `titlePlate`, `popS` |
+| `assets/logo.svg` | the marketmaker.cc mark (`fill="currentColor"`); `build.py` inlines it where a shell has `<!--__LOGO__-->` |
 | `fonts/` | Unbounded 700/900, Manrope 600/800, Roboto Mono 500/700 (Latin + Cyrillic), Noto Sans SC/TC 900 subsets; `fonts.css`; refresh with `tools/fetch_fonts.py` |
 | `vendor/gsap.min.js` | GSAP 3.14.2 (local, no CDN) |
 
@@ -43,6 +44,35 @@ The architecture is the same as the crab kit (`complex-arbitrage-rust/style/kit/
 5. Snapshot and look (`intro/tools/snap.sh`, `intro/tools/sheet.sh`). Render with `npx hyperframes render --quality high --output renders/x.mp4`.
 
 `style/gallery/` is a 6-second project showing every explainer primitive. Rebuild and snapshot it (`style/gallery/tools/snap.sh "4.5"`) after kit changes.
+
+## Otto (the octopus) API, for cameos and episodes
+
+The rig is self-contained in `40_octo.js` and needs only `00_core`, `05_palette`, `10_ink` and `K.card` from `30_world`. Copy those files (or load this kit) to use Otto in another project, such as an end card.
+
+```js
+K.begin(ctx, t, cam); K.applyCam(ctx, 1);
+K.octo(ctx, x, y, s, {
+  blink: K.blinkAt(t, 5),            // 0..1, seeded blinks; wink: 0..1 closes the viewer-left eye
+  squash: 0.07 * K.pulse(t, 1, 6),   // -1..1, volume kept (head only); hop: px lift (resting arms trail)
+  lean: 0,                           // degrees around the arm base
+  look: [0.3, -0.2],                 // pupils, -1..1
+  mouth: "smile",                    // "smile" | "grin" | "open" | "o" | "flat"; talk: 0..1 (narration) overrides
+  brow: 0.3,                         // -1..1.5
+  glint: 0,                          // 0..1 light flash across the glasses
+  exclaim: 0,                        // 0..1 "!" pop
+  skin: K.SKIN.calm,                 // calm | chaos | bull | bear, or K.skinMix(a, b, u)
+  wave: 1,                           // idle arm sway
+  arms: [null, { x: -330, y: -330, bend: -30, card: { kind: "bid", text: "99.98", s: 0.9 } }, null, null, null, null,
+         { x: 330, y: -330, bend: 30, card: { kind: "ask", text: "100.02", s: 0.9 } }, null],
+});
+const tips = K.octoTips; // world positions of the 8 arm tips after the draw
+```
+
+- Local space: arm tips rest on y = 0, head centre at (0, -250), head top at about -400; at scale 1 Otto is about 600 px wide with resting arms and 420 px tall.
+- `arms[i]` (0 = far left .. 7 = far right) is `null` for the resting fan or a tip target `{ x, y, bend, curl, card, prop, wrap }` in local space. `card` takes `K.card` options plus `dx`, `dy`, `s`, `a` (pop). `prop(ctx, x, y, ang)` draws anything at the tip; `wrap: true` curls the tip over it.
+- Arms on the left side (0 - 3) should reach left/up, arms 4 - 7 right/up, so they do not cross the face.
+- Pose blending in the intro: `armTrack(t, i, [[t0, target, dur], ...])` and `fanArms(t, t0, opt)` in `intro/src/30_verse.js` (copy them; they are scene helpers, not kit API).
+- Determinism: everything comes from `t` and seeds; `seed` in the pose changes the boil pattern for a second Otto in one frame.
 
 ## Rules the kit relies on
 

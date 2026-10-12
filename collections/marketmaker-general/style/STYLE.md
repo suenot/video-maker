@@ -90,7 +90,7 @@ Animation rules:
 
 ## 7. Timing (beat grid)
 
-- Theme song "Eight Arms on the Book": ska at ~153.5 BPM, beat 0.3909 s, bar 1.5636 s, first downbeat 0.095 s. `K.G.BARS` holds the measured downbeats; write times as `K.at(bar, beat)`.
+- Theme song "Eight Arms on the Book": ska at ~153.5 BPM, beat 0.3909 s, bar 1.5636 s, first downbeat 0.095 s. `K.G.BARS` holds the measured downbeats; write times as `K.at(bar, beat)`. The intro uses a 29.6 s downbeat cut (intro + chorus, break, final hook).
 - Every sung line starts on an even bar (see `intro/src/10_setup.js`); each line gets its own picture.
 - Pops land on beats with a 0.3 - 0.45 s back ease; staggers are 1/2 or 1/4 beat (the eight-arm fan staggers 0.03 s).
 - Determinism: no `Math.random`, `Date.now`, `performance.now`; seeded `mulberry` / `hash` only.
@@ -119,4 +119,6 @@ Layout rules: at most 2 explainer objects plus Otto in frame; text only on cards
 ## 9. Do / don't
 
 Do: build shots inside the reef and move the camera; let Otto react to every reveal (glint, wink, colour shift); keep bid blue / ask coral / spread sunshine consistent; land moves on downbeats.
+Logo: the marketmaker.cc mark (`kit/assets/logo.svg`, inlined by `build.py` at `<!--__LOGO__-->`) sits top-right in a cream pill with a navy outline, 92 px tall, 48 px margin, the whole intro. Keep action and title plates out of that corner.
+
 Don't: flat slide cards without the world; smooth gradients for water; black outlines; broken sketchy strokes (that is the crab); neon glow (only light rays, the spread glow and the attractor head glow); language-specific words in the drawn world of the intro (numbers and icons only). Localised text lives in DOM variables.
