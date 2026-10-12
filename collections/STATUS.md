@@ -19,7 +19,7 @@
 | onchain-defi-quant | hamster Chef Nibbs | re-render to 30.8 s + logo in progress | pending (bee) |
 | volatility-regimes | turtle Siggy | 31.0 s done (minor blank-frame fix) | in progress (seagull) |
 | causality-lead-lag | fox Vulpes | 33.2 s done | in progress (basset) |
-| marketmaker-general | octopus Otto | 29.6 s done | in progress (pufferfish) |
+| marketmaker-general | octopus Otto | 29.6 s done | done: pufferfish Puff, K.duo |
 
 - End card: done (19 s, 4 langs).
 - Episode prep (SCENES.md, hand-set slide timing, Whisper word timings): done for all 28 EN episodes in `<collection>/episodes/<slug>/en/prep/`. sync_slides auto-timing failed on every deck; timings are manual. Each SCENES.md lists NotebookLM errors with corrected content to draw.
