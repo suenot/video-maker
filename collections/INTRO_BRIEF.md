@@ -25,3 +25,6 @@ Report (<250 words): mascot/world summary, second-by-second outline, paths, know
 
 ## Machine load rule (12 CPUs, shared by ~20 agents)
 Wrap every `npx hyperframes render` (and whisper/transcribe) in the global slot limiter: `collections/tools/heavy_slot.sh render npx hyperframes render ...` (max 3 renders machine-wide). Render languages one after another, not in parallel.
+
+## Git rule (shared working tree, ~20 agents)
+Never `git add <dir>` then commit separately: other agents files get swept in. Commit only your own paths in one step: `git commit -m "..." -- <your paths>` (new files: `git add <exact files> && git commit -m "..." -- <same files>`). Push with `git pull --rebase --autostash && git push`, retry on "cannot lock ref".

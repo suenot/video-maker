@@ -23,3 +23,6 @@ Whisper is CPU-heavy and several agents run in parallel; it's fine to be slow. D
 Run every Whisper call through the global slot limiter (max 2 at once, 4 threads each):
 `collections/tools/heavy_slot.sh whisper .venv/bin/python3 scripts/extract_subtitles.py ...`
 Run sequentially within your own batch — never start several Whisper jobs yourself.
+
+## Git rule (shared working tree, ~20 agents)
+Never `git add <dir>` then commit separately: other agents files get swept in. Commit only your own paths in one step: `git commit -m "..." -- <your paths>` (new files: `git add <exact files> && git commit -m "..." -- <same files>`). Push with `git pull --rebase --autostash && git push`, retry on "cannot lock ref".
