@@ -15,7 +15,7 @@
 | modern-ml-trading | owl Strix | 26.6 s done | in progress (hummingbird) |
 | order-book-microstructure | raccoon Tikki | 26.4 s done | in progress (gecko) |
 | execution-market-making | mouse Mr. Tick | 27.1 s done | in progress (pigeon) |
-| statistical-arbitrage-pairs | ragtime cat + penguins | 28.9 s done | in progress (penguin) |
+| statistical-arbitrage-pairs | ragtime cat + penguins | 28.9 s done | done: penguin Skip, K.duo |
 | onchain-defi-quant | hamster Chef Nibbs | 30.8 s done | done: bee Bizzy, K.duo |
 | volatility-regimes | turtle Siggy | 31.0 s done; TODO: blank orange wipe frame ~25 s, near-empty frames 7 s and 13 s | done: seagull Gully, K.duo |
 | causality-lead-lag | fox Vulpes | 33.2 s done | done: Sergeant Basset, K.duo |
