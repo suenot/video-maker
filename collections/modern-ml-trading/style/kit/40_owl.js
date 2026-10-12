@@ -170,7 +170,7 @@ var LK = window.LK || (window.LK = {});
   /* blink curve with seeded blink times, 0..1 */
   K.blinkAt = function (t, seed) {
     let b = 0;
-    for (let i = 0; i < 14; i++) {
+    for (let i = 0; i < 40; i++) {
       const tb = 0.9 + i * 2.1 + K.hash(i, seed || 7) * 1.0, d = t - tb;
       if (d > 0 && d < 0.18) b = Math.max(b, Math.sin((d / 0.18) * Math.PI));
     }

@@ -133,7 +133,7 @@ var LK = window.LK || (window.LK = {});
     const an = lerp(A0, A1, clamp(v, 0, 1)) + Math.sin(K.now * 9) * 0.01;
     K.shape(ctx, [[Math.cos(an) * r * 0.78, Math.sin(an) * r * 0.78], [Math.cos(an + 1.57) * 7, Math.sin(an + 1.57) * 7], [Math.cos(an + 3.14) * 16, Math.sin(an + 3.14) * 16], [Math.cos(an - 1.57) * 7, Math.sin(an - 1.57) * 7]], { fill: P.bad, w: 3, boil: 0.5, seed: o.seed + 30 });
     K.dot(ctx, 0, 0, 9, P.brassDark, P.ink, 3, o.seed + 31);
-    if (o.readout) { K.shape(ctx, K.rrectPts(-r * 0.5, r * 0.32, r, r * 0.34, 6), { fill: P.board, w: 3, boil: 0.5, seed: o.seed + 32 }); K.text(ctx, o.readout, 0, r * 0.49, { size: r * 0.22, weight: 600, font: K.FONT.mono, fill: P.chalk }); }
+    if (o.readout) { K.shape(ctx, K.rrectPts(-r * 0.56, r * 0.3, r * 1.12, r * 0.38, 6), { fill: P.board, w: 3, boil: 0.5, seed: o.seed + 32 }); K.text(ctx, o.readout, 0, r * 0.49, { size: Math.max(26, r * 0.27), weight: 600, font: K.FONT.mono, fill: P.chalk }); }
     ctx.restore();
   };
 

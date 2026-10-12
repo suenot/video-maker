@@ -32,7 +32,7 @@ function drawTitleCanvas(t) {
     ctx.restore();
   }
   for (let i = 0; i < 5; i++) {
-    const t0 = T.show + (i * BEAT) / 2, a = K.inv(t0, t0 + 0.35, t);
+    const t0 = T.medals + (i * BEAT) / 2, a = K.inv(t0, t0 + 0.35, t);
     if (a <= 0) continue;
     const s = K.E.back(a, 2.6), x = 960 + (i - 2) * 150, y = MEDAL_Y + 5 * Math.sin(t * 2.4 + i) - 8 * K.pulse(t - i * 0.06, 1, 6);
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s);

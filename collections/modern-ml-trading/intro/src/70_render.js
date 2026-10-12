@@ -1,14 +1,18 @@
 /* ============================================================
-   INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
-   drives a proxy whose setter calls render(t).
-   0.00 - 0.69  deco iris opens on the lab; owl has its back to us
-   1.82         head swivels 180 to face us, waves
-   3.63 - 5.43  data seed from the pocket, tossed into the pot, data drizzle
-   5.43 - 9.04  "Fit it RIGHT, don't overfit": overfit vine -> snip -> smooth fit -> band
-   9.94 -10.85  truck to the flasks; 10.85 "Validate every little bit": ticks
-   12.20-12.65  leap to the garden bench; "Trees and nets that learn and grow"
-   14.45        marquee title "Modern ML for Trading"; 16.26 "steal the show": bow, medals
-   18.06        "An owl in a lab with a data seed": seed held high, wink
+   INTRO 70 RENDER: render(t) is the whole film (57.3 s, the full song).
+   One paused GSAP timeline drives a proxy whose setter calls render(t).
+   0.0 - 3.6   deco iris opens on a dark lab; lamps flicker on; owl's back to us
+   3.63        band enters: head swivels to face us, waves
+   7.24 - 10.8 data seed tossed into the pot, data drizzle, sprout, data points
+   10.85-16.3  train-accuracy gauge, the vine creeps, a swing dance
+   17.2 - 19.9 "Fit it RIGHT, don't overfit": overfit vine -> snip -> smooth fit -> band
+   20.8 - 22.9 truck to the flasks: "Validate every little bit": ticks
+   23.5 - 28.9 leap to the garden: "Trees and nets ... Modern ML ... steal the show"
+   28.9        "An owl in a lab with a data seed": seed held high, wink
+   30.7 - 34.3 leap to the nursery: "Grows a little model on features to feed"
+   34.3 - 39.3 "Train it, test it, walk it forward", "No peeking", "keep the backtest clean"
+   39.7 - 45.1 back to the garden: prune, ticks, plants grow
+   45.13       marquee title; 46.94 bow; 48.74 medals; 50.5 swing dance; 55.96 final seed + wink
    ============================================================ */
 function drawIris(t) {
   const u = K.inv(T.iris[0], T.iris[1], t);
@@ -44,6 +48,9 @@ function render(t) {
     K.applyCam(ctx, 1);
     drawOwl(t);
     drawForeground();
+    /* the lab before the lamps come on */
+    const dark = 1 - lampsOn(t);
+    if (dark > 0) { K.screen(ctx); ctx.fillStyle = `rgba(26,16,6,${(0.62 * dark).toFixed(3)})`; ctx.fillRect(0, 0, 1920, 1080); }
     const m = drawTitleCanvas(t);
     layoutTitleDom(t, m);
     drawIris(t);

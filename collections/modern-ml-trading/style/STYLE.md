@@ -90,9 +90,9 @@ Animation rules:
 
 ## 7. Timing (beat grid)
 
-- The theme is electro-swing at 133 BPM: beat 0.451 s, bar 1.804 s. Write times as `K.at(bar, beat)`.
-- Intro grid `K.G.BARS = [0.018, 1.822, 3.627, 5.431, 7.236, 9.040, 10.845, 12.649, 14.454, 16.258, 18.062, 19.867]` (song_raw 12.78 - 32.63 s, one take).
-- Each sung line has its own picture: "Fit it RIGHT" is the snip on 7.24, "Validate every little bit" is the ticks on eighths, "Trees and nets" is the two plants growing, "Modern ML for Trading" is the marquee drop on 14.45, "steal the show" is the spotlight bow, "an owl in a lab with a data seed" is the raised glowing seed.
+- The theme is electro-swing at 133 BPM, and the intro runs the full song (57.3 s): beat 0.451 s, bar 1.804 s. Write times as `K.at(bar, beat)`.
+- Intro grid: the whole song (song_raw 1.95 - 59.2 s), 32 measured downbeats from `K.G.BARS = [0.021, 1.825, ...]` at 1.80443 s per bar (see `intro/src/10_setup.js`).
+- Each sung line has its own picture: "Fit it RIGHT" is the snip (18.07; the second chorus prunes wild twigs on 39.72), "Validate every little bit" is ticks on eighths, "Trees and nets" is the two plants growing, "Modern ML for Trading" is the plants blooming (first chorus) and the marquee drop (45.13, final chorus), "steal the show" is a spotlight bow, "an owl in a lab with a data seed" is the raised glowing seed, "grows a little model on features to feed" is feature pellets thrown into a nursery pot, "train it, test it, walk it forward" is train/test windows stepping on beats, "no peeking at the future" is a brass shutter and covered eyes, "keep the backtest clean" is a feather duster. Instrumental bars get the lamps flickering on, a train-accuracy gauge creeping into the red, and swing dances.
 - Pops land on beats with a back-ease overshoot of 0.35 - 0.45 s; staggers are 1/2 or 1/4 beat; marquee bulbs chase on eighths.
 - Determinism: no `Math.random`, `Date.now` or `performance.now`. Seeded `hash` / `mulberry` only.
 

@@ -263,4 +263,32 @@ var LK = window.LK || (window.LK = {});
     K.line(ctx, [[r * 0.4, -r * 0.4], [-r * 0.4, r * 0.4]], { stroke: P.paper, w: r * 0.2, boil: 0.4, seed: (seed || 220) + 2, taper: false });
     ctx.restore();
   };
+  /* ---------- feature pellet: a round seed-cake with a language-free feature icon ----------
+     kind 0 candles (price), 1 bars (volume), 2 wave (cycle), 3 dot cloud (alt data) */
+  K.pellet = function (ctx, x, y, r, kind, seed) {
+    seed = seed || 240;
+    K.shape(ctx, K.ellipsePts(x, y, r, r, 12), { fill: [P.brass, P.leafLight, P.glass, P.test][kind % 4], w: Math.max(2.5, r * 0.12), boil: 0.4, seed, rim: 1.5 });
+    const c = P.ink, w = Math.max(1.6, r * 0.11);
+    if (kind % 4 === 0) [-0.4, 0, 0.4].forEach((dx, i) => { K.line(ctx, [[x + dx * r, y - r * 0.5 + i * 3], [x + dx * r, y + r * 0.45 - i * 3]], { stroke: c, w, boil: 0.2, seed: seed + i, taper: false }); });
+    else if (kind % 4 === 1) [0.3, 0.7, 0.5].forEach((h, i) => K.line(ctx, [[x + (i - 1) * r * 0.42, y + r * 0.5], [x + (i - 1) * r * 0.42, y + r * 0.5 - h * r]], { stroke: c, w: w * 1.4, boil: 0.2, seed: seed + i, taper: false }));
+    else if (kind % 4 === 2) K.line(ctx, [[x - r * 0.6, y], [x - r * 0.3, y - r * 0.4], [x, y], [x + r * 0.3, y + r * 0.4], [x + r * 0.6, y]], { stroke: c, w, boil: 0.2, seed });
+    else for (let i = 0; i < 5; i++) K.dot(ctx, x + hs(i, seed) * r * 0.5, y + hs(i + 9, seed) * r * 0.5, r * 0.1, c, null, 0, seed + i);
+  };
+  /* glass jar of feature pellets (held by the owl when feeding) */
+  K.jar = function (ctx, x, y, s, seed) {
+    seed = seed || 250;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    K.shape(ctx, K.rrectPts(-42, -100, 84, 100, 18), { fill: "rgba(214,240,226,0.6)", w: 4.5, boil: 0.7, seed });
+    for (let i = 0; i < 6; i++) K.pellet(ctx, -22 + (i % 3) * 22, -22 - Math.floor(i / 3) * 22, 10, i, seed + 10 + i * 3);
+    K.shape(ctx, K.rectPts(-46, -114, 92, 18, 3), { fill: P.brass, w: 3.5, boil: 0.5, seed: seed + 2 });
+    ctx.restore();
+  };
+  /* feather duster (keeping the backtest clean) */
+  K.duster = function (ctx, x, y, ang, s, seed) {
+    seed = seed || 260;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(s || 1, s || 1);
+    K.shape(ctx, K.rrectPts(-6, -7, 90, 14, 7), { fill: P.wood, w: 3.5, boil: 0.5, seed });
+    for (let i = 0; i < 7; i++) { const a = -0.9 + (i / 6) * 1.8 + Math.sin(K.now * 14 + i) * 0.08; ctx.save(); ctx.translate(86, 0); ctx.rotate(a); K.shape(ctx, [[0, 0], [30, -12], [70, -6], [84, 0], [70, 6], [30, 12]], { fill: i % 2 ? P.bad : P.test, w: 3, boil: 0.8, seed: seed + 3 + i }); ctx.restore(); }
+    ctx.restore();
+  };
 })(LK);

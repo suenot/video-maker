@@ -1,5 +1,22 @@
 # Intro review log
 
+## Full-song version (57.3 s, current)
+The user asked for the intro to run the whole generated song. `song_full.m4a` = `song_raw.mp4` 1.95 - 59.2 s (leading silence trimmed, the song stops at 59.0), 0.5 s fade, loudnorm I = -14.6 target, measured -14.0 LUFS.
+Word times from whisper on the whole file and on 14-16 s segments: chorus 1 "Fit it right" 19.2 (raw), verse "An owl in a lab" 30.2, "Grows" 32.5, "Train it" 35.4, "No peeking" 37.9, chorus 2 "right" 41.6, "Trees" 45.2, outro after about 50 s. The 133 BPM grid fitted earlier holds over the whole song (32 downbeats).
+The 20 s material is reused, shifted 6 bars later; the new beats are the dark lab with lamps, a train-accuracy gauge, two swing dances, the bloom bow, station D (nursery pot fed with feature pellets, the walk-forward plate with a brass shutter and a feather duster), the second-chorus prune / ticks / growth, and the marquee on the final chorus.
+
+### Round F1 (first full build, 57 frames at 1 fps)
+- Station D sat too close to the garden: the net-vine pot showed in the nursery shots and the nursery pot showed in the title wide. D moved +550 px; bench and wall extended.
+- The gauge readout was 23 px. The readout now has a minimum of 26 px and a wider box.
+### Round F2
+- The walk-forward windows were so wide that the shutter covered only a thin strip of the future. Train 0.36 -> 0.28, test 0.12 -> 0.10, steps 0.13 -> 0.11, at most 3 steps: the shutter now covers the last third.
+- Dust specks looked like data points. They are now pale sepia blobs that vanish under the duster.
+### Round F3 (gates)
+- `lint` 0 errors (1 size warning by design); `check` passed, contrast 18/18 AA, 2 layout infos (title letters mid-drop).
+- Known weaknesses: 0 - 3.6 s is a slow, dark opening (by design, the lamps come on with the band); the cover-eyes pose shows the gloves beside the eyes rather than over them; the net-vine tendrils stay thin in the wide shot.
+
+## 20 s version (superseded)
+
 The intro is 19.9 s, 1920x1080, 30 fps, with the song muxed in (`song_20s.m4a` = `song_raw.mp4` 12.78 - 32.63 s, one take, 133 BPM, about -14 LUFS). There is also a silent copy of each render.
 Each round comes from snapshots I looked at (`tools/snap.sh`, 12 to 24 frames, plus full-resolution frames).
 

@@ -1,17 +1,33 @@
 /* ============================================================
-   INTRO 20 LAB: the long greenhouse lab and its three stations.
+   INTRO 20 LAB: the long greenhouse lab and its four stations.
      A (x ~1000): the plate. Seed -> sprout -> overfit vine -> snip -> smooth fit + band
      B (x ~2420): five walk-forward flasks on the bench, fold strips, ticks
-     C (x ~3400): decision-tree plant + neural-net vine; title set
+     C (x ~4050): decision-tree plant + neural-net vine; title set (visited twice)
+     D (x ~5500): nursery pot fed with feature pellets + walk-forward plate with a shutter
    Camera: one monotone track, moves start and land on downbeats.
    ============================================================ */
+/* lamps: dark lab, two flickers on beats, full on the band entry */
+function lampsOn(t) {
+  if (t < T.lamps[0]) return 0;
+  if (t < T.lamps[1]) return [0.8, 0.1, 0.7, 0.25][Math.min(3, Math.floor((t - T.lamps[0]) / (BEAT)))] ;
+  return 1;
+}
 const camTrack = K.mkTrack([
   [0, { x: 1060, y: 500, z: 1.12 }],
-  [at(1, 0), { x: 1000, y: 520, z: 1.0 }],
+  [T.lamps[1], { x: 1000, y: 520, z: 1.0 }],
+  [T.dance1[0], { x: 1000, y: 520, z: 1.0 }],
+  [T.dance1[1], { x: 1060, y: 540, z: 1.07 }],
+  [T.vine[0], { x: 1000, y: 520, z: 1.0 }],
   [T.truck1[0], { x: 1000, y: 520, z: 1.0 }],
   [T.truck1[1], { x: ST_B.cam.x, y: 520, z: 1.0 }],
   [T.jump[0] - 0.05, { x: ST_B.cam.x + 30, y: 520, z: 1.0 }],
   [T.jump[1], { x: ST_C.cam.x, y: 540, z: 1.0 }],
+  [T.truck2[0] - 0.1, { x: ST_C.cam.x, y: 540, z: 1.0 }],
+  [T.truck2[1], { x: ST_D.cam.x - 80, y: 520, z: 1.0 }],
+  [T.wf - 0.4, { x: ST_D.cam.x - 60, y: 520, z: 1.0 }],
+  [T.wf, { x: ST_D.cam.x + 40, y: 510, z: 1.0 }],
+  [T.truck3[0], { x: ST_D.cam.x + 40, y: 510, z: 1.0 }],
+  [T.truck3[1], { x: ST_C.cam.x, y: 540, z: 1.0 }],
   [T.zoomOut[0], { x: ST_C.cam.x, y: 540, z: 1.0 }],
   [T.zoomOut[1], { x: ST_C.cam.x, y: 520, z: 0.9 }],
   [DUR, { x: ST_C.cam.x, y: 528, z: 0.93 }],
@@ -58,8 +74,8 @@ function drawStationA(t) {
     band: bandA > 0 ? { lo: BAND.lo, hi: BAND.hi, a: bandA } : null,
   });
   /* the vine: overfit, then snipped, then the smooth fit */
-  const vp = K.inv(T.vine[0], T.vine[1], t);
-  if (t < T.snip && vp > 0) vinePath(OVER_PTS, K.E.inOut(vp), 1300, P.leafLight, 7);
+  const vp = 0.22 * K.E.inOut(K.inv(T.creep[0], T.creep[1], t)) + 0.78 * K.E.inOut(K.inv(T.vine[0], T.vine[1], t));
+  if (t < T.snip && vp > 0) vinePath(OVER_PTS, vp, 1300, P.leafLight, 7);
   else if (t >= T.snip) {
     /* falling cuttings */
     const d = t - T.snip;
@@ -87,14 +103,21 @@ function drawStationA(t) {
   /* soil puff */
   for (let i = 0; i < 3; i++) K.puff(ctx, POT_TOP[0] + (i - 1) * 40, POT_TOP[1] - 6, 18, K.inv(T.land, T.land + 0.6, t) * (0.7 + 0.15 * i), 1730 + i);
   /* beakers on the bench (props) */
-  K.beaker(ctx, 360, BENCH_Y, 0.9, P.test, 1740);
-  K.beaker(ctx, 450, BENCH_Y, 0.7, P.glass, 1745);
+  K.beaker(ctx, 420, BENCH_Y, 0.9, P.test, 1740);
+  K.beaker(ctx, 505, BENCH_Y, 0.7, P.glass, 1745);
+  /* train-accuracy gauge: creeps into the red while the vine overfits, drops back after the snip */
+  const ga = K.inv(T.gauge, T.gauge + 0.4, t);
+  if (ga > 0) {
+    const acc = t < T.snip ? 0.55 + 0.25 * K.inv(T.gauge, T.creep[1], t) + 0.19 * K.inv(T.vine[0], T.vine[1], t) : K.lerp(0.99, 0.74, K.E.out3(K.inv(T.snip, T.snip + 0.6, t)));
+    K.line(ctx, [[230, BENCH_Y - 120], [230, BENCH_Y]], { stroke: P.brassDark, w: 14, boil: 0.5, seed: 1750, taper: false });
+    K.gauge(ctx, 230, BENCH_Y - 230, 105, (acc - 0.5) * 2, { a: ga, readout: Math.round(acc * 100) + "%", seed: 1760 });
+  }
 }
 
 /* walk-forward folds: train grows, test is the next slice */
 const FOLD_N = 5;
 function drawStationB(t) {
-  K.lamp(ctx, 2470, 40, { seed: 2000, len: 260, sway: Math.sin(t * 1.3) * 8 });
+  K.lamp(ctx, 2470, 40, { seed: 2000, len: 260, on: lampsOn(t), sway: Math.sin(t * 1.3) * 8 });
   ST_B.flasks.forEach((fx, i) => {
     const a = K.inv(T.flasks + (i * BEAT) / 4, T.flasks + (i * BEAT) / 4 + 0.35, t);
     if (a <= 0) return;
@@ -111,34 +134,108 @@ function drawStationB(t) {
   });
 }
 
+/* tree leaf tips in tree-local units (spread 270, ratio 2.1, levelH 86): x of the 8 leaves */
+const TREE_LEAF_X = [-1, 1].flatMap((a) => [-1, 1].flatMap((b) => [-1, 1].map((c) => a * 270 + b * 128.6 + c * 61.2))).sort((p, q) => p - q);
+function treeScale(t) { return 0.8 * (1 + 0.1 * K.E.back(K.inv(T.grow2, T.grow2 + 0.5, t), 2)); }
+function drawWildTwigs(t, s, baseY) {
+  const g = K.inv(T.wild, T.prune - 0.1, t), d = t - T.prune;
+  if (g <= 0 || d > 1.3) return;
+  [0, 3, 6].forEach((li, k) => {
+    const bx = ST_C.tree + TREE_LEAF_X[li] * s, by = baseY - 335 * s - 50 * s, H = 150 * K.E.out3(g);
+    const pts = []; for (let i = 0; i <= 10; i++) pts.push([bx + Math.sin(i * 1.7 + k) * 22, by - (H * i) / 10]);
+    ctx.save();
+    if (d > 0) { ctx.globalAlpha = K.clamp(1 - d / 1.3, 0, 1); ctx.translate(bx + (k - 1) * 60 * d, by + 800 * d * d); ctx.rotate((k - 1) * 1.6 * d); ctx.translate(-bx, -by); }
+    K.line(ctx, pts, { stroke: P.ink, w: 11, boil: 0.8, seed: 2700 + k, taper: true });
+    K.line(ctx, pts, { stroke: "#a3b45a", w: 5, boil: 0.8, seed: 2710 + k, taper: true });
+    for (let i = 2; i < 10; i += 2) K.leaf(ctx, pts[i][0], pts[i][1], i % 4 ? -0.6 : -2.5, 0.35, 2720 + k * 10 + i, "#a3b45a");
+    ctx.restore();
+  });
+  if (d > 0 && d < 0.45) for (let i = 0; i < 6; i++) { const f = d / 0.45, a = (i / 6) * K.TAU; K.sparkle(ctx, ST_C.tree + Math.cos(a) * (40 + 140 * f), baseY - 360 * s + Math.sin(a) * (40 + 100 * f), 22 * (1 - f), 1 - f, 2740 + i); }
+}
 function drawStationC(t) {
   const gT = K.inv(T.grow - 0.05, T.grow + BEAT * 3.2, t) * 3, gN = K.inv(T.grow + BEAT * 0.5, T.grow + BEAT * 3.6, t) * 4;
   const potA = K.inv(T.grow - 0.3, T.grow, t);
-  if (potA > 0) {
-    const s = K.E.back(potA, 2.2);
-    K.treePlant(ctx, ST_C.tree, BENCH_Y - 118 * s, 0.8, { grow: gT, depth: 3, seed: 2500, spread: 270, ratio: 2.1, levelH: 86, leaves: ["0.2", "0.7", "0.4", "0.9", "0.1", "0.6", "0.3", "0.8"], hot: t > T.seedUp ? 3 : -1 });
-    K.pot(ctx, ST_C.tree, BENCH_Y, 1.0 * s, { seed: 2560 });
-    const pulse = t > T.show ? ((t - T.show) / (BEAT * 4)) % 1 : -1;
-    K.netVine(ctx, ST_C.net, BENCH_Y - 400, 0.95, { layers: [3, 4, 4, 2], grow: gN, seed: 2600, w: 420, h: 300, pulse });
-    K.pot(ctx, ST_C.net, BENCH_Y, 1.0 * s, { seed: 2660, color: P.glassDark, shadow: P.glassDeep });
+  if (potA <= 0) return;
+  const s = K.E.back(potA, 2.2), ts = treeScale(t), baseY = BENCH_Y - 118 * s;
+  /* after the bloom one leaf at a time glows, stepping on the beat */
+  const hot = t > T.bloom ? K.beatIndex(t) % 8 : -1;
+  K.treePlant(ctx, ST_C.tree, baseY, ts, { grow: gT, depth: 3, seed: 2500, spread: 270, ratio: 2.1, levelH: 86, leaves: ["0.2", "0.7", "0.4", "0.9", "0.1", "0.6", "0.3", "0.8"], hot });
+  drawWildTwigs(t, ts, baseY);
+  K.pot(ctx, ST_C.tree, BENCH_Y, 1.0 * s, { seed: 2560 });
+  const pulse = t > T.bloom ? ((t - T.bloom) / (BEAT * 4)) % 1 : -1;
+  K.netVine(ctx, ST_C.net, BENCH_Y - 400, 0.95 * ts / 0.8, { layers: [3, 4, 4, 2], grow: gN, seed: 2600, w: 420, h: 300, pulse });
+  K.pot(ctx, ST_C.net, BENCH_Y, 1.0 * s, { seed: 2660, color: P.glassDark, shadow: P.glassDeep });
+  /* second chorus: ticks over the plants on eighths, gone before the marquee */
+  const TK = [[ST_C.tree - 220, 300], [ST_C.tree, 270], [ST_C.tree + 220, 300], [ST_C.net - 120, 260], [ST_C.net + 120, 260]];
+  const out = 1 - K.inv(T.grow2 + 0.9, T.grow2 + 1.3, t);
+  TK.forEach((p, i) => { const t0 = T.ticks2 + (i * BEAT) / 2; K.check(ctx, p[0], p[1] - 6 * K.pulse(t, 1), 40, K.inv(t0, t0 + 0.3, t) * out, 2760 + i * 3); });
+}
+
+/* station D, the nursery: a new pot fed with feature pellets, and the walk-forward plate */
+const POT_D = [ST_D.pot, BENCH_Y - 122];
+const WF_STEP = (t) => { const k = (t - T.wf - BEAT) / BEAT; return K.clamp(Math.floor(k) + K.E.inOut(K.clamp((k - Math.floor(k)) * 2.5, 0, 1)), 0, 3); };
+function drawStationD(t) {
+  const pa = K.inv(T.truck2[1] - 0.3, T.truck2[1], t);
+  if (pa <= 0) return;
+  /* the walk-forward plate on an easel */
+  const pl = ST_D.plate, wa = K.inv(T.wf, T.wf + 0.4, t);
+  K.line(ctx, [[pl.x - 220, pl.y + 150], [pl.x - 280, BENCH_Y]], { stroke: P.woodDark, w: 14, boil: 0.7, seed: 3401, taper: false });
+  K.line(ctx, [[pl.x + 220, pl.y + 150], [pl.x + 280, BENCH_Y]], { stroke: P.woodDark, w: 14, boil: 0.7, seed: 3402, taper: false });
+  K.plate(ctx, pl.x, pl.y, pl.w, pl.h, [{ data: WF, color: P.data, kind: "line" }], {
+    a: wa, draw: K.inv(T.wf, T.wf + BEAT * 1.5, t), seed: 3410, yMin: 0, yMax: 1,
+    after: (c, M) => {
+      const k = WF_STEP(t), u0 = 0.02 + 0.11 * k, u1 = u0 + 0.28, u2 = u1 + 0.1;
+      const box = (ua, ub, col, al) => { c.save(); c.globalAlpha *= al; c.fillStyle = col; c.fillRect(M.X(ua), M.pt, M.X(ub) - M.X(ua), M.pb - M.pt); c.restore(); };
+      const wa2 = K.inv(T.wf + BEAT * 0.8, T.wf + BEAT * 1.2, t);
+      if (wa2 > 0) { box(u0, u1, P.train, 0.3 * wa2); box(u1, u2, P.test, 0.45 * wa2);
+        K.line(c, [[M.X(u1), M.pt], [M.X(u1), M.pb]], { stroke: P.ink, w: 3, boil: 0.5, seed: 3420, taper: false, alpha: wa2 });
+        /* the arrow of time under the windows */
+        K.line(c, [[M.X(u0), M.pb + 12], [M.X(u2) + 20, M.pb + 12]], { stroke: P.copper, w: 5, boil: 0.5, seed: 3421, taper: false, alpha: wa2 });
+        K.shape(c, [[M.X(u2) + 34, M.pb + 12], [M.X(u2) + 14, M.pb + 2], [M.X(u2) + 14, M.pb + 22]], { fill: P.copper, w: 2.5, boil: 0.4, seed: 3422, alpha: wa2 }); }
+      /* the future behind a brass shutter (from the end of the test window) */
+      const sh = K.E.back(K.inv(T.peek, T.peek + 0.4, t), 1.4);
+      if (sh > 0) {
+        const x0 = M.X(u2) + 4, x1 = M.pr + 6, y0 = M.pt - 30, h = (M.pb - M.pt + 40) * sh;
+        K.shape(c, K.rectPts(x0, y0, x1 - x0, h, 3), { fill: P.brass, w: 4, boil: 0.7, seed: 3430, shade: { color: P.brassDark, dx: 0, dy: -10 } });
+        for (let yy = y0 + 22; yy < y0 + h - 8; yy += 22) K.line(c, [[x0 + 6, yy], [x1 - 6, yy]], { stroke: P.brassDark, w: 2.5, boil: 0.4, seed: 3440 + yy, taper: false });
+        if (sh > 0.8) K.text(c, "?", (x0 + x1) / 2, y0 + h / 2, { size: 76, weight: 700, fill: P.paper, stroke: P.ink, w: 6 });
+      }
+      /* dust specks: gone once the backtest is cleaned */
+      const dust = 1 - K.inv(T.clean[0], T.clean[1], t);
+      if (wa > 0 && dust > 0) for (let i = 0; i < 14; i++) { const ux = 0.05 + 0.9 * K.hash(i, 31), vy = K.hash(i, 32); if (ux > 0.08 + (1 - dust) * 0.95) K.shape(c, K.blobPts(M.X(ux), K.lerp(M.pt, M.pb, vy), 9 + 6 * K.hash(i, 33), 6 + 4 * K.hash(i, 34), 7, 3450 + i, 0.4), { fill: "rgba(150,120,80,0.45)", stroke: null, w: 0, boil: 0.6, seed: 3450 + i }); }
+      const cs = K.inv(T.clean[0], T.clean[1] + 0.3, t);
+      if (cs > 0 && cs < 1) for (let i = 0; i < 4; i++) { const f = (cs * 4 - i); if (f > 0 && f < 1) K.sparkle(c, M.X(0.15 + i * 0.22), K.lerp(M.pt, M.pb, 0.3 + 0.1 * (i % 2)), 30 * Math.sin(f * Math.PI), 1, 3460 + i); }
+    },
+  });
+  /* the nursery pot, the little model and the pellets */
+  K.pot(ctx, ST_D.pot, BENCH_Y, K.E.back(pa, 2.2), { seed: 3500, color: P.copper, shadow: "#844524", squash: t > T.plant + BEAT ? Math.exp(-(t - T.plant - BEAT) * 9) * Math.sin((t - T.plant - BEAT) * 30) * 0.3 : 0 });
+  const g = K.inv(T.plant + BEAT * 2, T.wf, t) * 2;
+  if (g > 0) K.treePlant(ctx, ST_D.pot, BENCH_Y - 118, 0.7, { grow: g, depth: 2, seed: 3520, spread: 120, ratio: 2, levelH: 70, sway: 1 });
+  for (let i = 0; i < 8; i++) {
+    const t0 = T.feed[0] + (i * BEAT) / 2, u = K.inv(t0, t0 + 0.42, t);
+    if (u <= 0 || u >= 1) continue;
+    const h = feedHand(t0), x = K.lerp(h[0], POT_D[0] + K.hs(i, 3) * 30, u), y = K.lerp(h[1], POT_D[1], u) - Math.sin(u * Math.PI) * 110;
+    K.pellet(ctx, x, y, 17, i, 3600 + i * 5);
   }
 }
 
 /* foreground ferns (parallax 1.25) for depth */
 function drawForeground() {
   K.applyCam(ctx, 1.25);
-  [[700, 1180, -0.4], [2050, 1200, 0.3]].forEach((f, i) => {
+  [[700, 1180, -0.4], [2050, 1200, 0.3], [7080, 1190, 0.25]].forEach((f, i) => {
     for (let k = 0; k < 5; k++) K.leaf(ctx, f[0] + k * 14, f[1], -1.57 + f[2] + (k - 2) * 0.45 + Math.sin(K.now * 1.2 + i + k) * 0.04, 3.4 - Math.abs(k - 2) * 0.5, 2800 + i * 10 + k, P.leafDark);
   });
 }
 
 function drawLab(t) {
   K.applyCam(ctx, 0.9);
-  K.labWall(ctx, -400, 5800, { top: -700, bottom: 1500, dado: 560, windows: WINDOWS, seed: 3 });
-  K.pipe(ctx, [[-400, -90], [1300, -90], [1300, 20], [2200, 20], [2200, -90], [5800, -90]], { seed: 40, w: 20 });
+  K.labWall(ctx, -400, 8200, { top: -700, bottom: 1500, dado: 560, windows: WINDOWS, seed: 3 });
+  K.pipe(ctx, [[-400, -90], [1300, -90], [1300, 20], [2200, 20], [2200, -90], [8200, -90]], { seed: 40, w: 20 });
   K.applyCam(ctx, 1);
-  K.bench(ctx, -300, 5600, BENCH_Y, { seed: 60 });
+  K.bench(ctx, -300, 7900, BENCH_Y, { seed: 60 });
+  K.lamp(ctx, 1260, 30, { seed: 1190, len: 240, on: lampsOn(t), sway: Math.sin(t * 1.1) * 6 });
   drawStationA(t);
   drawStationB(t);
   drawStationC(t);
+  drawStationD(t);
 }
