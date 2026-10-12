@@ -43,4 +43,14 @@ critique, fix, re-snapshot. Final sheet: `snapshots/contact-sheet.jpg`.
 
 ## Round 4 (rendered mp4s)
 
-See the end of this file after the four renders were inspected.
+- All four renders: 19.000 s, H.264 1920x1080 30 fps yuv420p, AAC 48 kHz stereo,
+  -15.9 LUFS integrated. Frames pulled at 0.3 / 0.8 / 1.5 / 3 / 9 / 18.7 s (en)
+  and 8 s (ru, zh-CN, zh-TW).
+- Highlight follows `lang` in every render (English / Русский / 简体中文 / 繁體中文
+  sign turns sun-yellow with a coral tab); headline and slot labels localized.
+- During the chip pop-in (about 1.2-1.9 s) the back-ease overshoot briefly lets
+  a chip's text touch its neighbour. Transient (under 0.2 s), left as is.
+- "Подписаться" at the 32 px floor nearly fills the subscribe circle; it stays
+  inside the dashed ring and is covered by the YouTube subscribe element anyway.
+- The renderer's auto-worker calibration flags frame 0 as a "small frame" (it is
+  a solid ink cloud) and drops to one worker; output is correct, ~2.5 min each.
