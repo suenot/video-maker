@@ -1,0 +1,64 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "Graph Algorithms for Arbitrage Detection:\nFrom Bellman-Ford to RICH\n\nHow negative cycles, multi-asset graphs, and the RICH algorithm identify arbitrage opportunities in the\ndeep cryptocurrency market with sub-millisecond precision.\n\nAuthors: suenot | Date: 2026-02-23 | Part 1 of the series ‘Complex Arbitrage Chains Between Futures and Spot'\n\nGemini Notebook"
+    },
+    {
+      "page": 2,
+      "text": "1. The Market as a Graph\n\n1.1 Vertices and Edges\n\nMapping millions of live market pairs into a measurable mathematical universe.\n\nORDER BOOK CHAOS GRAPH THEORY MODEL\n| A NE I] Edges (Links):\n= a Vertices (Nodes): Trading pairs\nEa Assets (BTC, ETH, USDT) he (BTC/USDT, ETH/BTC)\na a —\n — Weights:\n<¢—— The exchange rate,\n\nR(i, j)\n\n=e\n\nR(USDT, ETH)\n\nMULTIPLICATIVE CYCLE CONDITION\n\nRCL) OH Rite <5 Rigel ue. 1\n\n& Gemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "1.2 From Multiplication to Addition\nEquation Transformation pipeline\nConverting multi-leg profit calculations from heavy multiplication to rapid addition.\n\nMultiplicative\nR ? i Condition\n\nTransformation Rationale\n\nIn(a x b)\n= In(a) + In(b)\n\nSign-Preserving\nw = -Ltn ( R) Transformation\n(Additive Weight)\n| | [ SE)\n\n| (-1n(R,)) + (-In(R,)) +. + (-1n(R,)) < 0 |\n\nTo find an arbitrage opportunity, every\n\nFunction gate edge is assigned weight w = —In(R).\n\nThe task is now to find a cycle with a\nnegative total weight.\n\nAdditive Cycle Condition for Arbitrage (Negative Cycle Detection)\n\nGemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "2. Classical Approach: Bellman-Ford\n2.1 The Algorithm in Rust\n\nThe \"Hello World\" of arbitrage detection relies on identifying negative cycles.\n\nuse petgraph::graph::{DiGraph, NodeIndex};\nuse petgraph::algo::bellman_ford;\n\ncn ee ee ee\n\nfn find_arbitrage_bellman_ford(\ngraph: &DiGraph<&str, f64>,\nstart_node: NodeIndex\n\nmatch bellman_ford(graph, start_node) {\nOk(_) => None,\nENG (CGO Ip) ae tae ee ee eee\nprintltn! (\"Arbitrage detected!\");\n\n) -> Option<Vec<NodeIndex>> { ¢--------------t-\n\nee CAVEAT: This petgraph snippet is illustrative, incomplete, and uncompiled.\n\nCAVEAT: Prints detection but explicitly\nreturns None even on the error path.\n\nCAVEAT: It does not reconstruct the\nactual arbitrage cycle.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 5,
+      "text": "2.2 Complexity and Limitations\n\nMathematical certainty bottlenecked by scale and execution speed.\n\n(where V = assets, E = pairs)\n\nV) Pros:\n\nGuarantees finding a\noyclie.af. 1E exi6ts.\n\n4\nOW x)\n\n(x) Cons:\n\nToo slow for High-\nFrequency Trading (HFT)\nwhen asset counts grow.\n\nPoet ae Thousands of Assets eee\n\nVY\n\nSal\nf\n\nYX\n\nANS\n\nThe One-Source Limitation: Algorithm\nonly outputs a single cycle at a time.\n\nGemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "3. SPFA: A Faster Alternative\n\nBypassing redundant calculations through active queue management.\n\nuse petgraph: :algo::spfa_negative_cycle;\nNode D\n\n° . ° A crs . on , Redundant\nfn find_arbitrage_spfa(graph: &DiGraph<.. ->veebeuue ...) -> Option<Vec<...>> { (Redundant)\n\nmi. A... & _— ve Node G Node E } ZZ ®\n\nNodeB | “ty EH. Node F\n(Stagnant) \\ —i 06 A—_ 50-8\n\nOT SES SEES ; se\nwhile tet Some(node) = queue.pop_front() {\nNode D pew-dist < dist[neighbor] {\n(Redundant)\n\nSource practical runtime claim: [oe ee = new_dist;\nO(k x E) where k <V, highly efficient f}@-PuSh_back (neighbor) ;\nfor sparse market graphs.\n\nCAVEAT: Source-claimed practical speed is observed behavior; it does not represent a worst-case mathematical bound.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "4. Modern Research: The RICH Algorithm\n\nTransitioning from generic pathfinding to high-profitability cyclic targeting.\n\nBellman-Ford\n\n2024\n\nRICH\n\n(Rapid\nIdentification\nof Cyclic High-\nprofitability)\n\nOptimized for millisecond updates to lock\nonto the most profitable cycle.\n\nTargets the first available cycle.\n\nGemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "4.1 Key Innovations of RICH\n\nThree architectural shifts designed to outpace millisecond market movements.\n\nPruning Layered Search Incremental Updates\n\nDiscards paths that cannot possibly Searches for cycles of increasing Only updates the localized graph\nlead to a profitable cycle based on length using bitmask state tracking areas affected by a price change,\nthe current best-known path. optimizations. bypassing full re-runs.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 9,
+      "text": "Premium Financial Research Dossier\n\nAlgorithm Synthesis Matrix\n\nEvolutionary overview of arbitrage detection architectures.\n\nCore Mechanic Full relaxation Queue-based relaxation | Pruning & Layered Search\n\nCycle Target First detected cycle First detected cycle Most profitable cycle\n\nj Optimized for millisecond\nSpeed / Complexity Practical O(k Xx E) incremental updates on\nsmall/medium graphs\n\nWorst-case edge Complexity of bitmask\n\nPrimary Bottleneck One-source limitation redundancy state tracking\n\nGemini Notebook"
+    },
+    {
+      "page": 10,
+      "text": "5. Implementation Challenges: Fees and Liquidity\n5.1 Incorporating Fees\n\nExecution costs severely prune theoretical mathematical loops.\n\nReality vs. Theory\nTheory Reality\n\nPruned /\nUnprofitable\n\nTheoretical\nProfit\n\n) (Cc)\n[ w = —Ln(R x (1 - fee))\n\n-\n!\ncal\n\nom mini Not"
+    },
+    {
+      "page": 11,
+      "text": "Premium Financial Research Dossier\n\n5.2 Liquidity and Slippage\n\nScaling volume bends the edges of the arbitrage graph.\n\nSlippage Curve: Execution Price vs. Volume\n\n“fo\n\n[ NetPro\n\n+\n\nZero-Profit Baseline\n\nf<>}\n\nNet Loss\n(Depleted Order-Book Depth)\n\nExecution Price\n(Relative to Mid-Market)\n\n$100 $2,500 $5,000 $7 ,500\nTrade Volume (SUSD)\n\n$10 ,000\n\nr 7\nParametric Weights\n\nEdge weight ‘w’ becomes a\nfunction of volume ‘V’, turning\nshortest-path search into Convex\nOptimization on a graph.\n\nr\n\nA Explicit Caveat:\n\nExplicit Caveat: Volume-\ndependent weights alone do\nnot mathematically prove\nthe optimization problem on\n\na graph is convex.\ni\n\n& Gemini Notebook"
+    },
+    {
+      "page": 12,
+      "text": "Real-World Execution Risks\n\nA negative mathematical cycle does not guarantee net executable profit.\n\nStale Quotes Hazard Dashboard Market Depth\ni = & Slippage\nMicrosecond latency Px = Depleti f vol\n: isvaS, = epletion of volume\nin data feeds. ZX | cay during execution.\nEdge Edge\n\nWeight < /) \\ee\" <0\n// _A\\\n\nNegative Cycle\n\nVenue/Counterparty\nRisks\n\nExchange downtime\nor API limits.\n\nOrder Sequencing\nEdge Weight < 0\n\nDelays between\nmulti-leg jumps.\n\nFees\n\nDynamic or tier-based\nexecution costs.\n\nArbitrage is not practically ‘risk-free’. Executing a theoretical negative cycle is subject to extreme friction.\n\nGemini Notebook"
+    },
+    {
+      "page": 13,
+      "text": "6. Why Rust?\n\nEngineering an execution engine that operates beneath the latency boundary.\n\n“100 microseconds is the difference between\n\nprofit and a skipped opportunity.”\n\nZero-Cost Abstractions\n\nHigh-level graph structures\nwith raw pointer performance.\n\nMemory Safety | Fearless Concurrency\n\n~ Parallel WebSocket parsing\nfrom 10+ exchanges.\n\nNo garbage collector (GC) |\npauses that freeze the bot.\n\nGemini Notebook"
+    },
+    {
+      "page": 14,
+      "text": "Conclusion\nGraph algorithms form the engine of modern crypto arbitrage.\n\nBellman-Ford provides the mathematical foundation, while\nmodern systems survive via SPFA optimizations and RICH logic.\n\n\\ \\\n\\ \\ ‘\n\\\n\nFunding Rates\n\n\\\n\\\n\\ \\ \\\n\\ 1\n\n—_—--—3--—--.\n-\n=\n\n\\\n\\\n\\\n\\\n\\\n|\n!\n|\nI\n!\nI\n\nwee 27\"\"=-—-..\n\n! !\n! !\n!\n\n\\\n\\\n\\\n\\\n|\n|\nI\n!\n!\n!\n!\n!\nI\n\n!\nI !\n\nCash-and-Carry\n\nThe ecosystem is evolving beyond simple swaps to\ncomplex Futures-Spot Arbitrage chains.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 15,
+      "text": "Source, Resources & Disclaimers\nExplore the open-source implementation.\n\nResource Link: Open Source Rust HFT Template\nURL: https://github.com/marketmaker-cc/hft-rust-core\n\nMetadata:\nSource: 'MM article complex-arbitrage-graph-algorithms EN e8c18d495609'\nDate: 2026-02-23.\n\n- Research, benchmarks, performance claims, and source code have not been independently verified.\n- Arbitrage is not practically 'risk-free'; subject to operational, venue, and liquidity risks.\n- Chinese regional terminology and Mandarin pronunciation await human editorial and listening review.\n\n& Gemini Notebook"
+    }
+  ]
+}
