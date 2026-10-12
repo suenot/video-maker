@@ -9,7 +9,7 @@
 const TRAIN = { rail: 880, v: 560, x0: 120, s: 1.2 };
 const VOL = [430, 330, 250, 200, 190, 215, 270, 360, 470];
 const locoX = (t) => TRAIN.x0 + TRAIN.v * (t - T.steam[0]);
-const GAUGE = { x: locoX(T.gauge) + 640, y: 330, r: 130 };
+const GAUGE = { x: locoX(T.gauge) + 600, y: 390, r: 125 }; /* low enough to clear the logo corner */
 
 function slipNeedle(t) {
   const base = 0.14 + 0.025 * Math.sin(t * 9) + 0.015 * Math.sin(t * 23);

@@ -1,9 +1,13 @@
 /* ============================================================
    INTRO 20 STATION: the yard (0 - 9.1 s), one continuous world.
+   Instrumental (0 - 3.6 s):
    0.00  close on Mr. Tick and his pocket watch; the giant crate behind
    1.83  he looks up: "!" and the camera pulls back to show its size
+   (mouseIntroPose also keeps a dawn walk-in and a timetable-board beat,
+   switched off by T.walk / T.board in the short cut, for a longer song)
+   Verse (3.6 - 9.1 s):
    3.60  "where the clockwork turns": the tower clock ticks on every beat
-   5.43  wide yard; "a big order splits": cut lines, then 8 slices hop onto 8 wagons
+   5.43  wide yard; "a big order splits": cut lines, then 8 pieces hop onto 8 wagons
    7.24  whip pan to the bridge; wagons leave a quarter beat apart, tiny ripples,
          the price flap moves one tick only ("the price won't slide")
    ============================================================ */
@@ -151,16 +155,24 @@ function tickStars(c, t) {
   }
 }
 
-function mouseYardPose(t) {
+function mouseIntroPose(t) {
   const bl = K.blinkAt(t, 9), pulse = K.pulse(t, 1, 6);
-  const st = { blink: bl, squash: 0.06 * pulse, seed: 700 };
-  if (t < T.camClock[0]) {
+  const st = { blink: bl, squash: 0.06 * pulse, seed: 700, mouth: "smile" };
+  if (t < T.walk[1]) {
+    /* walking in, swinging his arms */
+    const ph = (t / BEAT) * Math.PI;
+    st.legWalk = ph; st.squash = 0.05 * Math.abs(Math.sin(ph)); st.look = [1, 0];
+    st.handL = { x: -60 + 18 * Math.sin(ph), y: -70 }; st.handR = { x: 60 - 18 * Math.sin(ph), y: -70 };
+    return st;
+  }
+  const arrive = t - T.walk[1];
+  if (arrive < 0.5) st.squash = 0.22 * Math.exp(-arrive * 6) * Math.cos(arrive * 16);
+  if (t < T.board) {
     /* watch close-up, then the look up */
     const lid = K.inv(T.lid, T.lid + 0.3, t) * (1 - K.inv(T.lidShut, T.lidShut + 0.12, t));
     st.handL = { x: -58, y: -122 + 4 * pulse, hold: "watch", lid };
     st.handR = { x: 66, y: -80 };
-    st.look = [-0.5, 0.9];
-    st.mouth = "smile";
+    st.look = t < T.push[0] ? [0.3, 0] : [-0.5, 0.9];
     const u = t - T.lookUp;
     if (u > -0.18 && u < 0) st.squash = 0.28 * K.inv(-0.18, -0.05, u); /* anticipation */
     if (u >= 0) {
@@ -168,6 +180,21 @@ function mouseYardPose(t) {
       st.squash = -0.25 * Math.exp(-u * 5) * Math.cos(u * 16); st.brow = 1.3; st.mouth = u < 0.7 ? "o" : "grin"; st.ear = Math.exp(-u * 4) * Math.sin(u * 30);
       if (u > 0.55) { st.exclaim = 1 - K.inv(1.1, 1.3, u); st.handR = { x: 120, y: -200 - 6 * pulse, hold: "point" }; }
     }
+    return st;
+  }
+  /* the timetable: points at the board, then nods along with each departure */
+  st.handL = { x: -60, y: -130 + 4 * pulse, hold: "watch", lid: 1 };
+  st.handR = { x: 118, y: -214 - 10 * pulse, hold: "point" };
+  st.look = [1, -1]; st.brow = 0.6;
+  const w = K.inv(T.whistleIn[0], T.whistleIn[0] + 0.3, t);
+  if (w > 0) { st.handR = { x: 30, y: -172, hold: "whistle", wAng: Math.PI * 1.04 }; st.mouth = "whistle"; st.puff = 0.3 + 0.7 * K.inv(T.whistleIn[0] + 0.3, T.steam0[0] + 0.3, t); st.look = [0.4, -0.2]; st.blink = 0; st.squash = -0.12 * st.puff; }
+  return st;
+}
+
+function mouseYardPose(t) {
+  const bl = K.blinkAt(t, 9), pulse = K.pulse(t, 1, 6);
+  const st = { blink: bl, squash: 0.06 * pulse, seed: 700 };
+  if (t < T.camWide[0]) {
   } else if (t < T.camWide[0]) {
     /* compares his watch with the tower clock, nodding on the beat */
     st.handL = { x: -70, y: -230 + 8 * pulse, hold: "watch", lid: 1 };
@@ -220,7 +247,20 @@ function drawYard(c, t) {
     K.flap(c, POND.x, 470, "100.01", { a: fa, h: 110, prev: "100.00", flip: K.inv(T.priceFlip, T.priceFlip + 0.35, t), seed: 1310, colors: [null, null, null, null, null, P.mustardLight] });
   }
   /* Mr. Tick */
-  if (t < WHIP_MID) K.mouse(c, 520, PLAT_Y, MOUSE_S, mouseYardPose(t));
+  /* the timetable board (instrumental only) */
+  if (t < T.camClock[0]) {
+    const ba = K.inv(T.board, T.board + 0.4, t);
+    if (ba > 0) {
+      [1300, 1640].forEach((px, i) => K.shape(c, K.rectPts(px - 8, 420, 16, PLAT_Y - 420 + 60, 2), { fill: P.ink, w: 2, seed: 1150 + i, reg: 0 }));
+      const rows = [["#", "time", "qty"], ["1", "09:00", CHILD], ["2", "09:30", CHILD], ["3", "10:00", CHILD], ["…", "…", "…"], ["8", "12:30", CHILD]];
+      const shown = (t - T.board) / (BEAT * 0.5), hi = t > at(6, 0) ? 1 + (Math.floor((t - at(6, 0)) / BEAT) % 3) : -1;
+      K.board(c, 1240, 70, [80, 170, 170], rows, { a: ba, size: 32, rowH: 56, shown, hi, seed: 1160 });
+    }
+  }
+  if (t < T.camClock[0]) {
+    const wx = K.lerp(-380, 520, K.E.out3(K.inv(T.walk[0], T.walk[1], t)));
+    K.mouse(c, wx, PLAT_Y, MOUSE_S, mouseIntroPose(t));
+  } else if (t < WHIP_MID) K.mouse(c, 520, PLAT_Y, MOUSE_S, mouseYardPose(t));
   else K.mouse(c, BRIDGE_MOUSE_X, RAIL + 74, MOUSE_S, mouseBridgePose(t));
   /* whip-pan speed lines */
   const wv = Math.sin(Math.PI * K.inv(T.whip[0], T.whip[1], t));

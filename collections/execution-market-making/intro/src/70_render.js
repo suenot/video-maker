@@ -1,26 +1,51 @@
 /* ============================================================
    INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
    drives a proxy whose setter calls render(t).
-   0.00 - 9.08   the yard (20_station.js), with a whip pan at 7.24
-   8.66 - 9.38   departure-board wipe (split flaps) to the quote booths
-   9.08 - 10.91  "Quote both sides" (30_quotes.js)
-   10.41 - 11.23 steam wipe to the train
-   10.91 - 14.58 "Choo choo, keep the slippage low" (40_train.js)
-   14.16 - 14.88 departure-board wipe to the title
-   14.58 - 19.80 "Execution and Market Making, on deck!" (50_title.js)
-   Transitions are diegetic: a split-flap board and a wall of steam,
-   never a crossfade. Both sides of a wipe render to offscreen buffers.
+   Scenes (draw(c, t) functions) follow each other on the song's downbeats;
+   between two scenes a diegetic transition renders both into offscreen
+   buffers and composites them: a split-flap board, a wall of steam, or a
+   railway tunnel. Never a crossfade.
+     0.0  yard (intro + verse)     flap   9.1  quote booths
+    10.9  train "Choo choo"         tunnel 14.6  order-book board
+    18.3  balance "inventory"       flap  21.9  title, "All aboard" to 27.1
    ============================================================ */
 const bufA = document.createElement("canvas"), bufB = document.createElement("canvas");
 bufA.width = bufB.width = 1920; bufA.height = bufB.height = 1080;
 const ctxA = bufA.getContext("2d"), ctxB = bufB.getContext("2d");
 
+const sLadder = (c, t) => drawLadder(c, t, T.L2, "+0.04", BOOK1);
+const sBal = (c, t) => drawBalance(c, t, T.B2);
+/* [window, from, to, kind] in time order; a scene runs from the middle of one window to the middle of the next */
+const CUTS = [
+  [T.flap1, drawYard, drawQuotes, "flap"],
+  [T.steam, drawQuotes, drawTrain, "steam"],
+  [T.tunnel3, drawTrain, sLadder, "tunnel"],
+  [T.steam2, sLadder, sBal, "steam"],
+  [T.flap2, sBal, drawTitleSet, "flap"],
+];
+
 /* scene for time t (outside transitions) */
 function sceneAt(t) {
-  if (t < (T.flap1[0] + T.flap1[1]) / 2) return drawYard;
-  if (t < (T.steam[0] + T.steam[1]) / 2) return drawQuotes;
-  if (t < (T.flap2[0] + T.flap2[1]) / 2) return drawTrain;
-  return drawTitleSet;
+  let sc = drawYard;
+  CUTS.forEach((q) => { if (t >= (q[0][0] + q[0][1]) / 2) sc = q[2]; });
+  return sc;
+}
+
+/* railway tunnel: an arch closes to black on the old scene and opens on the new one */
+function tunnelWipe(c, u) {
+  const closing = u < 0.5, k = closing ? 1 - K.E.in3(u * 2) : K.E.out3((u - 0.5) * 2);
+  const r = 40 + 1280 * k, cx = 960, cy = 620;
+  K.screen(c);
+  c.fillStyle = P.ink; c.fillRect(0, 0, 1920, 1080);
+  if (k > 0.002) {
+    const arch = () => { c.beginPath(); c.moveTo(cx - r, 1200); c.lineTo(cx - r, cy); c.arc(cx, cy, r, Math.PI, 0); c.lineTo(cx + r, 1200); c.closePath(); };
+    c.save(); arch(); c.clip(); c.drawImage(closing ? bufA : bufB, 0, 0); c.restore();
+    /* brick ring of the portal */
+    c.save(); c.strokeStyle = P.tomatoDark; c.lineWidth = 34; arch(); c.stroke();
+    c.strokeStyle = P.ink; c.lineWidth = 4; c.beginPath();
+    for (let i = 0; i <= 14; i++) { const a = Math.PI + (i / 14) * Math.PI; c.moveTo(cx + Math.cos(a) * (r - 17), cy + Math.sin(a) * (r - 17)); c.lineTo(cx + Math.cos(a) * (r + 17), cy + Math.sin(a) * (r + 17)); }
+    c.stroke(); c.restore();
+  }
 }
 
 /* split-flap wipe: tiles flip column by column, left to right */
@@ -72,11 +97,14 @@ function steamWipe(c, u) {
 function render(t) {
   let box = null;
   try {
-    const inFlap1 = t >= T.flap1[0] && t < T.flap1[1], inSteam = t >= T.steam[0] && t < T.steam[1], inFlap2 = t >= T.flap2[0] && t < T.flap2[1];
-    if (inFlap1) { drawYard(ctxA, t); drawQuotes(ctxB, t); flapWipe(ctx, K.inv(T.flap1[0], T.flap1[1], t)); }
-    else if (inSteam) { drawQuotes(ctxA, t); drawTrain(ctxB, t); steamWipe(ctx, K.inv(T.steam[0], T.steam[1], t)); }
-    else if (inFlap2) { drawTrain(ctxA, t); box = drawTitleSet(ctxB, t); flapWipe(ctx, K.inv(T.flap2[0], T.flap2[1], t)); }
-    else {
+    const cut = CUTS.find((q) => t >= q[0][0] && t < q[0][1]);
+    if (cut) {
+      const u = K.inv(cut[0][0], cut[0][1], t);
+      cut[1](ctxA, t);
+      const r = cut[2](ctxB, t);
+      if (cut[2] === drawTitleSet) box = r;
+      if (cut[3] === "flap") flapWipe(ctx, u); else if (cut[3] === "steam") steamWipe(ctx, u); else tunnelWipe(ctx, u);
+    } else {
       const sc = sceneAt(t);
       const r = sc(ctx, t);
       if (sc === drawTitleSet) box = r;
@@ -86,12 +114,15 @@ function render(t) {
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "26px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 150), 20, 50);
   }
   layoutTitleDom(t, t >= T.flap2[1] ? box : null);
+  /* logo: one small bounce on the first downbeats, then static */
+  const lb = K.inv(0.05, 0.5, t), bounce = lb > 0 && lb < 1 ? Math.sin(Math.PI * lb) : 0;
+  logoEl.style.transform = `translateY(${(-10 * bounce).toFixed(2)}px) scale(${(1 + 0.05 * bounce).toFixed(3)})`;
   /* paper grain steps at the boil rate */
   const f = K.boilFrame(t);
   grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px";
 }
 
-const grainEl = document.getElementById("grain");
+const grainEl = document.getElementById("grain"), logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .42  0 0 0 0 .3  0 0 0 1.4 -.2'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
 
 const TL = gsap.timeline({ paused: true });

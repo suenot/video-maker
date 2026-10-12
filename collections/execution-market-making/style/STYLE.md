@@ -91,14 +91,16 @@ Animation rules (lessons carried over from the crab):
 - Transitions are diegetic and land on downbeats:
   - **departure-board wipe**: the frame becomes an 8 x 4 split-flap board and flips left to right (`flapWipe` in `intro/src/70_render.js`);
   - **steam wipe**: a wall of puffs rolls across, the next set behind it;
+  - **railway tunnel**: an arch with a brick ring closes to black on the old set and opens on the new one;
   - **whip pan** with cream speed lines inside one world.
   Never a crossfade.
 
 ## 8. Timing (beat grid)
 
 - The theme song is big-band swing at about 129 BPM: a beat is 0.464 s and a bar is about 1.84 s. Write times as `K.at(bar, beat)`.
-- The intro grid is `BARS = [0.0, 1.83, 3.60, 5.43, 7.24, 9.08, 10.91, 12.72, 14.58, 16.37, 18.20]` (measured on `song_20s.m4a`).
-- Sung lines start about 1.4 beats after the bar line, so the illustrating action goes on that word, not on the bar: "splits" at bar 3 beat 1, "price won't slide" at bar 4 beat 3.4.
+- The intro runs the whole short song (`song_short.m4a`, 27.1 s, brief UPDATE 3). Its grid is 15 measured downbeats (`K.G.BARS` in `intro/src/10_setup.js`): bars 0-1 instrumental, 2-5 verse, 6-13 chorus, 14 outro.
+- Sung lines start about 1.4 beats after the bar line, so the illustrating action goes on the word (word times from `hyperframes transcribe`), and camera moves and wipes go on the bar line.
+- A meaningful change every 2-4 s: each sung line (2 bars in the chorus, 1 bar in the verse) gets its own set or event.
 - Determinism: no `Math.random`, `Date.now` or `performance.now`; seeded `hash` / `mulberry` only.
 
 ## 9. Explainer elements in this world (for episodes)
@@ -122,7 +124,11 @@ Animation rules (lessons carried over from the crab):
 
 Layout rules: at most 2 explainer objects in frame plus Mr. Tick reacting; text sits on boards, signs or paper, never on raw sky; 64 px safe margin; numbers on screen must be the script's numbers.
 
-## 10. Do / don't
+## 10. Logo
+
+The marketmaker.cc logo (`kit/assets/logo.svg`, `fill="currentColor"`) sits top-right on every frame: 48 px margin, 100 px tall cream plate with a charcoal key line and a 5 px offset shadow (a printed sticker), the mark at 72 px plus the wordmark in Jost 700 38 px. It is a DOM overlay above the canvas, grain and vignette. `build.py` inlines the SVG at the `<!--__LOGO__-->` marker so CSS `color` tints it. One small bounce in the first half second, then static. Keep big signs, gauges and boards out of the 1450-1872 x 48-160 corner.
+
+## 11. Do / don't
 
 Do: move through a world; let the mouse react to every reveal; put pops on beats and smooth camera between them; keep tomato for impact and the ask side.
 Don't: flat slide cards; thick broken ink or hatching (that is the crab); neon glow or gradients as decoration; language-specific words in the drawn world (tickers like BID / ASK, numbers and icons only), so one render path serves en, ru, zh-CN and zh-TW.

@@ -13,6 +13,7 @@ The architecture is the same as the Arbitrage Crab kit (`complex-arbitrage-rust/
 | `40_mouse.js` | `mouse(ctx, x, y, s, pose)` with squash/stretch, IK arms (`ik2`), blink, mouths incl. whistle, cheek puff, ear flick, tail, cap tip, props (`pocketWatch`, `whistle`, flag, thumb, point), `!`; `blinkAt` |
 | `50_explainer.js` | `flap` / `flapChar`, `board`, `plaque`, `poster`, `tickets`, `teletype`, `stop` / `route` / `routePoint`, `tag`, `sign`, `popS` |
 | `fonts/` | local woff2 (Jost, IBM Plex Mono, CJK subsets) + `fonts.css`; refresh with `tools/fetch_fonts.py` |
+| `assets/logo.svg` | marketmaker.cc logo (`currentColor`); `build.py` inlines it at a `<!--__LOGO__-->` marker in the shell (see `intro/tools/shell.html`, `#logo`) |
 | `vendor/gsap.min.js` | GSAP 3.14.2 (local, no CDN) |
 
 ## Using the kit in an episode

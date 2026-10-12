@@ -59,6 +59,11 @@
       #title.cjk-tc .ln { font-family: "Jost", "CJK TC", sans-serif; letter-spacing: 0.12em; }
       #preload .sc { font-family: "CJK SC"; font-weight: 900; }
       #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      /* marketmaker.cc logo: top-right, 48 px margin, ~100 px tall, always on top of the action */
+      #logo { position: absolute; right: 48px; top: 48px; height: 100px; display: flex; align-items: center; gap: 14px; padding: 0 26px 0 16px; background: rgba(243, 230, 200, 0.92); border: 3px solid #2a2a2e; border-radius: 22px; color: #2a2a2e; box-shadow: 5px 6px 0 rgba(42, 42, 46, 0.85); transform-origin: 100% 0; }
+      #logo .mk { width: 72px; height: 72px; display: block; }
+      #logo .mk svg { display: block; width: 72px; height: 72px; }
+      #logo .wm { font-family: "Jost", sans-serif; font-weight: 700; font-size: 38px; letter-spacing: 0.01em; line-height: 1; white-space: nowrap; }
       #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
       #preload .j5 { font-family: "Jost"; font-weight: 500; }
       #preload .j7 { font-family: "Jost"; font-weight: 700; }
@@ -70,12 +75,48 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="19.8" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="27.1" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div id="title" data-layout-allow-overlap></div>
       <div class="ov" id="vig"></div>
       <div class="ov" id="grain"></div>
-      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="19.8" data-track-index="10" data-volume="1"></audio>
+      <div id="logo"><span class="mk"><svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1024 1024" preserveAspectRatio="xMidYMid meet">
+<g transform="translate(0, 1024) scale(0.1, -0.1)" fill="currentColor" stroke="none">
+<path d="M4815 9964 c-22 -2 -92 -9 -155 -14 -1263 -113 -2506 -762 -3284
+-1714 -595 -729 -940 -1541 -1053 -2481 -22 -188 -26 -815 -5 -990 74 -626
+245 -1198 509 -1705 501 -960 1276 -1694 2272 -2154 645 -298 1302 -439 2046
+-438 757 0 1402 147 2070 471 491 238 899 521 1264 876 813 789 1298 1766
+1438 2896 22 181 25 761 5 964 -58 577 -200 1087 -439 1585 -113 236 -184 361
+-334 585 -180 270 -349 476 -574 701 -368 369 -746 646 -1200 880 -563 290
+-1104 452 -1745 520 -146 15 -715 28 -815 18z m837 -559 c1134 -135 2191 -733
+2857 -1615 188 -249 385 -590 511 -885 132 -306 245 -719 294 -1071 37 -264
+48 -690 26 -939 -123 -1364 -861 -2559 -2003 -3243 -299 -179 -487 -266 -777
+-362 -836 -277 -1714 -292 -2579 -44 -119 35 -322 102 -330 110 -2 2 52 63
+120 135 519 553 1099 890 1714 996 73 12 159 17 320 18 300 0 359 -12 924
+-184 129 -39 263 -78 298 -86 187 -43 308 9 510 218 161 168 253 322 253 425
+0 76 -23 127 -156 349 -209 348 -358 662 -426 897 -15 54 -39 167 -53 250 -14
+83 -39 196 -57 250 -83 264 -268 406 -580 447 -54 7 -95 16 -92 20 9 16 120
+50 187 59 152 19 326 -17 779 -159 531 -166 733 -192 993 -126 178 45 317 127
+445 261 71 76 177 230 165 242 -2 3 -26 -9 -52 -26 -64 -41 -147 -77 -252
+-109 -78 -24 -102 -27 -256 -27 -139 -1 -191 3 -285 22 -203 41 -423 109 -725
+227 -654 254 -862 292 -1215 220 -188 -38 -298 -48 -371 -35 -35 6 -128 38
+-208 70 -266 106 -461 155 -716 181 -163 16 -480 6 -658 -21 -265 -40 -601
+-137 -916 -265 -86 -35 -244 -99 -351 -143 -205 -83 -335 -122 -435 -129 -71
+-5 -90 5 -81 40 8 33 99 147 209 262 48 50 87 95 87 100 0 20 -24 35 -58 35
+-49 0 -145 -54 -317 -180 -237 -173 -308 -199 -451 -166 -151 34 -520 172
+-614 228 -63 39 -88 70 -96 119 -10 59 13 113 101 236 171 240 249 360 299
+463 l51 105 0 210 c1 265 10 301 128 475 102 152 288 355 495 543 l74 66 -59
+58 c-68 67 -88 119 -81 208 6 68 40 115 118 162 89 54 172 77 280 76 52 0 120
+-5 152 -12 l56 -12 144 75 c268 140 477 214 835 296 304 69 480 127 700 230
+208 98 430 246 593 394 l95 87 155 -5 c85 -3 212 -13 282 -21z m1016 -5082
+c85 -41 130 -109 157 -240 8 -37 13 -68 12 -69 -1 -2 -48 19 -103 46 -121 59
+-139 79 -136 164 0 32 -5 76 -12 97 -14 39 -13 40 8 33 11 -3 45 -17 74 -31z"/>
+<path d="M2243 7035 c-92 -42 -196 -156 -205 -225 -4 -34 23 -37 94 -10 97 36
+180 131 202 233 6 23 3 27 -16 27 -13 0 -47 -11 -75 -25z"/>
+</g>
+</svg>
+</span><span class="wm">marketmaker.cc</span></div>
+      <audio id="song" src="song_short.m4a" data-start="0" data-duration="27.1" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="j5">Aa Бб 0</span><span class="j7">Aa Бб 0</span><span class="j8">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span><span class="sc">执行与做市</span><span class="tc">執行與造市</span></div>
     </div>
     <script>
@@ -1259,54 +1300,71 @@ var SK = window.SK || (window.SK = {});
 
 /* ============================================================
    INTRO 10 SETUP: variables, title DOM, timing (beat grid), world layout
-   Song: song_20s.m4a, big-band swing ~129 BPM (beat 0.464 s, bar ~1.84 s),
-   cut from song_raw.mp4: 11.19-14.81 intro turnaround, 29.49-40.50 verse +
-   first chorus line, 47.86-53.0 title line (see REVIEW.md).
+   Song: song_short.m4a (27.1 s), big-band swing ~129 BPM (beat 0.464 s,
+   bar ~1.84 s), cut from song_raw.mp4 on downbeats: 11.19-14.81 intro
+   turnaround + 29.49-53.0 verse and the whole second chorus, 1.2 s fade.
+   Word times from `hyperframes transcribe` (lyrics.srt is ~11 s off):
      0.00 instrumental (2 bars)
      3.52 "Down at the station where the clockwork turns"
      6.08 "A big order splits into little wagons in turns"
      7.92 "Slice it with care so the price won't slide"
      9.68 "Quote both sides and let the spread provide"
     10.96 "Choo choo, keep the slippage low"
-    14.68 "Execution and Market Making, on deck!"   18.9-19.8 fade
-   All story times are K.at(bar, beat) on the measured downbeats below.
+    14.80 "Buy the bid and sell the ask just so"
+    18.24 "Mind your inventory, keep it all in check"
+    22.32 "Execution and Market Making, on deck!"
+    25.04 "All aboard the market train"   25.9-27.1 fade
+   All story times are K.at(bar, beat) or sung-word times.
    ============================================================ */
 const K = SK, P = K.P, at = K.at;
 K.G.BPM = 129.2;
-K.G.BARS = [0.0, 1.83, 3.60, 5.43, 7.24, 9.08, 10.91, 12.72, 14.58, 16.37, 18.20];
-const DUR = 19.8, BEAT = 60 / K.G.BPM;
+K.G.BARS = [0.0, 1.83, 3.60, 5.43, 7.24, 9.08, 10.91, 12.72, 14.61, 16.42, 18.25, 20.09, 21.94, 23.78, 25.61];
+const DUR = 27.1, BEAT = 60 / K.G.BPM;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 
-/* ---------- story beats (on the song's downbeats) ---------- */
+/* ---------- story beats (on the song's downbeats and sung words) ---------- */
 const T = {
-  lid: at(0, 1),                   /* 0.46 the pocket watch opens */
-  lidShut: at(0, 3.2),             /* the watch snaps shut */
-  lookUp: at(1, 0),                /* 1.83 he looks up at the giant crate: "!" */
-  pull: [at(1, 0.2), at(1, 2.6)],  /* camera pulls back to show its size */
+  /* instrumental (bars 0-1): the yard */
+  walk: [-1, -0.5],                 /* (no walk-in in the short cut: he is already on the platform) */
+  push: [-1, -0.5],
+  lid: at(0, 1),                    /* 0.46 the pocket watch opens */
+  lidShut: at(0, 3.2),
+  lookUp: at(1, 0),                 /* 1.83 he looks up at the giant crate: "!" */
+  pull: [at(1, 0.2), at(1, 2.6)],   /* pull back to show its size */
+  board: 1e9, whistleIn: [1e9, 1e9], steam0: [1e9, 1e9],
+  /* verse (bars 2-5) */
+  verse: at(2, 0),
   camClock: [at(1, 3.2), at(2, 0.7)], /* 3.60 "Down at the station where the clockwork turns" */
   clock: at(2, 0),
   camWide: [at(2, 3.3), at(3, 0.6)],  /* 5.43 wide shot of the yard */
-  slice: [at(3, 1), at(3, 2)],     /* 5.89-6.36 "a big order SPLITS": cut lines */
-  hops: at(3, 2),                  /* 6.36 slices hop onto wagons, a quarter beat apart */
+  slice: [at(3, 1), at(3, 2)],        /* "a big order SPLITS": cut lines */
+  hops: at(3, 2),                     /* pieces hop onto wagons, a quarter beat apart */
   whip: [at(3, 3.55), at(4, 0.55)],   /* 7.24 whip pan to the bridge */
-  depart: at(4, 0.3),              /* wagons leave on a timetable */
-  priceFlip: at(4, 3.4),           /* 8.82 "the price won't slide": 100.00 -> 100.01 */
-  flap1: [at(5, 0) - 0.42, at(5, 0) + 0.3], /* departure-board wipe to the quote booths */
-  bid: at(5, 1),                   /* 9.54 "Quote both sides" */
+  depart: at(4, 0.3),
+  priceFlip: at(4, 3.4),              /* "the price won't slide": 100.00 -> 100.01 */
+  flap1: [at(5, 0) - 0.42, at(5, 0) + 0.3], /* board wipe to the quote booths */
+  bid: at(5, 1),                      /* 9.54 "Quote both sides" */
   ask: at(5, 1.75),
-  coins: at(5, 2.4),               /* "let the spread provide" */
+  coins: at(5, 2.4),                  /* "let the spread provide" */
   spread: at(5, 3),
+  /* chorus (bars 6-13) */
   steam: [at(6, 0) - 0.5, at(6, 0) + 0.32], /* steam wipe to the train */
-  choo: [at(6, 0), at(6, 1)],      /* 10.91, 11.37 "Choo choo" */
-  gauge: at(6, 3),                 /* "keep the slippage" */
-  low: at(7, 1.75),                /* 13.53 "low" */
+  choo: [10.96, 11.36],               /* "Choo choo" */
+  gauge: at(6, 3),                    /* "keep the slippage" */
+  low: 13.60,                         /* "low" */
   thumbs: at(7, 2),
-  flap2: [at(8, 0) - 0.42, at(8, 0) + 0.3], /* departure-board wipe to the title */
-  sign: [at(8, 0), at(8, 1.4)],    /* 14.58 "Execution and Market Making" */
-  letters: at(8, 0.35),
-  roundels: at(9, 0),              /* 16.37 */
-  whistle: at(9, 1.4),             /* 17.0 "on deck!" */
-  hatTip: at(10, 0),               /* 18.20 "all aboard" */
+  tunnel3: [at(8, 0) - 0.45, at(8, 0) + 0.3],
+  L2: { t0: at(8, 0), bid: 15.36, ask: 16.48, fill: 16.96, end: at(10, 0) },
+  steam2: [at(10, 0) - 0.5, at(10, 0) + 0.32],
+  B2: { t0: at(10, 0), drops: [18.3, 18.75, 19.2], sells: [20.08, 20.5], level: 20.88, end: at(12, 0) },
+  flap2: [at(12, 0) - 0.42, at(12, 0) + 0.3], /* board wipe to the title */
+  sign: [at(12, 0), at(12, 1.4)],     /* 21.94 "Execution and Market Making" */
+  letters: at(12, 0.6),
+  roundels: at(12, 2.5),
+  whistle: 24.24,                     /* "on deck!" */
+  aboard: [25.0, 26.35],              /* "All aboard the market train": the train pulls in */
+  cleared: 26.2,                      /* the line signal turns teal as the train stops */
+  hatTip: 26.45,                      /* cap tip as the song fades */
 };
 
 /* ---------- variables (title text, language) ---------- */
@@ -1321,9 +1379,9 @@ const titleEl = document.getElementById("title");
 if (LANG === "zh-CN") titleEl.classList.add("cjk-sc");
 if (LANG === "zh-TW") titleEl.classList.add("cjk-tc");
 const longest = Math.max(...TITLE_LINES.map((s) => s.length));
-/* Jost 800 caps run ~0.72 em with the 0.04 em tracking; Cyrillic caps ~6 % wider. Fit inside the 1300 px sign face. */
+/* Jost 800 caps run ~0.72 em with the 0.04 em tracking; Cyrillic caps ~6 % wider. Fit inside the 1030 px sign face (the sign leaves the top-right corner to the logo). */
 const EM = /[Ѐ-ӿ]/.test(VARS.title) ? 0.78 : 0.73;
-const TITLE_SIZE = IS_CJK ? 150 : Math.min(112, Math.floor(1300 / (EM * Math.max(8, longest))));
+const TITLE_SIZE = IS_CJK ? 140 : Math.min(108, Math.floor(1030 / (EM * Math.max(8, longest))));
 const TITLE_CH = [];
 TITLE_LINES.forEach((ln, li) => {
   const d = document.createElement("div");
@@ -1341,7 +1399,7 @@ const TITLE_LN = Array.from(titleEl.querySelectorAll(".ln"));
 
 /* ---------- station yard layout (world px, rail top y = RAIL) ---------- */
 const RAIL = 900, PLAT_Y = 836;
-const MOUSE_S = 1.2;
+const MOUSE_S = 1.45;
 const CRATE = { x: 1080, w: 560, h: 380 };           /* the parent order on its long flatcar */
 const WAG_S = 0.92, WAG_X0 = 1500, WAG_DX = 172, N_WAG = 8; /* the eight child orders */
 const POND = { x: 3560, w: 700 };                     /* the price pond under the bridge */
@@ -1350,10 +1408,14 @@ const ORDER = "10 000", CHILD = "1 250";
 
 /* ============================================================
    INTRO 20 STATION: the yard (0 - 9.1 s), one continuous world.
+   Instrumental (0 - 3.6 s):
    0.00  close on Mr. Tick and his pocket watch; the giant crate behind
    1.83  he looks up: "!" and the camera pulls back to show its size
+   (mouseIntroPose also keeps a dawn walk-in and a timetable-board beat,
+   switched off by T.walk / T.board in the short cut, for a longer song)
+   Verse (3.6 - 9.1 s):
    3.60  "where the clockwork turns": the tower clock ticks on every beat
-   5.43  wide yard; "a big order splits": cut lines, then 8 slices hop onto 8 wagons
+   5.43  wide yard; "a big order splits": cut lines, then 8 pieces hop onto 8 wagons
    7.24  whip pan to the bridge; wagons leave a quarter beat apart, tiny ripples,
          the price flap moves one tick only ("the price won't slide")
    ============================================================ */
@@ -1501,16 +1563,24 @@ function tickStars(c, t) {
   }
 }
 
-function mouseYardPose(t) {
+function mouseIntroPose(t) {
   const bl = K.blinkAt(t, 9), pulse = K.pulse(t, 1, 6);
-  const st = { blink: bl, squash: 0.06 * pulse, seed: 700 };
-  if (t < T.camClock[0]) {
+  const st = { blink: bl, squash: 0.06 * pulse, seed: 700, mouth: "smile" };
+  if (t < T.walk[1]) {
+    /* walking in, swinging his arms */
+    const ph = (t / BEAT) * Math.PI;
+    st.legWalk = ph; st.squash = 0.05 * Math.abs(Math.sin(ph)); st.look = [1, 0];
+    st.handL = { x: -60 + 18 * Math.sin(ph), y: -70 }; st.handR = { x: 60 - 18 * Math.sin(ph), y: -70 };
+    return st;
+  }
+  const arrive = t - T.walk[1];
+  if (arrive < 0.5) st.squash = 0.22 * Math.exp(-arrive * 6) * Math.cos(arrive * 16);
+  if (t < T.board) {
     /* watch close-up, then the look up */
     const lid = K.inv(T.lid, T.lid + 0.3, t) * (1 - K.inv(T.lidShut, T.lidShut + 0.12, t));
     st.handL = { x: -58, y: -122 + 4 * pulse, hold: "watch", lid };
     st.handR = { x: 66, y: -80 };
-    st.look = [-0.5, 0.9];
-    st.mouth = "smile";
+    st.look = t < T.push[0] ? [0.3, 0] : [-0.5, 0.9];
     const u = t - T.lookUp;
     if (u > -0.18 && u < 0) st.squash = 0.28 * K.inv(-0.18, -0.05, u); /* anticipation */
     if (u >= 0) {
@@ -1518,6 +1588,21 @@ function mouseYardPose(t) {
       st.squash = -0.25 * Math.exp(-u * 5) * Math.cos(u * 16); st.brow = 1.3; st.mouth = u < 0.7 ? "o" : "grin"; st.ear = Math.exp(-u * 4) * Math.sin(u * 30);
       if (u > 0.55) { st.exclaim = 1 - K.inv(1.1, 1.3, u); st.handR = { x: 120, y: -200 - 6 * pulse, hold: "point" }; }
     }
+    return st;
+  }
+  /* the timetable: points at the board, then nods along with each departure */
+  st.handL = { x: -60, y: -130 + 4 * pulse, hold: "watch", lid: 1 };
+  st.handR = { x: 118, y: -214 - 10 * pulse, hold: "point" };
+  st.look = [1, -1]; st.brow = 0.6;
+  const w = K.inv(T.whistleIn[0], T.whistleIn[0] + 0.3, t);
+  if (w > 0) { st.handR = { x: 30, y: -172, hold: "whistle", wAng: Math.PI * 1.04 }; st.mouth = "whistle"; st.puff = 0.3 + 0.7 * K.inv(T.whistleIn[0] + 0.3, T.steam0[0] + 0.3, t); st.look = [0.4, -0.2]; st.blink = 0; st.squash = -0.12 * st.puff; }
+  return st;
+}
+
+function mouseYardPose(t) {
+  const bl = K.blinkAt(t, 9), pulse = K.pulse(t, 1, 6);
+  const st = { blink: bl, squash: 0.06 * pulse, seed: 700 };
+  if (t < T.camWide[0]) {
   } else if (t < T.camWide[0]) {
     /* compares his watch with the tower clock, nodding on the beat */
     st.handL = { x: -70, y: -230 + 8 * pulse, hold: "watch", lid: 1 };
@@ -1570,7 +1655,20 @@ function drawYard(c, t) {
     K.flap(c, POND.x, 470, "100.01", { a: fa, h: 110, prev: "100.00", flip: K.inv(T.priceFlip, T.priceFlip + 0.35, t), seed: 1310, colors: [null, null, null, null, null, P.mustardLight] });
   }
   /* Mr. Tick */
-  if (t < WHIP_MID) K.mouse(c, 520, PLAT_Y, MOUSE_S, mouseYardPose(t));
+  /* the timetable board (instrumental only) */
+  if (t < T.camClock[0]) {
+    const ba = K.inv(T.board, T.board + 0.4, t);
+    if (ba > 0) {
+      [1300, 1640].forEach((px, i) => K.shape(c, K.rectPts(px - 8, 420, 16, PLAT_Y - 420 + 60, 2), { fill: P.ink, w: 2, seed: 1150 + i, reg: 0 }));
+      const rows = [["#", "time", "qty"], ["1", "09:00", CHILD], ["2", "09:30", CHILD], ["3", "10:00", CHILD], ["…", "…", "…"], ["8", "12:30", CHILD]];
+      const shown = (t - T.board) / (BEAT * 0.5), hi = t > at(6, 0) ? 1 + (Math.floor((t - at(6, 0)) / BEAT) % 3) : -1;
+      K.board(c, 1240, 70, [80, 170, 170], rows, { a: ba, size: 32, rowH: 56, shown, hi, seed: 1160 });
+    }
+  }
+  if (t < T.camClock[0]) {
+    const wx = K.lerp(-380, 520, K.E.out3(K.inv(T.walk[0], T.walk[1], t)));
+    K.mouse(c, wx, PLAT_Y, MOUSE_S, mouseIntroPose(t));
+  } else if (t < WHIP_MID) K.mouse(c, 520, PLAT_Y, MOUSE_S, mouseYardPose(t));
   else K.mouse(c, BRIDGE_MOUSE_X, RAIL + 74, MOUSE_S, mouseBridgePose(t));
   /* whip-pan speed lines */
   const wv = Math.sin(Math.PI * K.inv(T.whip[0], T.whip[1], t));
@@ -1651,7 +1749,7 @@ function drawQuotes(c, t) {
 const TRAIN = { rail: 880, v: 560, x0: 120, s: 1.2 };
 const VOL = [430, 330, 250, 200, 190, 215, 270, 360, 470];
 const locoX = (t) => TRAIN.x0 + TRAIN.v * (t - T.steam[0]);
-const GAUGE = { x: locoX(T.gauge) + 640, y: 330, r: 130 };
+const GAUGE = { x: locoX(T.gauge) + 600, y: 390, r: 125 }; /* low enough to clear the logo corner */
 
 function slipNeedle(t) {
   const base = 0.14 + 0.025 * Math.sin(t * 9) + 0.015 * Math.sin(t * 23);
@@ -1728,13 +1826,200 @@ function drawTrain(c, t) {
 }
 
 /* ============================================================
-   INTRO 50 TITLE: "Execution and Market Making, on deck!" (14.58 - 19.8 s)
+   INTRO 46 LADDER: "Buy the bid and sell the ask just so" (chorus 1: 18.5 s,
+   chorus 2: 40.5 s). The order book is the station's departure board: asks
+   (tomato) above, bids (teal) below. On "bid" Mr. Tick's mustard quote tab
+   slides into the best bid, on "ask" into the best ask; on "just so" both
+   get filled, the rows flash and the spread pops as a luggage tag.
+   Chorus 2 is the same board later in the day: the tag shows the running total.
+   ============================================================ */
+const LAD = { x: 250, y: 120, w: 980, rowH: 96 };
+/* morning book (chorus 1) and afternoon book (chorus 2): same spread, the market has moved */
+const BOOK1 = [["", "100.04", "900"], ["", "100.03", "600"], ["", "100.02", "300"], null, ["300", " 99.98", ""], ["700", " 99.97", ""], ["1 100", " 99.96", ""]];
+const BOOK2 = [["", "100.14", "800"], ["", "100.13", "500"], ["", "100.12", "400"], null, ["400", "100.08", ""], ["600", "100.07", ""], ["900", "100.06", ""]];
+
+function drawLadder(c, t, L, total, book) {
+  const rows = book;
+  K.begin(c, t, { x: 960, y: 540, z: K.tw(t, L.t0 - 0.4, L.end, 1.05, 1.0, K.E.out3), rot: 0 });
+  K.applyCam(c, 1);
+  /* station hall: cream wall, teal wainscot, arched windows */
+  K.shape(c, [[-200, -200], [2200, -200], [2200, 1400], [-200, 1400]], { fill: P.cream, key: null, boil: 0, seed: 3200, tone: { color: P.creamDeep, gap: 12, r: 0.4, r2: 2.6, dir: Math.PI / 2, alpha: 0.6 } });
+  [1420, 1720].forEach((x, i) => {
+    const pts = K.arcPts(x, 260, 110, Math.PI, K.TAU, 10).concat([[x + 110, 560], [x - 110, 560]]);
+    K.shape(c, pts, { fill: P.tealPale, w: 3.5, seed: 3201 + i, tone: { color: P.cream, gap: 12, r: 3, r2: 0, dir: -Math.PI / 2, alpha: 0.5 } });
+    K.line(c, [[x, 150], [x, 560]], { w: 3, seed: 3203 + i }); K.line(c, [[x - 110, 380], [x + 110, 380]], { w: 3, seed: 3205 + i });
+  });
+  K.shape(c, [[-200, 820], [2200, 820], [2200, 1400], [-200, 1400]], { fill: P.teal, w: 3, seed: 3210, shade: { color: P.tealDark, dx: 0, dy: 24 } });
+  /* the board */
+  const { x, y, w, rowH } = LAD, H = rows.length * rowH + 130;
+  K.shape(c, K.rrectPts(x, y, w, H, 20, 4), { fill: P.board, w: 4, seed: 3220, reg: 0, shade: { color: "#1c1c20", dx: 0, dy: 14 } });
+  K.shape(c, K.rrectPts(x + 14, y + 14, w - 28, 70, 10, 3), { fill: P.mustard, w: 2.5, seed: 3221 });
+  const colX = [x + 150, x + w / 2, x + w - 150];
+  K.text(c, "BID", colX[0], y + 50, { size: 40, weight: 800, fill: P.ink, track: 4 });
+  K.text(c, "ASK", colX[2], y + 50, { size: 40, weight: 800, fill: P.ink, track: 4 });
+  const flash = Math.max(0, Math.sin(Math.PI * K.inv(L.fill, L.fill + 0.5, t)));
+  rows.forEach((r, i) => {
+    const ry = y + 110 + i * rowH + rowH / 2;
+    if (!r) { /* the spread row */
+      c.save(); c.setLineDash([14, 10]); K.line(c, [[x + 40, ry], [x + w - 40, ry]], { key: P.inkSoft, w: 3, boil: 0 }); c.restore();
+      return;
+    }
+    const best = i === 2 || i === 4;
+    const a = K.inv(L.t0 - 0.2 + i * 0.06, L.t0 + 0.1 + i * 0.06, t);
+    if (best && flash > 0) K.shape(c, K.rrectPts(x + 24, ry - rowH / 2 + 8, w - 48, rowH - 16, 10, 2), { fill: P.mustardLight, w: 2, seed: 3230 + i, alpha: flash });
+    const ask = i < 3, col = flash > 0.3 && best ? P.ink : ask ? P.tomatoLight : P.tealPale;
+    c.save(); c.globalAlpha *= a;
+    K.text(c, r[0], colX[0], ry + 2, { size: 48, weight: 700, font: K.FONT.mono, fill: col });
+    K.text(c, r[1], colX[1], ry + 2, { size: 56, weight: 700, font: K.FONT.mono, fill: flash > 0.3 && best ? P.ink : P.cream });
+    K.text(c, r[2], colX[2], ry + 2, { size: 48, weight: 700, font: K.FONT.mono, fill: col });
+    c.restore();
+  });
+  /* Mr. Tick's quote tabs (mouse-ear badge) slide in from the board edges */
+  const tab = (u, row, side, seed) => {
+    if (u <= 0) return;
+    const ry = y + 110 + row * rowH + rowH / 2, tx = side < 0 ? K.lerp(x - 260, x - 70, K.E.back(u, 1.6)) : K.lerp(x + w + 260, x + w + 70, K.E.back(u, 1.6));
+    const pts = side < 0 ? [[tx - 70, ry - 34], [tx + 40, ry - 34], [tx + 70, ry], [tx + 40, ry + 34], [tx - 70, ry + 34]] : [[tx + 70, ry - 34], [tx - 40, ry - 34], [tx - 70, ry], [tx - 40, ry + 34], [tx + 70, ry + 34]];
+    K.shape(c, pts, { fill: P.mustard, w: 3, seed, shade: { color: P.mustardDark, dx: 0, dy: -8 } });
+    const bx = tx - side * 10; /* the badge: a tiny mouse head */
+    K.dot(c, bx - 14, ry - 12, 10, P.fur, P.ink, 2, seed + 1); K.dot(c, bx + 14, ry - 12, 10, P.fur, P.ink, 2, seed + 2);
+    K.dot(c, bx, ry + 4, 16, P.fur, P.ink, 2, seed + 3); K.dot(c, bx, ry + 8, 3.5, P.ink, null, 0, seed + 4);
+  };
+  tab(K.inv(L.bid - 0.1, L.bid + 0.3, t), 4, -1, 3240);
+  tab(K.inv(L.ask - 0.1, L.ask + 0.3, t), 2, 1, 3250);
+  /* fills: coins fly from the best rows to a pile at his feet; the spread tag */
+  const pile = [1560, 990];
+  for (let i = 0; i < 8; i++) {
+    const t0 = L.fill + 0.05 + i * BEAT * 0.25, u = K.inv(t0, t0 + 0.45, t); if (u <= 0) continue;
+    const sx = i % 2 ? x + w + 40 : x + w - 40, sy = y + 110 + (i % 2 ? 2 : 4) * rowH + rowH / 2;
+    const rx = pile[0] + ((i % 3) - 1) * 28, ry = pile[1] - 14 - Math.floor(i / 2) * 15;
+    const cx = K.lerp(sx, rx, u), cy = K.lerp(sy, ry, u) - 220 * Math.sin(Math.PI * u);
+    K.coin(c, u >= 1 ? rx : cx, u >= 1 ? ry : cy, 26, { seed: 3260 + i * 3, label: "¢", size: 24 });
+  }
+  const sa = K.inv(L.fill + 0.35, L.fill + 0.7, t);
+  if (sa > 0) K.tag(c, x + w / 2, y + 110 + 3 * rowH + rowH / 2 - 4, total, { a: sa, size: 54, color: P.mustardLight });
+  /* Mr. Tick beside the board */
+  const pulse = K.pulse(t, 1, 6), st = { blink: K.blinkAt(t, 61), seed: 700, squash: 0.06 * pulse, mouth: "smile", look: [-1, -0.5] };
+  const pb = K.inv(L.bid - 0.15, L.bid + 0.1, t), pa = K.inv(L.ask - 0.15, L.ask + 0.1, t), fl = K.inv(L.fill, L.fill + 0.2, t);
+  st.handL = pb > 0 ? { x: -130, y: -150 + 40 * (1 - pa), hold: "point" } : { x: -64, y: -74 };
+  st.handR = { x: 66, y: -78 };
+  if (pa > 0) { st.handL = { x: -130, y: -230, hold: "point" }; st.look = [-1, -1]; }
+  if (fl > 0) {
+    const hp = K.inv(L.fill + 0.3, L.fill + 0.75, t);
+    st.handL = { x: -86, y: -150, open: 1 }; st.handR = { x: 86, y: -150, open: 1 }; st.mouth = "grin"; st.look = [0.2, 1]; st.brow = 0.8;
+    if (hp > 0 && hp < 1) { st.hop = 46 * Math.sin(Math.PI * hp); st.squash = -0.15 * Math.sin(Math.PI * hp); }
+  }
+  K.mouse(c, 1640, 1000, 1.5, st);
+}
+
+/* ============================================================
+   INTRO 47 BALANCE: "Mind your inventory, keep it all in check"
+   (chorus 1: 22.2 s, chorus 2: 44.2 s). A big freight balance in the yard:
+   crates (inventory) land in the left pan one by one and the beam tips;
+   Mr. Tick, balancing on top of the pivot, flings crates across to the cash
+   pan where they turn into coins, and the beam comes level on "check".
+   The flap in the corner shows the inventory: +0 -> +3 -> +1.
+   ============================================================ */
+const BAL = { px: 960, py: 470, arm: 560, panDrop: 230, fx: 470, fy: 200 };
+
+function balanceState(t, B) {
+  const dropped = B.drops.filter((d) => t >= d + 0.35).length;
+  const sold = B.sells.filter((d) => t >= d + 0.4).length;
+  const inv = dropped - sold;
+  /* tilt eases toward its target after every event (back ease = a little wobble) */
+  let ang = 0;
+  const events = B.drops.map((d) => [d + 0.35, 1]).concat(B.sells.map((d) => [d + 0.4, -1])).sort((a, b) => a[0] - b[0]);
+  let level = 0;
+  events.forEach(([te, dv]) => { const u = K.E.back(K.inv(te, te + 0.4, t), 2.2); ang += -0.075 * dv * u; level += dv; });
+  /* "check": the last nudge to level */
+  const fix = K.E.back(K.inv(B.level, B.level + 0.4, t), 2);
+  ang = K.lerp(ang, 0, fix);
+  return { inv, ang, sold, dropped };
+}
+
+function drawBalance(c, t, B) {
+  K.begin(c, t, { x: 960, y: 520, z: K.tw(t, B.t0 - 0.4, B.end, 1.1, 1.16, K.E.inOut), rot: 0 });
+  K.applyCam(c, 0.3);
+  K.sky(c, { horizon: 790, sun: [1600, 220], sunR: 110 });
+  K.cloud(c, 760, 120, 240, 71); K.cloud(c, 1300, 210, 220, 74);
+  K.applyCam(c, 0.7);
+  K.hills(c, -400, 2400, 820, { h: 160, color: P.hillMid, seed: 77, n: 7 });
+  K.applyCam(c, 1);
+  K.shape(c, [[-300, 950], [2300, 950], [2300, 1500], [-300, 1500]], { fill: P.creamShade, w: 3, seed: 3300, tone: { color: P.ink, gap: 10, r: 0.6, r2: 2.4, dir: Math.PI / 2, alpha: 0.22 } });
+  const S = balanceState(t, B), { px, py, arm } = BAL;
+  /* pivot tower */
+  K.shape(c, [[px - 150, 950], [px - 26, py + 10], [px + 26, py + 10], [px + 150, 950]], { fill: P.teal, w: 3.5, seed: 3310, shade: { color: P.tealDark, dx: -40, dy: 0 }, tone: { color: P.ink, gap: 11, r: 0, r2: 2.4, dir: 0, alpha: 0.2 } });
+  K.gear(c, px, py + 250, 70, 10, t * 0.8 + S.ang * 6, { seed: 3311 });
+  /* beam ends after rotation */
+  const ca = Math.cos(S.ang), sa = Math.sin(S.ang);
+  const end = (sd) => [px + sd * arm * ca, py + sd * arm * sa];
+  /* pans hang straight down from the beam ends */
+  const pan = (sd, seed) => {
+    const [ex, ey] = end(sd), y = ey + BAL.panDrop;
+    K.line(c, [[ex, ey], [ex - 140, y]], { w: 3, seed }); K.line(c, [[ex, ey], [ex + 140, y]], { w: 3, seed: seed + 1 });
+    K.shape(c, [[ex - 170, y], [ex + 170, y], [ex + 130, y + 40], [ex - 130, y + 40]], { fill: sd < 0 ? P.tomato : P.mustard, w: 3.5, seed: seed + 2, shade: { color: sd < 0 ? P.tomatoDark : P.mustardDark, dx: 0, dy: 14 } });
+    return [ex, y];
+  };
+  const [lx, ly] = pan(-1, 3320), [rx, ry] = pan(1, 3330);
+  /* the beam */
+  c.save(); c.translate(px, py); c.rotate(S.ang);
+  K.shape(c, K.rrectPts(-arm - 20, -16, arm * 2 + 40, 32, 12, 3), { fill: P.mustard, w: 3.5, seed: 3340, shade: { color: P.mustardDark, dx: 0, dy: -10 } });
+  for (let i = -6; i <= 6; i++) K.line(c, [[i * 80, -16], [i * 80, -4]], { w: 2.5, seed: 3341 + i });
+  c.restore();
+  K.dot(c, px, py, 16, P.ink, P.ink, 2, 3355);
+  /* crates in the left pan: a pile that grows with each drop, minus the ones sold */
+  const slots = [[-70, 0], [70, 0], [0, -84], [0, -168]];
+  for (let i = 0; i < B.drops.length; i++) {
+    const d = B.drops[i], u = K.inv(d - 0.1, d + 0.35, t); if (u <= 0) continue;
+    const soldIdx = B.drops.length - 1 - i; /* the top crate is flung first */
+    const sellT = soldIdx < B.sells.length ? B.sells[soldIdx] : 1e9, su = K.inv(sellT, sellT + 0.4, t);
+    const q = slots[i], hx = lx + q[0], hy = ly + q[1];
+    if (su >= 1) continue;
+    if (su > 0) {
+      /* flung across, turning into a coin stack */
+      const fx = K.lerp(hx, rx + (soldIdx ? 60 : -60), su), fy = K.lerp(hy, ry, su) - 360 * Math.sin(Math.PI * su);
+      c.save(); c.translate(fx, fy); c.rotate(su * 6);
+      K.crate(c, 0, 42, 130 * (1 - su * 0.5), 84 * (1 - su * 0.5), { seed: 3360 + i * 3 });
+      c.restore(); continue;
+    }
+    const fall = K.E.out3(u), yy = K.lerp(hy - 500, hy, fall);
+    K.crate(c, hx, yy, 130, 84, { seed: 3360 + i * 3, label: CHILD, labelSize: 34 });
+  }
+  /* coin stacks in the right pan (one per sold crate, plus the starting cash) */
+  const stacks = 1 + S.sold;
+  for (let k = 0; k < stacks; k++) {
+    const sx = rx + (k - (stacks - 1) / 2) * 80, n = 5;
+    for (let j = 0; j < n; j++) {
+      const yy = ry - 12 - j * 14;
+      K.shape(c, K.ellipsePts(sx, yy, 34, 10, 16), { fill: P.mustard, w: 2.2, smooth: true, seed: 3380 + k * 9 + j, shade: { color: P.mustardDark, dx: 0, dy: 4 } });
+    }
+  }
+  /* inventory flap on a post over the pivot */
+  const inv = S.inv, prevInv = Math.max(0, inv - 1);
+  const flipT = Math.max(...B.drops.concat(B.sells).map((d) => (t >= d + 0.3 ? d + 0.3 : -1)));
+  const label = "+" + inv;
+  K.flap(c, BAL.fx, BAL.fy, label, { h: 110, prev: "+" + (inv > prevInv ? prevInv : inv + 1), flip: flipT > 0 ? K.inv(flipT, flipT + 0.3, t) : 1, seed: 3400, colors: [inv > 1 ? P.tomatoLight : P.tealPale, inv > 1 ? P.tomatoLight : P.tealPale] });
+  const ok = K.inv(B.level, B.level + 0.3, t);
+  if (ok > 0) for (let k = 0; k < 6; k++) { const ang = (k / 6) * K.TAU, d = 0.5 * K.E.out3(K.inv(B.level, B.level + 0.6, t)); K.star(c, BAL.fx + Math.cos(ang) * (130 + 220 * d), BAL.fy + Math.sin(ang) * (70 + 120 * d), 30 * (1 - K.inv(B.level + 0.4, B.level + 0.9, t)), { seed: 3410 + k }); }
+  /* Mr. Tick balances on the pivot: leans against the tilt, flings on each sell */
+  const pulse = K.pulse(t, 1, 6), st = { blink: K.blinkAt(t, 71), seed: 700, squash: 0.06 * pulse, mouth: "smile", look: [-0.8, 0.6] };
+  st.lean = -S.ang * 180 / Math.PI * 1.4;
+  st.handL = { x: -110, y: -150 + 20 * Math.sin(t * 5), open: 1 }; st.handR = { x: 110, y: -150 - 20 * Math.sin(t * 5), open: 1 };
+  if (S.dropped > 0 && t < B.sells[0]) { st.mouth = "o"; st.brow = 1.2; st.eyeUp = 3; }
+  B.sells.forEach((d) => { const u = K.inv(d - 0.15, d + 0.25, t); if (u > 0 && u < 1) { st.handR = { x: 120, y: -230 + 60 * u, hold: "point" }; st.look = [1, -0.4]; st.squash = -0.15 * Math.sin(Math.PI * u); } });
+  if (ok > 0) { st.handR = { x: 100, y: -160 - 40 * K.E.back(ok, 2), hold: "thumb" }; st.mouth = "grin"; st.look = [0, -0.5]; st.lean = 0; }
+  c.save(); c.translate(px, py - 16); c.rotate(S.ang); K.mouse(c, 0, 0, 1.0, st); c.restore();
+}
+
+/* ============================================================
+   INTRO 50 TITLE: "Execution and Market Making, on deck!" to the end (47.9 - 60.3 s)
    An enamel station sign drops on the downbeat; the title (DOM text, per
    language) flips in letter by letter like a split-flap board. Four
    platform roundels pop on half beats: TWAP, VWAP, Almgren-Chriss, market
-   making. Mr. Tick blows the whistle on "on deck!" and tips his cap.
+   making. Mr. Tick blows the whistle on "on deck!"; on "All aboard the market
+   train" the train pulls in and he waves the flag; on "we got it cleared" the
+   line signal turns teal; on the last "And on the deck!" he whistles and tips his cap.
    ============================================================ */
-const SIGN = { cx: 960, cy: 228, w: 1480, h: 300 };
+const SIGN = { cx: 840, cy: 240, w: 1160, h: 290 }; /* left of centre: the top-right corner belongs to the logo */
 const ROUND = { y: 512, r: 64, xs: [600, 768, 1152, 1320] };
 const ROUND_C = [P.teal, P.mustard, P.tomato, P.tealDark];
 
@@ -1771,13 +2056,25 @@ function drawTitleSet(c, t) {
   K.platform(c, 420, 1500, 870, { h: 80, seed: 2170 });
   K.lampPost(c, 520, 870, 230, 2180); K.lampPost(c, 1400, 870, 230, 2184);
   K.track(c, -400, 2400, 960, { seed: 2190 });
-  /* parked train, steaming on every beat */
-  for (let k = 0; k < 12; k++) {
-    const ts = T.flap2[0] + k * BEAT, age = t - ts; if (age < 0 || age > 1.8) continue;
-    K.puff(c, 200 * 0.86 + 133 * 0.86 - 30 * age, 960 - 280 * 0.86 - 150 * age, 40 + 8 * (k % 3), age / 1.8, 2200 + k);
+  /* "All aboard the market train": the train pulls in from the left and stops */
+  const LX = 172, lx = K.lerp(-950, LX, K.E.out3(K.inv(T.aboard[0], T.aboard[1], t)));
+  const rolling = t > T.aboard[0] && t < T.aboard[1];
+  if (t > T.aboard[0]) {
+    for (let k = 0; k < 20; k++) {
+      const ts = T.aboard[0] + k * BEAT * (k < 4 ? 0.5 : 1), age = t - ts; if (age < 0 || age > 1.8) continue;
+      const sx = K.lerp(-950, LX, K.E.out3(K.inv(T.aboard[0], T.aboard[1], ts)));
+      K.puff(c, sx + 133 * 0.86 - 30 * age, 960 - 280 * 0.86 - 150 * age, 40 + 8 * (k % 3), age / 1.8, 2200 + k);
+    }
+    for (let j = 0; j < 4; j++) K.wagon(c, lx - 260 - j * 170, 960, WAG_S * 0.86, { roll: lx, seed: 2300 + j * 20, color: j % 2 ? P.teal : P.tealLight, shade: P.tealDark, load: (cc) => K.crate(cc, 0, -58, 140, 84, { label: CHILD, labelSize: 40, seed: 2310 + j * 3 }) });
+    K.loco(c, lx, 960, 0.86, { roll: lx, seed: 2350, bob: rolling ? Math.sin(t * 18) * 1.5 : Math.sin(t * 3) * 1 });
   }
-  for (let j = 0; j < 2; j++) K.wagon(c, 200 * 0.86 - 260 - j * 170, 960, WAG_S * 0.86, { seed: 2300 + j * 20, color: j % 2 ? P.teal : P.tealLight, shade: P.tealDark, load: (cc) => K.crate(cc, 0, -58, 140, 84, { label: CHILD, labelSize: 40, seed: 2310 + j * 3 }) });
-  K.loco(c, 200 * 0.86, 960, 0.86, { seed: 2350, bob: Math.sin(t * 3) * 1 });
+  /* "we got it cleared": the line signal turns from tomato to teal */
+  const clr = K.inv(T.cleared, T.cleared + 0.25, t);
+  K.shape(c, K.rectPts(1846, 470, 14, 400, 2), { fill: P.ink, w: 2, seed: 2360, reg: 0 });
+  K.shape(c, K.rrectPts(1812, 360, 82, 160, 40, 6), { fill: P.ink, w: 3, seed: 2361, reg: 0 });
+  K.dot(c, 1853, 400, 26, clr > 0.5 ? P.inkSoft : P.tomato, P.ink, 3, 2362);
+  K.dot(c, 1853, 478, 26, clr > 0.5 ? P.tealLight : P.inkSoft, P.ink, 3, 2363);
+  if (clr > 0) for (let k = 0; k < 5; k++) { const d = t - T.cleared - k * 0.05; if (d > 0 && d < 0.6) { const ang = -Math.PI / 2 + (k - 2) * 0.6; K.star(c, 1853 + Math.cos(ang) * (50 + 160 * d), 478 + Math.sin(ang) * (50 + 160 * d), 26 * (1 - d / 0.6), { seed: 2370 + k }); } }
   /* Mr. Tick on the platform */
   const bl = K.blinkAt(t, 41), pulse = K.pulse(t, 1, 6);
   const st = { blink: bl, squash: 0.07 * pulse, seed: 700, mouth: "smile", look: [0, -0.4] };
@@ -1786,15 +2083,23 @@ function drawTitleSet(c, t) {
   st.handR = { x: 64, y: -72 };
   if (t < T.sign[1]) { st.look = [0, -1]; st.brow = 1.2; st.mouth = "o"; st.eyeUp = 4 * K.inv(T.sign[0], T.sign[0] + 0.3, t); }
   if (land > 0 && land < 0.6) st.squash = 0.3 * Math.exp(-land * 6) * Math.cos(land * 18);
-  const wh = Math.sin(Math.PI * K.inv(T.whistle - 0.1, T.whistle + 0.7, t));
+  /* all aboard: flag up and waving toward the arriving train */
+  const ab = K.inv(T.aboard[0] - 0.1, T.aboard[0] + 0.2, t) * (1 - K.inv(T.aboard[1] + 0.3, T.aboard[1] + 0.6, t));
+  if (ab > 0) { st.handR = { x: 90, y: -190 + 30 * Math.sin(t * 9) * ab, hold: "flag" }; st.look = [-1, 0]; st.mouth = "open"; st.lean = -4 * ab; }
+  if (t > T.roundels && t < T.cleared) { st.look = [0.3 * Math.sin((t - T.roundels) * 2), -1]; st.brow = 0.7; }
+  const ok = K.inv(T.cleared, T.cleared + 0.25, t) * (1 - K.inv(T.hatTip - 0.6, T.hatTip - 0.3, t));
+  if (ok > 0) { st.handR = { x: 96, y: -150 - 40 * K.E.back(ok, 2), hold: "thumb" }; st.look = [1, -0.6]; st.mouth = "grin"; st.brow = 0.8; }
+  const whistleAt = [T.whistle].concat(T.whistle2 ? [T.whistle2] : []);
+  let wh = 0, whT = 0;
+  whistleAt.forEach((tw0) => { const v = Math.sin(Math.PI * K.inv(tw0 - 0.1, tw0 + 0.6, t)); if (v > wh) { wh = v; whT = tw0; } });
   if (wh > 0) { st.handR = { x: 30, y: -172, hold: "whistle", wAng: Math.PI * 1.04 }; st.mouth = "whistle"; st.puff = wh; st.blink = 0; st.look = [0.3, -0.2]; }
   const tip = K.inv(T.hatTip, T.hatTip + 0.3, t);
   if (tip > 0) {
-    const k = Math.sin(Math.PI * K.inv(T.hatTip, T.hatTip + 1.1, t));
+    const k = Math.sin(Math.PI * K.inv(T.hatTip, T.hatTip + 1.2, t));
     st.handR = { x: 112, y: -236 - 24 * k, open: 1 }; st.hatTip = 16 * k; st.hatLift = 22 * k; st.mouth = "grin"; st.look = [0.2, 0.1]; st.brow = 0.6;
   }
-  K.mouse(c, 960, 870, 1.15, st);
-  if (wh > 0.1) { const age = K.inv(T.whistle, T.whistle + 0.8, t); K.puff(c, 960 - 40 - 50 * age, 870 - 1.15 * 230 - 140 * age, 40, age, 2400); }
+  K.mouse(c, 960, 870, 1.25, st);
+  if (wh > 0.1) { const age = K.inv(whT, whT + 0.8, t); K.puff(c, 960 - 40 - 50 * age, 870 - 1.25 * 230 - 140 * age, 40, age, 2400); }
   /* screen-space: sign + roundels */
   K.screen(c);
   const box = K.sign(c, SIGN.cx, SIGN.cy, SIGN.w, SIGN.h, K.inv(T.sign[0], T.sign[1], t), { seed: 2500 });
@@ -1819,8 +2124,9 @@ function layoutTitleDom(t, box) {
   let y = box.y - total / 2 - 4;
   TITLE_LN.forEach((d, i) => {
     d.style.top = y.toFixed(1) + "px";
+    d.style.left = (box.x - 960).toFixed(1) + "px";
     d.style.transform = `rotate(${(box.rot * 180 / Math.PI).toFixed(3)}deg)`;
-    d.style.transformOrigin = `${SIGN.cx}px ${(box.y - y).toFixed(1)}px`;
+    d.style.transformOrigin = `960px ${(box.y - y).toFixed(1)}px`;
     y += sizes[i] + gap;
   });
   TITLE_CH.forEach((ch) => {
@@ -1835,26 +2141,51 @@ function layoutTitleDom(t, box) {
 /* ============================================================
    INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
    drives a proxy whose setter calls render(t).
-   0.00 - 9.08   the yard (20_station.js), with a whip pan at 7.24
-   8.66 - 9.38   departure-board wipe (split flaps) to the quote booths
-   9.08 - 10.91  "Quote both sides" (30_quotes.js)
-   10.41 - 11.23 steam wipe to the train
-   10.91 - 14.58 "Choo choo, keep the slippage low" (40_train.js)
-   14.16 - 14.88 departure-board wipe to the title
-   14.58 - 19.80 "Execution and Market Making, on deck!" (50_title.js)
-   Transitions are diegetic: a split-flap board and a wall of steam,
-   never a crossfade. Both sides of a wipe render to offscreen buffers.
+   Scenes (draw(c, t) functions) follow each other on the song's downbeats;
+   between two scenes a diegetic transition renders both into offscreen
+   buffers and composites them: a split-flap board, a wall of steam, or a
+   railway tunnel. Never a crossfade.
+     0.0  yard (intro + verse)     flap   9.1  quote booths
+    10.9  train "Choo choo"         tunnel 14.6  order-book board
+    18.3  balance "inventory"       flap  21.9  title, "All aboard" to 27.1
    ============================================================ */
 const bufA = document.createElement("canvas"), bufB = document.createElement("canvas");
 bufA.width = bufB.width = 1920; bufA.height = bufB.height = 1080;
 const ctxA = bufA.getContext("2d"), ctxB = bufB.getContext("2d");
 
+const sLadder = (c, t) => drawLadder(c, t, T.L2, "+0.04", BOOK1);
+const sBal = (c, t) => drawBalance(c, t, T.B2);
+/* [window, from, to, kind] in time order; a scene runs from the middle of one window to the middle of the next */
+const CUTS = [
+  [T.flap1, drawYard, drawQuotes, "flap"],
+  [T.steam, drawQuotes, drawTrain, "steam"],
+  [T.tunnel3, drawTrain, sLadder, "tunnel"],
+  [T.steam2, sLadder, sBal, "steam"],
+  [T.flap2, sBal, drawTitleSet, "flap"],
+];
+
 /* scene for time t (outside transitions) */
 function sceneAt(t) {
-  if (t < (T.flap1[0] + T.flap1[1]) / 2) return drawYard;
-  if (t < (T.steam[0] + T.steam[1]) / 2) return drawQuotes;
-  if (t < (T.flap2[0] + T.flap2[1]) / 2) return drawTrain;
-  return drawTitleSet;
+  let sc = drawYard;
+  CUTS.forEach((q) => { if (t >= (q[0][0] + q[0][1]) / 2) sc = q[2]; });
+  return sc;
+}
+
+/* railway tunnel: an arch closes to black on the old scene and opens on the new one */
+function tunnelWipe(c, u) {
+  const closing = u < 0.5, k = closing ? 1 - K.E.in3(u * 2) : K.E.out3((u - 0.5) * 2);
+  const r = 40 + 1280 * k, cx = 960, cy = 620;
+  K.screen(c);
+  c.fillStyle = P.ink; c.fillRect(0, 0, 1920, 1080);
+  if (k > 0.002) {
+    const arch = () => { c.beginPath(); c.moveTo(cx - r, 1200); c.lineTo(cx - r, cy); c.arc(cx, cy, r, Math.PI, 0); c.lineTo(cx + r, 1200); c.closePath(); };
+    c.save(); arch(); c.clip(); c.drawImage(closing ? bufA : bufB, 0, 0); c.restore();
+    /* brick ring of the portal */
+    c.save(); c.strokeStyle = P.tomatoDark; c.lineWidth = 34; arch(); c.stroke();
+    c.strokeStyle = P.ink; c.lineWidth = 4; c.beginPath();
+    for (let i = 0; i <= 14; i++) { const a = Math.PI + (i / 14) * Math.PI; c.moveTo(cx + Math.cos(a) * (r - 17), cy + Math.sin(a) * (r - 17)); c.lineTo(cx + Math.cos(a) * (r + 17), cy + Math.sin(a) * (r + 17)); }
+    c.stroke(); c.restore();
+  }
 }
 
 /* split-flap wipe: tiles flip column by column, left to right */
@@ -1906,11 +2237,14 @@ function steamWipe(c, u) {
 function render(t) {
   let box = null;
   try {
-    const inFlap1 = t >= T.flap1[0] && t < T.flap1[1], inSteam = t >= T.steam[0] && t < T.steam[1], inFlap2 = t >= T.flap2[0] && t < T.flap2[1];
-    if (inFlap1) { drawYard(ctxA, t); drawQuotes(ctxB, t); flapWipe(ctx, K.inv(T.flap1[0], T.flap1[1], t)); }
-    else if (inSteam) { drawQuotes(ctxA, t); drawTrain(ctxB, t); steamWipe(ctx, K.inv(T.steam[0], T.steam[1], t)); }
-    else if (inFlap2) { drawTrain(ctxA, t); box = drawTitleSet(ctxB, t); flapWipe(ctx, K.inv(T.flap2[0], T.flap2[1], t)); }
-    else {
+    const cut = CUTS.find((q) => t >= q[0][0] && t < q[0][1]);
+    if (cut) {
+      const u = K.inv(cut[0][0], cut[0][1], t);
+      cut[1](ctxA, t);
+      const r = cut[2](ctxB, t);
+      if (cut[2] === drawTitleSet) box = r;
+      if (cut[3] === "flap") flapWipe(ctx, u); else if (cut[3] === "steam") steamWipe(ctx, u); else tunnelWipe(ctx, u);
+    } else {
       const sc = sceneAt(t);
       const r = sc(ctx, t);
       if (sc === drawTitleSet) box = r;
@@ -1920,12 +2254,15 @@ function render(t) {
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "26px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 150), 20, 50);
   }
   layoutTitleDom(t, t >= T.flap2[1] ? box : null);
+  /* logo: one small bounce on the first downbeats, then static */
+  const lb = K.inv(0.05, 0.5, t), bounce = lb > 0 && lb < 1 ? Math.sin(Math.PI * lb) : 0;
+  logoEl.style.transform = `translateY(${(-10 * bounce).toFixed(2)}px) scale(${(1 + 0.05 * bounce).toFixed(3)})`;
   /* paper grain steps at the boil rate */
   const f = K.boilFrame(t);
   grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px";
 }
 
-const grainEl = document.getElementById("grain");
+const grainEl = document.getElementById("grain"), logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .42  0 0 0 0 .3  0 0 0 1.4 -.2'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
 
 const TL = gsap.timeline({ paused: true });

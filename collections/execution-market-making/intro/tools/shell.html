@@ -21,6 +21,11 @@
       #title.cjk-tc .ln { font-family: "Jost", "CJK TC", sans-serif; letter-spacing: 0.12em; }
       #preload .sc { font-family: "CJK SC"; font-weight: 900; }
       #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      /* marketmaker.cc logo: top-right, 48 px margin, ~100 px tall, always on top of the action */
+      #logo { position: absolute; right: 48px; top: 48px; height: 100px; display: flex; align-items: center; gap: 14px; padding: 0 26px 0 16px; background: rgba(243, 230, 200, 0.92); border: 3px solid #2a2a2e; border-radius: 22px; color: #2a2a2e; box-shadow: 5px 6px 0 rgba(42, 42, 46, 0.85); transform-origin: 100% 0; }
+      #logo .mk { width: 72px; height: 72px; display: block; }
+      #logo .mk svg { display: block; width: 72px; height: 72px; }
+      #logo .wm { font-family: "Jost", sans-serif; font-weight: 700; font-size: 38px; letter-spacing: 0.01em; line-height: 1; white-space: nowrap; }
       #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
       #preload .j5 { font-family: "Jost"; font-weight: 500; }
       #preload .j7 { font-family: "Jost"; font-weight: 700; }
@@ -32,12 +37,13 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="19.8" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="27.1" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div id="title" data-layout-allow-overlap></div>
       <div class="ov" id="vig"></div>
       <div class="ov" id="grain"></div>
-      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="19.8" data-track-index="10" data-volume="1"></audio>
+      <div id="logo"><span class="mk"><!--__LOGO__--></span><span class="wm">marketmaker.cc</span></div>
+      <audio id="song" src="song_short.m4a" data-start="0" data-duration="27.1" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="j5">Aa Бб 0</span><span class="j7">Aa Бб 0</span><span class="j8">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span><span class="sc">执行与做市</span><span class="tc">執行與造市</span></div>
     </div>
     <script>
