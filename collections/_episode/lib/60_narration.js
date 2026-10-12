@@ -1,13 +1,14 @@
 /* ============================================================
-   EPISODE 60 NARRATION: read the precomputed sync data (tools/build_sync.py).
-   build_scene.py injects, before this file:
+   ENGINE 60 NARRATION (collection-agnostic): read the precomputed sync data
+   (collections/_episode/tools/build_sync.py). build_scene.py injects, before this file:
      SCENE = { id, start, end, slide, title }   (episode-global seconds)
-     SYNC  = { fps, env, spk, f0, words, phrases }  sliced to the scene (+-2 s)
+     SYNC  = { fps, f0, env, spk, words }  sliced to the scene (+-2 s)
    All times in scene code are EPISODE-GLOBAL seconds (g), the same numbers
    as SCENES.md and subtitles.json. render() gets g = SCENE.start + local t.
 
    NR.env(g)            loudness 0..1 (30 fps, interpolated)
-   NR.who(g)            "c" crab | "p" parrot | "." nobody
+   NR.who(g)            "a" host A (the one who talks more: the narrator / mascot)
+                        | "b" host B (the other voice: sidekick) | "." nobody
    NR.talk(g, who)      mouth opening 0..1 for that host (0 when the other talks)
    NR.cue(word, after)  global start time of the first word matching `word`
                         (string = case-insensitive whole word, or RegExp) at or
@@ -47,9 +48,9 @@ const NR = (function () {
   const cue = (word, after) => { const w = find(word, after); return w ? w[0] : (after || SCENE.start); };
   const cueEnd = (word, after) => { const w = find(word, after); return w ? w[1] : (after || SCENE.start); };
   /* accents: onsets of content words (>= 4 letters) where the voice is loud */
-  const ACC = { c: [], p: [] };
+  const ACC = { a: [], b: [] };
   W.forEach((w) => {
-    if (w[3] !== "c" && w[3] !== "p") return;
+    if (w[3] !== "a" && w[3] !== "b") return;
     if (norm(w[2]).length < 4) return;
     let pk = 0; for (let k = 0; k < 8; k++) pk = Math.max(pk, env(w[0] + k / FPS));
     if (pk > 0.72) { const L = ACC[w[3]]; if (!L.length || w[0] - L[L.length - 1] > 0.9) L.push(w[0]); }

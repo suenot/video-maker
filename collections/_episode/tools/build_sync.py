@@ -1,32 +1,28 @@
 #!/usr/bin/env python3
 """Precompute narration sync data for the episode (deterministic, numpy only).
 
-usage: python3 tools/build_sync.py [--audio PATH] [--subs PATH] [--out data/sync.json]
+usage: build_sync.py [episode_dir] [--audio PATH] [--subs PATH]   (defaults from the episode paths)
 
 Writes data/sync.json:
   fps        30
   dur        audio duration (s)
   env        loudness envelope, one char per 1/30 s frame, "0".."9a".."z" (36 levels, 0 = silence)
-  spk        speaker per frame: "c" crab (host A), "p" parrot (host B), "." nobody
-  words      [[start, end, text, speaker]]  (speaker "c" / "p"), Whisper word timings
+  spk        speaker per frame: "a" host A (talks more: the mascot / narrator), "b" host B, "." nobody
+  words      [[start, end, text, speaker]]  (speaker "a" / "b"), Whisper word timings
   phrases    [[start, end, speaker, first_word_index, last_word_index]]
-  hosts      {"c": {...stats}, "p": {...}}
+  hosts      {"a": {...stats}, "b": {...}}
 
 Diarization is deliberately simple: the two NotebookLM hosts differ in pitch,
 so each phrase (words joined by gaps < 0.35 s inside one Whisper segment,
 also split after . ? !)
 gets the median F0 of its voiced frames and is split by 2-means on log F0.
-The host who speaks more words is the crab (host A, the on-screen narrator).
+The host who speaks more words is host A (the on-screen mascot / narrator).
 """
 import argparse, json, math, os, subprocess, sys
 import numpy as np
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-EP = os.path.dirname(HERE)
-EN = os.path.dirname(EP)
-VM = os.path.abspath(os.path.join(EN, "..", "..", "..", "..", ".."))
-DEF_AUDIO = os.path.join(VM, "input", "notebooklm-sources", "complex-arbitrage-graph-algorithms", "en", "audio.m4a")
-DEF_SUBS = os.path.join(EN, "prep", "subtitles.json")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from epcommon import episode_from_args
 SR, FPS = 16000, 30
 ALPH = "0123456789abcdefghijklmnopqrstuvwxyz"
 
@@ -81,11 +77,14 @@ def f0_track(x):
 
 
 def main():
+    ep, rest = episode_from_args(sys.argv[1:])
     ap = argparse.ArgumentParser()
-    ap.add_argument("--audio", default=DEF_AUDIO)
-    ap.add_argument("--subs", default=DEF_SUBS)
-    ap.add_argument("--out", default=os.path.join(EP, "data", "sync.json"))
-    a = ap.parse_args()
+    ap.add_argument("--audio", default=ep.audio)
+    ap.add_argument("--subs", default=ep.subs)
+    ap.add_argument("--out", default=os.path.join(ep.dir, "data", "sync.json"))
+    ap.add_argument("--host-a", choices=["more", "low", "high"], default="more",
+                    help="which voice is host A (the mascot): the one with more words, the lower or the higher voice")
+    a = ap.parse_args(rest)
     x = decode(a.audio)
     dur = len(x) / SR
     print("audio", round(dur, 3), "s", file=sys.stderr)
@@ -131,8 +130,10 @@ def main():
     # who talks more = crab
     cnt = [0, 0]
     for ph, l in zip(phrases, labs): cnt[l] += ph[5] - ph[4] + 1
-    crab = 0 if cnt[0] >= cnt[1] else 1
-    sp = lambda l: "c" if l == crab else "p"
+    if a.host_a == "low": crab = 0          # cluster 0 = the lower voice (c0 < c1)
+    elif a.host_a == "high": crab = 1
+    else: crab = 0 if cnt[0] >= cnt[1] else 1  # host A
+    sp = lambda l: "a" if l == crab else "b"
     out_words, out_phr = [], []
     for ph, l in zip(phrases, labs):
         ph[2] = sp(l)
@@ -147,7 +148,7 @@ def main():
         for f in range(int(s * FPS), min(nF, int(math.ceil(e * FPS)) + 2)):
             spk[f] = who
     hosts = {}
-    for k, l in (("c", crab), ("p", 1 - crab)):
+    for k, l in (("a", crab), ("b", 1 - crab)):
         hz = math.exp(c1 if l == 1 else c0)
         hosts[k] = {"words": cnt[l], "medianF0Hz": round(hz, 1)}
     data = {

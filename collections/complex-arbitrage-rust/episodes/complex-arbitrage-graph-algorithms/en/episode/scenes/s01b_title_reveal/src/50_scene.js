@@ -217,7 +217,7 @@ function drawChart(g) {
     if (q > 0) SIGN.stamp(ctx, 1590, 300, { a: q * rf, text: "?", size: 110, rot: 0.15 });
   }
   HOST.duo(ctx, g, {
-    a: pop(g, CHART_AT - 0.1, 0.5),
+    x: 300, y: 1010, s: 1.15, a: pop(g, CHART_AT - 0.1, 0.5),
     point: K.toScreen(1100, 330), pointAmt: hold(g, B.discrep, B.claims, 0.3),
     reacts: [
       { at: B.thousands, kind: "spyglass", dur: 2.6 },

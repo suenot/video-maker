@@ -10,7 +10,8 @@
    HOST.duo(ctx, g, o)    draws the raft stage with both hosts, in SCREEN space
                           (call after K.screen(ctx)). Returns { crab:[x,y], parrot:[x,y] }.
    o (all optional):
-     x, y, s        crab feet position (screen px) and scale (default 300, 1010, 1.15)
+     x, y, s        crab feet position (screen px) and scale (default 330, 1030, 1.55: the hosts
+                    are the storytellers, about 30 % of the frame height with the parrot)
      side           +1 parrot to the right of the crab, -1 to the left (default +1)
      point          [sx, sy] screen point the crab points at with the nearer claw
      pointAmt       0..1 blend of the point (use K.ss over a cue to raise/lower)
@@ -21,6 +22,9 @@
      stage          "raft" (default) | "none" (draw your own ground)
      parrot         false to hide the parrot (crab alone)
      a              appear 0..1 (pops the duo in, e.g. after a transition)
+     carryR/carryL  fn(ctx, x, y, g): draw an item held in that claw (a tag, a coin, a plank, a
+                    lantern, a scroll) at the claw tip; carryPoseR/L {x, y, open} moves the claw
+   returns { crab, parrot, clawR, clawL } screen points (e.g. to start a thrown item from the claw)
    ============================================================ */
 const HOST = (function () {
   const P = K.P, { clamp, lerp, ss } = K;
@@ -41,32 +45,32 @@ const HOST = (function () {
     for (let i = 0; i < L.length; i++) if (L[i] <= g + 0.1) k = i; else break;
     return k;
   }
-  const ACC = { c: NR.accents("c"), p: NR.accents("p") };
+  const ACC = { a: NR.accents("a"), b: NR.accents("b") };
 
   function crabPose(g, o) {
     o = o || {};
-    const side = o.side || 1, s = o.s || 1.15, x = o.x == null ? 300 : o.x, y = o.y == null ? 1010 : o.y;
-    const talk = NR.talk(g, "c"), who = NR.who(g);
+    const side = o.side || 1, s = o.s || 1.55, x = o.x == null ? 330 : o.x, y = o.y == null ? 1030 : o.y;
+    const talk = NR.talk(g, "a"), who = NR.who(g);
     const st = { seed: 500, blink: K.blinkAt(g, 3), mouth: "smile", look: [0.15 * Math.sin(g * 0.7), -0.1], talk };
     st.squash = 0.035 * Math.sin(g * 2.3);
     const restL = { x: -104 + 5 * Math.sin(g * 1.9), y: -40 + 6 * Math.sin(g * 2.6), open: 0.2 };
     const restR = { x: 104 + 5 * Math.sin(g * 2.1 + 1), y: -40 + 6 * Math.sin(g * 2.4 + 2), open: 0.2 + 0.1 * Math.sin(g * 3) };
     let cl = restL, cr = restR;
     /* talking gestures on accents */
-    const k = lastAccent(g, "c");
+    const k = lastAccent(g, "a");
     if (k >= 0) {
-      const ta = ACC.c[k], w = ss(ta - 0.1, ta + 0.14, g) * (1 - ss(ta + 0.75, ta + 1.25, g));
+      const ta = ACC.a[k], w = ss(ta - 0.1, ta + 0.14, g) * (1 - ss(ta + 0.75, ta + 1.25, g));
       const G = GEST[Math.floor(K.hash(k, 77) * GEST.length)];
       if (G.L) cl = mixPt(cl, G.L, w);
       if (G.R) cr = mixPt(cr, G.R, w);
-      st.squash += 0.12 * NR.accent(g, "c");
+      st.squash += 0.12 * NR.accent(g, "a");
       st.brow = 0.6 * w * (K.hash(k, 78) > 0.5 ? 1 : 0);
     }
-    if (who === "c") st.look = [0.25 * Math.sin(g * 0.9), -0.05];
+    if (who === "a") st.look = [0.25 * Math.sin(g * 0.9), -0.05];
     /* listening: look at the parrot, nod on its accents, small lean */
-    if (who === "p" && o.parrot !== false) {
+    if (who === "b" && o.parrot !== false) {
       st.look = [0.9 * side, -0.35]; st.lean = 2.5 * side;
-      st.squash += 0.07 * NR.accent(g, "p");
+      st.squash += 0.07 * NR.accent(g, "b");
       st.brow = 0.4;
     }
     /* pointing at content */
@@ -107,20 +111,20 @@ const HOST = (function () {
 
   function parrotPose(g, o) {
     o = o || {};
-    const side = o.side || 1, talk = NR.talk(g, "p"), who = NR.who(g);
+    const side = o.side || 1, talk = NR.talk(g, "b"), who = NR.who(g);
     const st = { seed: 700, blink: K.blinkAt(g, 11), talk, look: [0, 0], head: 4 * Math.sin(g * 0.8) };
     st.squash = 0.04 * Math.sin(g * 2.9 + 1);
-    const k = lastAccent(g, "p");
+    const k = lastAccent(g, "b");
     let wl = 0.04 * Math.sin(g * 2), wr = 0.04 * Math.sin(g * 2 + 1);
     if (k >= 0) {
-      const ta = ACC.p[k], w = ss(ta - 0.08, ta + 0.12, g) * (1 - ss(ta + 0.5, ta + 0.95, g));
+      const ta = ACC.b[k], w = ss(ta - 0.08, ta + 0.12, g) * (1 - ss(ta + 0.5, ta + 0.95, g));
       const h = K.hash(k, 91);
       if (h < 0.4) wl += 0.42 * w; else if (h < 0.8) wr += 0.42 * w; else { wl += 0.3 * w; wr += 0.3 * w; }
-      st.squash += 0.12 * NR.accent(g, "p");
-      st.hop = 7 * NR.accent(g, "p") * (h > 0.7 ? 1 : 0);
+      st.squash += 0.12 * NR.accent(g, "b");
+      st.hop = 7 * NR.accent(g, "b") * (h > 0.7 ? 1 : 0);
     }
-    if (who === "p") st.look = [-0.4 * side, -0.1];
-    if (who === "c" && o.crab !== false) { st.look = [-0.9 * side, -0.2]; st.head = -12 * side + 3 * Math.sin(g * 1.1); st.squash += 0.06 * NR.accent(g, "c"); }
+    if (who === "b") st.look = [-0.4 * side, -0.1];
+    if (who === "a" && o.crab !== false) { st.look = [-0.9 * side, -0.2]; st.head = -12 * side + 3 * Math.sin(g * 1.1); st.squash += 0.06 * NR.accent(g, "a"); }
     if (o.ppoint && (o.ppointAmt == null || o.ppointAmt > 0)) {
       const amt = o.ppointAmt == null ? 1 : o.ppointAmt, px = o._px || 0;
       if (o.ppoint[0] >= px) wr = lerp(wr, 0.62, amt); else wl = lerp(wl, 0.62, amt);
@@ -155,10 +159,19 @@ const HOST = (function () {
     K.line(ctx, pts, { stroke: P.foam, w: 4, boil: 1.2, seed: 831, gap: 0.15 });
   }
 
+  /* screen position of a crab claw tip for a pose (same math as K.crab), for carried items */
+  function clawTip(x, y, s, st, k) {
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk, hop = st.hop || 0, sd = k === "L" ? -1 : 1;
+    const c = st["claw" + k] || { x: sd * 104, y: -40 }, bodyY = -62 * syk - hop;
+    const r = K.ik2([sd * 58 * sxk, bodyY + 4 * syk], [c.x, c.y - hop], 36, 34, sd > 0 ? 1 : -1);
+    const a = ((st.lean || 0) * Math.PI) / 180, ex = r.end[0], ey = r.end[1];
+    return [x + s * (ex * Math.cos(a) - ey * Math.sin(a)), y + s * (ex * Math.sin(a) + ey * Math.cos(a))];
+  }
+
   function duo(ctx, g, o) {
     o = o || {};
-    const s = o.s || 1.15, x = o.x == null ? 300 : o.x, side = o.side || 1;
-    const bob = 5 * Math.sin(g * 1.5), y = (o.y == null ? 1010 : o.y) + bob;
+    const s = o.s || 1.55, x = o.x == null ? 330 : o.x, side = o.side || 1;
+    const bob = 5 * Math.sin(g * 1.5), y = (o.y == null ? 1030 : o.y) + bob;
     const a = o.a == null ? 1 : K.E.back(clamp(o.a, 0, 1), 1.8);
     if (a <= 0) return null;
     ctx.save(); ctx.translate(x, y); ctx.scale(a, a); ctx.translate(-x, -y);
@@ -168,9 +181,15 @@ const HOST = (function () {
       K.perch(ctx, px, py, 92 * s, 731);
       K.parrot(ctx, px, py - 92 * s, s * 0.95, parrotPose(g, Object.assign({}, o, { _px: px })));
     }
-    K.crab(ctx, x, y, s, crabPose(g, Object.assign({}, o, { y })));
+    const cp = crabPose(g, Object.assign({}, o, { x, y, s }));
+    /* carrying: the claw goes to a "hold" pose and the item is drawn at the claw tip, on top */
+    if (o.carryR) cp.clawR = Object.assign({ x: 92, y: -120, open: 0.35 }, o.carryPoseR || {});
+    if (o.carryL) cp.clawL = Object.assign({ x: -92, y: -120, open: 0.35 }, o.carryPoseL || {});
+    K.crab(ctx, x, y, s, cp);
+    if (o.carryR) { const t = clawTip(x, y, s, cp, "R"); o.carryR(ctx, t[0], t[1], g); }
+    if (o.carryL) { const t = clawTip(x, y, s, cp, "L"); o.carryL(ctx, t[0], t[1], g); }
     ctx.restore();
-    return { crab: [x, y], parrot: [px, py - 92 * s] };
+    return { crab: [x, y], parrot: [px, py - 92 * s], clawR: clawTip(x, y, s, cp, "R"), clawL: clawTip(x, y, s, cp, "L") };
   }
 
   return { crabPose, parrotPose, duo, raft, GEST };

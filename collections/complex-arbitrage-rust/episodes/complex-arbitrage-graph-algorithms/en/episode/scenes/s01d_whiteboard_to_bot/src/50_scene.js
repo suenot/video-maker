@@ -299,7 +299,7 @@ function draw(g) {
   else if (g < B.model) { point = K.toScreen(CH[0], CH[1]); pointAmt = hold(g, B.translate, B.understand + 0.8, 0.3); }
   else { point = [900, 470]; pointAmt = hold(g, B.map - 0.2, B.navigate + 1.2, 0.3); }
   HOST.duo(ctx, g, {
-    point, pointAmt,
+    x: 300, y: 1010, s: 1.15, point, pointAmt,
     ppoint: [1480, 140], ppointAmt: hold(g, B.notRisk - 0.3, B.far, 0.3),
     reacts: [
       { at: B.risk + 0.2, kind: "think", dur: 1.6 },

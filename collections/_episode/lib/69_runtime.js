@@ -1,5 +1,5 @@
 /* ============================================================
-   EPISODE 69 RUNTIME: the one paused GSAP timeline per scene.
+   ENGINE 69 RUNTIME (collection-agnostic): the one paused GSAP timeline per scene.
    A scene file ends with   RUN(draw);   where draw(g, t) paints one frame:
      g = episode-global seconds (SCENE.start + t), t = scene-local seconds.
    RUN adds: the in/out transitions from scenes.json, error-to-canvas (never a
@@ -21,7 +21,7 @@ function RUN(draw) {
     try {
       K.begin(ctx, g, { x: 960, y: 540, z: 1 });
       draw(g, t);
-      const td = TR.DUR;
+      const td = typeof TR !== "undefined" ? TR.DUR : 0;
       if (SCENE.in === "wave" && t < td) TR.waveIn(ctx, t / td);
       if (SCENE.in === "iris" && t < td) TR.irisIn(ctx, t / td, SCENE.inAt);
       if (SCENE.out === "wave" && t > DUR - td) TR.waveOut(ctx, (t - (DUR - td)) / td);
