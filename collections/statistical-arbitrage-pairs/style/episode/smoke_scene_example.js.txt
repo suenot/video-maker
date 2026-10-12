@@ -1,0 +1,41 @@
+/* s03a 311.2 - 359.1  SMOKE TEST of the collection layer (not a real scene): chapter intertitle,
+   Dan points at the chart on the cinema screen, "TRAP" stamp, Skip holds the 0.85 tag. */
+const TXT = {
+  chapter: ["The Fundamental Math", "Correlation Is a Trap", "Why a high correlation is not a trade."],
+  note: { title: "The Trap", lines: ["Correlated moves, prices that drift apart forever."] },
+  tag: "0.85", stamp: "TRAP",
+};
+const B = {
+  heading: NR.cue("mathematical", 311),
+  trap: NR.cue("trap", 321),
+  corr: NR.cue("correlation.", 326),
+  tag: NR.cue("Bitcoin", 332),
+  drift: NR.cue("drift", 355),
+};
+const CAM = K.mkTrack([[SCENE.start, { x: 960, y: 540, z: 1 }], [B.corr, { x: 1000, y: 530, z: 1.04 }], [SCENE.end, { x: 1030, y: 520, z: 1.08 }]]);
+const wk = (seed, n, drift) => { const r = K.mulberry(seed), out = []; let v = 0; for (let i = 0; i < n; i++) { v += (r() - 0.5) * 0.5 + (i > n / 2 ? drift * 0.12 : 0); out.push(v); } return out; };
+const SA = wk(11, 40, 1), SB = wk(11, 40, -1).map((v, i) => v + (i > 20 ? 0 : 0));
+
+function draw(g) {
+  K.cam = Object.assign({ rot: 0 }, CAM(g));
+  K.applyCam(ctx, 1);
+  HOUSE.back(ctx, g, { spots: [[1250, 560]] });
+  K.screenChart(ctx, g > B.drift - 1 ? 760 : 1230, 470, 860, 480, [{ data: SB, color: P.g3, w: 7, dash: [14, 10] }, { data: SA, color: P.ink, w: 7 }], { a: pop(g, B.trap - 1), draw: span(g, B.corr, B.drift + 2), spread: [20, 39], title: "Price over time" });
+  HOUSE.front(ctx, g);
+  K.screen(ctx);
+  SIGN.chapter(ctx, g, { at: B.heading, until: B.heading + 5, lines: TXT.chapter });
+  SIGN.note(ctx, g > B.drift - 1 ? 700 : 1380, 900, { a: pop(g, B.corr + 1.5), title: TXT.note.title, lines: TXT.note.lines, w: 620, to: [g > B.drift - 1 ? 760 : 1230, 700] });
+  SIGN.stamp(ctx, 1560, 190, { a: pop(g, B.drift - 1.5, 0.25), text: TXT.stamp, size: 70 });
+  const late = g > B.drift - 1;
+  HOST.duo(ctx, g, late ? {
+    side: -1, s: 1.5, point: K.toScreen(1230, 470), pointAmt: 0, carryR: (c, x, y) => K.coin(c, x + 24, y - 6, 34, { seed: 5 }),
+    ppoint: K.toScreen(760, 470), ppointAmt: hold(g, B.drift, B.drift + 8),
+  } : {
+    point: K.toScreen(1230, 470), pointAmt: hold(g, B.corr, B.corr + 6),
+    pcarryR: g > B.tag - 0.3 && g < B.tag + 6 ? (c, x, y) => K.hangTag(c, x + 66, y + 4, TXT.tag, { size: 34, gold: true, seed: 3 }) : null,
+    reacts: [{ at: B.trap + 0.3, kind: "surprise", dur: 1.2 }],
+    preacts: [{ at: B.tag + 7, kind: "think", dur: 1.6 }],
+  });
+  K.film(ctx, g);
+}
+RUN(draw);
