@@ -29,6 +29,7 @@
 ## Episode engine
 - Shared, collection-agnostic engine: `collections/_episode/` (README = builder guide, tools: init_episode.py, new_scene.sh, snap.sh, render_scene.sh, assemble.py).
 - Per collection a small layer in `<collection>/style/episode/` (65_host.js with HOST.duo, 66_signs.js, template); crab layer is the model. Each collection needs one "collection layer" agent (~1 h) before scene builders.
+- `init_episode.py --host-a` must be set explicitly (pilot voices had 1928 vs 1912 words; auto-pick is unreliable).
 - Hosts default s 1.55 (~30% of frame), must point/carry/react every 10-15 s.
 - Pilot remaining work: packages A s03-s04, B s05-s06, C s07-s10, D s11-s15, E re-stage s01a-s02c with big hosts.
 
