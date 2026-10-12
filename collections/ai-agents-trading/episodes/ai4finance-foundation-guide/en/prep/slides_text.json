@@ -1,0 +1,52 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "The Al4Finance\nFoundation Ecosystem\n\nArchitectural Map of FinGPT, FinRL, and FinRobot\n\n[SYSTEM STATUS]: Open Research Code Base\n[VERIFICATION PENDING]: Project capabilities are based on dated article descriptions pending\n\nprimary-source review. All facts are presented as unverified claims sourced from the article.\n[LEGAL]: This documentation does not constitute personal investment advice.\n\nGemini Notebook"
+    },
+    {
+      "page": 2,
+      "text": "The Three-Pillar Framework\nfor Algo-Trading\n\nData Backbone\n\nr,s ae\n[ Pillar 1: FinGPT ] [ Pillar 2: FinRL ] [ Pillar 3: Finobot_]\n\nAAA\nPurpose Purpose Purpose\nFinancial Large Reinforcement Multi-Agent\n\nLanguage Models Learning for SS Orchestration\n(LLMs) Trading R\n\nKey Technology Q pe ; Key Technology Ks Key Technology\n\nLoRA, Fine-tuning, Gymnasium, Deep AutoGen, System\nSentiment Analysis if Reinforcement Roles, Toolkits\nLearning (DRL) Agents\n\nA Gemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "Pillar |: FinGPT\n\nDeploying Financial LLMs\nvia Low-Rank Adaptation\n\ni Gemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "1 Contexts\n\ninancia\n\nF\n\nin\n\nThe LoRA Advantage\n\nCompact\nstorage\n\ntrainable matrices\nto selected layers.\n\nAdding small\n\nLSP YASS\nVE WA SETS\nA\n\nWw\n\n\\ V AWC CMCCnmu\n\nWW. SAS ASAS SSA\nMA,AVT_\n¢¢— a\\va\\a\\a\\a\\a\\a\\a\\a\\=\n\n)\n\nMore\n'] comparable [\n\n‘ >»\n\neee\n\nNe ee ee | Nee: Nee Nee Nee ge ta 5 ee,\n\nae ee ee Ce Ne ee Ne ee Nee\n\n| ee eS ee\n\n— | —_—)  ) — | >) |. SS >? Pe\n\nCheaper\nexecution\n\nRetraining all\nbillions of\n\nparameters\n\nVS SW SS oo\n\noS oo\n\n(YY SVN SANIAANAAO\n//\n\nen epee Ye pen) pm} pee pn? pa? pe pe\n\n(Y\\Y\\ SS VNSNSVVVS SS\n\nWMV _V VN VV VN SSSA\nWWW _ SV NV VV N SSS\n“0°6:0'0'0.4\nij V/\\ Wf\n\nl/ \\\n\nWS PVT VT TT TV\n\nEEE EEEEEEE\n\n‘ a yf ey Ne a ee\n\nee\"\n®\n>\nTs |\nWw)\n|\nc«d)\n‘@E\nx<\n®\n~>\nro\nro\nra]\nC:\n© |\n‘rd\n}\n40]\n}\n= |\ni\n=\n‘@)\n©O\nLJ\n\nmh Gemini Notebook"
+    },
+    {
+      "page": 5,
+      "text": "FinGPT Satellites: Data & Context Pipelines\n\nFinRAG (Retrieval-Augmented Generation Pipeline)\n\nETL for\nFinancial\nNLP\n\nCleaned Text\nCorpus\n\nPDF/Word\nDocuments aaa Chunks >\n\n& Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "Pillar IT:\nFinRL-—\n\nDeep Reinforcement Learning\nfor Algorithmic Trading\n\ni Gemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "The FinRL Convergence Architecture\n\nMarket Data\n(Raw financial\ntime-series\n\nstreams)\n\nFUUUL\n\nms\n\nReinforcement\nLearning Agent\n\nGymnasium\nEnvironments\n\n(Standardized RL\nframeworks)\n\n=H\n\nexecuting\ntrades\n\nDRL Libraries\n\nStable-Baselines3\n\ni Gemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "Built-in Risk Management:\nThe Circuit Breaker\n\nVolatility < turbulence_threshold\nTrading Mode\n\nturbulence_threshold (Agent active)\n\nCash Mode\nEq (Forced liquidation/safety\n\nVolatility > turbulence_threshold state)\n\nThe DRL agent automatically halts trading and switches entirely to cash\nwhen the turbulence index exceeds the predefined safety threshold."
+    },
+    {
+      "page": 9,
+      "text": "FinRL Modular Satellites\n\nOF\nEQ FinRL-Meta\n\nExtended environments and\n\ndatasets.\n|\n\nje r(&)\ni J °\n“ry FinRL DeepSeek\n3b): ee?\nIngests NLP features directly\ninto PPO/CPPO reinforcement\nlearning models.\n\na FinRL_Market_Simulator\n\nHigh-fidelity simulation\nenvironments (Limit Order Book\n(LOB) simulation, ABIDES, TWAP)."
+    },
+    {
+      "page": 10,
+      "text": "Pillar III:\n\nFinRobot\n\nMulti-Agent Orchestration\nand User Experience"
+    },
+    {
+      "page": 11,
+      "text": "Orchestrating the Ecosystem\n\nFinRobot UX & Scenarios\nPowered by AutoGen and internal Toolkits.\n\nI\na Equity Research 4 Risk Analysis - fe Portfolio a\nAgent | Agent | Management Agent\n\nli\nFinGPT (Language Context) 7 FinRL (Execution Policy)"
+    },
+    {
+      "page": 12,
+      "text": "Accessing the Foundation\n\nGitHub Repository:\ngithub.com/AI4Finance-\nFoundation\n\n> [ALERT]: All components discussed constitute open research code.\n\n> [WARNING]: This is explicitly not personal investment advice.\n\n> [STATUS]: Project capabilities remain dated article descriptions pending primary-source review.\nMutable facts are attributed to the article as unverified claims.\n\n| A Gemini Notebook"
+    }
+  ]
+}
