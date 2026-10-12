@@ -12,7 +12,7 @@
 |---|---|---|---|
 | complex-arbitrage-rust | crab captain | 31.5 s done; fix pending: 13 s static title | parrot Pip (done) |
 | ai-agents-trading | robot Beepo | 24.3 s done | in progress (analyst bot) |
-| modern-ml-trading | owl Strix | 26.6 s done | in progress (hummingbird) |
+| modern-ml-trading | owl Strix | 26.6 s done | done: hummingbird Pico, K.duo |
 | order-book-microstructure | raccoon Tikki | 26.4 s done | in progress (gecko) |
 | execution-market-making | mouse Mr. Tick | 27.1 s done | in progress (pigeon) |
 | statistical-arbitrage-pairs | ragtime cat + penguins | 28.9 s done | done: penguin Skip, K.duo |
