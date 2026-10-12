@@ -1,5 +1,5 @@
 #!/bin/bash
-# Renders the intro in en, ru, zh-CN, zh-TW (song muxed) plus silent copies into renders/.
+# Renders the full-length intro (28.9 s) in en, ru, zh-CN, zh-TW (song muxed) plus silent copies into renders/.
 # Retries each language up to 3 times. Each render runs in a machine-wide slot
 # (collections/tools/heavy_slot.sh, max 3 renders at once).
 cd "$(dirname "$0")/.." || exit 1

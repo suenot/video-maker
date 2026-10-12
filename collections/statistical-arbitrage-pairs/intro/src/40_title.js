@@ -3,7 +3,7 @@
    the title letters drop in on the beat (DOM text, one variable per
    language), the cast takes a bow: "Kalman's filter knows it well".
    ============================================================ */
-const MARQ = { cx: 960, cy: 268, w: 1500, h: 350 };
+const MARQ = { cx: 960, cy: 345, w: 1440, h: 340 }; /* top edge stays below the logo plate (y 48 - 148) */
 const TCAT = { x: 700, y: 1000, s: 0.95 };
 const TPEN = { y: 985, s: 0.86, A: 1150, B: 1330 };
 
@@ -21,6 +21,14 @@ function catTitlePose(t) {
     st.hatLift = 40 * tip * (1 - K.ss(T.irisEnd[0] + 0.2, T.irisEnd[0] + 0.5, t)); st.hatTip = -18 * tip; st.wink = tip * (1 - K.ss(T.hatTip + 0.9, T.hatTip + 1.1, t)); st.look = [0, 0]; st.turn = 0;
     st.gloveL = { x: -90, y: -130 - 10 * pb, open: 0.4 };
   }
+  /* finale on the held "well": hat back on, both arms up, a hop, then a wink for the iris */
+  const fin = K.ss(T.finale - 0.3, T.finale, t);
+  if (fin > 0) {
+    const hop = K.inv(T.finale, T.finale + 0.45, t);
+    st.gloveL = { x: -150, y: -270, open: 1 }; st.gloveR = { x: 150, y: -270, open: 1 }; st.hatLift = 0; st.hatTip = 0;
+    st.hop = 40 * Math.sin(hop * Math.PI); st.squash = 0.3 * (1 - fin) - 0.2 * Math.sin(hop * Math.PI) + 0.06 * pb;
+    st.mouth = "grin"; st.look = [0, 0]; st.turn = 0; st.wink = K.ss(T.irisEnd[0], T.irisEnd[0] + 0.2, t);
+  }
   return st;
 }
 function penTitlePose(t, who) {
@@ -33,6 +41,8 @@ function penTitlePose(t, who) {
   if (up > 0) { st.flipL = K.lerp(st.flipL, 150, up); st.flipR = K.lerp(st.flipR, 150, up); st.beak = "open"; }
   const tip = K.ss(T.hatTip - 0.1, T.hatTip + 0.2, t);
   if (tip > 0) { st.hatTip = -25 * tip * (1 - K.ss(T.hatTip + 0.8, T.hatTip + 1.1, t)); st.look = [0, 0]; }
+  const fin = K.inv(T.finale, T.finale + 0.45, t);
+  if (fin > 0 && fin < 1) { st.hop = 46 * Math.sin(fin * Math.PI); st.flipL = st.flipR = 150; st.beak = "open"; }
   return st;
 }
 

@@ -3,16 +3,18 @@
    drives a proxy whose setter calls render(t).
    0.00 - 0.90  iris opens on the closed curtain
    0.12 - 3.36  "Two stocks walk into a chart, ha!": curtain parts, penguins tap in
-   3.36 - 6.56  "Dancing close then drifting apart": spring stretches, z -> +2
-   6.56 - 9.73  "Trade the spread": cat tags sell -1 / buy +1, flips a coin
-   9.73 - 12.9  "Distance says these two should wed": snap back, heart, coins rain
-   12.9 - 16.1  "Cointegration rings the bell": bell, spread chart, bow, iris out
-   16.1 - 20.1  "Kalman's filter knows it well": marquee title, hat tip, iris
+   3.36 - 6.57  "Dancing close then drifting apart": spring stretches, z -> +2
+   6.57 - 9.78  "Buy the cheap one, short the rich": tags +1 / -1 thrown at the partners
+   9.78 - 12.97 "Spread's the tune we're trading with": spread reel, the spring hums
+   12.97- 16.16 "Trade the spread, trade the spread": two coin flips (the bet)
+   16.16- 19.34 "Distance says these two should wed": snap back, heart, coins rain
+   19.34- 22.57 "Cointegration rings the bell": bell, the spread reverts, bow, iris out
+   22.57- 28.9  "Kalman's filter knows it well": marquee title, hat tip, finale, iris
    The scene draws on #cv; the projector (flicker, scratches, dust,
    vignette, iris) draws on #fx above the DOM title.
    ============================================================ */
 const fx = document.getElementById("fx").getContext("2d");
-const grainEl = document.getElementById("grain");
+const grainEl = document.getElementById("grain"), logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1.6 -.3'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>\")";
 
 function render(t) {
@@ -30,14 +32,17 @@ function render(t) {
     if (t < T.irisIn[1]) K.iris(fx, 960, 560, K.irisT(t, T.irisIn[0], T.irisIn[1], false, 1150));
     if (t >= T.irisOut[0] && t < T.title) {
       K.cam = camAct(t); const c = K.toScreen(CAT.x, CAT.y - 250 * CAT.s);
-      K.iris(fx, c[0], c[1], K.irisT(t, T.irisOut[0], T.irisOut[1] - 0.05, true, 1500));
+      K.iris(fx, c[0], c[1], K.lerp(1500, 60, K.E.inOut(K.inv(T.irisOut[0], T.irisOut[1], t)))); /* never fully black: the title iris opens from the same 60 px */
     }
-    if (t >= T.title && t < T.title + 0.55) K.iris(fx, 960, 560, K.irisT(t, T.title, T.title + 0.55, false, 1150));
+    if (t >= T.title && t < T.title + 0.6) K.iris(fx, TCAT.x, TCAT.y - 250 * TCAT.s, K.lerp(60, 1500, K.E.inOut(K.inv(T.title, T.title + 0.6, t))));
     if (t >= T.irisEnd[0]) K.iris(fx, CAT_HEAD[0], CAT_HEAD[1], K.lerp(1500, 190, K.E.inOut(K.inv(T.irisEnd[0] + 0.1, DUR - 0.05, t))));
   } catch (err) {
     /* never leave a black frame silently: draw the error so a snapshot shows it */
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);
   }
+  /* logo: one small hop when the curtain is open, otherwise static */
+  const lh = K.inv(T.curtain[1], T.curtain[1] + 0.4, t);
+  logoEl.style.transform = lh > 0 && lh < 1 ? `translateY(${(-14 * Math.sin(lh * Math.PI)).toFixed(1)}px)` : "none";
   /* film grain steps at the boil rate */
   const f = K.boilFrame(t);
   grainEl.style.backgroundPosition = ((f % 7) * 41) + "px " + ((f % 5) * 59) + "px";

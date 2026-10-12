@@ -69,7 +69,7 @@ function penPose(t, who) {
 const KEY_X = (k) => PIANO.x + (-220 + 6 + (k + 0.5) * (428 / 22)) * PIANO.s;
 const KEY_Y = PIANO.y - 280 * PIANO.s;
 function toCat(p) { return { x: (p[0] - CAT.x) / CAT.s, y: (p[1] - CAT.y) / CAT.s }; }
-function playing(t) { return t < T.ha - 0.2 || (t > T.ha + 0.6 && t < T.trade - 0.35); }
+function playing(t) { return t < T.ha - 0.2 || (t > T.ha + 0.6 && t < T.trade - 0.35) || (t > T.tune + 0.15 && t < T.flips[0] - 0.4); }
 function pressedKeys(t) {
   if (!playing(t)) return [];
   const h = Math.floor((t - 0.12) / (BEAT / 2));
@@ -99,8 +99,8 @@ function catPose(t) {
   /* "!": z hits the gold zone */
   const pop = K.ss(T.spot - 0.06, T.spot + 0.06, t) * (1 - K.ss(T.trade + 0.4, T.trade + 0.8, t));
   if (pop > 0) { st.blink = 0; st.eyeUp = 10 * pop; st.brow = 1.4 * pop; st.mouth = "o"; st.exclaim = K.inv(T.spot - 0.05, T.spot + 0.25, t) * (1 - K.inv(T.trade + 0.5, T.trade + 0.7, t)); st.look = [1, -0.5]; st.turn = 0.6; }
-  /* "trade the spread": wind up and throw two tags (sell the rich, buy the cheap) */
-  if (t > T.trade - 0.35 && t < T.flip) {
+  /* "buy the cheap one, short the rich": wind up and throw a tag at each partner */
+  if (t > T.trade - 0.35 && t < T.tune + 0.15) {
     st.turn = 0.5; st.look = [1, -0.2]; st.mouth = "sly";
     [T.tagSell, T.tagBuy].forEach((tt) => {
       const wind = K.ss(tt - BEAT * 0.9, tt - BEAT * 0.4, t) * (1 - K.ss(tt - BEAT * 0.4, tt - BEAT * 0.2, t));
@@ -110,14 +110,16 @@ function catPose(t) {
     if (!st.gloveR) st.gloveR = { x: 90, y: -170, open: 0.5 };
     st.gloveL = { x: -80, y: -120 - 10 * pb, open: 0.3 };
   }
-  /* coin flip: bets on the reversion */
-  if (t > T.flip - 0.3 && t < T.snap + 0.4) {
-    const up = K.ss(T.flip - 0.3, T.flip, t);
-    st.gloveR = { x: 70, y: K.lerp(-150, -190, up) + 30 * K.ss(T.catch - 0.1, T.catch + 0.1, t) * 0, open: 0.4 };
-    st.gloveL = { x: -70, y: -140, open: 0.4 };
-    st.look = [0.3, -1 + 1.6 * K.inv(T.flip, T.flip + 0.6, t) * (1 - K.inv(T.catch - 0.6, T.catch, t))]; st.turn = 0.1;
-    st.mouth = t > T.catch ? "grin" : "o";
-    st.squash -= 0.2 * (1 - K.inv(T.flip, T.flip + 0.15, t)) * up;
+  /* "trade the spread" x2: a coin flip on each line (the bet on the reversion) */
+  if (t > T.flips[0] - 0.3 && t < T.snap + 0.4) {
+    const k = t < T.flips[1] - 0.3 ? 0 : 1, f0 = T.flips[k], c0 = T.catches[k];
+    const up = K.ss(f0 - 0.3, f0, t);
+    st.gloveR = { x: 70, y: K.lerp(-150, -190, up), open: 0.4 };
+    st.gloveL = { x: -70, y: -140 - 8 * pb, open: 0.4 };
+    st.look = [0.3, t < f0 ? 0 : -1 + 1.0 * K.inv(f0 + 0.5, c0, t)]; st.turn = 0.1;
+    st.mouth = t > c0 ? "grin" : t > f0 ? "o" : "sly";
+    st.squash -= 0.2 * (1 - K.inv(f0, f0 + 0.15, t)) * up;
+    if (t > c0) { st.wink = K.ss(c0, c0 + 0.1, t) * (1 - K.ss(c0 + 0.4, c0 + 0.55, t)); }
   }
   /* cue! both arms up as the spring snaps */
   const cue = K.ss(T.snap - 0.15, T.snap + 0.05, t) * (1 - K.ss(T.rain - 0.3, T.rain, t));
@@ -156,23 +158,25 @@ function drawTags(t, xs) {
   });
 }
 function drawFlipCoin(t) {
-  if (t < T.flip - 0.05 || t > T.snap + 0.3) return;
-  const u = K.inv(T.flip, T.catch, t), hx = CAT.x + 74 * CAT.s, hy = CAT.y - 210 * CAT.s;
+  if (t < T.flips[0] - 0.05 || t > T.snap + 0.3) return;
+  const k = t < T.flips[1] - 0.05 ? 0 : 1, f0 = T.flips[k], c0 = T.catches[k];
+  const u = K.inv(f0, c0, t), hx = CAT.x + 74 * CAT.s, hy = CAT.y - 210 * CAT.s;
   const y = hy - Math.sin(u * Math.PI) * 330, spin = u * 26;
   K.coin(ctx, hx + 10 * Math.sin(u * 3), y, 26, { spin: u < 1 ? spin : 0, seed: 1650 });
-  if (u >= 1) K.twinkle(ctx, hx + 30, hy - 30, 22, 1 - K.inv(T.catch, T.catch + 0.4, t), P.goldLight, 1651);
+  if (u >= 1) K.twinkle(ctx, hx + 30, hy - 30, 22, 1 - K.inv(c0, c0 + 0.4, t), P.goldLight, 1651);
 }
 
 /* ---------- the projected chart: prices first, the spread after the bell ---------- */
 function drawScreen(t) {
   const a = K.inv(T.curtain[0] + 0.3, T.curtain[1], t);
   if (a <= 0) return;
-  const draw = K.lerp(0.3, 1, K.inv(T.curtain[1], T.hit, t));
+  const draw = K.lerp(0.3, 0.62, K.inv(T.curtain[1], T.drift[1], t));
   const two = K.inv(T.chart2, T.chart2 + 0.45, t);
   if (two < 1) K.screenChart(ctx, SCREEN.x, SCREEN.y, SCREEN.w, SCREEN.h, [{ data: CHART.A, color: P.ink, w: 6 }, { data: CHART.B, color: P.g3, w: 6 }], { a, draw, seed: 1400, spread: true, beam: 0.15 });
   if (two > 0) { /* the new reel rolls down over the old one */
     ctx.save(); ctx.beginPath(); ctx.rect(SCREEN.x - SCREEN.w / 2 - 40, SCREEN.y - SCREEN.h / 2 - 40, SCREEN.w + 80, (SCREEN.h + 60) * K.E.out3(two)); ctx.clip();
-    const d2 = K.inv(T.chart2 + 0.2, T.bell[2], t), iEntry = 36, iExit = 52;
+    /* draws up to the +2 entry during \"spread's the tune\", then the reversion from the snap to the bell */
+    const iEntry = 36, iExit = 52, d2 = K.lerp(0, (iEntry + 0.4) / (NPTS - 1), K.inv(T.chart2 + 0.3, T.flips[0], t)) + K.lerp(0, 1 - (iEntry + 0.4) / (NPTS - 1), K.inv(T.snap, T.bell[2], t));
     K.screenChart(ctx, SCREEN.x, SCREEN.y, SCREEN.w, SCREEN.h, [{ data: CHART.S, color: P.ink, w: 6 }], { a: 1, draw: d2, seed: 1450, yMin: -3, yMax: 3, roller: true, beam: 0.15,
       bands: [{ v: 2, color: P.gold, label: "+2σ" }, { v: 0, color: P.g3, dash: [6, 10] }, { v: -2, color: P.gold, label: "−2σ" }], marks: [{ i: iEntry, s: 0 }, { i: iExit, s: 0 }] });
     ctx.restore();
@@ -195,7 +199,8 @@ function camAct(t) {
   const zb = K.tw(t, T.bell[0] - 0.3, T.bell[0] + 0.3, 0, 0.1, K.E.inOut) - K.tw(t, T.bow - 0.4, T.bow + 0.3, 0, 0.1, K.E.inOut);
   const x = 960 + K.tw(t, T.drift[0], T.drift[1], 0, 80, K.E.inOut) - K.tw(t, T.snap - 0.2, T.hit, 0, 80, K.E.inOut) - K.tw(t, T.bell[0] - 0.3, T.bell[0] + 0.3, 0, 120, K.E.inOut);
   const y = 540 + K.tw(t, T.bell[0] - 0.3, T.bell[0] + 0.3, 0, 70, K.E.inOut);
-  return { x, y, z: zi + zb, rot: 0 };
+  const tp = K.tw(t, T.tune, T.tune + 0.8, 0, 1, K.E.inOut) - K.tw(t, T.flips[0] - 0.6, T.flips[0], 0, 1, K.E.inOut);
+  return { x: x + 140 * tp, y: y - 70 * tp, z: zi + zb + 0.1 * tp, rot: 0 };
 }
 function drawAct(t) {
   K.cam = camAct(t); K.applyCam(ctx, 1);
@@ -215,7 +220,8 @@ function drawAct(t) {
   /* partners + spring (spring behind their bodies, between the waists) */
   const pa = penPose(t, "A"), pbz = penPose(t, "B");
   const wa = K.penguinWaist(xs[0], PEN.y, PEN.s, 1, pa), wb = K.penguinWaist(xs[1], PEN.y, PEN.s, -1, pbz);
-  K.spring(ctx, wa, wb, { strain, r: 17, w: 6, coils: 8, wob: t > T.snap && t < T.hit + 0.6 ? 4 : 0 });
+  K.spring(ctx, wa, wb, { strain, r: 17, w: 6, coils: 8, wob: t > T.snap && t < T.hit + 0.6 ? 4 : t > T.tune && t < T.flips[0] ? 3 * pulseB(t) : 0 });
+  if (t > T.tune && t < T.flips[0]) for (let i = 0; i < 3; i++) { const t0 = T.tune + i * BEAT * 2.7, d = (t - t0) % (BEAT * 8); if (t > t0 && d < 1.6) K.note(ctx, (wa[0] + wb[0]) / 2 + (i - 1) * 120 + 20 * Math.sin(d * 4 + i), wa[1] - 40 - d * 120, 0.75, 1 - d / 1.6, 760 + i * 3); }
   K.penguin(ctx, xs[0], PEN.y, PEN.s, pa);
   K.penguin(ctx, xs[1], PEN.y, PEN.s, pbz);
   drawTags(t, xs);

@@ -78,15 +78,56 @@
       #preload .sc { font-family: "CJK SC"; font-weight: 900; }
       #preload .tc { font-family: "CJK TC"; font-weight: 900; }
       #grain { opacity: 0.22; mix-blend-mode: overlay; }
+      /* marketmaker.cc logo: top-right, a black theatre plate with a paper double rule; above the iris */
+      #logo { position: absolute; top: 48px; right: 48px; height: 100px; display: flex; align-items: center; gap: 14px; padding: 0 28px 0 16px; background: #141312; color: #ece7da; border: 3px solid #ece7da; border-radius: 14px; box-shadow: inset 0 0 0 5px #141312, inset 0 0 0 7px #9a958d, 0 6px 18px rgba(0,0,0,0.45); pointer-events: none; }
+      #logo .mark { width: 66px; height: 66px; display: block; }
+      #logo .word { font-family: "Oswald", sans-serif; font-weight: 700; font-size: 44px; line-height: 1; letter-spacing: 0.01em; white-space: nowrap; }
+      #logo .word b { font-weight: 700; color: #e9b43a; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="20.1" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="28.9" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div id="title" data-layout-allow-overlap data-layout-allow-occlusion></div>
       <canvas id="fx" width="1920" height="1080" data-layout-allow-overflow data-layout-allow-occlusion></canvas>
+      <div id="logo" data-layout-allow-occlusion><svg class="mark" aria-label="marketmaker.cc" version="1.0" xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" preserveAspectRatio="xMidYMid meet">
+<g transform="translate(0, 1024) scale(0.1, -0.1)" fill="currentColor" stroke="none">
+<path d="M4815 9964 c-22 -2 -92 -9 -155 -14 -1263 -113 -2506 -762 -3284
+-1714 -595 -729 -940 -1541 -1053 -2481 -22 -188 -26 -815 -5 -990 74 -626
+245 -1198 509 -1705 501 -960 1276 -1694 2272 -2154 645 -298 1302 -439 2046
+-438 757 0 1402 147 2070 471 491 238 899 521 1264 876 813 789 1298 1766
+1438 2896 22 181 25 761 5 964 -58 577 -200 1087 -439 1585 -113 236 -184 361
+-334 585 -180 270 -349 476 -574 701 -368 369 -746 646 -1200 880 -563 290
+-1104 452 -1745 520 -146 15 -715 28 -815 18z m837 -559 c1134 -135 2191 -733
+2857 -1615 188 -249 385 -590 511 -885 132 -306 245 -719 294 -1071 37 -264
+48 -690 26 -939 -123 -1364 -861 -2559 -2003 -3243 -299 -179 -487 -266 -777
+-362 -836 -277 -1714 -292 -2579 -44 -119 35 -322 102 -330 110 -2 2 52 63
+120 135 519 553 1099 890 1714 996 73 12 159 17 320 18 300 0 359 -12 924
+-184 129 -39 263 -78 298 -86 187 -43 308 9 510 218 161 168 253 322 253 425
+0 76 -23 127 -156 349 -209 348 -358 662 -426 897 -15 54 -39 167 -53 250 -14
+83 -39 196 -57 250 -83 264 -268 406 -580 447 -54 7 -95 16 -92 20 9 16 120
+50 187 59 152 19 326 -17 779 -159 531 -166 733 -192 993 -126 178 45 317 127
+445 261 71 76 177 230 165 242 -2 3 -26 -9 -52 -26 -64 -41 -147 -77 -252
+-109 -78 -24 -102 -27 -256 -27 -139 -1 -191 3 -285 22 -203 41 -423 109 -725
+227 -654 254 -862 292 -1215 220 -188 -38 -298 -48 -371 -35 -35 6 -128 38
+-208 70 -266 106 -461 155 -716 181 -163 16 -480 6 -658 -21 -265 -40 -601
+-137 -916 -265 -86 -35 -244 -99 -351 -143 -205 -83 -335 -122 -435 -129 -71
+-5 -90 5 -81 40 8 33 99 147 209 262 48 50 87 95 87 100 0 20 -24 35 -58 35
+-49 0 -145 -54 -317 -180 -237 -173 -308 -199 -451 -166 -151 34 -520 172
+-614 228 -63 39 -88 70 -96 119 -10 59 13 113 101 236 171 240 249 360 299
+463 l51 105 0 210 c1 265 10 301 128 475 102 152 288 355 495 543 l74 66 -59
+58 c-68 67 -88 119 -81 208 6 68 40 115 118 162 89 54 172 77 280 76 52 0 120
+-5 152 -12 l56 -12 144 75 c268 140 477 214 835 296 304 69 480 127 700 230
+208 98 430 246 593 394 l95 87 155 -5 c85 -3 212 -13 282 -21z m1016 -5082
+c85 -41 130 -109 157 -240 8 -37 13 -68 12 -69 -1 -2 -48 19 -103 46 -121 59
+-139 79 -136 164 0 32 -5 76 -12 97 -14 39 -13 40 8 33 11 -3 45 -17 74 -31z"/>
+<path d="M2243 7035 c-92 -42 -196 -156 -205 -225 -4 -34 23 -37 94 -10 97 36
+180 131 202 233 6 23 3 27 -16 27 -13 0 -47 -11 -75 -25z"/>
+</g>
+</svg>
+<span class="word">marketmaker<b>.cc</b></span></div>
       <div class="ov" id="grain"></div>
-      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="20.1" data-track-index="10" data-volume="1"></audio>
+      <audio id="song" src="song_full.m4a" data-start="0" data-duration="28.9" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="p7">Aa Бб 0</span><span class="p9">Aa Бб 0</span><span class="o5">Aa Бб 0</span><span class="o7">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span><span class="sc">统计套利</span><span class="tc">統計套利</span></div>
     </div>
     <script>
@@ -1334,21 +1375,24 @@ var VK = window.VK || (window.VK = {});
 
 /* ============================================================
    INTRO 10 SETUP: variables, title DOM, timing (beat grid), the act's data.
-   Song: song_20s.m4a, "The Spread Trade Shuffle", ragtime at 150 BPM
-   (beat 0.40 s, bar 1.60 s), cut 0-6.57 + 12.97-26.6 of song_raw.mp4,
-   spliced on a downbeat. Each sung line is 2 bars:
+   Song: song_full.m4a = the whole song_raw.mp4 ("The Spread Trade Shuffle",
+   ragtime at 150 BPM: beat 0.40 s, bar 1.60 s), loudnormed, 28.9 s.
+   Each sung line is 2 bars (whisper word timings + librosa downbeats):
      0.12  "Two stocks walk into a chart, ha!"
      3.36  "Dancing close then drifting apart."
-     6.56  "Trade the spread, trade the spread,"
-     9.73  "Distance says these two should wed."
-     12.91 "Cointegration rings the bell,"
-     16.14 "Kalman's filter knows it well."   (title card)
+     6.57  "Buy the cheap one, short the rich,"
+     9.78  "Spread's the tune we're trading with."
+     12.97 "Trade the spread, trade the spread,"
+     16.16 "Distance says these two should wed."
+     19.34 "Cointegration rings the bell,"
+     22.57 "Kalman's filter knows it well."   (title card; the band
+           stops at 25.3, "well" is held to 28.5)
    All story times are K.at(bar, beat) on the measured downbeats below.
    ============================================================ */
 const K = VK, P = K.P, at = K.at;
 K.G.BPM = 150;
-K.G.BARS = [0.12, 1.74, 3.36, 4.97, 6.56, 8.13, 9.73, 11.33, 12.91, 14.55, 16.14, 17.74, 19.33];
-const DUR = 20.1;
+K.G.BARS = [0.12, 1.74, 3.36, 4.97, 6.57, 8.16, 9.78, 11.37, 12.97, 14.56, 16.16, 17.75, 19.34, 20.97, 22.57, 24.16];
+const DUR = 28.9;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const BEAT = K.beatLen();
 
@@ -1359,24 +1403,26 @@ const T = {
   enter: [at(0, 2), at(1, 2)],    /* penguins tap in from the wings */
   ha: at(1, 3),                   /* 2.94 "ha!": the cat winks at us, hat lift */
   close: at(2, 0),                /* 3.36 "dancing close" */
-  drift: [at(3, 0), at(4, 0)],    /* 4.97 - 6.56 "drifting apart": the spring stretches, z -> +2 */
+  drift: [at(3, 0), at(4, 0)],    /* 4.97 - 6.57 "drifting apart": the spring stretches, z -> +2 */
   spot: at(3, 3),                 /* 6.17 the cat spots z in the gold zone: "!" */
-  trade: at(4, 0),                /* 6.56 "Trade the spread" */
-  tagSell: at(4, 2),              /* tag -1 lands on the rich (top hat) penguin */
-  tagBuy: at(4, 3),               /* tag +1 lands on the cheap (boater) penguin */
-  flip: at(5, 0),                 /* 8.13 "trade the spread" #2: the cat flips a gold coin (bets) */
-  catch: at(5, 3),                /* 9.33 coin back in the glove */
-  snap: at(6, 0),                 /* 9.73 "Distance says": the spring snaps them back */
-  hit: at(6, 1),                  /* 10.13 they meet: squash, heart */
-  rain: at(7, 0),                 /* 11.33 "should wed": coins rain, the cat catches them in his hat */
-  bell: [at(8, 0), at(8, 2), at(9, 0)], /* 12.91 "Cointegration rings the bell" */
-  chart2: at(8, 0),               /* the screen shows the spread reverting inside +/-2 */
-  bow: at(9, 2),                  /* 15.35 bows */
-  irisOut: [at(9, 2.5), at(10, 0)], /* 15.55 - 16.14 iris closes on the cat */
-  title: at(10, 0),               /* 16.14 "Kalman's filter knows it well": the marquee lights */
-  letters: at(10, 0.5),
-  hatTip: at(11, 0),              /* 17.74 "knows it well": hat tip + wink */
-  irisEnd: [at(12, 0), DUR],      /* 19.33 - 20.1 closing iris (stops on the cat's face) */
+  trade: at(4, 0),                /* 6.57 "Buy the cheap one, short the rich" */
+  tagBuy: at(4, 2),               /* 7.37 "buy the cheap one": +1 lands on the boater penguin */
+  tagSell: at(5, 2),              /* 8.96 "short the rich": -1 lands on the top-hat penguin */
+  tune: at(6, 0),                 /* 9.78 "Spread's the tune": back to the piano, the spring hums */
+  chart2: at(6, 0),               /* the spread reel rolls down on the screen, +/-2 sigma bands */
+  flips: [at(8, 0), at(9, 0)],    /* 12.97, 14.56 "Trade the spread" x2: a gold coin flip each (the bet) */
+  catches: [at(8, 3), at(9, 3)],
+  snap: at(10, 0),                /* 16.16 "Distance says": the spring snaps them back */
+  hit: at(10, 1),                 /* 16.56 they meet: squash, heart */
+  rain: at(11, 0),                /* 17.75 "should wed": coins rain, the cat holds out his hat */
+  bell: [at(12, 0), at(12, 2), at(13, 0)], /* 19.34 "Cointegration rings the bell" */
+  bow: at(13, 2),                 /* 21.77 bows */
+  irisOut: [at(13, 2.5), at(14, 0)], /* 21.97 - 22.57 iris closes on the cat */
+  title: at(14, 0),               /* 22.57 "Kalman's filter knows it well": the marquee lights */
+  letters: at(14, 0.5),
+  hatTip: at(15, 0),              /* 24.16 "knows it well": hat tip + wink */
+  finale: at(16, 0),              /* 25.76 the held "well": ta-da, everybody hops */
+  irisEnd: [at(17, 0), DUR],      /* 27.36 - 28.9 closing iris (stops on the cat's face) */
 };
 
 /* ---------- variables (title text, language) ---------- */
@@ -1501,7 +1547,7 @@ function penPose(t, who) {
 const KEY_X = (k) => PIANO.x + (-220 + 6 + (k + 0.5) * (428 / 22)) * PIANO.s;
 const KEY_Y = PIANO.y - 280 * PIANO.s;
 function toCat(p) { return { x: (p[0] - CAT.x) / CAT.s, y: (p[1] - CAT.y) / CAT.s }; }
-function playing(t) { return t < T.ha - 0.2 || (t > T.ha + 0.6 && t < T.trade - 0.35); }
+function playing(t) { return t < T.ha - 0.2 || (t > T.ha + 0.6 && t < T.trade - 0.35) || (t > T.tune + 0.15 && t < T.flips[0] - 0.4); }
 function pressedKeys(t) {
   if (!playing(t)) return [];
   const h = Math.floor((t - 0.12) / (BEAT / 2));
@@ -1531,8 +1577,8 @@ function catPose(t) {
   /* "!": z hits the gold zone */
   const pop = K.ss(T.spot - 0.06, T.spot + 0.06, t) * (1 - K.ss(T.trade + 0.4, T.trade + 0.8, t));
   if (pop > 0) { st.blink = 0; st.eyeUp = 10 * pop; st.brow = 1.4 * pop; st.mouth = "o"; st.exclaim = K.inv(T.spot - 0.05, T.spot + 0.25, t) * (1 - K.inv(T.trade + 0.5, T.trade + 0.7, t)); st.look = [1, -0.5]; st.turn = 0.6; }
-  /* "trade the spread": wind up and throw two tags (sell the rich, buy the cheap) */
-  if (t > T.trade - 0.35 && t < T.flip) {
+  /* "buy the cheap one, short the rich": wind up and throw a tag at each partner */
+  if (t > T.trade - 0.35 && t < T.tune + 0.15) {
     st.turn = 0.5; st.look = [1, -0.2]; st.mouth = "sly";
     [T.tagSell, T.tagBuy].forEach((tt) => {
       const wind = K.ss(tt - BEAT * 0.9, tt - BEAT * 0.4, t) * (1 - K.ss(tt - BEAT * 0.4, tt - BEAT * 0.2, t));
@@ -1542,14 +1588,16 @@ function catPose(t) {
     if (!st.gloveR) st.gloveR = { x: 90, y: -170, open: 0.5 };
     st.gloveL = { x: -80, y: -120 - 10 * pb, open: 0.3 };
   }
-  /* coin flip: bets on the reversion */
-  if (t > T.flip - 0.3 && t < T.snap + 0.4) {
-    const up = K.ss(T.flip - 0.3, T.flip, t);
-    st.gloveR = { x: 70, y: K.lerp(-150, -190, up) + 30 * K.ss(T.catch - 0.1, T.catch + 0.1, t) * 0, open: 0.4 };
-    st.gloveL = { x: -70, y: -140, open: 0.4 };
-    st.look = [0.3, -1 + 1.6 * K.inv(T.flip, T.flip + 0.6, t) * (1 - K.inv(T.catch - 0.6, T.catch, t))]; st.turn = 0.1;
-    st.mouth = t > T.catch ? "grin" : "o";
-    st.squash -= 0.2 * (1 - K.inv(T.flip, T.flip + 0.15, t)) * up;
+  /* "trade the spread" x2: a coin flip on each line (the bet on the reversion) */
+  if (t > T.flips[0] - 0.3 && t < T.snap + 0.4) {
+    const k = t < T.flips[1] - 0.3 ? 0 : 1, f0 = T.flips[k], c0 = T.catches[k];
+    const up = K.ss(f0 - 0.3, f0, t);
+    st.gloveR = { x: 70, y: K.lerp(-150, -190, up), open: 0.4 };
+    st.gloveL = { x: -70, y: -140 - 8 * pb, open: 0.4 };
+    st.look = [0.3, t < f0 ? 0 : -1 + 1.0 * K.inv(f0 + 0.5, c0, t)]; st.turn = 0.1;
+    st.mouth = t > c0 ? "grin" : t > f0 ? "o" : "sly";
+    st.squash -= 0.2 * (1 - K.inv(f0, f0 + 0.15, t)) * up;
+    if (t > c0) { st.wink = K.ss(c0, c0 + 0.1, t) * (1 - K.ss(c0 + 0.4, c0 + 0.55, t)); }
   }
   /* cue! both arms up as the spring snaps */
   const cue = K.ss(T.snap - 0.15, T.snap + 0.05, t) * (1 - K.ss(T.rain - 0.3, T.rain, t));
@@ -1588,23 +1636,25 @@ function drawTags(t, xs) {
   });
 }
 function drawFlipCoin(t) {
-  if (t < T.flip - 0.05 || t > T.snap + 0.3) return;
-  const u = K.inv(T.flip, T.catch, t), hx = CAT.x + 74 * CAT.s, hy = CAT.y - 210 * CAT.s;
+  if (t < T.flips[0] - 0.05 || t > T.snap + 0.3) return;
+  const k = t < T.flips[1] - 0.05 ? 0 : 1, f0 = T.flips[k], c0 = T.catches[k];
+  const u = K.inv(f0, c0, t), hx = CAT.x + 74 * CAT.s, hy = CAT.y - 210 * CAT.s;
   const y = hy - Math.sin(u * Math.PI) * 330, spin = u * 26;
   K.coin(ctx, hx + 10 * Math.sin(u * 3), y, 26, { spin: u < 1 ? spin : 0, seed: 1650 });
-  if (u >= 1) K.twinkle(ctx, hx + 30, hy - 30, 22, 1 - K.inv(T.catch, T.catch + 0.4, t), P.goldLight, 1651);
+  if (u >= 1) K.twinkle(ctx, hx + 30, hy - 30, 22, 1 - K.inv(c0, c0 + 0.4, t), P.goldLight, 1651);
 }
 
 /* ---------- the projected chart: prices first, the spread after the bell ---------- */
 function drawScreen(t) {
   const a = K.inv(T.curtain[0] + 0.3, T.curtain[1], t);
   if (a <= 0) return;
-  const draw = K.lerp(0.3, 1, K.inv(T.curtain[1], T.hit, t));
+  const draw = K.lerp(0.3, 0.62, K.inv(T.curtain[1], T.drift[1], t));
   const two = K.inv(T.chart2, T.chart2 + 0.45, t);
   if (two < 1) K.screenChart(ctx, SCREEN.x, SCREEN.y, SCREEN.w, SCREEN.h, [{ data: CHART.A, color: P.ink, w: 6 }, { data: CHART.B, color: P.g3, w: 6 }], { a, draw, seed: 1400, spread: true, beam: 0.15 });
   if (two > 0) { /* the new reel rolls down over the old one */
     ctx.save(); ctx.beginPath(); ctx.rect(SCREEN.x - SCREEN.w / 2 - 40, SCREEN.y - SCREEN.h / 2 - 40, SCREEN.w + 80, (SCREEN.h + 60) * K.E.out3(two)); ctx.clip();
-    const d2 = K.inv(T.chart2 + 0.2, T.bell[2], t), iEntry = 36, iExit = 52;
+    /* draws up to the +2 entry during \"spread's the tune\", then the reversion from the snap to the bell */
+    const iEntry = 36, iExit = 52, d2 = K.lerp(0, (iEntry + 0.4) / (NPTS - 1), K.inv(T.chart2 + 0.3, T.flips[0], t)) + K.lerp(0, 1 - (iEntry + 0.4) / (NPTS - 1), K.inv(T.snap, T.bell[2], t));
     K.screenChart(ctx, SCREEN.x, SCREEN.y, SCREEN.w, SCREEN.h, [{ data: CHART.S, color: P.ink, w: 6 }], { a: 1, draw: d2, seed: 1450, yMin: -3, yMax: 3, roller: true, beam: 0.15,
       bands: [{ v: 2, color: P.gold, label: "+2σ" }, { v: 0, color: P.g3, dash: [6, 10] }, { v: -2, color: P.gold, label: "−2σ" }], marks: [{ i: iEntry, s: 0 }, { i: iExit, s: 0 }] });
     ctx.restore();
@@ -1627,7 +1677,8 @@ function camAct(t) {
   const zb = K.tw(t, T.bell[0] - 0.3, T.bell[0] + 0.3, 0, 0.1, K.E.inOut) - K.tw(t, T.bow - 0.4, T.bow + 0.3, 0, 0.1, K.E.inOut);
   const x = 960 + K.tw(t, T.drift[0], T.drift[1], 0, 80, K.E.inOut) - K.tw(t, T.snap - 0.2, T.hit, 0, 80, K.E.inOut) - K.tw(t, T.bell[0] - 0.3, T.bell[0] + 0.3, 0, 120, K.E.inOut);
   const y = 540 + K.tw(t, T.bell[0] - 0.3, T.bell[0] + 0.3, 0, 70, K.E.inOut);
-  return { x, y, z: zi + zb, rot: 0 };
+  const tp = K.tw(t, T.tune, T.tune + 0.8, 0, 1, K.E.inOut) - K.tw(t, T.flips[0] - 0.6, T.flips[0], 0, 1, K.E.inOut);
+  return { x: x + 140 * tp, y: y - 70 * tp, z: zi + zb + 0.1 * tp, rot: 0 };
 }
 function drawAct(t) {
   K.cam = camAct(t); K.applyCam(ctx, 1);
@@ -1647,7 +1698,8 @@ function drawAct(t) {
   /* partners + spring (spring behind their bodies, between the waists) */
   const pa = penPose(t, "A"), pbz = penPose(t, "B");
   const wa = K.penguinWaist(xs[0], PEN.y, PEN.s, 1, pa), wb = K.penguinWaist(xs[1], PEN.y, PEN.s, -1, pbz);
-  K.spring(ctx, wa, wb, { strain, r: 17, w: 6, coils: 8, wob: t > T.snap && t < T.hit + 0.6 ? 4 : 0 });
+  K.spring(ctx, wa, wb, { strain, r: 17, w: 6, coils: 8, wob: t > T.snap && t < T.hit + 0.6 ? 4 : t > T.tune && t < T.flips[0] ? 3 * pulseB(t) : 0 });
+  if (t > T.tune && t < T.flips[0]) for (let i = 0; i < 3; i++) { const t0 = T.tune + i * BEAT * 2.7, d = (t - t0) % (BEAT * 8); if (t > t0 && d < 1.6) K.note(ctx, (wa[0] + wb[0]) / 2 + (i - 1) * 120 + 20 * Math.sin(d * 4 + i), wa[1] - 40 - d * 120, 0.75, 1 - d / 1.6, 760 + i * 3); }
   K.penguin(ctx, xs[0], PEN.y, PEN.s, pa);
   K.penguin(ctx, xs[1], PEN.y, PEN.s, pbz);
   drawTags(t, xs);
@@ -1671,7 +1723,7 @@ function drawAct(t) {
    the title letters drop in on the beat (DOM text, one variable per
    language), the cast takes a bow: "Kalman's filter knows it well".
    ============================================================ */
-const MARQ = { cx: 960, cy: 268, w: 1500, h: 350 };
+const MARQ = { cx: 960, cy: 345, w: 1440, h: 340 }; /* top edge stays below the logo plate (y 48 - 148) */
 const TCAT = { x: 700, y: 1000, s: 0.95 };
 const TPEN = { y: 985, s: 0.86, A: 1150, B: 1330 };
 
@@ -1689,6 +1741,14 @@ function catTitlePose(t) {
     st.hatLift = 40 * tip * (1 - K.ss(T.irisEnd[0] + 0.2, T.irisEnd[0] + 0.5, t)); st.hatTip = -18 * tip; st.wink = tip * (1 - K.ss(T.hatTip + 0.9, T.hatTip + 1.1, t)); st.look = [0, 0]; st.turn = 0;
     st.gloveL = { x: -90, y: -130 - 10 * pb, open: 0.4 };
   }
+  /* finale on the held "well": hat back on, both arms up, a hop, then a wink for the iris */
+  const fin = K.ss(T.finale - 0.3, T.finale, t);
+  if (fin > 0) {
+    const hop = K.inv(T.finale, T.finale + 0.45, t);
+    st.gloveL = { x: -150, y: -270, open: 1 }; st.gloveR = { x: 150, y: -270, open: 1 }; st.hatLift = 0; st.hatTip = 0;
+    st.hop = 40 * Math.sin(hop * Math.PI); st.squash = 0.3 * (1 - fin) - 0.2 * Math.sin(hop * Math.PI) + 0.06 * pb;
+    st.mouth = "grin"; st.look = [0, 0]; st.turn = 0; st.wink = K.ss(T.irisEnd[0], T.irisEnd[0] + 0.2, t);
+  }
   return st;
 }
 function penTitlePose(t, who) {
@@ -1701,6 +1761,8 @@ function penTitlePose(t, who) {
   if (up > 0) { st.flipL = K.lerp(st.flipL, 150, up); st.flipR = K.lerp(st.flipR, 150, up); st.beak = "open"; }
   const tip = K.ss(T.hatTip - 0.1, T.hatTip + 0.2, t);
   if (tip > 0) { st.hatTip = -25 * tip * (1 - K.ss(T.hatTip + 0.8, T.hatTip + 1.1, t)); st.look = [0, 0]; }
+  const fin = K.inv(T.finale, T.finale + 0.45, t);
+  if (fin > 0 && fin < 1) { st.hop = 46 * Math.sin(fin * Math.PI); st.flipL = st.flipR = 150; st.beak = "open"; }
   return st;
 }
 
@@ -1762,16 +1824,18 @@ function layoutTitleDom(t, box) {
    drives a proxy whose setter calls render(t).
    0.00 - 0.90  iris opens on the closed curtain
    0.12 - 3.36  "Two stocks walk into a chart, ha!": curtain parts, penguins tap in
-   3.36 - 6.56  "Dancing close then drifting apart": spring stretches, z -> +2
-   6.56 - 9.73  "Trade the spread": cat tags sell -1 / buy +1, flips a coin
-   9.73 - 12.9  "Distance says these two should wed": snap back, heart, coins rain
-   12.9 - 16.1  "Cointegration rings the bell": bell, spread chart, bow, iris out
-   16.1 - 20.1  "Kalman's filter knows it well": marquee title, hat tip, iris
+   3.36 - 6.57  "Dancing close then drifting apart": spring stretches, z -> +2
+   6.57 - 9.78  "Buy the cheap one, short the rich": tags +1 / -1 thrown at the partners
+   9.78 - 12.97 "Spread's the tune we're trading with": spread reel, the spring hums
+   12.97- 16.16 "Trade the spread, trade the spread": two coin flips (the bet)
+   16.16- 19.34 "Distance says these two should wed": snap back, heart, coins rain
+   19.34- 22.57 "Cointegration rings the bell": bell, the spread reverts, bow, iris out
+   22.57- 28.9  "Kalman's filter knows it well": marquee title, hat tip, finale, iris
    The scene draws on #cv; the projector (flicker, scratches, dust,
    vignette, iris) draws on #fx above the DOM title.
    ============================================================ */
 const fx = document.getElementById("fx").getContext("2d");
-const grainEl = document.getElementById("grain");
+const grainEl = document.getElementById("grain"), logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1.6 -.3'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>\")";
 
 function render(t) {
@@ -1789,14 +1853,17 @@ function render(t) {
     if (t < T.irisIn[1]) K.iris(fx, 960, 560, K.irisT(t, T.irisIn[0], T.irisIn[1], false, 1150));
     if (t >= T.irisOut[0] && t < T.title) {
       K.cam = camAct(t); const c = K.toScreen(CAT.x, CAT.y - 250 * CAT.s);
-      K.iris(fx, c[0], c[1], K.irisT(t, T.irisOut[0], T.irisOut[1] - 0.05, true, 1500));
+      K.iris(fx, c[0], c[1], K.lerp(1500, 60, K.E.inOut(K.inv(T.irisOut[0], T.irisOut[1], t)))); /* never fully black: the title iris opens from the same 60 px */
     }
-    if (t >= T.title && t < T.title + 0.55) K.iris(fx, 960, 560, K.irisT(t, T.title, T.title + 0.55, false, 1150));
+    if (t >= T.title && t < T.title + 0.6) K.iris(fx, TCAT.x, TCAT.y - 250 * TCAT.s, K.lerp(60, 1500, K.E.inOut(K.inv(T.title, T.title + 0.6, t))));
     if (t >= T.irisEnd[0]) K.iris(fx, CAT_HEAD[0], CAT_HEAD[1], K.lerp(1500, 190, K.E.inOut(K.inv(T.irisEnd[0] + 0.1, DUR - 0.05, t))));
   } catch (err) {
     /* never leave a black frame silently: draw the error so a snapshot shows it */
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);
   }
+  /* logo: one small hop when the curtain is open, otherwise static */
+  const lh = K.inv(T.curtain[1], T.curtain[1] + 0.4, t);
+  logoEl.style.transform = lh > 0 && lh < 1 ? `translateY(${(-14 * Math.sin(lh * Math.PI)).toFixed(1)}px)` : "none";
   /* film grain steps at the boil rate */
   const f = K.boilFrame(t);
   grainEl.style.backgroundPosition = ((f % 7) * 41) + "px " + ((f % 5) * 59) + "px";

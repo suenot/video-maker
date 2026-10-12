@@ -15,6 +15,7 @@ The architecture matches the crab kit (`complex-arbitrage-rust/style/kit`): core
 | `45_penguin.js` | `penguin(ctx, x, y, s, pose)` (top hat = rich, boater = cheap), tap shoes, flippers, gold heart; `penguinWaist` (spring anchor) |
 | `50_explainer.js` | slide content as props: `intertitle`, `easel`, `playbill`, `screenChart`, `ticket`, `hangTag`, `typewriter`, `marquee` |
 | `fonts/` | local woff2 (Playfair Display, Oswald, IBM Plex Mono, Noto Serif SC/TC subsets) plus `fonts.css`; refresh with `tools/fetch_fonts.py` |
+| `assets/logo.svg` | the marketmaker.cc mark (monochrome, `currentColor`); `build.py` inlines it where the shell has `<!--__LOGO__-->` |
 | `vendor/gsap.min.js` | GSAP 3.14.2 (local, no CDN) |
 
 ## Using the kit in an episode

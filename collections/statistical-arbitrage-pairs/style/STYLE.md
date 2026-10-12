@@ -28,6 +28,8 @@ How it differs from the sibling worlds: the crab is sunny, saturated and nautica
 | Highlights on black shapes | `shine` | `#fbf8f0` |
 | **The one accent**: money, the z-score zones, a stretched spring, the winning trade | `gold` / `goldLight` / `goldDark` / `goldGlow` | `#e9b43a` / `#ffd76a` / `#a77818` / `#fff0b8` |
 
+The marketmaker.cc logo sits top-right on a black theatre plate with a paper double rule (`#logo`, 100 px tall, 48 px margin); ".cc" is gold. It stays above the iris and the action for the whole film.
+
 Rules: everything is a grey of nitrate film. Gold appears only where money or the signal is: coins, the z-meter's |z| >= 2 zones and needle hub, a spring under strain (strain > 0.6), the +/-2 sigma bands, position tags, the tip jar, the heart of the reunited pair, and the title's second line. Never colour a character or a set piece gold for decoration.
 
 ## 3. Line and texture (1920s studio ink)
@@ -100,7 +102,7 @@ Animation rules:
 
 - The theme is ragtime at **150 BPM**: beat 0.40 s, bar 1.60 s. Write times as `K.at(bar, beat)`.
 - Retime to a song by setting `K.G.BPM` and `K.G.BARS` (measured downbeats).
-- The intro's grid is `BARS = [0.12, 1.74, 3.36, 4.97, 6.56, 8.13, 9.73, 11.33, 12.91, 14.55, 16.14, 17.74, 19.33]`. Each sung line is two bars and gets its own picture (see `intro/REVIEW.md`).
+- The intro runs the full song (28.9 s). Its grid is `BARS = [0.12, 1.74, 3.36, 4.97, 6.57, 8.16, 9.78, 11.37, 12.97, 14.56, 16.16, 17.75, 19.34, 20.97, 22.57, 24.16]`. Each of the 8 sung lines is two bars and gets its own picture (see `intro/REVIEW.md`).
 - Pops land on beats with a back ease (0.35 - 0.45 s); staggers are 1/2 or 1/4 beat; bulbs chase one step per beat.
 - Determinism: no `Math.random`, `Date.now` or `performance.now`, no infinite repeats. Seeded `mulberry` / `hash` only.
 
