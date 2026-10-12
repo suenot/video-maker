@@ -13,7 +13,7 @@ Rules
   If no lyrics.srt exists, find sections by energy/novelty and choose the most hooky 20 s. Write the measured downbeats into the kit beat grid; land every major move on a downbeat and illustrate the sung lines.
 - Final 4-5 s: title card with collection title; render en/ru/zh-CN/zh-TW (titles below), song muxed, plus silent copies. Renders in `intro/renders/` (git-ignored).
 - QA: `npx hyperframes lint` + `check` pass; contact sheet 1 frame/s at `intro/snapshots/contact-sheet.jpg`; LOOK at it (Read tool) and do >=3 critique/fix rounds (readability, no text overlap, no empty frames, motion not stiff, on-beat). Log in `intro/REVIEW.md`. Integrated loudness about -14 LUFS.
-- Git: repo is video_maker. Commit only your own `<slug>/` sources with clear messages, then `git pull --rebase` and `git push` (other agents push in parallel; retry on conflict). Never touch other collections, channels/marketmaker.json, scripts/run_pipeline.sh. No mp4/m4a in git.
+- Git: repo is video_maker. Commit only your own `<slug>/` sources with clear messages, then `git pull --rebase --autostash` (working tree has unrelated edits) and `git push` (other agents push in parallel; retry on conflict). Never touch other collections, channels/marketmaker.json, scripts/run_pipeline.sh. No mp4/m4a in git.
 - Renders are CPU heavy and other agents render in parallel: if a render fails from load/timeouts, wait and retry, don't give up.
 
 Report (<250 words): mascot/world summary, second-by-second outline, paths, known weaknesses.
