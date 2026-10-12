@@ -22,6 +22,9 @@ var CK = window.CK || (window.CK = {});
     seaFar: "#5fb3c4", seaMid: "#2f8fa8", seaDeep: "#1d6a86", seaNight: "#16506a", foam: "#f7f3e6",
     /* land */
     sand: "#f2d38d", sandDark: "#d4ac5e", grass: "#73b351", grassDark: "#4c8a39", rock: "#9a8a78", palm: "#3f8a3a", trunk: "#8a5a32",
+    /* parrot (first mate, host B) */
+    parrot: "#5fbf4a", parrotDark: "#3c8a33", parrotLight: "#9ad97a", parrotWing: "#2f7fc0", parrotWingDark: "#1f5a8c",
+    parrotBelly: "#ffe08a", beak: "#efe2c0", beakDark: "#c9b98e", crest: "#f79a5c",
     /* data / explainer */
     route: "#fff7e0",       /* a plain graph edge (rope) */
     profit: "#ffc93c",      /* the winning cycle, gains */

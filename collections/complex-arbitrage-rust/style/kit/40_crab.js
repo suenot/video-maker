@@ -8,8 +8,9 @@
      lean       deg    whole body tilt around the feet
      hop        px     lift off the ground (legs dangle)
      look       [dx, dy] pupils, -1..1
-     blink      0..1   (1 = closed)
+     blink      0..1   (1 = closed); wink 0..1 closes only the viewer-left eye
      mouth      "smile" | "open" | "grin" | "o"
+     talk       0..1   talking mouth opening (overrides mouth while > 0.06)
      clawL/R    { x, y, open 0..1, rot }  target of the claw tip in local space
      hat        true | false,  hatTip deg, hatLift px
      hold       "spyglass" in right claw
@@ -55,7 +56,7 @@ var CK = window.CK || (window.CK = {});
   K.crab = function (ctx, x, y, s, st) {
     st = st || {};
     const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk; /* keep volume */
-    const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1);
+    const hop = st.hop || 0, look = st.look || [0, 0], blinkAll = clamp(st.blink || 0, 0, 1);
     const seed = st.seed || 500;
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
     ctx.rotate(((st.lean || 0) * Math.PI) / 180);
@@ -88,8 +89,13 @@ var CK = window.CK || (window.CK = {});
     /* cheeks */
     [-1, 1].forEach((sd, i) => { ctx.save(); ctx.globalAlpha = 0.5; K.shape(ctx, K.ellipsePts(sd * 40, 4, 10, 6, 8), { fill: "#ff8f7a", stroke: null, w: 0, boil: 0.5, seed: seed + 8 + i }); ctx.restore(); });
     /* mouth */
-    const m = st.mouth || "smile";
-    if (m === "smile") K.line(ctx, [[-22, 4], [-10, 14], [10, 14], [22, 4]], { stroke: P.ink, w: 4.5, boil: 0.9, seed: seed + 11, gap: 0 });
+    const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1);
+    if (talk > 0.06) { /* talking: open mouth sized by loudness (narration sync) */
+      const mw = 12 + 9 * talk, mh = 3 + 14 * talk;
+      K.shape(ctx, [[-mw, 6], [-mw * 0.5, 6 - 2 * talk], [mw * 0.5, 6 - 2 * talk], [mw, 6], [mw * 0.6, 6 + mh], [0, 8 + mh * 1.05], [-mw * 0.6, 6 + mh]], { fill: "#7a2a1a", w: 4, boil: 0.9, seed: seed + 15, gap: 0 });
+      if (talk > 0.35) K.shape(ctx, K.ellipsePts(0, 6 + mh * 0.85, mw * 0.42, mh * 0.22, 8), { fill: "#e0705a", stroke: null, w: 0, boil: 0.4, seed: seed + 16 });
+    }
+    else if (m === "smile") K.line(ctx, [[-22, 4], [-10, 14], [10, 14], [22, 4]], { stroke: P.ink, w: 4.5, boil: 0.9, seed: seed + 11, gap: 0 });
     else if (m === "grin") K.shape(ctx, [[-26, 2], [26, 2], [14, 20], [0, 23], [-14, 20]], { fill: "#7a2a1a", w: 4, boil: 0.9, seed: seed + 12, gap: 0 });
     else if (m === "open") K.shape(ctx, K.ellipsePts(0, 12, 14, 12, 10), { fill: "#7a2a1a", w: 4, boil: 0.9, seed: seed + 13, gap: 0 });
     else if (m === "o") K.shape(ctx, K.ellipsePts(0, 12, 7, 8, 8), { fill: "#7a2a1a", w: 3.5, boil: 0.7, seed: seed + 14, gap: 0 });
@@ -104,6 +110,7 @@ var CK = window.CK || (window.CK = {});
     }
     /* eyes */
     eyes.forEach((e, i) => {
+      const blink = i === 0 ? Math.max(blinkAll, clamp(st.wink || 0, 0, 1)) : blinkAll; /* wink closes the viewer-left eye */
       const r = 18, ry = r * (1 - 0.92 * blink);
       K.shape(ctx, K.ellipsePts(e[0], e[1], r, Math.max(1.5, ry), 14), { fill: P.eye, w: 4, boil: 0.8, seed: seed + 40 + i, gap: 0 });
       if (blink < 0.6) {
@@ -146,9 +153,11 @@ var CK = window.CK || (window.CK = {});
   };
 
   /* convenience: blink curve with seeded random blink times, 0..1 */
+  /* works for any t (long episode scenes): only the slots around t are checked */
   K.blinkAt = function (t, seed) {
     let b = 0;
-    for (let i = 0; i < 12; i++) {
+    const i0 = Math.max(0, Math.floor((t - 0.8) / 1.9) - 1);
+    for (let i = i0; i < i0 + 3; i++) {
       const tb = 0.8 + i * 1.9 + K.hash(i, seed || 7) * 1.1, d = t - tb;
       if (d > 0 && d < 0.16) b = Math.max(b, Math.sin((d / 0.16) * Math.PI));
     }

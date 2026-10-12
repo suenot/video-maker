@@ -1,0 +1,28 @@
+{
+  "fps": 30,
+  "audio_dur": 1385.883,
+  "intro": "../../../../intro/renders/intro_en.mp4",
+  "note": "One entry per renderable scene, in order, contiguous. start/end are episode-global seconds (audio time). out = transition into the next scene: wave | iris | cut. outAt = [x, y] iris centre (optional).",
+  "scenes": [
+    { "id": "s01a_physics_glitch",   "slide": 1,  "start": 0.0,    "end": 62.3,   "out": "iris",  "title": "Efficient market vs crypto chaos" },
+    { "id": "s01b_title_reveal",     "slide": 1,  "start": 62.3,   "end": 103.2,  "out": "cut",   "title": "Welcome, the article, the title, risk-free?" },
+    { "id": "s01c_four_hop_cycle",   "slide": 1,  "start": 103.2,  "end": 141.9,  "out": "wave",  "title": "BTC -> ETH -> SOL -> USDT -> BTC, magic but math" },
+    { "id": "s01d_whiteboard_to_bot","slide": 1,  "start": 141.9,  "end": 181.5,  "out": "wave",  "title": "Theory to a sub-ms bot, not risk free, we need a model" },
+    { "id": "s02a_vertices_edges",   "slide": 2,  "start": 181.5,  "end": 244.5,  "out": "cut",   "title": "1.1 Vertices, directed edges, weights" },
+    { "id": "s02b_flight_map",       "slide": 2,  "start": 244.5,  "end": 298.9,  "out": "cut",   "title": "Flight-map gag, R(i, j), multiplicative condition" },
+    { "id": "s02c_cycle_condition",  "slide": 2,  "start": 298.9,  "end": 344.9,  "out": "wave",  "title": "The product formula > 1, is multiplication heavy?" },
+    { "id": "s03_mult_to_add",       "slide": 3,  "start": 344.9,  "end": 481.5,  "out": "wave",  "title": "1.2 From multiplication to addition" },
+    { "id": "s04_bellman_ford_code", "slide": 4,  "start": 481.5,  "end": 592.0,  "out": "cut",   "title": "2 / 2.1 Bellman-Ford in Rust + caveats" },
+    { "id": "s05_complexity",        "slide": 5,  "start": 592.0,  "end": 673.9,  "out": "wave",  "title": "2.2 Complexity and limitations" },
+    { "id": "s06_spfa",              "slide": 6,  "start": 673.9,  "end": 781.2,  "out": "wave",  "title": "3 SPFA: a faster alternative" },
+    { "id": "s07_rich",              "slide": 7,  "start": 781.2,  "end": 812.9,  "out": "cut",   "title": "4 Modern research: RICH" },
+    { "id": "s08_rich_innovations",  "slide": 8,  "start": 812.9,  "end": 905.5,  "out": "cut",   "title": "4.1 Pruning, layered search, incremental updates" },
+    { "id": "s09_synthesis_matrix",  "slide": 9,  "start": 905.5,  "end": 926.1,  "out": "wave",  "title": "Algorithm synthesis matrix" },
+    { "id": "s10_fees",              "slide": 10, "start": 926.1,  "end": 988.3,  "out": "cut",   "title": "5 / 5.1 Incorporating fees" },
+    { "id": "s11_slippage",          "slide": 11, "start": 988.3,  "end": 1069.1, "out": "cut",   "title": "5.2 Liquidity and slippage" },
+    { "id": "s12_execution_risks",   "slide": 12, "start": 1069.1, "end": 1137.5, "out": "wave",  "title": "Real-world execution risks" },
+    { "id": "s13_why_rust",          "slide": 13, "start": 1137.5, "end": 1269.3, "out": "wave",  "title": "6 Why Rust?" },
+    { "id": "s14_conclusion",        "slide": 14, "start": 1269.3, "end": 1324.3, "out": "cut",   "title": "Conclusion" },
+    { "id": "s15_resources",         "slide": 15, "start": 1324.3, "end": 1385.883,"out": "end",  "title": "Source, resources and disclaimers" }
+  ]
+}

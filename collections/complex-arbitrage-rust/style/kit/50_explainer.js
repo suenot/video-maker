@@ -34,7 +34,8 @@ var CK = window.CK || (window.CK = {});
 
   /* ---------- graph edge: a sea route between two points ----------
      p (draw progress), state "plain" | "hot" | "dim", bend (curvature, px),
-     label (rate text on a little flag), dir arrow at 60 % when hot */
+     label (rate text on a little flag), lu (its position 0..1 along the route),
+     arrow 0..1 (direction arrow on plain routes; hot routes always have one), au (arrow position), arrowS (size) */
   K.edgePoint = function (A, B, bend, u) {
     const mx = (A[0] + B[0]) / 2, my = (A[1] + B[1]) / 2, dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1;
     const C = [mx - (dy / L) * bend, my + (dx / L) * bend];
@@ -44,7 +45,7 @@ var CK = window.CK || (window.CK = {});
     return [x, y, Math.atan2(ty, tx)];
   };
   K.edge = function (ctx, A, B, opt) {
-    const o = Object.assign({ p: 1, state: "plain", bend: 60, label: "", seed: 1, trim: 120, labelA: 1, w: 7, labelSize: 30, lu: 0.5 }, opt || {});
+    const o = Object.assign({ p: 1, state: "plain", bend: 60, label: "", seed: 1, trim: 120, labelA: 1, w: 7, labelSize: 30, lu: 0.5, arrow: 0, au: 0.62, arrowS: 1 }, opt || {});
     if (o.p <= 0) return;
     const L = Math.hypot(B[0] - A[0], B[1] - A[1]), u0 = clamp(o.trim / L, 0, 0.45), u1 = 1 - u0;
     const N = 28, pts = [];
@@ -61,10 +62,12 @@ var CK = window.CK || (window.CK = {});
       K.line(ctx, [[a[0], a[1]], [b[0], b[1]]], { stroke: col, w: o.w, boil: 1.0, seed: o.seed + i, gap: 0, alpha });
     }
     /* arrow head */
-    if (hot && o.p >= 1) {
-      const q = K.edgePoint(A, B, o.bend, lerp(u0, u1, 0.62));
-      ctx.save(); ctx.translate(q[0], q[1]); ctx.rotate(q[2]);
-      K.shape(ctx, [[18, 0], [-12, -14], [-6, 0], [-12, 14]], { fill: P.profit, w: 4, boil: 0.8, seed: o.seed + 7, gap: 0 });
+    /* arrow head: always on hot routes; on plain / dim routes when arrow > 0 (0..1 pops it in) */
+    const arr = hot ? 1 : o.arrow || 0;
+    if (arr > 0 && o.p >= 1) {
+      const q = K.edgePoint(A, B, o.bend, lerp(u0, u1, o.au)), as = popS(arr) * o.arrowS;
+      ctx.save(); ctx.translate(q[0], q[1]); ctx.rotate(q[2]); ctx.scale(as, as);
+      K.shape(ctx, [[18, 0], [-12, -14], [-6, 0], [-12, 14]], { fill: hot ? P.profit : P.route, w: 4, boil: 0.8, seed: o.seed + 7, gap: 0, alpha });
       ctx.restore();
     }
     /* rate flag at the middle */
