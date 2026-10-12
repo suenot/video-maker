@@ -6,7 +6,7 @@
    ============================================================ */
 const TT = { horizon: 720, medalY: 548, medalR: 62 };
 const MEDALS = ["garch", "leverage", "cluster", "regimes", "realized"];
-const camTitle = K.mkTrack([[T.title - 0.01, { x: 960, y: -260, z: 1 }], [T.title + 0.7, { x: 960, y: 540, z: 1 }], [DUR, { x: 960, y: 548, z: 1.02 }]]);
+const camTitle = K.mkTrack([[T.title - 0.01, { x: 960, y: 200, z: 1 }], [T.title + 0.4, { x: 960, y: 540, z: 1 }], [DUR, { x: 960, y: 548, z: 1.02 }]]);
 
 function titlePose(t) {
   const p = { seed: 700, blink: K.blinkAt(t, 11), squash: 0.08 * K.pulse(t, 1, 6) + 0.12, mouth: "grin", turn: 0.2, brow: 0.4, footL: { x: -70, y: 0 }, footR: { x: 62, y: 0 } };

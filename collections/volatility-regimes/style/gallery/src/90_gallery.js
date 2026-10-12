@@ -88,7 +88,7 @@ function page5(t) {
 function page6(t) {
   const u = 0.5;
   ["point", "surprise", "think", "thumbs"].forEach((k, i) => K.turtle(ctx, 300 + i * 440, 560, 0.85, Object.assign({ seed: 700, mouth: "smile" }, K.turtleGesture(k, u, { target: [220, -260] }))));
-  ["surprise", "think", "whistle", "binos"].forEach((k, i) => K.gull(ctx, 300 + i * 440, 1030, 0.95, Object.assign({ seed: 900, face: 1 }, K.gullGesture(k, u, { face: 1 }))));
+  ["surprise", "think", "whistle", "binos"].forEach((k, i) => K.gully(ctx, 300 + i * 440, 1030, 0.95, Object.assign({ seed: 900, face: 1 }, K.gullGesture(k, u, { face: 1 }))));
 }
 
 function render(t) {

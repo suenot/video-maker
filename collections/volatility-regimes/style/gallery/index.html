@@ -1051,7 +1051,7 @@ var VK = window.VK || (window.VK = {});
 })(VK);
 
 /* ============================================================
-   KIT 42 GULL (Surf Turtle kit): "Gully", the seagull lifeguard, Siggy's
+   KIT 42 GULL (Surf Turtle kit): K.gully, "Gully" the seagull lifeguard, Siggy's
    co-host (episode host B, the curious higher voice).
    Local space: feet on y = 0, 3/4 view facing `face` (+1 right, -1 left).
    Scale 1: about 230 px tall (0.9 of Siggy). Plump white body, grey back,
@@ -1091,7 +1091,7 @@ var VK = window.VK || (window.VK = {});
     return r.end;
   }
 
-  K.gull = function (ctx, x, y, s, st) {
+  K.gully = function (ctx, x, y, s, st) {
     st = st || {};
     const sq = clamp((st.squash || 0) - 0.12 * (st.puff || 0), -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
     const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1), face = st.face == null ? 1 : st.face;
@@ -1285,7 +1285,7 @@ var VK = window.VK || (window.VK = {});
     const pa = K.hostPose("A", t, { talk: o.talkA, other: o.talkB, face: faceA, gesture: gA });
     const pb = K.hostPose("B", t, { talk: o.talkB, other: o.talkA, face: faceB, gesture: gB });
     if (o.holdA) pa.flipL = { x: -120, y: -150 };
-    K.gull(ctx, seat[0], seat[1], gs, pb);
+    K.gully(ctx, seat[0], seat[1], gs, pb);
     K.turtle(ctx, ax, ay, s, pa);
     if (o.holdA) o.holdA(ctx, ax - 120 * s, ay - 150 * s);
     ctx.restore();
@@ -1797,7 +1797,7 @@ function page5(t) {
 function page6(t) {
   const u = 0.5;
   ["point", "surprise", "think", "thumbs"].forEach((k, i) => K.turtle(ctx, 300 + i * 440, 560, 0.85, Object.assign({ seed: 700, mouth: "smile" }, K.turtleGesture(k, u, { target: [220, -260] }))));
-  ["surprise", "think", "whistle", "binos"].forEach((k, i) => K.gull(ctx, 300 + i * 440, 1030, 0.95, Object.assign({ seed: 900, face: 1 }, K.gullGesture(k, u, { face: 1 }))));
+  ["surprise", "think", "whistle", "binos"].forEach((k, i) => K.gully(ctx, 300 + i * 440, 1030, 0.95, Object.assign({ seed: 900, face: 1 }, K.gullGesture(k, u, { face: 1 }))));
 }
 
 function render(t) {

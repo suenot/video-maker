@@ -25,7 +25,7 @@ function drawChart(t) {
   drawPosterBack(t);
   const z = K.tw(t, T.chart - 0.3, T.roll[0], 1.0, 1.035, K.E.inOut);
   ctx.save(); ctx.translate(960, 540); ctx.scale(z, z); ctx.translate(-960, -540);
-  const draw = K.inv(T.chart, T.chart + 1.35, t);
+  const draw = K.inv(T.dial[0], T.chart + 0.9, t); /* starts painting inside the dial iris */
   const series = [
     { kind: "zig", data: RET, colorAt: (i, v) => (v >= 0 ? P.up : P.down) },
     { kind: "line", data: SIG.map((s) => 2 * s), color: P.sigma, w: 7 },
@@ -34,7 +34,7 @@ function drawChart(t) {
   const ch = K.posterChart(ctx, CHART.x, CHART.y, CHART.w, CHART.h, series, { a: K.inv(T.dial[0], T.chart + 0.1, t), draw, bands: BANDS, yMin: -7.2, yMax: 7.2, zero: true, seed: 41 });
   /* regime medals stuck on the card's top edge, each pops when its band starts painting */
   if (ch) BANDS.forEach((b, i) => {
-    const tb = T.chart + 1.35 * (b.from / RET.length) + 0.05;
+    const tb = T.dial[0] + (T.chart + 0.9 - T.dial[0]) * (b.from / RET.length) + 0.05;
     const mx = (ch.X(b.from) + ch.X(b.to)) / 2;
     K.medal(ctx, mx, CHART.y - CHART.h / 2 + 4, 46, { a: K.inv(tb, tb + 0.3, t), color: b.regime === "storm" ? P.storm : P.calm, icon: b.regime === "storm" ? K.ICON.storm : K.ICON.sun, seed: 640 + i * 5 });
   });

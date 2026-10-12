@@ -16,13 +16,13 @@ function hmmState(t, switches) {
 
 function drawHmm(t, t0, switches) {
   const st = hmmState(t, switches), storm = st.s ? st.u : 1 - st.u;
-  K.begin(ctx, t, { x: 960, y: K.tw(t, t0, t0 + 0.6, -420, 540, K.E.out3), z: K.tw(t, t0, t0 + 2, 1.06, 1.0, K.E.out3), rot: 0 });
+  K.begin(ctx, t, { x: 960, y: K.tw(t, t0, t0 + 0.4, 120, 540, K.E.out3), z: K.tw(t, t0, t0 + 2, 1.06, 1.0, K.E.out3), rot: 0 });
   K.applyCam(ctx, 1);
   K.sky(ctx, HMM.horizon, { storm, sunX: 1500, sunY: 280, sunR: 110, top: -1200, drift: 500 });
   K.farIsle(ctx, 240, HMM.horizon, 340, storm, 67);
   K.lighthouse(ctx, 1760, HMM.horizon + 40, 0.6, { beam: K.mix(P.beamCalm, P.beamStorm, storm), ang: 0.3 + 0.1 * Math.sin(t * 1.2), flash: Math.exp(-5 * Math.max(0, t - st.last)) * (st.last > t0 ? 1 : 0), seed: 160 });
   K.ocean(ctx, HMM.horizon, { storm, vol: 0.15 + 0.7 * storm, bottom: 1240 });
-  const a = (k) => K.inv(t0 + 0.55 + k * BEAT / 2, t0 + 0.95 + k * BEAT / 2, t); /* pops start as the camera lands */
+  const a = (k) => K.inv(t0 + 0.2 + k * BEAT / 2, t0 + 0.6 + k * BEAT / 2, t); /* pops start as the camera lands */
   const C = HMM.calm, S = HMM.storm, up = [0, -150];
   /* currents first (behind the buoys) */
   K.current(ctx, [C[0] + up[0], C[1] - 130], [S[0], S[1] - 130], { p: a(2), bend: -120, label: "0.03", seed: 171, hot: st.s === 1 && t - st.last < 0.8, labelSize: 34 });

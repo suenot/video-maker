@@ -1,5 +1,5 @@
 /* ============================================================
-   KIT 42 GULL (Surf Turtle kit): "Gully", the seagull lifeguard, Siggy's
+   KIT 42 GULL (Surf Turtle kit): K.gully, "Gully" the seagull lifeguard, Siggy's
    co-host (episode host B, the curious higher voice).
    Local space: feet on y = 0, 3/4 view facing `face` (+1 right, -1 left).
    Scale 1: about 230 px tall (0.9 of Siggy). Plump white body, grey back,
@@ -39,7 +39,7 @@ var VK = window.VK || (window.VK = {});
     return r.end;
   }
 
-  K.gull = function (ctx, x, y, s, st) {
+  K.gully = function (ctx, x, y, s, st) {
     st = st || {};
     const sq = clamp((st.squash || 0) - 0.12 * (st.puff || 0), -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
     const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1), face = st.face == null ? 1 : st.face;

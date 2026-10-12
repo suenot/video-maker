@@ -37,6 +37,11 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, `tools/sheet.sh`, 
 - Logo: the title moved down to start at y 168 so that line 1 never runs under the sticker; the medals moved to y 548.
 - Check: passed, contrast 31/31 AA. One info remains: a title letter's descender briefly crosses line 2 while the letters drop (the title is `data-layout-allow-overlap`).
 
+## Round 5 (lead review)
+- 25 s was a blank orange sky (the tilt into the title took 1.5 beats up and 0.7 s back down). Both sky tilts now take 0.9 beat, rise only to y -200, and the next set starts 340 px above its rest and lands in 0.35 - 0.4 s, so the turtle and the title stay in frame through the cut.
+- 7 s and 13 s were nearly empty: the chart only started painting on the downbeat, and the hidden-state buoys popped after a long camera descent. The chart now paints from inside the dial iris and finishes 0.9 s after the downbeat. The buoys pop 0.2 s into the scene.
+- Regression from the sidekick work: the new seagull co-host was named `K.gull`, which overwrote the flying-gull silhouette of `30_world.js`, so lifeguard gulls stood in the sky. The co-host is now `K.gully`.
+
 ## Known weaknesses
 - Siggy's head is a front view that only slides features for `turn`, so profile turns are suggested, not drawn.
 - The second big set ("big waves follow big waves") stands up at the right edge for only about one second before the dial iris.

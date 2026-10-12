@@ -39,7 +39,7 @@ const T = {
   board: at(6),                    /* 9.29 "Measure the swell": the surf-report board, GARCH in chalk */
   forecast: at(7),                 /* 10.75 "read the sea": the forecast dial swings to storm */
   grab: at(7, 2),                  /* Siggy picks the storm gun board */
-  tilt: [at(8, -1.5), at(8)],      /* camera tilts up into the sky, cut on the downbeat */
+  tilt: [at(8, -0.9), at(8)],      /* camera tilts up into the sky, cut on the downbeat */
   hmm: at(8),                      /* 12.24 "Volatility Modeling and Regimes!": two hidden states (buoys) */
   hmmSw: [at(9, 2), at(10, 2), at(11), at(11, 2)], /* instrumental: hidden states switch */
   unroll: [at(12, -1), at(12)],    /* a poster unrolls down over the sea */
@@ -48,7 +48,7 @@ const T = {
   roll2: [at(14, -1), at(14)],     /* the poster rolls up onto the sea again */
   ride: at(14),                    /* 21.06 a cluster of big sets, then calm comes back */
   calmBack: at(16),                /* 23.99 the beam turns turquoise again */
-  tilt2: [at(17, -1.5), at(17)],   /* tilt up into the sunset */
+  tilt2: [at(17, -0.9), at(17)],   /* tilt up into the sunset */
   title: at(17),                   /* 25.47 title card on the ending */
   line2: at(17, 2),
   medals: at(18),                  /* 26.94 five episode medals pop on eighth notes */

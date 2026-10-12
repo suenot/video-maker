@@ -8,7 +8,7 @@
 const RIDE_H = 540;
 function drawRide(t) {
   const storm = 1 - K.E.inOut(K.inv(T.calmBack, T.calmBack + 0.7, t));
-  const cam = { x: 960 + 20 * Math.sin(t * 0.8), y: K.tw(t, T.tilt2[0], T.tilt2[1], 560, -640, K.E.in3), z: K.tw(t, T.ride, T.ride + 1.5, 1.12, 1.02, K.E.out3), rot: 0 };
+  const cam = { x: 960 + 20 * Math.sin(t * 0.8), y: K.tw(t, T.tilt2[0], T.tilt2[1], 560, -200, K.E.in3), z: K.tw(t, T.ride, T.ride + 1.5, 1.12, 1.02, K.E.out3), rot: 0 };
   K.begin(ctx, t, cam);
   K.applyCam(ctx, 1);
   K.sky(ctx, RIDE_H, { storm, sunX: 1250, sunY: 330, sunR: 120, top: -1500, drift: 700 });

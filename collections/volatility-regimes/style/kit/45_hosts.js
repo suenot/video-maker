@@ -99,7 +99,7 @@ var VK = window.VK || (window.VK = {});
     const pa = K.hostPose("A", t, { talk: o.talkA, other: o.talkB, face: faceA, gesture: gA });
     const pb = K.hostPose("B", t, { talk: o.talkB, other: o.talkA, face: faceB, gesture: gB });
     if (o.holdA) pa.flipL = { x: -120, y: -150 };
-    K.gull(ctx, seat[0], seat[1], gs, pb);
+    K.gully(ctx, seat[0], seat[1], gs, pb);
     K.turtle(ctx, ax, ay, s, pa);
     if (o.holdA) o.holdA(ctx, ax - 120 * s, ay - 150 * s);
     ctx.restore();
