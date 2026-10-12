@@ -267,6 +267,10 @@ var CK = window.CK || (window.CK = {});
     /* suspects: A leads (amber family), B lags (cool), Z is the hidden confounder */
     A: "#ffb43f", B: "#7fb6d0", C: "#a7c48a", D: "#d99ab8", Z: "#9d86d6",
     BTC: "#f7a23a", ETH: "#8a93f0",
+    /* the sidekick: Sergeant Basset (host B), a basset hound in a navy police coat */
+    hound: "#c08a56", houndDark: "#7a4f2c", houndLight: "#dcae7c", houndEar: "#5e3a22", houndEarDark: "#3e2516",
+    uniform: "#2f3d66", uniformDark: "#1d2645", uniformLight: "#46578a",
+    mouthIn: "#4a1418", tongue: "#d9686a",
   };
   K.FONT = {
     display: '"Yanone Kaffeesatz", "CJK SC", "CJK TC", sans-serif', /* titles, labels (500 / 700) */
@@ -855,6 +859,10 @@ var CK = window.CK || (window.CK = {});
      tail     -1..1  sway;  legWalk phase (radians), 0 = standing
      exclaim  0..1   "!" pops over the head
      light    0..1   amber rim light on the left edge (lamp / clue light)
+     talk     0..1   loudness of his own voice: viseme-ish talking mouth (K.speech);
+                     viseme "A" | "O" | "E" | "M" forces a shape
+     nod      0..1   head dip (listening nods);  headTilt deg
+     fingerL/R 0..1  pointing finger out of that paw
    Returns nothing; writes K.lensPt (screen point of the lens centre) when
    the magnifier is held, for iris transitions.
    ============================================================ */
@@ -951,7 +959,7 @@ var CK = window.CK || (window.CK = {});
 
     /* ---- head ---- */
     const hx = turn * 6, hy = -276;
-    ctx.save(); ctx.translate(hx, hy);
+    ctx.save(); ctx.translate(hx, hy + (st.nod || 0) * 12); ctx.rotate(((st.headTilt || 0) * Math.PI) / 180);
     const ft = turn * 14; /* face features slide with the turn */
     /* ears (behind the hat brim) */
     [-1, 1].forEach((sd, i) => {
@@ -970,7 +978,8 @@ var CK = window.CK || (window.CK = {});
     K.dot(ctx, ft * 1.4 - 4, 11, 2.5, "#ffffff", null, 0, seed + 48);
     /* mouth */
     const m = st.mouth || "smirk", mx = ft * 1.3;
-    if (m === "smirk") K.line(ctx, [[mx - 16, 28], [mx - 2, 32], [mx + 12, 28], [mx + 22, 20]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 50, gap: 0 });
+    if ((st.talk || 0) > 0.06 || st.viseme) K.talkMouth(ctx, mx, 27, 34, K.speech(st.talk, K.now, seed, st.viseme), seed + 56);
+    else if (m === "smirk") K.line(ctx, [[mx - 16, 28], [mx - 2, 32], [mx + 12, 28], [mx + 22, 20]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 50, gap: 0 });
     else if (m === "smile") K.line(ctx, [[mx - 20, 24], [mx - 8, 33], [mx + 8, 33], [mx + 20, 24]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 51, gap: 0 });
     else if (m === "flat") K.line(ctx, [[mx - 14, 30], [mx + 14, 30]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 52, gap: 0 });
     else if (m === "grin") K.shape(ctx, [[mx - 24, 22], [mx + 24, 22], [mx + 12, 38], [mx, 41], [mx - 12, 38]], { fill: "#5a1a1a", w: 4, boil: 0.6, seed: seed + 53, gap: 0 });
@@ -1035,6 +1044,8 @@ var CK = window.CK || (window.CK = {});
       if (hold === "magnifier") K.magnifier(ctx, r.end[0], r.end[1], ang, 1, seed + 110 + sd, st.lensEye > 0.5 && k === "R" ? bigEye(st, seed) : st.lensInside);
       else if (hold === "flashlight") K.flashlight(ctx, r.end[0], r.end[1], ang, 1, seed + 120 + sd, st.flashOn == null ? 1 : st.flashOn);
       else if (hold === "pin") K.pin && K.pin(ctx, r.end[0] + Math.cos(ang) * 22, r.end[1] + Math.sin(ang) * 22, P.string, 1.1);
+      const fin = st["finger" + k] || 0; /* pointing finger along the forearm */
+      if (fin > 0) K.limb2(ctx, [[r.end[0], r.end[1]], [r.end[0] + Math.cos(ang) * 30 * fin, r.end[1] + Math.sin(ang) * 30 * fin]], 9, P.paw, seed + 107 + sd);
       K.shape(ctx, K.ellipsePts(r.end[0], r.end[1], 15, 13, 10, ang), { fill: P.paw, w: 4, boil: 0.6, seed: seed + 106 + sd });
     });
     ctx.restore();
@@ -1064,6 +1075,385 @@ var CK = window.CK || (window.CK = {});
       if (d > 0 && d < 0.16) b = Math.max(b, Math.sin((d / 0.16) * Math.PI));
     }
     return b;
+  };
+})(CK);
+
+/* ============================================================
+   KIT 41 TALK: talking mouths for both hosts.
+   K.speech(talk, t, seed) turns one loudness value per frame (0..1, from
+   the narration sync) into a viseme-ish mouth: { open, wide, round, v }.
+   Syllables change about 7 times a second (seeded, deterministic); each
+   syllable picks a shape (A open, O round, E wide, M closed) and the
+   loudness scales how far it opens. Both rigs read it when pose.talk > 0.06
+   (or take pose.viseme = "A" | "O" | "E" | "M" to force a shape).
+   K.talkMouth(ctx, x, y, w, sp, seed) draws a generic noir mouth from it.
+   ============================================================ */
+var CK = window.CK || (window.CK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp } = K;
+  const VIS = {
+    A: { open: 1.0, wide: 0.8, round: 0 },
+    O: { open: 0.8, wide: 0.35, round: 1 },
+    E: { open: 0.45, wide: 1.0, round: 0 },
+    M: { open: 0.12, wide: 0.6, round: 0 },
+  };
+  const ORDER = ["A", "E", "O", "A", "M", "E", "A", "O"];
+  K.VISEMES = VIS;
+
+  K.speech = function (talk, t, seed, force) {
+    talk = clamp(talk || 0, 0, 1);
+    if (force && VIS[force]) { const v = VIS[force]; return { open: v.open * Math.max(talk, 0.6), wide: v.wide, round: v.round, v: force }; }
+    const rate = 7.1 + 1.3 * K.hash(seed || 1, 5), ph = t * rate + (seed || 0) * 0.37, i = Math.floor(ph), f = ph - i;
+    const a = VIS[ORDER[Math.floor(K.hash(i, seed || 3) * ORDER.length)]], b = VIS[ORDER[Math.floor(K.hash(i + 1, seed || 3) * ORDER.length)]];
+    const u = K.ss(0.7, 1, f); /* hold the shape, blend into the next one */
+    const flutter = 0.55 + 0.45 * Math.sin(Math.PI * f);
+    return {
+      open: talk * lerp(a.open, b.open, u) * flutter,
+      wide: lerp(a.wide, b.wide, u), round: lerp(a.round, b.round, u),
+      v: u < 0.5 ? ORDER[Math.floor(K.hash(i, seed || 3) * ORDER.length)] : ORDER[Math.floor(K.hash(i + 1, seed || 3) * ORDER.length)],
+    };
+  };
+
+  /* generic mouth: (x, y) = centre of the lips, w = full width at wide 1 */
+  K.talkMouth = function (ctx, x, y, w, sp, seed) {
+    const ww = w * (0.55 + 0.45 * sp.wide) * (1 - 0.35 * sp.round), hh = 3 + w * 0.62 * sp.open;
+    if (sp.open < 0.08) { K.line(ctx, [[x - ww / 2, y], [x, y + 2], [x + ww / 2, y]], { stroke: P.ink, w: 4, boil: 0.5, seed, gap: 0 }); return; }
+    const pts = sp.round > 0.5
+      ? K.ellipsePts(x, y + hh * 0.4, ww * 0.45, hh * 0.6, 12)
+      : [[x - ww / 2, y], [x - ww * 0.2, y - 2], [x + ww * 0.2, y - 2], [x + ww / 2, y], [x + ww * 0.3, y + hh * 0.8], [x, y + hh], [x - ww * 0.3, y + hh * 0.8]];
+    K.shape(ctx, pts, { fill: P.mouthIn, w: 3.5, boil: 0.6, seed, gap: 0 });
+    if (sp.open > 0.4) K.shape(ctx, K.ellipsePts(x, y + hh * 0.72, ww * 0.22, hh * 0.18, 8), { fill: P.tongue, stroke: null, w: 0, boil: 0.3, seed: seed + 1 });
+  };
+})(CK);
+
+/* ============================================================
+   KIT 42 HOUND: "Sergeant Basset", the co-host (host B, the curious one).
+   A stocky basset hound in a navy police coat with brass buttons and a
+   peaked cap; long ears, heavy jowls, droopy eyes, a spiral notebook and
+   a pencil. Watson to Inspector Vulpes: he writes things down and asks.
+   Local space: feet on y = 0, faces the viewer; about 330 px to the cap
+   crown at scale 1 (0.87x the fox). Arms are two-bone IK (50 + 48).
+   Pose state (all optional):
+     squash   -1..1  volume kept;  lean deg;  hop px
+     look     [dx, dy] pupils -1..1;  blink 0..1;  lid 0..1 (droopy default 0.42)
+     eyeUp    0..1   surprise (eyes round, lids up, ears lift)
+     brow     -1..1.5;  browTilt -1..1 (one brow up: puzzled)
+     talk     0..1   loudness of his voice: viseme-ish mouth (K.speech); viseme forces a shape
+     mouth    "smile" | "frown" | "open" | "o" | "flat"   (when not talking)
+     head     deg    head tilt (curious);  nod 0..1 head dip
+     ears     -1..1  ear swing (+ flap outwards);  tail -1..1 wag
+     pawL/R   { x, y, rot }  IK targets in local space
+     holdL    "notebook" (default) | null;  holdR "pencil" (default) | "magnifier" | "flashlight" | null
+     write    0..1   pencil scribbles on the notebook (animated by K.now)
+     exclaim  0..1   "!" ;  question 0..1  "?" (thinking)
+     cap      false = no cap;  capTip deg
+   ============================================================ */
+var CK = window.CK || (window.CK = {});
+(function (K) {
+  const P = K.P, { clamp } = K;
+  const limb = (ctx, pts, w, color, seed) => K.limb2(ctx, pts, w, color, seed);
+
+  /* spiral notebook held upright in a paw; open 0..1, lines = scribbles written so far */
+  K.notebook = function (ctx, x, y, ang, s, seed, write) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(s, s);
+    K.shape(ctx, K.rectPts(-34, -78, 68, 92, 2), { fill: P.paper, w: 4, boil: 0.8, seed, shade: { color: P.paperShade, dx: -6, dy: -6 } });
+    for (let i = 0; i < 5; i++) K.dot(ctx, -24 + i * 12, -78, 4.5, P.greyLight, P.ink, 2, seed + 1 + i);
+    const n = Math.floor(2 + (write || 0) * 4);
+    for (let i = 0; i < 5; i++) {
+      const yy = -58 + i * 15;
+      K.line(ctx, [[-24, yy], [24, yy]], { stroke: K.rgba(P.B, 0.5), w: 1.6, boil: 0.4, seed: seed + 10 + i, gap: 0, taper: false });
+      if (i < n) K.line(ctx, [[-22, yy - 4], [-8, yy - 7], [4, yy - 3], [16 - 8 * K.hash(i, seed), yy - 6]], { stroke: P.ink, w: 2.4, boil: 0.6, seed: seed + 20 + i, gap: 0.1 });
+    }
+    ctx.restore();
+  };
+  K.pencil = function (ctx, x, y, ang, s, seed) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(s, s);
+    K.shape(ctx, K.rectPts(-6, -5, 46, 10, 2), { fill: P.amber, w: 3, boil: 0.5, seed });
+    K.shape(ctx, [[40, -5], [54, 0], [40, 5]], { fill: P.houndLight, w: 3, boil: 0.4, seed: seed + 1 });
+    K.dot(ctx, 53, 0, 2.2, P.ink, null, 0, seed + 2);
+    K.shape(ctx, K.rectPts(-12, -5, 7, 10, 1), { fill: P.string, w: 2.5, boil: 0.4, seed: seed + 3 });
+    ctx.restore();
+  };
+
+  K.hound = function (ctx, x, y, s, st) {
+    st = st || {};
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
+    const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1);
+    const up = clamp(st.eyeUp || 0, 0, 1), seed = st.seed || 900, now = K.now;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    K.shape(ctx, K.ellipsePts(0, 2, 112 - hop * 0.3, 16, 14), { fill: P.ink, stroke: null, w: 0, boil: 0.6, seed: seed + 1, alpha: 0.7 });
+    ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    ctx.translate(0, -hop);
+
+    /* tail: thin, wagging, white tip, behind the coat on his left */
+    const wag = (st.tail || 0) * 0.5 + Math.sin(now * 5.5) * 0.15;
+    ctx.save(); ctx.translate(58, -78); ctx.rotate(-0.9 + wag);
+    K.shape(ctx, [[0, -9], [56, -14], [86, -8], [88, 4], [56, 2], [0, 9]], { fill: P.hound, w: 4.5, boil: 0.9, seed: seed + 2, shade: { color: P.houndDark, dx: 0, dy: -5 } });
+    K.shape(ctx, [[70, -12], [90, -7], [90, 5], [70, 3]], { fill: P.cream, w: 3.5, boil: 0.6, seed: seed + 3 });
+    ctx.restore();
+
+    /* stubby legs + big paws */
+    for (let sd = -1; sd <= 1; sd += 2) {
+      const hip = [sd * 34 * sxk, -50 * syk], foot = [sd * 40, -2];
+      limb(ctx, [hip, [sd * 38, -26], foot], 28, P.uniformDark, seed + 10 + sd);
+      K.shape(ctx, K.ellipsePts(foot[0] + sd * 8, foot[1] - 4, 30, 15, 12), { fill: P.hound, w: 4.5, boil: 0.7, seed: seed + 12 + sd, shade: { color: P.houndDark, dx: 0, dy: -5 } });
+      [-1, 0, 1].forEach((k) => K.line(ctx, [[foot[0] + sd * 8 + k * 11, foot[1] - 12], [foot[0] + sd * 8 + k * 11, foot[1] - 4]], { stroke: P.ink, w: 2.5, boil: 0.4, seed: seed + 14 + k, gap: 0 }));
+    }
+
+    /* coat (squash space): pear shaped, brass buttons, belt */
+    ctx.save(); ctx.translate(0, -50); ctx.scale(sxk, syk); ctx.translate(0, 50);
+    const coat = [[-62, -196], [-30, -206], [30, -206], [62, -196], [86, -140], [96, -92], [88, -48], [40, -40], [0, -44], [-40, -40], [-88, -48], [-96, -92], [-86, -140]];
+    K.shape(ctx, coat, { fill: P.uniform, w: 6, boil: 1.2, seed: seed + 20, shade: { color: P.uniformDark, dx: -26, dy: -8 }, hatch: { ang: 0.9, gap: 13, alpha: 0.16, color: P.uniformDark } });
+    K.shape(ctx, [[-90, -100], [90, -100], [92, -84], [-92, -84]], { fill: P.ink, w: 3.5, boil: 0.7, seed: seed + 21 });
+    K.shape(ctx, K.rectPts(-14, -104, 28, 24, 1), { fill: null, stroke: P.brass, w: 5, boil: 0.5, seed: seed + 22 });
+    [[-22, -176], [22, -176], [-24, -144], [24, -144], [-22, -66], [22, -66]].forEach((b, i) => K.dot(ctx, b[0], b[1], 6, P.brass, P.ink, 2, seed + 23 + i));
+    /* white chest blaze in the collar V */
+    K.shape(ctx, [[-30, -206], [30, -206], [0, -158]], { fill: P.cream, w: 4, boil: 0.7, seed: seed + 30 });
+    K.shape(ctx, [[-30, -206], [-54, -196], [-8, -150]], { fill: P.uniformLight, w: 4, boil: 0.7, seed: seed + 31 });
+    K.shape(ctx, [[30, -206], [54, -196], [8, -150]], { fill: P.uniformLight, w: 4, boil: 0.7, seed: seed + 32 });
+    /* shoulder badge */
+    K.shape(ctx, [[54, -186], [70, -180], [72, -160], [62, -152], [52, -160]], { fill: P.brass, w: 3, boil: 0.5, seed: seed + 33 });
+
+    /* ---- head ---- */
+    ctx.save(); ctx.translate(0, -254 + (st.nod || 0) * 12); ctx.rotate(((st.head || 0) * Math.PI) / 180);
+    const ew = (st.ears || 0) * 0.35 + up * 0.35 + Math.sin(now * 2.1) * 0.04;
+    /* ears: long, droopy, behind the jowls; they swing from the skull sides */
+    [-1, 1].forEach((sd, i) => {
+      ctx.save(); ctx.translate(sd * 48, -40); ctx.rotate(sd * (0.12 + ew) + Math.sin(now * 1.6 + i) * 0.03);
+      const ear = [[-sd * 4, -6], [sd * 22, -2], [sd * 34, 40], [sd * 36, 92], [sd * 22, 118], [sd * 4, 112], [-sd * 6, 70], [-sd * 10, 20]];
+      K.shape(ctx, ear, { fill: P.houndEar, w: 5, boil: 1, seed: seed + 40 + i, shade: { color: P.houndEarDark, dx: sd * 8, dy: -6 } });
+      ctx.restore();
+    });
+    /* skull */
+    const skull = [[-46, -64], [0, -76], [46, -64], [60, -30], [56, 6], [40, 26], [-40, 26], [-56, 6], [-60, -30]];
+    K.shape(ctx, skull, { fill: P.hound, w: 5.5, boil: 1.1, seed: seed + 44, shade: { color: P.houndDark, dx: -12, dy: -10 } });
+    /* white blaze up the nose */
+    K.shape(ctx, [[-8, -72], [8, -72], [14, -10], [-14, -10]], { fill: P.cream, stroke: null, w: 0, boil: 0.6, seed: seed + 45 });
+    /* muzzle + jowls (heavy, hanging past the chin) */
+    const jl = 6 * Math.sin(now * 3.2) * (st.talk || 0);
+    const muzzle = [[-40, -8], [-16, -14], [16, -14], [40, -8], [50, 26], [42, 54 + jl], [22, 60], [0, 52], [-22, 60], [-42, 54 + jl], [-50, 26]];
+    K.shape(ctx, muzzle, { fill: P.houndLight, w: 5, boil: 1, seed: seed + 46, shade: { color: P.hound, dx: 0, dy: -10 } });
+    K.line(ctx, [[0, 14], [0, 36]], { stroke: P.ink, w: 3.5, boil: 0.5, seed: seed + 47, gap: 0 });
+    /* mouth under the nose */
+    const sp = (st.talk || 0) > 0.06 || st.viseme ? K.speech(st.talk, now, seed, st.viseme) : null;
+    if (sp) K.talkMouth(ctx, 0, 40, 40, sp, seed + 48);
+    else {
+      const m = st.mouth || "smile";
+      if (m === "smile") K.line(ctx, [[-26, 34], [-12, 42], [0, 37], [12, 42], [26, 34]], { stroke: P.ink, w: 4, boil: 0.5, seed: seed + 49, gap: 0 });
+      else if (m === "frown") K.line(ctx, [[-24, 44], [-12, 37], [0, 40], [12, 37], [24, 44]], { stroke: P.ink, w: 4, boil: 0.5, seed: seed + 50, gap: 0 });
+      else if (m === "flat") K.line(ctx, [[-20, 40], [20, 40]], { stroke: P.ink, w: 4, boil: 0.5, seed: seed + 51, gap: 0 });
+      else K.talkMouth(ctx, 0, 40, 36, m === "o" ? { open: 0.45, wide: 0.3, round: 1 } : { open: 0.85, wide: 0.8, round: 0 }, seed + 52);
+    }
+    /* big nose */
+    K.shape(ctx, K.ellipsePts(0, 4, 20, 13, 12), { fill: P.nose, w: 3.5, boil: 0.6, seed: seed + 53, gap: 0 });
+    K.dot(ctx, -6, 0, 3.4, "#ffffff", null, 0, seed + 54);
+    /* droopy eyes with bags */
+    const lid = clamp(st.lid == null ? 0.42 : st.lid, 0, 1) * (1 - up);
+    [-1, 1].forEach((sd, i) => {
+      const ex = sd * 26, ey = -32, r = 15 + 4 * up, ry = r * (1 - 0.92 * blink);
+      K.line(ctx, [[ex - 14, ey + 18], [ex, ey + 23], [ex + 14, ey + 18]], { stroke: P.houndDark, w: 3, boil: 0.5, seed: seed + 60 + i, gap: 0 });
+      if (blink < 0.75) {
+        const eye = K.ellipsePts(ex, ey, r, Math.max(2, ry), 14);
+        K.shape(ctx, eye, { fill: P.eye, w: 3.5, boil: 0.5, seed: seed + 62 + i, gap: 0 });
+        ctx.save(); K.pathOf(ctx, eye, true); ctx.clip();
+        const px = ex + look[0] * 6, py = ey + 3 + look[1] * 5;
+        K.shape(ctx, K.ellipsePts(px, py, 9, 9.5, 10), { fill: P.houndDark, stroke: null, w: 0, boil: 0.4, seed: seed + 64 + i });
+        K.shape(ctx, K.ellipsePts(px, py, 5, 5.5, 8), { fill: P.pupil, stroke: null, w: 0, boil: 0.3, seed: seed + 66 + i });
+        K.dot(ctx, px + 3, py - 3, 2.4, "#ffffff", null, 0, seed + 68 + i);
+        if (lid > 0.02) { ctx.fillStyle = P.hound; ctx.fillRect(ex - r - 2, ey - r - 4, r * 2 + 4, (r * 2 + 4) * lid); }
+        ctx.restore();
+        if (lid > 0.02) K.line(ctx, [[ex - r, ey - r + 2 * r * lid - 1], [ex + r, ey - r + 2 * r * lid - 1]], { stroke: P.ink, w: 3.5, boil: 0.4, seed: seed + 70 + i, gap: 0 });
+      } else K.line(ctx, [[ex - r, ey], [ex, ey + 4], [ex + r, ey]], { stroke: P.ink, w: 4, boil: 0.5, seed: seed + 72 + i, gap: 0 });
+      /* brows: sad slant by default, lift with surprise */
+      const br = (st.brow || 0) + up * 1.3 + (st.browTilt || 0) * sd * 0.9;
+      K.line(ctx, [[ex - sd * 16, ey - 20 - br * 6], [ex + sd * 12, ey - 26 - br * 7]], { stroke: P.houndDark, w: 6, boil: 0.5, seed: seed + 74 + i, gap: 0 });
+    });
+    /* police cap */
+    if (st.cap !== false) {
+      ctx.save(); ctx.translate(0, -66); ctx.rotate(((st.capTip || 0) * Math.PI) / 180);
+      K.shape(ctx, [[-50, -8], [-56, -34], [-30, -46], [30, -46], [56, -34], [50, -8]], { fill: P.uniform, w: 5, boil: 0.9, seed: seed + 80, shade: { color: P.uniformDark, dx: -10, dy: 0 } });
+      K.shape(ctx, K.rectPts(-50, -14, 100, 14, 2), { fill: P.ink, w: 3.5, boil: 0.6, seed: seed + 81 });
+      K.shape(ctx, [[-44, 0], [44, 0], [34, 14], [-34, 14]], { fill: P.ink, w: 3.5, boil: 0.6, seed: seed + 82 });
+      K.shape(ctx, [[0, -40], [7, -30], [0, -20], [-7, -30]], { fill: P.brass, w: 2.5, boil: 0.4, seed: seed + 83 });
+      ctx.restore();
+    }
+    /* "!" and "?" */
+    const mark = (ch, a, sd) => {
+      if (a <= 0) return;
+      const sc = K.E.back(clamp(a, 0, 1), 2.5);
+      ctx.save(); ctx.translate(96, -120); ctx.rotate(0.2); ctx.scale(sc, sc);
+      K.text(ctx, ch, 0, 0, { size: 84, weight: 700, fill: P.amber, stroke: P.ink, w: 7 });
+      ctx.restore();
+    };
+    mark("!", st.exclaim || 0); if (!(st.exclaim > 0)) mark("?", st.question || 0);
+    ctx.restore(); /* head */
+    ctx.restore(); /* squash space */
+
+    /* ---- arms (unsquashed) ---- */
+    [["L", -1], ["R", 1]].forEach(([k, sd]) => {
+      const def = k === "L" ? { x: -46, y: -100, rot: -60 } : { x: 70, y: -112, rot: -140 }; /* notebook at the belly, pencil ready */
+      const c = st["paw" + k] || def;
+      const S = [sd * 60 * sxk, -188 * syk + 50 * (1 - syk)];
+      const r = K.ik2(S, [c.x, c.y], 50, 48, sd > 0 ? -1 : 1);
+      limb(ctx, [S, r.elbow, r.end], 28, P.uniform, seed + 100 + sd);
+      const ang = c.rot != null ? (c.rot * Math.PI) / 180 : Math.atan2(r.end[1] - r.elbow[1], r.end[0] - r.elbow[0]);
+      const hold = k === "L" ? (st.holdL === undefined ? "notebook" : st.holdL) : (st.holdR === undefined ? "pencil" : st.holdR);
+      if (hold === "notebook") K.notebook(ctx, r.end[0] + 14, r.end[1] - 12, -0.14, 0.95, seed + 110, st.write); /* held by its bottom edge, upright */
+      const wr = st.write > 0 && k === "R" ? [Math.sin(K.now * 22) * 5, Math.cos(K.now * 17) * 3] : [0, 0];
+      const px = r.end[0] + wr[0], py = r.end[1] + wr[1];
+      if (hold === "pencil") K.pencil(ctx, px, py, ang, 1, seed + 120);
+      else if (hold === "magnifier") K.magnifier(ctx, px, py, ang, 0.85, seed + 125, st.lensInside);
+      else if (hold === "flashlight") K.flashlight(ctx, px, py, ang, 1, seed + 128, st.flashOn == null ? 1 : st.flashOn);
+      K.shape(ctx, K.ellipsePts(r.end[0] - Math.cos(ang) * 8, r.end[1] - Math.sin(ang) * 8, 18, 18, 10), { fill: P.uniformLight, w: 4, boil: 0.5, seed: seed + 130 + sd });
+      K.shape(ctx, K.ellipsePts(px, py, 17, 15, 10, ang), { fill: P.hound, w: 4, boil: 0.5, seed: seed + 132 + sd, shade: { color: P.houndDark, dx: 0, dy: -4 } });
+    });
+    ctx.restore();
+  };
+})(CK);
+
+/* ============================================================
+   KIT 46 DUO: both hosts as storytellers (episodes).
+   Inspector Vulpes (fox) = host A, the explainer (lower voice).
+   Sergeant Basset (hound) = host B, the curious co-host (higher voice).
+
+   K.hostPose(who, t, o) -> pose object for K.fox ("fox") or K.hound ("hound")
+     o.talk       0..1  loudness of this host's own voice this frame (mouth, energy)
+     o.listen     0..1  loudness of the other host (listening: look at him, small lean)
+     o.accent     0..1  pulse on this host's stressed syllable (beat gesture, squash)
+     o.accentIdx  int   index of that accent (picks the gesture variety)
+     o.otherAccent 0..1 pulse on the other host's accent (listening nod)
+     o.toward     -1|+1 which side the other host stands on
+     o.point      [lx, ly] LOCAL target for the nearer paw; o.pointAmt 0..1
+     o.gesture    { name, amt }: point | nod | surprise | think | present | shrug | tip | write
+     o.seed, o.blinkSeed
+   K.gesturePose(who, st, name, amt) mixes one named gesture into a pose.
+   K.duo(ctx, o) draws both hosts LARGE in screen space (call after K.screen):
+     o.x, o.y   fox feet (default 360, 1060); o.s fox scale (default 1.25: about 475 px tall)
+     o.side     +1 hound to the right of the fox (default), -1 to the left
+     o.gap      feet distance (default 330 * s);  o.hs hound scale (default o.s)
+     o.talkA / talkB, accentA / accentB, accentIdxA / B  (narration sync values)
+     o.point    [sx, sy] SCREEN point the fox points at; o.pointAmt
+     o.hpoint   [sx, sy] screen point for the hound;     o.hpointAmt
+     o.gestA / gestB  { name, amt } extra gestures;  o.foxPose / houndPose: overrides
+     o.propA(ctx, x, y) / o.propB: draw a kit prop held up in the free paw (screen px)
+     o.a        appear 0..1 (pop in);  o.ground false = no puddle under the hosts
+   returns { fox: [x, y], hound: [x, y], pawA: [x, y], pawB: [x, y] } (screen px)
+   ============================================================ */
+var CK = window.CK || (window.CK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp } = K;
+  const mix = (a, b, u) => ({ x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u), rot: u > 0.5 ? b.rot : a.rot });
+  const REST = {
+    fox: { L: { x: -86, y: -100 }, R: { x: 86, y: -100 } },
+    hound: { L: { x: -46, y: -100, rot: -60 }, R: { x: 70, y: -112, rot: -140 } },
+  };
+  const SHOULDER = { fox: [56, -196], hound: [60, -188] }, REACH = { fox: 118, hound: 94 };
+  /* beat gestures while talking (rest-relative paw targets) */
+  const BEATS = {
+    fox: [{ R: { x: 150, y: -250 } }, { L: { x: -150, y: -200 }, R: { x: 150, y: -200 } }, { L: { x: -150, y: -250 } }, { R: { x: 60, y: -230 } }],
+    hound: [{ R: { x: 120, y: -230, rot: -60 } }, { R: { x: 70, y: -270, rot: -90 } }, { L: { x: -110, y: -180, rot: -100 } }],
+  };
+
+  K.gesturePose = function (who, st, name, amt) {
+    if (!amt || amt <= 0) return st;
+    const e = clamp(amt, 0, 1), fox = who === "fox";
+    const L = st.pawL || REST[who].L, R = st.pawR || REST[who].R;
+    if (name === "nod") st.nod = Math.max(st.nod || 0, e * Math.max(0, Math.sin(K.now * 9)));
+    else if (name === "surprise") {
+      st.eyeUp = Math.max(st.eyeUp || 0, e); st.exclaim = e; st.blink = 0;
+      if (!(st.talk > 0.06)) st.mouth = "o";
+      st.hop = (st.hop || 0) + 14 * e; st.squash = (st.squash || 0) - 0.15 * e;
+      if (fox) { st.pawL = mix(L, { x: -120, y: -300 }, e); st.pawR = mix(R, { x: 120, y: -300 }, e); }
+      else { st.ears = (st.ears || 0) + e; st.pawR = mix(R, { x: 110, y: -240, rot: -80 }, e); }
+    } else if (name === "think") {
+      st.look = [0.5, -0.9]; st.browTilt = 0.8 * e;
+      if (fox) st.pawR = mix(R, { x: 40, y: -255, rot: -100 }, e); else { st.question = e; st.head = (st.head || 0) + 12 * e; st.pawR = mix(R, { x: 30, y: -230, rot: -120 }, e); }
+    } else if (name === "present") {
+      if (fox) { st.pawL = mix(L, { x: -160, y: -180 }, e); st.pawR = mix(R, { x: 160, y: -180 }, e); }
+      else st.pawR = mix(R, { x: 130, y: -170, rot: -20 }, e);
+      st.brow = (st.brow || 0) + 0.5 * e;
+    } else if (name === "shrug") {
+      if (fox) { st.pawL = mix(L, { x: -150, y: -230 }, e); st.pawR = mix(R, { x: 150, y: -230 }, e); } else { st.pawR = mix(R, { x: 120, y: -200, rot: -30 }, e); st.head = (st.head || 0) - 10 * e; }
+      st.brow = (st.brow || 0) + 1 * e; st.squash = (st.squash || 0) + 0.08 * e;
+    } else if (name === "tip") {
+      if (fox) { st.hatTip = -18 * e; st.hatLift = 20 * e; st.pawL = mix(L, { x: -60, y: -390 }, e); }
+      else { st.capTip = -14 * e; st.pawR = mix(R, { x: 40, y: -330, rot: -90 }, e); }
+    } else if (name === "write") {
+      if (!fox) { st.write = e; st.look = [-0.3, 0.8]; st.pawR = mix(R, { x: 10, y: -150, rot: -165 }, e); st.head = (st.head || 0) - 6 * e; }
+    } else if (name === "point" && st._point) {
+      const pt = st._point, sd = pt[0] >= 0 ? 1 : -1, sh = [sd * SHOULDER[who][0], SHOULDER[who][1]];
+      const d = Math.hypot(pt[0] - sh[0], pt[1] - sh[1]) || 1, rch = REACH[who];
+      const tgt = { x: sh[0] + ((pt[0] - sh[0]) / d) * rch, y: sh[1] + ((pt[1] - sh[1]) / d) * rch, rot: (Math.atan2(pt[1] - sh[1], pt[0] - sh[0]) * 180) / Math.PI };
+      if (sd > 0) st.pawR = mix(R, tgt, e); else st.pawL = mix(L, tgt, e);
+      if (fox) st[sd > 0 ? "fingerR" : "fingerL"] = e;
+      st.look = [lerp((st.look || [0, 0])[0], sd * 0.9, e), lerp((st.look || [0, 0])[1], clamp((pt[1] + 260) / 300, -1, 1), e)];
+      if (!fox && sd < 0) st.holdL = null; /* the notebook hand points: tuck the notebook away */
+    }
+    return st;
+  };
+
+  K.hostPose = function (who, t, o) {
+    o = o || {};
+    const fox = who === "fox", tw = o.toward || (fox ? 1 : -1), talk = clamp(o.talk || 0, 0, 1), listen = clamp(o.listen || 0, 0, 1);
+    const st = { seed: o.seed || (fox ? 760 : 900), blink: K.blinkAt(t, o.blinkSeed || (fox ? 17 : 23)), talk, look: [0.15 * Math.sin(t * 0.7), -0.1] };
+    st.squash = 0.035 * Math.sin(t * (fox ? 2.3 : 2.9)) + 0.12 * (o.accent || 0);
+    st.pawL = Object.assign({}, REST[who].L); st.pawR = Object.assign({}, REST[who].R);
+    st.pawL.y += 6 * Math.sin(t * 2.1); st.pawR.y += 6 * Math.sin(t * 2.4 + 1);
+    if (fox) { st.lid = 0.3; st.tail = Math.sin(t * 2.4); st.mouth = "smirk"; }
+    else { st.tail = Math.sin(t * 3) * 0.6; st.ears = 0.1 * Math.sin(t * 1.3); st.head = 3 * Math.sin(t * 0.8); }
+    /* talking: beat gestures on accents, look ahead / at the audience */
+    if (talk > 0.02 || (o.accent || 0) > 0) {
+      st.look = [0.2 * Math.sin(t * 0.9), -0.05];
+      const B = BEATS[who][Math.floor(K.hash(o.accentIdx || 0, fox ? 77 : 91) * BEATS[who].length)], w = clamp(o.accent || 0, 0, 1);
+      if (B.L) st.pawL = mix(st.pawL, B.L, w);
+      if (B.R) st.pawR = mix(st.pawR, B.R, w);
+      st.brow = 0.5 * w;
+    }
+    /* listening: look at the talker, lean in, nod on his accents */
+    if (listen > 0.02 || (o.otherAccent || 0) > 0) {
+      st.look = [0.9 * tw, -0.3]; st.lean = 2.5 * tw;
+      st.nod = 0.8 * (o.otherAccent || 0);
+      if (fox) st.headTilt = 4 * tw; else st.head = (st.head || 0) + 8 * tw;
+    }
+    if (o.point && (o.pointAmt == null || o.pointAmt > 0)) { st._point = o.point; K.gesturePose(who, st, "point", o.pointAmt == null ? 1 : o.pointAmt); }
+    if (o.gesture) K.gesturePose(who, st, o.gesture.name, o.gesture.amt == null ? 1 : o.gesture.amt);
+    return st;
+  };
+
+  /* screen -> local point for a host standing at (fx, fy) with scale s */
+  const toLocal = (pt, fx, fy, s) => [(pt[0] - fx) / s, (pt[1] - fy) / s];
+  /* approximate screen position of a paw from its IK target (targets are kept reachable) */
+  const pawScreen = (p, fx, fy, s) => [fx + p.x * s, fy + p.y * s];
+
+  K.duo = function (ctx, o) {
+    o = o || {};
+    const t = K.now, s = o.s || 1.25, hs = o.hs || s, side = o.side || 1;
+    const fx = o.x == null ? 360 : o.x, fy = o.y == null ? 1060 : o.y;
+    const hx = fx + side * (o.gap || 330 * s), hy = fy + 6;
+    const a = o.a == null ? 1 : o.a; if (a <= 0) return null;
+    const pa = a >= 1 ? 1 : K.E.back(a, 2);
+    const foxO = { talk: o.talkA, listen: o.talkB, accent: o.accentA, accentIdx: o.accentIdxA, otherAccent: o.accentB, toward: side, gesture: o.gestA };
+    if (o.point) { foxO.point = toLocal(o.point, fx, fy, s); foxO.pointAmt = o.pointAmt; }
+    const houndO = { talk: o.talkB, listen: o.talkA, accent: o.accentB, accentIdx: o.accentIdxB, otherAccent: o.accentA, toward: -side, gesture: o.gestB };
+    if (o.hpoint) { houndO.point = toLocal(o.hpoint, hx, hy, hs); houndO.pointAmt = o.hpointAmt; }
+    const fst = Object.assign(K.hostPose("fox", t, foxO), o.foxPose || {});
+    const hst = Object.assign(K.hostPose("hound", t, houndO), o.houndPose || {});
+    if (o.propA && !fst.hold) fst.hold = null;
+    /* a shared wet-pavement puddle under both hosts */
+    if (o.ground !== false) {
+      ctx.save(); ctx.globalAlpha *= 0.85 * a;
+      K.shape(ctx, K.blobPts((fx + hx) / 2, fy + 8, Math.abs(hx - fx) / 2 + 210 * s, 34 * s, 16, 31, 0.12), { fill: P.puddle, stroke: P.ink, w: 3, boil: 0.8, seed: 991, gap: 0.3, shade: { color: P.street, dx: 0, dy: 10 } });
+      ctx.restore();
+    }
+    ctx.save(); ctx.globalAlpha *= Math.min(1, a * 2);
+    const drawFox = () => K.fox(ctx, fx, fy, s * pa, fst), drawHound = () => K.hound(ctx, hx, hy, hs * pa, hst);
+    /* the listener is drawn first, so the talker overlaps if they ever touch */
+    if ((o.talkB || 0) > (o.talkA || 0)) { drawFox(); drawHound(); } else { drawHound(); drawFox(); }
+    ctx.restore();
+    const pawA = pawScreen(side > 0 ? fst.pawR : fst.pawL, fx, fy, s), pawB = pawScreen(side > 0 ? hst.pawL : hst.pawR, hx, hy, hs);
+    if (o.propA) o.propA(ctx, pawA[0], pawA[1]);
+    if (o.propB) o.propB(ctx, pawB[0], pawB[1]);
+    return { fox: [fx, fy], hound: [hx, hy], pawA, pawB };
   };
 })(CK);
 

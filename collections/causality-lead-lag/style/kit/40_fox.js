@@ -21,6 +21,10 @@
      tail     -1..1  sway;  legWalk phase (radians), 0 = standing
      exclaim  0..1   "!" pops over the head
      light    0..1   amber rim light on the left edge (lamp / clue light)
+     talk     0..1   loudness of his own voice: viseme-ish talking mouth (K.speech);
+                     viseme "A" | "O" | "E" | "M" forces a shape
+     nod      0..1   head dip (listening nods);  headTilt deg
+     fingerL/R 0..1  pointing finger out of that paw
    Returns nothing; writes K.lensPt (screen point of the lens centre) when
    the magnifier is held, for iris transitions.
    ============================================================ */
@@ -117,7 +121,7 @@ var CK = window.CK || (window.CK = {});
 
     /* ---- head ---- */
     const hx = turn * 6, hy = -276;
-    ctx.save(); ctx.translate(hx, hy);
+    ctx.save(); ctx.translate(hx, hy + (st.nod || 0) * 12); ctx.rotate(((st.headTilt || 0) * Math.PI) / 180);
     const ft = turn * 14; /* face features slide with the turn */
     /* ears (behind the hat brim) */
     [-1, 1].forEach((sd, i) => {
@@ -136,7 +140,8 @@ var CK = window.CK || (window.CK = {});
     K.dot(ctx, ft * 1.4 - 4, 11, 2.5, "#ffffff", null, 0, seed + 48);
     /* mouth */
     const m = st.mouth || "smirk", mx = ft * 1.3;
-    if (m === "smirk") K.line(ctx, [[mx - 16, 28], [mx - 2, 32], [mx + 12, 28], [mx + 22, 20]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 50, gap: 0 });
+    if ((st.talk || 0) > 0.06 || st.viseme) K.talkMouth(ctx, mx, 27, 34, K.speech(st.talk, K.now, seed, st.viseme), seed + 56);
+    else if (m === "smirk") K.line(ctx, [[mx - 16, 28], [mx - 2, 32], [mx + 12, 28], [mx + 22, 20]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 50, gap: 0 });
     else if (m === "smile") K.line(ctx, [[mx - 20, 24], [mx - 8, 33], [mx + 8, 33], [mx + 20, 24]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 51, gap: 0 });
     else if (m === "flat") K.line(ctx, [[mx - 14, 30], [mx + 14, 30]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 52, gap: 0 });
     else if (m === "grin") K.shape(ctx, [[mx - 24, 22], [mx + 24, 22], [mx + 12, 38], [mx, 41], [mx - 12, 38]], { fill: "#5a1a1a", w: 4, boil: 0.6, seed: seed + 53, gap: 0 });
@@ -201,6 +206,8 @@ var CK = window.CK || (window.CK = {});
       if (hold === "magnifier") K.magnifier(ctx, r.end[0], r.end[1], ang, 1, seed + 110 + sd, st.lensEye > 0.5 && k === "R" ? bigEye(st, seed) : st.lensInside);
       else if (hold === "flashlight") K.flashlight(ctx, r.end[0], r.end[1], ang, 1, seed + 120 + sd, st.flashOn == null ? 1 : st.flashOn);
       else if (hold === "pin") K.pin && K.pin(ctx, r.end[0] + Math.cos(ang) * 22, r.end[1] + Math.sin(ang) * 22, P.string, 1.1);
+      const fin = st["finger" + k] || 0; /* pointing finger along the forearm */
+      if (fin > 0) K.limb2(ctx, [[r.end[0], r.end[1]], [r.end[0] + Math.cos(ang) * 30 * fin, r.end[1] + Math.sin(ang) * 30 * fin]], 9, P.paw, seed + 107 + sd);
       K.shape(ctx, K.ellipsePts(r.end[0], r.end[1], 15, 13, 10, ang), { fill: P.paw, w: 4, boil: 0.6, seed: seed + 106 + sd });
     });
     ctx.restore();

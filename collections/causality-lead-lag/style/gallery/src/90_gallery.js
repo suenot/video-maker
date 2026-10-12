@@ -2,7 +2,7 @@
    Page 1 (0-3 s): the evidence board (photos, strings, tags, pins) and two paw trails.
    Page 2 (3-6 s): placard, case file, chalkboard, screen chart, notepad, typewriter,
    clue card, marquee title, magnifying glass. Items pop in, then hold (boil keeps them alive). */
-const K = CK, P = K.P, at = K.at, DUR = 6;
+const K = CK, P = K.P, at = K.at, DUR = 12;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const pop = (t, t0) => K.inv(t0, t0 + 0.4, t);
 
@@ -65,7 +65,7 @@ function render(t) {
     K.begin(ctx, t, { x: 960, y: 540, z: 1 });
     K.applyCam(ctx, 1);
     night();
-    if (t < 3) page1(t); else page2(t);
+    if (t < 3) page1(t); else if (t < 6) page2(t); else if (t < 9) page3(t); else page4(t);
   } catch (e) {
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 120);
     ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(e && e.stack || e).slice(0, 160), 20, 60);

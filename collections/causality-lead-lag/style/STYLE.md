@@ -86,6 +86,34 @@ Animation rules:
 - Blinks are seeded (`K.blinkAt`) and forced open during surprises.
 - Something is always alive: beat bounce, tail sway, the boil, rain.
 
+## 5b. Sergeant Basset (the co-host) and the duo
+
+Episodes are told by two hosts: **host A = Inspector Vulpes** (the explainer, lower voice) and **host B = Sergeant Basset** (the curious one who writes things down and asks, higher voice). Watson to the inspector.
+
+| Part | Value (scale 1, local px, feet at y 0) |
+| --- | --- |
+| Height | about 330 to the cap crown (0.87x the fox); head centre y -254; stocky, wide |
+| Coat | navy police coat (`P.uniform` / `uniformDark` / `uniformLight`), brass buttons, black belt with brass buckle, shoulder badge, cream chest blaze |
+| Head | tan basset (`P.hound`, `houndDark`, `houndLight`), white blaze, heavy jowls, big black nose |
+| Eyes | droopy, lids at 0.42 by default, bags under them; `eyeUp` opens them round and lifts the ears |
+| Ears | long, dark (`P.houndEar`), swing with motion (`ears`) |
+| Cap | navy peaked police cap with a brass badge; `capTip` |
+| Arms | two-bone IK 50 + 48; left paw holds the spiral notebook upright (by its bottom edge, never over the face), right paw the pencil; `write` scribbles |
+| Legs and tail | stubby legs, big paws, wagging tail with a cream tip |
+
+Talking (both hosts): one loudness value per frame (0 - 1, from the narration sync) drives `pose.talk`. `K.speech` turns it into viseme-ish shapes (A open, O round, E wide, M closed) that change about 7 times a second, seeded and deterministic; `pose.viseme` forces a shape. Mouth interior `P.mouthIn` with a `P.tongue` when wide open. Below talk 0.06 the normal expression mouth returns.
+
+Listening: the silent host looks at the speaker, leans in a little, tilts the head and nods on the speaker's stressed syllables (`otherAccent`). The fox never stands frozen while the hound talks, and the reverse.
+
+Gestures (`K.gesturePose`): point (the fox shows a finger; the hound points with the pencil), nod, surprise (`!`, eyes round), think (paw to chin, the hound gets a `?`), present (open paws), shrug, tip (hat / cap), write (hound only). Beat gestures fire on accents while talking, so a long sentence never reads as a static mouth.
+
+Duo placement (`K.duo`, screen space, after `K.screen`):
+- Hosts are large: fox scale 1.2 - 1.3 (about 460 - 500 px tall), hound at the same scale; never under 300 px tall in a duo shot.
+- Default: fox feet at (360, 1060), hound to his right at 330 * scale; mirror with `side: -1` when the explainer object is on the left.
+- Hosts sit in the lower third and stand on one shared puddle of lamplight; the explainer object takes the upper two thirds and the free side.
+- The listener is drawn first, the speaker on top. Pointing targets are screen points on the object being explained; props (`propA` / `propB`) are kit objects held up at the paw.
+- Keep both hosts fully in frame while they talk; cut-ins to one host use the solo rigs at 1.4 - 1.7.
+
 ## 6. Sets and camera
 
 - **Street** (side view): curb y 760, sky in screen space, moon parallax 0.15, clouds 0.25, far skyline 0.45, near buildings 0.8, street plane 1.0. Lamps throw amber cones and pools; road reflections wobble.

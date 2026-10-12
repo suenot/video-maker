@@ -38,6 +38,10 @@ var CK = window.CK || (window.CK = {});
     /* suspects: A leads (amber family), B lags (cool), Z is the hidden confounder */
     A: "#ffb43f", B: "#7fb6d0", C: "#a7c48a", D: "#d99ab8", Z: "#9d86d6",
     BTC: "#f7a23a", ETH: "#8a93f0",
+    /* the sidekick: Sergeant Basset (host B), a basset hound in a navy police coat */
+    hound: "#c08a56", houndDark: "#7a4f2c", houndLight: "#dcae7c", houndEar: "#5e3a22", houndEarDark: "#3e2516",
+    uniform: "#2f3d66", uniformDark: "#1d2645", uniformLight: "#46578a",
+    mouthIn: "#4a1418", tongue: "#d9686a",
   };
   K.FONT = {
     display: '"Yanone Kaffeesatz", "CJK SC", "CJK TC", sans-serif', /* titles, labels (500 / 700) */

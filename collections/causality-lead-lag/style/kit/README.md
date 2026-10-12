@@ -9,7 +9,10 @@ It uses plain browser JS with no modules. Each file attaches to the global `CK` 
 | `05_palette.js` | `CK.P` colours and `CK.FONT` stacks (the only place they are defined) |
 | `10_ink.js` | frame setup `begin(ctx, t, cam)`, the camera `applyCam(ctx, parallax)`, `toScreen`; `shape` (fill + shadow band + hatch + boiled **noir brush** outline), `line` (`taper: false` for even width), `dot`, `hatch`, `text` (never boils), `glow`, and the point generators `ellipsePts`, `blobPts`, `rectPts` |
 | `30_world.js` | street set: `nightSky`, `moon`, `skyline` (far / near), `street` (wet road + reflections), `lamp`, `cone`, `pool`, `brickWall`, `rain` (screen space), `ripples`, `puddle`, `fog`, `flash`; office: `blindsWindow`, `blindLight`, `desk`, `deskLamp`; people and props: `suspect`, `limb2`, `lineupWall`, `newspaper` |
-| `40_fox.js` | `fox(ctx, x, y, s, pose)` with squash/stretch, two-bone IK paws (`ik2`), blink, lids, brows, mouths, head turn, hat tip, tail, walk cycle, `!`, props (`magnifier`, `flashlight`, `pin`), the giant lens eye (`lensEye`); `blinkAt(t, seed)`; `K.lensPt` / `K.lensR` (screen point and radius of the lens, for iris transitions) |
+| `40_fox.js` | `fox(ctx, x, y, s, pose)` with squash/stretch, two-bone IK paws (`ik2`), blink, lids, brows, mouths, talking mouth (`talk`, `viseme`), listening `nod` / `headTilt`, pointing finger (`fingerL` / `fingerR`), head turn, hat tip, tail, walk cycle, `!`, props (`magnifier`, `flashlight`, `pin`), the giant lens eye (`lensEye`); `blinkAt(t, seed)`; `K.lensPt` / `K.lensR` (screen point and radius of the lens, for iris transitions) |
+| `41_talk.js` | talking mouths for both hosts: `speech(talk, t, seed, viseme)` turns a 0 - 1 loudness per frame into `{ open, wide, round, v }` (visemes A / O / E / M, `K.VISEMES`); `talkMouth(ctx, x, y, w, sp, seed)` draws it |
+| `42_hound.js` | `hound(ctx, x, y, s, pose)`: Sergeant Basset, the co-host (blink, droopy lids, squash, IK paws, ears, tail wag, cap, `talk`, `nod`, `head`, `write`, `!` / `?`); props `notebook(ctx, x, y, ang, s, seed, write)`, `pencil(ctx, x, y, ang, s, seed)`; also holds `magnifier` / `flashlight` |
+| `46_duo.js` | the two-host layer: `hostPose(who, t, o)` (idle bob, talking, beat gestures on accents, listening = look at the speaker, lean, nod), `gesturePose(who, pose, name, amt)` (point, nod, surprise, think, present, shrug, tip, write), `duo(ctx, o)` draws both hosts large in screen space with pointing targets and held props; see the file header for every option |
 | `50_explainer.js` | slide content as noir objects: `paw`, `trail`, `pin`, `corkboard`, `node`, `edge` / `edgePoint` / `tag`, `plank`, `ledger`, `slate`, `screenChart` (= `sailChart`), `notice`, `logbook`, `scatter`, `banner`, `magnify` |
 | `fonts/` | local woff2 (Yanone Kaffeesatz, Cousine, Noto Serif SC / TC subsets) plus `fonts.css`; refresh with `tools/fetch_fonts.py` |
 | `vendor/gsap.min.js` | GSAP 3.14.2 (local, no CDN) |
@@ -46,7 +49,15 @@ It uses plain browser JS with no modules. Each file attaches to the global `CK` 
 4. Build, then check: `python3 style/kit/tools/build.py <project>` and `cd <project> && npx hyperframes lint && npx hyperframes check`.
 5. Snapshot and look at the frames (`intro/tools/snap.sh` shows the loop). Render with `npx hyperframes render --quality high --output renders/x.mp4` (`intro/tools/render_all.sh` renders all four languages).
 
-`style/gallery/` is a 6-second project that shows every explainer primitive (two pages). Rebuild and snapshot it after you change the kit, to catch regressions.
+`style/gallery/` is a 12-second project with four pages: every explainer primitive (pages 1 - 2), the duo talking, listening and pointing at a board (page 3) and the gesture sheet for both hosts (page 4). Rebuild and snapshot it after you change the kit, to catch regressions.
+
+A duo shot in an episode (talk values come from the narration sync, one per host per frame):
+
+```js
+K.screen(ctx);
+K.duo(ctx, { x: 330, y: 1070, s: 1.2, talkA: loudA(t), talkB: loudB(t), accentA: accA(t), accentB: accB(t),
+  point: [720, 640], pointAmt: K.inv(at(3), at(3, 1), t) });
+```
 
 ## Rules the kit relies on
 
