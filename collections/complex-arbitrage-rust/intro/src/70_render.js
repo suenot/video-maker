@@ -1,25 +1,44 @@
 /* ============================================================
-   INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
-   drives a proxy whose setter calls render(t).
-   0.00 - 4.43  side set: ship sails in, crab spots something (spyglass)
-   3.46 - 4.43  iris through the spyglass into the chart set
-   4.43 - 8.24  "Heave ho, the cycle flows": routes draw, loop glows, one lap
-   8.24 - 11.6  "Graph and matrix, the Rust-crab knows": rates fly into a matrix
-   11.57- 12.05 iris closes on the ship, opens on the two-ship set
-   12.05- 15.86 "Futures, spot and copula sea": spot + futures ships, basis rope, one swell
-   15.10- 15.86 wave wipe to the title set
-   15.86- 20.10 "Complex arbitrage, sail with me!": banner hit, letters, jump, snap, hat tip
+   INTRO 70 RENDER: render(t) is the whole film (64.2 s). One paused GSAP
+   timeline drives a proxy whose setter calls render(t).
+    0.0 - 15.4  side set: ship sails in, cap tip, rivets, horizon markets, spyglass "!"
+   15.4 - 16.3  iris through the spyglass into the chart
+   16.3 - 25.2  chart: three ports, loop lap (+0.46 %), cycle glows, rates -> matrix
+   25.2 - 25.6  iris closes on the ship -> two ships (futures/spot, basis rope, swell)
+   29.2 - 33.0  "sail with me!": push-in, the crab beckons and winks
+   32.3 - 33.0  wave wipe -> break: accordion jig, sail chart, logbook (dusk)
+   44.0 - 44.5  spyglass iris -> chart: fast lap (+0.92 %), matrix -> tensor
+   48.0 - 48.5  iris out -> two ships at sunset
+   51.3 - 52.1  wave wipe -> title: banner, net haul, jump, snap, medallions, cap tip
    ============================================================ */
-const SIDE_OPEN = (t) => ({
-  horizon: 600, warm: 0, zoom: K.tw(t, 0, T.iris[1], 1, 1.18, K.E.inOut), fx: 900, fy: 640,
-  shipX: K.tw(t, T.shipIn[0], T.shipIn[1], -520, 800, K.E.out3), shipY: 930, shipS: 1.6, crabS: 1.15, crab: crabOpening,
-});
+const OPEN_CAM = K.mkTrack([
+  [0, { z: 1.0, fx: 900, fy: 640, toX: 900 }],
+  [T.pushIn[0], { z: 1.08, fx: 900, fy: 640, toX: 900 }],
+  [T.pushIn[1], { z: 1.55, fx: 650, fy: 720, toX: 860 }],
+  [T.pullOut[0], { z: 1.55, fx: 650, fy: 720, toX: 860 }],
+  [T.pullOut[1], { z: 1.0, fx: 960, fy: 600, toX: 960 }],
+  [T.spyUp, { z: 1.0, fx: 900, fy: 640, toX: 900 }],
+  [T.iris[1], { z: 1.15, fx: 800, fy: 660, toX: 820 }],
+]);
+const MARKETS = [
+  { x: 270, label: "BTC", color: P.BTC, t0: T.markets },
+  { x: 1240, label: "ETH", color: P.ETH, t0: T.markets + bl(1) },
+  { x: 1700, label: "USDT", color: P.USDT, t0: T.markets + bl(2) },
+  { x: 410, label: "SOL", color: P.SOL, t0: T.markets + bl(3) },
+];
+const SIDE_OPEN = (t) => {
+  const c = OPEN_CAM(t);
+  return {
+    horizon: 600, warm: 0, zoom: c.z, fx: c.fx, fy: c.fy, toX: c.toX, markets: MARKETS, rivets: T.rivets,
+    shipX: K.tw(t, T.shipIn[0], T.shipIn[1], -520, 800, K.E.out3), shipY: 930, shipS: 1.6, crabS: 1.15, crab: crabOpening,
+  };
+};
 const SIDE_TITLE = (t) => ({
-  horizon: 640, warm: 0.7, zoom: K.tw(t, T.wipe[0], DUR, 1.06, 1.0, K.E.out3), fx: 960, fy: 700, drift: 600,
-  shipX: 960, shipY: 1000, shipS: 1.45, crabS: 1.22, crab: crabTitle, coins: 22,
+  horizon: 640, warm: 0.7, zoom: K.tw(t, T.wipe2[0], T.wipe2[1] + 2, 1.06, 1.0, K.E.out3), fx: 960, fy: 700, drift: 600,
+  shipX: TITLE_SHIP.x, shipY: TITLE_SHIP.y, shipS: TITLE_SHIP.s, crabS: TITLE_SHIP.crabS, crab: crabTitle,
+  coins: Math.round(22 + 12 * K.inv(T.dump + 0.2, T.dump + 0.9, t)), front: (tt, bob) => drawNet(tt, bob),
 });
 
-function wipeFront(t) { return K.tw(t, T.wipe[0], T.wipe[1], -420, 2400, K.E.inOut); }
 function drawWaveFront(x) {
   /* a tall curling wave sweeps right; left of it is already the next set */
   const crest = [];
@@ -42,45 +61,47 @@ function ring(cx, cy, r) {
   ctx.restore();
 }
 
+function irisIn(t, win, drawA, drawB) {
+  /* drawA full, drawB inside a circle growing from the spyglass lens (K.lens, set while drawA draws) */
+  drawA(); const from = K.lens || { x: 1200, y: 400 };
+  const u = K.E.inOut(K.inv(win[0], win[1], t));
+  const cx = K.lerp(from.x, 960, u), cy = K.lerp(from.y, 540, u), r = K.lerp(10, 1250, u);
+  K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, K.TAU); ctx.clip(); drawB(); ctx.restore(); ring(cx, cy, r);
+}
+function irisOutOnShip(t, win, drawNext) {
+  const u = K.E.inOut(K.inv(win[0], win[1], t)), r = K.lerp(1300, 0, u);
+  K.cam = camChart(t); const sp = shipAt(t), c = K.toScreen(sp.x, sp.y - 80);
+  K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(-10, -10, 1940, 1100); ctx.arc(c[0], c[1], r, 0, K.TAU, true); ctx.clip("evenodd"); drawNext(); ctx.restore();
+  K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.arc(c[0], c[1], r, 0, K.TAU); ctx.clip(); drawChart(t); ctx.restore();
+  if (r > 4) ring(c[0], c[1], r);
+}
+function waveWipe(t, win, drawOld, drawNew) {
+  const x = K.tw(t, win[0], win[1], -420, 2400, K.E.inOut);
+  drawOld(); K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(-10, -10, x + 10, 1100); ctx.clip(); drawNew(); ctx.restore();
+  K.screen(ctx); drawWaveFront(x);
+}
+const drawBreak = (t) => { drawSide(t, SIDE_BREAK(t)); drawSailChart(t); drawLogbook(t); };
+const drawTitleSet = (t) => { drawSide(t, SIDE_TITLE(t)); K.screen(ctx); if (t >= T.banner[0]) drawTitleCanvas(t); };
+
 function render(t) {
   try {
     K.begin(ctx, t, { x: 0, y: 0, z: 1 });
     titleEl.style.opacity = "0";
-    /* 1. opening side set */
-    if (t < T.iris[1]) drawSide(t, SIDE_OPEN(t));
-    /* 2. chart set (through the spyglass iris at first) */
-    if (t >= T.iris[0] && t < T.irisOut[1]) {
-      if (t < T.iris[1]) {
-        const u = K.E.inOut(K.inv(T.iris[0], T.iris[1], t)), lens = K.lens || { x: 1200, y: 400 };
-        const cx = K.lerp(lens.x, 960, u), cy = K.lerp(lens.y, 540, u), r = K.lerp(10, 1250, u);
-        K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, K.TAU); ctx.clip();
-        drawChart(t); ctx.restore(); ring(cx, cy, r);
-      } else if (t < T.irisOut[0]) drawChart(t);
-    }
-    /* 3. iris out on the ship, then the two-ship set */
-    if (t >= T.irisOut[0] && t < T.wipe[1]) {
-      if (t < T.irisOut[1]) {
-        const u = K.E.inOut(K.inv(T.irisOut[0], T.irisOut[1], t)), r = K.lerp(1300, 0, u);
-        K.cam = camChart(t); const sp = shipAt(t), c = K.toScreen(sp.x, sp.y - 80);
-        K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(-10, -10, 1940, 1100); ctx.arc(c[0], c[1], r, 0, K.TAU, true); ctx.clip("evenodd");
-        drawSide(t, SIDE_TWO(t)); ctx.restore();
-        K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.arc(c[0], c[1], r, 0, K.TAU); ctx.clip();
-        drawChart(t); ctx.restore();
-        if (r > 4) ring(c[0], c[1], r);
-      } else drawSide(t, SIDE_TWO(t));
-    }
-    /* 4. wave wipe to the title set */
-    if (t >= T.wipe[0]) {
-      const x = wipeFront(t);
-      K.screen(ctx); ctx.save();
-      if (t < T.wipe[1]) { ctx.beginPath(); ctx.rect(-10, -10, x + 10, 1100); ctx.clip(); }
-      drawSide(t, SIDE_TITLE(t));
-      K.screen(ctx);
-      if (t >= T.banner[0]) drawTitleCanvas(t);
-      ctx.restore();
-      if (t < T.wipe[1]) { K.screen(ctx); drawWaveFront(x); }
-      layoutTitleDom(t);
-    }
+    const two1 = () => drawSide(t, SIDE_TWO(t, TWO[0])), two2 = () => drawSide(t, SIDE_TWO(t, TWO[1]));
+    if (t < T.iris[0]) drawSide(t, SIDE_OPEN(t));
+    else if (t < T.iris[1]) irisIn(t, T.iris, () => drawSide(t, SIDE_OPEN(t)), () => drawChart(t));
+    else if (t < T.irisOut[0]) drawChart(t);
+    else if (t < T.irisOut[1]) irisOutOnShip(t, T.irisOut, two1);
+    else if (t < T.wipe1[0]) two1();
+    else if (t < T.wipe1[1]) waveWipe(t, T.wipe1, two1, () => drawBreak(t));
+    else if (t < T.iris2[0]) drawBreak(t);
+    else if (t < T.iris2[1]) irisIn(t, T.iris2, () => drawBreak(t), () => drawChart(t));
+    else if (t < T.irisOut2[0]) drawChart(t);
+    else if (t < T.irisOut2[1]) irisOutOnShip(t, T.irisOut2, two2);
+    else if (t < T.wipe2[0]) two2();
+    else if (t < T.wipe2[1]) waveWipe(t, T.wipe2, two2, () => drawTitleSet(t));
+    else drawTitleSet(t);
+    if (t >= T.banner[0]) layoutTitleDom(t);
   } catch (err) {
     /* never leave a black frame silently: draw the error so a snapshot shows it */
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);

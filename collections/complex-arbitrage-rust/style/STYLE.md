@@ -93,7 +93,7 @@ Animation rules, as lessons from the rejected stiff `paper-cut-stopmotion` puppe
 
 - The theme song is a sea shanty at about 126 BPM: a beat is 0.476 s and a bar (4 beats) is 1.906 s. Write times as `K.at(bar, beat)`.
 - Retime to a real song by setting `K.G.BPM` and `K.G.BARS` (the list of measured downbeat times). Measured downbeats are better than one `OFFSET`, because a song cut from several takes drifts at each splice. Bars past the list extrapolate at BPM.
-- The intro's grid is `BARS = [0.60, 2.51, 4.43, 6.33, 8.24, 10.14, 12.05, 13.96, 15.86, 17.77, 19.68]`. Each sung line gets its own picture: "cycle flows" is the glowing loop, "graph and matrix" is rates flying into a matrix, "futures, spot and copula sea" is two ships on one swell, and "sail with me" is the title hit.
+- The intro uses the full song: bar n starts at `0.60 + n * 1.9067` s. Measure the tempo from repeated sung lines (whisper word times) when the beat tracker drifts. Each sung line gets its own picture: "cycle flows" is the glowing loop, "graph and matrix" is rates flying into a matrix, "futures, spot and copula sea" is two ships on one swell, and "sail with me" is the title hit.
 - Pops (islands, tags, medallions) land on beats, with a back-ease overshoot of 0.35 - 0.45 s. Staggers are 1/2 or 1/4 beat.
 - Determinism: no `Math.random`, `Date.now` or `performance.now`, and no infinite repeats. Seeded `mulberry` / `hash` only.
 

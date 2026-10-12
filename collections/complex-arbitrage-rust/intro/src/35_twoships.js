@@ -3,21 +3,28 @@
    Our ship (cog sail) is spot; the hourglass ship is the future.
    A gold rope between them carries the basis; then one swell lifts
    both ships together: dependence you can see.
+   Chorus 1 (midday) ends with "sail with me!": the crab beckons us aboard.
+   Chorus 2 is the same idea at sunset, and a wave wipes to the title.
    ============================================================ */
 const FUT = { y: 845, s: 0.98 };
-const futX = (t) => K.tw(t, T.twoShips - 0.4, T.twoShips + 0.9, 2350, 1360, K.E.out3);
+const TWO = [
+  { t0: T.two1, rope: T.rope1, swell: T.swell1, warm: 0.2, gap: "+0.8 %", beckon: T.beckon, end: T.wipe1[1] },
+  { t0: T.two2, rope: T.rope2, swell: T.swell2, warm: 0.75, gap: "+0.6 %", beckon: null, end: T.wipe2[1] },
+];
 const hourglass = (c, x, y) => {
   K.coin(c, x, y, 34, { color: P.ETH, seed: 870 });
   K.shape(c, [[x - 13, y - 18], [x + 13, y - 18], [x, y], [x + 13, y + 18], [x - 13, y + 18], [x, y]], { fill: P.paper, w: 3, boil: 0.6, seed: 871, gap: 0 });
 };
+const futX = (t, V) => K.tw(t, V.t0 - 0.4, V.t0 + 0.9, 2350, 1360, K.E.out3) + (V.beckon ? K.tw(t, V.beckon, V.beckon + 2.5, 0, 1100, K.E.in3) : 0);
 
-function crabTwoShips(t) {
+function crabTwoShips(t, V) {
+  if (V.beckon && t > V.beckon - 0.25) return crabBeckon(t);
   const b = pulseB(t), st = { seed: 500, blink: K.blinkAt(t, 21), mouth: "smile", look: [1, -0.3], squash: 0.1 * b - 0.03 };
   st.clawL = { x: -72, y: -42, open: 0.15 };
   st.clawR = { x: 92, y: -70 - 18 * b, open: 0.3 + 0.4 * b };
-  const p = K.ss(T.basis - 0.3, T.basis, t) * (1 - K.ss(T.swell - 0.2, T.swell + 0.1, t));
+  const p = K.ss(V.rope - 0.3, V.rope, t) * (1 - K.ss(V.swell - 0.2, V.swell + 0.1, t));
   if (p > 0) { st.clawR = { x: K.lerp(92, 118, p), y: K.lerp(-70, -120, p), open: 0.05, rot: -18 }; st.mouth = "o"; st.brow = 0.8 * p; }
-  const sw = K.ss(T.swell - 0.1, T.swell + 0.3, t);
+  const sw = K.ss(V.swell - 0.1, V.swell + 0.3, t);
   if (sw > 0) {
     st.mouth = "grin"; st.look = [0.2, -1];
     st.clawL = { x: -100, y: K.lerp(-42, -150 - 20 * b, sw), open: 0.3 + 0.6 * b };
@@ -26,30 +33,34 @@ function crabTwoShips(t) {
   return st;
 }
 
-const SIDE_TWO = (t) => {
-  const sw = K.ss(T.swell - 0.15, T.swell + 0.6, t);
+const SIDE_TWO = (t, V) => {
+  const sw = K.ss(V.swell - 0.15, V.swell + 0.6, t) * (V.beckon ? 1 - K.ss(V.beckon, V.beckon + 1.2, t) : 1);
   const our = { x: 640, y: 930, s: 1.4 };
+  /* "sail with me!": the camera closes on the crab */
+  const bk = V.beckon ? K.ss(V.beckon - 0.2, V.beckon + 0.9, t) : 0;
   return {
-    horizon: 600, warm: 0.25, zoom: K.tw(t, T.irisOut[0], T.wipe[1], 1.0, 1.08, K.E.inOut), fx: 960, fy: 700, drift: 300,
-    shipX: our.x, shipY: our.y, shipS: our.s, crabS: 1.15, crab: crabTwoShips, coins: 15, swell: sw,
+    horizon: 600, warm: V.warm, sunY: V.warm > 0.5 ? 430 : 250, sunX: V.warm > 0.5 ? 1560 : 1480,
+    zoom: K.lerp(K.tw(t, V.t0 - 0.5, V.end, 1.0, 1.08, K.E.inOut), 1.75, bk), fx: K.lerp(960, 560, bk), toX: K.lerp(960, 820, bk), fy: K.lerp(700, 640, bk), drift: 300,
+    shipX: our.x, shipY: our.y, shipS: our.s, crabS: 1.15, crab: (tt) => crabTwoShips(tt, V), coins: V.beckon ? 15 : 22, swell: sw,
     behind: (tt, bob, rock) => {
-      K.ship(ctx, futX(tt), FUT.y + bob * 0.9, FUT.s, { rock, sail: 1, flagColor: P.ETH, emblem: hourglass, seed: 700 });
+      const fx = futX(tt, V); if (fx > 2500) return;
+      K.ship(ctx, fx, FUT.y + bob * 0.9, FUT.s, { rock, sail: 1, flagColor: P.ETH, emblem: hourglass, seed: 700 });
     },
     front: (tt, bob) => {
       /* basis rope between the masts (sags, bobs with both ships) */
-      const ra = K.inv(T.basis - 0.1, T.basis + 0.4, tt); if (ra <= 0) return;
-      const A = [our.x + 40 * our.s, our.y + bob - 250 * our.s], B = [futX(tt) + 40 * FUT.s, FUT.y + bob * 0.9 - 250 * FUT.s];
+      const ra = K.inv(V.rope - 0.1, V.rope + 0.4, tt) * (V.beckon ? 1 - K.inv(V.beckon, V.beckon + 0.3, tt) : 1); if (ra <= 0) return;
+      const fx = futX(tt, V), A = [our.x + 40 * our.s, our.y + bob - 250 * our.s], B = [fx + 40 * FUT.s, FUT.y + bob * 0.9 - 250 * FUT.s];
       const pts = [];
       for (let i = 0; i <= 12; i++) { const u = (i / 12) * K.E.out3(ra); pts.push([K.lerp(A[0], B[0], u), K.lerp(A[1], B[1], u) + Math.sin(u * Math.PI) * 60]); }
       K.line(ctx, pts, { stroke: P.ink, w: 12, boil: 1.2, seed: 880, gap: 0 });
       K.line(ctx, pts, { stroke: P.profit, w: 6, boil: 1.2, seed: 881, gap: 0.15 });
       const m = [K.lerp(A[0], B[0], 0.5), K.lerp(A[1], B[1], 0.5) + 60];
-      K.tag(ctx, m[0], m[1] - 6, "+0.8 %", { a: K.inv(T.basis + 0.2, T.basis + 0.6, tt), hot: true, size: 44, seed: 882 });
-      /* one swell, two ships: matching bob marks */
-      const sw = K.ss(T.swell - 0.15, T.swell + 0.6, tt);
-      if (sw > 0) [our.x, futX(tt)].forEach((x, i) => {
+      K.tag(ctx, m[0], m[1] - 6, V.gap, { a: K.inv(V.rope + 0.2, V.rope + 0.6, tt) * ra, hot: true, size: 44, seed: 882 });
+      /* one swell, two ships: matching foam marks under both hulls */
+      const sw2 = K.ss(V.swell - 0.15, V.swell + 0.6, tt);
+      if (sw2 > 0) [our.x, fx].forEach((x, i) => {
         const y = (i ? FUT.y : our.y) + bob * (i ? 0.9 : 1) + 60;
-        K.line(ctx, [[x - 120, y], [x - 40, y - 14], [x + 40, y - 14], [x + 120, y]], { stroke: P.foam, w: 6, boil: 1.6, seed: 890 + i, gap: 0, alpha: sw });
+        K.line(ctx, [[x - 120, y], [x - 40, y - 14], [x + 40, y - 14], [x + 120, y]], { stroke: P.foam, w: 6, boil: 1.6, seed: 890 + i, gap: 0, alpha: sw2 * ra });
       });
     },
   };

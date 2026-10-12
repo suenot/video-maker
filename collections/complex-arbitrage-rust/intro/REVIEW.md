@@ -1,6 +1,6 @@
 # Intro review log
 
-The intro is 20.1 s, 1920x1080, 30 fps, with the song muxed in (`song_20s.m4a`, about 126 BPM). There is also a silent copy of each render.
+The intro now runs the full song: 64.2 s, 1920x1080, 30 fps, with `song_full.m4a` muxed in (the whole `song_raw.mp4`, end fade from 62.4 s, two-pass loudnorm to -14.0 LUFS). There is also a silent copy of each render. Rounds 1-4 below are the earlier 20 s cut; rounds 5-7 are the full-song version.
 Each round comes from snapshots I looked at (`tools/snap.sh`, 12 to 17 frames, plus full-resolution crops).
 
 ## Round 1 (first build)
@@ -36,8 +36,37 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, 12 to 17 frames, p
 - Bug: the first build was all blank, because `T` was used before its definition in `10_setup.js`. Moved; the console error now also prints on the canvas.
 - Matrix shot: the ETH island sat under the matrix board. The camera now goes to z 0.42, with the triangle in the left half.
 
+## Round 5 (full song: structure)
+- Beat grid: librosa drifted through the verse, because the accordion off-beats confuse it. The tempo comes from line starts in the whisper (medium.en) word timings instead. The same chorus lines sit 22.9 s = 12 bars apart, so the bar is 1.9067 s (125.9 BPM). Downbeats are at 0.60 + n x 1.9067 s (`K.G.BARS`, 35 bars).
+- Sung lines, from whisper:
+  - verse: "A crab sails out" 5.9, "Through markets wide" 9.9, "Three ports in a loop" 13.7, "Haul in the spread" 17.6;
+  - chorus: 21.4 / 23.3 / 25.3 / 29.1;
+  - instrumental break: 32.8 - 44.1;
+  - chorus 2: 44.3 / 46.2 / 48.1 / 51.9; "Haul" 53.9, "Heave ho" 58.8, "Graph" 60.2, "Futures!" 62.3, fade.
+- New beats:
+  - cap tip with a wink, and a spark running along the hull rivets ("Rust-iron ship");
+  - coin flags pop on the horizon islands ("markets wide");
+  - the spyglass moves to "Three ports", and the lap pays out on "catch!";
+  - the crab beckons and winks on "sail with me!";
+  - a break of accordion jig, then a sail-cloth basis chart (futures converge to spot), then a dusk logbook typing a Rust Bellman-Ford cycle finder;
+  - chorus 2 is a fast lap (+0.92 %), the matrix stacks into a tensor, and two ships at sunset;
+  - the title lands on the last "sail with me!" (52.1 s); then a net of coins is hauled on every beat, dumped, and followed by jump, snap with medallions, cap tip and wave to the end.
+- Kit, additive only (an episode builder uses it): `st.wink`, and measured downbeats in `K.G.BARS`. Scene code stays in `intro/src`.
+
+## Round 6
+- At the 7 s push-in the crab was cut off at the left. The side camera gained `toX`, so a push-in also recentres.
+- The rivet sparks were too small to see. Each spark is now 34 px with a glow.
+- The horizon coins were tiny. Radius 38 -> 48.
+- The accordion covered the crab's face. It now sits in front of the belly, with zigzag dark bellows so it reads as an accordion and not a box.
+- The sail chart covered the crab's eyes. Chart 1060 x 480, raised to y 285.
+- The net was hard to see. It is 1.4x larger and further right.
+
+## Round 7
+- At zoom 0.92 the opening showed the canvas edge. Side zoom is never below 1.0 now.
+
 ## Known weaknesses
 - The crab's legs are simple 3-point limbs: readable, but less refined than the body and claws.
 - In the matrix shot the map tags are about 19 px. They are context only; the matrix shows the same numbers at 26 px.
 - The title-card crab is about 220 px wide. It is charming, but secondary to the banner.
 - One lint warning remains: the file is large, because it is built from the kit by design.
+- 52-58 s: the title card is dense (banner, net, coins). The banner never moves after it unrolls.

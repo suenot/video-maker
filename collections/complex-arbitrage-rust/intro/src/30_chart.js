@@ -1,19 +1,19 @@
 /* ============================================================
    INTRO 30 CHART SET: the archipelago as a graph. Islands = currencies,
-   routes = exchange rates. "Heave ho, the cycle flows": the loop glows and
-   the crab sails it. "Graph and matrix": every route's rate flies into a
-   rate matrix, and "the Rust-crab knows" which cells form the cycle.
+   routes = exchange rates. Verse: three ports, the prices don't match,
+   the crab sails the loop. Chorus: the cycle glows, the rates fly into a
+   matrix (chorus 2: the matrix stacks into a tensor) and the Rust-crab knows.
    ============================================================ */
 const EDGE_TRIM = 150, DOCK_TRIM = 175;
-const legDur1 = (T.lap1[1] - T.lap1[0]) / 3;
-const ARRIVALS = [1, 2, 3].map((k) => T.lap1[0] + k * legDur1);
+const LAPS = [T.lap1, T.lap2];
+const ARRIVALS = LAPS.flatMap((L) => [1, 2, 3].map((k) => L[0] + (k * (L[1] - L[0])) / 3));
 const endsOf = (e) => [[NODES[e[0]].x, NODES[e[0]].y], [NODES[e[1]].x, NODES[e[1]].y]];
 
 /* ship position on the loop: {x, y, heading} */
 function shipAt(t) {
-  let leg = 0, v = 0;
-  if (t >= T.lap1[1]) { leg = 2; v = 1; }
-  else if (t >= T.lap1[0]) { const k = (t - T.lap1[0]) / legDur1; leg = Math.min(2, Math.floor(k)); v = k - leg; }
+  let leg = 2, v = 1;
+  if (t < LAPS[0][0]) { leg = 0; v = 0; }
+  LAPS.forEach((L) => { if (t >= L[0] && t < L[1]) { const k = ((t - L[0]) / (L[1] - L[0])) * 3; leg = Math.min(2, Math.floor(k)); v = k - leg; } });
   const e = EDGES[LOOP[leg]], [A, B] = endsOf(e), L = Math.hypot(B[0] - A[0], B[1] - A[1]);
   const u0 = DOCK_TRIM / L, u = K.lerp(u0, 1 - u0, K.E.inOut(K.clamp(v, 0, 1)));
   const p = K.edgePoint(A, B, e[3], u);
@@ -21,18 +21,26 @@ function shipAt(t) {
 }
 const arrivedCount = (t) => ARRIVALS.filter((a) => t >= a).length;
 
+const MATRIX_CAM = { x: 2157, y: 840, z: 0.42 };
 const camB = K.mkTrack([
   [T.iris[0], { x: 1350, y: 250, z: 1.45 }],
-  [T.iris[1], { x: 1310, y: 760, z: 0.72 }],
-  [T.lap1[1], { x: 1300, y: 740, z: 0.75 }],
-  [at(4, 0.8), { x: 2157, y: 840, z: 0.42 }],
+  [T.iris[1], { x: 1310, y: 720, z: 0.74 }],
+  [T.lap1[1], { x: 1300, y: 720, z: 0.76 }],
+  [T.hot, { x: 1300, y: 760, z: 0.74 }],
+  [at(11, 3), { x: 1310, y: 930, z: 0.6 }],
+  [at(12, 0.6), MATRIX_CAM],
   [T.irisOut[1], { x: 2120, y: 850, z: 0.44 }],
+  [T.iris2[0], { x: 420, y: 760, z: 1.5 }],
+  [T.iris2[1] + 0.3, { x: 1300, y: 740, z: 0.74 }],
+  [T.lap2[1], { x: 1300, y: 740, z: 0.76 }],
+  [at(24, 0.6), MATRIX_CAM],
+  [T.irisOut2[1], { x: 2120, y: 850, z: 0.44 }],
 ]);
 function camChart(t) { const c = camB(t); return { x: c.x, y: c.y, z: c.z, rot: 0 }; }
 
 /* crab pose on the ship in the chart view */
 function crabChart(t) {
-  const b = pulseB(t), rich = K.ss(T.lap1[1], T.lap1[1] + 0.4, t);
+  const b = pulseB(t), rich = K.ss(T.lap1[1], T.lap1[1] + 0.4, t) * (1 - K.ss(T.lap2[0] - 0.3, T.lap2[0], t)) + K.ss(T.lap2[1], T.lap2[1] + 0.3, t);
   const st = { seed: 500, blink: K.blinkAt(t, 5), mouth: rich > 0.5 ? "grin" : "smile", look: [0.6, -0.2], squash: 0.12 * b - 0.04 };
   st.clawL = { x: -72, y: -44, open: 0.15 };
   st.clawR = { x: 92, y: -70 - 18 * b, open: 0.3 + 0.4 * b };
@@ -48,13 +56,22 @@ function crabChart(t) {
 const MX = { order: ["USDT", "BTC", "ETH", "SOL", "EUR"], x: 1100, y: 150, head: 130, cw: 116, hh: 70, ch: 84, pad: 20 };
 MX.w = MX.pad * 2 + MX.head + MX.cw * 5; MX.h = MX.pad * 2 + MX.hh + MX.ch * 5;
 const cellXY = (r, c) => [MX.x + MX.pad + MX.head + MX.cw * (c + 0.5), MX.y + MX.pad + MX.hh + MX.ch * (r + 0.5)];
-const FLY = EDGES.map((e, i) => ({ r: MX.order.indexOf(e[0]), c: MX.order.indexOf(e[1]), v: e[2], t0: T.fly + (i * K.beatLen()) / 3, loop: LOOP.indexOf(i) >= 0, i }));
+const FLY = EDGES.map((e, i) => ({ r: MX.order.indexOf(e[0]), c: MX.order.indexOf(e[1]), v: e[2], t0: T.fly + bl(i / 4), loop: LOOP.indexOf(i) >= 0, i }));
 const FLY_DUR = 0.42;
 
 function drawMatrix(t, cam) {
-  const a = K.inv(T.matrix, T.matrix + 0.45, t); if (a <= 0) return;
+  const second = t >= T.tensor;
+  if (!second && t >= T.irisOut[1]) return;
+  const a = second ? K.inv(T.tensor, T.tensor + 0.4, t) : K.inv(T.matrix, T.matrix + 0.45, t); if (a <= 0) return;
   const s = K.E.back(a, 2), cx = MX.x + MX.w / 2, cy = MX.y + MX.h / 2;
   K.screen(ctx); ctx.save(); ctx.translate(cx, cy); ctx.scale(s, s); ctx.translate(-cx, -cy);
+  /* chorus 2: the matrix becomes a tensor, two more sheets slide in behind on the beat */
+  if (second) for (let k = 2; k >= 1; k--) {
+    const g = K.E.back(K.inv(T.tensor + bl(k), T.tensor + bl(k) + 0.35, t), 2); if (g <= 0) continue;
+    const ox = 34 * k * g, oy = -30 * k * g;
+    K.shape(ctx, K.rectPts(MX.x + ox, MX.y + oy, MX.w, MX.h, 4), { fill: K.shadeC(P.paper, -0.06 * k), w: 5, boil: 1.4, seed: 860 + k, shade: { color: P.paperShade, dx: -10, dy: -10 } });
+    for (let i = 0; i < 5; i++) K.text(ctx, MX.order[i], MX.x + ox + MX.pad + MX.head + MX.cw * (i + 0.5), MX.y + oy + 30, { size: 22, weight: 800, fill: K.shadeC(P[MX.order[i]], -0.25), alpha: 0.55 });
+  }
   /* parchment */
   const edge = [];
   for (let i = 0; i <= 10; i++) edge.push([MX.x + (MX.w * i) / 10, MX.y + K.hs(i, 4) * 4]);
@@ -63,7 +80,7 @@ function drawMatrix(t, cam) {
   for (let i = 7; i >= 0; i--) edge.push([MX.x + K.hs(i + 60, 4) * 4, MX.y + (MX.h * i) / 7]);
   K.shape(ctx, edge, { fill: P.paper, w: 5, boil: 1.4, seed: 820, shade: { color: P.paperShade, dx: -12, dy: -12 } });
   /* loop cells glow once the crab "knows" */
-  const know = K.inv(T.knows + 0.2, T.knows + 0.5, t);
+  const know = second ? K.inv(T.knows2 + 0.2, T.knows2 + 0.5, t) : K.inv(T.knows + 0.2, T.knows + 0.5, t);
   if (know > 0) FLY.filter((f) => f.loop).forEach((f, k) => {
     const [x, y] = cellXY(f.r, f.c), pz = 1 + 0.08 * pulseB(t - k * 0.08);
     ctx.save(); ctx.globalAlpha = know * 0.9;
@@ -88,7 +105,7 @@ function drawMatrix(t, cam) {
   ctx.restore();
   /* rates in flight: from the route tag on the map to their cell */
   FLY.forEach((f) => {
-    const u = K.inv(f.t0, f.t0 + FLY_DUR, t); if (u <= 0 || u >= 1) return;
+    const u = K.inv(f.t0, f.t0 + FLY_DUR, t); if (u <= 0 || u >= 1 || second) return;
     const e = EDGES[f.i], [A, B] = endsOf(e), q = K.edgePoint(A, B, e[3], e[5] || 0.5);
     const S = K.toScreen(q[0], q[1] - 6), D = cellXY(f.r, f.c), w = K.E.inOut(u);
     const x = K.lerp(S[0], D[0], w), y = K.lerp(S[1], D[1], w) - Math.sin(w * Math.PI) * 120;
@@ -98,8 +115,9 @@ function drawMatrix(t, cam) {
 
 /* the crab pops up beside the matrix and points at the cycle */
 function drawKnowingCrab(t) {
-  const a = K.inv(T.knows - 0.35, T.knows + 0.1, t); if (a <= 0) return;
-  const out = K.inv(T.irisOut[0] - 0.1, T.irisOut[0] + 0.25, t);
+  const W = t >= T.tensor ? [T.knows2, T.irisOut2[0]] : [T.knows, T.irisOut[0]];
+  const a = K.inv(W[0] - 0.35, W[0] + 0.1, t); if (a <= 0) return;
+  const out = K.inv(W[1] - 0.1, W[1] + 0.25, t);
   const y = K.lerp(1330, 1010, K.E.back(a, 1.8)) + 300 * K.E.in3(out), x = 990, s = 1.35;
   const target = cellXY(0, 1), b = pulseB(t);
   K.screen(ctx);
@@ -148,7 +166,7 @@ function drawChart(t) {
   const plankA = K.inv(T.lap1[0] - 0.2, T.lap1[0] + 0.3, t);
   if (plankA > 0) {
     const bumpT = ARRIVALS.filter((a) => t >= a).pop(), bump = bumpT ? Math.exp(-8 * (t - bumpT)) : 0;
-    const gain = n >= 3 ? "+0.46 %" : "";
+    const gain = n >= 6 ? "+0.92 %" : n >= 3 ? "+0.46 %" : "";
     ctx.save(); ctx.translate(1320, 640); ctx.scale(1 + 0.12 * bump, 1 + 0.12 * bump);
     K.plank(ctx, 0, 0, 640, gain ? 190 : 130, gain ? [HOLD[n], gain] : [HOLD[n]], { a: plankA, size: 56, seed: 11, colors: [P.ink, "#2f8a3e"] });
     ctx.restore();

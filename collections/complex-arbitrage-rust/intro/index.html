@@ -76,12 +76,12 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="20.1" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="64.2" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div id="title" data-layout-allow-overlap></div>
       <div class="ov" id="vig"></div>
       <div class="ov" id="grain"></div>
-      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="20.1" data-track-index="10" data-volume="1"></audio>
+      <audio id="song" src="song_full.m4a" data-start="0" data-duration="64.2" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="r5">Aa Бб 0</span><span class="r8">Aa Бб 0</span><span class="r9">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span><span class="sc">复杂套利</span><span class="tc">複雜套利</span></div>
     </div>
     <script>
@@ -220,6 +220,9 @@ var CK = window.CK || (window.CK = {});
     seaFar: "#5fb3c4", seaMid: "#2f8fa8", seaDeep: "#1d6a86", seaNight: "#16506a", foam: "#f7f3e6",
     /* land */
     sand: "#f2d38d", sandDark: "#d4ac5e", grass: "#73b351", grassDark: "#4c8a39", rock: "#9a8a78", palm: "#3f8a3a", trunk: "#8a5a32",
+    /* parrot (first mate, host B) */
+    parrot: "#5fbf4a", parrotDark: "#3c8a33", parrotLight: "#9ad97a", parrotWing: "#2f7fc0", parrotWingDark: "#1f5a8c",
+    parrotBelly: "#ffe08a", beak: "#efe2c0", beakDark: "#c9b98e", crest: "#f79a5c",
     /* data / explainer */
     route: "#fff7e0",       /* a plain graph edge (rope) */
     profit: "#ffc93c",      /* the winning cycle, gains */
@@ -732,8 +735,9 @@ var CK = window.CK || (window.CK = {});
      lean       deg    whole body tilt around the feet
      hop        px     lift off the ground (legs dangle)
      look       [dx, dy] pupils, -1..1
-     blink      0..1   (1 = closed)
+     blink      0..1   (1 = closed); wink 0..1 closes only the viewer-left eye
      mouth      "smile" | "open" | "grin" | "o"
+     talk       0..1   talking mouth opening (overrides mouth while > 0.06)
      clawL/R    { x, y, open 0..1, rot }  target of the claw tip in local space
      hat        true | false,  hatTip deg, hatLift px
      hold       "spyglass" in right claw
@@ -779,7 +783,7 @@ var CK = window.CK || (window.CK = {});
   K.crab = function (ctx, x, y, s, st) {
     st = st || {};
     const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk; /* keep volume */
-    const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1);
+    const hop = st.hop || 0, look = st.look || [0, 0], blinkAll = clamp(st.blink || 0, 0, 1);
     const seed = st.seed || 500;
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
     ctx.rotate(((st.lean || 0) * Math.PI) / 180);
@@ -812,8 +816,13 @@ var CK = window.CK || (window.CK = {});
     /* cheeks */
     [-1, 1].forEach((sd, i) => { ctx.save(); ctx.globalAlpha = 0.5; K.shape(ctx, K.ellipsePts(sd * 40, 4, 10, 6, 8), { fill: "#ff8f7a", stroke: null, w: 0, boil: 0.5, seed: seed + 8 + i }); ctx.restore(); });
     /* mouth */
-    const m = st.mouth || "smile";
-    if (m === "smile") K.line(ctx, [[-22, 4], [-10, 14], [10, 14], [22, 4]], { stroke: P.ink, w: 4.5, boil: 0.9, seed: seed + 11, gap: 0 });
+    const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1);
+    if (talk > 0.06) { /* talking: open mouth sized by loudness (narration sync) */
+      const mw = 12 + 9 * talk, mh = 3 + 14 * talk;
+      K.shape(ctx, [[-mw, 6], [-mw * 0.5, 6 - 2 * talk], [mw * 0.5, 6 - 2 * talk], [mw, 6], [mw * 0.6, 6 + mh], [0, 8 + mh * 1.05], [-mw * 0.6, 6 + mh]], { fill: "#7a2a1a", w: 4, boil: 0.9, seed: seed + 15, gap: 0 });
+      if (talk > 0.35) K.shape(ctx, K.ellipsePts(0, 6 + mh * 0.85, mw * 0.42, mh * 0.22, 8), { fill: "#e0705a", stroke: null, w: 0, boil: 0.4, seed: seed + 16 });
+    }
+    else if (m === "smile") K.line(ctx, [[-22, 4], [-10, 14], [10, 14], [22, 4]], { stroke: P.ink, w: 4.5, boil: 0.9, seed: seed + 11, gap: 0 });
     else if (m === "grin") K.shape(ctx, [[-26, 2], [26, 2], [14, 20], [0, 23], [-14, 20]], { fill: "#7a2a1a", w: 4, boil: 0.9, seed: seed + 12, gap: 0 });
     else if (m === "open") K.shape(ctx, K.ellipsePts(0, 12, 14, 12, 10), { fill: "#7a2a1a", w: 4, boil: 0.9, seed: seed + 13, gap: 0 });
     else if (m === "o") K.shape(ctx, K.ellipsePts(0, 12, 7, 8, 8), { fill: "#7a2a1a", w: 3.5, boil: 0.7, seed: seed + 14, gap: 0 });
@@ -828,6 +837,7 @@ var CK = window.CK || (window.CK = {});
     }
     /* eyes */
     eyes.forEach((e, i) => {
+      const blink = i === 0 ? Math.max(blinkAll, clamp(st.wink || 0, 0, 1)) : blinkAll; /* wink closes the viewer-left eye */
       const r = 18, ry = r * (1 - 0.92 * blink);
       K.shape(ctx, K.ellipsePts(e[0], e[1], r, Math.max(1.5, ry), 14), { fill: P.eye, w: 4, boil: 0.8, seed: seed + 40 + i, gap: 0 });
       if (blink < 0.6) {
@@ -870,13 +880,115 @@ var CK = window.CK || (window.CK = {});
   };
 
   /* convenience: blink curve with seeded random blink times, 0..1 */
+  /* works for any t (long episode scenes): only the slots around t are checked */
   K.blinkAt = function (t, seed) {
     let b = 0;
-    for (let i = 0; i < 12; i++) {
+    const i0 = Math.max(0, Math.floor((t - 0.8) / 1.9) - 1);
+    for (let i = i0; i < i0 + 3; i++) {
       const tb = 0.8 + i * 1.9 + K.hash(i, seed || 7) * 1.1, d = t - tb;
       if (d > 0 && d < 0.16) b = Math.max(b, Math.sin((d / 0.16) * Math.PI));
     }
     return b;
+  };
+})(CK);
+
+/* ============================================================
+   KIT 42 PARROT: "Pip", the first mate (episode co-host, host B).
+   Local space: feet grip a perch at y = 0, faces the viewer (3/4 body).
+   Proportions (scale 1): body 76 x 104, head r 36 at (0, -138),
+   beak 26 long, wings 34 x 84, tail 70. About 0.8x the crab's height.
+   Pose state (all optional):
+     squash   -1..1   volume kept (like the crab)
+     lean     deg     tilt around the feet
+     hop      px      lift off the perch
+     look     [dx, dy] pupils, -1..1
+     blink    0..1
+     talk     0..1    beak opening (narration sync)
+     wingL/R  0..1    wing raise (1 = straight up, a "point" or a flap)
+     brow     -1..1.5
+     exclaim  0..1    "!" pop
+     head     deg     head tilt (curious cock of the head)
+   ============================================================ */
+var CK = window.CK || (window.CK = {});
+(function (K) {
+  const P = K.P, { clamp } = K;
+
+  K.parrot = function (ctx, x, y, s, st) {
+    st = st || {};
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
+    const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1), talk = clamp(st.talk || 0, 0, 1);
+    const seed = st.seed || 700;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    /* tail: two long feathers hanging behind the perch */
+    [[-10, 1], [8, -1]].forEach((f, i) => {
+      const sw = Math.sin(K.now * 1.7 + i) * 4;
+      K.shape(ctx, [[f[0] - 9, -40 - hop], [f[0] + 9, -40 - hop], [f[0] + 8 + sw, 36], [f[0] + sw, 58], [f[0] - 8 + sw, 36]], { fill: i ? P.parrotWing : P.crest, w: 4, boil: 1, seed: seed + i, shade: { color: i ? P.parrotWingDark : P.rustDark, dx: 5, dy: 0 } });
+    });
+    /* feet on the perch */
+    [-1, 1].forEach((sd, i) => K.line(ctx, [[sd * 14, -14 - hop], [sd * 12, -2], [sd * 6, 4], [sd * 20, 4]], { stroke: P.inkSoft, w: 5, boil: 0.8, seed: seed + 5 + i, gap: 0 }));
+    ctx.save(); ctx.translate(0, -16 - hop); ctx.scale(sxk, syk);
+    /* wings (behind the body edge, raise around the shoulder) */
+    const wing = (sd, up, ws) => {
+      ctx.save(); ctx.translate(sd * 30, -78); ctx.rotate(-sd * up * 2.3);
+      const pts = [[0, -10], [sd * 14, -6], [sd * 20, 24], [sd * 16, 56], [sd * 6, 76], [-sd * 4, 58], [-sd * 6, 18]];
+      K.shape(ctx, pts, { fill: P.parrotDark, w: 4.5, boil: 1.1, seed: ws, shade: { color: P.parrotWing, dx: 0, dy: -24 } });
+      K.line(ctx, [[sd * 2, 40], [sd * 10, 50], [sd * 14, 40]], { stroke: P.ink, w: 2.5, boil: 0.8, seed: ws + 1, gap: 0 });
+      ctx.restore();
+    };
+    /* body */
+    K.shape(ctx, K.ellipsePts(0, -54, 38, 54, 16), { fill: P.parrot, w: 5, boil: 1.3, seed: seed + 10, shade: { color: P.parrotDark, dx: -9, dy: -8 }, hatch: { ang: 0.9, gap: 11, alpha: 0.18, color: P.parrotDark } });
+    K.shape(ctx, K.ellipsePts(3, -42, 24, 34, 12), { fill: P.parrotBelly, w: 3, boil: 1, seed: seed + 11, gap: 0.2 });
+    wing(-1, clamp(st.wingL || 0, 0, 1), seed + 20);
+    wing(1, clamp(st.wingR || 0, 0, 1), seed + 30);
+    /* navy neckerchief (matches the captain's cap) */
+    K.shape(ctx, [[-24, -100], [24, -100], [6, -80], [0, -70], [-6, -80]], { fill: P.capNavy, w: 3.5, boil: 0.9, seed: seed + 12, shade: { color: P.capNavyDark, dx: -5, dy: 0 } });
+    /* head */
+    ctx.save(); ctx.translate(0, -128); ctx.rotate(((st.head || 0) * Math.PI) / 180);
+    /* crest: three feathers that wobble */
+    for (let i = 0; i < 3; i++) {
+      const a = -0.5 + i * 0.4 + Math.sin(K.now * 2.3 + i) * 0.06, L = 34 + i * 4;
+      const bx = -6 + i * 6, by = -30;
+      K.shape(ctx, [[bx - 5, by], [bx + Math.sin(a) * L - 3, by - Math.cos(a) * L], [bx + Math.sin(a) * L + 6, by - Math.cos(a) * L + 4], [bx + 6, by]], { fill: P.crest, w: 3.5, boil: 0.9, seed: seed + 40 + i });
+    }
+    K.shape(ctx, K.ellipsePts(0, -8, 38, 35, 16), { fill: P.parrot, w: 5, boil: 1.1, seed: seed + 13, shade: { color: P.parrotDark, dx: -7, dy: -7 } });
+    /* face patch (pale, macaw-like) */
+    [-1, 1].forEach((sd, i) => K.shape(ctx, K.ellipsePts(sd * 14, -12, 15, 14, 10), { fill: "#f5f2e6", stroke: null, w: 0, boil: 0.6, seed: seed + 50 + i }));
+    /* eyes */
+    [-1, 1].forEach((sd, i) => {
+      const ex = sd * 14, ey = -14, r = 11, ry = r * (1 - 0.92 * blink);
+      K.shape(ctx, K.ellipsePts(ex, ey, r, Math.max(1.5, ry), 12), { fill: P.eye, w: 3.5, boil: 0.7, seed: seed + 60 + i, gap: 0 });
+      if (blink < 0.6) {
+        const px = ex + look[0] * 4, py = ey + look[1] * 4 * (1 - blink);
+        K.shape(ctx, K.ellipsePts(px, py, 5.5, 6.2 * (1 - blink), 8), { fill: P.pupil, stroke: null, w: 0, boil: 0.4, seed: seed + 62 + i });
+        K.shape(ctx, K.ellipsePts(px + 2, py - 3, 2, 2, 6), { fill: "#ffffff", stroke: null, w: 0, boil: 0.2, seed: seed + 64 + i });
+      } else K.line(ctx, [[ex - r, ey], [ex, ey + 2], [ex + r, ey]], { stroke: P.ink, w: 3.5, boil: 0.5, seed: seed + 66 + i, gap: 0 });
+      const br = st.brow || 0;
+      K.line(ctx, [[ex - 10, ey - 17 - br * 4 + sd * br * 2], [ex + 10, ey - 17 - br * 4 - sd * br * 2]], { stroke: P.ink, w: 3.5, boil: 0.5, seed: seed + 68 + i, gap: 0 });
+    });
+    /* beak: lower mandible drops with talk, hooked upper beak on top */
+    ctx.save(); ctx.translate(0, 2); ctx.rotate(0.05 + talk * 0.32);
+    K.shape(ctx, [[-9, 0], [9, 0], [6, 12 + talk * 4], [0, 15 + talk * 5], [-6, 12 + talk * 4]], { fill: P.beakDark, w: 3.5, boil: 0.7, seed: seed + 70, gap: 0 });
+    ctx.restore();
+    if (talk > 0.1) K.shape(ctx, K.ellipsePts(0, 8 + talk * 6, 6, 3 + talk * 4, 8), { fill: "#7a2a1a", stroke: null, w: 0, boil: 0.4, seed: seed + 71 });
+    K.shape(ctx, [[-13, -4], [0, -10], [13, -4], [10, 10], [2, 24 - talk * 4], [-2, 14], [-10, 6]], { fill: P.beak, w: 4, boil: 0.8, seed: seed + 72, gap: 0, shade: { color: P.beakDark, dx: 4, dy: 0 } });
+    /* "!" */
+    if (st.exclaim > 0) {
+      const a = K.E.back(clamp(st.exclaim, 0, 1), 2.5);
+      ctx.save(); ctx.translate(52, -60); ctx.rotate(0.25); ctx.scale(a * 0.8, a * 0.8);
+      K.shape(ctx, [[-9, -52], [9, -52], [5, -10], [-5, -10]], { fill: P.gold, w: 4, boil: 1, seed: seed + 90, gap: 0 });
+      K.shape(ctx, K.ellipsePts(0, 4, 7, 7, 8), { fill: P.gold, w: 4, boil: 1, seed: seed + 91, gap: 0 });
+      ctx.restore();
+    }
+    ctx.restore(); /* head */
+    ctx.restore(); /* body */
+    ctx.restore();
+  };
+
+  /* a wooden perch post (the parrot stands at its top, y - h) */
+  K.perch = function (ctx, x, y, h, seed) {
+    K.limb(ctx, [[x, y], [x, y - h]], 12, P.woodDark, seed || 730);
+    K.limb(ctx, [[x - 44, y - h], [x + 44, y - h]], 10, P.wood, (seed || 730) + 1);
   };
 })(CK);
 
@@ -916,7 +1028,8 @@ var CK = window.CK || (window.CK = {});
 
   /* ---------- graph edge: a sea route between two points ----------
      p (draw progress), state "plain" | "hot" | "dim", bend (curvature, px),
-     label (rate text on a little flag), dir arrow at 60 % when hot */
+     label (rate text on a little flag), lu (its position 0..1 along the route),
+     arrow 0..1 (direction arrow on plain routes; hot routes always have one), au (arrow position), arrowS (size) */
   K.edgePoint = function (A, B, bend, u) {
     const mx = (A[0] + B[0]) / 2, my = (A[1] + B[1]) / 2, dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1;
     const C = [mx - (dy / L) * bend, my + (dx / L) * bend];
@@ -926,7 +1039,7 @@ var CK = window.CK || (window.CK = {});
     return [x, y, Math.atan2(ty, tx)];
   };
   K.edge = function (ctx, A, B, opt) {
-    const o = Object.assign({ p: 1, state: "plain", bend: 60, label: "", seed: 1, trim: 120, labelA: 1, w: 7, labelSize: 30, lu: 0.5 }, opt || {});
+    const o = Object.assign({ p: 1, state: "plain", bend: 60, label: "", seed: 1, trim: 120, labelA: 1, w: 7, labelSize: 30, lu: 0.5, arrow: 0, au: 0.62, arrowS: 1 }, opt || {});
     if (o.p <= 0) return;
     const L = Math.hypot(B[0] - A[0], B[1] - A[1]), u0 = clamp(o.trim / L, 0, 0.45), u1 = 1 - u0;
     const N = 28, pts = [];
@@ -943,10 +1056,12 @@ var CK = window.CK || (window.CK = {});
       K.line(ctx, [[a[0], a[1]], [b[0], b[1]]], { stroke: col, w: o.w, boil: 1.0, seed: o.seed + i, gap: 0, alpha });
     }
     /* arrow head */
-    if (hot && o.p >= 1) {
-      const q = K.edgePoint(A, B, o.bend, lerp(u0, u1, 0.62));
-      ctx.save(); ctx.translate(q[0], q[1]); ctx.rotate(q[2]);
-      K.shape(ctx, [[18, 0], [-12, -14], [-6, 0], [-12, 14]], { fill: P.profit, w: 4, boil: 0.8, seed: o.seed + 7, gap: 0 });
+    /* arrow head: always on hot routes; on plain / dim routes when arrow > 0 (0..1 pops it in) */
+    const arr = hot ? 1 : o.arrow || 0;
+    if (arr > 0 && o.p >= 1) {
+      const q = K.edgePoint(A, B, o.bend, lerp(u0, u1, o.au)), as = popS(arr) * o.arrowS;
+      ctx.save(); ctx.translate(q[0], q[1]); ctx.rotate(q[2]); ctx.scale(as, as);
+      K.shape(ctx, [[18, 0], [-12, -14], [-6, 0], [-12, 14]], { fill: hot ? P.profit : P.route, w: 4, boil: 0.8, seed: o.seed + 7, gap: 0, alpha });
       ctx.restore();
     }
     /* rate flag at the middle */
@@ -1133,43 +1248,82 @@ var CK = window.CK || (window.CK = {});
 })(CK);
 
 /* ============================================================
-   INTRO 10 SETUP: variables, title DOM, world data, timing (beat grid)
-   Song: song_20s.m4a, sea shanty ~126 BPM (beat 0.476 s, bar 1.906 s).
-   0.00-4.43 instrumental; 4.43 chorus: "Heave ho, the cycle flows" /
-   8.2 "Graph and matrix, the Rust-crab knows" / 11.9 "Futures, spot and
-   copula sea" / 15.7 "Complex arbitrage, sail with me!"; 19.3-20.1 fade.
-   All story times are K.at(bar, beat) on the measured downbeats below.
+   INTRO 10 SETUP: beat grid, story times, variables, title DOM, world data.
+   Song: song_full.m4a (song_raw.mp4 0 - 64.2 s, end fade 62.4 s, -14 LUFS),
+   a sea shanty at ~125.9 BPM: beat 0.4767 s, bar 1.9067 s, first downbeat 0.60 s
+   (tempo from line starts 23 bars apart; whisper word times in REVIEW.md).
+     0.0  instrumental intro
+     5.9  verse: "A crab sails out in a Rust-iron ship" / 9.9 "Through markets wide
+          on a currency trip" / 13.7 "Three ports in a loop and the prices don't
+          match" / 17.6 "Haul in the spread before the gap's too late to catch!"
+    21.4  chorus: "Heave ho, the cycle flows" / 23.3 "Graph and matrix, the
+          Rust-crab knows" / 25.3 "Futures, spot and copula sea" / 29.1
+          "Complex arbitrage, sail with me!"
+    33.0  instrumental break (accordion + fiddle)
+    44.3  chorus again / 51.9 "sail with me!" / 53.9 "Haul in the spread..."
+    58.8  "Heave ho..." / 60.2 "Graph and matrix..." / 62.3 "Futures!" (fade)
+   Story times are K.at(bar, beat); bar n starts at 0.60 + n * 1.9067 s.
    ============================================================ */
 const K = CK, P = K.P, at = K.at;
-K.G.BPM = 126;
-K.G.BARS = [0.60, 2.51, 4.43, 6.33, 8.24, 10.14, 12.05, 13.96, 15.86, 17.77, 19.68];
-const DUR = 20.1;
+K.G.BPM = 240 / 1.9067;
+K.G.BARS = Array.from({ length: 35 }, (_, n) => Math.round((0.60 + n * 1.9067) * 1000) / 1000);
+const DUR = 64.2;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+const bl = (k) => k * K.beatLen();
 
 /* ---------- story beats (on the song's downbeats) ---------- */
 const T = {
-  shipIn: [0, at(0, 3)],          /* 0 - 2.03 ship sails in (instrumental) */
-  spyUp: at(1, 0),                /* 2.51 crab raises the spyglass */
-  spot: at(1, 1.5),               /* 3.22 eyes pop: "!" */
-  iris: [at(1, 2), at(2, 0)],     /* 3.46 - 4.43 iris into the chart, lands on the chorus */
-  loopDraw: at(2, 0),             /* 4.43 "Heave ho, the cycle flows": the loop routes draw */
-  hot: at(2, 2),                  /* 5.38 loop glows */
-  others: at(2, 2.5),             /* the other routes draw, dimmed */
-  lap1: [at(2, 3), at(3, 3.5)],   /* 5.86 - 7.99, legs of 1.5 beats */
-  matrix: at(4, 0),               /* 8.24 "Graph and matrix": the rates fly into a matrix */
-  fly: at(4, 1),                  /* first tag leaves the map */
-  knows: at(5, 0.5),              /* 10.38 "the Rust-crab knows": crab points at the loop cells */
-  irisOut: [at(5, 3), at(6, 0)],  /* 11.57 - 12.05 iris closes on the ship */
-  twoShips: at(6, 0),             /* 12.05 "Futures, spot": a second ship alongside */
-  basis: at(6, 2),                /* 13.0 rope + basis tag between the ships */
-  swell: at(7, 0),                /* 13.96 "copula sea": both ships ride one swell */
-  wipe: [at(7, 2.4), at(8, 0)],   /* 15.10 - 15.86 wave wipe to the title set */
-  banner: [at(8, 0), at(8, 1.2)], /* 15.86 title hit: "Complex arbitrage, sail with me!" */
-  letters: at(8, 0.4),
-  jump: at(8, 2),
-  snap: [at(9, 0), at(9, 1)],
-  medals: at(9, 0),
-  hatTip: at(9, 2),
+  /* intro + verse 1: the side set */
+  shipIn: [0, at(1, 2)],          /* ship sails in */
+  pushIn: [at(2, 2), at(3, 2)],   /* camera closes on the crab for "A crab sails out" */
+  salute: at(3, 1),               /* cap tip */
+  rivets: at(4, 0),               /* "Rust-iron ship": sparks run along the rivets */
+  pullOut: [at(4, 3), at(5, 1)],  /* "Through markets wide": wide again */
+  markets: at(5, 1),              /* coin flags pop on the horizon islands, one per beat */
+  spyUp: at(7, 0),                /* "Three ports in a loop" */
+  spot: at(7, 2),
+  iris: [at(7, 3), at(8, 1)],     /* spyglass iris into the chart */
+  /* chart set, chorus 1 */
+  loopDraw: at(8, 0.5),           /* "the prices don't match": the three loop routes */
+  lap1: [at(9, 0), at(10, 2)],    /* "Haul in the spread": legs of 2 beats; gain on "catch!" */
+  hot: at(11, 0),                 /* "Heave ho, the cycle flows" */
+  others: at(11, 0.5),
+  matrix: at(12, 0),              /* "Graph and matrix" */
+  fly: at(12, 0.5),
+  knows: at(12, 2),               /* "the Rust-crab knows" */
+  irisOut: [at(12, 3.5), at(13, 0.5)],
+  /* two ships, chorus 1 */
+  two1: at(13, 0),                /* "Futures" */
+  rope1: at(14, 0),               /* "spot" */
+  swell1: at(14, 2),              /* "copula sea" */
+  beckon: at(15, 0),              /* "Complex arbitrage, sail with me!" */
+  wink: at(16, 1.5),
+  wipe1: [at(16, 2.4), at(17, 0)],
+  /* instrumental break */
+  jig: [at(17, 0), at(19, 0)],    /* accordion jig at sunset */
+  sail: [at(19, 0), at(21, 0)],   /* the sail becomes a chart */
+  log: [at(21, 0), at(23, 0)],    /* the captain's logbook: Rust */
+  spyUp2: at(22, 2),
+  iris2: [at(22, 3), at(23, 0)],
+  /* chart set, chorus 2 */
+  lap2: [at(23, 0), at(23, 3)],   /* fast lap, legs of 1 beat */
+  tensor: at(24, 0),              /* "Graph and matrix": matrix -> stacked tensor */
+  knows2: at(24, 2.5),
+  irisOut2: [at(24, 3.5), at(25, 0.5)],
+  /* two ships at sunset, chorus 2 */
+  two2: at(25, 0),
+  rope2: at(26, 0),
+  swell2: at(26, 2),
+  wipe2: [at(26, 2.4), at(27, 0)],
+  /* title: "Complex arbitrage, sail with me!" and the ending */
+  banner: [at(27, 0), at(27, 1.2)],
+  letters: at(27, 0.4),
+  haul: [at(28, 0), at(30, 0)],   /* "Haul in the spread": the net comes up on every beat */
+  dump: at(30, 0),
+  jump: at(30, 2),                /* "Heave ho" */
+  snap: [at(31, 0), at(31, 1)],   /* "Graph and matrix": snap + episode medallions */
+  medals: at(31, 0),
+  hatTip: at(32, 0),              /* "Futures!" */
 };
 
 /* ---------- variables (title text, language) ---------- */
@@ -1205,54 +1359,67 @@ const TITLE_LN = Array.from(titleEl.querySelectorAll(".ln"));
 
 /* ---------- chart-view world: currency islands (graph nodes) and routes (edges) ---------- */
 const NODES = {
-  USDT: { x: 300, y: 900, c: P.USDT, seed: 11, lighthouse: true, palms: 1, pop: at(1, 3) },
-  BTC: { x: 1350, y: 380, c: P.BTC, seed: 23, palms: 2, pop: at(1, 1.5) },
-  ETH: { x: 2300, y: 880, c: P.ETH, seed: 37, palms: 2, pop: at(1, 3.5) },
-  SOL: { x: 1480, y: 1440, c: P.SOL, seed: 41, palms: 1, pop: at(2, 1) },
-  EUR: { x: 520, y: 1620, c: P.EUR, seed: 53, palms: 2, pop: at(2, 1.5) },
+  USDT: { x: 300, y: 900, c: P.USDT, seed: 11, lighthouse: true, palms: 1, pop: at(8, 0) },
+  BTC: { x: 1350, y: 380, c: P.BTC, seed: 23, palms: 2, pop: at(7, 2.5) },
+  ETH: { x: 2300, y: 880, c: P.ETH, seed: 37, palms: 2, pop: at(8, 0.5) },
+  SOL: { x: 1480, y: 1440, c: P.SOL, seed: 41, palms: 1, pop: at(11, 0.5) },
+  EUR: { x: 520, y: 1620, c: P.EUR, seed: 53, palms: 2, pop: at(11, 1) },
 };
 const NODE_S = 0.9;
-/* rate on each route: price of the second asset in the first */
-const EB = (k) => T.loopDraw + k * K.beatLen() / 2;
+/* rate on each route: price of the second asset in the first. [from, to, rate, bend, drawAt, labelPos] */
+const EB = (k) => T.loopDraw + bl(k / 2);
+const OB = (k) => T.others + bl(k / 2);
 const EDGES = [
   ["USDT", "BTC", "62 000", -70, EB(0)],
   ["BTC", "ETH", "0.0525", -70, EB(1)],
   ["ETH", "USDT", "3 270", -60, EB(2)],
-  ["USDT", "SOL", "148.2", 60, EB(5)],
-  ["SOL", "ETH", "0.0453", 60, EB(6)],
-  ["BTC", "SOL", "418.6", 50, EB(7), 0.72],
-  ["EUR", "USDT", "1.084", 40, EB(8)],
-  ["EUR", "SOL", "136.9", -40, EB(9)],
+  ["USDT", "SOL", "148.2", 60, OB(0)],
+  ["SOL", "ETH", "0.0453", 60, OB(1)],
+  ["BTC", "SOL", "418.6", 50, OB(2), 0.72],
+  ["EUR", "USDT", "1.084", 40, OB(3)],
+  ["EUR", "SOL", "136.9", -40, OB(4)],
 ];
 const LOOP = [0, 1, 2]; /* indices of the profitable cycle in EDGES */
-/* the cargo: 1 USDT -> BTC -> ETH -> USDT */
-const HOLD = ["1.0000 USDT", "0.0000161 BTC", "0.000307 ETH", "1.0046 USDT"];
-
+/* the cargo: 1 USDT -> BTC -> ETH -> USDT, twice */
+const HOLD = ["1.0000 USDT", "0.0000161 BTC", "0.000307 ETH", "1.0046 USDT", "0.0000162 BTC", "0.000310 ETH", "1.0092 USDT"];
 
 /* ============================================================
    INTRO 20 SIDE SET: horizon, big ship, the crab close up.
-   Used twice: opening (0 - 4.6 s) and the title card (15 - 20 s).
+   Used by the opening + verse, the two-ship choruses, the accordion jig
+   and the title card. Crab poses are pure functions of t.
    ============================================================ */
 const pulseB = (t) => K.pulse(t, 1, 6);          /* every beat */
-const pulseA = (t) => K.pulse(t, 4, 5);          /* every accent (bar) */
+const pulseA = (t) => K.pulse(t, 4, 5);          /* every bar */
+const win = (t, a, b, fi, fo) => K.ss(a - (fi || 0.25), a, t) * (1 - K.ss(b - (fo || 0.25), b, t)); /* 0..1 inside [a, b] */
 
-/* crab pose for the opening */
+/* ---------- opening + verse: helm, cap tip, spyglass, "!" ---------- */
 function crabOpening(t) {
   const st = { seed: 500, blink: K.blinkAt(t, 3), mouth: "smile", look: [0.2, 0] };
   const bounce = pulseB(t);
   st.squash = 0.1 * bounce - 0.04;
-  /* left claw on the helm wheel (local: wheel is 55 px behind the crab), right claw waves to the beat */
+  /* left claw on the helm wheel, right claw waves to the beat */
   st.clawL = { x: -72, y: -42 + 4 * Math.sin(t * 3), open: 0.15 };
   st.clawR = { x: 92, y: -70 - 18 * bounce, open: 0.3 + 0.4 * bounce };
   st.look = [Math.sin(t * 1.3) * 0.8, -0.1];
+  /* "A crab sails out": tips the cap to us, wink-smile */
+  const sal = win(t, T.salute, T.salute + 1.4, 0.3, 0.35);
+  if (sal > 0) {
+    st.clawR = { x: K.lerp(92, 62, sal), y: K.lerp(-70, -150, sal), open: 0.35, rot: K.lerp(-40, -150, sal) };
+    st.hatLift = 18 * sal; st.hatTip = 14 * sal; st.look = [0, 0]; st.mouth = "grin";
+    st.wink = K.ss(T.salute + 0.2, T.salute + 0.35, t) * (1 - K.ss(T.salute + 0.9, T.salute + 1.05, t));
+  }
+  /* "Rust-iron ship": proud knock on the rail */
+  const rv = win(t, T.rivets, T.rivets + 1.2, 0.2, 0.3);
+  if (rv > 0) { st.clawR = { x: 70, y: K.lerp(-70, -12, rv) + 10 * pulseB(t), open: 0.1 }; st.look = [0.6, 0.8]; st.mouth = "grin"; }
+  /* "markets wide": looks around */
+  if (t > T.pullOut[0] && t < T.spyUp - 0.6) st.look = [Math.sin((t - T.pullOut[0]) * 2.2), -0.5];
   /* anticipation then spyglass up */
   const up = K.ss(T.spyUp - 0.25, T.spyUp + 0.2, t);
   if (t > T.spyUp - 0.6) st.squash += 0.22 * K.ss(T.spyUp - 0.6, T.spyUp - 0.25, t) * (1 - up);
   if (up > 0) {
     st.hold = "spyglass";
     st.clawR = { x: K.lerp(92, 38, up), y: K.lerp(-70, -150, up), open: 0.05, rot: K.lerp(-30, -14, up) };
-    st.look = [1, -0.6];
-    st.lean = -4 * up;
+    st.look = [1, -0.6]; st.lean = -4 * up;
   }
   /* discovery: eyes pop, mouth open, a little hop */
   const pop = K.ss(T.spot - 0.08, T.spot + 0.06, t) * (1 - K.ss(T.spot + 0.5, T.spot + 0.9, t));
@@ -1264,11 +1431,57 @@ function crabOpening(t) {
   return st;
 }
 
-/* crab pose for the title card */
+/* ---------- break: accordion jig (claws squeeze on every beat) ---------- */
+function crabJig(t) {
+  const b = pulseB(t), ph = ((t - K.G.BARS[0]) / K.beatLen()) % 2; /* two-beat bellows cycle */
+  const squeeze = 0.5 + 0.5 * Math.cos(ph * Math.PI);
+  const st = { seed: 500, blink: K.blinkAt(t, 17), mouth: "grin", look: [0.4 * Math.sin(t * 2), -0.4], squash: 0.14 * b - 0.05 };
+  st.hop = 10 * b; st.lean = 7 * Math.sin(t * Math.PI / K.beatLen() / 2);
+  st.clawL = { x: -58 - 34 * squeeze, y: -6, open: 0.05, rot: 180 };
+  st.clawR = { x: 58 + 34 * squeeze, y: -6, open: 0.05, rot: 0 };
+  st.accordion = squeeze;
+  return st;
+}
+/* accordion between the claws, drawn in crab-local space after the crab */
+function drawAccordion(c, st, s) {
+  if (st.accordion == null) return;
+  const L = st.clawL.x + 14, R = st.clawR.x - 14, y = st.clawL.y - (st.hop || 0), n = 7;
+  c.save(); c.scale(s, s); c.rotate(((st.lean || 0) * Math.PI) / 180);
+  K.shape(c, K.rectPts(L - 26, y - 28, 26, 56, 2), { fill: P.loss, w: 4, boil: 0.8, seed: 940 });
+  K.shape(c, K.rectPts(R, y - 28, 26, 56, 2), { fill: P.loss, w: 4, boil: 0.8, seed: 941 });
+  for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) K.dot(c, L - 18 + j * 10, y - 14 + i * 14, 3, P.paper, P.ink, 1.5, 942 + i * 2 + j);
+  /* bellows: zigzag edges, dark cloth, cream pleat lines */
+  const top = [], bot = [];
+  for (let i = 0; i <= n * 2; i++) { const x = K.lerp(L, R, i / (n * 2)); top.push([x, y - (i % 2 ? 18 : 26)]); bot.push([x, y + (i % 2 ? 18 : 26)]); }
+  K.shape(c, top.concat(bot.reverse()), { fill: P.capNavy, w: 4, boil: 0.8, seed: 950, gap: 0 });
+  for (let i = 1; i < n * 2; i++) K.line(c, [[K.lerp(L, R, i / (n * 2)), y - 20], [K.lerp(L, R, i / (n * 2)), y + 20]], { stroke: i % 2 ? P.paper : P.capNavyDark, w: 2.5, boil: 0.6, seed: 951 + i, gap: 0 });
+  c.restore();
+}
+
+/* ---------- chorus: "sail with me!" beckon + wink ---------- */
+function crabBeckon(t) {
+  const b = pulseB(t), st = { seed: 500, blink: K.blinkAt(t, 23), mouth: "grin", look: [0, 0], squash: 0.1 * b - 0.03 };
+  st.clawL = { x: -96, y: -50 - 10 * b, open: 0.25 };
+  const curl = 0.5 + 0.5 * Math.sin((t - T.beckon) * Math.PI / K.beatLen()); /* "come here" on the beat */
+  st.clawR = { x: 70 + 26 * curl, y: -120 + 30 * curl, open: 0.2 + 0.6 * (1 - curl), rot: -110 + 50 * curl };
+  st.wink = K.ss(T.wink - 0.08, T.wink + 0.05, t) * (1 - K.ss(T.wink + 0.45, T.wink + 0.6, t));
+  if (st.wink > 0.2) st.mouth = "smile";
+  return st;
+}
+
+/* ---------- title card: haul the net, jump, snap, cap tip, wave ---------- */
 function crabTitle(t) {
   const st = { seed: 500, blink: K.blinkAt(t, 9), mouth: "grin", look: [0.3, -0.5], squash: 0.08 * pulseB(t) - 0.03 };
   st.clawL = { x: -96, y: -50 - 10 * pulseB(t), open: 0.25 };
   st.clawR = { x: 96, y: -50 - 10 * pulseB(t + 0.25), open: 0.25 };
+  /* "Haul in the spread": both claws on the rope, lean back on every beat */
+  const hl = win(t, T.haul[0], T.haul[1], 0.3, 0.3);
+  if (hl > 0) {
+    const pull = pulseB(t);
+    st.clawL = { x: K.lerp(-96, 70, hl), y: K.lerp(-50, -40 - 30 * pull, hl), open: 0.1 };
+    st.clawR = { x: K.lerp(96, 110, hl), y: K.lerp(-50, -60 - 30 * pull, hl), open: 0.1 };
+    st.lean = -10 * hl * (0.4 + 0.6 * pull); st.mouth = pull > 0.5 ? "open" : "grin"; st.look = [1, 0.3]; st.squash += 0.12 * pull * hl;
+  }
   /* jump: crouch, stretch up, land squash */
   const j0 = T.jump - 0.3, j1 = T.jump + 0.55;
   if (t > j0 && t < j1 + 0.4) {
@@ -1279,7 +1492,7 @@ function crabTitle(t) {
     const land = K.inv(j1, j1 + 0.35, t);
     if (land > 0 && land < 1) st.squash += 0.4 * Math.sin(land * Math.PI) * (1 - land);
     st.clawL = { x: -100, y: -130 - 60 * h, open: 0.8 }; st.clawR = { x: 100, y: -130 - 60 * h, open: 0.8 };
-    st.mouth = "open"; st.look = [0, -1];
+    st.mouth = "open"; st.look = [0, -1]; st.lean = 0;
   }
   /* claw snap flourish on two beats: right claw high, snapping */
   const s0 = T.snap[0] - 0.3, s1 = T.hatTip - 0.2;
@@ -1289,32 +1502,36 @@ function crabTitle(t) {
     st.clawR = { x: K.lerp(96, 104, r), y: K.lerp(-50, -196, r), open: 0.1 + 0.85 * snapOpen, rot: K.lerp(0, -70, r) };
     st.look = [0.9, -0.8]; st.lean = -5 * r;
   }
-  /* hat tip with the left claw */
-  const h0 = T.hatTip - 0.2, h1 = T.hatTip + 0.8;
+  /* cap tip with the left claw */
+  const h0 = T.hatTip - 0.2, h1 = T.hatTip + 0.9;
   if (t > h0 && t < h1) {
     const r = K.ss(h0, T.hatTip, t) * (1 - K.ss(h1 - 0.3, h1, t));
     st.clawL = { x: K.lerp(-96, -66, r), y: K.lerp(-50, -146, r), open: 0.35, rot: K.lerp(180, -30, r) };
     st.hatLift = 16 * r; st.hatTip = -16 * r; st.blink = Math.max(st.blink, r > 0.6 ? 1 : 0); st.mouth = "grin";
   }
-  /* wave goodbye at the end */
-  if (t > T.hatTip + 0.9) {
-    const r = K.ss(T.hatTip + 0.9, T.hatTip + 1.2, t);
+  /* wave goodbye to the end */
+  if (t > T.hatTip + 1.0) {
+    const r = K.ss(T.hatTip + 1.0, T.hatTip + 1.3, t);
     st.clawR = { x: 110 + 16 * Math.sin((t - T.hatTip) * 9) * r, y: K.lerp(-50, -170, r), open: 0.5, rot: -80 + 20 * Math.sin((t - T.hatTip) * 9) * r };
   }
   return st;
 }
 
-/* t: time; warm 0..1 (golden light for the title); opts: ship placement + push-in */
+/* ---------- the side set ----------
+   o: horizon, warm, zoom/fx/fy (push-in), sunX/sunY, drift,
+      shipX/Y/S, crab(t) -> pose, crabS, coins, swell, behind/front hooks,
+      markets [{x, label, color, t0}] (coin flags on the horizon islands),
+      rivets (time the spark run starts) */
 function drawSide(t, o) {
   const horizon = o.horizon;
   K.screen(ctx);
   ctx.save();
-  /* gentle push-in: scale around a focus point (sky moves at half rate = depth) */
   const z = o.zoom || 1, fx = o.fx || 960, fy = o.fy || 600;
-  const camAt = (k) => { ctx.setTransform(1, 0, 0, 1, 0, 0); const zz = 1 + (z - 1) * k; ctx.translate(fx, fy); ctx.scale(zz, zz); ctx.translate(-fx, -fy); };
+  const toX = o.toX == null ? fx : o.toX; /* screen x the focus point moves to (lets a push-in recentre) */
+  const camAt = (k) => { ctx.setTransform(1, 0, 0, 1, 0, 0); const zz = 1 + (z - 1) * k; ctx.translate(K.lerp(fx, toX, k), fy); ctx.scale(zz, zz); ctx.translate(-fx, -fy); };
   camAt(0.4);
-  K.sideSky(ctx, horizon, { warm: o.warm, drift: o.drift || 0 });
-  /* gulls */
+  const sky = { warm: o.warm, drift: o.drift || 0 }; if (o.sunX != null) sky.sunX = o.sunX; if (o.sunY != null) sky.sunY = o.sunY;
+  K.sideSky(ctx, horizon, sky);
   for (let i = 0; i < 3; i++) {
     const gx = ((t * (70 + i * 12) + i * 520) % 2400) - 240, gy = 170 + i * 60 + Math.sin(t * 1.5 + i) * 14;
     K.gull(ctx, gx, gy, 0.9 - i * 0.15, i * 2);
@@ -1322,6 +1539,15 @@ function drawSide(t, o) {
   camAt(0.7);
   K.farIsland(ctx, 330, horizon, 320, 70, 1);
   K.farIsland(ctx, 1240, horizon, 200, 44, 2);
+  K.farIsland(ctx, 1720, horizon, 240, 52, 3);
+  (o.markets || []).forEach((m, i) => {
+    const a = K.inv(m.t0, m.t0 + 0.4, t); if (a <= 0) return;
+    const s = K.E.back(a, 2.4), bob = Math.sin(t * 2 + i) * 4;
+    K.line(ctx, [[m.x, horizon - 30], [m.x, horizon - 30 - 90 * s]], { stroke: P.ink, w: 4, boil: 0.6, seed: 960 + i, gap: 0 });
+    ctx.save(); ctx.translate(m.x, horizon - 140 * s + bob); ctx.scale(s, s);
+    K.coin(ctx, 0, 0, 48, { color: m.color, label: m.label, labelColor: P.paper, size: m.label.length > 3 ? 21 : 26, seed: 970 + i });
+    ctx.restore();
+  });
   K.sideSea(ctx, horizon, { warm: o.warm });
   K.waveRow(ctx, horizon + 70, { amp: 6, len: 90, speed: 18, color: "#4aa3b8", w: 2.5, seed: 21, crest: "#e6f4ee" });
   camAt(1);
@@ -1329,37 +1555,47 @@ function drawSide(t, o) {
   K.waveRow(ctx, horizon + 190, { amp: 9 + 10 * sw, len: 140 + 60 * sw, speed: 32, color: P.seaMid, w: 3.2, seed: 22 });
   const bob = 7 * Math.sin(t * 2.2) - 6 * pulseA(t) - 34 * sw * Math.sin(t * 2.4), rock = 2.4 * Math.sin(t * 1.6 + 0.4) + 3 * sw * Math.cos(t * 2.4);
   if (o.behind) o.behind(t, bob, rock);
-  /* the ship */
-  const crabFn = (c) => K.crab(c, 0, 0, o.crabS || 1, o.crab(t));
+  const cs = o.crabS || 1, pose = o.crab(t);
+  const crabFn = (c) => { K.crab(c, 0, 0, cs, pose); drawAccordion(c, pose, cs); };
   K.ship(ctx, o.shipX, o.shipY + bob, o.shipS, { rock, coins: o.coins || 0, crab: crabFn, sail: 1 });
   if (o.front) o.front(t, bob, rock);
-  /* coin glints on the pile */
+  /* "Rust-iron": a spark runs along the rivet row */
+  if (o.rivets != null) {
+    const d = t - o.rivets;
+    if (d > 0 && d < 1.3) for (let i = 0; i < 15; i++) {
+      const k = d * 18 - i; if (k < 0 || k > 3) continue;
+      const a = Math.sin((k / 3) * Math.PI);
+      K.glow(ctx, o.shipX + o.shipS * (-150 + i * 21), o.shipY + bob + o.shipS * -46, 50, "rgba(255,230,150,0.9)", a * 0.7);
+      K.sparkle(ctx, o.shipX + o.shipS * (-150 + i * 21), o.shipY + bob + o.shipS * -46, 34 * a, a, 980 + i);
+    }
+  }
   if (o.coins) for (let i = 0; i < 3; i++) {
     const ph = (t * 1.3 + i * 0.37) % 1, gx = o.shipX + o.shipS * (70 + 50 * K.hash(i, Math.floor(t * 1.3 + i * 0.37))), gy = o.shipY + bob - o.shipS * (90 + 30 * K.hash(i + 5, Math.floor(t * 1.3 + i * 0.37)));
     K.sparkle(ctx, gx, gy, 22 * Math.sin(ph * Math.PI), Math.sin(ph * Math.PI), i);
   }
-  /* front waves cover the hull bottom */
+  if (o.notes) o.notes(t, bob);
   K.waveRow(ctx, o.shipY + 30, { amp: 12 + 16 * sw, len: 180 + 80 * sw, speed: 44, color: "#2a86a0", w: 4, seed: 23 });
   K.waveRow(ctx, o.shipY + 110, { amp: 14 + 18 * sw, len: 220 + 90 * sw, speed: 60, color: P.seaDeep, w: 4.5, seed: 24 });
+  if (o.over) o.over(t, bob);
   ctx.restore();
 }
 
 /* ============================================================
    INTRO 30 CHART SET: the archipelago as a graph. Islands = currencies,
-   routes = exchange rates. "Heave ho, the cycle flows": the loop glows and
-   the crab sails it. "Graph and matrix": every route's rate flies into a
-   rate matrix, and "the Rust-crab knows" which cells form the cycle.
+   routes = exchange rates. Verse: three ports, the prices don't match,
+   the crab sails the loop. Chorus: the cycle glows, the rates fly into a
+   matrix (chorus 2: the matrix stacks into a tensor) and the Rust-crab knows.
    ============================================================ */
 const EDGE_TRIM = 150, DOCK_TRIM = 175;
-const legDur1 = (T.lap1[1] - T.lap1[0]) / 3;
-const ARRIVALS = [1, 2, 3].map((k) => T.lap1[0] + k * legDur1);
+const LAPS = [T.lap1, T.lap2];
+const ARRIVALS = LAPS.flatMap((L) => [1, 2, 3].map((k) => L[0] + (k * (L[1] - L[0])) / 3));
 const endsOf = (e) => [[NODES[e[0]].x, NODES[e[0]].y], [NODES[e[1]].x, NODES[e[1]].y]];
 
 /* ship position on the loop: {x, y, heading} */
 function shipAt(t) {
-  let leg = 0, v = 0;
-  if (t >= T.lap1[1]) { leg = 2; v = 1; }
-  else if (t >= T.lap1[0]) { const k = (t - T.lap1[0]) / legDur1; leg = Math.min(2, Math.floor(k)); v = k - leg; }
+  let leg = 2, v = 1;
+  if (t < LAPS[0][0]) { leg = 0; v = 0; }
+  LAPS.forEach((L) => { if (t >= L[0] && t < L[1]) { const k = ((t - L[0]) / (L[1] - L[0])) * 3; leg = Math.min(2, Math.floor(k)); v = k - leg; } });
   const e = EDGES[LOOP[leg]], [A, B] = endsOf(e), L = Math.hypot(B[0] - A[0], B[1] - A[1]);
   const u0 = DOCK_TRIM / L, u = K.lerp(u0, 1 - u0, K.E.inOut(K.clamp(v, 0, 1)));
   const p = K.edgePoint(A, B, e[3], u);
@@ -1367,18 +1603,26 @@ function shipAt(t) {
 }
 const arrivedCount = (t) => ARRIVALS.filter((a) => t >= a).length;
 
+const MATRIX_CAM = { x: 2157, y: 840, z: 0.42 };
 const camB = K.mkTrack([
   [T.iris[0], { x: 1350, y: 250, z: 1.45 }],
-  [T.iris[1], { x: 1310, y: 760, z: 0.72 }],
-  [T.lap1[1], { x: 1300, y: 740, z: 0.75 }],
-  [at(4, 0.8), { x: 2157, y: 840, z: 0.42 }],
+  [T.iris[1], { x: 1310, y: 720, z: 0.74 }],
+  [T.lap1[1], { x: 1300, y: 720, z: 0.76 }],
+  [T.hot, { x: 1300, y: 760, z: 0.74 }],
+  [at(11, 3), { x: 1310, y: 930, z: 0.6 }],
+  [at(12, 0.6), MATRIX_CAM],
   [T.irisOut[1], { x: 2120, y: 850, z: 0.44 }],
+  [T.iris2[0], { x: 420, y: 760, z: 1.5 }],
+  [T.iris2[1] + 0.3, { x: 1300, y: 740, z: 0.74 }],
+  [T.lap2[1], { x: 1300, y: 740, z: 0.76 }],
+  [at(24, 0.6), MATRIX_CAM],
+  [T.irisOut2[1], { x: 2120, y: 850, z: 0.44 }],
 ]);
 function camChart(t) { const c = camB(t); return { x: c.x, y: c.y, z: c.z, rot: 0 }; }
 
 /* crab pose on the ship in the chart view */
 function crabChart(t) {
-  const b = pulseB(t), rich = K.ss(T.lap1[1], T.lap1[1] + 0.4, t);
+  const b = pulseB(t), rich = K.ss(T.lap1[1], T.lap1[1] + 0.4, t) * (1 - K.ss(T.lap2[0] - 0.3, T.lap2[0], t)) + K.ss(T.lap2[1], T.lap2[1] + 0.3, t);
   const st = { seed: 500, blink: K.blinkAt(t, 5), mouth: rich > 0.5 ? "grin" : "smile", look: [0.6, -0.2], squash: 0.12 * b - 0.04 };
   st.clawL = { x: -72, y: -44, open: 0.15 };
   st.clawR = { x: 92, y: -70 - 18 * b, open: 0.3 + 0.4 * b };
@@ -1394,13 +1638,22 @@ function crabChart(t) {
 const MX = { order: ["USDT", "BTC", "ETH", "SOL", "EUR"], x: 1100, y: 150, head: 130, cw: 116, hh: 70, ch: 84, pad: 20 };
 MX.w = MX.pad * 2 + MX.head + MX.cw * 5; MX.h = MX.pad * 2 + MX.hh + MX.ch * 5;
 const cellXY = (r, c) => [MX.x + MX.pad + MX.head + MX.cw * (c + 0.5), MX.y + MX.pad + MX.hh + MX.ch * (r + 0.5)];
-const FLY = EDGES.map((e, i) => ({ r: MX.order.indexOf(e[0]), c: MX.order.indexOf(e[1]), v: e[2], t0: T.fly + (i * K.beatLen()) / 3, loop: LOOP.indexOf(i) >= 0, i }));
+const FLY = EDGES.map((e, i) => ({ r: MX.order.indexOf(e[0]), c: MX.order.indexOf(e[1]), v: e[2], t0: T.fly + bl(i / 4), loop: LOOP.indexOf(i) >= 0, i }));
 const FLY_DUR = 0.42;
 
 function drawMatrix(t, cam) {
-  const a = K.inv(T.matrix, T.matrix + 0.45, t); if (a <= 0) return;
+  const second = t >= T.tensor;
+  if (!second && t >= T.irisOut[1]) return;
+  const a = second ? K.inv(T.tensor, T.tensor + 0.4, t) : K.inv(T.matrix, T.matrix + 0.45, t); if (a <= 0) return;
   const s = K.E.back(a, 2), cx = MX.x + MX.w / 2, cy = MX.y + MX.h / 2;
   K.screen(ctx); ctx.save(); ctx.translate(cx, cy); ctx.scale(s, s); ctx.translate(-cx, -cy);
+  /* chorus 2: the matrix becomes a tensor, two more sheets slide in behind on the beat */
+  if (second) for (let k = 2; k >= 1; k--) {
+    const g = K.E.back(K.inv(T.tensor + bl(k), T.tensor + bl(k) + 0.35, t), 2); if (g <= 0) continue;
+    const ox = 34 * k * g, oy = -30 * k * g;
+    K.shape(ctx, K.rectPts(MX.x + ox, MX.y + oy, MX.w, MX.h, 4), { fill: K.shadeC(P.paper, -0.06 * k), w: 5, boil: 1.4, seed: 860 + k, shade: { color: P.paperShade, dx: -10, dy: -10 } });
+    for (let i = 0; i < 5; i++) K.text(ctx, MX.order[i], MX.x + ox + MX.pad + MX.head + MX.cw * (i + 0.5), MX.y + oy + 30, { size: 22, weight: 800, fill: K.shadeC(P[MX.order[i]], -0.25), alpha: 0.55 });
+  }
   /* parchment */
   const edge = [];
   for (let i = 0; i <= 10; i++) edge.push([MX.x + (MX.w * i) / 10, MX.y + K.hs(i, 4) * 4]);
@@ -1409,7 +1662,7 @@ function drawMatrix(t, cam) {
   for (let i = 7; i >= 0; i--) edge.push([MX.x + K.hs(i + 60, 4) * 4, MX.y + (MX.h * i) / 7]);
   K.shape(ctx, edge, { fill: P.paper, w: 5, boil: 1.4, seed: 820, shade: { color: P.paperShade, dx: -12, dy: -12 } });
   /* loop cells glow once the crab "knows" */
-  const know = K.inv(T.knows + 0.2, T.knows + 0.5, t);
+  const know = second ? K.inv(T.knows2 + 0.2, T.knows2 + 0.5, t) : K.inv(T.knows + 0.2, T.knows + 0.5, t);
   if (know > 0) FLY.filter((f) => f.loop).forEach((f, k) => {
     const [x, y] = cellXY(f.r, f.c), pz = 1 + 0.08 * pulseB(t - k * 0.08);
     ctx.save(); ctx.globalAlpha = know * 0.9;
@@ -1434,7 +1687,7 @@ function drawMatrix(t, cam) {
   ctx.restore();
   /* rates in flight: from the route tag on the map to their cell */
   FLY.forEach((f) => {
-    const u = K.inv(f.t0, f.t0 + FLY_DUR, t); if (u <= 0 || u >= 1) return;
+    const u = K.inv(f.t0, f.t0 + FLY_DUR, t); if (u <= 0 || u >= 1 || second) return;
     const e = EDGES[f.i], [A, B] = endsOf(e), q = K.edgePoint(A, B, e[3], e[5] || 0.5);
     const S = K.toScreen(q[0], q[1] - 6), D = cellXY(f.r, f.c), w = K.E.inOut(u);
     const x = K.lerp(S[0], D[0], w), y = K.lerp(S[1], D[1], w) - Math.sin(w * Math.PI) * 120;
@@ -1444,8 +1697,9 @@ function drawMatrix(t, cam) {
 
 /* the crab pops up beside the matrix and points at the cycle */
 function drawKnowingCrab(t) {
-  const a = K.inv(T.knows - 0.35, T.knows + 0.1, t); if (a <= 0) return;
-  const out = K.inv(T.irisOut[0] - 0.1, T.irisOut[0] + 0.25, t);
+  const W = t >= T.tensor ? [T.knows2, T.irisOut2[0]] : [T.knows, T.irisOut[0]];
+  const a = K.inv(W[0] - 0.35, W[0] + 0.1, t); if (a <= 0) return;
+  const out = K.inv(W[1] - 0.1, W[1] + 0.25, t);
   const y = K.lerp(1330, 1010, K.E.back(a, 1.8)) + 300 * K.E.in3(out), x = 990, s = 1.35;
   const target = cellXY(0, 1), b = pulseB(t);
   K.screen(ctx);
@@ -1494,7 +1748,7 @@ function drawChart(t) {
   const plankA = K.inv(T.lap1[0] - 0.2, T.lap1[0] + 0.3, t);
   if (plankA > 0) {
     const bumpT = ARRIVALS.filter((a) => t >= a).pop(), bump = bumpT ? Math.exp(-8 * (t - bumpT)) : 0;
-    const gain = n >= 3 ? "+0.46 %" : "";
+    const gain = n >= 6 ? "+0.92 %" : n >= 3 ? "+0.46 %" : "";
     ctx.save(); ctx.translate(1320, 640); ctx.scale(1 + 0.12 * bump, 1 + 0.12 * bump);
     K.plank(ctx, 0, 0, 640, gain ? 190 : 130, gain ? [HOLD[n], gain] : [HOLD[n]], { a: plankA, size: 56, seed: 11, colors: [P.ink, "#2f8a3e"] });
     ctx.restore();
@@ -1508,21 +1762,28 @@ function drawChart(t) {
    Our ship (cog sail) is spot; the hourglass ship is the future.
    A gold rope between them carries the basis; then one swell lifts
    both ships together: dependence you can see.
+   Chorus 1 (midday) ends with "sail with me!": the crab beckons us aboard.
+   Chorus 2 is the same idea at sunset, and a wave wipes to the title.
    ============================================================ */
 const FUT = { y: 845, s: 0.98 };
-const futX = (t) => K.tw(t, T.twoShips - 0.4, T.twoShips + 0.9, 2350, 1360, K.E.out3);
+const TWO = [
+  { t0: T.two1, rope: T.rope1, swell: T.swell1, warm: 0.2, gap: "+0.8 %", beckon: T.beckon, end: T.wipe1[1] },
+  { t0: T.two2, rope: T.rope2, swell: T.swell2, warm: 0.75, gap: "+0.6 %", beckon: null, end: T.wipe2[1] },
+];
 const hourglass = (c, x, y) => {
   K.coin(c, x, y, 34, { color: P.ETH, seed: 870 });
   K.shape(c, [[x - 13, y - 18], [x + 13, y - 18], [x, y], [x + 13, y + 18], [x - 13, y + 18], [x, y]], { fill: P.paper, w: 3, boil: 0.6, seed: 871, gap: 0 });
 };
+const futX = (t, V) => K.tw(t, V.t0 - 0.4, V.t0 + 0.9, 2350, 1360, K.E.out3) + (V.beckon ? K.tw(t, V.beckon, V.beckon + 2.5, 0, 1100, K.E.in3) : 0);
 
-function crabTwoShips(t) {
+function crabTwoShips(t, V) {
+  if (V.beckon && t > V.beckon - 0.25) return crabBeckon(t);
   const b = pulseB(t), st = { seed: 500, blink: K.blinkAt(t, 21), mouth: "smile", look: [1, -0.3], squash: 0.1 * b - 0.03 };
   st.clawL = { x: -72, y: -42, open: 0.15 };
   st.clawR = { x: 92, y: -70 - 18 * b, open: 0.3 + 0.4 * b };
-  const p = K.ss(T.basis - 0.3, T.basis, t) * (1 - K.ss(T.swell - 0.2, T.swell + 0.1, t));
+  const p = K.ss(V.rope - 0.3, V.rope, t) * (1 - K.ss(V.swell - 0.2, V.swell + 0.1, t));
   if (p > 0) { st.clawR = { x: K.lerp(92, 118, p), y: K.lerp(-70, -120, p), open: 0.05, rot: -18 }; st.mouth = "o"; st.brow = 0.8 * p; }
-  const sw = K.ss(T.swell - 0.1, T.swell + 0.3, t);
+  const sw = K.ss(V.swell - 0.1, V.swell + 0.3, t);
   if (sw > 0) {
     st.mouth = "grin"; st.look = [0.2, -1];
     st.clawL = { x: -100, y: K.lerp(-42, -150 - 20 * b, sw), open: 0.3 + 0.6 * b };
@@ -1531,34 +1792,120 @@ function crabTwoShips(t) {
   return st;
 }
 
-const SIDE_TWO = (t) => {
-  const sw = K.ss(T.swell - 0.15, T.swell + 0.6, t);
+const SIDE_TWO = (t, V) => {
+  const sw = K.ss(V.swell - 0.15, V.swell + 0.6, t) * (V.beckon ? 1 - K.ss(V.beckon, V.beckon + 1.2, t) : 1);
   const our = { x: 640, y: 930, s: 1.4 };
+  /* "sail with me!": the camera closes on the crab */
+  const bk = V.beckon ? K.ss(V.beckon - 0.2, V.beckon + 0.9, t) : 0;
   return {
-    horizon: 600, warm: 0.25, zoom: K.tw(t, T.irisOut[0], T.wipe[1], 1.0, 1.08, K.E.inOut), fx: 960, fy: 700, drift: 300,
-    shipX: our.x, shipY: our.y, shipS: our.s, crabS: 1.15, crab: crabTwoShips, coins: 15, swell: sw,
+    horizon: 600, warm: V.warm, sunY: V.warm > 0.5 ? 430 : 250, sunX: V.warm > 0.5 ? 1560 : 1480,
+    zoom: K.lerp(K.tw(t, V.t0 - 0.5, V.end, 1.0, 1.08, K.E.inOut), 1.75, bk), fx: K.lerp(960, 560, bk), toX: K.lerp(960, 820, bk), fy: K.lerp(700, 640, bk), drift: 300,
+    shipX: our.x, shipY: our.y, shipS: our.s, crabS: 1.15, crab: (tt) => crabTwoShips(tt, V), coins: V.beckon ? 15 : 22, swell: sw,
     behind: (tt, bob, rock) => {
-      K.ship(ctx, futX(tt), FUT.y + bob * 0.9, FUT.s, { rock, sail: 1, flagColor: P.ETH, emblem: hourglass, seed: 700 });
+      const fx = futX(tt, V); if (fx > 2500) return;
+      K.ship(ctx, fx, FUT.y + bob * 0.9, FUT.s, { rock, sail: 1, flagColor: P.ETH, emblem: hourglass, seed: 700 });
     },
     front: (tt, bob) => {
       /* basis rope between the masts (sags, bobs with both ships) */
-      const ra = K.inv(T.basis - 0.1, T.basis + 0.4, tt); if (ra <= 0) return;
-      const A = [our.x + 40 * our.s, our.y + bob - 250 * our.s], B = [futX(tt) + 40 * FUT.s, FUT.y + bob * 0.9 - 250 * FUT.s];
+      const ra = K.inv(V.rope - 0.1, V.rope + 0.4, tt) * (V.beckon ? 1 - K.inv(V.beckon, V.beckon + 0.3, tt) : 1); if (ra <= 0) return;
+      const fx = futX(tt, V), A = [our.x + 40 * our.s, our.y + bob - 250 * our.s], B = [fx + 40 * FUT.s, FUT.y + bob * 0.9 - 250 * FUT.s];
       const pts = [];
       for (let i = 0; i <= 12; i++) { const u = (i / 12) * K.E.out3(ra); pts.push([K.lerp(A[0], B[0], u), K.lerp(A[1], B[1], u) + Math.sin(u * Math.PI) * 60]); }
       K.line(ctx, pts, { stroke: P.ink, w: 12, boil: 1.2, seed: 880, gap: 0 });
       K.line(ctx, pts, { stroke: P.profit, w: 6, boil: 1.2, seed: 881, gap: 0.15 });
       const m = [K.lerp(A[0], B[0], 0.5), K.lerp(A[1], B[1], 0.5) + 60];
-      K.tag(ctx, m[0], m[1] - 6, "+0.8 %", { a: K.inv(T.basis + 0.2, T.basis + 0.6, tt), hot: true, size: 44, seed: 882 });
-      /* one swell, two ships: matching bob marks */
-      const sw = K.ss(T.swell - 0.15, T.swell + 0.6, tt);
-      if (sw > 0) [our.x, futX(tt)].forEach((x, i) => {
+      K.tag(ctx, m[0], m[1] - 6, V.gap, { a: K.inv(V.rope + 0.2, V.rope + 0.6, tt) * ra, hot: true, size: 44, seed: 882 });
+      /* one swell, two ships: matching foam marks under both hulls */
+      const sw2 = K.ss(V.swell - 0.15, V.swell + 0.6, tt);
+      if (sw2 > 0) [our.x, fx].forEach((x, i) => {
         const y = (i ? FUT.y : our.y) + bob * (i ? 0.9 : 1) + 60;
-        K.line(ctx, [[x - 120, y], [x - 40, y - 14], [x + 40, y - 14], [x + 120, y]], { stroke: P.foam, w: 6, boil: 1.6, seed: 890 + i, gap: 0, alpha: sw });
+        K.line(ctx, [[x - 120, y], [x - 40, y - 14], [x + 40, y - 14], [x + 120, y]], { stroke: P.foam, w: 6, boil: 1.6, seed: 890 + i, gap: 0, alpha: sw2 * ra });
       });
     },
   };
 };
+
+/* ============================================================
+   INTRO 38 INSTRUMENTAL BREAK (33.0 - 44.45 s): one ship at sunset.
+     jig  : the crab plays the accordion, notes float up on every beat
+     sail : a sail-cloth chart rises: futures converge to spot (the basis)
+     log  : dusk; the captain's logbook types a Rust cycle finder, then
+            the spyglass comes up and an iris opens on chorus 2
+   ============================================================ */
+const JIG_SHIP = { x: 900, y: 1000, s: 1.45 };
+
+function crabBreak(t) {
+  if (t < T.sail[0] - 0.2) return crabJig(t);
+  const b = pulseB(t), st = { seed: 500, blink: K.blinkAt(t, 29), mouth: "smile", look: [0.8, -1], squash: 0.08 * b - 0.03 };
+  st.clawL = { x: -72, y: -42, open: 0.15 };
+  st.clawR = { x: 70, y: -180, open: 0.1, rot: -60 }; /* points up at the chart / the book */
+  if (t > T.log[0]) { st.look = [1, -0.8]; st.clawR = { x: 92, y: -70 - 18 * b, open: 0.3 + 0.4 * b }; st.mouth = "o"; }
+  const up = K.ss(T.spyUp2 - 0.25, T.spyUp2 + 0.2, t);
+  if (up > 0) { st.hold = "spyglass"; st.clawR = { x: K.lerp(92, 38, up), y: K.lerp(-70, -150, up), open: 0.05, rot: K.lerp(-30, -14, up) }; st.look = [1, -0.6]; st.lean = -4 * up; st.mouth = "smile"; }
+  return st;
+}
+
+function musicNotes(t, bob) {
+  /* one note born on each beat, drifting up from the accordion */
+  const cx = JIG_SHIP.x - 95 * JIG_SHIP.s, cy = JIG_SHIP.y + bob - 160;
+  for (let k = 0; k < 6; k++) {
+    const i = Math.floor((t - T.jig[0]) / K.beatLen()) - k, born = T.jig[0] + bl(i), d = t - born;
+    if (i < 0 || d > 2.6 || born > T.jig[1] - 0.3) continue;
+    const x = cx + (K.hash(i, 3) - 0.3) * 160 + d * 60, y = cy - d * 150 - 30, a = Math.min(1, d * 4) * (1 - K.inv(1.8, 2.6, d));
+    ctx.save(); ctx.globalAlpha *= a; ctx.translate(x, y); ctx.rotate(Math.sin(d * 3 + i) * 0.25);
+    K.shape(ctx, K.ellipsePts(0, 0, 13, 10, 10, -0.4), { fill: P.ink, w: 2.5, boil: 0.6, seed: 1000 + i, gap: 0 });
+    K.line(ctx, [[11, -3], [11, -52]], { stroke: P.ink, w: 4.5, boil: 0.6, seed: 1010 + i, gap: 0 });
+    if (i % 2) K.line(ctx, [[11, -52], [26, -40], [24, -26]], { stroke: P.ink, w: 4.5, boil: 0.6, seed: 1020 + i, gap: 0 });
+    ctx.restore();
+  }
+}
+
+const SIDE_BREAK = (t) => {
+  const dusk = K.ss(T.log[0] - 0.5, T.log[0] + 1.5, t);
+  return {
+    horizon: 640, warm: 0.9, sunX: 1520, sunY: K.lerp(470, 600, dusk), drift: 900,
+    zoom: K.tw(t, T.jig[0], T.log[1], 1.25, 1.45, K.E.inOut), fx: 700, fy: 760,
+    shipX: JIG_SHIP.x, shipY: JIG_SHIP.y, shipS: JIG_SHIP.s, crabS: 1.25, crab: crabBreak, coins: 15,
+    notes: (tt, bob) => musicNotes(tt, bob),
+    over: () => {
+      if (dusk <= 0) return;
+      K.screen(ctx); ctx.save(); ctx.globalAlpha = 0.38 * dusk; ctx.fillStyle = "#1c2a5a"; ctx.fillRect(0, 0, 1920, 1080); ctx.restore();
+      for (let i = 0; i < 26; i++) {
+        const x = K.hash(i, 61) * 1920, y = K.hash(i, 62) * 420, tw = 0.6 + 0.4 * Math.sin(t * 2 + i);
+        K.sparkle(ctx, x, y, 7 + 5 * K.hash(i, 63), dusk * tw, 1100 + i);
+      }
+    },
+  };
+};
+
+/* the sail-cloth chart: futures (rust) converge to spot (green) at expiry */
+const SPOT = [100, 101.4, 100.7, 102.5, 103.0, 102.2, 103.8, 104.4];
+const FUTS = SPOT.map((v, i) => v + 3.4 * (1 - i / (SPOT.length - 1)));
+function drawSailChart(t) {
+  const inA = K.inv(T.sail[0] - 0.45, T.sail[0], t), outA = K.inv(T.log[0] - 0.4, T.log[0], t);
+  if (inA <= 0 || outA >= 1) return;
+  const x = K.lerp(1000, 1150, inA) - 1800 * K.E.in3(outA), y = K.lerp(900, 285, K.E.out3(inA));
+  K.screen(ctx);
+  K.sailChart(ctx, x, y, 1060, 480, [{ data: SPOT, color: P.USDT }, { data: FUTS, color: P.rust }],
+    { a: inA, draw: K.inv(T.sail[0] + 0.2, T.sail[0] + 2.6, t), seed: 1200, yMin: 99, yMax: 106, xLabels: ["1", "2", "3", "4", "5", "6", "7", "8"] });
+  /* the basis shrinks: a gold bracket between the line ends */
+  const g = K.inv(T.sail[0] + 2.6, T.sail[0] + 3.0, t);
+  if (g > 0) { K.tag(ctx, x - 420, y - 130, "+3.4", { a: g, hot: true, size: 36, seed: 1210 }); K.tag(ctx, x + 440, y - 160, "0.0", { a: K.inv(T.sail[0] + 2.9, T.sail[0] + 3.3, t), hot: true, size: 36, seed: 1211 }); }
+}
+
+const RUST_LINES = [
+  "fn find_cycle(g: &Graph) -> Option<Cycle> {",
+  "    let w = g.map(|rate| -rate.ln());",
+  "    bellman_ford(&w).negative_cycle()",
+  "}",
+];
+function drawLogbook(t) {
+  const inA = K.inv(T.log[0] - 0.35, T.log[0] + 0.1, t), outA = K.inv(T.iris2[0] - 0.1, T.iris2[0] + 0.3, t);
+  if (inA <= 0 || outA >= 1) return;
+  const x = K.lerp(2400, 1220, K.E.out3(inA)) + 1300 * K.E.in3(outA);
+  K.screen(ctx);
+  K.logbook(ctx, x, 360, 1020, RUST_LINES, { a: 1, size: 34, seed: 1300, typed: K.inv(T.log[0] + 0.2, T.log[0] + 2.4, t) });
+}
 
 /* ============================================================
    INTRO 40 TITLE: banner + DOM title letters + six episode medallions.
@@ -1624,28 +1971,79 @@ function layoutTitleDom(t) {
   });
 }
 
+/* ---------- "Haul in the spread": a net of coins comes up, one pull per beat ---------- */
+const TITLE_SHIP = { x: 960, y: 1000, s: 1.45, crabS: 1.22 };
+function netState(t) {
+  const steps = (T.haul[1] - T.haul[0]) / K.beatLen(); /* 8 pulls */
+  const k = K.clamp((t - T.haul[0]) / K.beatLen(), 0, steps), whole = Math.floor(k), fr = k - whole;
+  const rise = (whole + K.E.back(Math.min(1, fr * 2.2), 1.6)) / steps; /* jerk up on each beat */
+  const dump = K.inv(T.dump, T.dump + 0.5, t);
+  return { x: K.lerp(1330, 1170, dump), y: K.lerp(1180, 800, K.clamp(rise, 0, 1)) - 60 * dump, open: dump, gone: K.inv(T.dump + 0.5, T.dump + 0.9, t) };
+}
+function drawNet(t, bob) {
+  if (t < T.haul[0] - 0.3 || t > T.dump + 1.0) return;
+  const n = netState(t), hand = [TITLE_SHIP.x - 95 * TITLE_SHIP.s + 110 * TITLE_SHIP.crabS * TITLE_SHIP.s, TITLE_SHIP.y + bob - 60 * TITLE_SHIP.s - 75 * TITLE_SHIP.crabS * TITLE_SHIP.s];
+  const top = [n.x, n.y - 100 + bob * 0.5];
+  if (n.gone < 1) {
+    K.line(ctx, [hand, [K.lerp(hand[0], top[0], 0.5), Math.max(hand[1], top[1]) + 20], top], { stroke: P.ink, w: 9, boil: 1, seed: 1400, gap: 0 });
+    K.line(ctx, [hand, [K.lerp(hand[0], top[0], 0.5), Math.max(hand[1], top[1]) + 20], top], { stroke: P.sailShade, w: 5, boil: 1, seed: 1400, gap: 0 });
+  }
+  ctx.save(); ctx.globalAlpha *= 1 - n.gone; ctx.translate(n.x, n.y + bob * 0.5); ctx.rotate(-0.5 * n.open); ctx.scale(1.4, 1.4);
+  const bag = K.blobPts(0, 0, 80, 70, 14, 1401, 0.12);
+  ctx.save(); K.pathOf(ctx, bag, true); ctx.clip();
+  for (let i = 0; i < 16; i++) if (K.hash(i, 1402) > n.open * 0.9) K.goldBit(ctx, K.hs(i, 1403) * 60, 20 - (i % 5) * 16 + K.hs(i, 1404) * 6, 15, 1405 + i, K.hs(i, 1406) * 0.4);
+  ctx.restore();
+  for (let i = -3; i <= 3; i++) { K.line(ctx, [[i * 22, -72], [i * 26, 72]], { stroke: P.inkSoft, w: 2.5, boil: 0.8, seed: 1410 + i, gap: 0.1 }); K.line(ctx, [[-82, i * 20], [82, i * 20]], { stroke: P.inkSoft, w: 2.5, boil: 0.8, seed: 1420 + i, gap: 0.1 }); }
+  K.shape(ctx, bag, { fill: null, w: 5, boil: 1.2, seed: 1430 });
+  ctx.restore();
+  /* coins pour onto the pile when the net opens */
+  const d = t - T.dump; if (d > 0 && d < 0.9) for (let i = 0; i < 10; i++) {
+    const u = K.clamp(d * 1.6 - i * 0.05, 0, 1); if (u <= 0 || u >= 1) continue;
+    K.goldBit(ctx, K.lerp(n.x - 40, TITLE_SHIP.x + 95 * TITLE_SHIP.s + K.hs(i, 1440) * 60, u), K.lerp(n.y + 30, TITLE_SHIP.y + bob - 80 * TITLE_SHIP.s, u * u), 14, 1450 + i, u * 6 + i);
+  }
+}
+
 /* ============================================================
-   INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
-   drives a proxy whose setter calls render(t).
-   0.00 - 4.43  side set: ship sails in, crab spots something (spyglass)
-   3.46 - 4.43  iris through the spyglass into the chart set
-   4.43 - 8.24  "Heave ho, the cycle flows": routes draw, loop glows, one lap
-   8.24 - 11.6  "Graph and matrix, the Rust-crab knows": rates fly into a matrix
-   11.57- 12.05 iris closes on the ship, opens on the two-ship set
-   12.05- 15.86 "Futures, spot and copula sea": spot + futures ships, basis rope, one swell
-   15.10- 15.86 wave wipe to the title set
-   15.86- 20.10 "Complex arbitrage, sail with me!": banner hit, letters, jump, snap, hat tip
+   INTRO 70 RENDER: render(t) is the whole film (64.2 s). One paused GSAP
+   timeline drives a proxy whose setter calls render(t).
+    0.0 - 15.4  side set: ship sails in, cap tip, rivets, horizon markets, spyglass "!"
+   15.4 - 16.3  iris through the spyglass into the chart
+   16.3 - 25.2  chart: three ports, loop lap (+0.46 %), cycle glows, rates -> matrix
+   25.2 - 25.6  iris closes on the ship -> two ships (futures/spot, basis rope, swell)
+   29.2 - 33.0  "sail with me!": push-in, the crab beckons and winks
+   32.3 - 33.0  wave wipe -> break: accordion jig, sail chart, logbook (dusk)
+   44.0 - 44.5  spyglass iris -> chart: fast lap (+0.92 %), matrix -> tensor
+   48.0 - 48.5  iris out -> two ships at sunset
+   51.3 - 52.1  wave wipe -> title: banner, net haul, jump, snap, medallions, cap tip
    ============================================================ */
-const SIDE_OPEN = (t) => ({
-  horizon: 600, warm: 0, zoom: K.tw(t, 0, T.iris[1], 1, 1.18, K.E.inOut), fx: 900, fy: 640,
-  shipX: K.tw(t, T.shipIn[0], T.shipIn[1], -520, 800, K.E.out3), shipY: 930, shipS: 1.6, crabS: 1.15, crab: crabOpening,
-});
+const OPEN_CAM = K.mkTrack([
+  [0, { z: 1.0, fx: 900, fy: 640, toX: 900 }],
+  [T.pushIn[0], { z: 1.08, fx: 900, fy: 640, toX: 900 }],
+  [T.pushIn[1], { z: 1.55, fx: 650, fy: 720, toX: 860 }],
+  [T.pullOut[0], { z: 1.55, fx: 650, fy: 720, toX: 860 }],
+  [T.pullOut[1], { z: 1.0, fx: 960, fy: 600, toX: 960 }],
+  [T.spyUp, { z: 1.0, fx: 900, fy: 640, toX: 900 }],
+  [T.iris[1], { z: 1.15, fx: 800, fy: 660, toX: 820 }],
+]);
+const MARKETS = [
+  { x: 270, label: "BTC", color: P.BTC, t0: T.markets },
+  { x: 1240, label: "ETH", color: P.ETH, t0: T.markets + bl(1) },
+  { x: 1700, label: "USDT", color: P.USDT, t0: T.markets + bl(2) },
+  { x: 410, label: "SOL", color: P.SOL, t0: T.markets + bl(3) },
+];
+const SIDE_OPEN = (t) => {
+  const c = OPEN_CAM(t);
+  return {
+    horizon: 600, warm: 0, zoom: c.z, fx: c.fx, fy: c.fy, toX: c.toX, markets: MARKETS, rivets: T.rivets,
+    shipX: K.tw(t, T.shipIn[0], T.shipIn[1], -520, 800, K.E.out3), shipY: 930, shipS: 1.6, crabS: 1.15, crab: crabOpening,
+  };
+};
 const SIDE_TITLE = (t) => ({
-  horizon: 640, warm: 0.7, zoom: K.tw(t, T.wipe[0], DUR, 1.06, 1.0, K.E.out3), fx: 960, fy: 700, drift: 600,
-  shipX: 960, shipY: 1000, shipS: 1.45, crabS: 1.22, crab: crabTitle, coins: 22,
+  horizon: 640, warm: 0.7, zoom: K.tw(t, T.wipe2[0], T.wipe2[1] + 2, 1.06, 1.0, K.E.out3), fx: 960, fy: 700, drift: 600,
+  shipX: TITLE_SHIP.x, shipY: TITLE_SHIP.y, shipS: TITLE_SHIP.s, crabS: TITLE_SHIP.crabS, crab: crabTitle,
+  coins: Math.round(22 + 12 * K.inv(T.dump + 0.2, T.dump + 0.9, t)), front: (tt, bob) => drawNet(tt, bob),
 });
 
-function wipeFront(t) { return K.tw(t, T.wipe[0], T.wipe[1], -420, 2400, K.E.inOut); }
 function drawWaveFront(x) {
   /* a tall curling wave sweeps right; left of it is already the next set */
   const crest = [];
@@ -1668,45 +2066,47 @@ function ring(cx, cy, r) {
   ctx.restore();
 }
 
+function irisIn(t, win, drawA, drawB) {
+  /* drawA full, drawB inside a circle growing from the spyglass lens (K.lens, set while drawA draws) */
+  drawA(); const from = K.lens || { x: 1200, y: 400 };
+  const u = K.E.inOut(K.inv(win[0], win[1], t));
+  const cx = K.lerp(from.x, 960, u), cy = K.lerp(from.y, 540, u), r = K.lerp(10, 1250, u);
+  K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, K.TAU); ctx.clip(); drawB(); ctx.restore(); ring(cx, cy, r);
+}
+function irisOutOnShip(t, win, drawNext) {
+  const u = K.E.inOut(K.inv(win[0], win[1], t)), r = K.lerp(1300, 0, u);
+  K.cam = camChart(t); const sp = shipAt(t), c = K.toScreen(sp.x, sp.y - 80);
+  K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(-10, -10, 1940, 1100); ctx.arc(c[0], c[1], r, 0, K.TAU, true); ctx.clip("evenodd"); drawNext(); ctx.restore();
+  K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.arc(c[0], c[1], r, 0, K.TAU); ctx.clip(); drawChart(t); ctx.restore();
+  if (r > 4) ring(c[0], c[1], r);
+}
+function waveWipe(t, win, drawOld, drawNew) {
+  const x = K.tw(t, win[0], win[1], -420, 2400, K.E.inOut);
+  drawOld(); K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(-10, -10, x + 10, 1100); ctx.clip(); drawNew(); ctx.restore();
+  K.screen(ctx); drawWaveFront(x);
+}
+const drawBreak = (t) => { drawSide(t, SIDE_BREAK(t)); drawSailChart(t); drawLogbook(t); };
+const drawTitleSet = (t) => { drawSide(t, SIDE_TITLE(t)); K.screen(ctx); if (t >= T.banner[0]) drawTitleCanvas(t); };
+
 function render(t) {
   try {
     K.begin(ctx, t, { x: 0, y: 0, z: 1 });
     titleEl.style.opacity = "0";
-    /* 1. opening side set */
-    if (t < T.iris[1]) drawSide(t, SIDE_OPEN(t));
-    /* 2. chart set (through the spyglass iris at first) */
-    if (t >= T.iris[0] && t < T.irisOut[1]) {
-      if (t < T.iris[1]) {
-        const u = K.E.inOut(K.inv(T.iris[0], T.iris[1], t)), lens = K.lens || { x: 1200, y: 400 };
-        const cx = K.lerp(lens.x, 960, u), cy = K.lerp(lens.y, 540, u), r = K.lerp(10, 1250, u);
-        K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, K.TAU); ctx.clip();
-        drawChart(t); ctx.restore(); ring(cx, cy, r);
-      } else if (t < T.irisOut[0]) drawChart(t);
-    }
-    /* 3. iris out on the ship, then the two-ship set */
-    if (t >= T.irisOut[0] && t < T.wipe[1]) {
-      if (t < T.irisOut[1]) {
-        const u = K.E.inOut(K.inv(T.irisOut[0], T.irisOut[1], t)), r = K.lerp(1300, 0, u);
-        K.cam = camChart(t); const sp = shipAt(t), c = K.toScreen(sp.x, sp.y - 80);
-        K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(-10, -10, 1940, 1100); ctx.arc(c[0], c[1], r, 0, K.TAU, true); ctx.clip("evenodd");
-        drawSide(t, SIDE_TWO(t)); ctx.restore();
-        K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.arc(c[0], c[1], r, 0, K.TAU); ctx.clip();
-        drawChart(t); ctx.restore();
-        if (r > 4) ring(c[0], c[1], r);
-      } else drawSide(t, SIDE_TWO(t));
-    }
-    /* 4. wave wipe to the title set */
-    if (t >= T.wipe[0]) {
-      const x = wipeFront(t);
-      K.screen(ctx); ctx.save();
-      if (t < T.wipe[1]) { ctx.beginPath(); ctx.rect(-10, -10, x + 10, 1100); ctx.clip(); }
-      drawSide(t, SIDE_TITLE(t));
-      K.screen(ctx);
-      if (t >= T.banner[0]) drawTitleCanvas(t);
-      ctx.restore();
-      if (t < T.wipe[1]) { K.screen(ctx); drawWaveFront(x); }
-      layoutTitleDom(t);
-    }
+    const two1 = () => drawSide(t, SIDE_TWO(t, TWO[0])), two2 = () => drawSide(t, SIDE_TWO(t, TWO[1]));
+    if (t < T.iris[0]) drawSide(t, SIDE_OPEN(t));
+    else if (t < T.iris[1]) irisIn(t, T.iris, () => drawSide(t, SIDE_OPEN(t)), () => drawChart(t));
+    else if (t < T.irisOut[0]) drawChart(t);
+    else if (t < T.irisOut[1]) irisOutOnShip(t, T.irisOut, two1);
+    else if (t < T.wipe1[0]) two1();
+    else if (t < T.wipe1[1]) waveWipe(t, T.wipe1, two1, () => drawBreak(t));
+    else if (t < T.iris2[0]) drawBreak(t);
+    else if (t < T.iris2[1]) irisIn(t, T.iris2, () => drawBreak(t), () => drawChart(t));
+    else if (t < T.irisOut2[0]) drawChart(t);
+    else if (t < T.irisOut2[1]) irisOutOnShip(t, T.irisOut2, two2);
+    else if (t < T.wipe2[0]) two2();
+    else if (t < T.wipe2[1]) waveWipe(t, T.wipe2, two2, () => drawTitleSet(t));
+    else drawTitleSet(t);
+    if (t >= T.banner[0]) layoutTitleDom(t);
   } catch (err) {
     /* never leave a black frame silently: draw the error so a snapshot shows it */
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);
