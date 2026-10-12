@@ -18,7 +18,7 @@
 | statistical-arbitrage-pairs | ragtime cat + penguins | 28.9 s done | in progress (penguin) |
 | onchain-defi-quant | hamster Chef Nibbs | re-render to 30.8 s + logo in progress | pending (bee) |
 | volatility-regimes | turtle Siggy | 31.0 s done (minor blank-frame fix) | in progress (seagull) |
-| causality-lead-lag | fox Vulpes | 33.2 s done | in progress (basset) |
+| causality-lead-lag | fox Vulpes | 33.2 s done | done: Sergeant Basset, K.duo |
 | marketmaker-general | octopus Otto | 29.6 s done | done: pufferfish Puff, K.duo |
 
 - End card: done (19 s, 4 langs).
