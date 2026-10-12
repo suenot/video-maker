@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "Almgren-Chriss Without the Hand-Waving\n\nOptimal Execution You Can Implement in an Afternoon\n\nA complete, reproducible derivation of the\n\nAlmgren-Chriss model, bridging dense academic\n\nliterature with production-ready engineering. This\n\ndocument provides the closed-form trajectory, the\n\nefficient frontier, and strict calibration methodo- 's 'conditional_liquidation_model',\nlogies for Binance data. Shown as a conditional ‘chad’,\n\na ; ‘not_included': ‘return_forecasts',\nliquidation calculation, not a return forecast. ‘tags': L'execution', ‘almgren-chriss’,\n\n‘market impact', ‘'twap', ‘quant',\n\n‘python', 'crypto']\n[TATADICTIONARVa VARIABLES ——SSSCSC~*dCSC«d crypto],\n\n= trading_rate (units/time) ‘author’: ‘suenot’,\n\n= remaining_inventory (units) ‘source_date': '2026-07-14'\ntotal_time (sec)\n\nvolatility (price_stdev/time)\n\ntemp_impact_coeff (price/unit/time)\n\nperm_impact_coeff (price/unit)\n\nrisk_aversion_parameter\n\nTE TUES beter\n\nWARNING: This is a conditional liquidation calculation.\nMarket conditions may vary. Not a financial forecast."
+    },
+    {
+      "page": 2,
+      "text": "1. The setup: what the model actually assumes\n\nArithmetic Zero-Drift\nWalk\n\nLinear Permanent\nImpact\n\nLinear Instantaneous\nTemporary Impact\n\nThe unperturbed price\nfollows:\n\nSt = Spa + oVTE —\nTg(nx/T)\n\nArithmetic keeps\nalgebra linear-\nquadratic; zero drift\navoids fitting intraday\nnoise. Uses i.i.d.\nnormal shocks.\n\ng(v) = yv\n\nTrading shifts the price\npermanently, and it\nnever decays. Linear\nimpact is the only\narbitrage-free choice;\nnon-linear models permit\nprice manipulation.\n\nSi = Sr 1 = h(nx/T),\nwhere h(v) =\nesgn(v) + nu\n\nIncludes half-\nspread/fees (e).\nAssumes the limit\norder book fully\nreplenishes before the\nnext child order.\n\nData Dictionary:\nState Variables\n\n: Total inventory (BTC)\n\n: Total horizon time\n(hours)\n\n: Interval length (T/N)\n(hours)\n\n: Number of intervals\n\n: Remaining\ninventory at step k\n\n: Child order size\n(rp_-1 — Zp)\n\n: Price in dollars\nper BTC\n\n& Gemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "2. Cost and variance of a trajectory\n\nExpected Implementation Shortfall ie\n1 1\nE|C] = eee + eX + — ) nie\nas\n1\nLY i\nPermanent Cost: Completely schedule- Spread: Half the Temporary Cost: Punishes fast trading.\n\nindependent. This toll remains identical under bid-ask spread Discretization correction: 7 = n — yr /2.\nlinear assumptions regardless of execution path. plus fees.\n\nInventory-weighted Variance\n\nRisk Accumulation: Variance is weighted by remaining inventory (x,,), not\ntrade size (n,). This dynamic forces urgency to front-load schedules."
+    },
+    {
+      "page": 4,
+      "text": "3. The closed form: sinh, cosh, and the urgency parameter\n\nThe Difference Equations\n¢ Objective: Minimize U = E[C] + AV[C]\n\n¢ Interior points yield a second-difference\nequation:\neg ee Upp\n\n~\n= KK Za\nT? )\n\n¢ Boundary conditions: x9 = X, zy = 0\n\nClosed-form holdings:\n\n_ . [sinh(«(T — t;))\n25 x |\n\nClosed-form child trades:\n\n_ | 2sinh(K7/2) |\n;= eee | cosh(K(T' — tj~1/2)) X\n\nThe Urgency Parameter\nDiscrete relation small-7 approx: « ~ \\/Ao?/n\n\nUrgency («) compresses risk aversion, volatility,\nand liquidity into a single rate (1/time).\n\nCharacteristic time (9 = 1/k): The optimal\ntimescale to hold risk to save impact cost.\nIndependent of deadline T and size X.\n\nData Dictionary: Parameters\n\nao : Absolute volatility ($/BTC/Vh)\n\n€ : Spread/fees ($/BTC)\n\n7 : Temporary impact (-h/BTC?) Dimensional ambiguity:\n(implied by rate convention) rate convention verified.\n\n‘ : Permanent impact ($/BTC?)\n\nA : Risk aversion (inverse dollars, 1/$)\n\n& Gemini Notebook"
+    },
+    {
+      "page": 5,
+      "text": "4. The risk-neutral limit is TWAP\n\nA 0 KI ~1\n\nInventory (x(t))\nInventory (x(t))\nInventory (x(t))\n\n0 7 0\n\nY Time (t) i 8 Time (t) ‘ Time (t) i\nAs \\ + 0, « — 0. The hyperbolic sine kT interpolates behavior between TWAP High-risk-aversion limit. Dump entire\ndegenerates (sinh(z) — z). Trajectory and immediate liquidation. inventory in the first interval. When @ < T,\nbecomes a straight line: z(t) > X(T-t)/T. the model executes on its intrinsic\nTWAP is the exact mathematical optimum timescale @. The deadline T becomes\nfor a risk-neutral trader. The deadline T irrelevant.\nstrictly binds.\n\npf aR\n° ce)\nSanaa eee DT\n\nA> 0 TWAP KT = 1 Interpolation A>1 Immediate Liquidation A — 00\n(Risk-Neutral) (Optimal Execution) (High Risk Aversion)\n\nA Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "5. The efficient frontier of execution\n\nEfficient Frontier 3 Ways to Select Risk (A)\n\nWalk the frontier. Ask: “Do | pay AZ dollars to\nremove Astd dollars of shortfall standard\ndeviation?” The knee of the curve is usually\nobvious within a factor of 2.\n\nRisk Budget\n\nExpected Cost (E)\n\nFix a maximum acceptable variance (e.g.,\n1-day 1-sigma residual < 15 bps). Take the\ncheapest trajectory. The Lagrange multiplier\nof this constraint is A.\n\n. _ Variance (V) - Characteristic Time Target\n[Strictly Variance, not Standard Deviation]\n\nSteeply diminishing returns: Less variance always\n\nalgebraically back out A = n/(o*2 642).\ncosts more expected shortfall.\n\nf Pick @ directly (e.g., “90-minute half-life”) and\n\nA Gemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "The 100 BTC Worked es\n\nShortfall Std Dev $53, 000 $69, 300"
+    },
+    {
+      "page": 8,
+      "text": "Python Trajectory Inputs & Outputs\n\n®@ almgren_chriss. py\n\nInput: lam swept over\n\ndef almgren_chriss(X, T, N, sigma, eta, gamma, lam): np.logspace(-8, -4, 50)\n\ntau=T/N\neta_t = eta - 0.5 * gamma * tau\nkappa_t2 = lam * sigmax*2 / eta_t\nkappa = np.arccosh(0.5 * kappa_t2 * taux*2 + 1) / tau\nt = np.arange(N + 1) * tau\n= X * np.sinh(kappa * (T - t)) / np.sinh(kappa * T)\n=) -oel ls]\n= 0.5 * gamma * Xxx2 + (eta_t / tau) * np.sum(n**2)\nV = sigmax*2 * tau * np.sum(x[1:]**2)\nTOCULN eee, oe\n\nx n 3 V\n(holdings (child (Expected (Variance)\ntrajectory) trades) Cost)\n\n: The trajectory math fits in 10 lines of code;\nx, n, E, V = almgren_chriss(X=100, T=4, N=48, sigma=600,\n\neta=1.0, gamma=0.3, lam=1e-6)\n\nthe true engineering challenge lies entirely\nin parameter calibration.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 9,
+      "text": "6. Calibration Pipeline & 7. o: The Easy One\n\n- o (Volatility) -> The easy one\n\nfod Binance Data zg nN (Temporary Impact) -> From book depth & trades\n\ny (Permanent Impact) -> From signed taker flow\n\no Calibration Schematic\nMethod: Absolute volatility per root-hour via mid-price returns.\nData Source: Binance 1-minute kline bars (REST API).\n\nCrucial Detail: Must use 1-minute bars or slower. Finer sampling introduces\nmic ostructure noise (bid-ask boun e) which arti fll ficially t Dlases realized variance upward. ”\n\nReliability: High. Volatility is the single parameter you can expect to measure cleanly."
+    },
+    {
+      "page": 10,
+      "text": "8. 7: Temporary impact from the book and trades\n\nRoute A: Walk the L2 Book\n\ne Mechanism: Compute the cost of a\nhypothetical marketable sweep\nfrom depth snapshots (VWAP o\nconsumed levels minus mid).\n\ne Equation:\nFit cost(q) ¥ € + Ninst 4\n\ne Conversion: Must assume a\n\nbook replenishment time At,\n\n(10-60s for BTCUSDT).\n1 ~ Ninst At,.\n\nDimensional Tracking Warning:\nRoute A relies entirely on the\nfull-replenishment assumption\n\nto convert instantaneous impact\ninto the -h/BTC2 rate convention\nrequired by the model\n\nRoute B: Regressed Realized Slippage\n\nMechanism: Bucket aggressive\n(taker) flow into 1-minute\nbins. Regress taker-side VWAP\nminus open-mid against taker\nvolume rate.\n\nSynthesis: Route B measures\nwhat the market actually\ncharged aggressors. Route A\nmeasures what the resting book\nwould charge right now. Trust\nB for absolute level, A for\nintraday shape.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "9. y: Permanent impact via Kyle-style regression\n\n\\gamma Regression Mechanism\nFormula: A Sc, = Y Qnez + Noise\nQnet = taker buys - taker sells\n\nSampling Horizon: Regress mid-price changes on\nsigned net taker flow over 5-minute windows.\n\nt t+1 window\n\nThe Non-Reversion Check: You must verify the\nimpact does not revert one window later. Only the\nnon-reverting component is truly “permanent”.\n\nBinance REST Extraction\n\ntr = requests.get(f\"{B}/aggTrades\",\nparams=dict(symbol=sym, Limit=100Q0)).json()\ndf = pd.DataFrame(dict(t=[t[\"T\"] for t in tr],\np=[float(t[\"p\"]) for t in tr],\nq=[float(t(\"q\"]) * (-1 t[\"m\"]\nelse 1) for t in tr]))\ndf[\"bin\"] = df.t // 300_000 # 5-min bins\ng = df.groupby(\"bin\").agg(dp=(\"p\", lambda s:\ns.iloc[-1] - s.iloc[@]), qn=(\"q\", \"sum\"))\ngamma = np.polyfit(g.qn, g.dp, 1)[@]\n\nA Warning: A single aggTrades page is insufficient\nfor production. You must use historical dumps\nand regress on thousands of bins.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 12,
+      "text": "10. Why crypto calibration is noisy\n\n1. Endogeneity\nFlow responds to price. OLS y is not\ncausal; it absorbs momentum trader\n\nreactions. Note weak R-squared and\nday-to-day coefficient drift.\n\n3. Fragmentation / Perp Leadership\n\nBTCUSDT spot is just one venue.\nPerpetual futures often lead price\ndiscovery, injecting structural noise\ninto spot regressions.\n\n2. Concave Impact\nReal impact is empirically square-root,\nnot linear.\n\nFix: Calibrate parameters specifically at\nthe participation rates you intend to\ntrade.\n\n4. Regime Dependence\n\nImpact roughly doubles when vol doubles.\nAsia session 7 does not match US open.\n\nFix: Fit weekly, per session.\n\nThe Saving Grace: The cost function is flat near the optimum.\n\nKk x ./(1/n), So a 2x error in 7 moves xk by only V2. Precision is required for\npre-trade estimates; robustness suffices for the actual schedule.\n\nf Gemini Notebook"
+    },
+    {
+      "page": 13,
+      "text": "11. Where the model breaks, and the papers that fix it\n\nNonlinear\nImpact\n\nInstant\nReplenishment\n\nNo-Dynamic-\nArbitrage\n\nLinear-Gaussian\nConstraints\n\nAlmgren\n(2003)\n\nObizhaeva &\nWang (2013)\n\nGatheral\n(2010)\n\nRL/Neural\nSequels\n\nSquare-root law (a ~ 1/2) punishes\nbursts less. Trajectories become more\nfront-loaded; sinh formula breaks.\n\nFinite resilience/LOB. Drastic shape\nchange: block trade at start, block at\nend, constant rate in middle.\n\nExponential decay is ONLY compatible\n\nwith linear impact. Mixing decay\n\nkernels with concave impact creates false\narbitrage opportunities.\n\nRelaxes constraints for state-dependent\nrouting, but always initialized and\nbenchmarked against the AC baseline.\n\nGemini Notebook"
+    },
+    {
+      "page": 14,
+      "text": "12. What to take away & 13. References\n\nThe Execution Blueprint\n\n1. Three assumptions, one equation, one number.\n\nLinear impact keeps it arbitrage-free. The strategy\n\ncollapses entirely into urgency kappa = \\sqrt{Ao”*2/n}.\n\nReferences\n\nAlmgren & Chriss (2001), Journal of Risk\nAlmgren (2003), Applied Mathematical Finance\nHuberman & Stanzl (2004), Econometrica\nAlmgren et al. (2005), Risk\n\nNevmyvaka et al. (2006), ICML\n\nGatheral (2010), Quantitative Finance\n\nObizhaeva & Wang (2013), Journal of Financial\nMarkets\n\nNote: Mathematical, empirical, and numerical assertions reflect claims from the primary article pending independent environment, data, and code review. Do not imply clez ™Semir' Notebook"
+    }
+  ]
+}
