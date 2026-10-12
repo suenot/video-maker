@@ -1,0 +1,74 @@
+1
+00:00:00,000 --> 00:00:03,800
+♪
+
+2
+00:00:03,800 --> 00:00:07,625
+♪ Fit it right, don't overfit
+Validate every little bit ♪
+
+3
+00:00:07,625 --> 00:00:11,450
+♪ Fit it right, don't overfit
+Validate every little bit
+Trees and nets that learn and grow ♪
+
+4
+00:00:11,450 --> 00:00:15,275
+♪ Validate every little bit
+Trees and nets that learn and grow
+Modern ML for Trading, steal the show ♪
+
+5
+00:00:15,275 --> 00:00:19,100
+♪ Trees and nets that learn and grow
+Modern ML for Trading, steal the show
+An owl in a lab with a data seed ♪
+
+6
+00:00:19,100 --> 00:00:22,900
+♪ Modern ML for Trading, steal the show
+An owl in a lab with a data seed
+Grows a little model on features to feed ♪
+
+7
+00:00:22,900 --> 00:00:26,700
+♪ An owl in a lab with a data seed
+Grows a little model on features to feed
+Train it, test it, walk it forward in time ♪
+
+8
+00:00:26,700 --> 00:00:30,500
+♪ Grows a little model on features to feed
+Train it, test it, walk it forward in time
+No peeking at the future, keep the backtest clean ♪
+
+9
+00:00:30,500 --> 00:00:34,300
+♪ Train it, test it, walk it forward in time
+No peeking at the future, keep the backtest clean
+Fit it right, don't overfit ♪
+
+10
+00:00:34,300 --> 00:00:38,100
+♪ No peeking at the future, keep the backtest clean
+Fit it right, don't overfit
+Validate every little bit ♪
+
+11
+00:00:38,100 --> 00:00:41,900
+♪ Fit it right, don't overfit
+Validate every little bit
+Trees and nets that learn and grow ♪
+
+12
+00:00:41,900 --> 00:00:45,700
+♪ Validate every little bit
+Trees and nets that learn and grow
+Modern ML for Trading, steal the show ♪
+
+13
+00:00:45,700 --> 00:00:49,500
+♪ Trees and nets that learn and grow
+Modern ML for Trading, steal the show ♪
+

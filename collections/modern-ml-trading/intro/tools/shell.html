@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[{"id":"title","type":"string","label":"Title (| = line break)","default":"Modern ML|for Trading"},{"id":"lang","type":"string","label":"Language: en, ru, zh-CN, zh-TW","default":"en"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Modern ML for Trading: intro</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+/*__FONTS__*/
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #2a2018; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #2a2018; }
+      #cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      #title { position: absolute; left: 0; top: 0; width: 1920px; height: 0; pointer-events: none; }
+      #title .ln { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap; line-height: 1; text-transform: uppercase; }
+      #title .ch { display: inline-block; will-change: transform, opacity; }
+      #title .l0 { font-family: "Oswald", "CJK SC", "CJK TC", sans-serif; font-weight: 700; color: #f4e9d0; letter-spacing: 0.06em; -webkit-text-stroke: 6px #1f2620; paint-order: stroke fill; }
+      #title .l1 { font-family: "Oswald", "CJK SC", "CJK TC", sans-serif; font-weight: 600; color: #f0cf7a; letter-spacing: 0.12em; -webkit-text-stroke: 5px #1f2620; paint-order: stroke fill; }
+      #title.cjk-sc .ln { font-family: "Oswald", "CJK SC", serif; letter-spacing: 0.08em; }
+      #title.cjk-tc .ln { font-family: "Oswald", "CJK TC", serif; letter-spacing: 0.08em; }
+      #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
+      #preload .o6 { font-family: "Oswald"; font-weight: 600; }
+      #preload .o7 { font-family: "Oswald"; font-weight: 700; }
+      #preload .a5 { font-family: "Alegreya Sans"; font-weight: 500; }
+      #preload .a8 { font-family: "Alegreya Sans"; font-weight: 800; }
+      #preload .m5 { font-family: "IBM Plex Mono"; font-weight: 500; }
+      #preload .m6 { font-family: "IBM Plex Mono"; font-weight: 600; }
+      #preload .sc { font-family: "CJK SC"; font-weight: 900; }
+      #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      #vig { background: radial-gradient(80% 75% at 50% 46%, rgba(0, 0, 0, 0) 55%, rgba(38, 22, 8, 0.55) 100%); }
+      #grain { opacity: 0.16; mix-blend-mode: multiply; }
+      #flick { background: #3a2410; opacity: 0; mix-blend-mode: multiply; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="19.9" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div id="title" data-layout-allow-overlap></div>
+      <div class="ov" id="vig"></div>
+      <div class="ov" id="grain"></div>
+      <div class="ov" id="flick"></div>
+      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="19.9" data-track-index="10" data-volume="1"></audio>
+      <div id="preload"><span class="o6">Aa Бб 0</span><span class="o7">Aa Бб 0</span><span class="a5">Aa Бб 0</span><span class="a8">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m6">Aa 0</span><span class="sc">交易中的现代机器学习</span><span class="tc">交易中的現代機器學習</span></div>
+    </div>
+    <script>
+(function () {
+/*__SCRIPT__*/
+})();
+    </script>
+  </body>
+</html>

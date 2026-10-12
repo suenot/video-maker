@@ -1,0 +1,11 @@
+# renders, preview copies and media stay local (fonts/gsap are copied in by build.py)
+intro/assets/
+intro/preview/
+intro/renders/
+intro/snapshots/frame-*.png
+style/gallery/assets/
+style/gallery/preview/
+style/gallery/snapshots/
+*.mp4
+*.m4a
+*.wav
