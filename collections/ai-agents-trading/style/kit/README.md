@@ -15,6 +15,7 @@ The architecture matches the crab kit (`complex-arbitrage-rust/style/kit`), so t
 | `50_explainer.js` | `node`, `edge` / `edgePoint` / `tag`, `scoreboard`, `termTable` (+ `termWindow`), `holo`, `monitorChart` + `plot` (line / bar / candle), `taskBoard`, `terminal`, `loopRing`, `neonSign`, `popS` |
 | `fonts/` | local woff2 (Russo One, Exo 2, IBM Plex Mono, Press Start 2P, CJK subsets) + `fonts.css`; refresh with `tools/fetch_fonts.py` |
 | `vendor/gsap.min.js` | GSAP 3.14.2 (local, no CDN) |
+| `logo.svg` | the marketmaker.cc mark (`fill="currentColor"`); `tools/build.py` inlines it at `<!--__LOGO__-->` in a shell |
 
 ## Using the kit in an episode
 

@@ -1,12 +1,14 @@
 /* ============================================================
-   INTRO 50 TITLE SET: the neon sign over the whole team. Used twice:
-   k = TITLE_A (chorus 1): the sign buzzes on and the team hops in from the
-   sides ("here they come!"); k = TITLE_B (final card): the team is there,
-   the tag "AI Agents for Trading!" makes everyone jump, five episode
-   medallions pop on eighth notes, pixel confetti falls.
+   INTRO 50 TITLE SET: the neon sign over the whole team. k is the set's
+   timing: with k.medals (the final card) the team pops in, the tag "AI
+   Agents for Trading!" makes everyone jump, five episode medallions pop on
+   eighth notes and pixel confetti falls; without it (a mid-song sign, see
+   extra/) the team hops in from the sides ("here they come!").
+   The sign sits left of centre so the marketmaker.cc logo (top-right) never
+   touches it.
    Letters flicker on one by one (DOM text, per language).
    ============================================================ */
-const SIGN = { cx: 960, cy: 256, w: 1500, h: 360 };
+const SIGN = { cx: 880, cy: 262, w: 1180, h: 360 };
 const MEDAL_Y = 514, MEDAL_R = 48;
 /* five episodes, language-free: agentic revolution, open-source hedge fund team,
    AI4Finance foundation, daily stock-analysis agent, agent harness */
@@ -94,7 +96,7 @@ function drawTitleSet(t, k) {
   /* medallions: tiny CRT tiles, eighth notes after the tag */
   if (k.medals) MEDALS.forEach((md, i) => {
     const t0 = k.medals + i * BEAT / 2, a = K.inv(t0, t0 + 0.35, t); if (a <= 0) return;
-    const s = K.E.back(a, 2.6), x = 960 + (i - 2) * 150, y = MEDAL_Y + 5 * Math.sin(t * 2.6 + i) - 8 * K.pulse(t - i * 0.08, 1, 6);
+    const s = K.E.back(a, 2.6), x = SIGN.cx + (i - 2) * 150, y = MEDAL_Y + 5 * Math.sin(t * 2.6 + i) - 8 * K.pulse(t - i * 0.08, 1, 6);
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
     K.glow(ctx, 0, 0, 90, K.rgba(md[1], 0.5), 1);
     K.shape(ctx, K.rrPts(-MEDAL_R, -MEDAL_R, MEDAL_R * 2, MEDAL_R * 2, 16, 2), { fill: P.screen, w: 5, boil: 0.5, seed: 600 + i * 7, rim: { color: md[1], dx: 4, dy: 4, a: 0.9 } });
@@ -111,6 +113,7 @@ function layoutTitleDom(t, k) {
   if (t < k.letters) return;
   const n = TITLE_LN.length, sizes = TITLE_LN.map((d) => +d.dataset.size), gap = 14;
   const total = sizes.reduce((a, b) => a + b, 0) + gap * (n - 1);
+  titleEl.style.left = (SIGN.cx - 960) + "px";
   let y = SIGN.cy - total / 2 - 8;
   TITLE_LN.forEach((d, i) => { d.style.top = y.toFixed(1) + "px"; y += sizes[i] + gap; });
   TITLE_CH.forEach((c) => {

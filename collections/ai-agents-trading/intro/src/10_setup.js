@@ -1,28 +1,26 @@
 /* ============================================================
    INTRO 10 SETUP: variables, title DOM, world layout, timing (beat grid)
-   Song: song_full.m4a = the whole generated song (raw 0.10-58.6, 1.0 s fade,
-   loudnorm -14 LUFS), 80s synth-funk with vocoder, ~113 BPM (beat 0.531 s,
-   bar ~2.13 s; the verse drifts a little, so the grid is measured per bar).
-   Each sung line is two bars (verse words checked with whisper):
-     bar  0  1.21  intro: Beepo boots up       bar 10 22.62 "Robots on the floor where the neon glows"
-     bar  2  5.74  "Beep boop, the signals run" bar 12 26.84 "Reading every tick as the order flows"
-     bar  4  9.98  "Agents trade till the day is done"   bar 14 31.09 "One agent plans and another one checks"
-     bar  6 14.23  "Observe, decide, then act again"     bar 16 35.60 "Tools and memory to place the next bets!"
-     bar  8 18.48  "AI Agents for Trading, here they come!"
-     bar 18 39.98  chorus 2: "Beep boop" ... bar 24 52.73 "AI Agents for Trading, here they come!"
-     bar 25 54.85  tag "AI Agents for Trading!", bar 26 56.98 ring-out, fade to 58.5
+   Song: song_short.m4a, 24.3 s, 80s synth-funk with vocoder, ~113 BPM
+   (beat 0.531 s, bar ~2.12 s). Cut from song_raw.mp4: the instrumental
+   intro (raw 0.10-5.84) + the second chorus with the song's own ending
+   (raw 40.08-58.6), 30 ms crossfade on the downbeat, 1 s fade, loudnorm.
+     bar 0  1.21  intro: Beepo boots up, waves hello on bar 1
+     bar 2  5.74  "Beep boop, the signals run"
+     bar 4  9.96  "Agents trade till the day is done"
+     bar 6 14.21  "Observe, decide, then act again"
+     bar 8 18.46  "AI Agents for Trading, here they come!"  (title card)
+     bar 9 20.57  tag "AI Agents for Trading!", bar 10 22.68 ring-out
    All story times are K.at(bar, beat) on the measured downbeats below.
    ============================================================ */
 const K = AK, P = K.P, at = K.at;
 K.G.BPM = 113;
-K.G.BARS = [1.21, 3.48, 5.74, 7.85, 9.98, 12.10, 14.23, 16.35, 18.48, 20.60, 22.62, 24.71, 26.84, 28.96, 31.09, 33.48, 35.60, 37.73, 39.98, 42.10, 44.23, 46.35, 48.48, 50.60, 52.73, 54.85, 56.98];
-const DUR = 58.5;
+K.G.BARS = [1.21, 3.48, 5.74, 7.83, 9.96, 12.07, 14.21, 16.32, 18.46, 20.57, 22.68];
+const DUR = 24.3;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const BEAT = K.beatLen();
 
 /* ---------- story beats (on the song's downbeats) ---------- */
 const T = {
-  /* intro + chorus 1 */
   powerOn: [0, 0.32],               /* CRT power-on line opens the film */
   noise: [0.2, at(0, 2)],           /* face screen boots: static */
   eyesOn: at(0, 2),                 /* pixel eyes appear */
@@ -39,19 +37,13 @@ const T = {
   dive: [at(6) - 0.55, at(6)],      /* camera dives into Beepo's face screen */
   observe: at(6), decide: at(6, 2), act: at(7), again: at(7, 2),
   crtOff: [at(8) - 0.42, at(8) - 0.04],  /* power-off squeeze into a line */
-  title: at(8),                     /* "AI Agents for Trading, here they come!" (first sign) */
-  /* verse: one continuous take along the night floor */
-  verse: at(10), tick: at(12), plan: at(14), tools: at(16),
-  /* chorus 2 */
-  net: at(18), eod: at(20), ring: at(22),
-  crtOff2: [at(24) - 0.42, at(24) - 0.04],
-  title2: at(24), medals: at(25), final: at(26),
+  title: at(8),                     /* "AI Agents for Trading, here they come!" */
+  medals: at(9), final: at(10),
 };
-/* the two title sets: first sign (chorus 1) and the final title card */
-const TITLE_A = { start: T.title, letters: T.title + 0.25, jump: at(9), medals: null, end: at(10) };
-const TITLE_B = { start: T.title2, letters: T.title2 + 0.25, jump: at(24, 2), medals: T.medals, final: T.final, end: DUR };
-/* glitch cuts (CRT signal tear) between sets */
-const CUTS = [at(10), at(18), at(20), at(22)];
+/* the title card (50_title.js takes the set's timing as k) */
+const TITLE_B = { start: T.title, letters: T.title + 0.25, jump: at(8, 2), medals: T.medals, final: T.final, end: DUR };
+/* glitch cuts (CRT signal tear) between sets; the short cut has none */
+const CUTS = [];
 
 /* ---------- variables (title text, language) ---------- */
 const VARS = Object.assign({ title: "AI Agents|for Trading", lang: "en" },
@@ -89,8 +81,8 @@ const HORIZON = 700;
 const WORLD = { x0: -600, x1: 4200 };
 const SCREEN_BIG = { x: 260, y: 200, w: 860, h: 400 };   /* wall chart */
 const WINDOW = { x: 1560, y: 110, w: 980, h: 460 };      /* synthwave window behind the team */
-const CLOCK = { x: 2600, y: 170, w: 330, h: 120 };      /* 7-seg wall clock */
-const PNL = { x: 2600, y: 400, w: 330, h: 170 };        /* PnL scoreboard */
+const CLOCK = { x: 2600, y: 220, w: 330, h: 120 };      /* 7-seg wall clock */
+const PNL = { x: 2600, y: 430, w: 330, h: 170 };        /* PnL scoreboard */
 const TUBE = { x: 3200, top: -200, y: 980 };            /* pneumatic tube to the exchange */
 const BEEPO_A = [1000, 1060], BEEPO_B = [1600, 1070], BEEPO_S = 1.2;
 const TEAM = [

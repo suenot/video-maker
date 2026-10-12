@@ -1,20 +1,16 @@
 /* ============================================================
-   INTRO 70 RENDER: render(t) is the whole film (the full song, 58.5 s).
+   INTRO 70 RENDER: render(t) is the whole film (the short song, 24.3 s).
    One paused GSAP timeline drives a proxy whose setter calls render(t).
     0.00 -  5.74  CRT power-on; close-up: Beepo boots, waves hello
-    5.74 -  9.98  "Beep boop, the signals run": hop, pull back, cables light
-    9.98 - 14.23  "Agents trade till the day is done": ticket line, dusk
-   13.68 - 14.23  dive into Beepo's face screen
-   14.23 - 18.06  "Observe, decide, then act again": the loop in his face
-   18.06 - 18.48  CRT power-off
-   18.48 - 22.62  "AI Agents for Trading, here they come!": sign, team hops in
-   22.62 - 39.98  verse, one continuous take (60_verse.js), glitch cut in
-   39.98 - 44.23  "Beep boop": the agent network
-   44.23 - 48.48  "Agents trade till the day is done": desks, the 16:00 bell
-   48.48 - 52.31  "Observe, decide, then act again": the ring on the floor
-   52.31 - 52.73  CRT power-off
-   52.73 - 58.50  final title card; tag at 54.85; CRT power-off at the end
-   Cuts between sets are diegetic: face dive, CRT off/on, CRT signal tear.
+    5.74 -  9.96  "Beep boop, the signals run": hop, pull back, cables light
+    9.96 - 14.21  "Agents trade till the day is done": ticket line, dusk
+   13.66 - 14.21  dive into Beepo's face screen
+   14.21 - 18.04  "Observe, decide, then act again": the loop in his face
+   18.04 - 18.46  CRT power-off
+   18.46 - 24.30  "AI Agents for Trading, here they come!": title card;
+                  tag at 20.57 (medallions, confetti); CRT off at the end
+   Cuts are diegetic: face dive, CRT off/on (glitch() is the signal-tear
+   cut kept for longer cuts, see extra/).
    ============================================================ */
 const FACE_SCALE = (2060 / 1920); /* loop scene scale when the face fills the frame */
 
@@ -87,16 +83,6 @@ function render(t) {
     else if (t < T.title) {
       if (t < T.crtOff[1]) crtOff(K.inv(T.crtOff[0], T.crtOff[1], t), () => drawLoopFull(t));
       else blackFrame(t, T.crtOff[1], T.title);
-    } else if (t < TITLE_A.end) {
-      k = TITLE_A;
-      if (t < k.start + 0.3) crtMask(K.inv(k.start, k.start + 0.3, t), () => drawTitleSet(t, k)); else drawTitleSet(t, k);
-    } else if (t < T.net) drawVerse(t);
-    else if (t < T.eod) drawNet(t);
-    else if (t < T.ring) drawEOD(t);
-    else if (t < T.crtOff2[0]) drawRing(t);
-    else if (t < T.title2) {
-      if (t < T.crtOff2[1]) crtOff(K.inv(T.crtOff2[0], T.crtOff2[1], t), () => drawRing(t));
-      else blackFrame(t, T.crtOff2[1], T.title2);
     } else {
       /* final title card: power-on, and the whole frame powers off over the last 0.4 s */
       k = TITLE_B;
@@ -118,11 +104,14 @@ function render(t) {
     /* never leave a black frame silently: draw the error so a snapshot shows it */
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);
   }
+  /* logo: one small bounce on the first downbeat, then static */
+  const lb = K.inv(at(0), at(0) + 0.35, t), ls = lb > 0 && lb < 1 ? 1 + 0.08 * Math.sin(lb * Math.PI) : 1;
+  logoEl.style.transform = ls === 1 ? "" : `scale(${ls.toFixed(3)})`;
   /* rolling CRT bright band, continuous time */
   rollEl.style.transform = `translateY(${(((t * 0.32) % 1) * 1500).toFixed(1)}px)`;
 }
 
-const rollEl = document.getElementById("roll");
+const rollEl = document.getElementById("roll"), logoEl = document.getElementById("logo");
 const TL = gsap.timeline({ paused: true });
 const drv = { _t: 0 };
 Object.defineProperty(drv, "t", { get() { return this._t; }, set(v) { this._t = v; render(v); } });

@@ -91,11 +91,15 @@ Animation rules:
 ## 7. Timing (beat grid)
 
 - The theme is 80s synth-funk with vocoder at about 113 BPM: a beat is 0.531 s and a bar is 2.12 s. Write times as `K.at(bar, beat)`.
-- The intro runs the full song (`song_full.m4a`, 58.5 s). Its grid is measured per bar, because the verse drifts: `BARS = [1.21, 3.48, 5.74, 7.85, 9.98, 12.10, 14.23, 16.35, 18.48, 20.60, 22.62, 24.71, 26.84, 28.96, 31.09, 33.48, 35.60, 37.73, 39.98, 42.10, 44.23, 46.35, 48.48, 50.60, 52.73, 54.85, 56.98]`.
-- Each sung line (two bars) has its own picture. In chorus 1: the cables light; the ticket line runs while dusk falls; the loop plays inside Beepo's face; the neon sign lights as the team hops in. In the verse: the neon signs ignite; the analyst reads the tape and the order book; the trader plans while risk checks; Beepo gathers tools and memory and places the bet. In chorus 2: the agent network; the 16:00 bell; the loop ring on the floor; the final title card.
+- The intro runs the full length of the short song (`song_short.m4a`, 24.3 s). Its grid is `BARS = [1.21, 3.48, 5.74, 7.83, 9.96, 12.07, 14.21, 16.32, 18.46, 20.57, 22.68]`, measured per bar (Gemini songs drift a little).
+- Each sung line (two bars) has its own picture: "Beep boop, the signals run" = Beepo sings and the cables light with pulses; "Agents trade till the day is done" = the ticket pipeline while dusk falls and the clock runs to 16:00; "Observe, decide, then act again" = the loop ring inside Beepo's face; "AI Agents for Trading" = the neon sign title. The 58 s build's verse and chorus-2 scenes (neon signs, tape + order book, plan and check, tools and memory, the agent network, the 16:00 bell, the floor ring) are in `intro/extra/` for episodes.
 - A third diegetic cut exists for fast scene changes: the **CRT signal tear** (`glitch` in `intro/src/70_render.js`), with horizontal bands shifted for 0.2 s either side of a downbeat.
 - Pops land on beats with a back ease (0.3 - 0.4 s). Staggers are 1/2 or 1/4 beat.
 - Determinism: no `Math.random`, `Date.now`, `performance.now`; seeded `hash` / `mulberry` only.
+
+## 7b. The marketmaker.cc logo
+
+Top-right on every intro frame: the mark from `kit/logo.svg` (inlined by `build.py` at `<!--__LOGO__-->`) plus the "marketmaker.cc" wordmark in Exo 2 800 at 36 px. It sits on a navy plate (`rgba(7,8,28,.78)`) with a cyan rim and glow, 96 px tall, 48 px from the edges, and above all overlays. It bounces once on the first downbeat and is otherwise static. Keep scene content out of the area x > 1440, y < 160.
 
 ## 8. Explainer elements in this world (for episodes)
 

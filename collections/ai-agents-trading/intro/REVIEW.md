@@ -1,6 +1,8 @@
 # Intro review log
 
-**Current version: the full song.** The intro runs the whole generated song: 58.5 s, 1920x1080, 30 fps. The audio is `song_full.m4a` (raw 0.10-58.6 s, 1.0 s fade, -14 LUFS), and there is a silent copy of each render.
+**Current version: the short song (user decision, UPDATE 3).** The intro runs the full length of a 24.3 s song, 1920x1080, 30 fps. The audio is `song_short.m4a`: the instrumental intro (raw 0.10-5.84) plus the second chorus with the song's own ending (raw 40.08-58.6), with a 30 ms crossfade on the downbeat, a 1 s fade and loudnorm (-13.5 LUFS). Every render also has a silent copy.
+The marketmaker.cc logo (UPDATE 2) sits top-right for the whole intro.
+The 58.5 s full-song build (verse and chorus-2 scenes) was made and then dropped by the same user decision. Its scenes live in `intro/extra/` for episodes.
 The 20 s rounds below are kept as history; the full-song rounds follow them.
 Each round comes from snapshots I looked at (`tools/snap.sh`, 9 to 20 frames, plus full-resolution frames and crops).
 
@@ -52,9 +54,15 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, 9 to 20 frames, pl
 - The ring's step icons were too small to read. Their scale is now 1.15 (1.5 when lit).
 - `check`: lint has 0 errors, runtime 0, layout 0 issues, motion 0, and contrast 18/18. The 1 fps sheet (`snapshots/contact-sheet.jpg`, 58 frames) shows a new picture every 2-4 s, and no empty frames except the two short CRT power-off blacks (18.1-18.5 s and 52.3-52.7 s).
 
+## Short song (24.3 s) + logo
+- Grid: `BARS = [1.21, 3.48, 5.74, 7.83, 9.96, 12.07, 14.21, 16.32, 18.46, 20.57, 22.68]`, measured on `song_short.m4a`. The chorus lines land on bars 2 / 4 / 6 / 8, and the tag on bar 9, so the chorus-1 story maps one to one. The title card is on "AI Agents for Trading, here they come!" (18.46), and the medallions and confetti come on the tag (20.57).
+- Logo: the marketmaker.cc mark (inlined from `style/kit/logo.svg` by `build.py`) plus the "marketmaker.cc" wordmark on a navy plate with a cyan rim, 96 px tall, 48 px margin, top-right, above every overlay. It bounces once on the first downbeat.
+- The neon sign overlapped the logo. The sign is now 1180 wide and centred at x 880, with the title DOM and medallions shifted with it. The clock and PnL boards on the floor moved down 40 px, so the logo never covers them in a held shot.
+- 1 fps sheet (24 frames): there are no empty frames except the CRT power-off line at 18.0-18.5 s. `check` passes, with contrast 23/23 including the logo wordmark.
+
 ## Known weaknesses
-- In the verse take, the bots that hop on to later stations cross the order-book shot (bar 12). This is lively, but it busies the frame for one beat.
-- The network shot (40-44 s) leaves the top-left of the wall empty, apart from Beepo singing.
-- The title sign appears twice (the chorus 1 hook and the final card). It is intentional, but the two are close in look.
+- The wide pull-back (7-9 s) still shows Beepo at about 280 px tall; the floor reveal needs the width.
+- The title sign sits left of centre (to clear the logo), while Beepo stands at the centre.
+- Loudness is -13.5 LUFS, single-pass loudnorm on a short clip.
 - Ticket text in the pipeline shot is about 24 px; it is context, not information.
 - One lint warning remains: the file is large, because it is built from the kit by design.
