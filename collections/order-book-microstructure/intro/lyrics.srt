@@ -1,0 +1,102 @@
+1
+00:00:00,000 --> 00:00:06,400
+♪
+
+2
+00:00:06,400 --> 00:00:09,600
+♪ Hey! The spread is tight,
+Depth and flow from left to right, ♪
+
+3
+00:00:09,600 --> 00:00:12,800
+♪ Hey! The spread is tight,
+Depth and flow from left to right,
+Every tick and every queue, ♪
+
+4
+00:00:12,800 --> 00:00:16,000
+♪ Depth and flow from left to right,
+Every tick and every queue,
+Order Book and Market Microstructure! ♪
+
+5
+00:00:16,000 --> 00:00:19,200
+♪ Every tick and every queue,
+Order Book and Market Microstructure!
+Bids on the left and the asks up high, ♪
+
+6
+00:00:19,200 --> 00:00:22,400
+♪ Order Book and Market Microstructure!
+Bids on the left and the asks up high,
+Stacked like a tower reaching to the sky, ♪
+
+7
+00:00:22,400 --> 00:00:25,600
+♪ Bids on the left and the asks up high,
+Stacked like a tower reaching to the sky,
+Limit orders wait in a price-time queue, ♪
+
+8
+00:00:25,600 --> 00:00:28,800
+♪ Stacked like a tower reaching to the sky,
+Limit orders wait in a price-time queue,
+Market orders come and they cross right through! ♪
+
+9
+00:00:28,800 --> 00:00:32,000
+♪ Limit orders wait in a price-time queue,
+Market orders come and they cross right through!
+Hey! The spread is tight, ♪
+
+10
+00:00:32,000 --> 00:00:35,200
+♪ Market orders come and they cross right through!
+Hey! The spread is tight,
+Depth and flow from left to right, ♪
+
+11
+00:00:35,200 --> 00:00:38,400
+♪ Hey! The spread is tight,
+Depth and flow from left to right,
+Every tick and every queue, ♪
+
+12
+00:00:38,400 --> 00:00:41,600
+♪ Depth and flow from left to right,
+Every tick and every queue,
+Order Book and Market Microstructure! ♪
+
+13
+00:00:41,600 --> 00:00:44,800
+♪ Every tick and every queue,
+Order Book and Market Microstructure!
+Hey! The spread is tight, ♪
+
+14
+00:00:44,800 --> 00:00:51,200
+♪
+
+15
+00:00:51,200 --> 00:00:53,600
+♪ Order Book and Market Microstructure!
+Hey! The spread is tight,
+Depth and flow from left to right, ♪
+
+16
+00:00:53,600 --> 00:00:56,000
+♪ Hey! The spread is tight,
+Depth and flow from left to right,
+Every tick and every queue, ♪
+
+17
+00:00:56,000 --> 00:00:58,400
+♪ Depth and flow from left to right,
+Every tick and every queue,
+Order Book and Market Microstructure! ♪
+
+18
+00:00:58,400 --> 00:01:00,800
+♪ Every tick and every queue,
+Order Book and Market Microstructure! ♪
+

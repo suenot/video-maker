@@ -1,0 +1,11 @@
+# Renders, audio/video, build copies and preview frames stay local
+*.mp4
+*.m4a
+*.wav
+**/renders/
+intro/assets/
+intro/preview/
+intro/snapshots/frame-*.png
+intro/snapshots/lang-*/
+style/gallery/assets/
+style/gallery/snapshots/frame-*.png
