@@ -1,0 +1,56 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "Analysis of Trader\nBehavior Prediction\nCapabilities in DEX\nBased on\nIdentification and\nModeling\n\nSynthesizing the Desire\nOrderbook, Trader\nEmbeddings, and Manipulation\nDetection Models"
+    },
+    {
+      "page": 2,
+      "text": "Machine Learning-Driven Wallet Tracking\nand Vector Embeddings\n\nW\nThe Proposal\n\nDEX participants operate via\nunique wallet addresses,\nallowing detailed onchain\ntracking.\n\nAnalyzing approximately 100\ntransactions is sufficient to\ncreate dense vector\nrepresentations (embeddings)\nof a participant’s unique\ntrading style.\n\nAttributed Claim: Up to 84%\nrecognition accuracy among a\ncandidate pool of 100,000.\n\n\\\nvidence & Critical Caveats\n\nIdentity Distinction: Wallet\nidentification is not verified real-\nperson identity.\n\nIndependence Assumption: One\naddress cannot be asserted as one\nindependent, singular trader.\n\nPending Verification: Source study,\nsampling methods, metrics, and\ngeneralization capabilities require\nindependent primary-source review.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "Behavior Prediction and the Desire Orderbook Concept\n\nConceptual Framework: The author proposes aggregating individual\nbehavioral patterns to assess the probability of future trader actions.\n\n9\n\nStandard Orie [ LK Desire\nOrderbook Lone i Orderbook\n\noS\n\nWhat it is NOT: It is not a live order book. It What it is proposed to be: A probabilistic\ndoes not represent demonstrated liquidity, projection of potential future orders overlaid\nguaranteed orders, or verifiable onchain capital. with current market data.\n\nGemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "Sequential Components of the Prediction Model\n\nObservable Onchain State (Data-Driven) Inferred Intentions (Probabilistic)\n\n1. Historical Patterns.\nStudying a trader's typical behavior across\nvarying past market conditions.\n\nFactoring in time of day, day of the week,\n\nI\nI\nI\nI\n3. Temporal & Market Context.\nI\nand broader macro market trends.\n\nL\\ Wie |\nNY My:\n2. Current Portfolio State. 4. Behavioral Triggers.\n\nAnalyzing live asset balances and token ; Identifying specific, inferred events hypothesized to\ndistribution within the target wallet. precede a decision to sell or transact."
+    },
+    {
+      "page": 5,
+      "text": "Number of Active Traders as a Market Asset\n\nWY\nProposed Signals (The Hypothesis)\n\niE RESISTANCE\nPARTICIPATION : MANIPULATION DIFFICULTY\nMarket Health Indicator: Manipulation Resistance:\nHigh independent participation Greater participation theoretically\nsuggests a healthy ecosystem. increases manipulation difficulty.\n\nA\\ Critical Unresolved Assumptions (The Reality)\nAddress Clustering: Extreme !\ndifficulty in proving multiple\nactive addresses are not\ncontrolled by a single entity.\n\nmetrics are highly susceptible\nto automated generation and\nspoofing.\n\nEM:\nSybil Vulnerability: Active user\n\nFuture Liquidity Predictor:\nParticipant growth is hypothesized\nto precede volume growth.\n\nCausality Gap: The link between raw\nparticipant count and actual market\nresistance remains an unvalidated\nassumption, not a verified conclusion."
+    },
+    {
+      "page": 6,
+      "text": "Detection of Manipulations on DEX via Onchain Transparency\n\nThe Transparency Premise: The article posits that public blockchain ledgers create unique\nopportunities to isolate manipulation patterns buried in chaotic transaction streams.\n\ne ye fy °\n\nheshSeirensections / 4 ae\n“—/ _ © UNSTRUCTURED DATA\n\\ Pyas A a\n\nRAW TRANSACTIONS ©. > 0 Ye\nCHAOS aNee Sees SN :\na a o- SS\nhash3tiqiftvash afd tas = ee Se\nRAWIC TRANSACTIONS <8 * Pee.\n\nas a ——-\n\nVector 1: Order-Book Manipulation\neeoeoee eeeeoeoooe eee\nee @ 6 ee ee @e@\n\n° oe\n\nsy le @\nSs. oe NN\n\nVector 2: Curve Analysis Exploits\n\n.\no\n. —?>\n=-\n=\n\no @e°%ee, ,eoccse\n\need ry se | 2a a =\nole ea azo f a—s TTT Soe\n\n° a.” * 34 es ee 0% - a\nhash3trthBrawnldAzMUash® ,! 770 °%e % 4S MC ae WY\n4 2, .\noo. oe Le ee a Oe Vector 3: Order Placement & Front-Running\nA. ¥ rl . .e .\nUNSTRUCTURED DATA Wa ° 4 see Z a) ay _ UNSTRUCTURED DATA coo Rar oce—-\n\nee e nS \\ eeseeeeo eeeee--»\n\nrchitectural Limitation Caveat (CRITICAL): The proposed models regarding order placement, __\ncurve analysis, and order-book manipulation apply strictly to order-book DEXs. These dynamics |\n|. Cannot be assumed for, or directly mapped to, every liquidity-pool (AMM) DEX architecture.\n\nNote: Proposed detection signals require independent corroboration. This framework provides neither accusations against specific users nor actionable instructions for manipulation.\n\nini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "Detection Vector 1: Self-Trading and Wash-Trading Cycles\n\nThe Concept: Identifying artificial volume by tracing onchain transaction trails. The article cites the\nDEFIRANGER system and the analysis of Cash Flow Trees (CFT) to isolate these characteristics.\n\nTRANSACTION\nTRAIL\n\n_ ANOMALY\nDETECTED\n\n__ CROSS-REFERENCE\nFAIL\n\nTRANSACTION Lace are\nTRAIL\n\nANOMALY\nDETECTED\n\nSS\nPo\nww\n\nTRANSACTION\n~ TRAIL\nAs,\nNode 1 \"Raye\nKe, ANOMALY _\nDETECTED\n\nCash Flow Tree\n\n(CFT)\n\nTRANSACTION\nTRAIL\n\nASSET TRANSFER\n\n: Hypothesized Signals of Self-Trading\n\n—+\n\n© 1. Related Addresses: High-frequency\ntransactions occurring exclusively\nbetween closely linked or correlated\nwallets.\n\n. Overlapping Orders: Unusually large\nbuy/sell orders placed at almost\nidentical prices.\n\n. Cycle Anomalies: Repetitive transaction |\nloops that exhibit no logical economic |\nsense, profit motive, or external utility.\n\n—+\n\nA Gemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "Detection Vector 2: Price-Setting and Order Curve Anomalies\n\nThe Concept: Attempts to influence asset prices via the strategic placement of large orders\nin the orderbook that the initiator does not intend to fully execute.\n\nae Proposed Detection Methods\n\n°\n9\n\n+-+0 1. Order Curve Analysis: Comparing\nreal-time order curves against\nestablished baseline simulations of\n} fair markets.\n\n—-} |\n\n| / Anomalous Order Curve |\n\n. Irregularity Spotting: Identifying\n\nFair Market symmetry violations or recurring\nSimulation irregular behaviors in order\nplacement.\n\n. Standardization: Mapping standard\norder patterns to compare against\nreference models to continuously\nspot deviations."
+    },
+    {
+      "page": 9,
+      "text": "Lara ff\n\n15 SL\n\nEN\n\nme Detection Vector 3: Phased Pump-and-Dump Schemes\nThe Concept: Multi-phase schemes artificially inflating and crashing asset prices,\nhypothesized to be highly visible due to absolute DEX transaction transparency.\nSSS SS SS, SS eee SSS eS SS\n1. Pre-launch & Accumulation 2. Launch 3. Pump Phase 4. Dump Phase\n(I\n\n— a i\" ful]\n\n— SS ee —_\nMass selling of the\naccumulated asset into the\ninflated liquidity pool.\n\n| large token quantities priorto : activity designed to trigger driven by self-trading or\n\nQuiet, gradual purchasing of Initial coordinated market Artificial price inflation !\nbroad market awareness. | momentum. ' aggressive, coordinated orders. |"
+    },
+    {
+      "page": 10,
+      "text": "Component 1: ‘ Component 2: Component 3: Component 4:\nML Embeddings & Prediction Transaction Graphs Market Simulation Baselines Real-Time Monitoring\nMachine learning systems dedicated to Network analysis tools for mapping Systems running continuous fair-market Live-data ingestion systems designed\ngenerating trader vector representations relationships, identifying linked addresses, reference models to establish for the prompt, continuous detection of\nand probabilistic forecasts. and isolating self-trading clusters. comparative baseline behaviors. anomalous or suspicious onchain activity."
+    },
+    {
+      "page": 11,
+      "text": "Privacy Expectations\n\nBlockchain pseudonymity does\nnot grant absolute consent; highly\ndetailed behavioral profiling may\nviolate user privacy expectations.\n\nPublic awareness of ML detection\nLj | models will likely trigger\nO | manipulators to develop more\n| sophisticated, evasive schemes.\n\n© system Limitations and Ethical Considerations\n\nAdversarial Adaptation |\n\nLegitimate, complex, or\n\ninstitutional trading strategies may 7\neasily be erroneously flagged as\n\nmalicious market manipulations.\n\nHigh Volatility & uncertainty\n\nEven the most sophisticated\nalgorithms possess severe\nlimitations when operating within\nthe extreme volatility native to\ncryptocurrency markets."
+    },
+    {
+      "page": 12,
+      "text": "© The Author’s Hypothesis\n\nIntegration of ML embeddings, transaction graphs,\nand simulation models to construct a probabilistic\ndesire orderbook will result in greater fairness,\ntransparency, efficiency, and enhanced prediction\ncapabilities on DEXs."
+    },
+    {
+      "page": 13,
+      "text": "@software{soloviov2025analysistraderpredictiondex,\nauthor = {Soloviov, Eugen},\ntitle = {Analysis of Trader Behavior Prediction Capabilities in DEX Based on\n\nIdentification and Modeling},\n\nyear = {2025},\n\nurl = {https://marketmaker.cc/en/blog/post/analysis-trader-prediction-dex},\n\nversion = {0.1.0},\n\ndescription = {How DEX transparency and modern identification methods allow predicting\ntrader behavior, detecting manipulations, and building a desire orderbook. }\n\nFootnoted References (from Source):\n[“1] BP-Lennart-August-s4800036.pdf (Trader Identification / 84% accuracy claim)\n[“2] DEFIRANGER / malgenomeproject.org (Self-Trading / Cash Flow Tree analysis)\n[3] dirittoue.info (Market Manipulation / Fair market simulation)\n\nFootnote: Draft requires human editorial and primary-source review. Target-channel duplicates remain unverified; do not imply clearance.\n\n]\n& Gemini Notebook ;"
+    }
+  ]
+}
