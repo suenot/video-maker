@@ -12,6 +12,10 @@
      ear      -1..1 extra ear flick                    tail  phase (radians)
      handL/R  { x, y, open, hold: "watch" | "whistle" | "flag" | "thumb" | null, lid 0..1 }
      hatTip   deg, hatLift px                          legWalk phase (radians)
+     talk     0..1 loudness: overrides `mouth` above 0.04 with a talking mouth
+     viseme   "a" | "e" | "o" | "m" talking shape (auto from K.viseme when omitted)
+     nod      px head dip, tilt deg head tilt           ponder 0..1 "?" pops
+     hand.draw(ctx, x, y, ang) draws a carried prop at the hand (under the glove)
    ============================================================ */
 var SK = window.SK || (window.SK = {});
 (function (K) {
@@ -104,7 +108,7 @@ var SK = window.SK || (window.SK = {});
     ctx.restore();
     /* ---- head ---- */
     const headY = bodyBase - 112 * syk - 50;
-    ctx.save(); ctx.translate(0, headY); ctx.scale(1 + sq * 0.12, 1 - sq * 0.12);
+    ctx.save(); ctx.translate(0, headY + (st.nod || 0)); if (st.tilt) ctx.rotate((st.tilt * Math.PI) / 180); ctx.scale(1 + sq * 0.12, 1 - sq * 0.12);
     const earA = Math.sin(t * 3.1) * 0.05 + (st.ear || 0) * 0.3;
     [-1, 1].forEach((sd, i) => {
       ctx.save(); ctx.translate(sd * 50, -46); ctx.rotate(sd * (0.25 + earA * (i ? 1 : -1)));
@@ -117,15 +121,16 @@ var SK = window.SK || (window.SK = {});
     for (let i = 0; i < 24; i++) { const a = (i / 24) * K.TAU, c = Math.cos(a), sn = Math.sin(a); head.push([c * (60 + 6 * Math.max(0, sn)), sn * (sn > 0 ? 54 : 58)]); }
     K.shape(ctx, head, { fill: P.fur, w: 3.5, smooth: true, boil: 0.8, seed: seed + 25, shade: { color: P.furDark, dx: 12, dy: 8 }, tone: { color: P.ink, gap: 8, r: 0, r2: 2, dir: Math.PI * 0.2, alpha: 0.2 } });
     /* muzzle */
-    const pf = clamp(st.puff || 0, 0, 1);
-    K.shape(ctx, K.ellipsePts(0, 24, 36 + pf * 10, 25 + pf * 4, 18), { fill: P.furLight, w: 2.5, smooth: true, boil: 0.5, seed: seed + 26 });
+    const pf = clamp(st.puff || 0, 0, 1), tk = clamp(st.talk || 0, 0, 1), talking = tk > 0.04;
+    K.shape(ctx, K.ellipsePts(0, 24 + (talking ? tk * 3 : 0), 36 + pf * 10, 25 + pf * 4 + (talking ? tk * 6 : 0), 18), { fill: P.furLight, w: 2.5, smooth: true, boil: 0.5, seed: seed + 26 });
     /* cheeks */
     [-1, 1].forEach((sd, i) => { ctx.save(); ctx.globalAlpha *= 0.55 + pf * 0.3; K.shape(ctx, K.ellipsePts(sd * (40 + pf * 6), 18, 11 + pf * 7, 7 + pf * 5, 10), { fill: P.earPink, key: null, smooth: true, boil: 0.4, seed: seed + 27 + i, reg: 0 }); ctx.restore(); });
     /* whiskers */
     [-1, 1].forEach((sd) => [-6, 2, 10].forEach((dy, k) => K.line(ctx, [[sd * 26, 16 + dy * 0.3], [sd * (66 + k * 4), 8 + dy * 1.2 + Math.sin(t * 4 + k + sd) * 1.5]], { w: 1.8, boil: 0.5, seed: seed + 30 + k + (sd > 0 ? 5 : 0) })));
     /* mouth */
     const m = st.mouth || "smile";
-    if (m === "smile") K.line(ctx, [[-14, 30], [-6, 37], [0, 33], [6, 37], [14, 30]], { w: 3, boil: 0.4, seed: seed + 40, smooth: true });
+    if (talking) K.talkMouth(ctx, tk, st.viseme || K.viseme(t, tk, seed), seed + 40);
+    else if (m === "smile") K.line(ctx, [[-14, 30], [-6, 37], [0, 33], [6, 37], [14, 30]], { w: 3, boil: 0.4, seed: seed + 40, smooth: true });
     else if (m === "grin") {
       K.shape(ctx, [[-20, 28], [20, 28], [12, 44], [0, 47], [-12, 44]], { fill: "#6e2a1c", w: 2.5, boil: 0.4, seed: seed + 41, smooth: true });
       K.shape(ctx, K.rectPts(-7, 28, 14, 9, 1), { fill: P.cream, w: 2, boil: 0.2, seed: seed + 42 });
@@ -161,6 +166,14 @@ var SK = window.SK || (window.SK = {});
       K.shape(ctx, K.ellipsePts(0, 2, 7, 7, 10), { fill: P.tomato, w: 3, smooth: true, seed: seed + 65 });
       ctx.restore();
     }
+    if (st.ponder > 0) { /* "?" (thinking) */
+      const a = K.E.back(clamp(st.ponder, 0, 1), 2.5), qp = [[-14, -40], [-6, -54], [10, -54], [16, -40], [2, -28], [0, -16]];
+      ctx.save(); ctx.translate(-96, -104); ctx.rotate(-0.2); ctx.scale(a, a);
+      K.line(ctx, qp, { key: P.ink, w: 15, smooth: true, boil: 0.3, seed: seed + 66 });
+      K.line(ctx, qp, { key: P.mustard, w: 8, smooth: true, boil: 0.3, seed: seed + 66 });
+      K.shape(ctx, K.ellipsePts(0, 0, 7, 7, 10), { fill: P.mustard, w: 3, smooth: true, seed: seed + 67 });
+      ctx.restore();
+    }
     ctx.restore();
     /* ---- arms: shoulders at the coat's top corners, IK to hand targets ---- */
     [["L", -1], ["R", 1]].forEach(([k, sd]) => {
@@ -185,15 +198,41 @@ var SK = window.SK || (window.SK = {});
         const wv = Math.sin(t * 6) * 6;
         K.shape(ctx, [[fx, fy - 110], [fx + 70, fy - 96 + wv], [fx, fy - 70]], { fill: P.mustard, w: 3, seed: seed + 97, boil: 0.5 });
         K.glove(ctx, fx, fy, ang, 1, h, seed + 98);
-      } else K.glove(ctx, r.end[0], r.end[1], ang, 1, h, seed + 100 + (sd > 0 ? 3 : 0));
+      } else {
+        if (h.draw) h.draw(ctx, r.end[0] + Math.cos(ang) * 14, r.end[1] + Math.sin(ang) * 14, ang);
+        K.glove(ctx, r.end[0], r.end[1], ang, 1, h, seed + 100 + (sd > 0 ? 3 : 0));
+      }
     });
     ctx.restore();
   };
 
-  /* seeded blink curve, about one blink per 1.9 s, 0..1 */
+  /* talking mouth in head space (mouth top at y 30); tk 0..1, v viseme */
+  K.talkMouth = function (ctx, tk, v, seed) {
+    if (v === "m" || tk < 0.1) { K.line(ctx, [[-13, 33], [0, 36], [13, 33]], { w: 3.2, boil: 0.3, seed, smooth: true }); return; }
+    if (v === "o") { K.shape(ctx, K.ellipsePts(0, 37 + tk * 3, 5 + tk * 4, 6 + tk * 8, 12), { fill: P.mouthIn, w: 2.5, smooth: true, boil: 0.3, seed }); return; }
+    const e = v === "e", w = e ? 16 + tk * 6 : 11 + tk * 7, h = e ? 4 + tk * 7 : 5 + tk * 15;
+    K.shape(ctx, [[-w, 30], [w, 30], [w * 0.7, 30 + h * 0.8], [0, 30 + h], [-w * 0.7, 30 + h * 0.8]], { fill: P.mouthIn, w: 2.5, smooth: true, boil: 0.35, seed });
+    if (!e && tk > 0.35) K.shape(ctx, K.ellipsePts(0, 30 + h * 0.74, w * 0.5, h * 0.24, 10), { fill: P.tomatoLight, key: null, smooth: true, boil: 0.2, seed: seed + 1, reg: 0 });
+    K.shape(ctx, K.rectPts(e ? -w * 0.62 : -6, 30, e ? w * 1.24 : 12, e ? 4 : 5, 1), { fill: P.cream, key: null, boil: 0.2, seed: seed + 2, reg: 0 });
+  };
+  /* viseme-ish shape for a loudness value: changes about 8x a second (syllable rate),
+     closes on quiet frames. Deterministic: hash of the 1/8 s slot. */
+  K.viseme = function (t, tk, seed) {
+    if (tk < 0.12) return "m";
+    const h = K.hash(Math.floor(t * 8), (seed || 1) + 17);
+    return tk > 0.6 ? (h < 0.6 ? "a" : h < 0.85 ? "o" : "e") : h < 0.4 ? "a" : h < 0.7 ? "e" : "o";
+  };
+  /* look vector [-1..1, -1..1] from an eye point to a target (both screen px) */
+  K.lookAt = function (from, to) {
+    const dx = to[0] - from[0], dy = to[1] - from[1], d = Math.hypot(dx, dy) || 1;
+    return [dx / d, (dy / d) * 0.8];
+  };
+
+  /* seeded blink curve, about one blink per 1.9 s, 0..1 (any length of t) */
   K.blinkAt = function (t, seed) {
     let b = 0;
-    for (let i = 0; i < 14; i++) {
+    const i0 = Math.max(0, Math.floor((t - 2) / 1.9));
+    for (let i = i0; i < i0 + 3; i++) {
       const tb = 0.8 + i * 1.9 + K.hash(i, seed || 7) * 1.1, d = t - tb;
       if (d > 0 && d < 0.16) b = Math.max(b, Math.sin((d / 0.16) * Math.PI));
     }

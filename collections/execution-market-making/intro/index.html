@@ -253,6 +253,9 @@ var SK = window.SK || (window.SK = {});
     /* mascot: Mr. Tick, the stationmaster mouse */
     fur: "#b4aa9c", furDark: "#8a8073", furLight: "#d8d0c2", earPink: "#ec9a86", nose: "#2a2a2e",
     eye: "#fffaf0", pupil: "#1f1e22", glove: "#fbf6ea", gloveShade: "#ddd3bf",
+    /* sidekick: Dash, the pigeon telegraph clerk (neck sheen = teal ink) */
+    pigeon: "#8e98a6", pigeonDark: "#66707e", pigeonLight: "#bcc3cc", beak: "#e2a42b", leg: "#ec8a6c", iris: "#e2a42b",
+    mouthIn: "#6e2a1c",
     /* sky and land */
     sky: "#f1dfb5", skyHigh: "#e9d3a0", sun: "#e2a42b",
     hillFar: "#a7d0c3", hillMid: "#5fa79c", hillNear: "#2a7b78",
@@ -832,6 +835,10 @@ var SK = window.SK || (window.SK = {});
      ear      -1..1 extra ear flick                    tail  phase (radians)
      handL/R  { x, y, open, hold: "watch" | "whistle" | "flag" | "thumb" | null, lid 0..1 }
      hatTip   deg, hatLift px                          legWalk phase (radians)
+     talk     0..1 loudness: overrides `mouth` above 0.04 with a talking mouth
+     viseme   "a" | "e" | "o" | "m" talking shape (auto from K.viseme when omitted)
+     nod      px head dip, tilt deg head tilt           ponder 0..1 "?" pops
+     hand.draw(ctx, x, y, ang) draws a carried prop at the hand (under the glove)
    ============================================================ */
 var SK = window.SK || (window.SK = {});
 (function (K) {
@@ -924,7 +931,7 @@ var SK = window.SK || (window.SK = {});
     ctx.restore();
     /* ---- head ---- */
     const headY = bodyBase - 112 * syk - 50;
-    ctx.save(); ctx.translate(0, headY); ctx.scale(1 + sq * 0.12, 1 - sq * 0.12);
+    ctx.save(); ctx.translate(0, headY + (st.nod || 0)); if (st.tilt) ctx.rotate((st.tilt * Math.PI) / 180); ctx.scale(1 + sq * 0.12, 1 - sq * 0.12);
     const earA = Math.sin(t * 3.1) * 0.05 + (st.ear || 0) * 0.3;
     [-1, 1].forEach((sd, i) => {
       ctx.save(); ctx.translate(sd * 50, -46); ctx.rotate(sd * (0.25 + earA * (i ? 1 : -1)));
@@ -937,15 +944,16 @@ var SK = window.SK || (window.SK = {});
     for (let i = 0; i < 24; i++) { const a = (i / 24) * K.TAU, c = Math.cos(a), sn = Math.sin(a); head.push([c * (60 + 6 * Math.max(0, sn)), sn * (sn > 0 ? 54 : 58)]); }
     K.shape(ctx, head, { fill: P.fur, w: 3.5, smooth: true, boil: 0.8, seed: seed + 25, shade: { color: P.furDark, dx: 12, dy: 8 }, tone: { color: P.ink, gap: 8, r: 0, r2: 2, dir: Math.PI * 0.2, alpha: 0.2 } });
     /* muzzle */
-    const pf = clamp(st.puff || 0, 0, 1);
-    K.shape(ctx, K.ellipsePts(0, 24, 36 + pf * 10, 25 + pf * 4, 18), { fill: P.furLight, w: 2.5, smooth: true, boil: 0.5, seed: seed + 26 });
+    const pf = clamp(st.puff || 0, 0, 1), tk = clamp(st.talk || 0, 0, 1), talking = tk > 0.04;
+    K.shape(ctx, K.ellipsePts(0, 24 + (talking ? tk * 3 : 0), 36 + pf * 10, 25 + pf * 4 + (talking ? tk * 6 : 0), 18), { fill: P.furLight, w: 2.5, smooth: true, boil: 0.5, seed: seed + 26 });
     /* cheeks */
     [-1, 1].forEach((sd, i) => { ctx.save(); ctx.globalAlpha *= 0.55 + pf * 0.3; K.shape(ctx, K.ellipsePts(sd * (40 + pf * 6), 18, 11 + pf * 7, 7 + pf * 5, 10), { fill: P.earPink, key: null, smooth: true, boil: 0.4, seed: seed + 27 + i, reg: 0 }); ctx.restore(); });
     /* whiskers */
     [-1, 1].forEach((sd) => [-6, 2, 10].forEach((dy, k) => K.line(ctx, [[sd * 26, 16 + dy * 0.3], [sd * (66 + k * 4), 8 + dy * 1.2 + Math.sin(t * 4 + k + sd) * 1.5]], { w: 1.8, boil: 0.5, seed: seed + 30 + k + (sd > 0 ? 5 : 0) })));
     /* mouth */
     const m = st.mouth || "smile";
-    if (m === "smile") K.line(ctx, [[-14, 30], [-6, 37], [0, 33], [6, 37], [14, 30]], { w: 3, boil: 0.4, seed: seed + 40, smooth: true });
+    if (talking) K.talkMouth(ctx, tk, st.viseme || K.viseme(t, tk, seed), seed + 40);
+    else if (m === "smile") K.line(ctx, [[-14, 30], [-6, 37], [0, 33], [6, 37], [14, 30]], { w: 3, boil: 0.4, seed: seed + 40, smooth: true });
     else if (m === "grin") {
       K.shape(ctx, [[-20, 28], [20, 28], [12, 44], [0, 47], [-12, 44]], { fill: "#6e2a1c", w: 2.5, boil: 0.4, seed: seed + 41, smooth: true });
       K.shape(ctx, K.rectPts(-7, 28, 14, 9, 1), { fill: P.cream, w: 2, boil: 0.2, seed: seed + 42 });
@@ -981,6 +989,14 @@ var SK = window.SK || (window.SK = {});
       K.shape(ctx, K.ellipsePts(0, 2, 7, 7, 10), { fill: P.tomato, w: 3, smooth: true, seed: seed + 65 });
       ctx.restore();
     }
+    if (st.ponder > 0) { /* "?" (thinking) */
+      const a = K.E.back(clamp(st.ponder, 0, 1), 2.5), qp = [[-14, -40], [-6, -54], [10, -54], [16, -40], [2, -28], [0, -16]];
+      ctx.save(); ctx.translate(-96, -104); ctx.rotate(-0.2); ctx.scale(a, a);
+      K.line(ctx, qp, { key: P.ink, w: 15, smooth: true, boil: 0.3, seed: seed + 66 });
+      K.line(ctx, qp, { key: P.mustard, w: 8, smooth: true, boil: 0.3, seed: seed + 66 });
+      K.shape(ctx, K.ellipsePts(0, 0, 7, 7, 10), { fill: P.mustard, w: 3, smooth: true, seed: seed + 67 });
+      ctx.restore();
+    }
     ctx.restore();
     /* ---- arms: shoulders at the coat's top corners, IK to hand targets ---- */
     [["L", -1], ["R", 1]].forEach(([k, sd]) => {
@@ -1005,19 +1021,467 @@ var SK = window.SK || (window.SK = {});
         const wv = Math.sin(t * 6) * 6;
         K.shape(ctx, [[fx, fy - 110], [fx + 70, fy - 96 + wv], [fx, fy - 70]], { fill: P.mustard, w: 3, seed: seed + 97, boil: 0.5 });
         K.glove(ctx, fx, fy, ang, 1, h, seed + 98);
-      } else K.glove(ctx, r.end[0], r.end[1], ang, 1, h, seed + 100 + (sd > 0 ? 3 : 0));
+      } else {
+        if (h.draw) h.draw(ctx, r.end[0] + Math.cos(ang) * 14, r.end[1] + Math.sin(ang) * 14, ang);
+        K.glove(ctx, r.end[0], r.end[1], ang, 1, h, seed + 100 + (sd > 0 ? 3 : 0));
+      }
     });
     ctx.restore();
   };
 
-  /* seeded blink curve, about one blink per 1.9 s, 0..1 */
+  /* talking mouth in head space (mouth top at y 30); tk 0..1, v viseme */
+  K.talkMouth = function (ctx, tk, v, seed) {
+    if (v === "m" || tk < 0.1) { K.line(ctx, [[-13, 33], [0, 36], [13, 33]], { w: 3.2, boil: 0.3, seed, smooth: true }); return; }
+    if (v === "o") { K.shape(ctx, K.ellipsePts(0, 37 + tk * 3, 5 + tk * 4, 6 + tk * 8, 12), { fill: P.mouthIn, w: 2.5, smooth: true, boil: 0.3, seed }); return; }
+    const e = v === "e", w = e ? 16 + tk * 6 : 11 + tk * 7, h = e ? 4 + tk * 7 : 5 + tk * 15;
+    K.shape(ctx, [[-w, 30], [w, 30], [w * 0.7, 30 + h * 0.8], [0, 30 + h], [-w * 0.7, 30 + h * 0.8]], { fill: P.mouthIn, w: 2.5, smooth: true, boil: 0.35, seed });
+    if (!e && tk > 0.35) K.shape(ctx, K.ellipsePts(0, 30 + h * 0.74, w * 0.5, h * 0.24, 10), { fill: P.tomatoLight, key: null, smooth: true, boil: 0.2, seed: seed + 1, reg: 0 });
+    K.shape(ctx, K.rectPts(e ? -w * 0.62 : -6, 30, e ? w * 1.24 : 12, e ? 4 : 5, 1), { fill: P.cream, key: null, boil: 0.2, seed: seed + 2, reg: 0 });
+  };
+  /* viseme-ish shape for a loudness value: changes about 8x a second (syllable rate),
+     closes on quiet frames. Deterministic: hash of the 1/8 s slot. */
+  K.viseme = function (t, tk, seed) {
+    if (tk < 0.12) return "m";
+    const h = K.hash(Math.floor(t * 8), (seed || 1) + 17);
+    return tk > 0.6 ? (h < 0.6 ? "a" : h < 0.85 ? "o" : "e") : h < 0.4 ? "a" : h < 0.7 ? "e" : "o";
+  };
+  /* look vector [-1..1, -1..1] from an eye point to a target (both screen px) */
+  K.lookAt = function (from, to) {
+    const dx = to[0] - from[0], dy = to[1] - from[1], d = Math.hypot(dx, dy) || 1;
+    return [dx / d, (dy / d) * 0.8];
+  };
+
+  /* seeded blink curve, about one blink per 1.9 s, 0..1 (any length of t) */
   K.blinkAt = function (t, seed) {
     let b = 0;
-    for (let i = 0; i < 14; i++) {
+    const i0 = Math.max(0, Math.floor((t - 2) / 1.9));
+    for (let i = i0; i < i0 + 3; i++) {
       const tb = 0.8 + i * 1.9 + K.hash(i, seed || 7) * 1.1, d = t - tb;
       if (d > 0 && d < 0.16) b = Math.max(b, Math.sin((d / 0.16) * Math.PI));
     }
     return b;
+  };
+})(SK);
+
+/* ============================================================
+   KIT 42 PIGEON: "Dash", the telegraph clerk (host B, the curious co-host).
+   A plump grey pigeon in a mustard waistcoat, a green celluloid eyeshade,
+   tomato sleeve garters and a pencil behind the head. 3/4 view: the beak
+   points to the `face` side, so place him facing Mr. Tick.
+   Local space: feet on y = 0. Scale 1 = 260 px tall (eyeshade included).
+   Head centre (face*peck, -204), r ~44; body -30..-170; shoulders y -142.
+   Pose state (all optional):
+     face     +1 beak to the right (default), -1 to the left
+     squash   -1..1 (+ wide, - tall), volume kept     lean  deg around the feet
+     hop      px lift (legs tuck)                     look  [dx, dy] pupils -1..1
+     blink    0..1                                     brow  -1..1.5 (raised)
+     talk     0..1 loudness: opens the beak            viseme "a" | "e" | "o" | "m" (auto when omitted)
+     peck     px head thrust along `face` (the pigeon head bob)
+     head     deg head tilt                            nod  px head dip
+     exclaim  0..1 "!" pops                            ponder 0..1 "?" pops
+     wingL/R  { x, y, open 0..1, hold: "point" | "ticket" | "tape" | null, draw(ctx, x, y, ang), rot }
+              wing-hand targets in local space (IK, reach ~64 from the shoulder)
+   ============================================================ */
+var SK = window.SK || (window.SK = {});
+(function (K) {
+  const P = K.P, { clamp } = K;
+
+  /* a railway ticket card held in a wing or lying on a counter (hand space) */
+  K.ticket = function (ctx, x, y, ang, s, opt, seed) {
+    const o = Object.assign({ label: "No 7", color: P.tomato }, opt || {});
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(s, s);
+    K.shape(ctx, K.rrectPts(-30, -19, 60, 38, 4, 1), { fill: P.cream, w: 2.5, seed, boil: 0.3, shade: { color: P.creamShade, dx: 0, dy: 6 } });
+    K.shape(ctx, K.rectPts(-30, -19, 13, 38, 1), { fill: o.color, w: 2, seed: seed + 1, boil: 0.2 });
+    K.dot(ctx, 18, -8, 3.5, P.ink, null, 0, seed + 2);
+    K.text(ctx, o.label, 6, 6, { size: 13, font: K.FONT.mono, fill: P.ink });
+    ctx.restore();
+  };
+
+  /* telegraph tape: a cream strip with dots and dashes that hangs from (x, y)
+     and curls on the floor at y0 (local px). `u` 0..1 unrolls it. */
+  K.tape = function (ctx, x, y, y0, u, seed) {
+    const pts = [], n = 16, len = clamp(u == null ? 1 : u, 0, 1);
+    for (let i = 0; i <= n; i++) {
+      const k = (i / n) * len, yy = y + (y0 - y) * Math.min(1, k * 1.3), curl = Math.max(0, k * 1.3 - 1) / 0.3;
+      pts.push([x + Math.sin(k * 5 + seed) * 8 + curl * 40, yy - Math.sin(curl * Math.PI) * 14]);
+    }
+    if (len <= 0.02) return;
+    K.line(ctx, pts, { key: P.ink, w: 15, boil: 0.5, seed, smooth: true });
+    K.line(ctx, pts, { key: P.cream, w: 10, boil: 0.5, seed, smooth: true });
+    for (let i = 1; i < pts.length - 1; i++) {
+      const dash = K.hash(i, seed) > 0.5, [px, py] = pts[i];
+      if (dash) K.line(ctx, [[px - 3, py], [px + 3, py]], { w: 2.6, boil: 0, key: P.ink });
+      else K.dot(ctx, px, py, 1.8, P.ink, null, 0, seed + i);
+    }
+  };
+
+  /* wing-hand: three primary feathers fanned around `ang`, drawn at the IK end */
+  K.wingHand = function (ctx, x, y, ang, h, seed) {
+    const op = clamp(h.open == null ? 0.35 : h.open, 0, 1), pt = h.hold === "point";
+    const spread = pt ? 0.32 : 0.22 + 0.55 * op;
+    const fe = pt ? [[-1, 24], [0, 50], [1, 24]] : [[-1, 32], [0, 37], [1, 32]];
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+    fe.forEach(([k, len], i) => {
+      ctx.save(); ctx.rotate(k * spread);
+      K.shape(ctx, K.rrectPts(-4, -7, len, 14, 7, 2), { fill: i === 1 ? P.pigeonLight : P.pigeon, w: 2.5, seed: seed + i, boil: 0.4, shade: { color: P.pigeonDark, dx: 0, dy: 4 } });
+      ctx.restore();
+    });
+    K.shape(ctx, K.ellipsePts(-2, 0, 13, 12, 12), { fill: P.pigeon, w: 2.5, smooth: true, seed: seed + 4, boil: 0.4 });
+    ctx.restore();
+  };
+
+  K.pigeon = function (ctx, x, y, s, st) {
+    st = st || {};
+    const f = st.face === -1 ? -1 : 1;
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
+    const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1), seed = st.seed || 900;
+    const t = K.now;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    const air = clamp(hop / 30, 0, 1), bodyBase = -30 * syk - hop;
+    /* shadow */
+    ctx.save(); ctx.globalAlpha *= 0.25 * (1 - air * 0.5);
+    ctx.fillStyle = P.ink; ctx.beginPath(); ctx.ellipse(0, 2, 58 * (1 - air * 0.3), 8, 0, 0, K.TAU); ctx.fill(); ctx.restore();
+    /* legs + three-toed feet (toes point to the face side) */
+    [-1, 1].forEach((sd, i) => {
+      const fx = sd * (16 - 6 * air), fy = -hop * 0.9 - 4 * air;
+      K.tube(ctx, [[sd * 14 * sxk, bodyBase + 4], [fx, fy - 4]], 8, P.leg, seed + 1 + i, false);
+      [-0.5, 0, 0.5].forEach((a, k) => K.line(ctx, [[fx, fy - 2], [fx + f * Math.cos(a) * 16 - (k === 0 ? 0 : 0), fy - 2 + Math.sin(a) * 6 + 2]], { key: P.ink, w: 7, boil: 0.3, seed: seed + 3 + k }));
+      [-0.5, 0, 0.5].forEach((a, k) => K.line(ctx, [[fx, fy - 2], [fx + f * Math.cos(a) * 15, fy - 2 + Math.sin(a) * 6 + 2]], { key: P.leg, w: 3.5, boil: 0.3, seed: seed + 3 + k }));
+    });
+    /* ---- body: tail fan behind, plump egg, waistcoat front ---- */
+    ctx.save(); ctx.translate(0, bodyBase); ctx.scale(sxk, syk);
+    /* tail: three rounded feathers fanned behind, dark tips */
+    [0.42, 0.18, -0.06].forEach((a, i) => {
+      ctx.save(); ctx.translate(-f * 22, -30); ctx.scale(-f, 1); ctx.rotate(a);
+      K.shape(ctx, K.rrectPts(0, -11, 66, 22, 11, 2), { fill: i === 1 ? P.pigeonLight : P.pigeon, w: 3, seed: seed + 8 + i, boil: 0.5 });
+      K.shape(ctx, K.rrectPts(50, -11, 16, 22, 10, 2), { fill: P.ink, key: null, seed: seed + 5 + i, boil: 0.3, reg: 0 });
+      ctx.restore();
+    });
+    const body = [];
+    for (let i = 0; i < 26; i++) {
+      const a = (i / 26) * K.TAU, c = Math.cos(a), sn = Math.sin(a);
+      const bulge = 1 + 0.14 * Math.max(0, c * f) * Math.max(0, -sn + 0.4);
+      body.push([c * 62 * bulge, -72 + sn * (sn > 0 ? 70 : 76)]);
+    }
+    K.shape(ctx, body, { fill: P.pigeon, w: 3.5, smooth: true, boil: 0.8, seed: seed + 10, shade: { color: P.pigeonDark, dx: -f * 14, dy: 0 }, tone: { color: P.ink, gap: 9, r: 0, r2: 2.2, dir: 0, alpha: 0.2 } });
+    /* waistcoat: two mustard panels over a cream shirt V, a string tie */
+    K.shape(ctx, [[-34, -132], [34, -132], [44, -60], [36, -18], [0, -6], [-36, -18], [-44, -60]], { fill: P.mustard, w: 3, smooth: true, boil: 0.6, seed: seed + 11, shade: { color: P.mustardDark, dx: -f * 10, dy: 0 } });
+    K.shape(ctx, [[-18, -134], [0, -92], [18, -134]], { fill: P.cream, w: 2.5, seed: seed + 12, boil: 0.4 });
+    K.line(ctx, [[0, -122], [-6, -98]], { w: 3, boil: 0.3, seed: seed + 13 });
+    K.line(ctx, [[0, -122], [6, -100]], { w: 3, boil: 0.3, seed: seed + 14 });
+    [-70, -46].forEach((yy, i) => K.dot(ctx, 0, yy, 5, P.ink, P.ink, 1.5, seed + 15 + i));
+    K.shape(ctx, K.rectPts(16, -64, 20, 6, 1), { fill: P.mustardDark, w: 2, seed: seed + 17, boil: 0.3 });
+    /* iridescent neck ring (teal sheen) */
+    K.shape(ctx, K.ellipsePts(f * 4, -140, 42, 17, 18), { fill: P.tealLight, w: 3, smooth: true, boil: 0.5, seed: seed + 18, tone: { color: P.teal, gap: 6, r: 0.6, r2: 2.4, dir: Math.PI / 2, alpha: 0.7 } });
+    ctx.restore();
+    /* ---- head ---- */
+    const peck = st.peck || 0, headY = bodyBase - 140 * syk - 34 + (st.nod || 0);
+    ctx.save(); ctx.translate(f * peck, headY); ctx.rotate(((st.head || 0) * Math.PI) / 180 * f); ctx.scale(1 + sq * 0.1, 1 - sq * 0.1);
+    /* pencil tucked behind the head */
+    ctx.save(); ctx.translate(-f * 28, -34); ctx.rotate(-f * 0.75);
+    K.shape(ctx, K.rectPts(-7, -46, 14, 52, 1), { fill: P.mustardLight, w: 2.5, seed: seed + 19, boil: 0.3 });
+    K.shape(ctx, K.rectPts(-7, -56, 14, 12, 3), { fill: P.tomatoLight, w: 2.5, seed: seed + 20, boil: 0.3 });
+    ctx.restore();
+    const head = [];
+    for (let i = 0; i < 22; i++) { const a = (i / 22) * K.TAU, c = Math.cos(a), sn = Math.sin(a); head.push([c * (44 + 4 * Math.max(0, c * f)), sn * (sn > 0 ? 40 : 44)]); }
+    K.shape(ctx, head, { fill: P.pigeon, w: 3.5, smooth: true, boil: 0.7, seed: seed + 21, shade: { color: P.pigeonDark, dx: -f * 10, dy: 6 }, tone: { color: P.ink, gap: 8, r: 0, r2: 2, dir: Math.PI * 0.2, alpha: 0.18 } });
+    /* eyes: near eye on the face side, far eye smaller (3/4 view) */
+    [[f * 17, 14, 16, 0], [-f * 18, 11, 14, 1]].forEach(([ex, rx, ry0, i]) => {
+      const ey = -1, ry = ry0 * (1 - 0.92 * blink);
+      K.shape(ctx, K.ellipsePts(ex, ey, rx, Math.max(1.4, ry), 14), { fill: P.eye, w: 3, smooth: true, boil: 0.4, seed: seed + 22 + i, reg: 1 });
+      if (blink < 0.6) {
+        const px = ex + look[0] * rx * 0.35, py = ey + 1 + look[1] * ry * 0.35;
+        K.shape(ctx, K.ellipsePts(px, py, rx * 0.62, ry * 0.62, 12), { fill: P.iris, key: null, smooth: true, boil: 0.3, seed: seed + 24 + i, reg: 0 });
+        K.shape(ctx, K.ellipsePts(px, py, rx * 0.33, ry * 0.36, 10), { fill: P.pupil, key: null, smooth: true, boil: 0.2, seed: seed + 26 + i, reg: 0 });
+        K.shape(ctx, K.ellipsePts(px + 2, py - 3, 2.2, 2.2, 6), { fill: "#ffffff", key: null, smooth: true, boil: 0.2, seed: seed + 28 + i, reg: 0 });
+      } else K.line(ctx, [[ex - rx, ey], [ex, ey + 3], [ex + rx, ey]], { w: 3, boil: 0.3, seed: seed + 30 + i, smooth: true });
+      const br = st.brow || 0;
+      K.line(ctx, [[ex - rx + 1, ey - ry0 - 7 - br * 6 + br * 2], [ex + rx - 1, ey - ry0 - 7 - br * 6 - br * 2]], { w: 4, boil: 0.3, seed: seed + 32 + i });
+    });
+    /* beak: upper mandible fixed, lower one hinges open with `talk` */
+    const tk = clamp(st.talk || 0, 0, 1), vis = st.viseme || K.viseme(t, tk, seed);
+    const opn = tk < 0.04 || vis === "m" ? 0 : tk * (vis === "e" ? 0.4 : vis === "o" ? 0.55 : 0.78);
+    const bx = f * 36, by = 14, bl = vis === "o" ? 30 : 36;
+    ctx.save(); ctx.translate(bx, by); ctx.scale(f, 1);
+    if (opn > 0.01) {
+      const lx = Math.cos(opn) * (bl - 2), ly = Math.sin(opn) * (bl - 2);
+      K.shape(ctx, [[-2, -2], [bl, 0], [lx, ly + 4], [-2, 8]], { fill: P.mouthIn, key: null, seed: seed + 34, boil: 0.3, reg: 0 });
+      if (opn > 0.22) K.shape(ctx, K.ellipsePts(lx * 0.45, ly * 0.45 + 3, 8, 3.5, 8, opn * 0.5), { fill: P.tomatoLight, key: null, smooth: true, seed: seed + 35, boil: 0.2, reg: 0 });
+    }
+    ctx.save(); ctx.rotate(opn);
+    K.shape(ctx, [[-4, 2], [bl - 4, 3], [-4, 11]], { fill: P.mustardDark, w: 2.5, seed: seed + 36, boil: 0.3 });
+    ctx.restore();
+    K.shape(ctx, [[-6, -12], [bl * 0.55, -8], [bl + 4, 1], [bl - 4, 4], [-6, 4]], { fill: P.beak, w: 2.8, smooth: true, seed: seed + 37, boil: 0.4 });
+    K.shape(ctx, K.ellipsePts(2, -10, 9, 5, 8), { fill: P.cream, w: 2, smooth: true, seed: seed + 38, boil: 0.3 });
+    if (vis === "e" && tk > 0.04) K.line(ctx, [[-6, 6], [-12, 0]], { w: 2.5, boil: 0.2, seed: seed + 39 });
+    ctx.restore();
+    /* eyeshade: band round the crown + a translucent teal visor over the eyes */
+    K.shape(ctx, [[-42, -30], [-34, -44], [34, -44], [42, -30], [0, -34]], { fill: P.ink, w: 2, smooth: true, seed: seed + 40, boil: 0.4, reg: 0 });
+    K.shape(ctx, [[-f * 34, -38], [f * 40, -38], [f * 84, -26], [f * 28, -27], [-f * 30, -31]], { fill: P.teal, w: 3, seed: seed + 41, boil: 0.4, alpha: 0.86, tone: { color: P.tealLight, gap: 6, r: 0.6, r2: 2, dir: 0, alpha: 0.6 } });
+    ctx.restore();
+    /* "!" surprise and "?" thinking (language-neutral) */
+    const pop = (v, x0, y0, q) => {
+      if (!(v > 0)) return;
+      const a = K.E.back(clamp(v, 0, 1), 2.5);
+      ctx.save(); ctx.translate(x0, y0); ctx.rotate(0.22 * f); ctx.scale(a, a);
+      if (q) {
+        K.line(ctx, [[-14, -40], [-6, -54], [10, -54], [16, -40], [2, -28], [0, -16]], { key: P.ink, w: 15, smooth: true, boil: 0.3, seed: seed + 42 });
+        K.line(ctx, [[-14, -40], [-6, -54], [10, -54], [16, -40], [2, -28], [0, -16]], { key: P.mustard, w: 8, smooth: true, boil: 0.3, seed: seed + 42 });
+        K.shape(ctx, K.ellipsePts(0, 0, 7, 7, 10), { fill: P.mustard, w: 3, smooth: true, seed: seed + 43 });
+      } else {
+        K.shape(ctx, [[-9, -54], [9, -54], [5, -12], [-5, -12]], { fill: P.tomato, w: 3, seed: seed + 44 });
+        K.shape(ctx, K.ellipsePts(0, 2, 7, 7, 10), { fill: P.tomato, w: 3, smooth: true, seed: seed + 45 });
+      }
+      ctx.restore();
+    };
+    pop(st.exclaim, f * 74 + f * peck, headY - 52, false);
+    pop(st.ponder, -f * 70 + f * peck, headY - 56, true);
+    /* ---- wings: shoulders at the waistcoat's top, IK to wing-hand targets ---- */
+    [["L", -1], ["R", 1]].forEach(([k, sd]) => {
+      const h = st["wing" + k] || { x: sd * 64, y: -70 };
+      const S = [sd * 46 * sxk, bodyBase - 112 * syk];
+      const r = K.ik2(S, [h.x, h.y - hop], 34, 32, sd > 0 ? -1 : 1);
+      K.tube(ctx, [S, r.elbow, r.end], 19, P.pigeon, seed + 50 + (sd > 0 ? 1 : 0), false);
+      /* sleeve garter on the upper wing */
+      const gx = (S[0] + r.elbow[0]) / 2, gy = (S[1] + r.elbow[1]) / 2, ga = Math.atan2(r.elbow[1] - S[1], r.elbow[0] - S[0]) + Math.PI / 2;
+      K.line(ctx, [[gx - Math.cos(ga) * 11, gy - Math.sin(ga) * 11], [gx + Math.cos(ga) * 11, gy + Math.sin(ga) * 11]], { key: P.tomato, w: 7, boil: 0.3, seed: seed + 52 + (sd > 0 ? 1 : 0), cap: "butt" });
+      const ang = h.rot != null ? (h.rot * Math.PI) / 180 : Math.atan2(r.end[1] - r.elbow[1], r.end[0] - r.elbow[0]);
+      if (h.hold === "tape") K.tape(ctx, r.end[0], r.end[1] + 6, -6 + hop, h.unroll == null ? 1 : h.unroll, seed + 56);
+      if (h.hold === "ticket") K.ticket(ctx, r.end[0] + Math.cos(ang) * 26, r.end[1] + Math.sin(ang) * 26 - 8, ang * 0.3, 1, { label: h.label || "No 7" }, seed + 60);
+      if (h.draw) h.draw(ctx, r.end[0] + Math.cos(ang) * 22, r.end[1] + Math.sin(ang) * 22, ang);
+      K.wingHand(ctx, r.end[0], r.end[1], ang, h, seed + 64 + (sd > 0 ? 6 : 0));
+    });
+    ctx.restore();
+  };
+
+  /* rig landmarks (local px at rest, scale 1) for pose helpers and prop placement */
+  K.pigeon.HEAD = [0, -204]; K.pigeon.SHOULDER = [46, -142]; K.pigeon.REACH = 64; K.pigeon.H = 260;
+})(SK);
+
+/* ============================================================
+   KIT 44 HOSTS: Mr. Tick (host A, the explainer) + Dash (host B, the
+   curious co-host) acting together. Pure functions of time + inputs, so
+   an episode can drive them from its narration data (loudness per frame,
+   who is talking, stressed-syllable times) without the kit knowing about it.
+
+   K.mousePose(t, o)   -> pose object for K.mouse
+   K.pigeonPose(t, o)  -> pose object for K.pigeon
+   K.duo(ctx, t, o)    draws both hosts in SCREEN space (call after K.screen(ctx))
+                       and returns their anchors (see below).
+
+   Per-host inputs (o for the pose functions, o.a / o.b for K.duo):
+     talk      0..1 loudness of this host's own voice this frame (mouth + body)
+     viseme    force a mouth shape ("a" | "e" | "o" | "m"); auto when omitted
+     listen    0..1 the partner is talking: look at them, lean in, nod
+     nodAt     [sec] partner's stressed syllables -> a nod on each (listening)
+     accents   [sec] own stressed syllables -> a beat gesture on each (talking)
+     gest      [{ at, kind, dur }] scripted gestures (global seconds), kinds:
+               point | nod | surprise | think | shrug | wave | grin | worry
+               mouse also: thumbs | watch | whistle;  pigeon also: flap | tape | ticket
+     point     [sx, sy] screen point to aim the nearer hand at; pointAmt 0..1;
+               pointUp rad minimum arm elevation (K.duo sets 0.6 for Dash so he
+               points over Mr. Tick's head)
+     carry     { draw(ctx, x, y, ang), amt } a prop carried in the outer hand
+               (drawn in rig space at the hand; amt raises the hand to the chest)
+     seed      blink / viseme seed
+   Layout for K.duo (all optional):
+     layout    "left" (default: hosts bottom-left, room on the right; Dash on the
+               outer side so Mr. Tick points at the content unobstructed),
+               "right" (mirror), "flank" (hosts at both edges, prop in the middle)
+     x, y      Mr. Tick's feet (screen px); s his scale (default 1.15 = 345 px tall)
+     gap       px between the two hosts (default 250 * s)
+     bs        Dash's scale relative to s (default 1.05, so ~285 px tall at s 1.15)
+     speaker   "a" | "b" | null: who talks now (sets listen on the other one;
+               inferred from a.talk / b.talk when omitted)
+     stage     "platform" (default) | "none"   appear 0..1 (pops the pair in)
+     a, b      per-host inputs (above); false hides that host
+   Returns { a: { x, y, s, head:[x,y], hand:[x,y] }, b: { ... } } in screen px.
+   ============================================================ */
+var SK = window.SK || (window.SK = {});
+(function (K) {
+  const { clamp, lerp, ss } = K;
+  const mix = (a, b, u) => ({ ...b, x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u), open: lerp(a.open || 0, b.open || 0, u), hold: u > 0.5 ? b.hold : a.hold, rot: u > 0.5 ? b.rot : a.rot, draw: u > 0.5 ? b.draw : a.draw });
+  /* gesture envelope: rises 0.18 s, holds, falls 0.3 s */
+  const env = (t, r) => { const d = r.dur || 1.6; return ss(r.at - 0.18, r.at, t) * (1 - ss(r.at + d - 0.3, r.at + d, t)); };
+  K.gestEnv = env;
+  /* the last time in `list` at or before t (index), lists are sorted seconds */
+  const lastIdx = (list, t) => { let k = -1; if (list) for (let i = 0; i < list.length; i++) if (list[i] <= t + 0.08) k = i; else break; return k; };
+  /* nod curve: one dip per accent (0..1) */
+  const nodOf = (list, t) => { const k = lastIdx(list, t); if (k < 0) return 0; const d = t - list[k]; return d < 0.45 ? Math.sin((d / 0.45) * Math.PI) : 0; };
+  /* aim a hand from the shoulder (local) towards a screen point; returns a local target */
+  function aim(o, sh, reach, side) {
+    const sx = o.x + sh[0] * o.s, sy = o.y + sh[1] * o.s;
+    /* pointUp (rad) raises the arm when the partner stands between host and target */
+    const e = Math.max(Math.atan2(sy - o.point[1], Math.abs(o.point[0] - sx)), o.pointUp || -9);
+    const ang = side > 0 ? -e : e - Math.PI;
+    return { x: sh[0] + Math.cos(ang) * reach, y: sh[1] + Math.sin(ang) * reach, side };
+  }
+
+  /* ---------------- Mr. Tick ---------------- */
+  const MBEAT = [
+    { R: { x: 92, y: -150, open: 1 } },                                   /* right hand up */
+    { L: { x: -98, y: -110 }, R: { x: 98, y: -110 } },                    /* both out, palms up */
+    { L: { x: -92, y: -150 } },                                           /* left hand up */
+    { R: { x: 60, y: -170, hold: "point" } },                             /* finger up: "listen" */
+  ];
+  K.mousePose = function (t, o) {
+    o = o || {};
+    const tk = clamp(o.talk || 0, 0, 1), ls = clamp(o.listen || 0, 0, 1), tw = o.toward || 1, seed = o.seed || 2;
+    const st = { blink: K.blinkAt(t, seed), talk: tk, viseme: o.viseme, mouth: "smile", look: [0.12 * Math.sin(t * 0.7), -0.05] };
+    st.squash = 0.03 * Math.sin(t * 2.3) + 0.1 * tk * (0.5 + 0.5 * Math.sin(t * 17));  /* idle breath + talking bounce */
+    st.tail = t * 2.2;
+    let L = { x: -62 + 4 * Math.sin(t * 1.9), y: -66 + 5 * Math.sin(t * 2.6) }, R = { x: 62 + 4 * Math.sin(t * 2.1 + 1), y: -66 + 5 * Math.sin(t * 2.4 + 2) };
+    /* talking: a beat gesture on each stressed syllable */
+    const k = lastIdx(o.accents, t);
+    if (k >= 0 && tk > 0.02) {
+      const ta = o.accents[k], w = ss(ta - 0.1, ta + 0.14, t) * (1 - ss(ta + 0.7, ta + 1.2, t)), G = MBEAT[Math.floor(K.hash(k, 77) * MBEAT.length)];
+      if (G.L) L = mix(L, G.L, w); if (G.R) R = mix(R, G.R, w);
+      st.brow = 0.6 * w;
+    }
+    if (tk > 0.04) st.look = [0.3 * tw + 0.15 * Math.sin(t * 0.9), -0.1];
+    /* listening: look at the partner, lean in, nod on their accents (or a slow nod) */
+    if (ls > 0) {
+      const nd = o.nodAt ? nodOf(o.nodAt, t) : 0.5 + 0.5 * Math.sin(t * 5.2);
+      st.look = [lerp(st.look[0], 0.95 * tw, ls), lerp(st.look[1], -0.15, ls)];
+      st.lean = 3 * tw * ls; st.tilt = 6 * tw * ls; st.nod = 7 * nd * ls; st.brow = 0.3 * ls;
+      st.ear = 0.6 * ls;
+    }
+    /* point at a screen target with the nearer hand */
+    if (o.point && o.pointAmt !== 0) {
+      const amt = o.pointAmt == null ? 1 : o.pointAmt, sd = o.point[0] >= o.x ? 1 : -1;
+      const tg = aim(o, [sd * 34, -144], 68, sd); tg.hold = "point";
+      if (sd > 0) R = mix(R, tg, amt); else L = mix(L, tg, amt);
+      st.look = [lerp(st.look[0], sd * 0.9, amt), lerp(st.look[1], clamp((o.point[1] - (o.y - 210 * o.s)) / 300, -1, 1), amt)];
+    }
+    /* carry a prop in the outer hand, raised to the chest */
+    if (o.carry) {
+      const amt = o.carry.amt == null ? 1 : o.carry.amt, sd = -tw;
+      const c = { x: sd * 58, y: -118, open: 0, draw: o.carry.draw, rot: o.carry.rot };
+      if (sd > 0) R = mix(R, c, amt); else L = mix(L, c, amt);
+    }
+    (o.gest || []).forEach((r) => {
+      const e = env(t, r); if (e <= 0) return;
+      const u = K.inv(r.at - 0.18, r.at + (r.dur || 1.6), t);
+      if (r.kind === "surprise") {
+        st.blink = 0; st.eyeUp = 6 * e; st.brow = 1.5 * e; st.exclaim = e; st.ear = e;
+        if (tk < 0.1) st.mouth = "open";
+        st.hop = 18 * Math.max(0, Math.sin(K.inv(r.at, r.at + 0.35, t) * Math.PI)); st.squash -= 0.18 * e;
+        L = mix(L, { x: -84, y: -150, open: 1 }, e); R = mix(R, { x: 84, y: -150, open: 1 }, e);
+      } else if (r.kind === "nod") { st.nod = (st.nod || 0) + 10 * Math.max(0, Math.sin((t - r.at) * 11)) * e; st.blink = Math.max(st.blink, 0.5 * e); }
+      else if (r.kind === "think") {
+        R = mix(R, { x: 26, y: -170, hold: "thumb", rot: -100 }, e); L = mix(L, { x: -20, y: -110 }, e);
+        st.look = [lerp(st.look[0], -0.6, e), lerp(st.look[1], -0.9, e)]; st.brow = 1 * e; st.tilt = -8 * e; st.ponder = e; if (tk < 0.1) st.mouth = "o";
+      } else if (r.kind === "shrug") { L = mix(L, { x: -100, y: -120, open: 1 }, e); R = mix(R, { x: 100, y: -120, open: 1 }, e); st.brow = 1.1 * e; st.squash += 0.08 * e; st.tilt = 6 * e; }
+      else if (r.kind === "wave") { R = mix(R, { x: 86 + 14 * Math.sin((t - r.at) * 12), y: -186 }, e); st.mouth = "grin"; }
+      else if (r.kind === "thumbs") { R = mix(R, { x: 90, y: -150, hold: "thumb", rot: -90 }, e); st.mouth = "grin"; }
+      else if (r.kind === "grin") { st.mouth = "grin"; st.brow = 0.8 * e; }
+      else if (r.kind === "worry") { st.brow = -1 * e; if (tk < 0.1) st.mouth = "o"; L = mix(L, { x: -40, y: -96 }, e); R = mix(R, { x: 40, y: -96 }, e); st.squash -= 0.05 * e; }
+      else if (r.kind === "watch") { R = mix(R, { x: 60, y: -132, hold: "watch", lid: 1 - K.inv(0.1, 0.35, u) }, e); st.look = [0.5, 0.6]; }
+      else if (r.kind === "whistle") { R = mix(R, { x: 22, y: -196, hold: "whistle" }, e); st.mouth = "whistle"; st.puff = 0.8 * e; }
+      else if (r.kind === "point" && !o.point) { R = mix(R, { x: 100, y: -150, hold: "point" }, e); st.look = [0.9, -0.3]; }
+    });
+    st.handL = L; st.handR = R;
+    return st;
+  };
+
+  /* ---------------- Dash ---------------- */
+  K.pigeonPose = function (t, o) {
+    o = o || {};
+    const tk = clamp(o.talk || 0, 0, 1), ls = clamp(o.listen || 0, 0, 1), f = o.face || -1, seed = o.seed || 11;
+    const st = { face: f, blink: K.blinkAt(t, seed), talk: tk, viseme: o.viseme, look: [0.25 * f, 0], seed: 900 };
+    /* idle: breathing, and the pigeon head-bob (a quick thrust, slow return) */
+    const bp = (t * 0.9) % 1, bob = bp < 0.18 ? Math.sin((bp / 0.18) * Math.PI * 0.5) : Math.cos(((bp - 0.18) / 0.82) * Math.PI * 0.5);
+    st.peck = 7 * bob * (1 - 0.6 * tk);
+    st.squash = 0.04 * Math.sin(t * 2.9 + 1) + 0.12 * tk * (0.5 + 0.5 * Math.sin(t * 19));
+    st.head = 4 * Math.sin(t * 0.8);
+    let L = { x: -62 + 4 * Math.sin(t * 2), y: -70 + 4 * Math.sin(t * 2.7), open: 0.3 }, R = { x: 62 + 4 * Math.sin(t * 2.2 + 1), y: -70 + 4 * Math.sin(t * 2.5), open: 0.3 };
+    const k = lastIdx(o.accents, t);
+    if (k >= 0 && tk > 0.02) {
+      const ta = o.accents[k], w = ss(ta - 0.08, ta + 0.12, t) * (1 - ss(ta + 0.5, ta + 0.95, t)), h = K.hash(k, 91);
+      const up = { x: f * 84, y: -160, open: 1 }, both = [{ x: -90, y: -130, open: 1 }, { x: 90, y: -130, open: 1 }];
+      if (h < 0.5) { if (f > 0) R = mix(R, up, w); else L = mix(L, up, w); }
+      else { L = mix(L, both[0], w); R = mix(R, both[1], w); }
+      st.hop = 8 * w * (h > 0.75 ? 1 : 0); st.brow = 0.7 * w;
+    }
+    if (ls > 0) {
+      const nd = o.nodAt ? nodOf(o.nodAt, t) : 0.5 + 0.5 * Math.sin(t * 5.6);
+      st.look = [lerp(st.look[0], 0.95 * f, ls), lerp(st.look[1], -0.25, ls)];
+      st.head = lerp(st.head, -10, ls); st.nod = 8 * nd * ls; st.lean = 3 * f * ls; st.peck *= 1 - 0.5 * ls;
+    }
+    if (o.point && o.pointAmt !== 0) {
+      const amt = o.pointAmt == null ? 1 : o.pointAmt, sd = o.point[0] >= o.x ? 1 : -1;
+      const tg = aim(o, [sd * 46, -142], 62, sd); tg.hold = "point";
+      if (sd > 0) R = mix(R, tg, amt); else L = mix(L, tg, amt);
+      st.look = [lerp(st.look[0], sd, amt), lerp(st.look[1], clamp((o.point[1] - (o.y - 204 * o.s)) / 300, -1, 1), amt)];
+    }
+    if (o.carry) {
+      const amt = o.carry.amt == null ? 1 : o.carry.amt, sd = -f;
+      const c = { x: sd * 52, y: -110, open: 0.1, draw: o.carry.draw, rot: o.carry.rot };
+      if (sd > 0) R = mix(R, c, amt); else L = mix(L, c, amt);
+    }
+    (o.gest || []).forEach((r) => {
+      const e = env(t, r); if (e <= 0) return;
+      if (r.kind === "surprise") {
+        st.blink = 0; st.brow = 1.5 * e; st.exclaim = e; st.peck = -6 * e; st.squash -= 0.2 * e;
+        st.hop = 16 * Math.max(0, Math.sin(K.inv(r.at, r.at + 0.32, t) * Math.PI));
+        L = mix(L, { x: -96, y: -150, open: 1 }, e); R = mix(R, { x: 96, y: -150, open: 1 }, e);
+        if (tk < 0.1) st.talk = 0.5 * e, st.viseme = "o";
+      } else if (r.kind === "nod") { st.nod = (st.nod || 0) + 10 * Math.max(0, Math.sin((t - r.at) * 11)) * e; st.peck = 6 * e; }
+      else if (r.kind === "think") {
+        const tip = { x: f * 34, y: -168, open: 0, rot: f > 0 ? -60 : -120 };
+        if (f > 0) R = mix(R, tip, e); else L = mix(L, tip, e);
+        st.look = [lerp(st.look[0], -0.4 * f, e), lerp(st.look[1], -0.9, e)]; st.head = 14 * e; st.ponder = e; st.brow = 0.9 * e;
+      } else if (r.kind === "shrug") { L = mix(L, { x: -96, y: -122, open: 1 }, e); R = mix(R, { x: 96, y: -122, open: 1 }, e); st.brow = 1.1 * e; st.head = 10 * e; }
+      else if (r.kind === "wave") { const w = { x: f * (90 + 14 * Math.sin((t - r.at) * 12)), y: -180, open: 1 }; if (f > 0) R = mix(R, w, e); else L = mix(L, w, e); }
+      else if (r.kind === "flap") { const fl = 0.5 + 0.5 * Math.sin((t - r.at) * 24); L = mix(L, { x: -100, y: -110 - 60 * fl, open: 1 }, e); R = mix(R, { x: 100, y: -110 - 60 * fl, open: 1 }, e); st.hop = 22 * e; }
+      else if (r.kind === "grin") { st.brow = 0.9 * e; st.head = 10 * e; st.viseme = tk > 0.04 ? st.viseme : "e"; }
+      else if (r.kind === "worry") { st.brow = -1 * e; st.head = -14 * e; L = mix(L, { x: -40, y: -100, open: 0 }, e); R = mix(R, { x: 40, y: -100, open: 0 }, e); }
+      else if (r.kind === "tape") { const u = K.inv(r.at, r.at + (r.dur || 1.6) * 0.7, t), w = { x: -f * 40, y: -120, open: 0.2, hold: "tape", unroll: u }; if (f > 0) L = mix(L, w, e); else R = mix(R, w, e); st.look = [-f * 0.3, 0.8]; }
+      else if (r.kind === "ticket") { const w = { x: f * 92, y: -150, open: 0.1, hold: "ticket", label: r.label }; if (f > 0) R = mix(R, w, e); else L = mix(L, w, e); }
+      else if (r.kind === "point" && !o.point) { const w = { x: f * 100, y: -150, hold: "point" }; if (f > 0) R = mix(R, w, e); else L = mix(L, w, e); st.look = [f, -0.3]; }
+    });
+    st.wingL = L; st.wingR = R;
+    return st;
+  };
+
+  /* ---------------- the pair ---------------- */
+  K.duo = function (ctx, t, o) {
+    o = o || {};
+    const lay = o.layout || "left", s = o.s || 1.15, bsk = s * (o.bs || 1.05), gap = o.gap == null ? 250 * s : o.gap;
+    let ax, bx; const y = o.y == null ? 1000 : o.y;
+    /* Dash stands on the outer side so Mr. Tick's pointing hand faces the content */
+    if (lay === "right") { ax = o.x == null ? 1500 : o.x; bx = ax + gap; }
+    else if (lay === "flank") { ax = o.x == null ? 250 : o.x; bx = o.bx == null ? 1670 : o.bx; }
+    else { ax = o.x == null ? 470 : o.x; bx = ax - gap; }
+    const A = Object.assign({}, o.a || {}), B = Object.assign({}, o.b || {});
+    const ta = A.talk || 0, tb = B.talk || 0;
+    const spk = o.speaker !== undefined ? o.speaker : ta > 0.08 && ta >= tb ? "a" : tb > 0.08 ? "b" : null;
+    if (A.listen == null) A.listen = spk === "b" ? 1 : 0;
+    if (B.listen == null) B.listen = spk === "a" ? 1 : 0;
+    A.toward = bx >= ax ? 1 : -1; B.face = bx >= ax ? -1 : 1;
+    const ap = o.appear == null ? 1 : o.appear;
+    const pa = K.E.back(clamp(ap, 0, 1), 1.8);
+    if (pa <= 0) return null;
+    if (o.stage !== "none") {
+      const x0 = Math.min(ax, bx) - 170 * s, x1 = lay === "flank" ? ax + 190 * s : Math.max(ax, bx) + 190 * s;
+      ctx.save(); ctx.globalAlpha *= clamp(ap * 3, 0, 1);
+      K.platform(ctx, x0, x1, y + 6, { h: 90, seed: 61 });
+      if (lay === "flank") K.platform(ctx, bx - 170 * s, bx + 190 * s, y + 6, { h: 90, seed: 63 });
+      ctx.restore();
+    }
+    const at = (x, yy) => { ctx.save(); ctx.translate(x, yy); ctx.scale(pa, pa); ctx.translate(-x, -yy); };
+    A.x = ax; A.y = y; A.s = s; B.x = bx; B.y = y; B.s = bsk;
+    if (lay !== "flank" && B.pointUp == null) B.pointUp = 0.6;
+    const sa = K.mousePose(t, A), sb = K.pigeonPose(t, B);
+    if (o.b !== false) { at(bx, y); K.pigeon(ctx, bx, y, bsk, sb); ctx.restore(); }
+    if (o.a !== false) { at(ax, y); K.mouse(ctx, ax, y, s, sa); ctx.restore(); }
+    const hand = (st, k, x, s_) => { const h = st[k]; return h ? [x + h.x * s_, y + h.y * s_] : null; };
+    return {
+      a: { x: ax, y, s, head: [ax, y - 212 * s], hand: hand(sa, A.toward > 0 ? "handR" : "handL", ax, s), pose: sa },
+      b: { x: bx, y, s: bsk, head: [bx, y - 204 * bsk], hand: hand(sb, B.face > 0 ? "wingR" : "wingL", bx, bsk), pose: sb },
+      speaker: spk,
+    };
   };
 })(SK);
 

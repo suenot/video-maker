@@ -36,6 +36,8 @@ It must not look like the Arbitrage Crab. The crab world is a sunny, outlined, h
 | Accent (impact, loss, ask) | `tomato` / `tomatoDark` / `tomatoLight` | `#d65a3a` / `#a23e26` / `#ec8a6c` |
 | Sky | `sky` / `skyHigh` | `#f1dfb5` / `#e9d3a0` |
 | Mouse fur, ears | `fur` / `furDark` / `furLight` / `earPink` | `#b4aa9c` / `#8a8073` / `#d8d0c2` / `#ec9a86` |
+| Pigeon feathers, beak, legs | `pigeon` / `pigeonDark` / `pigeonLight` / `beak` / `leg` / `iris` | `#8e98a6` / `#66707e` / `#bcc3cc` / `#e2a42b` / `#ec8a6c` / `#e2a42b` |
+| Inside a mouth or beak | `mouthIn` | `#6e2a1c` |
 | Steel (wheels, rails) | `steel` / `steelDark` / `steelLight` | `#5c6168` / `#3c4046` / `#8b9097` |
 
 Rules: tomato is rare. It means impact, cost, the ask side or a warning zone, never decoration (exceptions: the tower roof and the cowcatcher, both small). Mustard means money and the chosen schedule. Teal is the world.
@@ -83,6 +85,29 @@ Animation rules (lessons carried over from the crab):
 - Anticipation: a 0.15 s squash before the look-up, a hop before the spread pops.
 - Hands are IK targets ("where the glove goes"). The arm reaches about 70 px from the shoulder: a target above the cap is not reachable, so wave beside the head instead.
 - Something is always alive: beat bob, tail sway, ear flick, whiskers, boil.
+
+### 6b. Dash (the pigeon telegraph clerk, host B)
+
+Dash is a cheeky, curious pigeon who works the station telegraph and the ticket window. He asks the questions. Mr. Tick explains.
+
+| Part | Value (scale 1, local px; feet on y = 0) |
+| --- | --- |
+| Height | 260 incl. eyeshade; head r ~ 44 at y -204; body -30 .. -170 |
+| View | 3/4. The beak points to the `face` side (always towards Mr. Tick or towards the content he points at) |
+| Costume | mustard waistcoat, cream shirt and string tie, teal neck sheen, translucent green eyeshade, tomato sleeve garters, a pencil behind the head |
+| Eyes | cream with a mustard iris; the far eye is smaller; pupils follow `look`; seeded blinks |
+| Beak | mustard with a cream cere; the lower mandible hinges open with `talk` |
+| Wings | two-bone IK 34 + 32 from the shoulders, with three feather "fingers" (`open`; `point` extends the middle one) |
+| Props | telegraph `tape` (dots and dashes, unrolls to the floor) and a railway `ticket` (`label`) |
+| Idle | pigeon head bob (`peck`: a quick thrust and a slow return), breathing squash |
+
+### 6c. The hosts on screen
+
+- Hosts are storytellers. In explainer scenes Mr. Tick is at least 300 px tall (`K.duo` default s 1.15 makes him 345 px and Dash 285 px). Never show them tiny in a corner.
+- They stand together on a piece of platform at the bottom-left (`layout: "left"`), with Dash on the outer side so Mr. Tick's pointing hand faces the content. Use `right` to mirror this, or `flank` with the explainer prop between them.
+- The talker's mouth follows the loudness of their voice. The listener looks at the talker, leans in and nods on the talker's stressed words. Somebody always reacts.
+- Pointing is the main link between a host and an explainer element. Use a gesture (`surprise`, `think`, `shrug`, `nod`) on every reveal.
+- `!` means surprise and `?` means thinking, for both hosts. Both marks are language-neutral.
 
 ## 7. Camera and transitions
 

@@ -20,6 +20,9 @@ var SK = window.SK || (window.SK = {});
     /* mascot: Mr. Tick, the stationmaster mouse */
     fur: "#b4aa9c", furDark: "#8a8073", furLight: "#d8d0c2", earPink: "#ec9a86", nose: "#2a2a2e",
     eye: "#fffaf0", pupil: "#1f1e22", glove: "#fbf6ea", gloveShade: "#ddd3bf",
+    /* sidekick: Dash, the pigeon telegraph clerk (neck sheen = teal ink) */
+    pigeon: "#8e98a6", pigeonDark: "#66707e", pigeonLight: "#bcc3cc", beak: "#e2a42b", leg: "#ec8a6c", iris: "#e2a42b",
+    mouthIn: "#6e2a1c",
     /* sky and land */
     sky: "#f1dfb5", skyHigh: "#e9d3a0", sun: "#e2a42b",
     hillFar: "#a7d0c3", hillMid: "#5fa79c", hillNear: "#2a7b78",
