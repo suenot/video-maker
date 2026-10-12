@@ -40,6 +40,17 @@ var MK = window.MK || (window.MK = {});
   const curScale = (ctx) => { const m = ctx.getTransform(); return Math.sqrt(m.a * m.a + m.b * m.b) || 1; };
   K.lw = (ctx, w) => Math.max(w, K.MIN_PX / curScale(ctx));
 
+  /* two-bone IK: shoulder S, target T, lengths a, b, bend +1/-1 -> { elbow, end } (fins, limbs) */
+  K.ik2 = function (S, T, a, b, bend) {
+    let dx = T[0] - S[0], dy = T[1] - S[1], d = Math.hypot(dx, dy);
+    const dm = clamp(d, Math.abs(a - b) + 0.01, a + b - 0.01);
+    if (d < 1e-6) { dx = 1; dy = 0; d = 1; }
+    const ux = dx / d, uy = dy / d;
+    const ca = clamp((a * a + dm * dm - b * b) / (2 * a * dm), -1, 1), A = Math.acos(ca) * (bend || 1);
+    const ex = S[0] + a * (ux * Math.cos(A) - uy * Math.sin(A)), ey = S[1] + a * (ux * Math.sin(A) + uy * Math.cos(A));
+    return { elbow: [ex, ey], end: [S[0] + ux * dm, S[1] + uy * dm] };
+  };
+
   /* ---------- point generators ---------- */
   K.ellipsePts = function (cx, cy, rx, ry, n, rot) {
     const out = [], r = rot || 0, cr = Math.cos(r), sr = Math.sin(r);

@@ -82,6 +82,22 @@ Animation rules:
 - Singing / narration: `talk` 0..1 opens the mouth (driven by 8th notes in the intro, by the voice envelope in episodes).
 - Always something alive: idle arm sway (`wave`), beat bob, blinks, the boil.
 
+## 5b. Puff, the pufferfish intern (host B, the co-host)
+
+Episodes are two-voice conversations: **Otto = host A** (the explainer, lower voice), **Puff = host B** (the curious co-host, higher voice).
+
+| Part | Value (scale 1, local px, origin at the body centre) |
+| --- | --- |
+| Body | 216 x 200 sunshine-yellow `#ffcf4a` ball, cream belly, orange spots, halftone shading |
+| Eyes | r 27 at x = +/-40, y -24; big pupils with highlights; eyelids; thick brows (`browTilt` for thinking) |
+| Fins | pectoral fins on two-bone IK (40 + 38) ending in a fan blade; tail fan and dorsal fin wag |
+| Puff-up | `puff` 0..1: body 1.45x, 18 cream spines grow from 10 to 40 px, eyes widen, mouth "o" |
+| Intern badge | bid-blue lanyard with a cream badge and a coral star (no words) |
+| On-screen size | 180 - 400 px tall; in the duo it floats beside Otto's head |
+
+Acting: surprise = puff up + "!"; think = fin to chin, one brow up, a "?" thought bubble; point = a fin toward the target and a lean; worry = wobbly mouth, brows down; listening = look at the speaker and nod on their loudness.
+Talking mouths for both hosts come from `K.talkMouth`: the loudness opens the mouth, and `K.viseme` picks m / a / o / e / u per syllable.
+
 ## 6. Camera and transitions
 
 - One virtual camera `{x, y, z, rot}` per shot, keyed with a monotone spline (`K.mkTrack`), never overshooting.

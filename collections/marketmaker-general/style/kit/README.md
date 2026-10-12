@@ -8,9 +8,12 @@ The architecture is the same as the crab kit (`complex-arbitrage-rust/style/kit/
 | --- | --- |
 | `00_core.js` | `clamp lerp inv ss tw E.*` eases, `mulberry` / `hash` / `fbm` seeded noise, `mkSpline` / `mkTrack`, the beat grid `G.BPM`, `G.BARS`, `at(bar, beat)`, `pulse`, `beatIndex`, and the boil clock `boilFrame(t)` at 12 fps |
 | `05_palette.js` | `MK.P` colours and `MK.FONT` stacks (the only place they are defined) |
-| `10_ink.js` | camera `begin` / `applyCam(ctx, parallax)` / `screen` / `toScreen`; `shape` (flat fill + `shade` band + `hi` highlight + halftone `dots` + sticker `drop` + clean navy outline), `line`, `tube`, `dot`, `halftone`, `text` (never boils), `glow`; point generators `ellipsePts`, `blobPts`, `rrectPts` (sharp-edged rounded rects), `rectPts` |
+| `10_ink.js` | `ik2` two-bone IK; camera `begin` / `applyCam(ctx, parallax)` / `screen` / `toScreen`; `shape` (flat fill + `shade` band + `hi` highlight + halftone `dots` + sticker `drop` + clean navy outline), `line`, `tube`, `dot`, `halftone`, `text` (never boils), `glow`; point generators `ellipsePts`, `blobPts`, `rrectPts` (sharp-edged rounded rects), `rectPts` |
 | `30_world.js` | `ocean` (flat bands), `rays`, `surface`, `sun`, `bubble` / `bubbles` / `bubbleBurst`, `sand`, `kelp`, `coralBranch`, `coralFan`, `brainCoral`, `rock`, `starfish`, `tower` (coral exchange tower with ticker strip), `clamDesk` (`part: back/front`), `fish` (4 species, can carry a card), `card` (bid / ask / up / down / sun / plain), `coin`, `sparkle`, `inkCloud`, `mix` |
 | `40_octo.js` | `octo(ctx, x, y, s, pose)`: Otto with 8 tapered sucker arms posed by tip targets, held cards/props, squash, hop, blink/wink, mouths, brows, glasses glint, `!`, skin colour shift; `OCTO_REST`, `octoTips` (world tips after a draw), `blinkAt`, `SKIN`, `skinMix` |
+| `41_talk.js` | `viseme(t, talk, seed)` (one viseme-ish shape per syllable: m / a / o / e / u) and `talkMouth` (both hosts' talking mouths, opening scales with loudness) |
+| `42_puffer.js` | `puffer(ctx, x, y, s, pose)`: Puff, the pufferfish intern (host B): puff-up, spines, IK pectoral fins, look-at, blink, brows, mouths, `!`, thought bubble; `PUFF_SKIN`, `pufferEyes` |
+| `45_duo.js` | `duo(ctx, t, opt)`: both hosts placed and acted from narration loudness (talking, listening, point, surprise, think, grin, nod, shrug, wave, carry); `duoStage` |
 | `50_explainer.js` | `panel`, `chart` (+ `genCandles`, `sma`, `alligator`, `ao`, `fractals`), `attractor`, `manifold`, `formula`, `table`, `bullets`, `code`, `book`, `badge`, `titlePlate`, `popS` |
 | `assets/logo.svg` | the marketmaker.cc mark (`fill="currentColor"`); `build.py` inlines it where a shell has `<!--__LOGO__-->` |
 | `fonts/` | Unbounded 700/900, Manrope 600/800, Roboto Mono 500/700 (Latin + Cyrillic), Noto Sans SC/TC 900 subsets; `fonts.css`; refresh with `tools/fetch_fonts.py` |
@@ -73,6 +76,43 @@ const tips = K.octoTips; // world positions of the 8 arm tips after the draw
 - Arms on the left side (0 - 3) should reach left/up, arms 4 - 7 right/up, so they do not cross the face.
 - Pose blending in the intro: `armTrack(t, i, [[t0, target, dur], ...])` and `fanArms(t, t0, opt)` in `intro/src/30_verse.js` (copy them; they are scene helpers, not kit API).
 - Determinism: everything comes from `t` and seeds; `seed` in the pose changes the boil pattern for a second Otto in one frame.
+
+## Puff (the sidekick) API
+
+```js
+K.puffer(ctx, x, y, s, {
+  talk: loudnessB, viseme: undefined,  // 0..1 loudness; viseme optional (auto per syllable)
+  puff: 0,                             // 0..1 inflate (surprise): body 1.45x, spines out
+  wide: 0, blink: K.blinkAt(t, 23),    // eyes pop / blink
+  look: [0, 0], lookAt: [lx, ly],      // pupils, or a local point to look at
+  brow: 0, browTilt: 0,                // browTilt 1 = one brow up (thinking)
+  mouth: "smile",                      // "smile" | "grin" | "o" | "flat" | "worry"
+  finL: { x: -150, y: 30 }, finR: null,// pectoral fin tip targets (IK); null = idle flap
+  exclaim: 0, think: 0,                // "!" pop; thought bubbles with "?"
+  bob: 0, lean: 0, squash: 0,          // float offset, tilt, squash/stretch (volume kept)
+});
+```
+
+Local origin is the body centre; at scale 1 the body is 216 x 200 px (about 250 px with fins and tail). Keep Puff at s 0.8 - 1.6 so it reads at 180 - 400 px.
+
+## Duo: both hosts from narration
+
+```js
+K.screen(ctx);
+const d = K.duo(ctx, g, {
+  x: 1340, y: 1010, s: 0.95, side: 1,      // Otto's base point; Puff floats at x + side * 380 * s, up 300 * s
+  talkA: NR.talk(g, "A"), talkB: NR.talk(g, "B"),  // loudness per voice; the louder one speaks, the other listens
+  actA: { kind: "point", u: hold(g, b1, b2) }, pointA: [sx, sy], pointAmtA: hold(g, b1, b2),
+  actB: { kind: "surprise", u: hold(g, b3, b3 + 1) },
+  propA: (c, x, y, ang) => K.card(c, x, y - 40, 0.9, { kind: "ask", text: "100.02" }),
+});
+// d.A.head, d.B, d.tips: anchor leaders, sparkles or props to the hosts
+```
+
+- Listening is automatic: the quiet host looks at the speaker and nods on the speaker's loudness.
+- Talking hands are automatic: Otto's outer arm (away from Puff) lifts and opens while he speaks; Puff's fins flap with its speech.
+- Acting kinds: A `point surprise think grin nod shrug wave carry`; B `point surprise think grin nod shrug wave worry`. Feed `u` from an envelope (`hold(t, t0, t1)`), so poses blend in and out.
+- Layout: the duo owns a column about 640 px wide (`side: 1` at x about 1340 = bottom-right; `side: -1` at x about 580 = bottom-left). Otto is about 400 px tall at s 0.95; never go under s 0.75 in explainer scenes. Keep boards out of that column, so the think bubble and pointing arm stay clear.
 
 ## Rules the kit relies on
 

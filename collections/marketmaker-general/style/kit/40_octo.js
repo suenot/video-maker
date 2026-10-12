@@ -9,7 +9,8 @@
      hop      px     lift (resting arms trail behind)
      look     [dx, dy] pupils, -1..1
      blink    0..1   wink 0..1 (viewer-left eye only)
-     mouth    "smile" | "grin" | "open" | "o" | "flat";  talk 0..1 overrides
+     mouth    "smile" | "grin" | "open" | "o" | "flat";  talk 0..1 overrides (loudness),
+              viseme "m" | "a" | "o" | "e" | "u" (default: K.viseme picks one per syllable)
      brow     -1..1.5  (+ = raised)
      glint    0..1   a light flash crosses the glasses
      exclaim  0..1   "!" pops above the head
@@ -114,11 +115,8 @@ var MK = window.MK || (window.MK = {});
     [-1, 1].forEach((sd, k) => K.shape(ctx, K.ellipsePts(sd * 92, -186, 20, 12, 10), { fill: P.blush, stroke: null, w: 0, boil: 0.3, seed: seed + 30 + k, alpha: 0.45 }));
     /* mouth */
     const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1), my = -168;
-    if (talk > 0.06) {
-      const mw = 16 + 10 * talk, mh = 4 + 20 * talk;
-      K.shape(ctx, [[-mw, my], [0, my - 2], [mw, my], [mw * 0.6, my + mh], [0, my + mh * 1.1], [-mw * 0.6, my + mh]], { fill: "#7a1f3d", w: 4.5, boil: 0.5, seed: seed + 40 });
-      if (talk > 0.3) K.shape(ctx, K.ellipsePts(0, my + mh * 0.8, mw * 0.4, mh * 0.22, 8), { fill: "#ff8fa8", stroke: null, w: 0, boil: 0.3, seed: seed + 41 });
-    } else if (m === "smile") K.line(ctx, [[-26, my - 4], [-12, my + 9], [12, my + 9], [26, my - 4]], { stroke: P.ink, w: 5, boil: 0.5, seed: seed + 42 });
+    if (talk > 0.06) K.talkMouth(ctx, 0, my - 2, 24, talk, st.viseme || K.viseme(K.now, talk, seed), seed + 40);
+    else if (m === "smile") K.line(ctx, [[-26, my - 4], [-12, my + 9], [12, my + 9], [26, my - 4]], { stroke: P.ink, w: 5, boil: 0.5, seed: seed + 42 });
     else if (m === "grin") { K.shape(ctx, [[-32, my - 6], [32, my - 6], [18, my + 18], [0, my + 22], [-18, my + 18]], { fill: "#7a1f3d", w: 4.5, boil: 0.5, seed: seed + 43 }); K.shape(ctx, [[-24, my - 4], [24, my - 4], [20, my + 3], [-20, my + 3]], { fill: "#ffffff", stroke: null, w: 0, boil: 0.3, seed: seed + 44 }); }
     else if (m === "open") K.shape(ctx, K.ellipsePts(0, my + 6, 18, 16, 12), { fill: "#7a1f3d", w: 4.5, boil: 0.5, seed: seed + 45 });
     else if (m === "o") K.shape(ctx, K.ellipsePts(0, my + 4, 9, 11, 10), { fill: "#7a1f3d", w: 4, boil: 0.4, seed: seed + 46 });

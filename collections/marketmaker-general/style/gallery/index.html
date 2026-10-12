@@ -78,7 +78,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="12" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div class="ov" id="vig"></div>
       <div class="ov" id="grain"></div>
@@ -285,6 +285,17 @@ var MK = window.MK || (window.MK = {});
   };
   const curScale = (ctx) => { const m = ctx.getTransform(); return Math.sqrt(m.a * m.a + m.b * m.b) || 1; };
   K.lw = (ctx, w) => Math.max(w, K.MIN_PX / curScale(ctx));
+
+  /* two-bone IK: shoulder S, target T, lengths a, b, bend +1/-1 -> { elbow, end } (fins, limbs) */
+  K.ik2 = function (S, T, a, b, bend) {
+    let dx = T[0] - S[0], dy = T[1] - S[1], d = Math.hypot(dx, dy);
+    const dm = clamp(d, Math.abs(a - b) + 0.01, a + b - 0.01);
+    if (d < 1e-6) { dx = 1; dy = 0; d = 1; }
+    const ux = dx / d, uy = dy / d;
+    const ca = clamp((a * a + dm * dm - b * b) / (2 * a * dm), -1, 1), A = Math.acos(ca) * (bend || 1);
+    const ex = S[0] + a * (ux * Math.cos(A) - uy * Math.sin(A)), ey = S[1] + a * (ux * Math.sin(A) + uy * Math.cos(A));
+    return { elbow: [ex, ey], end: [S[0] + ux * dm, S[1] + uy * dm] };
+  };
 
   /* ---------- point generators ---------- */
   K.ellipsePts = function (cx, cy, rx, ry, n, rot) {
@@ -756,7 +767,8 @@ var MK = window.MK || (window.MK = {});
      hop      px     lift (resting arms trail behind)
      look     [dx, dy] pupils, -1..1
      blink    0..1   wink 0..1 (viewer-left eye only)
-     mouth    "smile" | "grin" | "open" | "o" | "flat";  talk 0..1 overrides
+     mouth    "smile" | "grin" | "open" | "o" | "flat";  talk 0..1 overrides (loudness),
+              viseme "m" | "a" | "o" | "e" | "u" (default: K.viseme picks one per syllable)
      brow     -1..1.5  (+ = raised)
      glint    0..1   a light flash crosses the glasses
      exclaim  0..1   "!" pops above the head
@@ -861,11 +873,8 @@ var MK = window.MK || (window.MK = {});
     [-1, 1].forEach((sd, k) => K.shape(ctx, K.ellipsePts(sd * 92, -186, 20, 12, 10), { fill: P.blush, stroke: null, w: 0, boil: 0.3, seed: seed + 30 + k, alpha: 0.45 }));
     /* mouth */
     const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1), my = -168;
-    if (talk > 0.06) {
-      const mw = 16 + 10 * talk, mh = 4 + 20 * talk;
-      K.shape(ctx, [[-mw, my], [0, my - 2], [mw, my], [mw * 0.6, my + mh], [0, my + mh * 1.1], [-mw * 0.6, my + mh]], { fill: "#7a1f3d", w: 4.5, boil: 0.5, seed: seed + 40 });
-      if (talk > 0.3) K.shape(ctx, K.ellipsePts(0, my + mh * 0.8, mw * 0.4, mh * 0.22, 8), { fill: "#ff8fa8", stroke: null, w: 0, boil: 0.3, seed: seed + 41 });
-    } else if (m === "smile") K.line(ctx, [[-26, my - 4], [-12, my + 9], [12, my + 9], [26, my - 4]], { stroke: P.ink, w: 5, boil: 0.5, seed: seed + 42 });
+    if (talk > 0.06) K.talkMouth(ctx, 0, my - 2, 24, talk, st.viseme || K.viseme(K.now, talk, seed), seed + 40);
+    else if (m === "smile") K.line(ctx, [[-26, my - 4], [-12, my + 9], [12, my + 9], [26, my - 4]], { stroke: P.ink, w: 5, boil: 0.5, seed: seed + 42 });
     else if (m === "grin") { K.shape(ctx, [[-32, my - 6], [32, my - 6], [18, my + 18], [0, my + 22], [-18, my + 18]], { fill: "#7a1f3d", w: 4.5, boil: 0.5, seed: seed + 43 }); K.shape(ctx, [[-24, my - 4], [24, my - 4], [20, my + 3], [-20, my + 3]], { fill: "#ffffff", stroke: null, w: 0, boil: 0.3, seed: seed + 44 }); }
     else if (m === "open") K.shape(ctx, K.ellipsePts(0, my + 6, 18, 16, 12), { fill: "#7a1f3d", w: 4.5, boil: 0.5, seed: seed + 45 });
     else if (m === "o") K.shape(ctx, K.ellipsePts(0, my + 4, 9, 11, 10), { fill: "#7a1f3d", w: 4, boil: 0.4, seed: seed + 46 });
@@ -946,6 +955,274 @@ var MK = window.MK || (window.MK = {});
     bear: { fill: "#ff7272", dark: "#d94848", light: "#ffb0b0" },
   };
   K.skinMix = function (a, b, u) { return { fill: K.mix(a.fill, b.fill, u), dark: K.mix(a.dark, b.dark, u), light: K.mix(a.light, b.light, u) }; };
+})(MK);
+
+/* ============================================================
+   KIT 41 TALK: talking mouths shared by both hosts.
+   Narration sync gives a loudness value 0..1 per frame (`talk`).
+   K.viseme(t, talk, seed) picks a viseme-ish shape per syllable
+   (about 7.5 syllables per second, seeded, deterministic):
+     "m" closed, "a" open tall, "o" round, "e" wide with teeth, "u" small round.
+   K.talkMouth draws it; the opening scales with loudness.
+   ============================================================ */
+var MK = window.MK || (window.MK = {});
+(function (K) {
+  const P = K.P, { clamp, hash } = K;
+  const SHAPES = ["a", "o", "e", "a", "u", "e"];
+  K.viseme = function (t, talk, seed) {
+    if (talk < 0.06) return "m";
+    const syl = Math.floor(t * 7.5 + hash(seed | 0, 3));
+    return talk < 0.18 ? "u" : SHAPES[Math.floor(hash(syl, seed | 0) * SHAPES.length)];
+  };
+  /* cx, cy = mouth centre; w = half width at rest (local px); colours: inside, tongue */
+  K.talkMouth = function (ctx, cx, cy, w, talk, vis, seed, opt) {
+    const o = Object.assign({ inside: "#7a1f3d", tongue: "#ff8fa8", teeth: "#ffffff", line: P.ink, lw: 5 }, opt || {});
+    talk = clamp(talk, 0, 1);
+    if (vis === "m" || talk < 0.06) { K.line(ctx, [[cx - w * 0.8, cy], [cx, cy + w * 0.12], [cx + w * 0.8, cy]], { stroke: o.line, w: o.lw, boil: 0.4, seed }); return; }
+    let mw, mh;
+    if (vis === "o") { mw = w * (0.55 + 0.25 * talk); mh = w * (0.6 + 0.6 * talk); }
+    else if (vis === "u") { mw = w * (0.38 + 0.15 * talk); mh = w * (0.35 + 0.35 * talk); }
+    else if (vis === "e") { mw = w * (1.05 + 0.2 * talk); mh = w * (0.3 + 0.5 * talk); }
+    else { mw = w * (0.8 + 0.25 * talk); mh = w * (0.45 + 1.0 * talk); } /* "a" */
+    const pts = vis === "o" || vis === "u" ? K.ellipsePts(cx, cy + mh * 0.4, mw, mh * 0.6, 14)
+      : [[cx - mw, cy], [cx, cy - mh * 0.08], [cx + mw, cy], [cx + mw * 0.62, cy + mh], [cx, cy + mh * 1.12], [cx - mw * 0.62, cy + mh]];
+    K.shape(ctx, pts, { fill: o.inside, stroke: o.line, w: o.lw * 0.9, boil: 0.4, seed });
+    ctx.save(); K.pathOf(ctx, pts, true); ctx.clip();
+    if (vis === "e" || vis === "a") K.shape(ctx, K.rectPts(cx - mw, cy - 4, mw * 2, Math.max(5, mh * 0.28), 2), { fill: o.teeth, stroke: null, w: 0, boil: 0.2, seed: seed + 1 });
+    if (talk > 0.3 && vis !== "u") K.shape(ctx, K.ellipsePts(cx, cy + mh * 0.95, mw * 0.5, mh * 0.3, 10), { fill: o.tongue, stroke: null, w: 0, boil: 0.3, seed: seed + 2 });
+    ctx.restore();
+  };
+})(MK);
+
+/* ============================================================
+   KIT 42 PUFFER: "Puff", the eager pufferfish intern (host B, the co-host).
+   Puff floats: local origin = body centre. Scale 1: body 216 x 200,
+   eyes r 27, pectoral fins on two-bone "arms", tail fan behind,
+   an intern lanyard badge (a star, no words). Puffs up when surprised:
+   the body grows 1.45x and the spines stand out.
+   Pose state (all optional):
+     puff     0..1   inflate (surprise, big news)
+     squash   -1..1  volume kept;  lean deg;  bob px (vertical float offset)
+     look     [dx, dy] pupils -1..1;  lookAt [x, y] local point (overrides look)
+     blink    0..1;  wide 0..1 (eyes pop open)
+     talk     0..1 loudness -> K.talkMouth;  viseme ("m" | "a" | "o" | "e" | "u");  mouth "smile" | "grin" | "o" | "flat" | "worry"
+     brow     -1..1.5;  browTilt -1..1 (thinking: one brow up)
+     finL/finR { x, y } fin tip target in local space (point, wave, chin); default: idle flap
+     exclaim 0..1 "!";  think 0..1 thought bubbles with "?"
+     skin     { fill, dark, light } colour override
+   ============================================================ */
+var MK = window.MK || (window.MK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp, hash } = K;
+  K.PUFF_SKIN = { fill: "#ffcf4a", dark: "#e09a12", light: "#ffe79a", belly: "#fff6e6", spot: "#ff9442" };
+
+  K.puffer = function (ctx, x, y, s, st) {
+    st = st || {};
+    const sk = Object.assign({}, K.PUFF_SKIN, st.skin || {});
+    const pf = clamp(st.puff || 0, 0, 1), grow = 1 + 0.45 * K.E.out3(pf);
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = (1 + sq * 0.5) * grow, syk = grow / (1 + sq * 0.5);
+    const seed = st.seed || 900, R = 100, now = K.now;
+    const blink = clamp(st.blink || 0, 0, 1) * (1 - clamp(st.wide || 0, 0, 1));
+    ctx.save(); ctx.translate(x, y + (st.bob || 0)); ctx.scale(s, s); ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    /* tail fan behind the body (lower right), wagging */
+    ctx.save(); ctx.translate(R * 0.82 * sxk, R * 0.42 * syk); ctx.rotate(0.6 + Math.sin(now * 6 + seed) * 0.18);
+    K.shape(ctx, [[0, 0], [70, -40], [84, 0], [70, 40]], { fill: sk.dark, w: 5, boil: 0.6, seed: seed + 1 });
+    K.line(ctx, [[8, 0], [70, -20]], { stroke: sk.fill, w: 3, boil: 0.4, seed: seed + 2 }); K.line(ctx, [[8, 0], [72, 18]], { stroke: sk.fill, w: 3, boil: 0.4, seed: seed + 3 });
+    ctx.restore();
+    /* dorsal fin on top */
+    ctx.save(); ctx.translate(-10, -R * 0.96 * syk); ctx.rotate(-0.15 + Math.sin(now * 4 + seed) * 0.08);
+    K.shape(ctx, [[-30, 8], [-8, -40], [26, -28], [30, 8]], { fill: sk.dark, w: 5, boil: 0.6, seed: seed + 4 });
+    ctx.restore();
+    /* spines around the outline: stubs at rest, long when puffed */
+    const spineL = 10 + 30 * pf;
+    for (let i = 0; i < 18; i++) {
+      const a = (i / 18) * K.TAU + 0.17, ca = Math.cos(a), sa = Math.sin(a), rx = R * 1.08 * sxk, ry = R * syk;
+      const bx = ca * rx * 0.96, by = sa * ry * 0.96, ex = ca * (rx + spineL), ey = sa * (ry + spineL);
+      K.shape(ctx, [[bx - sa * 9, by + ca * 9], [ex, ey], [bx + sa * 9, by - ca * 9]], { fill: P.cream, w: 4, boil: 0.4, seed: seed + 10 + i, sharp: true });
+    }
+    /* body */
+    const body = K.ellipsePts(0, 0, R * 1.08 * sxk, R * syk, 24);
+    K.shape(ctx, body, { fill: sk.fill, w: 6, boil: 0.8, seed: seed + 30, shade: { color: sk.dark, dx: -18, dy: -16 }, hi: { color: sk.light, dx: 14, dy: 18 }, dots: { color: sk.dark, alpha: 0.3, gap: 14, r: 3.4, ang: 0.9, from: 0.55 } });
+    /* belly and spots */
+    ctx.save(); K.pathOf(ctx, body, true); ctx.clip();
+    K.shape(ctx, K.ellipsePts(0, R * 0.62 * syk, R * 0.82 * sxk, R * 0.55 * syk, 18), { fill: sk.belly, w: 4, boil: 0.5, seed: seed + 31 });
+    [[-70, -40, 9], [62, -52, 7], [-40, -78, 6], [80, -10, 6], [-86, 10, 5]].forEach((d, i) => K.shape(ctx, K.ellipsePts(d[0] * sxk, d[1] * syk, d[2], d[2], 8), { fill: sk.spot, stroke: null, w: 0, boil: 0.3, seed: seed + 32 + i }));
+    ctx.restore();
+    K.shape(ctx, K.ellipsePts(-46 * sxk, -62 * syk, 22, 11, 10, -0.5), { fill: "#ffffff", stroke: null, w: 0, boil: 0.3, seed: seed + 38, alpha: 0.75 });
+    /* lanyard + intern badge (a star, language-free) */
+    const by = R * 0.74 * syk;
+    K.line(ctx, [[-52 * sxk, R * 0.42 * syk], [0, by - 18], [52 * sxk, R * 0.42 * syk]], { stroke: P.bid, w: 4, boil: 0.4, seed: seed + 40 });
+    ctx.save(); ctx.translate(0, by + 4); ctx.rotate(Math.sin(now * 2.2 + seed) * 0.12);
+    K.shape(ctx, K.rrectPts(-18, -20, 36, 40, 8, 2), { fill: P.cream, w: 4, boil: 0.4, seed: seed + 41 });
+    K.starfish(ctx, 0, 1, 11, { color: P.ask, seed: seed + 42 });
+    ctx.restore();
+    /* cheeks */
+    [-1, 1].forEach((sd, k) => K.shape(ctx, K.ellipsePts(sd * 62 * sxk, 14 * syk, 15, 9, 10), { fill: P.blush, stroke: null, w: 0, boil: 0.3, seed: seed + 44 + k, alpha: 0.45 }));
+    /* eyes */
+    const EY = -24 * syk, EX = 40 * sxk, er = 27 * (1 + 0.15 * clamp(st.wide || 0, 0, 1) + 0.12 * pf);
+    let look = st.look || [0, 0];
+    if (st.lookAt) { const dx = st.lookAt[0], dy = st.lookAt[1] - EY, d = Math.hypot(dx, dy) || 1; look = [dx / d, dy / d]; }
+    [-1, 1].forEach((sd, k) => {
+      const ex = sd * EX;
+      K.shape(ctx, K.ellipsePts(ex, EY, er, er * 1.08, 14), { fill: P.eye, w: 4.5, boil: 0.4, seed: seed + 50 + k });
+      if (blink < 0.95) {
+        ctx.save(); K.pathOf(ctx, K.ellipsePts(ex, EY, er, er * 1.08, 14), true); ctx.clip();
+        const px = ex + look[0] * er * 0.42, py = EY + look[1] * er * 0.38 + blink * 6, pr = er * (0.48 - 0.12 * clamp(st.wide || 0, 0, 1));
+        K.shape(ctx, K.ellipsePts(px, py, pr, pr * 1.05, 12), { fill: P.pupil, stroke: null, w: 0, boil: 0.3, seed: seed + 52 + k });
+        K.shape(ctx, K.ellipsePts(px + pr * 0.35, py - pr * 0.4, pr * 0.32, pr * 0.32, 8), { fill: "#ffffff", stroke: null, w: 0, boil: 0.2, seed: seed + 54 + k });
+        if (blink > 0.02) K.shape(ctx, [[ex - er - 4, EY - er - 6], [ex + er + 4, EY - er - 6], [ex + er + 4, EY - er + 2 * er * blink], [ex - er - 4, EY - er + 2 * er * blink]], { fill: sk.fill, stroke: P.ink, w: 4, boil: 0.3, seed: seed + 56 + k });
+        ctx.restore();
+      } else K.line(ctx, [[ex - er * 0.8, EY + 2], [ex, EY + 9], [ex + er * 0.8, EY + 2]], { stroke: P.ink, w: 5, boil: 0.4, seed: seed + 58 + k });
+      const br = st.brow || 0, tilt = (st.browTilt || 0) * (sd < 0 ? 1 : -0.4);
+      K.line(ctx, [[ex - 18, EY - er - 14 - (br + tilt) * 11 + sd * br * 3], [ex + 18, EY - er - 14 - (br + tilt) * 11 - sd * br * 3]], { stroke: P.ink, w: 6, boil: 0.4, seed: seed + 60 + k });
+    });
+    /* mouth */
+    const my = 26 * syk, talk = clamp(st.talk || 0, 0, 1), m = st.mouth || "smile";
+    if (talk > 0.06) K.talkMouth(ctx, 0, my, 18, talk, st.viseme || K.viseme(now, talk, seed + 7), seed + 70);
+    else if (pf > 0.4 || m === "o") K.shape(ctx, K.ellipsePts(0, my + 6, 9 + 4 * pf, 11 + 4 * pf, 10), { fill: "#7a1f3d", w: 4, boil: 0.4, seed: seed + 71 });
+    else if (m === "grin") K.shape(ctx, [[-22, my - 2], [22, my - 2], [12, my + 14], [0, my + 17], [-12, my + 14]], { fill: "#7a1f3d", w: 4.5, boil: 0.4, seed: seed + 72 });
+    else if (m === "flat") K.line(ctx, [[-14, my + 4], [14, my + 2]], { stroke: P.ink, w: 5, boil: 0.4, seed: seed + 73 });
+    else if (m === "worry") K.line(ctx, [[-16, my + 8], [-6, my + 2], [6, my + 6], [16, my + 1]], { stroke: P.ink, w: 5, boil: 0.4, seed: seed + 74 });
+    else K.line(ctx, [[-18, my], [-8, my + 9], [8, my + 9], [18, my]], { stroke: P.ink, w: 5, boil: 0.4, seed: seed + 75 });
+    /* pectoral fins: two-bone arm (outlined tube) ending in a fan blade */
+    [["L", -1], ["R", 1]].forEach(([k, sd]) => {
+      const S = [sd * R * 0.98 * sxk, R * 0.18 * syk];
+      const flap = Math.sin(now * 5.5 + seed + (sd > 0 ? 1.4 : 0));
+      const tg = st["fin" + k] || { x: sd * (R * 1.32 * sxk + 18), y: R * 0.32 * syk + 16 * flap };
+      const r = K.ik2(S, [tg.x, tg.y], 40, 38, sd > 0 ? -1 : 1);
+      K.tube(ctx, [S, r.elbow, r.end], 12, sk.dark, seed + 80 + sd, { ow: 9 });
+      const ang = Math.atan2(r.end[1] - r.elbow[1], r.end[0] - r.elbow[0]);
+      ctx.save(); ctx.translate(r.end[0], r.end[1]); ctx.rotate(ang);
+      K.shape(ctx, [[-4, 0], [26, -22], [40, -6], [40, 8], [26, 22]], { fill: sk.fill, w: 4.5, boil: 0.5, seed: seed + 84 + sd, shade: { color: sk.dark, dx: 0, dy: -6 } });
+      ctx.restore();
+    });
+    /* "!" and thought bubbles */
+    if (st.exclaim > 0) {
+      const a = K.E.back(clamp(st.exclaim, 0, 1), 2.5);
+      ctx.save(); ctx.translate(R * 1.2 * sxk, -R * 1.25 * syk); ctx.rotate(0.25); ctx.scale(a, a);
+      K.shape(ctx, [[-10, -56], [10, -56], [5, -12], [-5, -12]], { fill: P.sun, w: 5, boil: 0.5, seed: seed + 90, sharp: true });
+      K.dot(ctx, 0, 6, 8, P.sun, P.ink, 5, seed + 91);
+      ctx.restore();
+    }
+    if (st.think > 0) {
+      const a = clamp(st.think, 0, 1);
+      [[R * 0.9, -R * 1.15, 9], [R * 1.15, -R * 1.45, 14]].forEach((b, i) => { if (a > i * 0.25) K.dot(ctx, b[0] * sxk, b[1] * syk + 4 * Math.sin(now * 3 + i), b[2], P.cream, P.ink, 4, seed + 92 + i); });
+      if (a > 0.5) {
+        const g = K.E.back(K.inv(0.5, 1, a), 2), cx = R * 1.55 * sxk, cy = -R * 1.95 * syk + 5 * Math.sin(now * 2.4);
+        ctx.save(); ctx.translate(cx, cy); ctx.scale(g, g);
+        K.shape(ctx, K.blobPts(0, 0, 54, 44, 12, seed + 95, 0.12), { fill: P.cream, w: 4.5, boil: 0.6, seed: seed + 95 });
+        K.text(ctx, "?", 0, 4, { size: 54, weight: 900, font: K.FONT.display, fill: P.ask });
+        ctx.restore();
+      }
+    }
+    ctx.restore();
+    K.pufferEyes = [x, y + (st.bob || 0) + EY * s]; /* point between the eyes, in the caller's space (look-at targets) */
+  };
+})(MK);
+
+/* ============================================================
+   KIT 45 DUO: Otto (host A, the explainer) + Puff (host B, the co-host)
+   placed together and acted from narration data.
+   K.duo(ctx, t, opt) draws both hosts (and an optional sand mound "stage")
+   in the current coordinate space (usually screen space: K.screen(ctx)).
+   opt:
+     x, y      Otto's arm-base point (default 400, 1040); s scale (default 0.95 -> Otto ~400 px tall)
+     side      +1 = Puff to Otto's right, -1 = Puff to his left (for a duo in the bottom-right)
+     talkA, talkB   loudness 0..1 of each voice this frame (mouths + gestures)
+     speaker   "A" | "B" | null (default: the louder voice); the other one listens (looks, nods)
+     actA, actB     { kind, u } acting on top, u 0..1 envelope (use hold(t, t0, t1)):
+                    A kinds: point, surprise, think, grin, nod, shrug, wave, carry
+                    B kinds: point, surprise (puffs up), think, grin, nod, shrug, wave, worry
+     pointA, pointB [x, y] target in the same space; pointAmtA / pointAmtB 0..1
+     propA     fn(ctx, x, y, ang) drawn in Otto's outer arm (carry a card, chart, coin...)
+     skinA     Otto colour shift (K.SKIN.*);  stage (default true);  a fade 0..1;  seed
+   Returns { A: {x, y, head}, B: {x, y}, tips } so scenes can attach props or leaders.
+   ============================================================ */
+var MK = window.MK || (window.MK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp } = K;
+  const act = (o, k) => (o && o.kind === k ? clamp(o.u == null ? 1 : o.u, 0, 1) : 0);
+
+  K.duoStage = function (ctx, x, y, w, seed) {
+    const pts = []; for (let i = 0; i <= 14; i++) { const u = i / 14, a = Math.PI + u * Math.PI; pts.push([x + Math.cos(a) * w / 2, y + 30 + Math.sin(a) * 70 + 6 * Math.sin(i * 2.1 + seed)]); }
+    K.shape(ctx, pts.concat([[x + w / 2, y + 200], [x - w / 2, y + 200]]), { fill: P.sand, w: 5, boil: 0.6, seed: seed + 1, shade: { color: P.sandDark, dx: 0, dy: -26 }, dots: { color: P.sandDark, alpha: 0.5, gap: 20, r: 3, ang: Math.PI / 2, from: 0.4 } });
+    K.starfish(ctx, x - w * 0.32, y + 46, 22, { rot: 0.4, seed: seed + 2 });
+  };
+
+  K.duo = function (ctx, t, o) {
+    o = Object.assign({ x: 400, y: 1040, s: 0.95, side: 1, talkA: 0, talkB: 0, speaker: null, actA: null, actB: null, pointA: null, pointB: null, pointAmtA: 0, pointAmtB: 0, propA: null, skinA: null, stage: true, a: 1, seed: 0 }, o || {});
+    if (o.a <= 0) return null;
+    const sd = o.side, s = o.s, ox = o.x, oy = o.y;
+    const ps = 0.92 * s, px = ox + sd * 380 * s, bob = 9 * Math.sin(t * 2.1 + 0.7), py = oy - 300 * s;
+    const tA = clamp(o.talkA, 0, 1), tB = clamp(o.talkB, 0, 1);
+    const spk = o.speaker || (tA > tB + 0.04 ? "A" : tB > tA + 0.04 ? "B" : null);
+    ctx.save(); ctx.globalAlpha *= clamp(o.a, 0, 1);
+    if (o.stage) K.duoStage(ctx, ox + sd * 170 * s, oy + 10, 980 * s, 960 + o.seed);
+
+    /* ---------- Otto (A) ---------- */
+    const L = (wx, wy) => ({ x: (wx - ox) / s, y: (wy - oy) / s });
+    const outer = sd > 0 ? 1 : 6, inner = sd > 0 ? 6 : 1; /* outer arm = away from Puff */
+    const rest = (i) => { const r = K.OCTO_REST[i]; return { x: r[0], y: r[1], bend: (i < 4 ? 1 : -1) * 20, curl: (i < 4 ? -1 : 1) * 2.6 }; };
+    const mixA = (a, b, u) => ({ x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u), bend: lerp(a.bend || 0, b.bend || 0, u), curl: lerp(a.curl || 0, b.curl || 0, u), card: u > 0.5 ? b.card : null, prop: u > 0.5 ? b.prop : null, wrap: u > 0.5 ? b.wrap : false });
+    const arms = [null, null, null, null, null, null, null, null];
+    const pA = { blink: K.blinkAt(t, 11 + o.seed), talk: tA, squash: 0.05 * K.pulse(t, 1, 6) + 0.06 * tA, skin: o.skinA || undefined, seed: 700 + o.seed };
+    pA.look = spk === "B" ? [sd * 0.9, -0.25] : [0.1 * Math.sin(t * 0.8), -0.1];
+    /* talking hands: the outer arm opens and lifts while Otto speaks */
+    const ge = clamp(tA * 2.4, 0, 1) * (spk === "A" ? 1 : 0.3);
+    if (ge > 0.02) arms[outer] = mixA(rest(outer), { x: -sd * (330 + 30 * Math.sin(t * 1.9)), y: -300 - 90 * (0.5 + 0.5 * Math.sin(t * 2.3)), bend: -sd * 40, curl: sd * 0.8 }, ge);
+    /* listening: small nods on the other voice */
+    if (spk === "B") pA.lean = 2.5 * Math.sin(t * 6.5) * clamp(tB * 2, 0, 1);
+    const u = (k) => act(o.actA, k);
+    if (o.pointA && o.pointAmtA > 0) {
+      const tg = L(o.pointA[0], o.pointA[1]), useI = tg.x * sd < 0 ? outer : inner, root = [useI === 1 ? -72 : 72, -128];
+      let dx = tg.x - root[0], dy = tg.y - root[1]; const d = Math.hypot(dx, dy) || 1, k = Math.min(1, 560 / d);
+      arms[useI] = mixA(arms[useI] || rest(useI), { x: root[0] + dx * k, y: root[1] + dy * k, bend: (useI === 1 ? -1 : 1) * 30, curl: (useI === 1 ? 1 : -1) * 0.7 }, clamp(o.pointAmtA, 0, 1));
+      pA.look = [clamp(dx / d * 1.2, -1, 1), clamp(dy / d, -1, 1)];
+    }
+    if (u("surprise")) { const v = u("surprise"); pA.exclaim = v; pA.brow = 1.4 * v; pA.mouth = "o"; pA.hop = 50 * Math.sin(Math.PI * v); pA.squash = -0.2 * Math.sin(Math.PI * v); if (tA < 0.1) pA.talk = 0; }
+    if (u("think")) { const v = u("think"); arms[inner] = mixA(arms[inner] || rest(inner), { x: sd * 70, y: -150, bend: sd * 60, curl: -sd * 1.8 }, v); pA.look = [0.4 * sd, -1]; pA.brow = 0.7 * v; if (tA < 0.1) pA.mouth = "flat"; }
+    if (u("grin")) { pA.mouth = "grin"; pA.glint = u("grin"); pA.brow = 0.6; }
+    if (u("nod")) pA.lean = 5 * Math.sin(t * 9) * u("nod");
+    if (u("shrug")) { const v = u("shrug"); [1, 6].forEach((i) => (arms[i] = mixA(arms[i] || rest(i), { x: (i === 1 ? -1 : 1) * 360, y: -360, bend: (i === 1 ? 1 : -1) * 40, curl: (i === 1 ? -1 : 1) * 1.5 }, v))); pA.brow = v; pA.mouth = "flat"; }
+    if (u("wave")) arms[outer] = mixA(arms[outer] || rest(outer), { x: -sd * 300, y: -460 + 30 * Math.sin(t * 12), bend: -sd * 30, curl: sd * 1 }, u("wave"));
+    if (o.propA || u("carry")) arms[outer] = mixA(arms[outer] || rest(outer), { x: -sd * 330, y: -420, bend: -sd * 40, prop: o.propA, wrap: true }, o.propA ? Math.max(u("carry"), o.actA ? 0 : 1) : u("carry"));
+    pA.arms = arms;
+    K.octo(ctx, ox, oy, s, pA);
+    const tips = K.octoTips;
+    if (u("think") > 0.5) { /* Otto's thought bubble */
+      const g = K.E.back(K.inv(0.5, 1, u("think")), 2), hx = ox + sd * 20 * s, hy = oy - 560 * s;
+      K.dot(ctx, ox + sd * 70 * s, oy - 430 * s, 9 * s, P.cream, P.ink, 4, 970); K.dot(ctx, ox + sd * 45 * s, oy - 475 * s, 13 * s, P.cream, P.ink, 4, 971);
+      ctx.save(); ctx.translate(hx, hy); ctx.scale(g * s, g * s);
+      K.shape(ctx, K.blobPts(0, 0, 60, 48, 12, 972, 0.12), { fill: P.cream, w: 4.5, boil: 0.6, seed: 972 });
+      K.text(ctx, "?", 0, 4, { size: 58, weight: 900, font: K.FONT.display, fill: P.bid });
+      ctx.restore();
+    }
+
+    /* ---------- Puff (B) ---------- */
+    const v = (k) => act(o.actB, k);
+    const headA = [ox, oy - 250 * s];
+    const pB = { blink: K.blinkAt(t, 23 + o.seed), talk: tB, bob, squash: 0.05 * K.pulse(t, 1, 6) + 0.08 * tB, seed: 900 + o.seed };
+    pB.lookAt = spk === "A" ? [(headA[0] - px) / ps, (headA[1] - py - bob) / ps] : [0.1 * Math.sin(t * 0.7) * 60, 20];
+    if (spk === "A") pB.lean = 3 * Math.sin(t * 6.5 + 1) * clamp(tA * 2, 0, 1); /* listening nods */
+    /* talking fins */
+    if (spk === "B") { const f = clamp(tB * 2.4, 0, 1); pB.finR = { x: 150, y: 10 - 60 * f * (0.5 + 0.5 * Math.sin(t * 3.1)) }; pB.finL = { x: -150, y: 30 - 40 * f * (0.5 + 0.5 * Math.sin(t * 2.6 + 1)) }; }
+    if (o.pointB && o.pointAmtB > 0) {
+      const dx = (o.pointB[0] - px) / ps, dy = (o.pointB[1] - py - bob) / ps, d = Math.hypot(dx, dy) || 1, k = dx < 0 ? "finL" : "finR";
+      const base = { x: (k === "finL" ? -1 : 1) * 150, y: 30 };
+      pB[k] = { x: lerp(base.x, (k === "finL" ? -100 : 100) + (dx / d) * 120, o.pointAmtB), y: lerp(base.y, 18 + (dy / d) * 120, o.pointAmtB) };
+      pB.lookAt = [dx, dy]; pB.lean = (dx > 0 ? 6 : -6) * o.pointAmtB;
+    }
+    if (v("surprise")) { const w = v("surprise"); pB.puff = w; pB.wide = w; pB.exclaim = w; pB.brow = 1.3 * w; pB.squash = -0.15 * Math.sin(Math.PI * w); pB.finL = { x: -170, y: -60 * w }; pB.finR = { x: 170, y: -60 * w }; }
+    if (v("think")) { const w = v("think"); pB.think = w; pB.browTilt = w; pB.look = [0.5, -0.9]; delete pB.lookAt; pB.finR = { x: 40, y: 64 }; if (tB < 0.1) pB.mouth = "flat"; }
+    if (v("grin")) pB.mouth = "grin";
+    if (v("worry")) { pB.mouth = "worry"; pB.brow = -0.6; }
+    if (v("nod")) pB.lean = 7 * Math.sin(t * 9) * v("nod");
+    if (v("shrug")) { const w = v("shrug"); pB.finL = { x: -140, y: -80 * w }; pB.finR = { x: 140, y: -80 * w }; pB.brow = w; pB.mouth = "flat"; }
+    if (v("wave")) pB[sd > 0 ? "finR" : "finL"] = { x: sd * 130, y: -110 + 30 * Math.sin(t * 12) };
+    K.puffer(ctx, px, py, ps, pB);
+    ctx.restore();
+    return { A: { x: ox, y: oy, head: headA }, B: { x: px, y: py + bob }, tips };
+  };
 })(MK);
 
 /* ============================================================
@@ -1263,15 +1540,18 @@ var MK = window.MK || (window.MK = {});
   };
 })(MK);
 
-/* KIT GALLERY: every explainer primitive on one reef wall, for visual QA of the kit.
-   0-3 s: things pop in on beats; 3-6 s: hold (the soft boil keeps them alive).
-   The camera shows a 3500 x 1960 world at zoom 0.55. */
-const K = MK, P = K.P, at = K.at, DUR = 6;
+/* KIT GALLERY: visual QA of the kit.
+   0 - 6 s: every explainer primitive on one reef wall (camera: 3500 x 1960 world at zoom 0.55).
+   6 - 12 s: the two hosts with K.duo: Otto talks and points at a chart while Puff listens,
+   Puff puffs up (surprise), Puff talks while Otto listens and nods, Puff thinks while Otto grins,
+   Puff points while Otto thinks. Loudness is synthetic here; episodes feed narration sync. */
+const K = MK, P = K.P, at = K.at, DUR = 12;
 K.G.BPM = 153.5;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const ap = (t, b) => K.inv(at(0, b), at(0, b) + 0.4, t);
 const CD = K.genCandles(48, 7, 100, 1.6, 0.06), AL = K.alligator(CD), AO = K.ao(CD, 20), FR = K.fractals(CD).slice(0, 6);
 function render(t) {
+  if (t >= 6) return renderDuo(t);
   K.begin(ctx, t, { x: 1750, y: 980, z: 0.55 });
   K.ocean(ctx, { depth: 0.5 });
   K.rays(ctx, { a: 0.8 });
@@ -1290,6 +1570,29 @@ function render(t) {
   K.fish(ctx, 2500, 1600, 0.9, { species: "T", dir: -1, card: { kind: "ask", text: "100.02" } });
   K.coralBranch(ctx, 2900, 1830, 1.1, {}); K.kelp(ctx, 200, 1850, 520, {}); K.kelp(ctx, 3300, 1850, 460, { seed: 9 });
   K.bubbles(ctx, { x0: 0, x1: 3500, y0: 1960, h: 2000, n: 30 });
+}
+const voice = (t, t0, t1) => (t >= t0 && t < t1 ? 0.25 + 0.6 * Math.abs(Math.sin(t * 10.5)) * (0.55 + 0.45 * Math.abs(Math.sin(t * 2.9))) : 0);
+const hold = (t, t0, t1, f) => { f = f || 0.25; return Math.min(K.inv(t0, t0 + f, t), 1 - K.inv(t1 - f, t1, t)); };
+const CDG = K.genCandles(30, 5, 100, 1.4, 0.1);
+function renderDuo(t) {
+  K.begin(ctx, t, { x: 960, y: 540, z: 1 });
+  K.ocean(ctx, { depth: 0.45 }); K.rays(ctx, {});
+  K.applyCam(ctx, 1);
+  K.tower(ctx, 120, 1010, 180, 560, { color: P.fan, dark: P.fanDark, ticker: ["42.10", "42.12"], seed: 7 });
+  K.sand(ctx, 1010, { x1: 2400 });
+  K.kelp(ctx, 1880, 1020, 420, { seed: 5 });
+  const res = K.chart(ctx, 560, 420, 900, 600, { a: K.inv(6, 6.4, t), candles: CDG, lines: [{ data: K.sma(CDG.map((c) => c.c), 5), color: P.bid }], draw: K.inv(6.1, 7.4, t), title: "BTC 1h", tab: P.bid });
+  const target = res ? [res.X(24), res.Y(CDG[24].h)] : [900, 400];
+  K.screen(ctx);
+  K.duo(ctx, t, {
+    x: 1340, y: 1010, s: 0.95, side: 1,
+    talkA: voice(t, 6.0, 7.6), talkB: voice(t, 8.6, 10.2) + voice(t, 11.2, 12),
+    pointA: target, pointAmtA: hold(t, 6.4, 7.7),
+    pointB: target, pointAmtB: hold(t, 11.2, 12.2),
+    actA: t < 11.2 ? { kind: "grin", u: hold(t, 10.2, 11.2) } : { kind: "think", u: hold(t, 11.2, 12.2) },
+    actB: t < 8.6 ? { kind: "surprise", u: hold(t, 7.6, 8.6, 0.2) } : { kind: "think", u: hold(t, 10.2, 11.2, 0.25) },
+  });
+  if (t >= 6 && t < 6.15) { ctx.fillStyle = "rgba(255,255,255," + (1 - (t - 6) / 0.15) + ")"; ctx.fillRect(0, 0, 1920, 1080); }
 }
 const TL = gsap.timeline({ paused: true });
 const drv = { _t: 0 };
