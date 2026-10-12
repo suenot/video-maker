@@ -1,0 +1,9 @@
+# Code-drawn collection: media, renders, build copies stay local
+*.mp4
+*.m4a
+*.wav
+renders/
+preview/
+**/assets/
+**/snapshots/frame-*.png
+**/snapshots/old/

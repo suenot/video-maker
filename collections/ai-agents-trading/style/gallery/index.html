@@ -1,0 +1,1450 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[{"id":"title","type":"string","label":"Title (| = line break)","default":"AI Agents|for Trading"},{"id":"lang","type":"string","label":"Language: en, ru, zh-CN, zh-TW","default":"en"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>AI Agents kit: gallery</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Russo One"; font-weight: 400; font-display: block;
+  src: url("assets/fonts/RussoOne-400-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Russo One"; font-weight: 400; font-display: block;
+  src: url("assets/fonts/RussoOne-400-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Russo One"; font-weight: 400; font-display: block;
+  src: url("assets/fonts/RussoOne-400-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Exo 2"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Exo2-500-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Exo 2"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Exo2-500-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Exo 2"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Exo2-500-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Exo 2"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Exo2-500-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Exo 2"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Exo2-800-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Exo 2"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Exo2-800-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Exo 2"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Exo2-800-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Exo 2"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Exo2-800-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-500-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-500-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-500-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-500-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-700-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-700-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-700-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-700-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Press Start 2P"; font-weight: 400; font-display: block;
+  src: url("assets/fonts/PressStart2P-400-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Press Start 2P"; font-weight: 400; font-display: block;
+  src: url("assets/fonts/PressStart2P-400-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Press Start 2P"; font-weight: 400; font-display: block;
+  src: url("assets/fonts/PressStart2P-400-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Press Start 2P"; font-weight: 400; font-display: block;
+  src: url("assets/fonts/PressStart2P-400-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "CJK SC"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/NotoSansSC-900-subset.woff2") format("woff2"); }
+@font-face { font-family: "CJK TC"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/NotoSansTC-900-subset.woff2") format("woff2"); }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #07081c; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #07081c; }
+      #cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      #title { position: absolute; left: 0; top: 0; width: 1920px; height: 0; pointer-events: none; }
+      #title .ln { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap; line-height: 1; font-family: "Russo One", "CJK SC", "CJK TC", sans-serif; font-weight: 400; }
+      #title .ch { display: inline-block; will-change: transform, opacity; }
+      #title .l0 { color: #fff2fa; letter-spacing: 0.02em; text-shadow: 0 0 6px #ff3fa4, 0 0 18px #ff3fa4, 0 0 42px #c41f7a, 0 0 80px #c41f7a; }
+      #title .l1 { color: #eafcff; letter-spacing: 0.03em; text-shadow: 0 0 6px #36e6ff, 0 0 18px #36e6ff, 0 0 42px #1497c2, 0 0 80px #1497c2; }
+      #title.cjk-sc .ln { font-family: "Russo One", "CJK SC", sans-serif; font-weight: 900; }
+      #title.cjk-tc .ln { font-family: "Russo One", "CJK TC", sans-serif; font-weight: 900; }
+      #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
+      #preload .ru { font-family: "Russo One"; }
+      #preload .e5 { font-family: "Exo 2"; font-weight: 500; }
+      #preload .e8 { font-family: "Exo 2"; font-weight: 800; }
+      #preload .m5 { font-family: "IBM Plex Mono"; font-weight: 500; }
+      #preload .m7 { font-family: "IBM Plex Mono"; font-weight: 700; }
+      #preload .px { font-family: "Press Start 2P"; }
+      #preload .sc { font-family: "CJK SC"; font-weight: 900; }
+      #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      #scan { background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0px, rgba(0, 0, 0, 0.16) 2px, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0) 5px); mix-blend-mode: multiply; }
+      #roll { background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(180, 220, 255, 0.05) 50%, rgba(255, 255, 255, 0) 100%); height: 260px; inset: auto 0 auto 0; top: -300px; }
+      #vig { background: radial-gradient(100% 90% at 50% 48%, rgba(0, 0, 0, 0) 58%, rgba(4, 2, 18, 0.62) 100%); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+            <div class="ov" id="scan"></div>
+      <div class="ov" id="roll"></div>
+      <div class="ov" id="vig"></div>
+      <div id="preload"><span class="ru">Aa Бб 0</span><span class="e5">Aa Бб 0</span><span class="e8">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span><span class="px">Aa Бб 0</span><span class="sc">交易中的智能体</span><span class="tc">交易中的智慧體</span></div>
+    </div>
+    <script>
+(function () {
+/* ============================================================
+   KIT 00 CORE: math, seeded random, noise, splines, beat grid, boil clock
+   Every frame is a pure function of time t (seconds). No Math.random,
+   no Date.now, no performance.now anywhere in the kit.
+   ============================================================ */
+var AK = window.AK || (window.AK = {});
+(function (K) {
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const inv = (a, b, v) => clamp((v - a) / (b - a), 0, 1);
+  const ss = (a, b, t) => { const u = inv(a, b, t); return u * u * (3 - 2 * u); };
+  const f1 = (n) => Math.round(n * 10) / 10;
+  const f2 = (n) => Math.round(n * 100) / 100;
+
+  /* eases (u in 0..1) */
+  const E = {
+    inOut: (u) => u * u * (3 - 2 * u),
+    out3: (u) => 1 - Math.pow(1 - u, 3),
+    in3: (u) => u * u * u,
+    back: (u, s) => { s = s == null ? 1.7 : s; const v = u - 1; return 1 + v * v * ((s + 1) * v + s); },
+    elastic: (u) => (u <= 0 ? 0 : u >= 1 ? 1 : Math.pow(2, -9 * u) * Math.sin((u * 10 - 0.75) * (2 * Math.PI) / 3) + 1),
+  };
+  /* tween value from a to b during [t0, t1] with an ease */
+  const tw = (t, t0, t1, a, b, ease) => lerp(a, b, (ease || E.inOut)(inv(t0, t1, t)));
+
+  /* seeded PRNG (mulberry32) */
+  function mulberry(seed) {
+    let s = seed | 0;
+    return function () {
+      s = (s + 0x6d2b79f5) | 0;
+      let q = Math.imul(s ^ (s >>> 15), 1 | s);
+      q = (q + Math.imul(q ^ (q >>> 7), 61 | q)) ^ q;
+      return ((q ^ (q >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  /* stateless hash -> [0,1) for (i, seed) */
+  function hash(i, s) {
+    let h = (Math.imul(i | 0, 374761393) + Math.imul(s | 0, 668265263)) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+  }
+  const hs = (i, s) => hash(i, s) * 2 - 1; /* signed */
+  function vnoise(x, s) { const i = Math.floor(x), f = x - i, u = f * f * (3 - 2 * f); return lerp(hash(i, s), hash(i + 1, s), u); }
+  function fbm(x, s, oct) { let a = 0.5, v = 0, fr = 1, n = 0; for (let k = 0; k < (oct || 3); k++) { v += a * vnoise(x * fr, s + k * 17); n += a; a *= 0.5; fr *= 2.03; } return v / n; }
+
+  /* monotone cubic Hermite spline through [[t, v], ...] (no overshoot) */
+  function mkSpline(pts) {
+    const n = pts.length, T = pts.map((p) => p[0]), V = pts.map((p) => p[1]);
+    if (n === 1) return () => V[0];
+    const d = [], m = new Array(n).fill(0);
+    for (let i = 0; i < n - 1; i++) d[i] = (V[i + 1] - V[i]) / (T[i + 1] - T[i]);
+    m[0] = d[0]; m[n - 1] = d[n - 2];
+    for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2;
+    for (let i = 0; i < n - 1; i++) {
+      if (d[i] === 0) { m[i] = 0; m[i + 1] = 0; continue; }
+      const a = m[i] / d[i], b = m[i + 1] / d[i], s = a * a + b * b;
+      if (s > 9) { const tau = 3 / Math.sqrt(s); m[i] = tau * a * d[i]; m[i + 1] = tau * b * d[i]; }
+    }
+    return function (x) {
+      x = clamp(x, T[0], T[n - 1]);
+      let i = 0; while (i < n - 2 && x >= T[i + 1]) i++;
+      const h = T[i + 1] - T[i], u = (x - T[i]) / h, u2 = u * u, u3 = u2 * u;
+      return (2 * u3 - 3 * u2 + 1) * V[i] + (u3 - 2 * u2 + u) * h * m[i] + (-2 * u3 + 3 * u2) * V[i + 1] + (u3 - u2) * h * m[i + 1];
+    };
+  }
+  /* keys: [[t, {a:.., b:..}], ...] -> fn(t) -> {a, b} (one spline per channel) */
+  function mkTrack(keys) {
+    const names = Object.keys(keys[0][1]), sp = {};
+    names.forEach((k) => { sp[k] = mkSpline(keys.map((q) => [q[0], q[1][k]])); });
+    return (t) => { const o = {}; names.forEach((k) => (o[k] = sp[k](t))); return o; };
+  }
+
+  /* ---------- beat grid (retime to the real song by changing BPM/OFFSET or BARS) ----------
+     BARS: optional list of measured downbeat times (seconds). Songs cut from
+     several takes drift a few ms per splice, so measured downbeats beat a
+     single OFFSET. Past the list, bars extrapolate at BPM. */
+  const G = { BPM: 113, OFFSET: 0, BEATS_PER_ACCENT: 4, BARS: null };
+  const beatLen = () => 60 / G.BPM;
+  const barLen = () => beatLen() * G.BEATS_PER_ACCENT;
+  function barStart(b) {
+    const B = G.BARS;
+    if (!B || !B.length) return G.OFFSET + b * barLen();
+    if (b < 0) return B[0] + b * barLen();
+    if (b < B.length) return B[b];
+    return B[B.length - 1] + (b - B.length + 1) * barLen();
+  }
+  /* time of bar b (0-based, an "accent" = 4 beats) plus beat k (fractional ok) */
+  const at = (bar, beat) => barStart(Math.floor(bar)) + ((bar - Math.floor(bar)) * G.BEATS_PER_ACCENT + (beat || 0)) * beatLen();
+  /* index of the bar containing t (-1 before the first downbeat) */
+  function barAt(t) {
+    if (t < barStart(0)) return -1;
+    let b = 0; while (barStart(b + 1) <= t) b++;
+    return b;
+  }
+  /* 1 on the beat, decaying to 0 before the next beat (k = sharpness) */
+  function pulse(t, everyBeats, k) {
+    const b = barAt(t); if (b < 0) return 0;
+    const L = beatLen() * (everyBeats || 1), x = t - barStart(b);
+    return Math.exp(-(k || 7) * ((x % L) / L));
+  }
+  const beatIndex = (t) => { const b = barAt(t); return b < 0 ? -1 : b * G.BEATS_PER_ACCENT + Math.floor((t - barStart(b)) / beatLen()); };
+
+  /* ---------- line boil clock: drawings change 12 times per second ---------- */
+  const BOIL_FPS = 12;
+  const boilFrame = (t) => Math.floor(t * BOIL_FPS);
+
+  Object.assign(K, { clamp, lerp, inv, ss, f1, f2, E, tw, mulberry, hash, hs, vnoise, fbm, mkSpline, mkTrack,
+    G, beatLen, barLen, barStart, barAt, at, pulse, beatIndex, BOIL_FPS, boilFrame, TAU: Math.PI * 2 });
+})(AK);
+
+/* ============================================================
+   KIT 05 PALETTE + TYPE: the only place colours and fonts are defined.
+   STYLE.md documents the same values; change both together.
+   World: a neon 80s trading floor at night, run by robots.
+   ============================================================ */
+var AK = window.AK || (window.AK = {});
+(function (K) {
+  K.P = {
+    ink: "#0b0e2b",        /* all outlines: deep navy, never black */
+    inkSoft: "#262d66",    /* panel seams, secondary lines */
+    /* room */
+    night: "#07081c", wall: "#141842", wallDark: "#0d1033", wallLight: "#1f2560",
+    floor: "#100f33", floorFar: "#1a1450",
+    /* neon (light sources only; they glow) */
+    pink: "#ff3fa4", pinkDeep: "#c41f7a", cyan: "#36e6ff", cyanDeep: "#1497c2",
+    violet: "#9b5cff", yellow: "#ffe14d", green: "#39ff9a", orange: "#ff8a3d",
+    /* skyline window (synthwave sun) */
+    skyTop: "#1b1050", skyMid: "#5a1f7a", skyLow: "#ff6f91", sunTop: "#ffe14d", sunLow: "#ff3fa4",
+    /* robot plastics */
+    shell: "#e9ebff", shellShade: "#a3a8dc", shellDark: "#5d63a6",
+    screen: "#04161f", screenShade: "#0a2a36", phosphor: "#5dffd8", phosphorDim: "#1d7f74",
+    metal: "#7c84b8", metalDark: "#454c85", rubber: "#2a2f63",
+    /* team bots */
+    analyst: "#3fd0ff", analystDark: "#1f86b8",
+    risk: "#ffb238", riskDark: "#c97a12",
+    trader: "#ff5fae", traderDark: "#c42b7f",
+    /* data */
+    gain: "#39ff9a", loss: "#ff4d6d", profit: "#ffe14d",
+    paper: "#fff4dc", paperShade: "#e8cfa0", /* order tickets only */
+    term: "#03120f", termEdge: "#1d3a52", /* terminal glass */
+    holo: "#36e6ff",
+    /* tickers: one colour per asset */
+    AAPL: "#d9dcf2", NVDA: "#7cff4f", BTC: "#ff9f2e", ETH: "#8f95ff", TSLA: "#ff4d6d", SPY: "#36e6ff", MSFT: "#ffd34d",
+  };
+  K.FONT = {
+    display: '"Russo One", "CJK SC", "CJK TC", sans-serif',   /* titles, big labels (400 only) */
+    text: '"Exo 2", "CJK SC", "CJK TC", sans-serif',          /* labels, notes (500/800) */
+    mono: '"IBM Plex Mono", monospace',                       /* code, tables (500/700) */
+    pixel: '"Press Start 2P", monospace',                     /* LED tags, tickers (400) */
+    cjk: { "zh-CN": '"CJK SC", "Russo One", sans-serif', "zh-TW": '"CJK TC", "Russo One", sans-serif' },
+  };
+})(AK);
+
+/* ============================================================
+   KIT 10 INK: "neon cel" canvas primitives + the camera.
+   - K.begin(ctx, t, cam) once per frame; everything after reads K.now / K.bf.
+   - Contours boil gently: vertices jitter by a hash of (vertex, seed, boil
+     frame), so the drawing changes 12x per second and is identical on seek.
+   - Unlike a pen line, outlines here are chunky, continuous and navy; light
+     comes from the neon: every lit shape gets a coloured RIM band on the side
+     facing the light and a navy SHADE band on the far side, plus optional
+     halftone dots (80s print) instead of hatching.
+   - Line widths are world units but never thinner than MIN_PX on screen.
+   ============================================================ */
+var AK = window.AK || (window.AK = {});
+(function (K) {
+  const { hs, hash, clamp } = K;
+  K.MIN_PX = 2.0;
+  K.now = 0; K.bf = 0; K.zoom = 1;
+
+  /* ---------- camera: world -> screen. cam = {x, y, z, rot} (centre, zoom, degrees) ---------- */
+  K.W = 1920; K.H = 1080;
+  K.begin = function (ctx, t, cam) {
+    K.ctx = ctx; K.now = t; K.bf = K.boilFrame(t); K.cam = cam; K.zoom = cam.z;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.lineJoin = "round"; ctx.lineCap = "round";
+    ctx.shadowBlur = 0; ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
+  };
+  /* apply camera with an optional parallax factor p (1 = world plane, 0 = fixed to screen) */
+  K.applyCam = function (ctx, p) {
+    p = p == null ? 1 : p;
+    const c = K.cam, z = 1 + (c.z - 1) * p;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.translate(K.W / 2, K.H / 2);
+    if (c.rot) ctx.rotate((c.rot * Math.PI) / 180 * p);
+    ctx.scale(z, z);
+    ctx.translate(-c.x * p - (1 - p) * 960, -c.y * p - (1 - p) * 540);
+    K.zoom = z;
+  };
+  K.screen = function (ctx) { ctx.setTransform(1, 0, 0, 1, 0, 0); K.zoom = 1; };
+  K.toScreen = function (x, y) {
+    const c = K.cam, r = ((c.rot || 0) * Math.PI) / 180, dx = (x - c.x) * c.z, dy = (y - c.y) * c.z;
+    return [K.W / 2 + dx * Math.cos(r) - dy * Math.sin(r), K.H / 2 + dx * Math.sin(r) + dy * Math.cos(r)];
+  };
+  const curScale = (ctx) => { const m = ctx.getTransform(); return Math.sqrt(m.a * m.a + m.b * m.b) || 1; };
+  K.lw = (ctx, w) => Math.max(w, K.MIN_PX / curScale(ctx));
+
+  /* ---------- point generators ---------- */
+  K.ellipsePts = function (cx, cy, rx, ry, n, rot) {
+    const out = [], r = rot || 0, cr = Math.cos(r), sr = Math.sin(r);
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * K.TAU, x = Math.cos(a) * rx, y = Math.sin(a) * ry;
+      out.push([cx + x * cr - y * sr, cy + x * sr + y * cr]);
+    }
+    return out;
+  };
+  /* rounded rectangle (the house shape of this world: chunky, soft corners) */
+  K.rrPts = function (x, y, w, h, r, n) {
+    r = Math.min(r, w / 2, h / 2); n = n || 3; const out = [];
+    const C = [[x + w - r, y + r, -Math.PI / 2], [x + w - r, y + h - r, 0], [x + r, y + h - r, Math.PI / 2], [x + r, y + r, Math.PI]];
+    C.forEach((c) => { for (let i = 0; i <= n; i++) { const a = c[2] + (i / n) * (Math.PI / 2); out.push([c[0] + Math.cos(a) * r, c[1] + Math.sin(a) * r]); } });
+    return out;
+  };
+  K.blobPts = function (cx, cy, rx, ry, n, seed, irr) {
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * K.TAU, k = 1 + (irr || 0.18) * (K.fbm(i * 0.9, seed, 2) * 2 - 1);
+      out.push([cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]);
+    }
+    return out;
+  };
+  K.rectPts = function (x, y, w, h, n) {
+    n = n || 3; const out = [];
+    for (let i = 0; i < n; i++) out.push([x + (w * i) / n, y]);
+    for (let i = 0; i < n; i++) out.push([x + w, y + (h * i) / n]);
+    for (let i = 0; i < n; i++) out.push([x + w - (w * i) / n, y + h]);
+    for (let i = 0; i < n; i++) out.push([x, y + h - (h * i) / n]);
+    return out;
+  };
+
+  /* ---------- boil ---------- */
+  K.boil = function (pts, seed, amp, frameOverride) {
+    const f = frameOverride == null ? K.bf : frameOverride, s = (seed | 0) + f * 7919;
+    return pts.map((p, i) => [p[0] + hs(i * 2 + 1, s) * amp, p[1] + hs(i * 2 + 2, s) * amp]);
+  };
+
+  /* ---------- smooth path (Catmull-Rom -> Bezier) ---------- */
+  function segs(pts, closed) {
+    const n = pts.length, out = [];
+    const P = (i) => (closed ? pts[(i + n) % n] : pts[clamp(i, 0, n - 1)]);
+    const last = closed ? n : n - 1;
+    for (let i = 0; i < last; i++) {
+      const p0 = P(i - 1), p1 = P(i), p2 = P(i + 1), p3 = P(i + 2);
+      /* handles are capped at 1/3 of the segment, so a long edge next to a
+         tight rounded corner never overshoots into a spike */
+      const d = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]), cap = (hx, hy) => { const l = Math.hypot(hx, hy), k = l > d / 3 ? d / 3 / l : 1; return [hx * k, hy * k]; };
+      const h1 = cap((p2[0] - p0[0]) / 6, (p2[1] - p0[1]) / 6), h2 = cap((p3[0] - p1[0]) / 6, (p3[1] - p1[1]) / 6);
+      out.push([p1, [p1[0] + h1[0], p1[1] + h1[1]], [p2[0] - h2[0], p2[1] - h2[1]], p2]);
+    }
+    return out;
+  }
+  K.segs = segs;
+  K.pathOf = function (ctx, pts, closed) {
+    const S = segs(pts, closed);
+    ctx.beginPath(); ctx.moveTo(S[0][0][0], S[0][0][1]);
+    S.forEach((s) => ctx.bezierCurveTo(s[1][0], s[1][1], s[2][0], s[2][1], s[3][0], s[3][1]));
+    if (closed) ctx.closePath();
+  };
+  /* chunky outline: continuous by default, width breathes 0.94 - 1.06x per boil frame */
+  K.inkStroke = function (ctx, pts, closed, w, color, seed, gapP) {
+    const base = K.lw(ctx, w) * (0.94 + 0.12 * hash(seed | 0, K.bf * 31));
+    ctx.strokeStyle = color; ctx.lineWidth = base;
+    if (!gapP) { K.pathOf(ctx, pts, closed); ctx.stroke(); return; }
+    const S = segs(pts, closed), s = (seed | 0) + K.bf * 31; let open = false;
+    for (let i = 0; i < S.length; i++) {
+      if (S.length > 6 && hash(i, s) < gapP) { if (open) { ctx.stroke(); open = false; } continue; }
+      if (!open) { ctx.beginPath(); ctx.moveTo(S[i][0][0], S[i][0][1]); open = true; }
+      ctx.bezierCurveTo(S[i][1][0], S[i][1][1], S[i][2][0], S[i][2][1], S[i][3][0], S[i][3][1]);
+    }
+    if (open) ctx.stroke();
+  };
+
+  /* ---------- halftone: dot screen clipped to a path (replaces hatching) ---------- */
+  K.halftone = function (ctx, pts, opt) {
+    const o = Object.assign({ gap: 12, r: 2.6, color: K.P.ink, alpha: 0.35, ang: 0.5, fade: null }, opt || {});
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    pts.forEach((p) => { x0 = Math.min(x0, p[0]); y0 = Math.min(y0, p[1]); x1 = Math.max(x1, p[0]); y1 = Math.max(y1, p[1]); });
+    ctx.save(); K.pathOf(ctx, pts, true); ctx.clip();
+    ctx.globalAlpha *= o.alpha; ctx.fillStyle = o.color; ctx.beginPath();
+    const ca = Math.cos(o.ang), sa = Math.sin(o.ang), R = Math.hypot(x1 - x0, y1 - y0) / 2 + o.gap, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+    for (let u = -R; u <= R; u += o.gap) for (let v = -R; v <= R; v += o.gap) {
+      const x = cx + u * ca - v * sa, y = cy + u * sa + v * ca;
+      /* dots grow toward the lower right (away from the light) unless fade says otherwise */
+      const k = o.fade ? o.fade(x, y) : clamp(((x - x0) / (x1 - x0 || 1) + (y - y0) / (y1 - y0 || 1)) / 2, 0, 1);
+      const r = o.r * k; if (r < 0.4) continue;
+      ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, K.TAU);
+    }
+    ctx.fill(); ctx.restore();
+  };
+
+  /* band = shape minus its own offset copy, filled (used for shade and rim light) */
+  function band(ctx, fp, dx, dy, color, alpha, comp) {
+    const op = fp.map((p) => [p[0] + dx, p[1] + dy]);
+    ctx.save(); K.pathOf(ctx, fp, true); ctx.clip();
+    ctx.beginPath(); ctx.rect(-1e5, -1e5, 2e5, 2e5);
+    const seg = segs(op, true); ctx.moveTo(seg[0][0][0], seg[0][0][1]);
+    seg.forEach((s) => ctx.bezierCurveTo(s[1][0], s[1][1], s[2][0], s[2][1], s[3][0], s[3][1]));
+    ctx.closePath(); if (alpha != null) ctx.globalAlpha *= alpha; if (comp) ctx.globalCompositeOperation = comp;
+    ctx.fillStyle = color; ctx.fill("evenodd");
+    ctx.restore();
+  }
+
+  /* ---------- the workhorse: filled, cel-shaded, rim-lit, boiled, navy-outlined shape ----------
+     opt: fill, stroke (default ink), w (outline width), boil (amp), seed,
+          shade {color, dx, dy}   dark band on the far side (default lower right)
+          rim   {color, dx, dy, a} neon light band on the near side (upper left)
+          dots  object for K.halftone (or null), gloss (0..1 white highlight),
+          glow  neon colour drawn as an outer halo, gap (break probability), closed, alpha */
+  K.shape = function (ctx, pts, opt) {
+    const o = Object.assign({ stroke: K.P.ink, w: 5, boil: 1.0, seed: 1, closed: true }, opt || {});
+    const bp = o.boil ? K.boil(pts, o.seed, o.boil) : pts;
+    const fp = o.boil ? K.boil(pts, o.seed + 500, o.boil * 0.5) : pts;
+    ctx.save();
+    if (o.alpha != null) ctx.globalAlpha *= o.alpha;
+    if (o.glow) { ctx.save(); ctx.shadowColor = o.glow; ctx.shadowBlur = o.glowR || 28; K.pathOf(ctx, fp, true); ctx.fillStyle = o.fill || o.glow; ctx.fill(); ctx.restore(); }
+    if (o.fill && o.closed !== false) {
+      K.pathOf(ctx, fp, true); ctx.fillStyle = o.fill; ctx.fill();
+      if (o.shade) band(ctx, fp, o.shade.dx == null ? -10 : o.shade.dx, o.shade.dy == null ? -10 : o.shade.dy, o.shade.color, o.shade.a);
+      if (o.dots) K.halftone(ctx, fp, o.dots);
+      if (o.rim) band(ctx, fp, o.rim.dx == null ? 5 : o.rim.dx, o.rim.dy == null ? 5 : o.rim.dy, o.rim.color, o.rim.a == null ? 0.9 : o.rim.a);
+      if (o.gloss) {
+        let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+        fp.forEach((p) => { x0 = Math.min(x0, p[0]); y0 = Math.min(y0, p[1]); x1 = Math.max(x1, p[0]); y1 = Math.max(y1, p[1]); });
+        const w = x1 - x0, h = y1 - y0;
+        ctx.save(); K.pathOf(ctx, fp, true); ctx.clip(); ctx.globalAlpha *= o.gloss; ctx.fillStyle = "#ffffff";
+        K.pathOf(ctx, K.ellipsePts(x0 + w * 0.3, y0 + h * 0.22, w * 0.16, h * 0.07, 10, -0.35), true); ctx.fill(); ctx.restore();
+      }
+    }
+    if (o.stroke && o.w > 0) K.inkStroke(ctx, bp, o.closed !== false, o.w, o.stroke, o.seed, o.gap);
+    ctx.restore();
+  };
+  K.line = function (ctx, pts, opt) {
+    K.shape(ctx, pts, Object.assign({ closed: false, fill: null }, opt || {}));
+  };
+  K.dot = function (ctx, x, y, r, fill, stroke, w, seed) {
+    K.shape(ctx, K.ellipsePts(x, y, r, r, 10), { fill, stroke: stroke === undefined ? K.P.ink : stroke, w: w || 3, boil: r * 0.04 + 0.3, seed: seed || 5 });
+  };
+
+  /* ---------- neon tube: halo + coloured tube + hot white core ----------
+     opt: color, w (tube width), closed, on (0..1 brightness), seed */
+  K.flick = function (t, seed, depth) {
+    /* stepped at the boil rate: mostly lit, rare short dips (deterministic) */
+    const f = K.boilFrame(t), h = hash(f, (seed || 1) * 97);
+    return h < 0.06 ? 1 - (depth == null ? 0.55 : depth) : 0.92 + 0.08 * hash(f + 3, seed || 1);
+  };
+  K.neon = function (ctx, pts, opt) {
+    const o = Object.assign({ color: K.P.pink, w: 8, closed: false, on: 1, seed: 1, boil: 0.5, core: "#ffffff" }, opt || {});
+    if (o.on <= 0.01) return;
+    const bp = o.boil ? K.boil(pts, o.seed, o.boil) : pts, lw = K.lw(ctx, o.w);
+    ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.globalAlpha *= o.on;
+    ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.strokeStyle = o.color;
+    ctx.globalAlpha *= 0.16; ctx.lineWidth = lw * 5; K.pathOf(ctx, bp, o.closed); ctx.stroke();
+    ctx.globalAlpha /= 0.16; ctx.globalAlpha *= 0.28; ctx.lineWidth = lw * 2.6; ctx.stroke();
+    ctx.restore();
+    ctx.strokeStyle = o.color; ctx.lineWidth = lw; K.pathOf(ctx, bp, o.closed); ctx.stroke();
+    ctx.globalAlpha *= 0.85; ctx.strokeStyle = o.core; ctx.lineWidth = Math.max(1, lw * 0.32); ctx.stroke();
+    ctx.restore();
+  };
+
+  /* ---------- text: stable (never boils); optional neon glow ---------- */
+  K.text = function (ctx, str, x, y, opt) {
+    const o = Object.assign({ size: 40, weight: 400, font: K.FONT.display, fill: K.P.ink, stroke: null, w: 0, align: "center", base: "middle", alpha: 1, track: 0, glow: null }, opt || {});
+    ctx.save(); ctx.globalAlpha *= o.alpha;
+    ctx.font = `${o.weight} ${o.size}px ${o.font}`; ctx.textAlign = o.align; ctx.textBaseline = o.base;
+    if (o.track) ctx.letterSpacing = o.track + "px";
+    if (o.stroke && o.w) { ctx.lineJoin = "round"; ctx.strokeStyle = o.stroke; ctx.lineWidth = o.w; ctx.strokeText(str, x, y); }
+    if (o.glow) { ctx.shadowColor = o.glow; ctx.shadowBlur = o.glowR || 16; }
+    ctx.fillStyle = o.fill; ctx.fillText(str, x, y);
+    ctx.restore();
+  };
+  K.textW = function (ctx, str, size, weight, font) {
+    ctx.save(); ctx.font = `${weight || 400} ${size}px ${font || K.FONT.display}`; const w = ctx.measureText(str).width; ctx.restore(); return w;
+  };
+
+  /* ---------- glow (additive soft disc): lamps, screens, signal pulses ---------- */
+  K.glow = function (ctx, x, y, r, color, a) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, color); g.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.save(); ctx.globalAlpha *= a == null ? 1 : a; ctx.globalCompositeOperation = "lighter";
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, K.TAU); ctx.fill(); ctx.restore();
+  };
+  /* hex colour -> rgba string */
+  K.rgba = function (hex, a) {
+    const n = parseInt(hex.slice(1), 16);
+    return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
+  };
+})(AK);
+
+/* ============================================================
+   KIT 20 PIXEL: the world's language-free symbols.
+   - K.pix(ctx, name, x, y, cell, color, opt)  pixel-art icon from a bitmap,
+     centred on (x, y); each "#" is one rounded cell. Used on robot faces,
+     medallions, bullets and stamps.
+   - K.seg7(ctx, str, x, y, h, color, opt)    seven-segment LED digits for every
+     number in the world (prices, clocks, scores). Supports 0-9 . , - + % : $
+   ============================================================ */
+var AK = window.AK || (window.AK = {});
+(function (K) {
+  const P = K.P;
+  K.ICONS = {
+    eye: ["...#####...", ".##.....##.", "#...###...#", "#..#####..#", "#...###...#", ".##.....##.", "...#####..."],
+    fork: ["#.....#", "##...##", ".##.##.", "..###..", "...#...", "...#...", "...#..."],
+    brain: [".##.##.", "#..#..#", "#.##.##", "##..#.#", "#..#..#", ".##.##.", "...#..."],
+    bolt: ["....###", "...###.", "..###..", ".######", "...###.", "..###..", ".##....", "#......"],
+    check: ["......#", ".....##", "#...##.", "##.##..", ".###...", "..#...."],
+    cross: ["#...#", ".#.#.", "..#..", ".#.#.", "#...#"],
+    up: ["...#...", "..###..", ".#####.", "#######", "..###..", "..###..", "..###.."],
+    down: ["..###..", "..###..", "..###..", "#######", ".#####.", "..###..", "...#..."],
+    heart: [".##.##.", "#######", "#######", ".#####.", "..###..", "...#..."],
+    gear: ["..#.#..", ".#####.", "##...##", ".#...#.", "##...##", ".#####.", "..#.#.."],
+    lens: [".###..", "#...#.", "#...#.", "#...#.", ".####.", "....##", ".....#"],
+    shield: ["#######", "#.....#", "#..#..#", "#.###.#", ".#.#.#.", "..#.#..", "...#..."],
+    chat: ["#######", "#.....#", "#.#.#.#", "#.....#", "#######", ".##....", ".#....."],
+    coin: [".###.", "#.#.#", "##..#", "#..##", "#.#.#", ".###."],
+    rocket: ["...#...", "..###..", "..#.#..", "..###..", ".#####.", "#.###.#", "..#.#.."],
+    branch: ["#.....", "#.....", "##..#.", "#.##..", "#..#..", "#...#.", "#....#"],
+    chart: ["......#", ".....#.", "..#.#..", ".#.#...", "#......", "#######"],
+    team: [".#...#.", "###.###", ".#...#.", "#.#.#.#", ".......", ".##.##."],
+    globe: [".###.", "#.#.#", "#####", "#.#.#", ".###."],
+    clock: [".###.", "#.#.#", "#.##.", "#...#", ".###."],
+    play: ["#...", "##..", "###.", "##..", "#..."],
+    harness: ["#.#.#", "#####", "#.#.#", "#####", "..#..", ".###."],
+    dollar: ["..#..", ".####", "#.#..", ".###.", "..#.#", "####.", "..#.."],
+  };
+  /* draw an icon; opt.glow adds an additive halo, opt.bg draws a backing plate */
+  K.pix = function (ctx, name, x, y, cell, color, opt) {
+    const o = Object.assign({ glow: 0, round: 0.28, a: 1 }, opt || {});
+    const B = K.ICONS[name]; if (!B || o.a <= 0) return;
+    const rows = B.length, cols = Math.max(...B.map((r) => r.length));
+    const x0 = x - (cols * cell) / 2, y0 = y - (rows * cell) / 2, g = cell * 0.05, rr = cell * o.round;
+    ctx.save(); ctx.globalAlpha *= o.a;
+    if (o.glow) { ctx.shadowColor = color; ctx.shadowBlur = cell * 2.2 * o.glow; }
+    ctx.fillStyle = color; ctx.beginPath();
+    B.forEach((row, j) => { for (let i = 0; i < row.length; i++) if (row[i] === "#") {
+      const px = x0 + i * cell + g, py = y0 + j * cell + g, s = cell - 2 * g;
+      if (ctx.roundRect) ctx.roundRect(px, py, s, s, rr); else ctx.rect(px, py, s, s);
+    } });
+    ctx.fill(); ctx.restore();
+    return { w: cols * cell, h: rows * cell };
+  };
+
+  /* ---------- seven-segment digits ---------- */
+  const SEG = { "0": "abcdef", "1": "bc", "2": "abged", "3": "abgcd", "4": "fgbc", "5": "afgcd", "6": "afgedc", "7": "abc", "8": "abcdefg", "9": "abcfgd", "-": "g", "+": "g", " ": "" };
+  /* segment polygon for a cell of width w, height h (slanted 8 %) */
+  function segPoly(k, w, h, t) {
+    /* classic hexagonal segments: horizontal a, g, d; vertical f, b (top), e, c (bottom) */
+    const g = t * 0.18, q = t / 2, hh = h / 2;
+    const Hs = (yc) => [[q + g, yc], [t + g, yc - q], [w - t - g, yc - q], [w - q - g, yc], [w - t - g, yc + q], [t + g, yc + q]];
+    const Vs = (xc, y0, y1) => [[xc, y0 + g], [xc + q, y0 + q + g], [xc + q, y1 - q - g], [xc, y1 - g], [xc - q, y1 - q - g], [xc - q, y0 + q + g]];
+    return { a: Hs(q), g: Hs(hh), d: Hs(h - q), f: Vs(q, q, hh), b: Vs(w - q, q, hh), e: Vs(q, hh, h - q), c: Vs(w - q, hh, h - q) }[k];
+  }
+  /* returns the drawn width. opt: align "center"|"left"|"right", ghost (unlit segments alpha), glow */
+  K.seg7W = (str, h) => { let w = 0; const cw = h * 0.52, gap = h * 0.14; for (const c of String(str)) w += (c === "." || c === "," || c === ":" ? h * 0.18 : c === "%" || c === "$" ? h * 0.6 : cw) + gap; return w - gap; };
+  K.seg7 = function (ctx, str, x, y, h, color, opt) {
+    const o = Object.assign({ align: "center", ghost: 0.07, glow: 0.8, a: 1, skew: 0.08 }, opt || {});
+    str = String(str); const W = K.seg7W(str, h), cw = h * 0.52, gap = h * 0.14, t = h * 0.13;
+    let cx = o.align === "center" ? x - W / 2 : o.align === "right" ? x - W : x;
+    ctx.save(); ctx.globalAlpha *= o.a; ctx.translate(0, y - h / 2);
+    const fillPoly = (pts, ox) => { ctx.moveTo(ox + pts[0][0] - pts[0][1] * o.skew + h * o.skew * 0.5, pts[0][1]); for (let i = 1; i < pts.length; i++) ctx.lineTo(ox + pts[i][0] - pts[i][1] * o.skew + h * o.skew * 0.5, pts[i][1]); ctx.closePath(); };
+    for (const c of str) {
+      if (c === "." || c === "," || c === ":") {
+        ctx.fillStyle = color; if (o.glow) { ctx.shadowColor = color; ctx.shadowBlur = h * 0.25 * o.glow; }
+        ctx.beginPath();
+        if (c === ":") { ctx.rect(cx, h * 0.28, t, t); ctx.rect(cx - h * 0.07, h * 0.66, t, t); } else ctx.rect(cx - h * 0.05 * o.skew, h - t, t, t);
+        ctx.fill(); cx += h * 0.18 + gap; continue;
+      }
+      if (c === "%" || c === "$") {
+        K.text(ctx, c, cx + h * 0.3, h / 2, { size: h * 0.95, font: K.FONT.display, fill: color, glow: o.glow ? color : null, glowR: h * 0.25 });
+        cx += h * 0.6 + gap; continue;
+      }
+      const on = SEG[c] != null ? SEG[c] : "";
+      /* ghost (unlit) segments first, then lit ones with glow */
+      if (o.ghost) { ctx.save(); ctx.shadowBlur = 0; ctx.globalAlpha *= o.ghost; ctx.fillStyle = color; ctx.beginPath(); "abcdefg".split("").forEach((k) => fillPoly(segPoly(k, cw, h, t), cx)); ctx.fill(); ctx.restore(); }
+      ctx.save(); ctx.fillStyle = color; if (o.glow) { ctx.shadowColor = color; ctx.shadowBlur = h * 0.25 * o.glow; }
+      ctx.beginPath(); on.split("").forEach((k) => fillPoly(segPoly(k, cw, h, t), cx));
+      if (c === "+") { const vx = cx + cw / 2 - t / 2; ctx.rect(vx, h * 0.3, t, h * 0.4); }
+      ctx.fill(); ctx.restore();
+      cx += cw + gap;
+    }
+    ctx.restore();
+    return W;
+  };
+  void P;
+})(AK);
+
+/* ============================================================
+   KIT 30 WORLD: the neon trading floor.
+   Room (world units, horizon = where the back wall meets the floor):
+     K.wall       back wall: panel seams, neon strips top and bottom
+     K.floorGrid  synthwave perspective grid that scrolls toward camera
+     K.skyWindow  big window: striped retro sun + skyline; dusk 0..1
+     K.wallScreen bezel monitor; content drawn by a callback, clipped
+     K.desk       trading console with a small CRT and blinking keys
+     K.cable      floor cable; neon signal pulses travel along it
+     K.ticket     paper order slip (ticker, arrow, qty, stamp)
+     K.ledTape    scrolling LED ticker tape (pixel font, tickers only)
+     K.sparks     pixel spark burst; K.confetti falling pixel squares
+   ============================================================ */
+var AK = window.AK || (window.AK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp, hash, hs } = K;
+
+  /* ---------- back wall ---------- */
+  K.wall = function (ctx, x0, x1, top, horizon, opt) {
+    const o = Object.assign({ seed: 3, strip: 1, panel: 240 }, opt || {});
+    ctx.save();
+    const g = ctx.createLinearGradient(0, top, 0, horizon);
+    g.addColorStop(0, P.night); g.addColorStop(0.55, P.wallDark); g.addColorStop(1, P.wall);
+    ctx.fillStyle = g; ctx.fillRect(x0, top, x1 - x0, horizon - top);
+    /* panel seams (static, not boiled: architecture stays still) */
+    ctx.strokeStyle = P.inkSoft; ctx.lineWidth = K.lw(ctx, 3); ctx.beginPath();
+    for (let x = Math.ceil(x0 / o.panel) * o.panel; x < x1; x += o.panel) { ctx.moveTo(x, top); ctx.lineTo(x, horizon - 40); }
+    ctx.stroke();
+    /* baseboard */
+    ctx.fillStyle = P.ink; ctx.fillRect(x0, horizon - 40, x1 - x0, 40);
+    ctx.restore();
+    if (o.strip) {
+      K.neon(ctx, [[x0, horizon - 44], [x1, horizon - 44]], { color: P.cyan, w: 6, on: o.strip * K.flick(K.now, o.seed, 0.2), seed: o.seed, boil: 0 });
+    }
+  };
+
+  /* ---------- perspective floor grid (the 80s horizon) ----------
+     vx: vanishing x, horizon y, depth: how far down the floor goes, scroll: z offset */
+  K.floorGrid = function (ctx, x0, x1, horizon, depth, opt) {
+    const o = Object.assign({ vx: 960, scroll: 0, color: P.pink, rows: 14, cols: 26, spread: 260, a: 1 }, opt || {});
+    ctx.save();
+    const g = ctx.createLinearGradient(0, horizon, 0, horizon + depth);
+    g.addColorStop(0, P.floorFar); g.addColorStop(1, P.floor);
+    ctx.fillStyle = g; ctx.fillRect(x0, horizon, x1 - x0, depth);
+    ctx.globalAlpha *= o.a; ctx.globalCompositeOperation = "lighter";
+    ctx.strokeStyle = K.rgba(o.color, 0.55); ctx.lineWidth = K.lw(ctx, 2.5);
+    ctx.beginPath();
+    for (let i = -o.cols; i <= o.cols; i++) { /* radiating lines */
+      ctx.moveTo(o.vx + i * 40, horizon); ctx.lineTo(o.vx + i * o.spread * 6, horizon + depth * 1.6);
+    }
+    for (let j = 0; j < o.rows; j++) { /* receding rows: y = horizon + depth * f(z) */
+      const z = j + 1 - (o.scroll % 1), y = horizon + depth / Math.pow(o.rows / z, 1.6);
+      if (y > horizon + 2) { ctx.moveTo(x0, y); ctx.lineTo(x1, y); }
+    }
+    ctx.stroke();
+    /* horizon haze */
+    const h = ctx.createLinearGradient(0, horizon - 2, 0, horizon + 70);
+    h.addColorStop(0, K.rgba(o.color, 0.45)); h.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = h; ctx.fillRect(x0, horizon - 2, x1 - x0, 72);
+    ctx.restore();
+  };
+
+  /* ---------- the big window: synthwave sun + skyline ----------
+     dusk 0 = late afternoon (sun high), 1 = night (sun gone, stars) */
+  K.skyWindow = function (ctx, x, y, w, h, opt) {
+    const o = Object.assign({ dusk: 0.3, seed: 7 }, opt || {});
+    const d = clamp(o.dusk, 0, 1);
+    ctx.save();
+    K.pathOf(ctx, K.rrPts(x, y, w, h, 26, 3), true); ctx.save(); ctx.clip();
+    const g = ctx.createLinearGradient(0, y, 0, y + h);
+    g.addColorStop(0, P.skyTop); g.addColorStop(lerp(0.55, 0.85, d), P.skyMid); g.addColorStop(1, d < 0.85 ? P.skyLow : P.skyMid);
+    ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+    /* stars fade in at night */
+    for (let i = 0; i < 40; i++) {
+      const sx = x + hash(i, o.seed) * w, sy = y + hash(i + 50, o.seed) * h * 0.55, tw = 0.5 + 0.5 * Math.sin(K.now * 3 + i);
+      ctx.fillStyle = K.rgba("#ffffff", clamp(d * 1.4 - 0.4, 0, 1) * (0.4 + 0.6 * tw)); ctx.fillRect(sx, sy, 3, 3);
+    }
+    /* striped sun, sinks with dusk */
+    const sr = h * 0.36, sx = x + w * 0.5, sy = y + h * lerp(0.5, 1.12, d);
+    const sg = ctx.createLinearGradient(0, sy - sr, 0, sy + sr);
+    sg.addColorStop(0, P.sunTop); sg.addColorStop(1, P.sunLow);
+    ctx.save(); ctx.beginPath(); ctx.arc(sx, sy, sr, 0, K.TAU); ctx.clip();
+    ctx.fillStyle = sg; ctx.fillRect(sx - sr, sy - sr, sr * 2, sr * 2);
+    ctx.fillStyle = P.skyMid;
+    for (let i = 0; i < 6; i++) { const yy = sy + sr * (0.05 + i * 0.16), hh = 3 + i * 3.2; ctx.fillRect(sx - sr, yy, sr * 2, hh); }
+    ctx.restore();
+    K.glow(ctx, sx, sy, sr * 1.8, K.rgba(P.sunLow, 0.5), 1 - d * 0.7);
+    /* skyline: flat silhouettes with lit windows */
+    let bx = x - 10, i = 0;
+    while (bx < x + w) {
+      const bw = 50 + hash(i, o.seed + 3) * 90, bh = h * (0.18 + hash(i, o.seed + 4) * 0.34), top = y + h - bh;
+      ctx.fillStyle = P.night; ctx.fillRect(bx, top, bw - 6, bh);
+      for (let wy = top + 14; wy < y + h - 10; wy += 22) for (let wx = bx + 10; wx < bx + bw - 18; wx += 18) {
+        const k = hash(Math.floor(wx) * 7 + Math.floor(wy), o.seed + 9);
+        if (k < 0.18 + d * 0.4) { ctx.fillStyle = k < 0.09 ? P.cyan : P.yellow; ctx.globalAlpha = 0.75; ctx.fillRect(wx, wy, 8, 10); ctx.globalAlpha = 1; }
+      }
+      bx += bw; i++;
+    }
+    ctx.restore();
+    /* frame: chunky navy mullions with a pink rim */
+    K.shape(ctx, K.rrPts(x, y, w, h, 26, 3), { fill: null, w: 14, boil: 0.5, seed: o.seed + 20 });
+    K.line(ctx, [[x + w / 2, y + 4], [x + w / 2, y + h - 4]], { w: 10, boil: 0.4, seed: o.seed + 21 });
+    K.line(ctx, [[x + 4, y + h * 0.42], [x + w - 4, y + h * 0.42]], { w: 10, boil: 0.4, seed: o.seed + 22 });
+    K.neon(ctx, K.rrPts(x - 14, y - 14, w + 28, h + 28, 36, 3), { color: P.pink, w: 5, closed: true, on: K.flick(K.now, o.seed + 1, 0.3), seed: o.seed + 23, boil: 0.3 });
+    ctx.restore();
+  };
+
+  /* ---------- bezel monitor on the wall (content via callback, clipped to the glass) ----------
+     draw(ctx, w, h) is called with the origin at the glass's top-left */
+  K.wallScreen = function (ctx, x, y, w, h, draw, opt) {
+    const o = Object.assign({ a: 1, seed: 11, frame: P.metalDark, on: 1, glow: P.cyan }, opt || {});
+    const a = o.a <= 0 ? 0 : o.a >= 1 ? 1 : K.E.back(o.a, 2); if (a <= 0) return;
+    ctx.save(); ctx.translate(x + w / 2, y + h / 2); ctx.scale(a, a); ctx.translate(-w / 2, -h / 2);
+    K.glow(ctx, w / 2, h / 2, Math.max(w, h) * 0.75, K.rgba(o.glow, 0.22), o.on);
+    K.shape(ctx, K.rrPts(-22, -22, w + 44, h + 44, 30, 3), { fill: o.frame, w: 6, boil: 0.8, seed: o.seed, shade: { color: P.ink, dx: -8, dy: -8, a: 0.6 }, rim: { color: P.violet, dx: 4, dy: 4, a: 0.8 } });
+    K.pathOf(ctx, K.rrPts(0, 0, w, h, 18, 3), true);
+    ctx.fillStyle = P.screen; ctx.fill();
+    ctx.save(); K.pathOf(ctx, K.rrPts(0, 0, w, h, 18, 3), true); ctx.clip();
+    ctx.globalAlpha *= o.on;
+    if (draw) draw(ctx, w, h);
+    ctx.globalAlpha = 1;
+    /* glass: scanlines + a soft diagonal reflection */
+    ctx.fillStyle = "rgba(0,0,0,0.22)"; for (let yy = 0; yy < h; yy += 6) ctx.fillRect(0, yy, w, 2);
+    const rg = ctx.createLinearGradient(0, 0, w, h); rg.addColorStop(0, "rgba(255,255,255,0.10)"); rg.addColorStop(0.4, "rgba(255,255,255,0)");
+    ctx.fillStyle = rg; ctx.fillRect(0, 0, w, h);
+    ctx.restore();
+    K.shape(ctx, K.rrPts(0, 0, w, h, 18, 3), { fill: null, w: 5, boil: 0.6, seed: o.seed + 1 });
+    /* power LED */
+    K.dot(ctx, w - 8, h + 12, 5, P.green, P.ink, 2, o.seed + 2);
+    ctx.restore();
+  };
+
+  /* ---------- trading desk: console slab with keys and a small CRT ---------- */
+  K.desk = function (ctx, x, y, w, opt) {
+    const o = Object.assign({ seed: 31, color: P.metalDark, accent: P.cyan, crt: true, crtDraw: null }, opt || {});
+    if (o.crt) {
+      const cw = w * 0.42, ch = cw * 0.74, cx = x - cw / 2, cy = y - ch - 70;
+      K.shape(ctx, K.rrPts(cx - 16, cy - 16, cw + 32, ch + 40, 22, 3), { fill: P.shellShade, w: 5, boil: 0.8, seed: o.seed + 5, shade: { color: P.shellDark, dx: -8, dy: -8 }, rim: { color: o.accent, a: 0.7 } });
+      ctx.save(); K.pathOf(ctx, K.rrPts(cx, cy, cw, ch, 14, 3), true); ctx.fillStyle = P.screen; ctx.fill(); ctx.clip();
+      if (o.crtDraw) { ctx.save(); ctx.translate(cx, cy); o.crtDraw(ctx, cw, ch); ctx.restore(); }
+      ctx.fillStyle = "rgba(0,0,0,0.25)"; for (let yy = cy; yy < cy + ch; yy += 5) ctx.fillRect(cx, yy, cw, 2);
+      ctx.restore();
+      K.shape(ctx, K.rrPts(cx, cy, cw, ch, 14, 3), { fill: null, w: 4, boil: 0.5, seed: o.seed + 6 });
+      K.shape(ctx, K.rrPts(x - 26, cy + ch + 24, 52, 34, 6, 2), { fill: P.shellDark, w: 4, boil: 0.5, seed: o.seed + 7 });
+    }
+    /* slab */
+    const top = [[x - w / 2, y - 40], [x + w / 2, y - 40], [x + w / 2 + 30, y + 10], [x - w / 2 - 30, y + 10]];
+    K.shape(ctx, top, { fill: P.metal, w: 5, boil: 0.8, seed: o.seed, rim: { color: o.accent, dx: 0, dy: 5, a: 0.8 } });
+    K.shape(ctx, K.rrPts(x - w / 2 - 30, y + 10, w + 60, 110, 10, 2), { fill: o.color, w: 5, boil: 0.8, seed: o.seed + 1, shade: { color: P.ink, dx: 0, dy: -18, a: 0.5 }, dots: { gap: 11, r: 2.4, alpha: 0.35, color: P.ink } });
+    /* keys blink in a seeded pattern at the boil rate */
+    for (let i = 0; i < 9; i++) {
+      const kx = x - w / 2 + 20 + (i * (w - 40)) / 8, lit = hash(i, o.seed + Math.floor(K.now * 4)) < 0.35;
+      K.shape(ctx, K.rrPts(kx - 14, y - 32, 28, 16, 5, 1), { fill: lit ? (i % 3 ? o.accent : P.pink) : P.metalDark, w: 3, boil: 0.4, seed: o.seed + 10 + i, glow: lit ? (i % 3 ? o.accent : P.pink) : null, glowR: 14 });
+    }
+  };
+
+  /* ---------- floor cable with signal pulses ----------
+     pts: polyline; p: draw-in 0..1; pulses: array of u positions 0..1 */
+  K.polyAt = function (pts, u) {
+    let L = 0; const seg = [];
+    for (let i = 0; i < pts.length - 1; i++) { const l = Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]); seg.push(l); L += l; }
+    let d = clamp(u, 0, 1) * L;
+    for (let i = 0; i < seg.length; i++) {
+      if (d <= seg[i] || i === seg.length - 1) { const k = seg[i] ? d / seg[i] : 0; return [lerp(pts[i][0], pts[i + 1][0], k), lerp(pts[i][1], pts[i + 1][1], k), Math.atan2(pts[i + 1][1] - pts[i][1], pts[i + 1][0] - pts[i][0])]; }
+      d -= seg[i];
+    }
+    return [pts[0][0], pts[0][1], 0];
+  };
+  K.cable = function (ctx, pts, opt) {
+    const o = Object.assign({ p: 1, color: P.cyan, w: 10, pulses: [], seed: 41, lit: 0 }, opt || {});
+    if (o.p <= 0) return;
+    const N = 40, sp = [];
+    for (let i = 0; i <= N; i++) { const q = K.polyAt(pts, (i / N) * o.p); sp.push([q[0], q[1]]); }
+    K.line(ctx, sp, { stroke: P.ink, w: o.w + 8, boil: 0.6, seed: o.seed });
+    K.line(ctx, sp, { stroke: P.rubber, w: o.w, boil: 0.6, seed: o.seed });
+    if (o.lit > 0) K.neon(ctx, sp, { color: o.color, w: o.w * 0.35, on: o.lit, seed: o.seed + 3, boil: 0 });
+    o.pulses.forEach((u, i) => {
+      if (u < 0 || u > o.p) return;
+      const q = K.polyAt(pts, u);
+      K.glow(ctx, q[0], q[1], o.w * 4.5, K.rgba(o.color, 0.9), 1);
+      K.dot(ctx, q[0], q[1], o.w * 0.75, "#ffffff", null, 0, o.seed + 10 + i);
+    });
+  };
+
+  /* ---------- order ticket (paper slip) ----------
+     sym ticker, dir "up" | "down", qty string, stamp 0..1 (check stamp slams on) */
+  K.ticket = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ sym: "NVDA", dir: "up", qty: "100", stamp: 0, seed: 51, rot: 0, a: 1, stampIcon: "check" }, opt || {});
+    const a = o.a <= 0 ? 0 : o.a >= 1 ? 1 : K.E.back(o.a, 2.2); if (a <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(o.rot); ctx.scale(s * a, s * a);
+    const w = 150, h = 96;
+    const edge = [];
+    for (let i = 0; i <= 6; i++) edge.push([-w / 2 + (w * i) / 6, -h / 2]);
+    edge.push([w / 2, h / 2]);
+    for (let i = 6; i >= 0; i--) edge.push([-w / 2 + (w * i) / 6, h / 2 + (i % 2 ? 6 : 0)]); /* torn zigzag bottom */
+    K.shape(ctx, edge, { fill: P.paper, w: 4.5, boil: 0.7, seed: o.seed, shade: { color: P.paperShade, dx: -8, dy: -8 } });
+    const col = o.dir === "up" ? "#13a35a" : "#d4294d";
+    K.text(ctx, o.sym, -w / 2 + 14, -16, { size: 26, font: K.FONT.display, fill: P.ink, align: "left" });
+    K.pix(ctx, o.dir, w / 2 - 26, -16, 4.2, col);
+    K.text(ctx, "x" + o.qty, -w / 2 + 14, 22, { size: 22, weight: 700, font: K.FONT.mono, fill: P.inkSoft, align: "left" });
+    if (o.stamp > 0) {
+      const k = K.E.back(clamp(o.stamp, 0, 1), 3), sc = lerp(2.2, 1, k);
+      ctx.save(); ctx.translate(36, 14); ctx.rotate(-0.25); ctx.scale(sc, sc); ctx.globalAlpha *= clamp(o.stamp * 3, 0, 1);
+      ctx.strokeStyle = o.stampIcon === "cross" ? "#d4294d" : "#13a35a"; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(0, 0, 24, 0, K.TAU); ctx.stroke();
+      K.pix(ctx, o.stampIcon, 0, 0, 5, o.stampIcon === "cross" ? "#d4294d" : "#13a35a");
+      ctx.restore();
+    }
+    ctx.restore();
+  };
+
+  /* ---------- LED ticker tape (tickers + numbers only) ---------- */
+  K.ledTape = function (ctx, x, y, w, h, items, opt) {
+    const o = Object.assign({ speed: 120, seed: 61, size: null }, opt || {});
+    const size = o.size || h * 0.42;
+    K.shape(ctx, K.rrPts(x, y, w, h, h * 0.3, 2), { fill: "#05060f", w: 5, boil: 0.5, seed: o.seed });
+    ctx.save(); K.pathOf(ctx, K.rrPts(x + 6, y + 6, w - 12, h - 12, h * 0.25, 2), true); ctx.clip();
+    const parts = items.map((it) => ({ s: it.sym + " " + it.chg, up: it.chg[0] !== "-" }));
+    const widths = parts.map((p) => K.textW(ctx, p.s, size, 400, K.FONT.pixel) + size * 2.6);
+    const total = widths.reduce((a, b) => a + b, 0);
+    let off = -((K.now * o.speed) % total);
+    for (let rep = 0; rep < 3; rep++) parts.forEach((p, i) => {
+      const xx = x + 20 + off;
+      if (xx > x - widths[i] && xx < x + w) {
+        K.text(ctx, p.s, xx, y + h / 2 + 2, { size, font: K.FONT.pixel, fill: p.up ? P.gain : P.loss, align: "left", glow: p.up ? P.gain : P.loss, glowR: 10 });
+        K.pix(ctx, p.up ? "up" : "down", xx + widths[i] - size * 1.6, y + h / 2, size * 0.16, p.up ? P.gain : P.loss);
+      }
+      off += widths[i];
+    });
+    /* LED dot mask */
+    ctx.fillStyle = "rgba(0,0,0,0.35)";
+    for (let yy = y; yy < y + h; yy += 5) ctx.fillRect(x, yy, w, 1.5);
+    ctx.restore();
+  };
+
+  /* ---------- pixel spark burst (t0 = start time) ---------- */
+  K.sparks = function (ctx, x, y, t0, opt) {
+    const o = Object.assign({ n: 10, r: 160, dur: 0.55, color: P.yellow, size: 12, seed: 71 }, opt || {});
+    const d = (K.now - t0) / o.dur; if (d < 0 || d > 1) return;
+    for (let i = 0; i < o.n; i++) {
+      const a = (i / o.n) * K.TAU + hs(i, o.seed) * 0.3, rr = o.r * K.E.out3(d) * (0.7 + 0.3 * hash(i, o.seed + 1));
+      const s = o.size * (1 - d) * (i % 2 ? 1 : 0.7), px = x + Math.cos(a) * rr, py = y + Math.sin(a) * rr + d * d * 40;
+      ctx.save(); ctx.fillStyle = i % 3 === 0 ? P.cyan : i % 3 === 1 ? o.color : P.pink; ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 12;
+      ctx.fillRect(px - s / 2, py - s / 2, s, s); ctx.restore();
+    }
+  };
+  /* falling pixel confetti in a box, from time t0 */
+  K.confetti = function (ctx, x0, x1, y0, t0, opt) {
+    const o = Object.assign({ n: 60, fall: 520, seed: 81, size: 14 }, opt || {});
+    const d = K.now - t0; if (d < 0) return;
+    const cols = [P.pink, P.cyan, P.yellow, P.green, P.violet];
+    for (let i = 0; i < o.n; i++) {
+      const st = hash(i, o.seed) * 1.2, dd = d - st; if (dd < 0) continue;
+      const x = lerp(x0, x1, hash(i, o.seed + 1)) + Math.sin(dd * 3 + i) * 24, y = y0 + dd * o.fall * (0.7 + 0.5 * hash(i, o.seed + 2));
+      const s = o.size * (0.6 + 0.6 * hash(i, o.seed + 3)), flip = Math.abs(Math.cos(dd * 6 + i));
+      ctx.save(); ctx.translate(x, y); ctx.rotate(dd * 2 + i); ctx.fillStyle = cols[i % cols.length]; ctx.fillRect(-s / 2, (-s / 2) * flip, s, s * flip); ctx.restore();
+    }
+  };
+})(AK);
+
+/* ============================================================
+   KIT 40 ROBOT: "Beepo", the lead agent, and the specialist bots.
+   Local space: feet on y = 0, faces the viewer. Scale 1 sizes:
+     coil legs 44 tall, boots 46 x 20 at x = +/-30
+     torso 124 x 100 (centre y -94), chest LED panel
+     neck 16, CRT head 176 x 134 (centre y -228), screen 132 x 92
+     antenna: coil spring 54 + bulb r 11 (lights on beats)
+     arms: two-bone IK 46 + 44 rubber hose, mitt hand with a 2-finger clamp
+   Pose state (all optional):
+     kind      "lead" | "analyst" | "risk" | "trader"
+     squash    -0.6..0.6 (+ = squashed wide), volume kept; coil legs compress
+     lean      deg around the feet;  hop  px lift (legs dangle and stretch)
+     headTilt  deg;  look [dx, dy] -1..1;  blink 0..1
+     eyes      "dot" | "happy" | "wide" | "heart" | "dollar" | "x"
+     mouth     "smile" | "open" | "flat" | "talk" | "o";  talk 0..1 (waveform)
+     faceIcon  pixel icon name shown big instead of the face; iconColor
+     screen    fn(ctx, w, h) draws custom screen content (origin top-left); noScan hides the glass
+     bulb      0..1 antenna light;  chest  0..1 chest LED pulse
+     armL/armR { x, y, open 0..1 }  target of the hand in local space
+     hold      { R: "ticket"|"lens"|"shield"|"baton", L: ... }; holdSym ticker
+     exclaim   0..1 pixel "!" pop;  heartPop 0..1
+   K.faceRect is set to the screen-space quad of the screen (dive transitions).
+   ============================================================ */
+var AK = window.AK || (window.AK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp } = K;
+
+  K.ik2 = function (S, T, a, b, bend) {
+    let dx = T[0] - S[0], dy = T[1] - S[1], d = Math.hypot(dx, dy);
+    const dm = clamp(d, Math.abs(a - b) + 0.01, a + b - 0.01);
+    if (d < 1e-6) { dx = 1; dy = 0; d = 1; }
+    const ux = dx / d, uy = dy / d;
+    const ca = clamp((a * a + dm * dm - b * b) / (2 * a * dm), -1, 1), A = Math.acos(ca) * (bend || 1);
+    const ex = S[0] + a * (ux * Math.cos(A) - uy * Math.sin(A)), ey = S[1] + a * (ux * Math.sin(A) + uy * Math.cos(A));
+    return { elbow: [ex, ey], end: [S[0] + ux * dm, S[1] + uy * dm] };
+  };
+  /* rubber hose limb: navy outline, plastic fill, ring bands */
+  K.hose = function (ctx, pts, w, color, seed, rings) {
+    K.line(ctx, pts, { stroke: P.ink, w: w + 8, boil: 0.7, seed });
+    K.line(ctx, pts, { stroke: color, w, boil: 0.7, seed });
+    if (rings) for (let i = 1; i < rings; i++) {
+      const q = K.polyAt(pts, i / rings), nx = -Math.sin(q[2]) * w * 0.5, ny = Math.cos(q[2]) * w * 0.5;
+      K.line(ctx, [[q[0] - nx, q[1] - ny], [q[0] + nx, q[1] + ny]], { stroke: P.ink, w: 2.5, boil: 0.3, seed: seed + i });
+    }
+  };
+  /* coil spring between two points (legs, antenna) */
+  K.coil = function (ctx, A, B, wdt, turns, color, seed) {
+    const pts = [], n = turns * 2;
+    const dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L;
+    for (let i = 0; i <= n; i++) { const u = i / n, s = i === 0 || i === n ? 0 : i % 2 ? 1 : -1; pts.push([A[0] + dx * u + nx * s * wdt / 2, A[1] + dy * u + ny * s * wdt / 2]); }
+    K.line(ctx, pts, { stroke: P.ink, w: 11, boil: 0.5, seed });
+    K.line(ctx, pts, { stroke: color, w: 5, boil: 0.5, seed });
+  };
+  /* mitt hand with a two-finger clamp, pointing along ang */
+  K.mitt = function (ctx, x, y, ang, open, color, seed, flip) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(1, flip || 1);
+    const o = 0.12 + 0.6 * clamp(open, 0, 1);
+    ctx.save(); ctx.translate(10, -8); ctx.rotate(-o);
+    K.shape(ctx, K.rrPts(0, -7, 30, 14, 7, 2), { fill: color, w: 4.5, boil: 0.5, seed: seed + 1 });
+    ctx.restore();
+    ctx.save(); ctx.translate(10, 8); ctx.rotate(o * 0.7);
+    K.shape(ctx, K.rrPts(0, -7, 26, 14, 7, 2), { fill: color, w: 4.5, boil: 0.5, seed: seed + 2 });
+    ctx.restore();
+    K.shape(ctx, K.ellipsePts(0, 0, 19, 17, 12), { fill: color, w: 5, boil: 0.6, seed, shade: { color: P.shellDark, dx: -5, dy: -6 }, gloss: 0.5 });
+    ctx.restore();
+  };
+
+  const KINDS = {
+    lead: { body: P.shell, dark: P.shellShade, rim: P.cyan, head: "crt", ant: "spring", accent: P.pink },
+    analyst: { body: P.analyst, dark: P.analystDark, rim: "#c9f6ff", head: "dome", ant: "dish", accent: P.cyan },
+    risk: { body: P.risk, dark: P.riskDark, rim: "#fff1c7", head: "box", ant: "beacon", accent: P.orange },
+    trader: { body: P.trader, dark: P.traderDark, rim: "#ffd1ea", head: "crt", ant: "none", accent: P.pink, headset: true },
+  };
+  K.ROBOT_KINDS = KINDS;
+
+  /* ---------- the screen face ---------- */
+  function face(ctx, w, h, st, seed) {
+    const ph = P.phosphor, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1);
+    if (st.screen) { st.screen(ctx, w, h); return; }
+    if (st.faceIcon) { K.pix(ctx, st.faceIcon, w / 2, h / 2, Math.min(w, h) / 9, st.iconColor || ph, { glow: 1 }); return; }
+    const c = Math.max(4, w / 22); /* face pixel cell */
+    const ex = [w * 0.31, w * 0.69], ey = h * 0.42 + look[1] * c * 0.8, lx = look[0] * c * 1.1;
+    ctx.save(); ctx.shadowColor = ph; ctx.shadowBlur = c * 1.6; ctx.fillStyle = ph;
+    const R = (x, y, ww, hh) => { ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, ww, hh, c * 0.35) : ctx.rect(x, y, ww, hh); ctx.fill(); };
+    const eyes = st.eyes || "dot";
+    ex.forEach((x0, i) => {
+      const x = x0 + lx;
+      if (eyes === "heart") { K.pix(ctx, "heart", x, ey, c * 0.9, P.pink, { glow: 1 }); return; }
+      if (eyes === "dollar") { K.pix(ctx, "dollar", x, ey, c * 0.8, P.yellow, { glow: 1 }); return; }
+      if (eyes === "x") { K.pix(ctx, "cross", x, ey, c * 0.9, ph, { glow: 1 }); return; }
+      if (blink > 0.55) { R(x - c * 1.6, ey, c * 3.2, c * 0.8); return; }
+      if (eyes === "happy") { /* ^ ^ */
+        R(x - c * 1.8, ey + c * 0.2, c, c); R(x - c * 0.9, ey - c * 0.7, c * 1.8, c); R(x + c * 0.8, ey + c * 0.2, c, c); return;
+      }
+      const big = eyes === "wide" ? 1.35 : 1, ew = c * 2.2 * big, eh = c * 3.2 * big * (1 - blink * 0.85);
+      R(x - ew / 2, ey - eh / 2, ew, eh);
+      /* pupil highlight: a dark notch that moves with look */
+      ctx.save(); ctx.shadowBlur = 0; ctx.fillStyle = P.screen;
+      ctx.fillRect(x - ew / 2 + ew * 0.55 + look[0] * c * 0.3, ey - eh / 2 + c * 0.45, c * 0.7, c * 0.7 * (1 - blink));
+      ctx.restore();
+      void i;
+    });
+    /* cheeks */
+    ctx.save(); ctx.shadowBlur = 0; ctx.globalAlpha = 0.55; ctx.fillStyle = P.pink;
+    R(w * 0.13, h * 0.62, c * 1.6, c * 0.8); R(w * 0.87 - c * 1.6, h * 0.62, c * 1.6, c * 0.8); ctx.restore();
+    /* mouth */
+    const m = st.mouth || "smile", my = h * 0.7, mx = w / 2;
+    if (m === "smile") { R(mx - c * 2.5, my - c * 0.5, c, c); R(mx - c * 1.5, my + c * 0.3, c * 3, c); R(mx + c * 1.5, my - c * 0.5, c, c); }
+    else if (m === "open") R(mx - c * 1.6, my - c * 0.6, c * 3.2, c * 2.2);
+    else if (m === "o") R(mx - c * 0.8, my - c * 0.4, c * 1.6, c * 1.8);
+    else if (m === "flat") R(mx - c * 2, my, c * 4, c * 0.8);
+    else if (m === "talk") { /* waveform mouth: amplitude follows st.talk (singing) */
+      const amp = clamp(st.talk == null ? 0.6 : st.talk, 0, 1), n = 7;
+      for (let i = 0; i < n; i++) {
+        const k = Math.sin(i * 1.9 + K.bf * 1.7) * 0.5 + 0.5, hh = c * (0.6 + 2.4 * amp * k * Math.sin((i / (n - 1)) * Math.PI));
+        R(mx - (n * c * 0.8) / 2 + i * c * 0.8, my - hh / 2 + c * 0.3, c * 0.55, hh);
+      }
+    }
+    ctx.restore();
+  }
+
+  K.robot = function (ctx, x, y, s, st) {
+    st = st || {};
+    const kd = KINDS[st.kind || "lead"], seed = st.seed || 700 + (st.kind || "lead").length * 37;
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
+    const hop = st.hop || 0;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    /* ---- legs: coil springs that compress with squash and stretch in the air ---- */
+    const legH = 44 * syk * (1 + clamp(hop / 120, 0, 0.35)), hipY = -legH - hop;
+    [-1, 1].forEach((sd, i) => {
+      const fx = sd * 30 * sxk, fy = -hop * 0.15;
+      K.coil(ctx, [sd * 26 * sxk, hipY + 4], [fx, fy - 12], 22, 4, P.metal, seed + 2 + i);
+      K.shape(ctx, K.rrPts(fx - 25, fy - 18, 50, 20, 9, 2), { fill: P.rubber, w: 5, boil: 0.5, seed: seed + 4 + i, rim: { color: kd.rim, dx: 0, dy: 4, a: 0.5 } });
+    });
+    /* ---- torso (squash around the hips) ---- */
+    ctx.save(); ctx.translate(0, hipY); ctx.scale(sxk, syk);
+    const TW = 124, TH = 100;
+    K.shape(ctx, K.rrPts(-TW / 2, -TH, TW, TH, 30, 3), { fill: kd.body, w: 6, boil: 0.9, seed: seed + 10, shade: { color: kd.dark, dx: -12, dy: -10 }, rim: { color: kd.rim, dx: 6, dy: 6, a: 0.8 }, dots: { gap: 10, r: 2.2, alpha: 0.25, color: P.ink } });
+    /* chest panel: 3 LEDs + mini bar meter */
+    K.shape(ctx, K.rrPts(-36, -TH + 26, 72, 44, 10, 2), { fill: P.screen, w: 4, boil: 0.5, seed: seed + 11 });
+    const ch = clamp(st.chest == null ? 0.5 : st.chest, 0, 1);
+    [P.pink, P.yellow, P.green].forEach((c, i) => { const lit = i / 2 <= ch + 0.01; ctx.save(); ctx.fillStyle = lit ? c : K.rgba(c, 0.18); if (lit) { ctx.shadowColor = c; ctx.shadowBlur = 10; } ctx.beginPath(); ctx.arc(-20 + i * 20, -TH + 40, 6, 0, K.TAU); ctx.fill(); ctx.restore(); });
+    ctx.save(); ctx.fillStyle = P.cyan; ctx.shadowColor = P.cyan; ctx.shadowBlur = 8; ctx.fillRect(-26, -TH + 54, 52 * (0.25 + 0.75 * ch), 6); ctx.restore();
+    /* neck (accordion) */
+    K.shape(ctx, K.rrPts(-20, -TH - 18, 40, 22, 6, 2), { fill: P.metal, w: 4.5, boil: 0.5, seed: seed + 12 });
+    K.line(ctx, [[-18, -TH - 8], [18, -TH - 8]], { w: 3, boil: 0.3, seed: seed + 13 });
+    /* ---- head ---- */
+    const HW = 176, HH = 134, hcY = -TH - 16 - HH / 2;
+    ctx.save(); ctx.translate(0, hcY); ctx.rotate(((st.headTilt || 0) * Math.PI) / 180);
+    /* antenna (behind the head) */
+    const wob = Math.sin(K.now * 7.5) * 4 * (1 + Math.abs(sq) * 4) + (st.antLean || 0), bulb = clamp(st.bulb || 0, 0, 1);
+    if (kd.ant === "spring") {
+      const tip = [wob * 2.2, -HH / 2 - 62];
+      K.coil(ctx, [0, -HH / 2 + 4], [tip[0] * 0.9, tip[1] + 10], 14, 5, P.metal, seed + 20);
+      K.glow(ctx, tip[0], tip[1], 46, K.rgba(kd.accent, 0.95), 0.25 + 0.75 * bulb);
+      K.dot(ctx, tip[0], tip[1], 12, bulb > 0.3 ? "#ffd2ec" : kd.accent, P.ink, 4.5, seed + 21);
+    } else if (kd.ant === "dish") {
+      K.line(ctx, [[0, -HH / 2], [wob, -HH / 2 - 34]], { w: 6, boil: 0.4, seed: seed + 22 });
+      ctx.save(); ctx.translate(wob, -HH / 2 - 40); ctx.rotate(-0.5 + Math.sin(K.now * 2) * 0.3);
+      K.shape(ctx, [[-26, -4], [26, -4], [14, 12], [-14, 12]], { fill: P.shell, w: 4.5, boil: 0.5, seed: seed + 23, rim: { color: kd.rim, a: 0.6 } });
+      ctx.restore();
+      K.glow(ctx, wob, -HH / 2 - 44, 30, K.rgba(P.cyan, 0.9), bulb);
+    } else if (kd.ant === "beacon") {
+      K.shape(ctx, K.rrPts(-18, -HH / 2 - 30, 36, 34, 12, 2), { fill: bulb > 0.3 ? "#ffe0a8" : P.orange, w: 4.5, boil: 0.5, seed: seed + 24 });
+      K.glow(ctx, 0, -HH / 2 - 16, 70, K.rgba(P.orange, 0.9), 0.2 + 0.8 * bulb);
+    }
+    /* ear dials */
+    [-1, 1].forEach((sd, i) => { K.shape(ctx, K.rrPts(sd * HW / 2 - (sd < 0 ? 18 : 0), -24, 18, 48, 8, 2), { fill: P.metalDark, w: 4.5, boil: 0.5, seed: seed + 26 + i }); });
+    /* shell */
+    const headPts = kd.head === "dome" ? K.ellipsePts(0, 0, HW / 2 + 4, HH / 2 + 10, 22) : K.rrPts(-HW / 2, -HH / 2, HW, HH, kd.head === "box" ? 20 : 38, 3);
+    K.shape(ctx, headPts, { fill: kd.body, w: 6, boil: 0.9, seed: seed + 30, shade: { color: kd.dark, dx: -12, dy: -12 }, rim: { color: kd.rim, dx: 6, dy: 6, a: 0.85 }, gloss: 0.35 });
+    if (st.kind === "risk") K.shape(ctx, K.rrPts(-HW / 2 + 4, -HH / 2 + 2, HW - 8, 22, 10, 2), { fill: P.riskDark, w: 4, boil: 0.5, seed: seed + 31 }); /* helmet stripe */
+    /* screen */
+    const SW = 132, SH = 92, sx = -SW / 2, sy = -SH / 2 + 6;
+    const scrPts = kd.head === "dome" ? K.ellipsePts(0, sy + SH / 2, SW / 2, SH / 2, 20) : K.rrPts(sx, sy, SW, SH, 20, 3);
+    K.shape(ctx, scrPts, { fill: P.screen, w: 5, boil: 0.5, seed: seed + 32 });
+    ctx.save(); K.pathOf(ctx, scrPts, true); ctx.clip();
+    const sg = ctx.createRadialGradient(0, sy + SH / 2, 4, 0, sy + SH / 2, SW * 0.7); sg.addColorStop(0, P.screenShade); sg.addColorStop(1, P.screen);
+    ctx.fillStyle = sg; ctx.fillRect(sx, sy, SW, SH);
+    ctx.save(); ctx.translate(sx, sy); face(ctx, SW, SH, st, seed); ctx.restore();
+    if (!st.noScan) { /* glass: scanlines + glare (off when the camera dives into the screen) */
+      ctx.fillStyle = "rgba(0,0,0,0.3)"; for (let yy = sy; yy < sy + SH; yy += 4) ctx.fillRect(sx, yy, SW, 1.5);
+      ctx.fillStyle = "rgba(255,255,255,0.08)"; K.pathOf(ctx, K.ellipsePts(sx + SW * 0.3, sy + SH * 0.2, SW * 0.3, SH * 0.12, 10, -0.2), true); ctx.fill();
+    }
+    /* screen quad in screen space (for "dive into the face" transitions) */
+    const m = ctx.getTransform();
+    K.faceRect = [[sx, sy], [sx + SW, sy], [sx + SW, sy + SH], [sx, sy + SH]].map((q) => { const p = m.transformPoint(new DOMPoint(q[0], q[1])); return [p.x, p.y]; });
+    ctx.restore();
+    if (kd.headset) { /* trader's headset: band over the head, mic boom */
+      K.line(ctx, [[-HW / 2 - 6, -6], [-HW / 2 + 10, -HH / 2 - 14], [HW / 2 - 10, -HH / 2 - 14], [HW / 2 + 6, -6]], { stroke: P.ink, w: 12, boil: 0.5, seed: seed + 40 });
+      K.shape(ctx, K.rrPts(-HW / 2 - 16, -24, 26, 52, 10, 2), { fill: P.rubber, w: 4.5, boil: 0.5, seed: seed + 41 });
+      K.line(ctx, [[-HW / 2 - 4, 18], [-HW / 2 + 14, 52], [-34, 60]], { stroke: P.ink, w: 6, boil: 0.5, seed: seed + 42 });
+      K.dot(ctx, -34, 60, 8, P.rubber, P.ink, 3.5, seed + 43);
+    }
+    /* "!" pixel pop */
+    if (st.exclaim > 0) {
+      const a = K.E.back(clamp(st.exclaim, 0, 1), 2.5);
+      ctx.save(); ctx.translate(HW / 2 + 30, -HH / 2 - 20); ctx.rotate(0.2); ctx.scale(a, a);
+      ctx.fillStyle = P.yellow; ctx.shadowColor = P.yellow; ctx.shadowBlur = 14;
+      ctx.fillRect(-8, -54, 16, 36); ctx.fillRect(-8, -10, 16, 16); ctx.restore();
+    }
+    if (st.heartPop > 0) {
+      const a = clamp(st.heartPop, 0, 1);
+      K.pix(ctx, "heart", HW / 2 + 26, -HH / 2 - 30 - a * 40, 6, P.pink, { glow: 1, a: 1 - a * a });
+    }
+    ctx.restore(); /* head */
+    ctx.restore(); /* torso scale */
+    /* ---- arms (unscaled space so mitts keep their shape) ---- */
+    [["L", -1], ["R", 1]].forEach(([k, sd]) => {
+      const c = st["arm" + k] || { x: sd * 108, y: hipY - 30, open: 0.2 };
+      const S = [sd * 60 * sxk, hipY - 78 * syk];
+      const r = K.ik2(S, [c.x, c.y - hop], 46, 44, sd > 0 ? -1 : 1);
+      K.hose(ctx, [S, r.elbow, r.end], 14, kd.dark, seed + 50 + sd, 0);
+      const ang = c.rot != null ? (c.rot * Math.PI) / 180 : Math.atan2(r.end[1] - r.elbow[1], r.end[0] - r.elbow[0]);
+      const held = st.hold && st.hold[k];
+      if (held) holdProp(ctx, held, r.end, ang, st, seed + 60 + sd);
+      K.mitt(ctx, r.end[0], r.end[1], ang, c.open == null ? 0.2 : c.open, kd.body, seed + 70 + sd * 5, sd < 0 ? -1 : 1);
+    });
+    ctx.restore();
+  };
+  /* convenience: the mascot */
+  K.beepo = (ctx, x, y, s, st) => K.robot(ctx, x, y, s, Object.assign({ kind: "lead" }, st || {}));
+
+  function holdProp(ctx, what, p, ang, st, seed) {
+    ctx.save(); ctx.translate(p[0], p[1]);
+    if (what === "ticket") K.ticket(ctx, 40 * Math.cos(ang), 40 * Math.sin(ang) - 10, 0.75, { sym: st.holdSym || "NVDA", dir: st.holdDir || "up", qty: st.holdQty || "100", stamp: st.holdStamp || 0, seed, rot: ang * 0.2 });
+    else if (what === "lens") { /* analyst's magnifier */
+      ctx.rotate(ang);
+      K.shape(ctx, K.rrPts(10, -6, 50, 12, 6, 2), { fill: P.metalDark, w: 4, boil: 0.4, seed });
+      K.shape(ctx, K.ellipsePts(88, 0, 30, 30, 16), { fill: K.rgba(P.cyan, 0.25), w: 7, boil: 0.5, seed: seed + 1, gloss: 0.6 });
+    } else if (what === "shield") {
+      K.shape(ctx, [[-40, -50], [40, -50], [40, 0], [0, 54], [-40, 0]], { fill: P.riskDark, w: 6, boil: 0.6, seed, rim: { color: "#fff1c7", a: 0.7 } });
+      K.pix(ctx, "check", 0, -6, 7, P.green, { glow: 0.8 });
+    } else if (what === "baton") {
+      ctx.rotate(ang - 0.6);
+      K.neon(ctx, [[0, 0], [86, 0]], { color: P.yellow, w: 7, seed });
+    }
+    ctx.restore();
+  }
+
+  /* seeded blink curve, about one blink per 2.1 s */
+  K.blinkAt = function (t, seed) {
+    let b = 0;
+    for (let i = 0; i < 14; i++) {
+      const tb = 0.9 + i * 2.1 + K.hash(i, seed || 7) * 1.2, d = t - tb;
+      if (d > 0 && d < 0.14) b = Math.max(b, Math.sin((d / 0.14) * Math.PI));
+    }
+    return b;
+  };
+})(AK);
+
+/* ============================================================
+   KIT 50 EXPLAINER: slide content as objects on the neon trading floor.
+   Never draw a flat slide. Each primitive is a physical thing:
+     graph node   -> agent pod: round server with a ticker/icon     K.node
+     graph edge   -> neon cable with travelling signal + LED tag    K.edge, K.edgePoint, K.tag
+     big number   -> seven-segment scoreboard in a bezel           K.scoreboard
+     table        -> green-screen terminal window, rows typed in    K.termTable
+     formula      -> hologram panel projected from a floor emitter  K.holo
+     chart        -> CRT monitor: line / bar / candle series        K.monitorChart
+     bullets      -> task board; each bullet a lit pixel-icon LED   K.taskBoard
+     code         -> retro terminal (Python highlight), typed out   K.terminal
+     cycle/loop   -> ring of icon nodes with a running light        K.loopRing
+     title        -> neon tube sign (text is DOM or K.text)         K.neonSign
+   All take `a` (appear 0..1) and pop with a back ease on the beat.
+   Text never boils; frames and tubes do (gently).
+   ============================================================ */
+var AK = window.AK || (window.AK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp, hash, hs } = K;
+  const popS = (a) => (a <= 0 ? 0 : a >= 1 ? 1 : K.E.back(a, 2.2));
+  K.popS = popS;
+
+  /* ---------- agent pod (graph node) ---------- */
+  K.node = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ label: "", icon: null, color: P.cyan, a: 1, seed: 1, hot: 0, r: 70 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s * a, s * a);
+    if (o.hot > 0) K.glow(ctx, 0, 0, o.r * 2.4, K.rgba(o.color, 0.9), o.hot);
+    K.shape(ctx, K.ellipsePts(0, o.r * 0.9, o.r * 0.95, o.r * 0.3, 16), { fill: P.ink, stroke: null, w: 0, boil: 0.4, seed: o.seed + 1, alpha: 0.5 });
+    K.shape(ctx, K.ellipsePts(0, 0, o.r, o.r, 20), { fill: P.metalDark, w: 6, boil: 0.7, seed: o.seed, shade: { color: P.ink, dx: -10, dy: -10, a: 0.6 }, rim: { color: o.color, dx: 6, dy: 6 } });
+    K.shape(ctx, K.ellipsePts(0, 0, o.r * 0.72, o.r * 0.72, 18), { fill: P.screen, w: 4, boil: 0.5, seed: o.seed + 2 });
+    K.neon(ctx, K.ellipsePts(0, 0, o.r * 0.86, o.r * 0.86, 20), { color: o.color, w: 4, closed: true, on: 0.6 + 0.4 * o.hot, seed: o.seed + 3, boil: 0.3 });
+    if (o.icon) K.pix(ctx, o.icon, 0, o.label ? -o.r * 0.18 : 0, o.r * (o.label ? 0.09 : 0.12), o.color, { glow: 0.45 });
+    if (o.label) K.text(ctx, o.label, 0, o.icon ? o.r * 0.36 : 2, { size: o.r * (o.icon ? 0.26 : o.label.length > 3 ? 0.34 : 0.42), font: K.FONT.pixel, fill: "#ffffff", glow: o.color, glowR: 10 });
+    ctx.restore();
+  };
+
+  /* ---------- cable edge between two points ---------- */
+  K.edgePoint = function (A, B, bend, u) {
+    const mx = (A[0] + B[0]) / 2, my = (A[1] + B[1]) / 2, dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1;
+    const C = [mx - (dy / L) * bend, my + (dx / L) * bend];
+    const x = (1 - u) * (1 - u) * A[0] + 2 * (1 - u) * u * C[0] + u * u * B[0];
+    const y = (1 - u) * (1 - u) * A[1] + 2 * (1 - u) * u * C[1] + u * u * B[1];
+    const tx = 2 * (1 - u) * (C[0] - A[0]) + 2 * u * (B[0] - C[0]), ty = 2 * (1 - u) * (C[1] - A[1]) + 2 * u * (B[1] - C[1]);
+    return [x, y, Math.atan2(ty, tx)];
+  };
+  /* p draw progress; state "plain" | "hot" | "dim"; pulses travel A->B when hot */
+  K.edge = function (ctx, A, B, opt) {
+    const o = Object.assign({ p: 1, state: "plain", bend: 40, label: "", seed: 1, trim: 80, color: P.cyan, w: 8, lu: 0.5, labelSize: 22 }, opt || {});
+    if (o.p <= 0) return;
+    const L = Math.hypot(B[0] - A[0], B[1] - A[1]), u0 = clamp(o.trim / L, 0, 0.45), u1 = 1 - u0, N = 26, pts = [];
+    for (let i = 0; i <= N; i++) { const q = K.edgePoint(A, B, o.bend, lerp(u0, u1, (i / N) * o.p)); pts.push([q[0], q[1]]); }
+    const hot = o.state === "hot", dim = o.state === "dim", col = hot ? P.yellow : o.color;
+    ctx.save(); if (dim) ctx.globalAlpha *= 0.35;
+    K.line(ctx, pts, { stroke: P.ink, w: o.w + 8, boil: 0.6, seed: o.seed });
+    K.neon(ctx, pts, { color: col, w: o.w * 0.6, on: hot ? 1 : 0.55, seed: o.seed + 1, boil: 0 });
+    if (o.p >= 1) for (let k = 0; k < (hot ? 3 : 1); k++) {
+      const u = (K.now * (hot ? 0.9 : 0.4) + k / 3 + hash(o.seed, 3)) % 1, q = K.edgePoint(A, B, o.bend, lerp(u0, u1, u));
+      K.glow(ctx, q[0], q[1], o.w * 3.5, K.rgba(col, 0.9), 1); K.dot(ctx, q[0], q[1], o.w * 0.55, "#ffffff", null, 0, o.seed + 5 + k);
+    }
+    ctx.restore();
+    if (o.label && o.p > 0.6) { const q = K.edgePoint(A, B, o.bend, o.lu); K.tag(ctx, q[0], q[1] - 4, o.label, { a: clamp((o.p - 0.6) / 0.4, 0, 1) * (dim ? 0.5 : 1), hot, seed: o.seed + 9, size: o.labelSize }); }
+  };
+  /* LED chip label (numbers, tickers) */
+  K.tag = function (ctx, x, y, str, opt) {
+    const o = Object.assign({ a: 1, hot: false, size: 22, seed: 1, color: P.cyan, font: K.FONT.pixel }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const w = K.textW(ctx, str, o.size, 400, o.font) + 28, h = o.size + 22, col = o.hot ? P.yellow : o.color;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    K.shape(ctx, K.rrPts(-w / 2, -h / 2, w, h, 10, 2), { fill: "#070a1e", w: 4.5, boil: 0.5, seed: o.seed, rim: { color: col, dx: 0, dy: 3, a: 0.7 } });
+    K.text(ctx, str, 0, 2, { size: o.size, font: o.font, fill: col, glow: col, glowR: 8 });
+    ctx.restore();
+  };
+
+  /* ---------- scoreboard: big number in seven-segment LEDs ----------
+     lines: [{ v: "+12.4%", c: colour }] or strings; label: small pixel caption (ticker) */
+  K.scoreboard = function (ctx, x, y, w, h, lines, opt) {
+    const o = Object.assign({ a: 1, seed: 11, label: "", bump: 0, color: P.yellow }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const bump = 1 + 0.12 * Math.sin(clamp(o.bump, 0, 1) * Math.PI);
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    K.shape(ctx, K.rrPts(-w / 2 - 18, -h / 2 - 18, w + 36, h + 36, 22, 3), { fill: P.metalDark, w: 6, boil: 0.8, seed: o.seed, shade: { color: P.ink, dx: -8, dy: -8, a: 0.6 }, rim: { color: P.violet, a: 0.8 } });
+    K.shape(ctx, K.rrPts(-w / 2, -h / 2, w, h, 12, 3), { fill: "#05060f", w: 4.5, boil: 0.5, seed: o.seed + 1 });
+    /* bolts */
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach((c, i) => K.dot(ctx, c[0] * (w / 2 + 6), c[1] * (h / 2 + 6), 4.5, P.metal, P.ink, 2, o.seed + 3 + i));
+    const top = o.label ? 22 : 0, n = lines.length, lh = (h - 40 - top) / n;
+    if (o.label) K.text(ctx, o.label, 0, -h / 2 + 26, { size: 20, font: K.FONT.pixel, fill: P.cyan, glow: P.cyan, glowR: 8 });
+    lines.forEach((ln, i) => {
+      const v = typeof ln === "string" ? ln : ln.v, c = typeof ln === "string" ? o.color : ln.c || o.color;
+      const dh = Math.min(lh * 0.78, (w - 50) / Math.max(1, K.seg7W(v, 1)));
+      ctx.save(); ctx.translate(0, -h / 2 + 20 + top + lh * (i + 0.5)); ctx.scale(bump, bump);
+      K.seg7(ctx, v, 0, 0, dh, c);
+      ctx.restore();
+    });
+    ctx.restore();
+  };
+
+  /* ---------- terminal table (green screen) ----------
+     cols: widths; rows: arrays (row 0 = header); hi: highlighted row; reveal 0..1 */
+  K.termTable = function (ctx, x, y, cols, rows, opt) {
+    const o = Object.assign({ a: 1, size: 26, rowH: 50, seed: 21, hi: -1, reveal: 1, title: "" }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const w = cols.reduce((s, c) => s + c, 0) + 40, h = rows.length * o.rowH + 76;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    termWindow(ctx, w, h, o.seed, o.title);
+    const shown = rows.length * o.reveal;
+    rows.forEach((r, ri) => {
+      const g = clamp(shown - ri, 0, 1); if (g <= 0) return;
+      const ry = -h / 2 + 56 + ri * o.rowH + o.rowH / 2;
+      if (ri === o.hi) { ctx.save(); ctx.fillStyle = K.rgba(P.green, 0.85); ctx.shadowColor = P.green; ctx.shadowBlur = 14; ctx.fillRect(-w / 2 + 14, ry - o.rowH / 2 + 4, w - 28, o.rowH - 8); ctx.restore(); }
+      let cx = -w / 2 + 20;
+      r.forEach((cell, ci) => {
+        const str = String(cell), nCh = Math.ceil(str.length * clamp(g * 1.5, 0, 1));
+        const col = ri === o.hi ? P.term : ri === 0 ? P.pink : P.green;
+        K.text(ctx, str.slice(0, nCh), cx + cols[ci] / 2, ry, { size: o.size, weight: ri === 0 ? 700 : 500, font: K.FONT.mono, fill: col, glow: ri === o.hi ? null : col, glowR: 6 });
+        cx += cols[ci];
+      });
+      if (ri === 0) K.line(ctx, [[-w / 2 + 16, ry + o.rowH / 2], [w / 2 - 16, ry + o.rowH / 2]], { stroke: P.pink, w: 2.5, boil: 0.3, seed: o.seed + 50, alpha: 0.7 });
+    });
+    ctx.restore();
+  };
+  function termWindow(ctx, w, h, seed, title) {
+    K.shape(ctx, K.rrPts(-w / 2, -h / 2, w, h, 16, 3), { fill: P.term, w: 6, boil: 0.7, seed, rim: { color: P.cyan, dx: 4, dy: 4, a: 0.6 }, glow: K.rgba(P.cyan, 0.35), glowR: 30 });
+    K.shape(ctx, K.rrPts(-w / 2, -h / 2, w, 36, 16, 2).map((p) => [p[0], Math.min(p[1], -h / 2 + 36)]), { fill: P.termEdge, w: 4, boil: 0.5, seed: seed + 1 });
+    [P.loss, P.yellow, P.green].forEach((c, i) => K.dot(ctx, -w / 2 + 24 + i * 24, -h / 2 + 18, 7, c, P.ink, 2.5, seed + 2 + i));
+    if (title) K.text(ctx, title, 0, -h / 2 + 19, { size: 16, font: K.FONT.pixel, fill: P.cyan });
+    ctx.save(); ctx.fillStyle = "rgba(0,0,0,0.25)"; for (let yy = -h / 2 + 38; yy < h / 2 - 4; yy += 5) ctx.fillRect(-w / 2 + 6, yy, w - 12, 1.5); ctx.restore();
+  }
+  K.termWindow = termWindow;
+
+  /* ---------- hologram formula panel (projected from a floor emitter) ----------
+     lines: strings or {t, c}; write 0..1 types them letter by letter */
+  K.holo = function (ctx, x, y, w, h, lines, opt) {
+    const o = Object.assign({ a: 1, size: 54, seed: 31, write: 1, font: K.FONT.mono, emitter: true }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    ctx.save(); ctx.translate(x, y);
+    if (o.emitter) {
+      K.shape(ctx, K.rrPts(-90, h / 2 + 70, 180, 34, 14, 2), { fill: P.metalDark, w: 5, boil: 0.5, seed: o.seed + 9, rim: { color: P.cyan, a: 0.7 } });
+      ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha *= 0.18 * a; ctx.fillStyle = P.cyan;
+      ctx.beginPath(); ctx.moveTo(-70, h / 2 + 72); ctx.lineTo(70, h / 2 + 72); ctx.lineTo(w / 2, h / 2); ctx.lineTo(-w / 2, h / 2); ctx.closePath(); ctx.fill(); ctx.restore();
+    }
+    ctx.scale(1, a);
+    ctx.save(); ctx.globalCompositeOperation = "lighter";
+    ctx.fillStyle = K.rgba(P.cyan, 0.12); K.pathOf(ctx, K.rrPts(-w / 2, -h / 2, w, h, 14, 3), true); ctx.fill();
+    ctx.fillStyle = K.rgba(P.cyan, 0.08); for (let yy = -h / 2; yy < h / 2; yy += 7) ctx.fillRect(-w / 2, yy, w, 2.5);
+    ctx.restore();
+    K.neon(ctx, K.rrPts(-w / 2, -h / 2, w, h, 14, 3), { color: P.cyan, w: 4, closed: true, on: K.flick(K.now, o.seed, 0.3), seed: o.seed, boil: 0.4 });
+    const lh = o.size * 1.3, top = -((lines.length - 1) * lh) / 2;
+    lines.forEach((ln, i) => {
+      const str = typeof ln === "string" ? ln : ln.t, col = typeof ln === "string" ? "#dffaff" : ln.c || "#dffaff";
+      const n = Math.floor(str.length * clamp(o.write * lines.length - i, 0, 1));
+      if (n > 0) K.text(ctx, str.slice(0, n), -w / 2 + 40, top + i * lh, { size: o.size, weight: 500, font: o.font, fill: col, align: "left", glow: col === "#dffaff" ? P.cyan : col, glowR: 14 });
+    });
+    ctx.restore();
+  };
+
+  /* ---------- chart on a CRT monitor ----------
+     series: [{ data, color, kind: "line" | "bar" | "candle" }]; candle data = [[o,h,l,c], ...] */
+  K.monitorChart = function (ctx, x, y, w, h, series, opt) {
+    const o = Object.assign({ a: 1, draw: 1, seed: 41, yMin: null, yMax: null, xLabels: [], title: "", grid: true }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    K.wallScreen(ctx, x - w / 2, y - h / 2, w, h, (c, W, H) => K.plot(c, W, H, series, o), { a, seed: o.seed });
+  };
+  /* chart body, reusable inside any screen (origin top-left of the glass) */
+  K.plot = function (ctx, W, H, series, o) {
+    o = Object.assign({ draw: 1, yMin: null, yMax: null, xLabels: [], title: "", grid: true, seed: 41 }, o || {});
+    const pl = 56, pr = W - 30, pt = o.title ? 64 : 28, pb = H - (o.xLabels.length ? 52 : 28);
+    if (o.title) K.text(ctx, o.title, W / 2, 32, { size: 24, font: K.FONT.pixel, fill: P.cyan, glow: P.cyan, glowR: 8 });
+    if (o.grid) { ctx.save(); ctx.strokeStyle = K.rgba(P.violet, 0.35); ctx.lineWidth = 1.5; ctx.beginPath(); for (let i = 0; i <= 4; i++) { const yy = lerp(pt, pb, i / 4); ctx.moveTo(pl, yy); ctx.lineTo(pr, yy); } ctx.stroke(); ctx.restore(); }
+    let mn = o.yMin, mx = o.yMax;
+    if (mn == null || mx == null) { const all = series.flatMap((s) => (s.kind === "candle" ? s.data.flat() : s.data)); mn = mn == null ? Math.min(...all) : mn; mx = mx == null ? Math.max(...all) : mx; }
+    const X = (i, n) => pl + 16 + ((pr - pl - 32) * i) / Math.max(1, n - 1), Y = (v) => pb - ((v - mn) / (mx - mn || 1)) * (pb - pt);
+    series.forEach((s, si) => {
+      const n = s.data.length, col = s.color || P.cyan;
+      if (s.kind === "bar" || s.kind === "candle") {
+        const bw = ((pr - pl) / n) * (s.kind === "bar" ? 0.55 : 0.5);
+        s.data.forEach((v, i) => {
+          const g = clamp(o.draw * n - i, 0, 1); if (g <= 0) return;
+          ctx.save();
+          if (s.kind === "bar") {
+            const top = lerp(pb, Y(v), K.E.back(g, 1.4)), c = s.colors ? s.colors[i] : col;
+            ctx.fillStyle = c; ctx.shadowColor = c; ctx.shadowBlur = 12; ctx.fillRect(X(i, n) - bw / 2, top, bw, pb - top);
+          } else {
+            const [op, hi, lo, cl] = v, up = cl >= op, c = up ? P.gain : P.loss, k = K.E.out3(g), mid = (Y(op) + Y(cl)) / 2;
+            ctx.strokeStyle = c; ctx.fillStyle = c; ctx.shadowColor = c; ctx.shadowBlur = 10; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(X(i, n), lerp(mid, Y(hi), k)); ctx.lineTo(X(i, n), lerp(mid, Y(lo), k)); ctx.stroke();
+            const t1 = lerp(mid, Math.min(Y(op), Y(cl)), k), t2 = lerp(mid, Math.max(Y(op), Y(cl)), k);
+            ctx.fillRect(X(i, n) - bw / 2, t1, bw, Math.max(3, t2 - t1));
+          }
+          ctx.restore();
+        });
+      } else {
+        const k = o.draw * (n - 1), pts = [];
+        for (let i = 0; i <= Math.floor(k); i++) pts.push([X(i, n), Y(s.data[i])]);
+        const fr = k - Math.floor(k), i0 = Math.floor(k);
+        if (i0 < n - 1 && fr > 0) pts.push([lerp(X(i0, n), X(i0 + 1, n), fr), lerp(Y(s.data[i0]), Y(s.data[i0 + 1]), fr)]);
+        if (pts.length > 1) {
+          ctx.save(); ctx.beginPath(); ctx.moveTo(pts[0][0], pb); pts.forEach((p) => ctx.lineTo(p[0], p[1])); ctx.lineTo(pts[pts.length - 1][0], pb); ctx.closePath();
+          const gr = ctx.createLinearGradient(0, pt, 0, pb); gr.addColorStop(0, K.rgba(col, 0.35)); gr.addColorStop(1, K.rgba(col, 0)); ctx.fillStyle = gr; ctx.fill(); ctx.restore();
+          K.neon(ctx, pts, { color: col, w: 5, seed: o.seed + 30 + si, boil: 0 });
+          const hd = pts[pts.length - 1]; K.glow(ctx, hd[0], hd[1], 26, K.rgba(col, 0.9), 1); K.dot(ctx, hd[0], hd[1], 6, "#ffffff", null, 0, o.seed + 40 + si);
+        }
+      }
+    });
+    o.xLabels.forEach((lb, i) => K.text(ctx, lb, X(i, o.xLabels.length), pb + 28, { size: 18, font: K.FONT.pixel, fill: P.shellShade }));
+  };
+
+  /* ---------- task board (bullets): each bullet pops with a lit pixel icon ----------
+     items: strings or {t, icon, c}; shown: number visible (fractional = popping); done: items checked */
+  K.taskBoard = function (ctx, x, y, w, items, opt) {
+    const o = Object.assign({ a: 1, size: 38, seed: 51, shown: 99, title: "", lineH: null, done: 0 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const lh = o.lineH || o.size * 1.7, h = items.length * lh + (o.title ? 116 : 56);
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    K.shape(ctx, K.rrPts(-w / 2, -h / 2, w, h, 24, 3), { fill: P.wallLight, w: 6, boil: 0.8, seed: o.seed, shade: { color: P.ink, dx: -10, dy: -10, a: 0.5 }, rim: { color: P.pink, dx: 5, dy: 5, a: 0.8 } });
+    K.shape(ctx, K.rrPts(-w / 2 + 16, -h / 2 + 16, w - 32, h - 32, 14, 3), { fill: "#0a0d26", w: 4, boil: 0.5, seed: o.seed + 3 });
+    let yy = -h / 2 + 28 + lh / 2;
+    if (o.title) { K.text(ctx, o.title, 0, -h / 2 + 62, { size: o.size * 1.05, font: K.FONT.display, fill: P.pink, glow: P.pink, glowR: 12 }); yy += 56; }
+    items.forEach((it, i) => {
+      const g = clamp(o.shown - i, 0, 1); if (g <= 0) return;
+      const s = K.E.back(g, 2), str = typeof it === "string" ? it : it.t, done = i < o.done;
+      const icon = done ? "check" : (typeof it === "string" ? null : it.icon) || "play", col = done ? P.green : (typeof it === "string" ? null : it.c) || P.cyan;
+      ctx.save(); ctx.translate(-w / 2 + 64, yy + i * lh); ctx.scale(s, s);
+      K.shape(ctx, K.rrPts(-24, -24, 48, 48, 10, 2), { fill: P.screen, w: 4, boil: 0.4, seed: o.seed + 10 + i });
+      K.pix(ctx, icon, 0, 0, 5, col, { glow: 1 });
+      K.text(ctx, str, 46, 2, { size: o.size, weight: 500, font: K.FONT.text, fill: "#eef0ff", align: "left" });
+      ctx.restore();
+    });
+    ctx.restore();
+  };
+
+  /* ---------- retro terminal: code typed out (Python highlight) ---------- */
+  const KW = /^(def|class|return|import|from|for|in|if|elif|else|while|with|as|async|await|yield|lambda|not|and|or|is|None|True|False|try|except|pass|break|continue|self)$/;
+  K.terminal = function (ctx, x, y, w, lines, opt) {
+    const o = Object.assign({ a: 1, size: 26, seed: 61, typed: 1, title: "agent.py" }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const lh = o.size * 1.5, h = lines.length * lh + 80;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    termWindow(ctx, w, h, o.seed, o.title);
+    ctx.save(); ctx.font = `500 ${o.size}px ${K.FONT.mono}`; const cw = ctx.measureText("M").width; ctx.restore();
+    const total = lines.reduce((s, l) => s + l.length, 0); let budget = Math.floor(total * o.typed), cur = null;
+    lines.forEach((ln, i) => {
+      const yy = -h / 2 + 62 + lh / 2 + i * lh;
+      K.text(ctx, String(i + 1), -w / 2 + 30, yy, { size: o.size * 0.8, weight: 500, font: K.FONT.mono, fill: P.termEdge });
+      if (budget <= 0) return;
+      const vis = ln.slice(0, budget); budget -= ln.length; let col = 0;
+      const toks = vis.match(/#.*$|"[^"]*"?|'[^']*'?|[A-Za-z_][A-Za-z0-9_]*|[0-9][0-9_.]*|\s+|./g) || [];
+      toks.forEach((tk) => {
+        const c = tk.startsWith("#") ? "#5f6b9e" : KW.test(tk) ? P.pink : /^[0-9]/.test(tk) ? P.yellow : /^["']/.test(tk) ? P.green : P.cyan;
+        K.text(ctx, tk, -w / 2 + 62 + col * cw, yy, { size: o.size, weight: KW.test(tk) ? 700 : 500, font: K.FONT.mono, fill: c, align: "left" });
+        col += tk.length;
+      });
+      cur = [-w / 2 + 62 + col * cw, yy];
+    });
+    if (cur && Math.floor(K.now * 2.5) % 2 === 0) { ctx.fillStyle = P.green; ctx.fillRect(cur[0] + 2, cur[1] - o.size * 0.5, o.size * 0.55, o.size); }
+    ctx.restore();
+  };
+
+  /* ---------- loop ring: N icon nodes on a circle with a running light ----------
+     steps: [{ icon, color }], active: fractional index of the light (0..N), a appear */
+  K.loopRing = function (ctx, x, y, R, steps, opt) {
+    const o = Object.assign({ a: 1, active: 0, seed: 81, nodeR: 74, start: -Math.PI / 2, lit: 1 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const n = steps.length, ang = (i) => o.start + (i / n) * K.TAU;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    const ring = []; for (let i = 0; i < 64; i++) ring.push([Math.cos((i / 64) * K.TAU) * R, Math.sin((i / 64) * K.TAU) * R]);
+    K.shape(ctx, ring, { fill: null, w: 22, stroke: P.ink, boil: 0.4, seed: o.seed });
+    K.neon(ctx, ring, { color: P.violet, w: 6, closed: true, on: 0.55, seed: o.seed + 1, boil: 0 });
+    /* arrow heads between nodes (direction of the loop) */
+    for (let i = 0; i < n; i++) {
+      const am = ang(i + 0.5), px = Math.cos(am) * R, py = Math.sin(am) * R;
+      ctx.save(); ctx.translate(px, py); ctx.rotate(am + Math.PI / 2);
+      K.shape(ctx, [[16, 0], [-10, -14], [-4, 0], [-10, 14]], { fill: P.violet, w: 4, boil: 0.4, seed: o.seed + 10 + i });
+      ctx.restore();
+    }
+    /* running light */
+    if (o.lit > 0) {
+      const al = ang(o.active), lx = Math.cos(al) * R, ly = Math.sin(al) * R;
+      K.glow(ctx, lx, ly, 70, K.rgba(P.yellow, 0.95), o.lit); K.dot(ctx, lx, ly, 11, "#ffffff", null, 0, o.seed + 20);
+    }
+    steps.forEach((s, i) => {
+      const ax = Math.cos(ang(i)) * R, ay = Math.sin(ang(i)) * R, d = Math.abs(((o.active - i) % n + n + n / 2) % n - n / 2), hot = clamp(1 - d * 1.6, 0, 1);
+      K.node(ctx, ax, ay, 1 + 0.15 * hot, { icon: s.icon, color: s.color || P.cyan, r: o.nodeR, hot, seed: o.seed + 30 + i * 5 });
+    });
+    ctx.restore();
+  };
+
+  /* ---------- neon tube sign frame (returns the inner box for DOM text) ---------- */
+  K.neonSign = function (ctx, cx, cy, w, h, opt) {
+    const o = Object.assign({ on: 1, seed: 91, color: P.pink, color2: P.cyan, a: 1 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return null;
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(a, a);
+    /* backing plate with hanging chains */
+    [-1, 1].forEach((sd, i) => K.line(ctx, [[sd * (w / 2 - 80), -h / 2 - 220], [sd * (w / 2 - 80), -h / 2]], { stroke: P.metal, w: 5, boil: 0.4, seed: o.seed + 20 + i }));
+    K.shape(ctx, K.rrPts(-w / 2, -h / 2, w, h, 40, 4), { fill: "#0b0c2a", w: 7, boil: 0.7, seed: o.seed, shade: { color: P.ink, dx: -10, dy: -12, a: 0.6 }, dots: { gap: 12, r: 2.2, alpha: 0.35, color: P.inkSoft } });
+    K.neon(ctx, K.rrPts(-w / 2 + 18, -h / 2 + 18, w - 36, h - 36, 28, 4), { color: o.color, w: 7, closed: true, on: o.on, seed: o.seed + 1, boil: 0.3 });
+    K.neon(ctx, K.rrPts(-w / 2 + 38, -h / 2 + 38, w - 76, h - 76, 18, 4), { color: o.color2, w: 4, closed: true, on: o.on * 0.8, seed: o.seed + 2, boil: 0.3 });
+    ctx.restore();
+    return { x: cx - (w * a) / 2, y: cy - (h * a) / 2, w: w * a, h: h * a };
+  };
+  void hs;
+})(AK);
+
+/* ============================================================
+   GALLERY: every explainer primitive of the neon-floor kit, for regression
+   snapshots after kit changes. Board A (0 - 3 s): graph, scoreboard + LED
+   digits, terminal table, hologram formula, monitor chart. Board B (3 - 6 s):
+   terminal code, task board, loop ring, the whole cast, ticket, icons.
+   ============================================================ */
+const K = AK, P = K.P, DUR = 6;
+const ctx = document.getElementById("cv").getContext("2d");
+function room() {
+  K.wall(ctx, -10, 1930, -10, 760, { seed: 3, strip: 1 });
+  K.floorGrid(ctx, -10, 1930, 760, 330, { vx: 960, scroll: K.now * 0.5 });
+}
+function boardA(t) {
+  room();
+  /* graph: pods + cables */
+  const N = { A: [180, 300], B: [520, 160], C: [560, 470] };
+  K.edge(ctx, N.A, N.B, { state: "hot", label: "0.82", seed: 3, bend: -30 });
+  K.edge(ctx, N.B, N.C, { state: "plain", label: "1.4", seed: 5, color: P.pink });
+  K.edge(ctx, N.C, N.A, { state: "dim", label: "-0.3", seed: 7 });
+  K.node(ctx, N.A[0], N.A[1], 0.8, { icon: "eye", label: "DATA", color: P.cyan, hot: 0.6, seed: 11 });
+  K.node(ctx, N.B[0], N.B[1], 0.8, { icon: "brain", label: "LLM", color: P.pink, seed: 12 });
+  K.node(ctx, N.C[0], N.C[1], 0.8, { icon: "bolt", label: "EXEC", color: P.yellow, seed: 13 });
+  K.scoreboard(ctx, 1000, 170, 360, 180, [{ v: "+12.4%", c: P.green }], { label: "PNL", seed: 14 });
+  K.seg7(ctx, "0123456789", 1000, 330, 56, P.cyan);
+  K.seg7(ctx, "-3.14 $ 09:30", 1000, 410, 46, P.pink);
+  K.termTable(ctx, 1560, 280, [150, 150, 140], [["SYM", "SIG", "P&L"], ["NVDA", "BUY", "+2.1"], ["AAPL", "HOLD", "0.0"], ["TSLA", "SELL", "-0.7"]], { hi: 1, title: "signals.csv", size: 24, rowH: 46, seed: 15 });
+  K.holo(ctx, 430, 760, 640, 170, ["R = Σ w·r", { t: "a* = argmax Q", c: P.yellow }], { size: 44, seed: 16 });
+  K.monitorChart(ctx, 1320, 760, 760, 360, [{ kind: "bar", data: [3, 5, 4, 7, 6], color: P.violet }, { data: [2, 4, 3.4, 6, 7.5], color: P.cyan }], { title: "EQUITY", xLabels: ["M", "T", "W", "T", "F"], seed: 17 });
+}
+function boardB(t) {
+  room();
+  K.terminal(ctx, 470, 260, 820, ["def act(obs):", "    sig = llm.decide(obs)  # plan", "    if risk.ok(sig):", "        return broker.send(sig, 100)"], { title: "agent.py", size: 24, seed: 21 });
+  K.taskBoard(ctx, 1420, 240, 760, ["Observe the market", { t: "Decide with tools", icon: "brain", c: P.pink }, { t: "Act, then log", icon: "bolt", c: P.yellow }], { title: "LOOP", done: 1, size: 32, seed: 22 });
+  K.loopRing(ctx, 300, 760, 150, [{ icon: "eye", color: P.cyan }, { icon: "fork", color: P.pink }, { icon: "bolt", color: P.yellow }], { active: (t * 1.2) % 3, nodeR: 56, seed: 23 });
+  const eyes = ["dot", "happy", "wide", "heart"];
+  [["lead", 640], ["analyst", 900], ["risk", 1160], ["trader", 1420]].forEach(([k, x], i) => {
+    K.robot(ctx, x, 1060, 0.78, { kind: k, eyes: eyes[i], mouth: i === 3 ? "talk" : "smile", bulb: 1, chest: 1, hold: k === "analyst" ? { L: "lens" } : k === "risk" ? { L: "shield" } : k === "trader" ? { R: "ticket" } : { R: "baton" } });
+  });
+  K.ticket(ctx, 1700, 640, 1.2, { sym: "BTC", dir: "up", qty: "2", stamp: 1, seed: 24 });
+  Object.keys(K.ICONS).forEach((nm, i) => K.pix(ctx, nm, 1640 + (i % 6) * 46, 880 + Math.floor(i / 6) * 50, 4, [P.cyan, P.pink, P.yellow, P.green][i % 4], { glow: 0.5 }));
+}
+function render(t) {
+  K.begin(ctx, t, { x: 960, y: 540, z: 1, rot: 0 }); K.applyCam(ctx, 1);
+  if (t < 3) boardA(t); else boardB(t);
+}
+const TL = gsap.timeline({ paused: true }), drv = { _t: 0 };
+Object.defineProperty(drv, "t", { get() { return this._t; }, set(v) { this._t = v; render(v); } });
+TL.to(drv, { t: DUR, duration: DUR, ease: "none" }, 0);
+render(0);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(drv._t));
+window.__timelines["main"] = TL;
+
+})();
+    </script>
+  </body>
+</html>
