@@ -20,6 +20,11 @@
      reactA           { kind: surprise|nod|think|grin|thumbs|shrug, amt 0..1 }
      reactB           { kind: surprise|nod|think|write|flip, amt 0..1 }
      holdA            fn(ctx) prop in the owl's left glove (e.g. a flask), drawn in the hand frame
+     holdAR           the same for the right glove; carryPoseR/L {x, y, hand} move the carrying glove,
+                      carryAmt 0..1 raises it from rest (episodes: HOST.duo carryR/carryL)
+     hopA, squashA    owl lift (px) and extra squash; birdDx, birdDy  offset Pico; hideB  no Pico
+     poseOnly         true: draw nothing, return { A, B } pose objects (HOST.owlPose / picoPose)
+     reactA kinds also: worry | jump | magnifier;  reactB also: worry | flap | grin
      stage            "bench" (default) | "none"
      a                appear 0..1 (pops the duo in)
    ============================================================ */
@@ -53,23 +58,26 @@ var LK = window.LK || (window.LK = {});
     const accA = envAt(tA, o.accA), accB = envAt(tB, o.accB);
     /* Pico hovers clear of the owl's head (beak tip stays outside the head disc) */
     const pointing = o.pointA && (o.pointAmtA == null || o.pointAmtA > 0) ? (o.pointAmtA == null ? 1 : o.pointAmtA) : 0;
-    const sB = s * 1.15, bx = x + side * 370 * s, by = y - (230 + 130 * pointing) * s; /* lifts so the owl's pointing arm passes under */
+    const sB = s * 1.15, bx = x + side * 370 * s + (o.birdDx || 0), by = y - (230 + 130 * pointing) * s + (o.birdDy || 0); /* lifts so the owl's pointing arm passes under */
     const pop = app >= 1 ? 1 : K.E.back(app, 2.2);
 
-    if (o.stage !== "none") { ctx.save(); ctx.translate(x + side * 140 * s, y); ctx.scale(s, s); K.bench(ctx, -420, 420, 0, { seed: 960 }); ctx.restore(); }
+    if (o.stage !== "none" && !o.poseOnly) { ctx.save(); ctx.translate(x + side * 140 * s, y); ctx.scale(s, s); K.bench(ctx, -420, 420, 0, { seed: 960 }); ctx.restore(); }
 
     /* ---------- the owl ---------- */
-    const A = { seed: 700, blink: K.blinkAt(t, 3), mouth: "smile", talk: tA, viseme: o.visA, look: [0.15 * Math.sin(t * 0.7), 0], squash: 0.03 * Math.sin(t * 2.3), yaw: 0 };
+    const A = { seed: 700, blink: K.blinkAt(t, 3), mouth: "smile", talk: tA, viseme: o.visA, look: [0.15 * Math.sin(t * 0.7), 0], squash: 0.03 * Math.sin(t * 2.3) + (o.squashA || 0), yaw: 0, hop: o.hopA || 0 };
     let wR = { x: 125 + 5 * Math.sin(t * 2.1), y: -140 + 6 * Math.sin(t * 2.4), hand: "open" }, wL = { x: -125 + 5 * Math.sin(t * 1.9 + 1), y: -140 + 6 * Math.sin(t * 2.6), hand: "open", hold: o.holdA };
     if (who === "a" && accA > 0) {
       const G = GEST_A[(o.gestA != null ? o.gestA : Math.floor(K.hash(Math.floor(t / 1.6), 77) * GEST_A.length)) % GEST_A.length];
-      if (G.R) wR = mix(wR, G.R, accA);
+      if (G.R && !o.holdAR) wR = mix(wR, G.R, accA);
       if (G.L && !o.holdA) wL = mix(wL, G.L, accA);
       A.squash += 0.1 * accA; A.brow = 0.5 * accA;
     }
+    const cAmt = o.carryAmt == null ? 1 : clamp(o.carryAmt, 0, 1);
+    if (o.holdAR) wR = mix(wR, Object.assign({ x: 175, y: -270, hand: "hold" }, o.carryPoseR || {}, { hold: o.holdAR }), cAmt);
+    if (o.holdA && (o.carryPoseL || o.carryAmt != null)) wL = mix(wL, Object.assign({ x: -175, y: -270, hand: "hold" }, o.carryPoseL || {}, { hold: o.holdA }), cAmt);
     if (who === "b") { A.look = [0.9 * side, -0.4]; A.tilt = 6 * side; A.nod = 0.8 * accB; }
     if (o.pointA && (o.pointAmtA == null || o.pointAmtA > 0)) {
-      const amt = o.pointAmtA == null ? 1 : o.pointAmtA, lx = (o.pointA[0] - x) / s, ly = (o.pointA[1] - y) / s, sd = lx >= 0 ? 1 : -1;
+      const amt = o.pointAmtA == null ? 1 : o.pointAmtA, lx = (o.pointA[0] - x) / s, ly = (o.pointA[1] - y) / s, sd0 = lx >= 0 ? 1 : -1, sd = (sd0 > 0 && o.holdAR && !o.holdA) ? -1 : (sd0 < 0 && o.holdA && !o.holdAR) ? 1 : sd0; /* the free glove points */
       const sh = [sd * 86, -215], d = Math.hypot(lx - sh[0], ly - sh[1]) || 1, r = Math.min(d, 185);
       const tgt = { x: sh[0] + ((lx - sh[0]) / d) * r, y: sh[1] + ((ly - sh[1]) / d) * r, hand: "point" };
       if (sd > 0) wR = mix(wR, tgt, amt); else wL = mix(wL, tgt, amt);
@@ -82,6 +90,9 @@ var LK = window.LK || (window.LK = {});
       if (rA.kind === "nod") A.nod = Math.max(A.nod || 0, u * (0.5 + 0.5 * Math.sin(t * 9)));
       if (rA.kind === "think") { wR = mix(wR, { x: 62, y: -215, hand: "fist" }, u); A.look = [0.4, -0.9]; A.tilt = -8 * u; A.brow = 0.8 * u; }
       if (rA.kind === "grin") A.mouth = "grin";
+      if (rA.kind === "worry") { A.brow = -u; A.mouth = "o"; A.tilt = -7 * u; A.look = [0.3, 0.6]; A.squash -= 0.05 * u; wL = mix(wL, { x: -60, y: -170, hand: "fist" }, u * 0.8); }
+      if (rA.kind === "jump") { A.mouth = "open"; A.tufts = u; wR = mix(wR, { x: 150, y: -330, hand: "open" }, u); wL = mix(wL, { x: -150, y: -330, hand: "open" }, u); }
+      if (rA.kind === "magnifier") { wR = mix(wR, { x: 170, y: -280, hand: "hold", hold: (c) => K.magnifier(c, 0, -20, -0.5, 0.85, 905) }, u); A.look = [0.8, -0.2]; A.brow = 0.5 * u; }
       if (rA.kind === "thumbs") wR = mix(wR, { x: 160, y: -300, hand: "thumb" }, u);
       if (rA.kind === "shrug") { wR = mix(wR, { x: 170, y: -240, hand: "open" }, u); wL = mix(wL, { x: -170, y: -240, hand: "open" }, u); A.tilt = 8 * u; }
     }
@@ -115,16 +126,23 @@ var LK = window.LK || (window.LK = {});
         B.wingR = { mode: "point", x: 70 + 10 * Math.sin(t * 14), y: -70 + 6 * Math.cos(t * 11) };
       }
       if (rB.kind === "flip") B.lean = 360 * K.E.inOut(u);
+      if (rB.kind === "worry") { B.lean = -9 * u; B.look = [0.2, 0.9]; B.squash -= 0.08 * u; B.crest = 0; }
+      if (rB.kind === "flap") { B.crest = u; B.squash += 0.1 * u * Math.abs(Math.sin(t * 16)); B.wingR = { mode: "point", x: 60, y: -260 + 40 * Math.sin(t * 22) }; }
+      if (rB.kind === "grin") { B.crest = 0.6 * u; B.squash += 0.06 * u; }
     }
 
+    if (o.poseOnly) return { A, B, bx, by, sB };
     /* draw: owl, then Pico (Pico hovers a little in front of the owl's shoulder line) */
     ctx.save(); ctx.translate(x, y); ctx.scale(pop, pop); ctx.translate(-x, -y);
     ctx.save(); ctx.globalAlpha = 0.22; ctx.fillStyle = P.woodDark; ctx.beginPath(); ctx.ellipse(x, y + 4, 120 * s, 14 * s, 0, 0, K.TAU); ctx.fill(); ctx.restore();
     K.owl(ctx, x, y, s, A);
     ctx.restore();
     ctx.save(); ctx.translate(bx, by); ctx.scale(pop, pop); ctx.translate(-bx, -by);
-    K.hummingbird(ctx, bx, by, sB, B);
+    if (!o.hideB) K.hummingbird(ctx, bx, by, sB, B);
     ctx.restore();
-    return { owl: [x, y], bird: [bx, by], owlHead: [x, y - 300 * s], birdHead: [bx + B.dir * 22 * sB, by - 170 * sB] };
+    const hp = (w) => [x + s * w.x, y - s * (A.hop || 0) + s * w.y];
+    const xs = [x - 170 * s, bx + 150 * sB], x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
+    const free = side > 0 ? { x0: x1 + 40, x1: 1856, y0: 64, y1: 1016 } : { x0: 64, x1: x0 - 40, y0: 64, y1: 1016 };
+    return { owl: [x, y], bird: [bx, by], owlHead: [x, y - 300 * s], birdHead: [bx + B.dir * 22 * sB, by - 170 * sB], handR: hp(wR), handL: hp(wL), free };
   };
 })(LK);
