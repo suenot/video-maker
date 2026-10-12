@@ -1,0 +1,1817 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[{"id":"title","type":"string","label":"Title (| = line break)","default":"Statistical Arbitrage|& Pairs Trading"},{"id":"lang","type":"string","label":"Language: en, ru, zh-CN, zh-TW","default":"en"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Statistical Arbitrage and Pairs Trading: intro</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Playfair Display"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/PlayfairDisplay-700-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Playfair Display"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/PlayfairDisplay-700-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Playfair Display"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/PlayfairDisplay-700-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Playfair Display"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/PlayfairDisplay-900-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Playfair Display"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/PlayfairDisplay-900-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Playfair Display"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/PlayfairDisplay-900-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Oswald"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Oswald-500-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Oswald"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Oswald-500-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Oswald"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Oswald-500-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Oswald"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Oswald-500-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Oswald"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/Oswald-700-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "Oswald"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/Oswald-700-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Oswald"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/Oswald-700-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Oswald"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/Oswald-700-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-500-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-500-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-500-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-500-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-700-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-700-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-700-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-700-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "CJK SC"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/NotoSerifSC-900-subset.woff2") format("woff2"); }
+@font-face { font-family: "CJK TC"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/NotoSerifTC-900-subset.woff2") format("woff2"); }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #141312; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #141312; }
+      #cv, #fx { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      #title { position: absolute; left: 0; top: 0; width: 1920px; height: 0; pointer-events: none; }
+      #title .ln { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap; line-height: 1.12; }
+      #title .fit { display: inline-block; white-space: nowrap; }
+      #title .ch { display: inline-block; will-change: transform, opacity; }
+      #title .l0 { font-family: "Playfair Display", "CJK SC", "CJK TC", serif; font-weight: 900; color: #ece7da; letter-spacing: 0.01em; }
+      #title .l1 { font-family: "Playfair Display", "CJK SC", "CJK TC", serif; font-weight: 900; color: #e9b43a; -webkit-text-stroke: 6px #141312; paint-order: stroke fill; letter-spacing: 0.02em; }
+      #title.cjk-sc .ln { font-family: "Playfair Display", "CJK SC", serif; }
+      #title.cjk-tc .ln { font-family: "Playfair Display", "CJK TC", serif; }
+      #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
+      #preload .p7 { font-family: "Playfair Display"; font-weight: 700; }
+      #preload .p9 { font-family: "Playfair Display"; font-weight: 900; }
+      #preload .o5 { font-family: "Oswald"; font-weight: 500; }
+      #preload .o7 { font-family: "Oswald"; font-weight: 700; }
+      #preload .m5 { font-family: "IBM Plex Mono"; font-weight: 500; }
+      #preload .m7 { font-family: "IBM Plex Mono"; font-weight: 700; }
+      #preload .sc { font-family: "CJK SC"; font-weight: 900; }
+      #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      #grain { opacity: 0.22; mix-blend-mode: overlay; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20.1" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div id="title" data-layout-allow-overlap data-layout-allow-occlusion></div>
+      <canvas id="fx" width="1920" height="1080" data-layout-allow-overflow data-layout-allow-occlusion></canvas>
+      <div class="ov" id="grain"></div>
+      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="20.1" data-track-index="10" data-volume="1"></audio>
+      <div id="preload"><span class="p7">Aa Бб 0</span><span class="p9">Aa Бб 0</span><span class="o5">Aa Бб 0</span><span class="o7">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span><span class="sc">统计套利</span><span class="tc">統計套利</span></div>
+    </div>
+    <script>
+(function () {
+/* ============================================================
+   VAUDEVILLE KIT 00 CORE: math, seeded random, noise, splines, beat grid, boil clock
+   Every frame is a pure function of time t (seconds). No Math.random,
+   no Date.now, no performance.now anywhere in the kit.
+   ============================================================ */
+var VK = window.VK || (window.VK = {});
+(function (K) {
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const inv = (a, b, v) => clamp((v - a) / (b - a), 0, 1);
+  const ss = (a, b, t) => { const u = inv(a, b, t); return u * u * (3 - 2 * u); };
+  const f1 = (n) => Math.round(n * 10) / 10;
+  const f2 = (n) => Math.round(n * 100) / 100;
+
+  /* eases (u in 0..1) */
+  const E = {
+    inOut: (u) => u * u * (3 - 2 * u),
+    out3: (u) => 1 - Math.pow(1 - u, 3),
+    in3: (u) => u * u * u,
+    back: (u, s) => { s = s == null ? 1.7 : s; const v = u - 1; return 1 + v * v * ((s + 1) * v + s); },
+    elastic: (u) => (u <= 0 ? 0 : u >= 1 ? 1 : Math.pow(2, -9 * u) * Math.sin((u * 10 - 0.75) * (2 * Math.PI) / 3) + 1),
+  };
+  /* tween value from a to b during [t0, t1] with an ease */
+  const tw = (t, t0, t1, a, b, ease) => lerp(a, b, (ease || E.inOut)(inv(t0, t1, t)));
+
+  /* seeded PRNG (mulberry32) */
+  function mulberry(seed) {
+    let s = seed | 0;
+    return function () {
+      s = (s + 0x6d2b79f5) | 0;
+      let q = Math.imul(s ^ (s >>> 15), 1 | s);
+      q = (q + Math.imul(q ^ (q >>> 7), 61 | q)) ^ q;
+      return ((q ^ (q >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  /* stateless hash -> [0,1) for (i, seed) */
+  function hash(i, s) {
+    let h = (Math.imul(i | 0, 374761393) + Math.imul(s | 0, 668265263)) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+  }
+  const hs = (i, s) => hash(i, s) * 2 - 1; /* signed */
+  function vnoise(x, s) { const i = Math.floor(x), f = x - i, u = f * f * (3 - 2 * f); return lerp(hash(i, s), hash(i + 1, s), u); }
+  function fbm(x, s, oct) { let a = 0.5, v = 0, fr = 1, n = 0; for (let k = 0; k < (oct || 3); k++) { v += a * vnoise(x * fr, s + k * 17); n += a; a *= 0.5; fr *= 2.03; } return v / n; }
+
+  /* monotone cubic Hermite spline through [[t, v], ...] (no overshoot) */
+  function mkSpline(pts) {
+    const n = pts.length, T = pts.map((p) => p[0]), V = pts.map((p) => p[1]);
+    if (n === 1) return () => V[0];
+    const d = [], m = new Array(n).fill(0);
+    for (let i = 0; i < n - 1; i++) d[i] = (V[i + 1] - V[i]) / (T[i + 1] - T[i]);
+    m[0] = d[0]; m[n - 1] = d[n - 2];
+    for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2;
+    for (let i = 0; i < n - 1; i++) {
+      if (d[i] === 0) { m[i] = 0; m[i + 1] = 0; continue; }
+      const a = m[i] / d[i], b = m[i + 1] / d[i], s = a * a + b * b;
+      if (s > 9) { const tau = 3 / Math.sqrt(s); m[i] = tau * a * d[i]; m[i + 1] = tau * b * d[i]; }
+    }
+    return function (x) {
+      x = clamp(x, T[0], T[n - 1]);
+      let i = 0; while (i < n - 2 && x >= T[i + 1]) i++;
+      const h = T[i + 1] - T[i], u = (x - T[i]) / h, u2 = u * u, u3 = u2 * u;
+      return (2 * u3 - 3 * u2 + 1) * V[i] + (u3 - 2 * u2 + u) * h * m[i] + (-2 * u3 + 3 * u2) * V[i + 1] + (u3 - u2) * h * m[i + 1];
+    };
+  }
+  /* keys: [[t, {a:.., b:..}], ...] -> fn(t) -> {a, b} (one spline per channel) */
+  function mkTrack(keys) {
+    const names = Object.keys(keys[0][1]), sp = {};
+    names.forEach((k) => { sp[k] = mkSpline(keys.map((q) => [q[0], q[1][k]])); });
+    return (t) => { const o = {}; names.forEach((k) => (o[k] = sp[k](t))); return o; };
+  }
+
+  /* ---------- beat grid (retime to the real song by changing BPM/OFFSET or BARS) ----------
+     BARS: optional list of measured downbeat times (seconds). Songs cut from
+     several takes drift a few ms per splice, so measured downbeats beat a
+     single OFFSET. Past the list, bars extrapolate at BPM. */
+  const G = { BPM: 150, OFFSET: 0, BEATS_PER_ACCENT: 4, BARS: null };
+  const beatLen = () => 60 / G.BPM;
+  const barLen = () => beatLen() * G.BEATS_PER_ACCENT;
+  function barStart(b) {
+    const B = G.BARS;
+    if (!B || !B.length) return G.OFFSET + b * barLen();
+    if (b < 0) return B[0] + b * barLen();
+    if (b < B.length) return B[b];
+    return B[B.length - 1] + (b - B.length + 1) * barLen();
+  }
+  /* time of bar b (0-based, an "accent" = 4 beats) plus beat k (fractional ok) */
+  const at = (bar, beat) => barStart(Math.floor(bar)) + ((bar - Math.floor(bar)) * G.BEATS_PER_ACCENT + (beat || 0)) * beatLen();
+  /* index of the bar containing t (-1 before the first downbeat) */
+  function barAt(t) {
+    if (t < barStart(0)) return -1;
+    let b = 0; while (barStart(b + 1) <= t) b++;
+    return b;
+  }
+  /* 1 on the beat, decaying to 0 before the next beat (k = sharpness) */
+  function pulse(t, everyBeats, k) {
+    const b = barAt(t); if (b < 0) return 0;
+    const L = beatLen() * (everyBeats || 1), x = t - barStart(b);
+    return Math.exp(-(k || 7) * ((x % L) / L));
+  }
+  const beatIndex = (t) => { const b = barAt(t); return b < 0 ? -1 : b * G.BEATS_PER_ACCENT + Math.floor((t - barStart(b)) / beatLen()); };
+
+  /* ---------- line boil clock: drawings change 12 times per second ---------- */
+  const BOIL_FPS = 12;
+  const boilFrame = (t) => Math.floor(t * BOIL_FPS);
+
+  Object.assign(K, { clamp, lerp, inv, ss, f1, f2, E, tw, mulberry, hash, hs, vnoise, fbm, mkSpline, mkTrack,
+    G, beatLen, barLen, barStart, barAt, at, pulse, beatIndex, BOIL_FPS, boilFrame, TAU: Math.PI * 2 });
+})(VK);
+
+/* ============================================================
+   VAUDEVILLE KIT 05 PALETTE + TYPE: the only place colours and fonts live.
+   A black-and-white 1920s cartoon: everything is a grey of silver
+   nitrate film, and exactly ONE accent exists: gold = money, the
+   z-score and the winning trade. STYLE.md documents the same values.
+   ============================================================ */
+var VK = window.VK || (window.VK = {});
+(function (K) {
+  K.P = {
+    /* the grey ladder (warm silver, never pure #000 / #fff) */
+    ink: "#141312",        /* outlines, black fur, penguin backs */
+    g1: "#2b2926",         /* deep shadow, stage black */
+    g2: "#4a4743",         /* dark grey: curtains in shadow, piano */
+    g3: "#6e6a64",         /* mid grey: floor, drapes */
+    g4: "#9a958d",         /* light grey: backdrop, metal */
+    g5: "#c8c3b8",         /* pale grey: paper shade, muzzle shade */
+    paper: "#ece7da",      /* "white": gloves, bellies, cards, type on dark */
+    shine: "#fbf8f0",      /* specular highlights on black shapes */
+    /* the one accent */
+    gold: "#e9b43a", goldLight: "#ffd76a", goldDark: "#a77818", goldGlow: "#fff0b8",
+    /* data meaning (still inside the grey world: only gold is a hue) */
+    rich: "#2b2926",       /* the expensive leg: dark */
+    cheap: "#ece7da",      /* the cheap leg: light */
+  };
+  K.FONT = {
+    display: '"Playfair Display", "CJK SC", "CJK TC", serif',   /* marquee titles, act names (700/900) */
+    label: '"Oswald", "CJK SC", "CJK TC", sans-serif',          /* labels, bullets, notices (500/700) */
+    mono: '"IBM Plex Mono", monospace',                         /* numbers, z-scores, tables, code */
+    cjk: { "zh-CN": '"Playfair Display", "CJK SC", serif', "zh-TW": '"Playfair Display", "CJK TC", serif' },
+  };
+})(VK);
+
+/* ============================================================
+   VAUDEVILLE KIT 10 INK: brush-inked canvas primitives + the camera.
+   Line treatment (different from a sketchy pen): 1920s studio ink.
+   - Outlines are continuous, bold and even (no broken gaps).
+   - Open lines are BRUSH strokes: filled ribbons that taper at both
+     ends (K.brush), the signature of a hand-inked cel.
+   - Black shapes carry a white SHINE crescent (K.shape opt.shine), the
+     rubber-hose highlight, instead of hatching.
+   - Contours boil at 12 fps (hash of vertex, seed, boil frame), small
+     amplitude: the ink trembles, it does not scribble.
+   Line widths are world units, never thinner than MIN_PX on screen.
+   ============================================================ */
+var VK = window.VK || (window.VK = {});
+(function (K) {
+  const { hs, hash, clamp } = K;
+  K.MIN_PX = 2.0;
+  K.now = 0; K.bf = 0; K.zoom = 1;
+
+  /* ---------- camera: world -> screen. cam = {x, y, z, rot} (centre, zoom, degrees) ---------- */
+  K.W = 1920; K.H = 1080;
+  K.weave = [0, 0]; /* film gate weave, screen px, set per frame by K.begin */
+  K.begin = function (ctx, t, cam) {
+    K.ctx = ctx; K.now = t; K.bf = K.boilFrame(t); K.cam = cam; K.zoom = cam.z;
+    K.weave = [hs(K.bf, 4417) * 1.6, hs(K.bf, 4423) * 1.2];
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.lineJoin = "round"; ctx.lineCap = "round";
+  };
+  /* apply camera with an optional parallax factor p (1 = world plane, 0 = fixed to screen) */
+  K.applyCam = function (ctx, p) {
+    p = p == null ? 1 : p;
+    const c = K.cam, z = 1 + (c.z - 1) * p;
+    ctx.setTransform(1, 0, 0, 1, K.weave[0], K.weave[1]);
+    ctx.translate(K.W / 2, K.H / 2);
+    if (c.rot) ctx.rotate((c.rot * Math.PI) / 180 * p);
+    ctx.scale(z, z);
+    ctx.translate(-c.x * p - (K.W / 2) * (1 - p), -c.y * p - (K.H / 2) * (1 - p));
+    K.zoom = z;
+  };
+  K.screen = function (ctx) { ctx.setTransform(1, 0, 0, 1, K.weave[0], K.weave[1]); K.zoom = 1; };
+  K.toScreen = function (x, y) {
+    const c = K.cam, r = ((c.rot || 0) * Math.PI) / 180, dx = (x - c.x) * c.z, dy = (y - c.y) * c.z;
+    return [K.W / 2 + dx * Math.cos(r) - dy * Math.sin(r) + K.weave[0], K.H / 2 + dx * Math.sin(r) + dy * Math.cos(r) + K.weave[1]];
+  };
+  const curScale = (ctx) => { const m = ctx.getTransform(); return Math.sqrt(m.a * m.a + m.b * m.b) || 1; };
+  K.lw = (ctx, w) => Math.max(w, K.MIN_PX / curScale(ctx));
+
+  /* ---------- point generators ---------- */
+  K.ellipsePts = function (cx, cy, rx, ry, n, rot) {
+    const out = [], r = rot || 0, cr = Math.cos(r), sr = Math.sin(r);
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * K.TAU, x = Math.cos(a) * rx, y = Math.sin(a) * ry;
+      out.push([cx + x * cr - y * sr, cy + x * sr + y * cr]);
+    }
+    return out;
+  };
+  K.blobPts = function (cx, cy, rx, ry, n, seed, irr) {
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * K.TAU, k = 1 + (irr || 0.18) * (K.fbm(i * 0.9, seed, 2) * 2 - 1);
+      out.push([cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]);
+    }
+    return out;
+  };
+  K.rectPts = function (x, y, w, h, n) {
+    n = n || 3; const out = [];
+    for (let i = 0; i < n; i++) out.push([x + (w * i) / n, y]);
+    for (let i = 0; i < n; i++) out.push([x + w, y + (h * i) / n]);
+    for (let i = 0; i < n; i++) out.push([x + w - (w * i) / n, y + h]);
+    for (let i = 0; i < n; i++) out.push([x, y + h - (h * i) / n]);
+    return out;
+  };
+  /* rounded rectangle as points (corner radius r): cards, frames, keys */
+  K.roundPts = function (x, y, w, h, r, k) {
+    k = k || 3; r = Math.min(r, w / 2, h / 2); const out = [];
+    const C = [[x + w - r, y + r, -Math.PI / 2], [x + w - r, y + h - r, 0], [x + r, y + h - r, Math.PI / 2], [x + r, y + r, Math.PI]];
+    /* straight edges get evenly spaced points too: Catmull-Rom overshoots
+       when a long edge sits between two tightly packed corner points */
+    const step = Math.max(8, (r * Math.PI) / 2 / k);
+    C.forEach((c, ci) => {
+      for (let i = 0; i <= k; i++) { const a = c[2] + (i / k) * (Math.PI / 2); out.push([c[0] + Math.cos(a) * r, c[1] + Math.sin(a) * r]); }
+      const a1 = c[2] + Math.PI / 2, n = C[(ci + 1) % 4], e = [c[0] + Math.cos(a1) * r, c[1] + Math.sin(a1) * r], f = [n[0] + Math.cos(a1) * r, n[1] + Math.sin(a1) * r];
+      const m = Math.floor(Math.hypot(f[0] - e[0], f[1] - e[1]) / step);
+      for (let j = 1; j < m; j++) out.push([K.lerp(e[0], f[0], j / m), K.lerp(e[1], f[1], j / m)]);
+    });
+    return out;
+  };
+
+  /* ---------- boil ---------- */
+  K.boil = function (pts, seed, amp, frameOverride) {
+    const f = frameOverride == null ? K.bf : frameOverride, s = (seed | 0) + f * 7919;
+    return pts.map((p, i) => [p[0] + hs(i * 2 + 1, s) * amp, p[1] + hs(i * 2 + 2, s) * amp]);
+  };
+
+  /* ---------- smooth path through points (Catmull-Rom -> Bezier) ---------- */
+  function segs(pts, closed) {
+    const n = pts.length, out = [];
+    const P = (i) => (closed ? pts[(i + n) % n] : pts[clamp(i, 0, n - 1)]);
+    const last = closed ? n : n - 1;
+    for (let i = 0; i < last; i++) {
+      const p0 = P(i - 1), p1 = P(i), p2 = P(i + 1), p3 = P(i + 2);
+      out.push([p1, [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6], [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6], p2]);
+    }
+    return out;
+  }
+  K.pathOf = function (ctx, pts, closed) {
+    const S = segs(pts, closed);
+    ctx.beginPath(); ctx.moveTo(S[0][0][0], S[0][0][1]);
+    S.forEach((s) => ctx.bezierCurveTo(s[1][0], s[1][1], s[2][0], s[2][1], s[3][0], s[3][1]));
+    if (closed) ctx.closePath();
+  };
+  /* flatten the smooth path to k points per segment (for brush ribbons) */
+  K.sample = function (pts, closed, k) {
+    const S = segs(pts, closed), out = []; k = k || 6;
+    S.forEach((s, si) => {
+      for (let i = si === 0 ? 0 : 1; i <= k; i++) {
+        const u = i / k, v = 1 - u;
+        out.push([v * v * v * s[0][0] + 3 * v * v * u * s[1][0] + 3 * v * u * u * s[2][0] + u * u * u * s[3][0],
+          v * v * v * s[0][1] + 3 * v * v * u * s[1][1] + 3 * v * u * u * s[2][1] + u * u * u * s[3][1]]);
+      }
+    });
+    return out;
+  };
+  /* continuous, even ink outline (tiny width wobble per boil frame) */
+  K.inkStroke = function (ctx, pts, closed, w, color, seed) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = K.lw(ctx, w) * (0.95 + 0.1 * hash(seed | 0, K.bf));
+    K.pathOf(ctx, pts, closed); ctx.stroke();
+  };
+  /* tapered brush ribbon along an open path: width w in the middle, taper at ends.
+     taper: [start, end] fraction of w at the tips (0 = sharp point) */
+  K.brush = function (ctx, pts, opt) {
+    const o = Object.assign({ w: 6, color: K.P.ink, boil: 1, seed: 1, taper: [0.15, 0.15], alpha: 1 }, opt || {});
+    if (pts.length === 2) { const [a, b] = pts; pts = [0, 0.33, 0.66, 1].map((u) => [K.lerp(a[0], b[0], u), K.lerp(a[1], b[1], u)]); }
+    const bp = o.boil ? K.boil(pts, o.seed, o.boil) : pts;
+    const S = pts.length > 2 ? K.sample(bp, false, 5) : bp;
+    const n = S.length; if (n < 2) return;
+    const W = K.lw(ctx, o.w), L = [], R = [];
+    for (let i = 0; i < n; i++) {
+      const a = S[Math.max(0, i - 1)], b = S[Math.min(n - 1, i + 1)];
+      let dx = b[0] - a[0], dy = b[1] - a[1]; const d = Math.hypot(dx, dy) || 1; dx /= d; dy /= d;
+      const u = i / (n - 1), prof = u < 0.5 ? K.lerp(o.taper[0], 1, Math.sin(Math.min(1, u / 0.35) * Math.PI / 2)) : K.lerp(o.taper[1], 1, Math.sin(Math.min(1, (1 - u) / 0.35) * Math.PI / 2));
+      const hw = (W / 2) * prof * (0.94 + 0.12 * hash(i, o.seed + K.bf));
+      L.push([S[i][0] - dy * hw, S[i][1] + dx * hw]); R.push([S[i][0] + dy * hw, S[i][1] - dx * hw]);
+    }
+    ctx.save(); ctx.globalAlpha *= o.alpha; ctx.fillStyle = o.color;
+    ctx.beginPath(); ctx.moveTo(L[0][0], L[0][1]);
+    for (let i = 1; i < n; i++) ctx.lineTo(L[i][0], L[i][1]);
+    for (let i = n - 1; i >= 0; i--) ctx.lineTo(R[i][0], R[i][1]);
+    ctx.closePath(); ctx.fill();
+    /* round caps */
+    [[S[0], W * o.taper[0] / 2], [S[n - 1], W * o.taper[1] / 2]].forEach(([p, r]) => { if (r > 0.6) { ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, K.TAU); ctx.fill(); } });
+    ctx.restore();
+  };
+
+  /* ---------- the workhorse: filled, shaded, shined, ink-outlined shape ----------
+     opt: fill, stroke (default ink), w, boil, seed, closed,
+          shade {color, dx, dy}: flat shadow band (shape minus its offset copy)
+          shine {dx, dy, s, a}: white crescent highlight on dark shapes (rubber-hose shine)
+          alpha */
+  function band(ctx, fp, dx, dy, color) {
+    const op = fp.map((p) => [p[0] + dx, p[1] + dy]);
+    ctx.save(); K.pathOf(ctx, fp, true); ctx.clip();
+    ctx.beginPath(); ctx.rect(-1e5, -1e5, 2e5, 2e5);
+    const seg = segs(op, true); ctx.moveTo(seg[0][0][0], seg[0][0][1]);
+    seg.forEach((s) => ctx.bezierCurveTo(s[1][0], s[1][1], s[2][0], s[2][1], s[3][0], s[3][1]));
+    ctx.closePath(); ctx.fillStyle = color; ctx.fill("evenodd");
+    ctx.restore();
+  }
+  K.shape = function (ctx, pts, opt) {
+    const o = Object.assign({ stroke: K.P.ink, w: 5, boil: 1.1, seed: 1, closed: true }, opt || {});
+    const bp = o.boil ? K.boil(pts, o.seed, o.boil) : pts;
+    const fp = o.boil ? K.boil(pts, o.seed + 500, o.boil * 0.5) : pts;
+    ctx.save();
+    if (o.alpha != null) ctx.globalAlpha *= o.alpha;
+    if (o.fill && o.closed !== false) {
+      K.pathOf(ctx, fp, true); ctx.fillStyle = o.fill; ctx.fill();
+      if (o.shade) band(ctx, fp, o.shade.dx || 0, o.shade.dy || 0, o.shade.color);
+      if (o.shine) { /* crescent: shape scaled to s around its centre, minus an offset copy */
+        let cx = 0, cy = 0; fp.forEach((p) => { cx += p[0]; cy += p[1]; }); cx /= fp.length; cy /= fp.length;
+        const s = o.shine.s || 0.78, ip = fp.map((p) => [cx + (p[0] - cx) * s, cy + (p[1] - cy) * s]);
+        ctx.save(); K.pathOf(ctx, ip, true); ctx.clip();
+        ctx.globalAlpha *= o.shine.a == null ? 0.9 : o.shine.a;
+        band(ctx, ip, o.shine.dx == null ? 7 : o.shine.dx, o.shine.dy == null ? 9 : o.shine.dy, K.P.shine);
+        ctx.restore();
+      }
+    }
+    if (o.stroke && o.w > 0) K.inkStroke(ctx, bp, o.closed !== false, o.w, o.stroke, o.seed);
+    ctx.restore();
+  };
+  /* open line: tapered brush by default (set brush:false for an even stroke) */
+  K.line = function (ctx, pts, opt) {
+    const o = Object.assign({ stroke: K.P.ink, w: 5, boil: 1, seed: 1, brush: true }, opt || {});
+    if (o.brush) return K.brush(ctx, pts, { w: o.w, color: o.stroke, boil: o.boil, seed: o.seed, taper: o.taper || [0.35, 0.35], alpha: o.alpha == null ? 1 : o.alpha });
+    ctx.save(); if (o.alpha != null) ctx.globalAlpha *= o.alpha;
+    K.inkStroke(ctx, o.boil ? K.boil(pts, o.seed, o.boil) : pts, false, o.w, o.stroke, o.seed);
+    ctx.restore();
+  };
+  /* even-width limb (rubber hose): ink casing, then a fill core */
+  K.hose = function (ctx, pts, w, color, seed, edge) {
+    const bp = K.boil(pts, seed, 0.8);
+    ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.strokeStyle = K.P.ink; ctx.lineWidth = K.lw(ctx, w + (edge == null ? 8 : edge)); K.pathOf(ctx, bp, false); ctx.stroke();
+    if (color !== K.P.ink) { ctx.strokeStyle = color; ctx.lineWidth = w; K.pathOf(ctx, bp, false); ctx.stroke(); }
+    ctx.restore();
+  };
+  K.dot = function (ctx, x, y, r, fill, stroke, w, seed) {
+    K.shape(ctx, K.ellipsePts(x, y, r, r, 12), { fill, stroke: stroke === undefined ? K.P.ink : stroke, w: w || 3, boil: r * 0.04 + 0.3, seed: seed || 5 });
+  };
+
+  /* ---------- text: stable (never boils) ---------- */
+  K.text = function (ctx, str, x, y, opt) {
+    const o = Object.assign({ size: 40, weight: 700, font: K.FONT.label, fill: K.P.ink, stroke: null, w: 0, align: "center", base: "middle", alpha: 1, track: 0 }, opt || {});
+    ctx.save(); ctx.globalAlpha *= o.alpha;
+    ctx.font = `${o.weight} ${o.size}px ${o.font}`; ctx.textAlign = o.align; ctx.textBaseline = o.base;
+    if (o.track) ctx.letterSpacing = o.track + "px";
+    if (o.stroke && o.w) { ctx.lineJoin = "round"; ctx.strokeStyle = o.stroke; ctx.lineWidth = o.w; ctx.strokeText(str, x, y); }
+    ctx.fillStyle = o.fill; ctx.fillText(str, x, y);
+    ctx.restore();
+  };
+  K.textW = function (ctx, str, size, weight, font, track) {
+    ctx.save(); ctx.font = `${weight || 700} ${size}px ${font || K.FONT.label}`; if (track) ctx.letterSpacing = track + "px"; const w = ctx.measureText(str).width; ctx.restore(); return w;
+  };
+
+  /* ---------- light: additive soft disc (spotlights, bulbs, the gold glow) ---------- */
+  K.glow = function (ctx, x, y, r, color, a) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, color); g.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.save(); ctx.globalAlpha *= a == null ? 1 : a; ctx.globalCompositeOperation = "lighter";
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, K.TAU); ctx.fill(); ctx.restore();
+  };
+  /* four-point twinkle (white by default; gold only for money) */
+  K.twinkle = function (ctx, x, y, r, a, color, seed) {
+    if (a <= 0 || r <= 0) return;
+    const pts = []; for (let i = 0; i < 8; i++) { const ang = (i / 8) * K.TAU - Math.PI / 2, rr = i % 2 ? r * 0.22 : r; pts.push([x + Math.cos(ang) * rr, y + Math.sin(ang) * rr]); }
+    ctx.save(); ctx.globalAlpha *= a;
+    K.shape(ctx, pts, { fill: color || K.P.paper, w: Math.max(2, r * 0.12), boil: 0.4, seed: seed || 1 });
+    ctx.restore();
+  };
+})(VK);
+
+/* ============================================================
+   VAUDEVILLE KIT 20 FILM: the projector. Drawn in screen space on top
+   of the scene, all stepped at the 12 fps boil clock so it reads as
+   old nitrate film, and all seeded (identical on every seek).
+     K.film(ctx, t, opt)    flicker + scratches + dust + hairs + vignette
+     K.iris(ctx, cx, cy, r) the classic iris: black frame, round hole
+     K.irisT(t, t0, t1, closing)  radius curve for an iris move
+   The fine grain is a CSS SVG-noise layer (#grain) stepped in render().
+   ============================================================ */
+var VK = window.VK || (window.VK = {});
+(function (K) {
+  const P = K.P, { hash, hs } = K;
+
+  K.film = function (ctx, t, opt) {
+    const o = Object.assign({ flicker: 0.05, scratches: 1, dust: 1, vignette: 0.62 }, opt || {});
+    const f = K.boilFrame(t);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    /* exposure flicker: a thin veil of black or white per film frame */
+    const fl = hs(f, 71) * o.flicker;
+    ctx.fillStyle = fl > 0 ? "rgba(255,250,236," + (fl * 0.6).toFixed(3) + ")" : "rgba(10,9,8," + (-fl).toFixed(3) + ")";
+    ctx.fillRect(0, 0, K.W, K.H);
+    /* vignette: burnt corners of an old print */
+    const g = ctx.createRadialGradient(K.W / 2, K.H / 2, K.H * 0.38, K.W / 2, K.H / 2, K.H * 1.02);
+    g.addColorStop(0, "rgba(12,10,8,0)"); g.addColorStop(1, "rgba(12,10,8," + o.vignette + ")");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, K.W, K.H);
+    /* vertical scratches: live for 3-6 film frames, wander a little */
+    if (o.scratches) for (let k = 0; k < 3; k++) {
+      const life = 3 + Math.floor(hash(k, 5) * 4), slot = Math.floor(f / life), on = hash(slot * 3 + k, 91) < 0.55 * o.scratches;
+      if (!on) continue;
+      const x = 80 + hash(slot * 7 + k, 93) * (K.W - 160) + hs(f, 97 + k) * 3, y0 = hash(slot, 99 + k) * 300 - 100, y1 = y0 + 500 + hash(slot, 101 + k) * 700;
+      const light = hash(slot + k, 103) < 0.6;
+      ctx.strokeStyle = light ? "rgba(245,240,226,0.55)" : "rgba(12,10,8,0.5)"; ctx.lineWidth = 1.2 + hash(slot, 107) * 1.6;
+      ctx.beginPath(); ctx.moveTo(x, y0); ctx.bezierCurveTo(x + 4, y0 + 200, x - 3, y1 - 200, x + 2, y1); ctx.stroke();
+    }
+    /* dust specks and hairs: new every film frame */
+    if (o.dust) for (let i = 0; i < 9; i++) {
+      if (hash(i, f * 13 + 1) > 0.42 * o.dust) continue;
+      const x = hash(i, f * 13 + 2) * K.W, y = hash(i, f * 13 + 3) * K.H, r = 1.5 + hash(i, f * 13 + 4) * 4.5;
+      const dark = hash(i, f * 13 + 5) < 0.7;
+      ctx.fillStyle = dark ? "rgba(12,10,8,0.75)" : "rgba(250,246,232,0.8)";
+      if (hash(i, f * 13 + 6) < 0.18) { /* a hair */
+        ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.bezierCurveTo(x + 30, y - 20, x + 10, y + 40, x + 50, y + 30); ctx.stroke();
+      } else { ctx.beginPath(); ctx.ellipse(x, y, r, r * (0.6 + 0.4 * hash(i, f + 9)), hash(i, f) * 3, 0, K.TAU); ctx.fill(); }
+    }
+    ctx.restore();
+  };
+
+  /* iris: everything black except a circle of radius r around (cx, cy) */
+  K.iris = function (ctx, cx, cy, r) {
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.beginPath(); ctx.rect(-10, -10, K.W + 20, K.H + 20); ctx.arc(cx, cy, Math.max(0, r), 0, K.TAU, true);
+    ctx.fillStyle = P.ink; ctx.fill("evenodd");
+    /* a soft inner edge, like a real iris blade slightly out of focus */
+    if (r > 2) { ctx.strokeStyle = "rgba(20,19,18,0.45)"; ctx.lineWidth = 14; ctx.beginPath(); ctx.arc(cx, cy, r + 2, 0, K.TAU); ctx.stroke(); }
+    ctx.restore();
+  };
+  /* radius for an iris: opening (closing=false) from 0 to full frame, or closing */
+  K.irisT = function (t, t0, t1, closing, rMax) {
+    const u = K.E.inOut(K.inv(t0, t1, t)), R = rMax || 1200;
+    return closing ? R * (1 - u) : R * u;
+  };
+})(VK);
+
+/* ============================================================
+   VAUDEVILLE KIT 30 STAGE: the world. A 1920s vaudeville house seen
+   from the stalls. World units = 1080p pixels at camera z = 1, with the
+   stage opening centred on (960, 540) and the floor line at FLOOR_Y.
+     backdrop, floor, footlights, curtain, valance, proscenium, bulbs,
+     spot, piano, stool, gauge (the z-meter), spring (the spread),
+     coin, coinRain, bell, note, cane
+   Only gold is a hue: coins, the z-meter's +/-2 zones, a stretched spring.
+   ============================================================ */
+var VK = window.VK || (window.VK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp, hash, hs } = K;
+  K.FLOOR_Y = 800;
+
+  /* ---------- painted backdrop: striped wallpaper, wainscot, a soft light pool ---------- */
+  K.backdrop = function (ctx, opt) {
+    const o = Object.assign({ x0: -400, x1: 2320, y0: -300, y1: K.FLOOR_Y, light: 0.5, lx: 960, ly: 420 }, opt || {});
+    ctx.save();
+    ctx.fillStyle = P.g4; ctx.fillRect(o.x0, o.y0, o.x1 - o.x0, o.y1 - o.y0);
+    /* damask stripes: wide pale band, thin dark pinstripe */
+    for (let x = o.x0, i = 0; x < o.x1; x += 92, i++) {
+      ctx.fillStyle = "rgba(200,195,184,0.35)"; ctx.fillRect(x, o.y0, 46, o.y1 - o.y0);
+      K.line(ctx, [[x + 69, o.y0], [x + 69, o.y1 - 150]], { stroke: P.g3, w: 3, boil: 0.6, seed: 300 + i, taper: [1, 1], alpha: 0.5 });
+      /* a little fleur stamp on each pale band */
+      for (let y = o.y0 + 60 + (i % 2) * 70; y < o.y1 - 190; y += 140) {
+        ctx.save(); ctx.globalAlpha = 0.28; ctx.fillStyle = P.g3; ctx.beginPath();
+        ctx.moveTo(x + 23, y - 14); ctx.quadraticCurveTo(x + 36, y, x + 23, y + 14); ctx.quadraticCurveTo(x + 10, y, x + 23, y - 14); ctx.fill(); ctx.restore();
+      }
+    }
+    /* wainscot + chair rail */
+    K.shape(ctx, K.rectPts(o.x0, o.y1 - 150, o.x1 - o.x0, 150, 6), { fill: P.g3, w: 5, boil: 0.8, seed: 310, shade: { color: P.g2, dx: 0, dy: -18 } });
+    for (let x = o.x0 + 40, i = 0; x < o.x1 - 120; x += 180, i++) K.shape(ctx, K.rectPts(x, o.y1 - 122, 140, 92, 2), { fill: null, w: 3, boil: 0.7, seed: 320 + i });
+    K.line(ctx, [[o.x0, o.y1 - 150], [o.x1, o.y1 - 150]], { stroke: P.ink, w: 8, boil: 0.8, seed: 330, taper: [1, 1] });
+    /* warm pool of stage light on the wall (white, additive) */
+    if (o.light > 0) K.glow(ctx, o.lx, o.ly, 760, "rgba(255,250,235,0.55)", o.light);
+    ctx.restore();
+  };
+
+  /* ---------- stage floor: boards converging to a vanishing point ---------- */
+  K.floor = function (ctx, opt) {
+    const o = Object.assign({ x0: -400, x1: 2320, y0: K.FLOOR_Y, y1: 1300, vx: 960, vy: -900 }, opt || {});
+    ctx.save();
+    const g = ctx.createLinearGradient(0, o.y0, 0, o.y1);
+    g.addColorStop(0, P.g3); g.addColorStop(1, P.g2);
+    ctx.fillStyle = g; ctx.fillRect(o.x0, o.y0, o.x1 - o.x0, o.y1 - o.y0);
+    for (let i = -14; i <= 14; i++) {
+      const xb = o.vx + i * 150, k = (o.y1 - o.vy) / (o.y0 - o.vy), xt = o.vx + (xb - o.vx) / k;
+      K.line(ctx, [[xt, o.y0], [xb, o.y1]], { stroke: P.g1, w: 3, boil: 0.5, seed: 340 + i, taper: [0.6, 1], alpha: 0.55 });
+    }
+    [0.18, 0.45, 0.8].forEach((u, i) => K.line(ctx, [[o.x0, lerp(o.y0, o.y1, u * u)], [o.x1, lerp(o.y0, o.y1, u * u)]], { stroke: P.g1, w: 2.5, boil: 0.5, seed: 360 + i, alpha: 0.35, taper: [1, 1] }));
+    K.line(ctx, [[o.x0, o.y0], [o.x1, o.y0]], { stroke: P.ink, w: 7, boil: 0.8, seed: 370, taper: [1, 1] });
+    ctx.restore();
+  };
+
+  /* ---------- footlights: shell hoods with bulbs along the stage lip ---------- */
+  K.footlights = function (ctx, y, x0, x1, n, on) {
+    on = on == null ? 1 : on;
+    for (let i = 0; i < n; i++) {
+      const x = lerp(x0, x1, (i + 0.5) / n);
+      if (on > 0) K.glow(ctx, x, y - 26, 120, "rgba(255,248,226,0.7)", on * (0.75 + 0.25 * hash(i, K.bf)));
+      K.shape(ctx, [[x - 46, y], [x - 38, y - 30], [x, y - 44], [x + 38, y - 30], [x + 46, y]], { fill: P.g1, w: 4, boil: 0.7, seed: 380 + i, shine: { dx: 4, dy: 6, s: 0.7, a: 0.5 } });
+    }
+  };
+
+  /* ---------- side curtain (side -1 left, +1 right). open 0 = closed to centre ---------- */
+  K.curtain = function (ctx, side, open, opt) {
+    const o = Object.assign({ top: -60, bottom: 1120, seed: 400, color: P.g2 }, opt || {});
+    const xIn = side < 0 ? lerp(985, 150, open) : lerp(935, 1770, open), xOut = side < 0 ? -420 : 2340;
+    const H = o.bottom - o.top, tieY = o.top + H * 0.62, bulge = 120 * open;
+    const inner = [];
+    for (let i = 0; i <= 12; i++) {
+      const u = i / 12, y = o.top + H * u;
+      /* gathered at the tie-back: the inner edge swings toward the wing */
+      const pull = Math.sin(Math.min(1, u / 0.62) * Math.PI / 2) * (u < 0.62 ? 1 : 1 - (u - 0.62) / 0.38 * 0.55);
+      inner.push([xIn - side * bulge * pull + hs(i, o.seed + 1) * 2 + Math.sin(K.now * 1.3 + u * 3) * 3, y]);
+    }
+    const hem = [];
+    for (let i = 0; i <= 8; i++) { const x = lerp(inner[12][0], xOut, i / 8); hem.push([x, o.bottom + 10 * Math.sin(i * 2.4)]); }
+    const pts = [[xOut, o.top]].concat(inner, hem.slice(1));
+    K.shape(ctx, pts, { fill: o.color, w: 6, boil: 1, seed: o.seed, shade: { color: P.g1, dx: side * 34, dy: 0 } });
+    /* folds: deep shadow lines + pale ridge highlights */
+    ctx.save(); K.pathOf(ctx, pts, true); ctx.clip();
+    for (let k = 1; k <= 6; k++) {
+      const u = k / 7, line = inner.map((p, i) => [lerp(p[0], xOut, u) + Math.sin(i * 0.9 + k) * 10, p[1]]);
+      K.line(ctx, line, { stroke: P.g1, w: 16, boil: 1, seed: o.seed + 10 + k, alpha: 0.7, taper: [0.5, 1] });
+      K.line(ctx, line.map((p) => [p[0] - side * 22, p[1]]), { stroke: P.g3, w: 7, boil: 1, seed: o.seed + 30 + k, alpha: 0.6, taper: [0.2, 0.8] });
+    }
+    ctx.restore();
+    /* tie-back rope + tassel when open */
+    if (open > 0.3) {
+      const tp = inner[Math.round(0.62 * 12)];
+      K.line(ctx, [[tp[0] - side * 4, tp[1] - 20], [tp[0] + side * 60, tp[1]], [tp[0] + side * 120, tp[1] + 6]], { stroke: P.g5, w: 10, boil: 0.8, seed: o.seed + 50 });
+      K.shape(ctx, [[tp[0] - 10, tp[1] + 4], [tp[0] + 10, tp[1] + 4], [tp[0] + 18, tp[1] + 64], [tp[0] - 18, tp[1] + 64]], { fill: P.g5, w: 4, boil: 0.8, seed: o.seed + 51 });
+    }
+  };
+
+  /* ---------- top valance: swagged drape with fringe across the opening ---------- */
+  K.valance = function (ctx, y, opt) {
+    const o = Object.assign({ x0: -300, x1: 2220, depth: 150, swags: 5, seed: 420 }, opt || {});
+    const w = (o.x1 - o.x0) / o.swags;
+    K.shape(ctx, K.rectPts(o.x0, y - 400, o.x1 - o.x0, 400 + 30, 6), { fill: P.g1, w: 6, boil: 0.8, seed: o.seed });
+    for (let i = 0; i < o.swags; i++) {
+      const a = o.x0 + i * w, pts = [];
+      for (let k = 0; k <= 10; k++) { const u = k / 10; pts.push([a + w * u, y + 20 + Math.sin(u * Math.PI) * o.depth]); }
+      const poly = [[a, y - 10]].concat(pts, [[a + w, y - 10]]);
+      K.shape(ctx, poly, { fill: P.g2, w: 5, boil: 1, seed: o.seed + 1 + i, shade: { color: P.g1, dx: 0, dy: -24 } });
+      K.line(ctx, pts.map((p) => [p[0], p[1] - 34]), { stroke: P.g3, w: 6, boil: 0.8, seed: o.seed + 20 + i, alpha: 0.7 });
+      /* fringe */
+      for (let k = 1; k < 10; k++) { const p = pts[k]; K.line(ctx, [[p[0], p[1]], [p[0] + hs(k, i) * 2, p[1] + 22]], { stroke: P.g5, w: 4, boil: 0.5, seed: o.seed + 40 + i * 10 + k, taper: [1, 0.3] }); }
+      /* tassel where two swags meet */
+      if (i > 0) { const tx = a, ty = y + 10; K.shape(ctx, [[tx - 9, ty], [tx + 9, ty], [tx + 16, ty + 58], [tx - 16, ty + 58]], { fill: P.g5, w: 4, boil: 0.8, seed: o.seed + 60 + i }); K.dot(ctx, tx, ty, 10, P.g5, P.ink, 3, o.seed + 70 + i); }
+    }
+  };
+
+  /* ---------- proscenium pillars + bulb chase ---------- */
+  K.proscenium = function (ctx, opt) {
+    const o = Object.assign({ x: [40, 1880], top: -300, bottom: 1200, seed: 440 }, opt || {});
+    o.x.forEach((x, i) => {
+      const sd = i ? 1 : -1, w = 230, x0 = sd < 0 ? x - w : x;
+      K.shape(ctx, K.rectPts(x0, o.top, w, o.bottom - o.top, 6), { fill: P.g1, w: 6, boil: 0.8, seed: o.seed + i, shade: { color: P.ink, dx: sd * 40, dy: 0 } });
+      /* fluting */
+      for (let k = 0; k < 4; k++) K.line(ctx, [[x0 + 50 + k * 42, o.top], [x0 + 50 + k * 42, o.bottom]], { stroke: P.g2, w: 10, boil: 0.6, seed: o.seed + 10 + k + i * 5, taper: [1, 1] });
+    });
+  };
+  /* chasing marquee bulbs along a polyline; chase = phase (bulbs step every beat) */
+  K.bulbs = function (ctx, pts, n, chase, opt) {
+    const o = Object.assign({ r: 11, seed: 460, lit: 1, gold: false }, opt || {});
+    const L = []; let tot = 0;
+    for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); L.push(d); tot += d; }
+    for (let k = 0; k < n; k++) {
+      let d = (tot * k) / Math.max(1, n - 1), s = 0; while (s < L.length - 1 && d > L[s]) { d -= L[s]; s++; }
+      const u = clamp(d / (L[s] || 1), 0, 1), x = lerp(pts[s][0], pts[s + 1][0], u), y = lerp(pts[s][1], pts[s + 1][1], u);
+      const on = o.lit * (((k + Math.floor(chase)) % 3) === 0 ? 1 : 0.45);
+      if (on > 0.5) K.glow(ctx, x, y, o.r * 4.2, o.gold ? "rgba(255,215,106,0.9)" : "rgba(255,250,232,0.85)", on);
+      K.dot(ctx, x, y, o.r, on > 0.5 ? (o.gold ? P.goldLight : P.shine) : P.g4, P.ink, 3, o.seed + k);
+    }
+  };
+
+  /* ---------- spotlight: cone from above to a pool on the floor ---------- */
+  K.spot = function (ctx, x, yFloor, w, a, src) {
+    if (a <= 0) return;
+    const s = src || [x + 300, -200];
+    ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = a;
+    const g = ctx.createLinearGradient(s[0], s[1], x, yFloor);
+    g.addColorStop(0, "rgba(255,250,236,0.05)"); g.addColorStop(1, "rgba(255,250,236,0.22)");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(s[0] - 30, s[1]); ctx.lineTo(s[0] + 30, s[1]); ctx.lineTo(x + w / 2, yFloor); ctx.lineTo(x - w / 2, yFloor); ctx.closePath(); ctx.fill();
+    ctx.restore();
+    ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.globalAlpha = a * 0.55;
+    ctx.translate(x, yFloor); ctx.scale(1, 0.22); K.glow(ctx, 0, 0, w * 0.6, "rgba(255,250,236,0.9)", 1);
+    ctx.restore();
+  };
+
+  /* ---------- upright piano. origin = floor centre. keys(t) gives pressed key indices ---------- */
+  K.piano = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ seed: 480, pressed: [], jar: 0 }, opt || {});
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    const W = 440;
+    /* feet + lower case */
+    [-1, 1].forEach((sd, i) => K.shape(ctx, K.rectPts(sd * (W / 2 - 26) - 22, -40, 44, 40, 2), { fill: P.g1, w: 4, boil: 0.6, seed: o.seed + i }));
+    K.shape(ctx, K.rectPts(-W / 2 + 10, -250, W - 20, 216, 3), { fill: P.g1, w: 5, boil: 0.8, seed: o.seed + 2, shine: { dx: 10, dy: 12, s: 0.86, a: 0.35 } });
+    K.shape(ctx, K.roundPts(-W / 2 + 50, -220, W - 100, 150, 14), { fill: P.g2, w: 4, boil: 0.8, seed: o.seed + 3 });
+    [-30, 0, 30].forEach((px, i) => K.shape(ctx, [[px - 8, -36], [px + 8, -36], [px + 12, -18], [px - 12, -18]], { fill: P.g5, w: 3, boil: 0.5, seed: o.seed + 4 + i })); /* pedals */
+    /* keyboard shelf */
+    K.shape(ctx, K.rectPts(-W / 2 - 16, -300, W + 32, 54, 3), { fill: P.g1, w: 5, boil: 0.8, seed: o.seed + 8 });
+    const kx0 = -W / 2 + 6, kw = (W - 12) / 22;
+    ctx.save(); ctx.fillStyle = P.paper; ctx.fillRect(kx0, -296, W - 12, 34); ctx.restore();
+    for (let k = 0; k < 22; k++) {
+      const down = o.pressed.indexOf(k) >= 0;
+      if (down) { ctx.save(); ctx.fillStyle = P.g5; ctx.fillRect(kx0 + k * kw + 1, -293, kw - 2, 31); ctx.restore(); }
+      K.line(ctx, [[kx0 + k * kw, -296], [kx0 + k * kw, -262]], { stroke: P.ink, w: 2.5, boil: 0.3, seed: o.seed + 10 + k, taper: [1, 1] });
+      if ([0, 1, 3, 4, 5].indexOf(k % 7) >= 0 && k < 21) { ctx.save(); ctx.fillStyle = P.ink; ctx.fillRect(kx0 + (k + 0.62) * kw, -296, kw * 0.72, 20); ctx.restore(); }
+    }
+    /* upper case, fallboard and music stand with sheet music */
+    K.shape(ctx, K.rectPts(-W / 2, -560, W, 262, 3), { fill: P.g1, w: 5, boil: 0.8, seed: o.seed + 40, shine: { dx: 12, dy: 14, s: 0.88, a: 0.3 } });
+    K.shape(ctx, K.roundPts(-W / 2 + 34, -530, W - 68, 196, 16), { fill: P.g2, w: 4, boil: 0.8, seed: o.seed + 41 });
+    K.shape(ctx, [[-120, -480], [120, -480], [126, -330], [-126, -330]], { fill: P.paper, w: 4, boil: 0.8, seed: o.seed + 42, shade: { color: P.g5, dx: 8, dy: 0 } });
+    for (let r = 0; r < 3; r++) for (let l = 0; l < 5; l++) K.line(ctx, [[-104, -462 + r * 44 + l * 6], [104, -462 + r * 44 + l * 6]], { stroke: P.g3, w: 1.6, boil: 0.3, seed: o.seed + 50 + r * 5 + l, taper: [1, 1] });
+    for (let n = 0; n < 9; n++) K.dot(ctx, -90 + n * 22, -458 + (n % 3) * 44 + hash(n, 3) * 18, 4.5, P.ink, P.ink, 1, o.seed + 70 + n);
+    /* lid + candle sconces */
+    K.shape(ctx, K.rectPts(-W / 2 - 22, -590, W + 44, 34, 2), { fill: P.g1, w: 5, boil: 0.8, seed: o.seed + 80 });
+    /* tip jar on the lid: fills with gold as the act pays */
+    const jx = W / 2 - 80, jy = -590;
+    if (o.jar > 0) { const lvl = clamp(o.jar, 0, 1) * 70; for (let c = 0; c < Math.round(lvl / 9); c++) K.coin(ctx, jx - 18 + (c % 3) * 18, jy - 10 - Math.floor(c / 3) * 10 - (c % 2) * 3, 12, { seed: o.seed + 90 + c, flat: true }); }
+    K.shape(ctx, [[jx - 42, jy - 96], [jx + 42, jy - 96], [jx + 38, jy], [jx - 38, jy]], { fill: "rgba(236,231,218,0.18)", w: 4, boil: 0.7, seed: o.seed + 85 });
+    K.line(ctx, [[jx - 26, jy - 84], [jx - 22, jy - 18]], { stroke: P.shine, w: 6, boil: 0.5, seed: o.seed + 86, alpha: 0.7 });
+    ctx.restore();
+  };
+  K.stool = function (ctx, x, y, s, seed) {
+    seed = seed || 520;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    K.hose(ctx, [[-30, 0], [-16, -70], [-6, -130]], 8, P.g1, seed);
+    K.hose(ctx, [[30, 0], [16, -70], [6, -130]], 8, P.g1, seed + 1);
+    K.shape(ctx, K.ellipsePts(0, -140, 66, 20, 16), { fill: P.g2, w: 5, boil: 0.8, seed: seed + 2, shine: { dx: 0, dy: 6, s: 0.8, a: 0.4 } });
+    ctx.restore();
+  };
+
+  /* ---------- the z-meter: semicircular gauge, scale -3..3, gold zones beyond +/-2 ---------- */
+  K.gauge = function (ctx, x, y, r, z, opt) {
+    const o = Object.assign({ seed: 540, a: 1, readout: true, label: "z", glow: 0 }, opt || {});
+    if (o.a <= 0) return;
+    const A = (v) => Math.PI + ((clamp(v, -3.3, 3.3) + 3) / 6) * Math.PI; /* -3 at left, +3 at right */
+    ctx.save(); ctx.translate(x, y); ctx.scale(o.a, o.a);
+    if (o.glow > 0) K.glow(ctx, 0, -r * 0.4, r * 2.1, "rgba(255,215,106,0.85)", o.glow);
+    /* housing */
+    const hous = []; for (let i = 0; i <= 16; i++) { const a = Math.PI + (i / 16) * Math.PI; hous.push([Math.cos(a) * (r + 34), Math.sin(a) * (r + 34)]); }
+    hous.push([r + 34, 40], [-r - 34, 40]);
+    K.shape(ctx, hous, { fill: P.g1, w: 6, boil: 0.8, seed: o.seed, shine: { dx: 0, dy: 10, s: 0.9, a: 0.35 } });
+    const face = []; for (let i = 0; i <= 16; i++) { const a = Math.PI + (i / 16) * Math.PI; face.push([Math.cos(a) * r, Math.sin(a) * r]); }
+    face.push([r, 14], [-r, 14]);
+    K.shape(ctx, face, { fill: P.paper, w: 4, boil: 0.6, seed: o.seed + 1, shade: { color: P.g5, dx: 0, dy: 12 } });
+    /* gold zones |z| >= 2 */
+    ctx.save(); ctx.lineWidth = r * 0.16; ctx.lineCap = "butt";
+    [[2, 3], [-3, -2]].forEach(([a0, a1]) => { ctx.strokeStyle = P.gold; ctx.beginPath(); ctx.arc(0, 0, r * 0.84, A(a0), A(a1)); ctx.stroke(); });
+    ctx.restore();
+    for (let v = -3; v <= 3; v += 0.5) {
+      const a = A(v), big = v % 1 === 0, r0 = r * (big ? 0.72 : 0.78);
+      K.line(ctx, [[Math.cos(a) * r0, Math.sin(a) * r0], [Math.cos(a) * r * 0.93, Math.sin(a) * r * 0.93]], { stroke: P.ink, w: big ? 5 : 3, boil: 0.4, seed: o.seed + 10 + v * 4, taper: [1, 1] });
+      if (big) K.text(ctx, (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v), Math.cos(a) * r * 0.55, Math.sin(a) * r * 0.55 + 4, { size: r * 0.2, weight: 700, font: K.FONT.mono, fill: Math.abs(v) >= 2 ? P.goldDark : P.ink });
+    }
+    /* needle */
+    const na = A(z);
+    ctx.save(); ctx.rotate(na);
+    K.shape(ctx, [[-r * 0.14, -6], [r * 0.9, 0], [-r * 0.14, 6]], { fill: P.ink, w: 3, boil: 0.4, seed: o.seed + 30 });
+    ctx.restore();
+    K.dot(ctx, 0, 0, r * 0.09, P.gold, P.ink, 3, o.seed + 31);
+    /* readout window */
+    if (o.readout) {
+      const str = o.label + " = " + (z >= 0 ? "+" : "−") + Math.abs(z).toFixed(2), tw = K.textW(ctx, str, r * 0.24, 700, K.FONT.mono) + 30;
+      K.shape(ctx, K.roundPts(-tw / 2, 22, tw, r * 0.34, 8), { fill: Math.abs(z) >= 2 ? P.gold : P.g1, w: 4, boil: 0.5, seed: o.seed + 32 });
+      K.text(ctx, str, 0, 22 + r * 0.17 + 1, { size: r * 0.24, weight: 700, font: K.FONT.mono, fill: Math.abs(z) >= 2 ? P.ink : P.paper });
+    }
+    ctx.restore();
+  };
+
+  /* ---------- the spread: a coil spring between two points ----------
+     coils fixed, so stretching spaces them out. strain 0..1 tints it gold */
+  K.spring = function (ctx, A, B, opt) {
+    const o = Object.assign({ coils: 9, r: 22, w: 6, seed: 560, strain: 0, wob: 0 }, opt || {});
+    const dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, nx = -uy, ny = ux;
+    const lead = Math.min(26, L * 0.15), N = o.coils * 10, pts = [[A[0], A[1]], [A[0] + ux * lead, A[1] + uy * lead]];
+    for (let i = 0; i <= N; i++) {
+      const u = i / N, along = lead + (L - 2 * lead) * u, ang = u * o.coils * K.TAU;
+      const rr = o.r * (1 - 0.25 * clamp(o.strain, 0, 1)) + Math.sin(K.now * 18 + u * 9) * o.wob;
+      pts.push([A[0] + ux * along + nx * Math.sin(ang) * rr + ux * Math.cos(ang) * rr * 0.32, A[1] + uy * along + ny * Math.sin(ang) * rr + uy * Math.cos(ang) * rr * 0.32]);
+    }
+    pts.push([B[0] - ux * lead, B[1] - uy * lead], [B[0], B[1]]);
+    const col = o.strain > 0.05 ? (o.strain > 0.6 ? P.gold : P.g4) : P.g4;
+    if (o.strain > 0.6) { ctx.save(); ctx.globalAlpha = (o.strain - 0.6) * 1.2; K.pathOf(ctx, pts, false); ctx.strokeStyle = P.goldGlow; ctx.lineWidth = o.w * 4; ctx.stroke(); ctx.restore(); }
+    const bp = K.boil(pts, o.seed, 0.6);
+    ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.strokeStyle = P.ink; ctx.lineWidth = K.lw(ctx, o.w + 6); ctx.beginPath(); bp.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]))); ctx.stroke();
+    ctx.strokeStyle = col; ctx.lineWidth = o.w; ctx.stroke();
+    ctx.strokeStyle = "rgba(251,248,240,0.7)"; ctx.lineWidth = Math.max(1.5, o.w * 0.3); ctx.stroke();
+    ctx.restore();
+  };
+
+  /* ---------- gold coin ($ stamp). spin = angle (radians): the coin flips ---------- */
+  K.coin = function (ctx, x, y, r, opt) {
+    const o = Object.assign({ spin: 0, seed: 600, flat: false, a: 1 }, opt || {});
+    if (o.a <= 0) return;
+    const sx = o.flat ? 1 : Math.max(0.08, Math.abs(Math.cos(o.spin)));
+    ctx.save(); ctx.translate(x, y); ctx.globalAlpha *= o.a; ctx.scale(sx, 1);
+    K.shape(ctx, K.ellipsePts(0, 0, r, r, 14), { fill: P.gold, w: Math.max(2.5, r * 0.13), boil: 0.4, seed: o.seed, shade: { color: P.goldDark, dx: -r * 0.18, dy: -r * 0.2 } });
+    if (r > 10 && sx > 0.35) {
+      K.shape(ctx, K.ellipsePts(0, 0, r * 0.7, r * 0.7, 12), { fill: null, stroke: P.goldDark, w: Math.max(1.5, r * 0.07), boil: 0.3, seed: o.seed + 1 });
+      K.text(ctx, "$", 0, r * 0.06, { size: r * 1.05, weight: 900, font: K.FONT.display, fill: P.goldDark });
+    }
+    ctx.restore();
+    if (r > 8 && sx > 0.5) K.twinkle(ctx, x + r * 0.45 * sx, y - r * 0.45, r * 0.35, 0.9 * ((K.bf + o.seed) % 4 === 0 ? 1 : 0), P.shine, o.seed + 2);
+  };
+  /* deterministic rain of coins: fall, bounce once, settle on the floor */
+  K.coinRain = function (ctx, t, t0, opt) {
+    const o = Object.assign({ x0: 300, x1: 1600, floorY: K.FLOOR_Y + 120, n: 26, seed: 640, r: 22, stagger: 1.4, g: 2600 }, opt || {});
+    for (let i = 0; i < o.n; i++) {
+      const d = t - (t0 + hash(i, o.seed) * o.stagger); if (d <= 0) continue;
+      const x = lerp(o.x0, o.x1, hash(i, o.seed + 1)) + hs(i, o.seed + 2) * 30 * Math.min(d, 1);
+      const fy = o.floorY + hs(i, o.seed + 3) * 40, y0 = -80 - hash(i, o.seed + 4) * 200;
+      const tf = Math.sqrt((2 * (fy - y0)) / o.g); let y;
+      if (d < tf) y = y0 + 0.5 * o.g * d * d;
+      else { const v = o.g * tf * 0.32, db = d - tf, tb = (2 * v) / o.g; y = db < tb ? fy - (v * db - 0.5 * o.g * db * db) : fy; }
+      const settled = d > tf * 1.7, spin = settled ? Math.PI / 2 * 0.75 : d * (8 + 6 * hash(i, o.seed + 5));
+      const r = o.r * (0.8 + 0.4 * hash(i, o.seed + 6));
+      if (settled) { ctx.save(); ctx.translate(x, y + r * 0.3); ctx.scale(1, 0.38); K.coin(ctx, 0, 0, r, { flat: true, seed: o.seed + 10 + i }); ctx.restore(); }
+      else K.coin(ctx, x, y, r, { spin, seed: o.seed + 10 + i });
+    }
+  };
+
+  /* ---------- desk bell (the "bell" of cointegration). ring 0..1 (decays) ---------- */
+  K.bell = function (ctx, x, y, s, ring, seed) {
+    seed = seed || 680;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    const shake = ring > 0 ? Math.sin(K.now * 60) * 3 * ring : 0;
+    K.shape(ctx, K.roundPts(-70, -22, 140, 22, 8), { fill: P.g1, w: 5, boil: 0.6, seed, shine: { dx: 0, dy: 5, s: 0.85, a: 0.4 } });
+    ctx.save(); ctx.translate(shake, 0);
+    const dome = []; for (let i = 0; i <= 12; i++) { const a = Math.PI + (i / 12) * Math.PI; dome.push([Math.cos(a) * 58, -22 + Math.sin(a) * 52]); }
+    K.shape(ctx, dome, { fill: P.g4, w: 5, boil: 0.6, seed: seed + 1, shade: { color: P.g3, dx: -12, dy: -6 }, shine: { dx: 8, dy: 10, s: 0.75, a: 0.85 } });
+    K.hose(ctx, [[0, -74], [0, -92]], 6, P.g3, seed + 2, 6);
+    K.shape(ctx, K.ellipsePts(0, -96, 14, 6, 10), { fill: P.g4, w: 4, boil: 0.4, seed: seed + 3 });
+    ctx.restore();
+    if (ring > 0.02) for (let k = 0; k < 3; k++) {
+      const rr = 90 + k * 34 + (1 - ring) * 50;
+      [-1, 1].forEach((sd) => K.line(ctx, [[sd * rr * 0.86, -40 - rr * 0.5], [sd * rr, -40], [sd * rr * 0.86, -40 + rr * 0.42]], { stroke: k === 1 ? P.gold : P.paper, w: 7 - k, boil: 0.6, seed: seed + 10 + k + sd, alpha: ring }));
+    }
+    ctx.restore();
+  };
+
+  /* ---------- a music note (eighth note), floats up from the piano ---------- */
+  K.note = function (ctx, x, y, s, a, seed) {
+    if (a <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.globalAlpha *= a; ctx.rotate(-0.2);
+    K.shape(ctx, K.ellipsePts(0, 0, 14, 10, 10, -0.4), { fill: P.ink, w: 3, boil: 0.5, seed: seed || 700 });
+    K.line(ctx, [[12, -2], [12, -52]], { stroke: P.ink, w: 5, boil: 0.5, seed: (seed || 700) + 1, taper: [1, 1] });
+    K.line(ctx, [[12, -52], [30, -40], [28, -24]], { stroke: P.ink, w: 6, boil: 0.5, seed: (seed || 700) + 2 });
+    ctx.restore();
+  };
+})(VK);
+
+/* ============================================================
+   VAUDEVILLE KIT 40 CAT: "Dapper Dan", the ragtime cat who MCs the show.
+   A 1920s rubber-hose cartoon: black fur with a white shine, white
+   muzzle, pie-cut eyes, bowler hat, white bow tie and shirt front,
+   white four-finger gloves, black shoes with white spats, an S tail.
+   Local space: feet on y = 0, faces the viewer. Scale 1 = 330 px tall.
+   Pose (all optional):
+     squash   -1..1 (+ wide, - tall), volume kept     lean   deg around the feet
+     hop      px off the ground                       turn   -1..1 face shifts (3/4 feel)
+     look     [dx, dy] pupils -1..1                   blink  0..1   wink 0..1 (right eye)
+     mouth    "smile" | "grin" | "open" | "o" | "sly" brow   -1..1.5
+     gloveL/R {x, y, open 0..1, rot deg}  IK target of each glove (local px)
+     footL/R  {x, y}  shoe targets (defaults: standing)
+     hatTip deg, hatLift px, hatInHand true (hat rides on the right glove)
+     tail     phase offset, exclaim 0..1 ("!" card), seed
+   ============================================================ */
+var VK = window.VK || (window.VK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp } = K;
+
+  /* two-bone IK: shoulder S, target T, lengths a,b, bend +1/-1 -> elbow, end */
+  K.ik2 = function (S, T, a, b, bend) {
+    let dx = T[0] - S[0], dy = T[1] - S[1], d = Math.hypot(dx, dy);
+    const dm = clamp(d, Math.abs(a - b) + 0.01, a + b - 0.01);
+    if (d < 1e-6) { dx = 1; dy = 0; d = 1; }
+    const ux = dx / d, uy = dy / d;
+    const ca = clamp((a * a + dm * dm - b * b) / (2 * a * dm), -1, 1), A = Math.acos(ca) * (bend || 1);
+    const ex = S[0] + a * (ux * Math.cos(A) - uy * Math.sin(A)), ey = S[1] + a * (ux * Math.sin(A) + uy * Math.cos(A));
+    return { elbow: [ex, ey], end: [S[0] + ux * dm, S[1] + uy * dm] };
+  };
+
+  /* white cartoon glove at (x, y) pointing along ang; open 0 = fist, 1 = spread palm */
+  K.glove = function (ctx, x, y, ang, open, s, seed, flip) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(s, s * (flip || 1));
+    const o = clamp(open == null ? 0.5 : open, 0, 1);
+    /* fingers (3 + thumb) */
+    for (let f = 0; f < 3; f++) {
+      const fa = (f - 1) * (0.18 + 0.32 * o), len = 14 + 20 * o;
+      const bx = 14, by = (f - 1) * 9;
+      K.shape(ctx, K.ellipsePts(bx + Math.cos(fa) * len * 0.6, by + Math.sin(fa) * len * 0.6, len * 0.62 + 6, 8, 10, fa), { fill: P.paper, w: 4, boil: 0.6, seed: seed + f });
+    }
+    K.shape(ctx, K.ellipsePts(4, -16 - 8 * o, 8, 13, 10, -0.6 - 0.5 * o), { fill: P.paper, w: 4, boil: 0.6, seed: seed + 4 });
+    K.shape(ctx, K.ellipsePts(2, 0, 20, 18, 12), { fill: P.paper, w: 4.5, boil: 0.7, seed: seed + 5, shade: { color: P.g5, dx: -5, dy: -6 } });
+    /* cuff + back stitches */
+    K.shape(ctx, K.roundPts(-26, -15, 12, 30, 5), { fill: P.paper, w: 4, boil: 0.6, seed: seed + 6 });
+    [-6, 0, 6].forEach((dy, i) => K.line(ctx, [[-4, dy], [8, dy * 1.2]], { stroke: P.ink, w: 2.6, boil: 0.3, seed: seed + 7 + i }));
+    ctx.restore();
+  };
+
+  /* pie-cut eye: white oval, black pupil with a wedge cut out (the 1920s eye) */
+  K.pieEye = function (ctx, x, y, rx, ry, look, blink, seed, wink) {
+    const b = clamp(Math.max(blink || 0, wink || 0), 0, 1);
+    if (b > 0.75) { K.line(ctx, [[x - rx, y + 2], [x, y + ry * 0.25], [x + rx, y + 2]], { stroke: P.ink, w: 5, boil: 0.4, seed: seed + 9 }); return; }
+    const ryb = ry * (1 - 0.9 * b);
+    K.shape(ctx, K.ellipsePts(x, y, rx, ryb, 16), { fill: P.paper, w: 4, boil: 0.5, seed });
+    ctx.save(); K.pathOf(ctx, K.ellipsePts(x, y, rx, ryb, 16), true); ctx.clip();
+    const px = x + (look ? look[0] : 0) * rx * 0.4, py = y + (look ? look[1] : 0) * ry * 0.35 + ry * 0.12;
+    ctx.fillStyle = P.ink; ctx.beginPath(); ctx.ellipse(px, py, rx * 0.55, ry * 0.6, 0, 0, K.TAU); ctx.fill();
+    /* the pie cut: a wedge of white toward the upper right */
+    ctx.fillStyle = P.paper; ctx.beginPath(); ctx.moveTo(px + rx * 0.08, py - ry * 0.08); ctx.arc(px, py, ry * 0.7, -1.25, -0.55); ctx.closePath(); ctx.fill();
+    ctx.restore();
+    /* lid on half-blink */
+    if (b > 0.05) { ctx.save(); K.pathOf(ctx, K.ellipsePts(x, y, rx, ryb, 16), true); ctx.clip(); ctx.fillStyle = P.ink; ctx.fillRect(x - rx - 2, y - ryb - 2, rx * 2 + 4, ryb * 2 * b + 2); ctx.restore(); }
+  };
+
+  /* bowler hat (local: brim centre at 0,0) */
+  K.bowler = function (ctx, seed) {
+    const dome = []; for (let i = 0; i <= 12; i++) { const a = Math.PI + (i / 12) * Math.PI; dome.push([Math.cos(a) * 54, -6 + Math.sin(a) * 58]); }
+    K.shape(ctx, dome, { fill: P.ink, w: 5, boil: 0.7, seed, shine: { dx: 9, dy: 12, s: 0.78, a: 0.9 } });
+    K.shape(ctx, K.roundPts(-54, -20, 108, 15, 4), { fill: P.g2, w: 3.5, boil: 0.5, seed: seed + 1 });
+    K.shape(ctx, [[-82, 0], [-60, -10], [60, -10], [82, 0], [74, 8], [-74, 8]], { fill: P.ink, w: 5, boil: 0.6, seed: seed + 2, shine: { dx: 0, dy: 4, s: 0.85, a: 0.5 } });
+  };
+
+  K.cat = function (ctx, x, y, s, st) {
+    st = st || {};
+    const seed = st.seed || 800;
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
+    const hop = st.hop || 0, look = st.look || [0, 0], turn = clamp(st.turn || 0, -1, 1);
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    const hipY = -78 * syk - hop;
+    /* tail: an S curve that sways */
+    const tp = K.now * 2.4 + (st.tail || 0);
+    K.hose(ctx, [[30 * sxk, hipY + 14], [78, hipY - 10 + 8 * Math.sin(tp)], [96 + 10 * Math.sin(tp + 1), hipY - 80], [74 + 14 * Math.sin(tp + 2), hipY - 140], [92 + 10 * Math.sin(tp + 2.6), hipY - 166]], 9, P.ink, seed + 1);
+    /* legs (rubber hose) + spats shoes */
+    [["L", -1], ["R", 1]].forEach(([k, sd], i) => {
+      const f = st["foot" + k] || { x: sd * 34, y: 0 };
+      const H = [sd * 22 * sxk, hipY + 6], F = [f.x, f.y - hop * 0.15 - (hop > 0 ? hop * 0.85 * 0.3 : 0)];
+      const r = K.ik2(H, F, 44, 44, sd < 0 ? 1 : -1);
+      K.hose(ctx, [H, r.elbow, r.end], 12, P.ink, seed + 10 + i);
+      ctx.save(); ctx.translate(r.end[0], r.end[1]);
+      K.shape(ctx, K.ellipsePts(sd * 16, 2, 30, 14, 14), { fill: P.ink, w: 4.5, boil: 0.6, seed: seed + 12 + i, shine: { dx: 4, dy: 5, s: 0.7, a: 0.85 } });
+      K.shape(ctx, K.roundPts(-14, -16, 28, 15, 5), { fill: P.paper, w: 4, boil: 0.5, seed: seed + 14 + i });
+      ctx.restore();
+    });
+    ctx.save(); ctx.translate(0, hipY); ctx.scale(sxk, syk);
+    /* body: pear, black with shine; white shirt front + bow tie */
+    const body = [[-38, 6], [-54, -40], [-46, -86], [-26, -104], [26, -104], [46, -86], [54, -40], [38, 6], [0, 14]];
+    K.shape(ctx, body, { fill: P.ink, w: 5.5, boil: 1, seed: seed + 20, shine: { dx: -8, dy: 9, s: 0.82, a: 0.6 } });
+    K.shape(ctx, [[-22, -100], [22, -100], [10, -40], [0, -28], [-10, -40]], { fill: P.paper, w: 4, boil: 0.6, seed: seed + 21 });
+    [-74, -58].forEach((by, i) => K.dot(ctx, 0, by, 3.5, P.ink, P.ink, 1, seed + 22 + i));
+    ctx.restore();
+    /* head */
+    const hx = turn * 6, hy = hipY - 104 * syk - 70 * (1 + (syk - 1) * 0.6);
+    ctx.save(); ctx.translate(hx, hy); ctx.scale(lerp(1, sxk, 0.6), lerp(1, syk, 0.6));
+    ctx.rotate((turn * 4 + Math.sin(K.now * 2.1) * 1.5) * Math.PI / 180);
+    /* ears (behind the hat) */
+    [-1, 1].forEach((sd, i) => {
+      const tw = sd === 1 && st.earTwitch ? st.earTwitch * 8 : 0;
+      K.shape(ctx, [[sd * 30, -50], [sd * (66 + tw), -96 - tw], [sd * 70, -36]], { fill: P.ink, w: 5, boil: 0.7, seed: seed + 30 + i });
+      K.shape(ctx, [[sd * 42, -54], [sd * (62 + tw), -82 - tw], [sd * 62, -46]], { fill: P.g2, stroke: null, w: 0, boil: 0.5, seed: seed + 32 + i });
+    });
+    const skull = []; for (let i = 0; i < 18; i++) { const a = (i / 18) * K.TAU; skull.push([Math.cos(a) * 74, Math.sin(a) * (Math.sin(a) > 0 ? 62 : 70)]); }
+    K.shape(ctx, skull, { fill: P.ink, w: 5.5, boil: 1, seed: seed + 34, shine: { dx: 10, dy: 12, s: 0.8, a: 0.55 } });
+    /* muzzle: white peanut */
+    const fx = turn * 16;
+    const muz = [[fx - 52, 14], [fx - 46, -6], [fx - 22, -4], [fx, 4], [fx + 22, -4], [fx + 46, -6], [fx + 52, 14], [fx + 36, 46], [fx, 56], [fx - 36, 46]];
+    K.shape(ctx, muz, { fill: P.paper, w: 4.5, boil: 0.8, seed: seed + 36, shade: { color: P.g5, dx: 0, dy: -8 } });
+    /* eyes (tall, close together) */
+    const brow = st.brow || 0, eyeY = -22 - (st.eyeUp || 0);
+    K.pieEye(ctx, fx - 20, eyeY, 17, 27 + (st.eyeUp ? 4 : 0), look, st.blink, seed + 40);
+    K.pieEye(ctx, fx + 20, eyeY, 17, 27 + (st.eyeUp ? 4 : 0), look, st.blink, seed + 50, st.wink);
+    [-1, 1].forEach((sd, i) => K.line(ctx, [[fx + sd * 8, eyeY - 34 - brow * 8 + (i ? -brow : brow) * 3], [fx + sd * 34, eyeY - 40 - brow * 10]], { stroke: P.paper, w: 5, boil: 0.4, seed: seed + 60 + i }));
+    /* nose + mouth */
+    K.shape(ctx, K.ellipsePts(fx, 14, 11, 7, 10), { fill: P.ink, w: 3, boil: 0.4, seed: seed + 62, shine: { dx: 2, dy: 3, s: 0.6, a: 0.8 } });
+    const m = st.mouth || "smile";
+    if (m === "smile") K.line(ctx, [[fx - 26, 26], [fx - 12, 38], [fx, 30], [fx + 12, 38], [fx + 26, 26]], { stroke: P.ink, w: 4.5, boil: 0.5, seed: seed + 63 });
+    else if (m === "sly") K.line(ctx, [[fx - 22, 32], [fx, 34], [fx + 18, 30], [fx + 30, 22]], { stroke: P.ink, w: 4.5, boil: 0.5, seed: seed + 64 });
+    else if (m === "grin") { K.shape(ctx, [[fx - 32, 24], [fx + 32, 24], [fx + 18, 46], [fx, 50], [fx - 18, 46]], { fill: P.g1, w: 4, boil: 0.5, seed: seed + 65 }); K.shape(ctx, [[fx - 26, 26], [fx + 26, 26], [fx + 20, 32], [fx - 20, 32]], { fill: P.paper, stroke: null, w: 0, boil: 0.3, seed: seed + 66 }); }
+    else if (m === "open") { K.shape(ctx, K.ellipsePts(fx, 38, 18, 15, 12), { fill: P.g1, w: 4, boil: 0.5, seed: seed + 67 }); K.shape(ctx, K.ellipsePts(fx, 46, 10, 5, 8), { fill: P.g3, stroke: null, w: 0, boil: 0.3, seed: seed + 68 }); }
+    else if (m === "o") K.shape(ctx, K.ellipsePts(fx, 36, 8, 9, 10), { fill: P.g1, w: 3.5, boil: 0.4, seed: seed + 69 });
+    /* whiskers */
+    [-1, 1].forEach((sd, i) => [0, 1].forEach((k) => K.line(ctx, [[fx + sd * 44, 20 + k * 10], [fx + sd * 70, 14 + k * 16], [fx + sd * 92, 12 + k * 24]], { stroke: P.paper, w: 3, boil: 0.5, seed: seed + 70 + i * 2 + k, taper: [0.9, 0.05] })));
+    /* hat */
+    if (!st.hatInHand) {
+      ctx.save(); ctx.translate(turn * 4, -58 - (st.hatLift || 0)); ctx.rotate(((st.hatTip || 0) - 6) * Math.PI / 180);
+      K.bowler(ctx, seed + 80); ctx.restore();
+    }
+    ctx.restore();
+    /* bow tie at the collar */
+    ctx.save(); ctx.translate(0, hipY - 104 * syk + 2); ctx.rotate(Math.sin(K.now * 3) * 0.06);
+    K.shape(ctx, [[0, 0], [-28, -16], [-30, 16]], { fill: P.paper, w: 4, boil: 0.5, seed: seed + 90 });
+    K.shape(ctx, [[0, 0], [28, -16], [30, 16]], { fill: P.paper, w: 4, boil: 0.5, seed: seed + 91 });
+    K.dot(ctx, 0, 0, 8, P.paper, P.ink, 4, seed + 92);
+    ctx.restore();
+    /* arms: rubber hose with IK elbows, gloves in front */
+    [["L", -1], ["R", 1]].forEach(([k, sd]) => {
+      const g = st["glove" + k] || { x: sd * 74, y: -150, open: 0.4 };
+      const S = [sd * 42 * sxk, hipY - 86 * syk];
+      const r = K.ik2(S, [g.x, g.y - hop], 52, 50, sd > 0 ? -1 : 1);
+      K.hose(ctx, [S, r.elbow, r.end], 10, P.ink, seed + 100 + sd);
+      const ang = g.rot != null ? (g.rot * Math.PI) / 180 : Math.atan2(r.end[1] - r.elbow[1], r.end[0] - r.elbow[0]);
+      if (k === "R" && st.hatInHand) { ctx.save(); ctx.translate(r.end[0] + 6, r.end[1] - 34); ctx.rotate((st.hatTip || -10) * Math.PI / 180); K.bowler(ctx, seed + 80); ctx.restore(); }
+      K.glove(ctx, r.end[0], r.end[1], ang, g.open, 1.05, seed + 110 + sd * 10, sd < 0 ? -1 : 1);
+    });
+    /* "!" on a little card (language-neutral) */
+    if (st.exclaim > 0) {
+      const a = K.E.back(clamp(st.exclaim, 0, 1), 2.4);
+      ctx.save(); ctx.translate(110, hy - 120); ctx.rotate(0.2); ctx.scale(a, a);
+      K.shape(ctx, [[-10, -56], [10, -56], [6, -12], [-6, -12]], { fill: P.gold, w: 4.5, boil: 0.6, seed: seed + 120 });
+      K.dot(ctx, 0, 4, 8, P.gold, P.ink, 4.5, seed + 121);
+      ctx.restore();
+    }
+    ctx.restore();
+    return { head: [x + hx * s, y + hy * s] };
+  };
+
+  /* blink curve with seeded blink times, 0..1 */
+  K.blinkAt = function (t, seed) {
+    let b = 0;
+    for (let i = 0; i < 20; i++) {
+      const tb = 0.7 + i * 1.8 + K.hash(i, seed || 7) * 1.1, d = t - tb;
+      if (d > 0 && d < 0.16) b = Math.max(b, Math.sin((d / 0.16) * Math.PI));
+    }
+    return b;
+  };
+})(VK);
+
+/* ============================================================
+   VAUDEVILLE KIT 45 PENGUIN: the act. Two tap-dancing partners (a pair
+   of assets) tied waist to waist by a spring (the spread).
+     "top"    penguin wears a top hat   = the RICH leg (sell it)
+     "boater" penguin wears a boater    = the CHEAP leg (buy it)
+   Local space: feet on y = 0, faces the viewer. Scale 1 = 270 px tall.
+   Pose (all optional):
+     squash, lean (deg), hop (px), look [dx, dy], blink, beak "shut" | "open"
+     flipL/flipR  deg: 0 = hanging at the side, 90 = straight out, 160 = up
+     tapL/tapR    0..1 foot lift (toe-tap), hat "top" | "boater" | null,
+     hatTip deg, heart 0..1 (a gold heart pops above), seed
+   Waist anchor for the spring: K.penguinWaist(x, y, s, side).
+   ============================================================ */
+var VK = window.VK || (window.VK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp } = K;
+
+  K.penguinWaist = function (x, y, s, side, st) {
+    const sq = clamp((st && st.squash) || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk, hop = (st && st.hop) || 0;
+    return [x + side * 70 * sxk * s, y + (-20 - hop - 100 * syk) * s];
+  };
+
+  K.penguin = function (ctx, x, y, s, st) {
+    st = st || {};
+    const seed = st.seed || 900;
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
+    const hop = st.hop || 0, look = st.look || [0, 0];
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    /* tap shoes (behind the body) */
+    [["L", -1], ["R", 1]].forEach(([k, sd], i) => {
+      const lift = clamp(st["tap" + k] || 0, 0, 1);
+      ctx.save(); ctx.translate(sd * 30, -6 - lift * 26 - hop * 0.6); ctx.rotate(sd * (-0.1 - lift * 0.5));
+      K.hose(ctx, [[0, -26], [0, -4]], 10, P.ink, seed + i, 6);
+      K.shape(ctx, K.ellipsePts(sd * 14, 2, 30, 12, 14), { fill: P.ink, w: 4.5, boil: 0.6, seed: seed + 2 + i, shine: { dx: 3, dy: 4, s: 0.7, a: 0.9 } });
+      K.shape(ctx, K.roundPts(-13, -16, 26, 12, 4), { fill: P.paper, w: 3.5, boil: 0.4, seed: seed + 4 + i });
+      ctx.restore();
+    });
+    ctx.save(); ctx.translate(0, -hop - 20); ctx.scale(sxk, syk);
+    /* flippers behind the body edge */
+    [["L", -1], ["R", 1]].forEach(([k, sd], i) => {
+      const a = ((st["flip" + k] == null ? 8 : st["flip" + k]) * Math.PI) / 180;
+      ctx.save(); ctx.translate(sd * 58, -150); ctx.rotate(-sd * a);
+      K.shape(ctx, [[sd * -4, -6], [sd * 16, 0], [sd * 20, 60], [sd * 10, 104], [sd * 2, 60]], { fill: P.ink, w: 5, boil: 0.7, seed: seed + 10 + i, shine: { dx: 0, dy: 6, s: 0.7, a: 0.45 } });
+      ctx.restore();
+    });
+    /* body: egg, black; white belly + face */
+    const body = []; for (let i = 0; i < 20; i++) { const a = (i / 20) * K.TAU, sn = Math.sin(a); body.push([Math.cos(a) * (sn > 0 ? 76 : 64 - 10 * Math.max(0, -sn)), -112 + sn * (sn > 0 ? 96 : 128)]); }
+    K.shape(ctx, body, { fill: P.ink, w: 5.5, boil: 1, seed: seed + 20, shine: { dx: 10, dy: 12, s: 0.84, a: 0.55 } });
+    const belly = []; for (let i = 0; i < 18; i++) { const a = (i / 18) * K.TAU, sn = Math.sin(a); belly.push([Math.cos(a) * (sn > 0 ? 56 : 46), -82 + sn * (sn > 0 ? 70 : 84)]); }
+    K.shape(ctx, belly, { fill: P.paper, w: 4, boil: 0.8, seed: seed + 21, shade: { color: P.g5, dx: 8, dy: -6 } });
+    /* face mask (white spectacles patch) */
+    K.shape(ctx, [[-46, -196], [-20, -214], [0, -204], [20, -214], [46, -196], [40, -170], [0, -160], [-40, -170]], { fill: P.paper, w: 4, boil: 0.7, seed: seed + 22 });
+    K.pieEye(ctx, -17, -190, 11, 17, look, st.blink, seed + 30);
+    K.pieEye(ctx, 17, -190, 11, 17, look, st.blink, seed + 40);
+    /* beak */
+    if (st.beak === "open") {
+      K.shape(ctx, [[-14, -168], [14, -168], [0, -150]], { fill: P.g4, w: 4, boil: 0.5, seed: seed + 50 });
+      K.shape(ctx, [[-11, -150], [11, -150], [0, -136]], { fill: P.g4, w: 4, boil: 0.5, seed: seed + 51 });
+    } else K.shape(ctx, [[-15, -168], [15, -168], [0, -142]], { fill: P.g4, w: 4, boil: 0.5, seed: seed + 52, shade: { color: P.g3, dx: 0, dy: -6 } });
+    /* bow tie */
+    K.shape(ctx, [[0, -128], [-20, -140], [-22, -116]], { fill: P.paper, w: 3.5, boil: 0.4, seed: seed + 55 });
+    K.shape(ctx, [[0, -128], [20, -140], [22, -116]], { fill: P.paper, w: 3.5, boil: 0.4, seed: seed + 56 });
+    K.dot(ctx, 0, -128, 6, P.paper, P.ink, 3, seed + 57);
+    /* hat */
+    if (st.hat) {
+      ctx.save(); ctx.translate(4, -232); ctx.rotate(((st.hatTip || 0) + 8) * Math.PI / 180);
+      if (st.hat === "top") {
+        K.shape(ctx, [[-30, 0], [-26, -78], [26, -78], [30, 0]], { fill: P.ink, w: 5, boil: 0.6, seed: seed + 60, shine: { dx: 6, dy: 0, s: 0.8, a: 0.7 } });
+        K.shape(ctx, K.roundPts(-29, -20, 58, 14, 3), { fill: P.g3, w: 3.5, boil: 0.4, seed: seed + 61 });
+        K.shape(ctx, K.roundPts(-48, -4, 96, 12, 6), { fill: P.ink, w: 4.5, boil: 0.5, seed: seed + 62 });
+      } else {
+        K.shape(ctx, K.roundPts(-34, -30, 68, 30, 6), { fill: P.g5, w: 4.5, boil: 0.6, seed: seed + 63, shade: { color: P.g4, dx: -8, dy: 0 } });
+        K.shape(ctx, K.roundPts(-35, -18, 70, 11, 3), { fill: P.ink, w: 3, boil: 0.4, seed: seed + 64 });
+        K.shape(ctx, K.ellipsePts(0, 0, 60, 9, 16), { fill: P.g5, w: 4.5, boil: 0.5, seed: seed + 65 });
+      }
+      ctx.restore();
+    }
+    ctx.restore();
+    /* gold heart (the pair reunites) */
+    if (st.heart > 0) {
+      const a = K.E.back(clamp(st.heart, 0, 1), 2.6), hy = -320 - 30 * clamp(st.heart, 0, 1);
+      ctx.save(); ctx.translate(st.heartX || 0, hy); ctx.scale(a, a);
+      const hp = []; for (let i = 0; i < 24; i++) { const u = (i / 24) * K.TAU; hp.push([16 * Math.pow(Math.sin(u), 3) * 2.2, -(13 * Math.cos(u) - 5 * Math.cos(2 * u) - 2 * Math.cos(3 * u) - Math.cos(4 * u)) * 2.2]); }
+      K.shape(ctx, hp, { fill: P.gold, w: 5, boil: 0.6, seed: seed + 70, shade: { color: P.goldDark, dx: -6, dy: -6 } });
+      ctx.restore();
+    }
+    ctx.restore();
+  };
+})(VK);
+
+/* ============================================================
+   VAUDEVILLE KIT 50 EXPLAINER: slide content as props of the show.
+   Never a flat slide. Each primitive is a thing on a 1920s stage:
+     formula / statement -> silent-film intertitle card     K.intertitle
+     bullets, agenda     -> act card on an easel            K.easel
+     table               -> theatre playbill               K.playbill
+     chart, time series  -> picture on the cinema screen    K.screenChart
+     big number          -> admission ticket               K.ticket
+     small number, price -> hang tag on a string           K.hangTag
+     code                -> typewriter page                K.typewriter
+     z-score             -> the proscenium z-meter         K.gauge (30_stage)
+     spread              -> the spring between partners    K.spring (30_stage)
+     title               -> marquee with chasing bulbs     K.marquee
+   All take `a` (appear 0..1) and pop with a back ease, so they land on
+   a beat. Text never boils; frames, strings and paper edges do.
+   ============================================================ */
+var VK = window.VK || (window.VK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp, hash, hs } = K;
+  const popS = (a) => (a <= 0 ? 0 : a >= 1 ? 1 : K.E.back(a, 2.2));
+  const lineStr = (ln) => (typeof ln === "string" ? ln : ln.t);
+  const lineCol = (ln, d) => (typeof ln === "string" ? d : ln.c || d);
+
+  /* corner flourish (art-nouveau curl) */
+  function curl(ctx, x, y, sx, sy, col, seed) {
+    K.line(ctx, [[x, y + sy * 46], [x, y + sy * 10], [x + sx * 10, y], [x + sx * 46, y]], { stroke: col, w: 4, boil: 0.4, seed, taper: [0.2, 0.2] });
+    K.line(ctx, [[x + sx * 14, y + sy * 30], [x + sx * 16, y + sy * 16], [x + sx * 30, y + sy * 14]], { stroke: col, w: 3, boil: 0.4, seed: seed + 1, taper: [0.2, 0.2] });
+    K.dot(ctx, x + sx * 22, y + sy * 22, 4, col, null, 0, seed + 2);
+  }
+
+  /* ---------- silent-film intertitle (formula, statement; 1-4 lines) ---------- */
+  K.intertitle = function (ctx, x, y, w, h, lines, opt) {
+    const o = Object.assign({ a: 1, size: 52, seed: 1100, write: 1, font: K.FONT.mono, weight: 500, align: "center" }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    K.shape(ctx, K.rectPts(-w / 2, -h / 2, w, h, 4), { fill: P.ink, w: 6, boil: 0.8, seed: o.seed });
+    K.shape(ctx, K.rectPts(-w / 2 + 18, -h / 2 + 18, w - 36, h - 36, 4), { fill: null, stroke: P.paper, w: 4, boil: 0.6, seed: o.seed + 1 });
+    K.shape(ctx, K.rectPts(-w / 2 + 30, -h / 2 + 30, w - 60, h - 60, 4), { fill: null, stroke: P.paper, w: 2, boil: 0.6, seed: o.seed + 2 });
+    [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(([sx, sy], i) => curl(ctx, sx * (w / 2 - 44), sy * (h / 2 - 44), -sx, -sy, P.paper, o.seed + 10 + i * 3));
+    const lh = o.size * 1.32, top = -((lines.length - 1) * lh) / 2;
+    lines.forEach((ln, i) => {
+      const str = lineStr(ln), n = Math.floor(str.length * clamp(o.write * lines.length - i, 0, 1));
+      if (n > 0) K.text(ctx, str.slice(0, n), o.align === "left" ? -w / 2 + 70 : 0, top + i * lh, { size: o.size, weight: o.weight, font: o.font, fill: lineCol(ln, P.paper), align: o.align });
+    });
+    ctx.restore();
+  };
+
+  /* ---------- act card on an easel (bullets; each pops on its own beat) ---------- */
+  K.easel = function (ctx, x, y, w, items, opt) {
+    const o = Object.assign({ a: 1, size: 40, seed: 1200, shown: 99, title: "", lineH: null }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const lh = o.lineH || o.size * 1.6, h = items.length * lh + (o.title ? 130 : 70);
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a); ctx.rotate(Math.sin(K.now * 1.1 + o.seed) * 0.006);
+    /* tripod legs */
+    K.hose(ctx, [[-w * 0.32, -h / 2 + 20], [-w * 0.42, h / 2 + 200]], 10, P.g2, o.seed + 1);
+    K.hose(ctx, [[w * 0.32, -h / 2 + 20], [w * 0.42, h / 2 + 200]], 10, P.g2, o.seed + 2);
+    K.hose(ctx, [[0, -h / 2 - 30], [0, h / 2 + 180]], 9, P.g1, o.seed + 3);
+    K.shape(ctx, K.rectPts(-w / 2 - 10, h / 2 - 4, w + 20, 20, 3), { fill: P.g2, w: 4, boil: 0.6, seed: o.seed + 4 });
+    /* the card with a double rule */
+    K.shape(ctx, K.rectPts(-w / 2, -h / 2, w, h, 4), { fill: P.paper, w: 5, boil: 0.8, seed: o.seed + 5, shade: { color: P.g5, dx: -12, dy: -12 } });
+    K.shape(ctx, K.rectPts(-w / 2 + 16, -h / 2 + 16, w - 32, h - 32, 4), { fill: null, w: 2.5, boil: 0.6, seed: o.seed + 6 });
+    let yy = -h / 2 + 36 + lh / 2;
+    if (o.title) { K.text(ctx, o.title, 0, -h / 2 + 64, { size: o.size * 1.15, weight: 900, font: K.FONT.display, fill: P.ink }); K.line(ctx, [[-w * 0.3, -h / 2 + 100], [w * 0.3, -h / 2 + 100]], { stroke: P.ink, w: 4, boil: 0.5, seed: o.seed + 7 }); yy += 60; }
+    items.forEach((it, i) => {
+      const g = clamp(o.shown - i, 0, 1); if (g <= 0) return;
+      const s = K.E.back(g, 2);
+      ctx.save(); ctx.translate(-w / 2 + 64, yy + i * lh); ctx.scale(s, s);
+      K.twinkle(ctx, 0, 0, o.size * 0.4, 1, lineCol(it, P.ink) === P.gold ? P.gold : P.ink, o.seed + 10 + i);
+      K.text(ctx, lineStr(it), o.size * 0.8, 2, { size: o.size, weight: 500, font: K.FONT.label, fill: P.ink, align: "left" });
+      ctx.restore();
+    });
+    ctx.restore();
+  };
+
+  /* ---------- theatre playbill (table). rows[0] = header, hi = gold row ---------- */
+  K.playbill = function (ctx, x, y, cols, rows, opt) {
+    const o = Object.assign({ a: 1, size: 30, rowH: 54, seed: 1300, hi: -1, reveal: 1, title: "" }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const w = cols.reduce((s, c) => s + c, 0) + 60, head = o.title ? 90 : 30, h = rows.length * o.rowH + head + 40;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    K.shape(ctx, K.rectPts(-w / 2, -h / 2, w, h, 5), { fill: P.paper, w: 5, boil: 0.8, seed: o.seed, shade: { color: P.g5, dx: -10, dy: -10 } });
+    K.shape(ctx, K.rectPts(-w / 2 + 14, -h / 2 + 14, w - 28, h - 28, 5), { fill: null, w: 4, boil: 0.6, seed: o.seed + 1 });
+    K.shape(ctx, K.rectPts(-w / 2 + 22, -h / 2 + 22, w - 44, h - 44, 5), { fill: null, w: 1.8, boil: 0.6, seed: o.seed + 2 });
+    if (o.title) K.text(ctx, o.title, 0, -h / 2 + 62, { size: o.size * 1.25, weight: 900, font: K.FONT.display, fill: P.ink });
+    const shown = Math.ceil(rows.length * o.reveal);
+    rows.slice(0, shown).forEach((r, ri) => {
+      const ry = -h / 2 + head + 20 + ri * o.rowH + o.rowH / 2;
+      if (ri === o.hi) K.shape(ctx, K.rectPts(-w / 2 + 30, ry - o.rowH / 2 + 5, w - 60, o.rowH - 10, 3), { fill: P.gold, stroke: null, w: 0, boil: 0.6, seed: o.seed + 10 + ri });
+      let cx = -w / 2 + 30;
+      r.forEach((cell, ci) => {
+        K.text(ctx, lineStr(cell), cx + cols[ci] / 2, ry, { size: o.size, weight: ri === 0 ? 700 : 500, font: ri === 0 ? K.FONT.label : K.FONT.mono, fill: lineCol(cell, P.ink) });
+        cx += cols[ci];
+      });
+      if (ri === 0) { K.line(ctx, [[-w / 2 + 34, ry + o.rowH / 2], [w / 2 - 34, ry + o.rowH / 2]], { stroke: P.ink, w: 4, boil: 0.5, seed: o.seed + 30 }); K.line(ctx, [[-w / 2 + 34, ry + o.rowH / 2 + 7], [w / 2 - 34, ry + o.rowH / 2 + 7]], { stroke: P.ink, w: 2, boil: 0.5, seed: o.seed + 31 }); }
+    });
+    ctx.restore();
+  };
+
+  /* ---------- cinema screen with a chart (projected picture) ----------
+     series: [{ data, color, w, dash }], bands: [{ v, color, dash }] horizontal
+     lines (mean, +/-2 sigma), spread: [i0, i1] shades between series 0 and 1,
+     marks: [{ i, s, label }] dots on series s, draw 0..1 left-to-right */
+  K.screenChart = function (ctx, x, y, w, h, series, opt) {
+    const o = Object.assign({ a: 1, draw: 1, seed: 1400, yMin: null, yMax: null, bands: [], spread: null, marks: [], title: "", roller: true, beam: 0 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    if (o.roller) { K.shape(ctx, K.roundPts(-w / 2 - 30, -h / 2 - 34, w + 60, 26, 12), { fill: P.g1, w: 5, boil: 0.6, seed: o.seed, shine: { dx: 0, dy: 5, s: 0.8, a: 0.5 } }); }
+    K.shape(ctx, K.rectPts(-w / 2, -h / 2 - 10, w, h + 10, 4), { fill: P.shine, w: 5, boil: 0.8, seed: o.seed + 1, shade: { color: P.g5, dx: 0, dy: -14 } });
+    K.shape(ctx, K.rectPts(-w / 2 + 2, h / 2 - 4, w - 4, 16, 2), { fill: P.g1, w: 4, boil: 0.5, seed: o.seed + 2 });
+    if (o.beam > 0) K.glow(ctx, 0, 0, w * 0.6, "rgba(255,252,240,0.6)", o.beam);
+    const pl = -w / 2 + 50, pr = w / 2 - 36, pt = -h / 2 + (o.title ? 70 : 34), pb = h / 2 - 40;
+    if (o.title) K.text(ctx, o.title, 0, -h / 2 + 34, { size: 32, weight: 700, font: K.FONT.label, fill: P.ink });
+    let mn = o.yMin, mx = o.yMax;
+    if (mn == null || mx == null) { const all = series.flatMap((s) => s.data); mn = mn == null ? Math.min(...all) : mn; mx = mx == null ? Math.max(...all) : mx; }
+    const n0 = series.length ? series[0].data.length : 2;
+    const X = (i, n) => pl + ((pr - pl) * i) / Math.max(1, (n || n0) - 1), Y = (v) => pb - ((v - mn) / (mx - mn || 1)) * (pb - pt);
+    K.line(ctx, [[pl, pt], [pl, pb]], { stroke: P.ink, w: 4, boil: 0.5, seed: o.seed + 9, taper: [1, 1] });
+    K.line(ctx, [[pl, pb], [pr, pb]], { stroke: P.ink, w: 4, boil: 0.5, seed: o.seed + 8, taper: [1, 1] });
+    o.bands.forEach((b, bi) => {
+      const yy = Y(b.v); ctx.save(); ctx.setLineDash(b.dash || [16, 12]); ctx.strokeStyle = b.color || P.g3; ctx.lineWidth = b.w || 4;
+      ctx.beginPath(); ctx.moveTo(pl, yy); ctx.lineTo(pr, yy); ctx.stroke(); ctx.restore();
+      if (b.label) K.text(ctx, b.label, pr - 6, yy - 18, { size: 24, weight: 700, font: K.FONT.mono, fill: b.color === P.gold ? P.goldDark : P.g2, align: "right" });
+    });
+    const head = (s) => { const n = s.data.length, k = o.draw * (n - 1), pts = []; for (let i = 0; i <= Math.floor(k); i++) pts.push([X(i, n), Y(s.data[i])]); const fr = k - Math.floor(k), i0 = Math.floor(k); if (i0 < n - 1 && fr > 0) pts.push([lerp(X(i0, n), X(i0 + 1, n), fr), lerp(Y(s.data[i0]), Y(s.data[i0 + 1]), fr)]); return pts; };
+    if (o.spread && series.length > 1) {
+      const A = head(series[0]), B = head(series[1]); if (A.length > 1) { ctx.save(); ctx.globalAlpha = 0.28; ctx.fillStyle = P.gold; ctx.beginPath(); A.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]))); for (let i = B.length - 1; i >= 0; i--) ctx.lineTo(B[i][0], B[i][1]); ctx.closePath(); ctx.fill(); ctx.restore(); }
+    }
+    series.forEach((s, si) => {
+      const pts = head(s); if (pts.length < 2) return;
+      ctx.save(); if (s.dash) ctx.setLineDash(s.dash); ctx.lineCap = "round"; ctx.lineJoin = "round";
+      ctx.strokeStyle = s.color || P.ink; ctx.lineWidth = s.w || 6; ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]))); ctx.stroke(); ctx.restore();
+      const hp = pts[pts.length - 1]; K.dot(ctx, hp[0], hp[1], 8, s.color || P.ink, P.ink, 3, o.seed + 40 + si);
+    });
+    o.marks.forEach((m, mi) => { const s = series[m.s || 0], n = s.data.length; if (o.draw * (n - 1) < m.i) return; K.dot(ctx, X(m.i, n), Y(s.data[m.i]), 12, P.gold, P.ink, 3.5, o.seed + 60 + mi); if (m.label) K.hangTag(ctx, X(m.i, n), Y(s.data[m.i]) - 60, m.label, { seed: o.seed + 70 + mi, gold: true, size: 26, string: 30 }); });
+    ctx.restore();
+  };
+
+  /* ---------- admission ticket (big number, 1-2 lines) ---------- */
+  K.ticket = function (ctx, x, y, w, h, lines, opt) {
+    const o = Object.assign({ a: 1, size: 60, seed: 1500, gold: false, font: K.FONT.mono, weight: 700, rot: -0.04 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a); ctx.rotate(o.rot + Math.sin(K.now * 1.5 + o.seed) * 0.01);
+    const r = 18, pts = []; /* notched corners */
+    [[-w / 2, -h / 2, 0], [w / 2, -h / 2, Math.PI / 2], [w / 2, h / 2, Math.PI], [-w / 2, h / 2, -Math.PI / 2]].forEach(([cx, cy, a0]) => { for (let i = 0; i <= 4; i++) { const an = a0 + (i / 4) * (Math.PI / 2); pts.push([cx + Math.cos(an) * r, cy + Math.sin(an) * r]); } });
+    K.shape(ctx, pts, { fill: o.gold ? P.gold : P.paper, w: 5, boil: 0.7, seed: o.seed, shade: { color: o.gold ? P.goldDark : P.g5, dx: -10, dy: -10 } });
+    ctx.save(); ctx.setLineDash([10, 9]); ctx.strokeStyle = P.ink; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(w / 2 - 70, -h / 2 + 14); ctx.lineTo(w / 2 - 70, h / 2 - 14); ctx.stroke(); ctx.restore();
+    K.twinkle(ctx, w / 2 - 35, 0, 20, 1, P.ink, o.seed + 3);
+    const lh = o.size * 1.15, top = -((lines.length - 1) * lh) / 2;
+    lines.forEach((ln, i) => K.text(ctx, lineStr(ln), -35, top + i * lh + 2, { size: i ? o.size * 0.6 : o.size, weight: o.weight, font: i ? K.FONT.label : o.font, fill: lineCol(ln, P.ink) }));
+    ctx.restore();
+  };
+
+  /* ---------- hang tag on a string (prices, short numbers) ---------- */
+  K.hangTag = function (ctx, x, y, str, opt) {
+    const o = Object.assign({ a: 1, size: 30, seed: 1600, gold: false, string: 0, font: K.FONT.mono, weight: 700 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const w = K.textW(ctx, str, o.size, o.weight, o.font) + 40, h = o.size + 20;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a); ctx.rotate(Math.sin(K.now * 2.2 + o.seed) * 0.05);
+    if (o.string) K.line(ctx, [[0, h / 2], [0, h / 2 + o.string]], { stroke: P.ink, w: 3, boil: 0.5, seed: o.seed + 1, taper: [1, 1] });
+    K.shape(ctx, [[-w / 2 + 14, -h / 2], [w / 2, -h / 2], [w / 2, h / 2], [-w / 2 + 14, h / 2], [-w / 2, 0]], { fill: o.gold ? P.gold : P.paper, w: 4, boil: 0.6, seed: o.seed, shade: { color: o.gold ? P.goldDark : P.g5, dx: 0, dy: -6 } });
+    K.dot(ctx, -w / 2 + 14, 0, 4, P.ink, P.ink, 1, o.seed + 2);
+    K.text(ctx, str, 7, 1, { size: o.size, weight: o.weight, font: o.font, fill: P.ink });
+    ctx.restore();
+  };
+
+  /* ---------- typewriter page (code). Python-ish highlighting in greys + gold numbers ---------- */
+  const KW = /^(def|return|import|from|for|in|if|else|elif|while|class|lambda|with|as|and|or|not|None|True|False|fn|let|mut|pub|struct|impl|use|match)$/;
+  K.typewriter = function (ctx, x, y, w, lines, opt) {
+    const o = Object.assign({ a: 1, size: 28, seed: 1700, typed: 1 }, opt || {});
+    const a = popS(o.a); if (a <= 0) return;
+    const lh = o.size * 1.5, h = lines.length * lh + 90;
+    ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
+    /* the machine's platen roller behind the page top */
+    K.shape(ctx, K.roundPts(-w / 2 - 50, -h / 2 - 30, w + 100, 44, 20), { fill: P.g1, w: 5, boil: 0.6, seed: o.seed, shine: { dx: 0, dy: 8, s: 0.8, a: 0.5 } });
+    [-1, 1].forEach((sd, i) => K.dot(ctx, sd * (w / 2 + 64), -h / 2 - 8, 20, P.g2, P.ink, 4, o.seed + 1 + i));
+    K.shape(ctx, K.rectPts(-w / 2, -h / 2, w, h, 4), { fill: P.paper, w: 4.5, boil: 0.7, seed: o.seed + 3, shade: { color: P.g5, dx: 12, dy: 0 } });
+    ctx.save(); ctx.font = `500 ${o.size}px ${K.FONT.mono}`; const cw = ctx.measureText("M").width; ctx.restore();
+    const total = lines.reduce((s, l) => s + l.length, 0); let budget = Math.floor(total * o.typed);
+    lines.forEach((ln, i) => {
+      if (budget <= 0) return; const vis = ln.slice(0, budget); budget -= ln.length;
+      const yy = -h / 2 + 46 + lh / 2 + i * lh; let col = 0;
+      const toks = vis.match(/#.*$|\/\/.*$|"[^"]*"?|'[^']*'?|[A-Za-z_][A-Za-z0-9_]*|[0-9][0-9_.]*|\s+|./g) || [];
+      toks.forEach((tk) => {
+        const c = tk.startsWith("#") || tk.startsWith("//") ? P.g3 : KW.test(tk) ? P.ink : /^[0-9]/.test(tk) ? P.goldDark : /^["']/.test(tk) ? P.g2 : P.g1;
+        K.text(ctx, tk, -w / 2 + 40 + col * cw, yy, { size: o.size, weight: KW.test(tk) ? 700 : 500, font: K.FONT.mono, fill: c, align: "left" });
+        col += tk.length;
+      });
+    });
+    ctx.restore();
+  };
+
+  /* ---------- marquee (titles). u = light-up 0..1. returns the text box ---------- */
+  K.marquee = function (ctx, cx, cy, w, h, u, opt) {
+    const o = Object.assign({ seed: 1800, chase: 0 }, opt || {});
+    if (u <= 0) return null;
+    const a = K.E.back(clamp(u, 0, 1), 1.6), ww = w * a, hh = h * a;
+    ctx.save(); ctx.translate(cx, cy);
+    /* hanging chains */
+    [-1, 1].forEach((sd, i) => K.line(ctx, [[sd * ww * 0.36, -hh / 2 - 400], [sd * ww * 0.36, -hh / 2]], { stroke: P.g1, w: 6, boil: 0.5, seed: o.seed + i, taper: [1, 1] }));
+    K.shape(ctx, K.roundPts(-ww / 2, -hh / 2, ww, hh, 28), { fill: P.ink, w: 7, boil: 0.8, seed: o.seed + 2, shine: { dx: 0, dy: 10, s: 0.96, a: 0.25 } });
+    K.shape(ctx, K.roundPts(-ww / 2 + 46, -hh / 2 + 46, ww - 92, hh - 92, 14), { fill: P.g1, stroke: P.paper, w: 3, boil: 0.6, seed: o.seed + 3 });
+    /* bulbs around the frame (chase on the beat) */
+    const m = 23, path = [[-ww / 2 + m, -hh / 2 + m], [ww / 2 - m, -hh / 2 + m], [ww / 2 - m, hh / 2 - m], [-ww / 2 + m, hh / 2 - m], [-ww / 2 + m, -hh / 2 + m]];
+    K.bulbs(ctx, path, Math.round((ww + hh) / 44), o.chase, { r: 9, lit: clamp(u * 1.5 - 0.3, 0, 1), seed: o.seed + 10 });
+    ctx.restore();
+    return { x: cx - ww / 2, y: cy - hh / 2, w: ww, h: hh };
+  };
+})(VK);
+
+/* ============================================================
+   INTRO 10 SETUP: variables, title DOM, timing (beat grid), the act's data.
+   Song: song_20s.m4a, "The Spread Trade Shuffle", ragtime at 150 BPM
+   (beat 0.40 s, bar 1.60 s), cut 0-6.57 + 12.97-26.6 of song_raw.mp4,
+   spliced on a downbeat. Each sung line is 2 bars:
+     0.12  "Two stocks walk into a chart, ha!"
+     3.36  "Dancing close then drifting apart."
+     6.56  "Trade the spread, trade the spread,"
+     9.73  "Distance says these two should wed."
+     12.91 "Cointegration rings the bell,"
+     16.14 "Kalman's filter knows it well."   (title card)
+   All story times are K.at(bar, beat) on the measured downbeats below.
+   ============================================================ */
+const K = VK, P = K.P, at = K.at;
+K.G.BPM = 150;
+K.G.BARS = [0.12, 1.74, 3.36, 4.97, 6.56, 8.13, 9.73, 11.33, 12.91, 14.55, 16.14, 17.74, 19.33];
+const DUR = 20.1;
+const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+const BEAT = K.beatLen();
+
+/* ---------- story beats (on the song's downbeats) ---------- */
+const T = {
+  irisIn: [0, 0.9],               /* iris opens on the closed curtain */
+  curtain: [at(0, 0), at(1, 0)],  /* 0.12 - 1.74 curtain parts */
+  enter: [at(0, 2), at(1, 2)],    /* penguins tap in from the wings */
+  ha: at(1, 3),                   /* 2.94 "ha!": the cat winks at us, hat lift */
+  close: at(2, 0),                /* 3.36 "dancing close" */
+  drift: [at(3, 0), at(4, 0)],    /* 4.97 - 6.56 "drifting apart": the spring stretches, z -> +2 */
+  spot: at(3, 3),                 /* 6.17 the cat spots z in the gold zone: "!" */
+  trade: at(4, 0),                /* 6.56 "Trade the spread" */
+  tagSell: at(4, 2),              /* tag -1 lands on the rich (top hat) penguin */
+  tagBuy: at(4, 3),               /* tag +1 lands on the cheap (boater) penguin */
+  flip: at(5, 0),                 /* 8.13 "trade the spread" #2: the cat flips a gold coin (bets) */
+  catch: at(5, 3),                /* 9.33 coin back in the glove */
+  snap: at(6, 0),                 /* 9.73 "Distance says": the spring snaps them back */
+  hit: at(6, 1),                  /* 10.13 they meet: squash, heart */
+  rain: at(7, 0),                 /* 11.33 "should wed": coins rain, the cat catches them in his hat */
+  bell: [at(8, 0), at(8, 2), at(9, 0)], /* 12.91 "Cointegration rings the bell" */
+  chart2: at(8, 0),               /* the screen shows the spread reverting inside +/-2 */
+  bow: at(9, 2),                  /* 15.35 bows */
+  irisOut: [at(9, 2.5), at(10, 0)], /* 15.55 - 16.14 iris closes on the cat */
+  title: at(10, 0),               /* 16.14 "Kalman's filter knows it well": the marquee lights */
+  letters: at(10, 0.5),
+  hatTip: at(11, 0),              /* 17.74 "knows it well": hat tip + wink */
+  irisEnd: [at(12, 0), DUR],      /* 19.33 - 20.1 closing iris (stops on the cat's face) */
+};
+
+/* ---------- variables (title text, language) ---------- */
+const VARS = Object.assign({ title: "Statistical Arbitrage|& Pairs Trading", lang: "en" },
+  (window.__hyperframes && window.__hyperframes.getVariables && window.__hyperframes.getVariables()) || {});
+const LANG = VARS.lang || "en";
+const TITLE_LINES = String(VARS.title || "Statistical Arbitrage|& Pairs Trading").split("|").map((s) => s.trim()).filter(Boolean);
+const IS_CJK = LANG === "zh-CN" || LANG === "zh-TW";
+
+/* ---------- title DOM: one span per character (letters drop in on the beat) ---------- */
+const titleEl = document.getElementById("title");
+if (LANG === "zh-CN") titleEl.classList.add("cjk-sc");
+if (LANG === "zh-TW") titleEl.classList.add("cjk-tc");
+const TITLE_CH = [];
+TITLE_LINES.forEach((ln, li) => {
+  const d = document.createElement("div");
+  d.setAttribute("data-layout-allow-occlusion", "");
+  d.className = "ln " + (li === TITLE_LINES.length - 1 && TITLE_LINES.length > 1 ? "l1" : "l0");
+  const inner = document.createElement("span"); inner.className = "fit"; d.appendChild(inner);
+  Array.from(ln).forEach((c) => {
+    const s = document.createElement("span");
+    s.className = "ch"; s.setAttribute("data-layout-allow-occlusion", ""); s.textContent = c === " " ? " " : c;
+    inner.appendChild(s); TITLE_CH.push({ el: s, line: li, idx: TITLE_CH.length });
+  });
+  titleEl.appendChild(d);
+});
+const TITLE_LN = Array.from(titleEl.querySelectorAll(".ln"));
+
+/* ---------- the act: stage layout (world px at z = 1) ---------- */
+const FLOOR = K.FLOOR_Y;
+const PIANO = { x: 300, y: 930, s: 0.66 };
+const CAT = { x: 525, y: 990, s: 1.05 };
+const BELL = { x: 680, y: 985, stoolS: 0.66, s: 0.72 };
+const PEN = { y: 965, s: 0.9, A0: 1040, B0: 1250, A1: 830, B1: 1580 }; /* A = rich (top hat), B = cheap (boater) */
+const GAUGE = { x: 1000, y: 200, r: 118 };
+const SCREEN = { x: 1200, y: 425, w: 760, h: 270 };
+
+/* the price history projected on the screen: one common walk + a spread that
+   stays near 0, opens to +2 sigma and reverts (the act's story) */
+const NPTS = 64;
+const CHART = (function () {
+  const rnd = K.mulberry(20261012), A = [], B = [], S = [];
+  let c = 100;
+  for (let i = 0; i < NPTS; i++) {
+    c += (rnd() - 0.48) * 1.6;
+    const u = i / (NPTS - 1);
+    const open = K.ss(0.35, 0.62, u) * (1 - K.ss(0.72, 0.86, u));
+    const sp = 2.15 * open + (rnd() - 0.5) * 0.5 * (1 - open) + Math.sin(i * 0.9) * 0.25;
+    S.push(sp); A.push(c + sp * 2.2); B.push(c - sp * 2.2);
+  }
+  return { A, B, S };
+})();
+
+/* ============================================================
+   INTRO 20 THE ACT (0 - 16.1 s): stage, the cat at the piano, the two
+   penguins on a spring, the z-meter, the screen, coins and the bell.
+   Every function is a pure function of t.
+   ============================================================ */
+const pulseB = (t) => K.pulse(t, 1, 6);   /* every beat */
+const beatPh = (t) => { const b = K.barAt(t); return b < 0 ? 0 : ((t - K.barStart(b)) / BEAT) % 1; };
+const tapOf = (t, off) => { const p = (beatPh(t) + (off || 0)) % 1; return Math.max(0, Math.sin(p * Math.PI * 2)) ; };
+
+/* ---------- penguin x positions + spread state ---------- */
+function penX(t) {
+  const enter = K.inv(T.enter[0], T.enter[1], t), e = K.E.out3(enter);
+  let a = K.lerp(2120, PEN.A0, e), b = K.lerp(2330, PEN.B0, e);
+  /* drifting apart, then the snap back (fast ease-in, a little overshoot) */
+  const d = K.E.inOut(K.inv(T.drift[0], T.drift[1], t));
+  const back = K.inv(T.snap, T.hit, t), bk = back * back;
+  const dA = (PEN.A1 - PEN.A0) * d * (1 - bk), dB = (PEN.B1 - PEN.B0) * d * (1 - bk);
+  a += dA; b += dB;
+  /* recoil after the hit */
+  const r = t > T.hit ? Math.exp(-(t - T.hit) * 6) * Math.sin((t - T.hit) * 22) * 26 : 0;
+  a -= r; b += r;
+  /* a little dance sway while close */
+  const sway = (t > T.close && t < T.drift[0] + 0.4 ? 1 : 0) * Math.sin((t - T.close) * Math.PI / BEAT / 2) * 16;
+  return [a + sway, b + sway];
+}
+/* spread in sigma from the partners' separation; damped wobble after the snap */
+function zOf(t) {
+  const [a, b] = penX(t), sep0 = PEN.B0 - PEN.A0, sep1 = PEN.B1 - PEN.A1;
+  let z = 2.1 * K.clamp((b - a - sep0) / (sep1 - sep0), -0.4, 1.2);
+  if (t > T.hit) z += -0.7 * Math.exp(-(t - T.hit) * 2.6) * Math.cos((t - T.hit) * 9);
+  if (t > T.enter[1] && t < T.drift[0]) z += 0.12 * Math.sin(t * 5.3);
+  return z;
+}
+
+/* ---------- penguin poses ---------- */
+function penPose(t, who) {
+  const sd = who === "A" ? -1 : 1, off = who === "A" ? 0 : 0.5;
+  const st = { seed: who === "A" ? 900 : 950, hat: who === "A" ? "top" : "boater", blink: K.blinkAt(t, who === "A" ? 4 : 6), look: [-sd * 0.6, 0] };
+  const walking = t > T.enter[0] && t < T.enter[1] + 0.2;
+  st.tapL = tapOf(t, off) * (walking || t > T.close ? 0.9 : 0.4);
+  st.tapR = tapOf(t, off + 0.5) * (walking || t > T.close ? 0.9 : 0.4);
+  st.squash = 0.08 * pulseB(t) - 0.02;
+  st.hop = 6 * pulseB(t);
+  st.flipL = 18 + 14 * Math.sin(t * 7.85 + off * 3); st.flipR = 18 + 14 * Math.sin(t * 7.85 + 1 + off * 3);
+  st.lean = walking ? -sd * 6 : 0;
+  /* "ha!": jazz hands */
+  const ha = K.ss(T.ha - 0.15, T.ha + 0.05, t) * (1 - K.ss(T.ha + 0.35, T.ha + 0.6, t));
+  if (ha > 0) { st.flipL = K.lerp(st.flipL, 150, ha); st.flipR = K.lerp(st.flipR, 150, ha); st.beak = "open"; st.hop += 26 * ha; st.look = [0, -0.2]; }
+  /* drifting apart: lean outward, worried looks at each other */
+  const dr = K.inv(T.drift[0], T.drift[1], t) * (1 - K.inv(T.snap, T.hit, t));
+  if (dr > 0) { st.lean += sd * 10 * Math.sin(dr * Math.PI); st.look = [-sd, 0]; st[sd < 0 ? "flipR" : "flipL"] = 70 + 30 * dr; }
+  if (t > T.drift[1] && t < T.snap) { st.lean = sd * 4; st.beak = "open"; st.look = [-sd, -0.1]; st[sd < 0 ? "flipR" : "flipL"] = 95 + 6 * Math.sin(t * 9); }
+  /* the snap: flying back, then the hug */
+  if (t > T.snap && t < T.hit) { st.lean = -sd * 14; st.squash = -0.18; st.beak = "open"; st.look = [-sd, 0]; }
+  const hug = K.inv(T.hit, T.hit + 0.25, t);
+  if (t > T.hit) {
+    const land = Math.sin(K.inv(T.hit, T.hit + 0.3, t) * Math.PI) * (1 - K.inv(T.hit, T.hit + 0.3, t));
+    st.squash += 0.35 * land; st.beak = "shut"; st.blink = 0; st.look = [-sd * 0.4, -0.2];
+    st[sd < 0 ? "flipR" : "flipL"] = K.lerp(40, 110, hug);
+    st.heart = who === "A" ? K.inv(T.hit + 0.2, T.hit + 0.55, t) : 0; st.heartX = 85;
+  }
+  /* bow on the bell */
+  const bow = K.ss(T.bow - 0.2, T.bow + 0.2, t) * (1 - K.ss(T.irisOut[1] - 0.1, T.irisOut[1] + 0.2, t));
+  if (bow > 0) { st.lean = -sd * 0 + 0; st.squash -= 0.1 * bow; st.hatTip = -30 * bow; }
+  return st;
+}
+
+/* ---------- the cat ---------- */
+const KEY_X = (k) => PIANO.x + (-220 + 6 + (k + 0.5) * (428 / 22)) * PIANO.s;
+const KEY_Y = PIANO.y - 280 * PIANO.s;
+function toCat(p) { return { x: (p[0] - CAT.x) / CAT.s, y: (p[1] - CAT.y) / CAT.s }; }
+function playing(t) { return t < T.ha - 0.2 || (t > T.ha + 0.6 && t < T.trade - 0.35); }
+function pressedKeys(t) {
+  if (!playing(t)) return [];
+  const h = Math.floor((t - 0.12) / (BEAT / 2));
+  return [10 + (h % 4) * 2 + (K.hash(h, 3) < 0.5 ? 1 : 0), 17 + (h % 3)];
+}
+function catPose(t) {
+  const st = { seed: 800, blink: K.blinkAt(t, 3), mouth: "smile", look: [0.6, 0], turn: 0.3 };
+  const pb = pulseB(t);
+  st.squash = 0.07 * pb - 0.02;
+  st.lean = -3 + 2 * Math.sin(t * 3.9);
+  /* playing: gloves hop on the keys (stride left hand, melody right hand) */
+  const keys = pressedKeys(t);
+  if (keys.length) {
+    /* left hand plays the stride, right hand swings the beat at the act */
+    const L = toCat([KEY_X(keys[1]), KEY_Y - 14 * pb]);
+    st.gloveL = { x: L.x, y: L.y, open: 0.6, rot: 200 };
+    st.gloveR = { x: 96 + 10 * Math.sin(t * Math.PI / BEAT), y: -170 - 26 * pulseB(t - BEAT / 2), open: 0.9, rot: -40 + 20 * Math.sin(t * Math.PI / BEAT) };
+    st.look = [0.8, 0.1]; st.turn = 0.5;
+  }
+  /* "ha!": turn to the camera, wink, hat lift, present the act */
+  const ha = K.ss(T.ha - 0.2, T.ha, t) * (1 - K.ss(T.ha + 0.45, T.ha + 0.7, t));
+  if (ha > 0) {
+    st.turn = K.lerp(st.turn, 0, ha); st.look = [0, 0]; st.wink = ha; st.mouth = "grin"; st.hatLift = 34 * ha; st.hatTip = -12 * ha;
+    st.gloveR = { x: K.lerp(st.gloveR ? st.gloveR.x : 74, 150, ha), y: K.lerp(st.gloveR ? st.gloveR.y : -150, -190, ha), open: 1, rot: -20 };
+    st.squash -= 0.14 * ha;
+  }
+  /* "!": z hits the gold zone */
+  const pop = K.ss(T.spot - 0.06, T.spot + 0.06, t) * (1 - K.ss(T.trade + 0.4, T.trade + 0.8, t));
+  if (pop > 0) { st.blink = 0; st.eyeUp = 10 * pop; st.brow = 1.4 * pop; st.mouth = "o"; st.exclaim = K.inv(T.spot - 0.05, T.spot + 0.25, t) * (1 - K.inv(T.trade + 0.5, T.trade + 0.7, t)); st.look = [1, -0.5]; st.turn = 0.6; }
+  /* "trade the spread": wind up and throw two tags (sell the rich, buy the cheap) */
+  if (t > T.trade - 0.35 && t < T.flip) {
+    st.turn = 0.5; st.look = [1, -0.2]; st.mouth = "sly";
+    [T.tagSell, T.tagBuy].forEach((tt) => {
+      const wind = K.ss(tt - BEAT * 0.9, tt - BEAT * 0.4, t) * (1 - K.ss(tt - BEAT * 0.4, tt - BEAT * 0.2, t));
+      const thr = K.ss(tt - BEAT * 0.4, tt - BEAT * 0.15, t) * (1 - K.ss(tt + 0.1, tt + 0.35, t));
+      if (wind > 0 || thr > 0) { st.gloveR = { x: K.lerp(K.lerp(60, -40, wind), 170, thr), y: K.lerp(K.lerp(-170, -230, wind), -200, thr), open: 0.2 + 0.8 * thr }; st.lean = -8 * wind + 8 * thr; }
+    });
+    if (!st.gloveR) st.gloveR = { x: 90, y: -170, open: 0.5 };
+    st.gloveL = { x: -80, y: -120 - 10 * pb, open: 0.3 };
+  }
+  /* coin flip: bets on the reversion */
+  if (t > T.flip - 0.3 && t < T.snap + 0.4) {
+    const up = K.ss(T.flip - 0.3, T.flip, t);
+    st.gloveR = { x: 70, y: K.lerp(-150, -190, up) + 30 * K.ss(T.catch - 0.1, T.catch + 0.1, t) * 0, open: 0.4 };
+    st.gloveL = { x: -70, y: -140, open: 0.4 };
+    st.look = [0.3, -1 + 1.6 * K.inv(T.flip, T.flip + 0.6, t) * (1 - K.inv(T.catch - 0.6, T.catch, t))]; st.turn = 0.1;
+    st.mouth = t > T.catch ? "grin" : "o";
+    st.squash -= 0.2 * (1 - K.inv(T.flip, T.flip + 0.15, t)) * up;
+  }
+  /* cue! both arms up as the spring snaps */
+  const cue = K.ss(T.snap - 0.15, T.snap + 0.05, t) * (1 - K.ss(T.rain - 0.3, T.rain, t));
+  if (cue > 0) { st.gloveL = { x: -100, y: -260, open: 1 }; st.gloveR = { x: 110, y: -260, open: 1 }; st.mouth = "grin"; st.look = [1, -0.3]; st.turn = 0.4; st.hop = 30 * Math.sin(K.inv(T.hit, T.hit + 0.4, t) * Math.PI); }
+  /* coins rain: hat held out upside down */
+  if (t > T.rain - 0.3 && t < T.bell[0] - 0.25) {
+    const h = K.ss(T.rain - 0.3, T.rain, t);
+    st.hatInHand = true; st.hatTip = 180; st.gloveR = { x: 120, y: -230 + 20 * pb, open: 0.6 }; st.gloveL = { x: -90, y: -170, open: 0.8 }; st.mouth = "grin"; st.look = [0.3, -1]; st.turn = 0.2 * h;
+  }
+  /* ring the bell (glove slaps the plunger on each hit) */
+  if (t > T.bell[0] - 0.3 && t < T.bow - 0.2) {
+    const plunger = toCat([BELL.x, BELL.y - 140 * BELL.stoolS - 96 * BELL.s]);
+    let lift = 1; T.bell.forEach((tb) => { lift = Math.min(lift, K.ss(tb - 0.02, tb - 0.25, t) + K.ss(tb + 0.02, tb + 0.25, t)); });
+    lift = K.clamp(lift, 0, 1);
+    st.gloveR = { x: plunger.x - 6, y: plunger.y - 6 - 50 * lift, open: 0.15, rot: 90 }; st.gloveL = { x: -96, y: -200 - 10 * pb, open: 1 };
+    st.mouth = lift < 0.3 ? "open" : "grin"; st.look = [0.2, 0]; st.turn = 0; st.squash += 0.12 * (1 - lift);
+  }
+  /* bow with the hat */
+  const bow = K.ss(T.bow - 0.2, T.bow + 0.2, t);
+  if (bow > 0 && t < T.irisOut[1]) { st.lean = -10 * bow; st.hatInHand = true; st.hatTip = -20; st.gloveR = { x: 130, y: -120, open: 0.6 }; st.gloveL = { x: -60, y: -110, open: 0.5 }; st.mouth = "grin"; st.wink = bow; st.turn = 0; st.look = [0, 0]; }
+  return st;
+}
+
+/* ---------- tags thrown at the partners, the flipped coin ---------- */
+function drawTags(t, xs) {
+  const tags = [[T.tagSell, xs[0], "−1 ▼", 0], [T.tagBuy, xs[1], "+1 ▲", 1]];
+  tags.forEach(([tt, px, str, i]) => {
+    const t0 = tt - BEAT * 0.2; if (t < t0) return;
+    if (t > T.snap + 0.2) return;
+    const fly = K.inv(t0, tt, t), from = [CAT.x + 150 * CAT.s, CAT.y - 200 * CAT.s], to = [px, PEN.y - 300 * PEN.s];
+    const x = K.lerp(from[0], to[0], fly), y = K.lerp(from[1], to[1], fly) - Math.sin(fly * Math.PI) * 160;
+    const fade = 1 - K.inv(T.snap, T.snap + 0.2, t);
+    ctx.save(); ctx.globalAlpha = fade;
+    K.hangTag(ctx, x, y + (fly >= 1 ? 4 * Math.sin(t * 6 + i) : 0), str, { gold: true, size: 34, seed: 1610 + i * 7, string: fly >= 1 ? 28 : 0, a: K.inv(t0, t0 + 0.15, t) });
+    ctx.restore();
+  });
+}
+function drawFlipCoin(t) {
+  if (t < T.flip - 0.05 || t > T.snap + 0.3) return;
+  const u = K.inv(T.flip, T.catch, t), hx = CAT.x + 74 * CAT.s, hy = CAT.y - 210 * CAT.s;
+  const y = hy - Math.sin(u * Math.PI) * 330, spin = u * 26;
+  K.coin(ctx, hx + 10 * Math.sin(u * 3), y, 26, { spin: u < 1 ? spin : 0, seed: 1650 });
+  if (u >= 1) K.twinkle(ctx, hx + 30, hy - 30, 22, 1 - K.inv(T.catch, T.catch + 0.4, t), P.goldLight, 1651);
+}
+
+/* ---------- the projected chart: prices first, the spread after the bell ---------- */
+function drawScreen(t) {
+  const a = K.inv(T.curtain[0] + 0.3, T.curtain[1], t);
+  if (a <= 0) return;
+  const draw = K.lerp(0.3, 1, K.inv(T.curtain[1], T.hit, t));
+  const two = K.inv(T.chart2, T.chart2 + 0.45, t);
+  if (two < 1) K.screenChart(ctx, SCREEN.x, SCREEN.y, SCREEN.w, SCREEN.h, [{ data: CHART.A, color: P.ink, w: 6 }, { data: CHART.B, color: P.g3, w: 6 }], { a, draw, seed: 1400, spread: true, beam: 0.15 });
+  if (two > 0) { /* the new reel rolls down over the old one */
+    ctx.save(); ctx.beginPath(); ctx.rect(SCREEN.x - SCREEN.w / 2 - 40, SCREEN.y - SCREEN.h / 2 - 40, SCREEN.w + 80, (SCREEN.h + 60) * K.E.out3(two)); ctx.clip();
+    const d2 = K.inv(T.chart2 + 0.2, T.bell[2], t), iEntry = 36, iExit = 52;
+    K.screenChart(ctx, SCREEN.x, SCREEN.y, SCREEN.w, SCREEN.h, [{ data: CHART.S, color: P.ink, w: 6 }], { a: 1, draw: d2, seed: 1450, yMin: -3, yMax: 3, roller: true, beam: 0.15,
+      bands: [{ v: 2, color: P.gold, label: "+2σ" }, { v: 0, color: P.g3, dash: [6, 10] }, { v: -2, color: P.gold, label: "−2σ" }], marks: [{ i: iEntry, s: 0 }, { i: iExit, s: 0 }] });
+    ctx.restore();
+  }
+}
+
+/* ---------- floating notes from the piano ---------- */
+function drawNotes(t) {
+  for (let i = 0; i < 6; i++) {
+    const t0 = 0.3 + i * 0.75 + K.hash(i, 5) * 0.3, d = (t - t0) % 4.5;
+    if (t < t0 || !playing(t - d) || d > 1.8) continue;
+    K.note(ctx, PIANO.x + 120 + d * 60 + 20 * Math.sin(d * 4 + i), PIANO.y - 520 - d * 150, 0.9, 1 - d / 1.8, 720 + i * 3);
+  }
+}
+
+/* ---------- the whole stage ---------- */
+function camAct(t) {
+  /* wide, a gentle push toward the partners as they drift, back out for the snap, push on the bell */
+  const zi = K.tw(t, T.drift[0], T.drift[1], 1, 1.06, K.E.inOut) - K.tw(t, T.snap - 0.2, T.hit, 0, 0.06, K.E.inOut);
+  const zb = K.tw(t, T.bell[0] - 0.3, T.bell[0] + 0.3, 0, 0.1, K.E.inOut) - K.tw(t, T.bow - 0.4, T.bow + 0.3, 0, 0.1, K.E.inOut);
+  const x = 960 + K.tw(t, T.drift[0], T.drift[1], 0, 80, K.E.inOut) - K.tw(t, T.snap - 0.2, T.hit, 0, 80, K.E.inOut) - K.tw(t, T.bell[0] - 0.3, T.bell[0] + 0.3, 0, 120, K.E.inOut);
+  const y = 540 + K.tw(t, T.bell[0] - 0.3, T.bell[0] + 0.3, 0, 70, K.E.inOut);
+  return { x, y, z: zi + zb, rot: 0 };
+}
+function drawAct(t) {
+  K.cam = camAct(t); K.applyCam(ctx, 1);
+  const xs = penX(t), z = zOf(t), strain = K.clamp(z / 2.1, 0, 1.2);
+  K.backdrop(ctx, { lx: 1000, light: 0.55 });
+  drawScreen(t);
+  K.floor(ctx);
+  K.spot(ctx, (xs[0] + xs[1]) / 2, PEN.y + 10, 520 + (xs[1] - xs[0]) * 0.6, K.inv(T.enter[0], T.enter[1], t) * 0.9, [1100, -260]);
+  K.spot(ctx, CAT.x, CAT.y + 10, 360, 0.7, [700, -260]);
+  /* piano, notes, bell on its stand */
+  K.piano(ctx, PIANO.x, PIANO.y, PIANO.s, { pressed: pressedKeys(t), jar: K.inv(T.rain, T.bell[2], t) });
+  drawNotes(t);
+  K.stool(ctx, BELL.x, BELL.y, BELL.stoolS, 530);
+  let ring = 0; T.bell.forEach((tb) => { if (t >= tb) ring = Math.max(ring, Math.exp(-(t - tb) * 3)); });
+  K.bell(ctx, BELL.x, BELL.y - 140 * BELL.stoolS, BELL.s, ring, 690);
+  K.coinRain(ctx, t, T.rain, { x0: 480, x1: 1700, floorY: FLOOR + 120, n: 24, seed: 640, r: 24, stagger: 0.9 });
+  /* partners + spring (spring behind their bodies, between the waists) */
+  const pa = penPose(t, "A"), pbz = penPose(t, "B");
+  const wa = K.penguinWaist(xs[0], PEN.y, PEN.s, 1, pa), wb = K.penguinWaist(xs[1], PEN.y, PEN.s, -1, pbz);
+  K.spring(ctx, wa, wb, { strain, r: 17, w: 6, coils: 8, wob: t > T.snap && t < T.hit + 0.6 ? 4 : 0 });
+  K.penguin(ctx, xs[0], PEN.y, PEN.s, pa);
+  K.penguin(ctx, xs[1], PEN.y, PEN.s, pbz);
+  drawTags(t, xs);
+  /* distance tag on the spring while it is stretched */
+  const dA = K.inv(T.drift[0] + 0.6, T.drift[0] + 1, t) * (1 - K.inv(T.snap + 0.1, T.hit, t));
+  if (dA > 0) K.hangTag(ctx, (wa[0] + wb[0]) / 2, wa[1] + 70, "d = " + Math.max(0, z).toFixed(1) + "σ", { a: dA, size: 30, seed: 1630, gold: z >= 2 });
+  K.cat(ctx, CAT.x, CAT.y, CAT.s, catPose(t));
+  drawFlipCoin(t);
+  /* proscenium in front: valance, z-meter, curtains, footlights */
+  K.valance(ctx, -10, { x0: -300, x1: 2220, depth: 120, swags: 6 });
+  const zA = K.inv(T.curtain[0], T.curtain[1], t);
+  K.gauge(ctx, GAUGE.x, GAUGE.y, GAUGE.r, z, { a: K.E.back(K.clamp(zA * 1.4 - 0.3, 0, 1), 2), glow: K.clamp((z - 1.8) * 2, 0, 1) * 0.8 });
+  const open = K.E.inOut(K.inv(T.curtain[0], T.curtain[1], t));
+  K.curtain(ctx, -1, open, { seed: 400 }); K.curtain(ctx, 1, open, { seed: 460 });
+  K.proscenium(ctx, { x: [-90, 2010] });
+  K.footlights(ctx, 1110, 120, 1800, 9, 1);
+}
+
+/* ============================================================
+   INTRO 40 TITLE (16.1 - 20.1 s): the marquee lights up over the stage,
+   the title letters drop in on the beat (DOM text, one variable per
+   language), the cast takes a bow: "Kalman's filter knows it well".
+   ============================================================ */
+const MARQ = { cx: 960, cy: 268, w: 1500, h: 350 };
+const TCAT = { x: 700, y: 1000, s: 0.95 };
+const TPEN = { y: 985, s: 0.86, A: 1150, B: 1330 };
+
+function catTitlePose(t) {
+  const pb = pulseB(t);
+  const st = { seed: 800, blink: K.blinkAt(t, 9), mouth: "grin", look: [0.2, -0.3], turn: 0.1, squash: 0.08 * pb - 0.02 };
+  st.gloveL = { x: -110, y: -170 - 14 * pb, open: 1 }; st.gloveR = { x: 110, y: -170 - 14 * pulseB(t - BEAT / 2), open: 1 };
+  /* ta-da on the title hit */
+  const td = K.ss(T.title, T.title + 0.25, t) * (1 - K.ss(T.hatTip - 0.5, T.hatTip - 0.2, t));
+  if (td > 0) { st.gloveL = { x: -150, y: -260, open: 1 }; st.gloveR = { x: 150, y: -260, open: 1 }; st.hop = 20 * Math.sin(K.inv(T.title, T.title + 0.4, t) * Math.PI); }
+  /* hat tip + wink on "knows it well" */
+  const tip = K.ss(T.hatTip - 0.2, T.hatTip + 0.1, t);
+  if (tip > 0) {
+    st.gloveR = { x: K.lerp(110, 26, tip), y: K.lerp(-170, -372, tip), open: 0.2, rot: -70 };
+    st.hatLift = 40 * tip * (1 - K.ss(T.irisEnd[0] + 0.2, T.irisEnd[0] + 0.5, t)); st.hatTip = -18 * tip; st.wink = tip * (1 - K.ss(T.hatTip + 0.9, T.hatTip + 1.1, t)); st.look = [0, 0]; st.turn = 0;
+    st.gloveL = { x: -90, y: -130 - 10 * pb, open: 0.4 };
+  }
+  return st;
+}
+function penTitlePose(t, who) {
+  const off = who === "A" ? 0 : 0.5, pb = pulseB(t);
+  const st = { seed: who === "A" ? 900 : 950, hat: who === "A" ? "top" : "boater", blink: K.blinkAt(t, who === "A" ? 11 : 13), look: [who === "A" ? 0.5 : -0.5, 0] };
+  st.tapL = tapOf(t, off); st.tapR = tapOf(t, off + 0.5);
+  st.squash = 0.08 * pb - 0.02; st.hop = 8 * pb;
+  st.flipL = 30 + 20 * Math.sin(t * 7.85 + off * 3); st.flipR = 30 + 20 * Math.sin(t * 7.85 + 1 + off * 3);
+  const up = K.ss(T.title, T.title + 0.3, t) * (1 - K.ss(T.title + 1.2, T.title + 1.5, t));
+  if (up > 0) { st.flipL = K.lerp(st.flipL, 150, up); st.flipR = K.lerp(st.flipR, 150, up); st.beak = "open"; }
+  const tip = K.ss(T.hatTip - 0.1, T.hatTip + 0.2, t);
+  if (tip > 0) { st.hatTip = -25 * tip * (1 - K.ss(T.hatTip + 0.8, T.hatTip + 1.1, t)); st.look = [0, 0]; }
+  return st;
+}
+
+let CAT_HEAD = [960, 600];
+function drawTitleSet(t) {
+  K.cam = { x: 960, y: 540, z: K.tw(t, T.title, T.title + 1.5, 1.04, 1, K.E.out3), rot: 0 }; K.applyCam(ctx, 1);
+  K.backdrop(ctx, { lx: 960, ly: 420, light: 0.7 });
+  K.floor(ctx);
+  K.spot(ctx, TCAT.x, TCAT.y + 10, 420, 0.8, [600, -260]);
+  K.spot(ctx, (TPEN.A + TPEN.B) / 2, TPEN.y + 10, 480, 0.8, [1300, -260]);
+  /* last act's coins, settled on the floor */
+  K.coinRain(ctx, t + 12, T.rain, { x0: 300, x1: 1650, floorY: FLOOR + 140, n: 24, seed: 640, r: 24, stagger: 0.9 });
+  const pa = penTitlePose(t, "A"), pb = penTitlePose(t, "B");
+  const wa = K.penguinWaist(TPEN.A, TPEN.y, TPEN.s, 1, pa), wb = K.penguinWaist(TPEN.B, TPEN.y, TPEN.s, -1, pb);
+  K.spring(ctx, wa, wb, { r: 18, w: 6, coils: 7 });
+  K.penguin(ctx, TPEN.A, TPEN.y, TPEN.s, pa);
+  K.penguin(ctx, TPEN.B, TPEN.y, TPEN.s, pb);
+  const r = K.cat(ctx, TCAT.x, TCAT.y, TCAT.s, catTitlePose(t));
+  CAT_HEAD = K.toScreen(r.head[0], r.head[1] - 10);
+  K.valance(ctx, -60, { x0: -300, x1: 2220, depth: 90, swags: 6 });
+  K.curtain(ctx, -1, 1, { seed: 400 }); K.curtain(ctx, 1, 1, { seed: 460 });
+  K.proscenium(ctx, { x: [-90, 2010] });
+  K.footlights(ctx, 1110, 120, 1800, 9, 1);
+  /* the marquee (screen space) */
+  K.screen(ctx);
+  const u = K.inv(T.title - 0.05, T.title + 0.45, t);
+  return K.marquee(ctx, MARQ.cx, MARQ.cy + Math.sin(t * 1.7) * 4, MARQ.w, MARQ.h, u, { chase: K.beatIndex(t) * (t > T.hatTip ? 2 : 1), seed: 1800 });
+}
+
+/* DOM title: fit each line into the marquee, letters drop in on eighth notes */
+const TITLE_MAX_W = MARQ.w - 190;
+function layoutTitleDom(t, box) {
+  titleEl.style.opacity = box ? "1" : "0";
+  if (!box) return;
+  const n = TITLE_LN.length;
+  const base = IS_CJK ? 132 : n > 1 ? 118 : 124;
+  const sizes = TITLE_LN.map((d, i) => {
+    const s0 = i === 0 || n === 1 ? base : Math.round(base * 0.86);
+    d.style.fontSize = s0 + "px";
+    const w = d.firstChild.scrollWidth || 1;
+    return Math.min(s0, Math.floor((s0 * TITLE_MAX_W) / w));
+  });
+  sizes.forEach((s, i) => { TITLE_LN[i].style.fontSize = s + "px"; });
+  const gap = 8, total = sizes.reduce((a, b) => a + b * 1.12, 0) + gap * (n - 1);
+  let y = box.y + box.h / 2 - total / 2 - 14;
+  TITLE_LN.forEach((d, i) => { d.style.top = y.toFixed(1) + "px"; y += sizes[i] * 1.12 + gap; });
+  TITLE_CH.forEach((c) => {
+    const t0 = T.letters + c.idx * 0.03, a = K.inv(t0, t0 + 0.38, t);
+    const yy = (1 - K.E.back(a, 2.2)) * -110, land = K.inv(t0 + 0.26, t0 + 0.5, t);
+    const sq = Math.sin(land * Math.PI) * 0.14 * (1 - land);
+    const hop = -5 * K.pulse(t, 2, 6) * K.inv(T.hatTip - 0.3, T.hatTip, t) * (c.line === n - 1 ? 1 : 0);
+    c.el.style.opacity = a > 0 ? Math.min(1, a * 3).toFixed(2) : "0";
+    c.el.style.transform = `translateY(${(yy + hop).toFixed(1)}px) scale(${(1 + sq).toFixed(3)}, ${(1 - sq).toFixed(3)})`;
+  });
+}
+
+/* ============================================================
+   INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
+   drives a proxy whose setter calls render(t).
+   0.00 - 0.90  iris opens on the closed curtain
+   0.12 - 3.36  "Two stocks walk into a chart, ha!": curtain parts, penguins tap in
+   3.36 - 6.56  "Dancing close then drifting apart": spring stretches, z -> +2
+   6.56 - 9.73  "Trade the spread": cat tags sell -1 / buy +1, flips a coin
+   9.73 - 12.9  "Distance says these two should wed": snap back, heart, coins rain
+   12.9 - 16.1  "Cointegration rings the bell": bell, spread chart, bow, iris out
+   16.1 - 20.1  "Kalman's filter knows it well": marquee title, hat tip, iris
+   The scene draws on #cv; the projector (flicker, scratches, dust,
+   vignette, iris) draws on #fx above the DOM title.
+   ============================================================ */
+const fx = document.getElementById("fx").getContext("2d");
+const grainEl = document.getElementById("grain");
+grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1.6 -.3'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>\")";
+
+function render(t) {
+  try {
+    K.begin(ctx, t, { x: 960, y: 540, z: 1 });
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = P.ink; ctx.fillRect(0, 0, K.W, K.H);
+    let box = null;
+    if (t < T.title) drawAct(t);
+    else box = drawTitleSet(t);
+    layoutTitleDom(t, box);
+    /* projector layer */
+    K.begin(fx, t, K.cam);
+    fx.setTransform(1, 0, 0, 1, 0, 0); fx.clearRect(0, 0, K.W, K.H);
+    K.film(fx, t, { flicker: 0.05, scratches: 1, dust: 1, vignette: 0.6 });
+    if (t < T.irisIn[1]) K.iris(fx, 960, 560, K.irisT(t, T.irisIn[0], T.irisIn[1], false, 1150));
+    if (t >= T.irisOut[0] && t < T.title) {
+      K.cam = camAct(t); const c = K.toScreen(CAT.x, CAT.y - 250 * CAT.s);
+      K.iris(fx, c[0], c[1], K.irisT(t, T.irisOut[0], T.irisOut[1] - 0.05, true, 1500));
+    }
+    if (t >= T.title && t < T.title + 0.55) K.iris(fx, 960, 560, K.irisT(t, T.title, T.title + 0.55, false, 1150));
+    if (t >= T.irisEnd[0]) K.iris(fx, CAT_HEAD[0], CAT_HEAD[1], K.lerp(1500, 190, K.E.inOut(K.inv(T.irisEnd[0] + 0.1, DUR - 0.05, t))));
+  } catch (err) {
+    /* never leave a black frame silently: draw the error so a snapshot shows it */
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);
+  }
+  /* film grain steps at the boil rate */
+  const f = K.boilFrame(t);
+  grainEl.style.backgroundPosition = ((f % 7) * 41) + "px " + ((f % 5) * 59) + "px";
+}
+
+const TL = gsap.timeline({ paused: true });
+const drv = { _t: 0 };
+Object.defineProperty(drv, "t", { get() { return this._t; }, set(v) { this._t = v; render(v); } });
+TL.to(drv, { t: DUR, duration: DUR, ease: "none" }, 0);
+render(0);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(drv._t));
+window.__timelines["main"] = TL;
+window.__render = render;
+
+})();
+    </script>
+  </body>
+</html>

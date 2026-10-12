@@ -1,0 +1,11 @@
+# renders, songs, build copies and preview frames stay local
+*.mp4
+*.m4a
+intro/assets/
+intro/preview/
+intro/renders/
+style/gallery/assets/
+style/gallery/preview/
+**/snapshots/*
+!**/snapshots/contact-sheet.jpg
+preview_*/
