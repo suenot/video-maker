@@ -2,6 +2,8 @@
 
 > **UPDATE 2026-10-12 (user decision): the intro runs the FULL LENGTH of the generated song** (about 30-74 s), not a 20 s cut. Use the whole `song_raw.mp4` audio (trim only leading/trailing silence, short fade-out at the very end, loudnorm I=-14 TP=-1.5) → `song_full.m4a`. Composition duration = song length. Illustrate every sung line and the instrumental breaks with fresh story beats (verse 1, chorus, verse 2 / break, final chorus → title card on the last chorus/ending). Keep pacing alive: a meaningful change every 2-4 s, landing on downbeats from a beat grid measured over the full song. Get word timings with `npx hyperframes transcribe` or whisper (lyrics.srt is often wrong). Existing 20 s material is reused and extended, not thrown away.
 
+> **UPDATE 2 (user): marketmaker.cc logo in a corner of the intro.** Source: `/Users/suenot/projects/trading/marketmaker/marketmaker-cc-landing/public/logo.svg` (monochrome, `fill="currentColor"`). Copy it into your kit as an asset. Place it in the TOP-RIGHT corner (~90-110 px tall incl. the wordmark "marketmaker.cc" next to it, 48 px margin), visible the whole intro, tinted to fit your palette but always legible (subtle backing plate if needed), never covered by action. It may do one small on-beat bounce at the start; otherwise static.
+
 
 Approved reference: `complex-arbitrage-rust/` (crab captain mascot). Read its `style/STYLE.md`, `style/kit/README.md`, `intro/REVIEW.md`, `intro/src/*.js`, and look at `intro/snapshots/contact-sheet.jpg` + `intro/renders/intro_en.mp4` before starting.
 
