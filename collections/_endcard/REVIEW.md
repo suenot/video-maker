@@ -54,3 +54,16 @@ critique, fix, re-snapshot. Final sheet: `snapshots/contact-sheet.jpg`.
   inside the dashed ring and is covered by the YouTube subscribe element anyway.
 - The renderer's auto-worker calibration flags frame 0 as a "small frame" (it is
   a solid ink cloud) and drops to one worker; output is correct, ~2.5 min each.
+
+## Round 5 (websites added on request)
+
+- Added `www.marketmaker.cc` and `www.listingapis.com` as two large cream pills
+  with globe glyphs, right-aligned in the header row (38 px, pop in at 0.6 s,
+  globe nods every 5.5 s). The `marketmaker.cc` chip left the contacts panel
+  so the site isn't listed twice.
+- The fish lane moved from the header row (now taken by the pills) to the water
+  right of the headline banner (x > 1380, y ~200), above the slot board.
+- With 7 chips the first split put the two Telegram chips on different rows.
+  Reordered: both Telegrams, email, X / Discord, GitHub, Facebook (rows 1568 /
+  1542 px).
+- Checked en at 1 s / 8 s, ru at 3.4 s and zh-CN at 8 s. lint: 0 errors. check: passed.

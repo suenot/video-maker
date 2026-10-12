@@ -16,10 +16,10 @@ market maker holding the four channel signs.
 
 | Zone | Screen px | Content |
 | --- | --- | --- |
-| header | y 40-240 | logo + `marketmaker.cc`, localized headline banner |
+| header | y 40-240 | logo + `marketmaker.cc`; the websites `www.marketmaker.cc` and `www.listingapis.com` as large pills; localized headline banner |
 | channels | x 40-1110, y 270-600 | four YouTube signs: English, 简体中文, 繁體中文, Русский |
 | YouTube slots | x 1150-1880, y 268-888 | calm dark board, nothing moves there after 2.4 s |
-| contacts | y 900-1056 | website, email, X, Discord, Telegram, Telegram (RU), GitHub, Facebook |
+| contacts | y 900-1056 | Telegram, Telegram (RU), email, X, Discord, GitHub, Facebook |
 
 ### YouTube end-screen elements
 
@@ -39,7 +39,7 @@ element, and drag them onto the dashed slots.
 ## Render
 
 ```bash
-tools/render_all.sh                 # all four languages -> renders/endcard_<lang>.mp4
+tools/render_all.sh                 # all four languages -> renders/endcard_<lang>.mp4 (one after another, via ../tools/heavy_slot.sh)
 LANGS="ru" tools/render_all.sh      # one language
 tools/snap.sh "1,3,9" "" '{"lang":"ru"}'   # snapshots of a language
 tools/snap.sh "0.3,0.6,0.9,1.3,1.8,2.4,3.5,5,7,9.5,12,15,17.5,18.6" && tools/sheet.sh 7
@@ -81,7 +81,7 @@ ffmpeg -f concat -safe 0 -i /tmp/endcard_list.txt -c copy -movflags +faststart "
 ## Files
 
 - `src/05_logo.js` logo path data (from `marketmaker-cc-landing/public/logo.svg`)
-- `src/10_copy.js` headlines, channels, contacts, glyph paths
+- `src/10_copy.js` headlines, channels, websites, contacts, glyph paths
 - `src/20_scene.js` layout, drawing, timeline
 - `tools/shell.html` page skeleton (variables, fonts, audio)
 - `tools/make_bed.sh` builds `assets/bed.m4a` from the channel song

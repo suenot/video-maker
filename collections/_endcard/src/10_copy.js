@@ -30,16 +30,22 @@ const ICON = {
   f: { s: "M15.6 4.2h-2.3a3 3 0 0 0-3 3V20.5 M7.4 11.2h7.4" },
 };
 
+/* websites, shown large in the header (exact spelling, with www) */
+const SITES = [
+  { text: "www.marketmaker.cc", color: "kelp" },
+  { text: "www.listingapis.com", color: "bid" },
+];
+
 /* contacts from the marketmaker.cc footer; tag = small pill after the text.
-   Order = reading order of the two panel rows (balanced widths): web, email, X,
-   Discord / both Telegrams, GitHub, Facebook. */
+   Order = reading order of the two panel rows (balanced widths): both
+   Telegrams, email, X / Discord, GitHub, Facebook. The websites are not chips:
+   they sit large in the header (SITES). */
 const CONTACTS = [
-  { icon: "web", color: "kelp", text: "marketmaker.cc" },
+  { icon: "plane", color: "bid", text: "t.me/suenot" },
+  { icon: "plane", color: "bid", text: "t.me/suenot_dev", tag: "RU" },
   { icon: "mail", color: "coral", text: "suenot@marketmaker.cc" },
   { icon: "x", color: "ink", text: "x.com/suenot" },
   { icon: "chat", color: "fan", text: "discord.com/invite/2PtuMAg" },
-  { icon: "plane", color: "bid", text: "t.me/suenot" },
-  { icon: "plane", color: "bid", text: "t.me/suenot_dev", tag: "RU" },
   { icon: "branch", color: "inkSoft", text: "github.com/suenot" },
   { icon: "f", color: "fishB", text: "facebook.com/soloviov.evgeniy" },
 ];

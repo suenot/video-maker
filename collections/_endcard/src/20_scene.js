@@ -4,7 +4,8 @@
    kit (collections/marketmaker-general/style/kit). 1920 x 1080, 19 s.
 
    Layout (screen px):
-     header      y  40-130  logo + "marketmaker.cc"; fish swim on the right
+     header      y  40-130  logo + "marketmaker.cc"; on the right the two
+                            websites as big pills (www.marketmaker.cc, www.listingapis.com)
      headline    y 150-240  cream banner, localized (variable `lang`)
      channels    x  40-1110 four YouTube signs held by Otto the octopus,
                             the sign for `lang` is sun-yellow and bobs
@@ -166,6 +167,22 @@ function drawHeader(t) {
     K.text(ctx, "marketmaker.cc", 186 + dx, 90, { size: 52, weight: 900, font: FD("en"), fill: P.cream, stroke: P.ink, w: 12, align: "left" });
     ctx.restore();
   }
+  /* websites: two big pills, right-aligned in the header row */
+  const ss = fitSize(SITES.map((q) => q.text).join(""), 38, 800, FT("en"), 1880 - 800 - SITES.length * 104, 32);
+  let x1 = 1880;
+  SITES.slice().reverse().forEach((q, k) => {
+    const i = SITES.length - 1 - k, w = K.textW(ctx, q.text, ss, 800, FT("en")) + 100, x0 = x1 - w;
+    const as = ap(t, 0.6 + i * 0.12, 0.5), cy = 86;
+    const glint = t > 3 ? Math.sin(K.clamp(((t - 3 - i * 0.4) % 5.5) / 0.6, 0, 1) * Math.PI) : 0;
+    pop(as, x0 + 40, cy, () => {
+      K.shape(ctx, K.rrectPts(x0, cy - 40, w, 80, 40, 3), { fill: P.cream, w: 5, boil: 0.45, seed: 660 + i * 3, shade: { color: P.creamShade, dx: 0, dy: -9 }, drop: { dx: 0, dy: 8 } });
+      ctx.save(); ctx.translate(x0 + 42, cy); ctx.rotate(0.5 * glint); ctx.translate(-(x0 + 42), -cy);
+      glyph(x0 + 42, cy, 26, "web", q.color);
+      ctx.restore();
+      K.text(ctx, q.text, x0 + 80, cy + 1, { size: ss, weight: 800, font: FT("en"), align: "left" });
+    });
+    x1 = x0 - 24;
+  });
   /* headline banner: unrolls from the left */
   const ab = ap(t, 0.75, 0.6);
   if (ab > 0) {
@@ -273,11 +290,11 @@ function drawWorld(t) {
   K.sand(ctx, 905, {});
   K.coralFan(ctx, 1030, 915, 0.55, {});
   K.brainCoral(ctx, 120, 925, 0.6, {});
-  /* fish cross the empty top-right water, one after another (never over the slots) */
-  [[0.4, 12, 96, "Y", 0.55], [6.0, 13, 118, "T", 0.5], [11.4, 12, 92, "O", 0.55]].forEach(([t0, d, y, sp, s], k) => {
+  /* fish cross the water right of the headline, one after another (never over the slots or pills) */
+  [[0.4, 12, 200, "Y", 0.5], [6.0, 13, 214, "T", 0.45], [11.4, 12, 196, "O", 0.5]].forEach(([t0, d, y, sp, s], k) => {
     const u = (t - t0) / d; if (u < 0 || u > 1) return;
-    const x = K.lerp(2020, 780, u);
-    ctx.save(); ctx.globalAlpha *= K.clamp((x - 780) / 120, 0, 1);
+    const x = K.lerp(2020, 1380, u);
+    ctx.save(); ctx.globalAlpha *= K.clamp((x - 1380) / 120, 0, 1);
     K.fish(ctx, x, y + 8 * Math.sin(t * 2 + k), s, { species: sp, dir: -1 });
     ctx.restore();
   });
