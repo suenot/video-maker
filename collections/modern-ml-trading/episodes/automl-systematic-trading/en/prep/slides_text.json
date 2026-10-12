@@ -1,0 +1,48 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "© MH ora swat\n© vira_sconce_42\nAp © oor scosc_as\n+ nO EE vars sousce_as\n\nA a } © @ vinx stoser_zs\n} \\ | \\ FEATURE_ERE_HOOULE fee th\nU t O E O l FEATURE_EHG_ROOULE [CVAR: ALG} Lg ~~} i] © @ 017s scort_as\nie mt a I :\n4 ofr?\n\n——@ BB oxra_scurct_ar\nyy f © @ pi1a_assce_ as\n}\n\n/ ——© HE 017s scoret_si0\n\nCOWERCENCE POINT_2 \\\\\\ OCS ¢ ——© BF oir sconce\n\n6) A) ——© @ ora scusct_as\n\nt j |\n— pours ' ‘VV cS \\ ee / S (© @ v11s_scoscr_ses\n“4 MN \\ N\\A tf / \\™— 08 DATA_SOORCE_A20\n1 anal / ———© MH 017s seosct_aas\n© = 7, = \\X\\ , ai $0 BB vats_sousct_azz\nPipelines lt hi) =\n\nALPHA_SIGNAL_OUTPUT\n\nrh = e/a ‘ \\—>-© WE a1a_stosee_coe\n4 } fj te : tt \\ 70 i nT scons\n\nbudget-aware search, Re ee am\n\nP.\n\\ OW mre susce ars\n\nfactory, and the \\ iw =\n\nNWA © bta_esact_ais\n\nstatistical debt of =e? SC\n\nCONVERGENCE_POINT_1 Pee ’ © @ 017s _s0rct_420\n(FLOM: 90%) “~~\n\n° \\\\t © @ 01a_soorce_ss1\nautomation. = ae\nMB 0074 soosct_as3\n\nWB bats, souscr_sse\n\n© WH 047s_seorer_azs\n\nA Gemini Notebook"
+    },
+    {
+      "page": 2,
+      "text": "H2 — What AutoML Automates\n\n| Manual Approach AutoML Approach\n\nArchitecture design Fixed neural network topology Neural Architecture Search (NAS)\nEnsemble construction Manual stacking Automated ensemble selection\n\nTHE OBJECTIVE FUNCTION IMPERATIVE\n\nThe AutoML scorer must optimize the financial objective (e.g., Sharpe), not a proxy\nclassification metric like roc_auc.\n\n=\" Optimizing roc_auc crowned a sub-5% exposure lottery in 56% of 680 seeds, yielding an in-sample\nSharpe of 21 that collapsed to @.13 out of sample.\n\n& Gemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "H2 — Automated Feature Engineering\n\nH3 — tsfresh: From One Price Series to 800+ Features\n\nExplosion Diagram\n\n63\nCharacterization |\n\nMethods Z :: ~794\nshe Z a are. Target: 4-hour\nStatistical ts, of\nauiteerrelaeae . = nip distinct forward-return\nFourier coefficients, S ;s features\n\nBTC 1h\nOHLCV\n\n(rolling 24-\nbar window)\n\nComplexity measures,\nNonlinear features\n\na Benjamini-Yekutieli False Discovery Rate (FDR) is\nselect_features(... ’ fdr_level=0.05) controlled at 0.05 across the ~794 tests.\n\nCRITICAL WARNING: FDR control here is separate from the model-search multiplicity. Both must be paid.\n\ni Gemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "H3 — Featuretools: Deep Feature Synthesis\n\nRelational Stacking Diagram\n\nmax_depth=2\n\nRelational Multi-Table Features\n\n[featured [featured [|\nPeeature-a [oumneant [|\nPteature.2 [eunneana [|\nPteature.2 [features ||\nI i\n\nfeatured [features [|\nFseature_on [featureon [|\n\nSystem Alert\n\ntime_index=\"timestamp\" The load-bearing parameter. This declaration locks aggregations point-in-time.\n\nA Omitting or misconfiguring this causes DFS to silently build features out of future data, creating fatal future-leakage.\n\ni Gemini Notebook"
+    },
+    {
+      "page": 5,
+      "text": "H2 — Budget-Aware AutoML: FLAML\n\nTraditional Search Grid (Optuna/TPE)\n\nFocuses on which sampler to use\nbased on eval-cost crossover.\n\ntime_budget: 300\n\nsplit_type: time (with 5 folds)\nmetric: Custom sqrt(252) Sharpe scorer\n\nCost-Frugal Optimization (FLAML)\n\nCompute Budget: 300 seconds\n\nResource Allocation Gauge\n\nEscalate to expensive\nmodels only when\nmarginal gain\njustifies time spend\n(CatBoost)\n\nEvaluate fast\n\nmodels first\n(LightGBM)\n\nCRITICAL WARNING: get_output_from_log retrieves\nthe configuration log. Log length = exact trial\ncount needed for statistical deflation.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "H2 — Neural Architecture Search for Trading Models\nH3 - NAS Search Space for Trading\n\nNeural Topology Search Tree\n\nLayerChoice:\nLSTM\nLayerChoice:\nGRU\nLayerChoice:\nTransformer\nLayerChoice:\nLinear\n\nEvaluation Cost Context Skepticism / Caveat\n\nNAS sits at the extreme expensive end of The third-party EXAMM performance claim\neval-cost, where sample-efficient samplers (outperforming DJI/S&P 500 via evolved\n\nSearch Space:\n\nCell types: {LSTM,\nGRU, Transformer,\nLinear}\n\nPooling\n\nInputChoice\n\nOutput Final\nDense Architecture\n\nLayers: [1, 8]\n\nLookback window:\n{20, 60, 120, 252}\n\nare mandatory. RNNs) is an unreplicated best-of-search\nfigure with no deflation reported.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "H2 — The WorldQuant Alpha Factory Approach\n\nH3 — Philosophy: Exponential Alpha Generation, and Its Correction\n\nIRXIC-VBR\n\nThe Illusion: Misconceiving BR (Breadth)\nas the generated trial count.\nThe Reality: BR counts independent bets.\n\nThe Correction\n\nN\n\nTakeaway: Breadth comes from\nExample: Crypto correlation factor C¢ = 3 decorrelation. 1,000,000 cor-\n\nResult: 10 correlated signals ~ 3.3 independent bets | elated alphs do not compound.\n\nNe"
+    },
+    {
+      "page": 8,
+      "text": "H3 — The 101 Formulaic Alphas / H3 — LLM-Enhanced Alpha Discovery\n\nGrammar Synthesis\n\nExample: Alpha#42: (rank(vwap - close) / rank(vwap + close))\n\nLLM Role in the Alpha Factory\n\nLLMs are not used for text-signal extraction here. They are utilized to write the\nformula/hypothesis—translating cross-domain papers into testable mathematical expressions.\n\nGemini Notebook"
+    },
+    {
+      "page": 9,
+      "text": "H3 — Building Your Own Mini Alpha Factory\n\nSCHEMATIC\n\n(illustrative format only, not a measurement)\n\n6 templates \\\n\nReal-data IC/DSR/PBO results are TODO.\n\n\\\\)\nNY)\nWwe\n\\\n\nAWK\nN\\\n\n=\n\n—\non\n=\nH-\n=\nok\n(e)\n=\nWw\n\nCalculates IC,\nturnover, and\nSharpe\n\n\\ CRUCIAL WARNING: A raw Sharpe from a 30-configuration sweep is not a\n\nresult—it is merely the maximum of 30 draws.\n\nGemini Notebook"
+    },
+    {
+      "page": 10,
+      "text": "H2 — Guardrails: What You Already Owe\n\n5-Pillar Constraint Layout\n\nA WAR\n\n2. Validate\nTemporally\n\nAWAR\n\n1. Price the\nSearch\n\nUse the\nDeflated\nSharpe Ratio\n(DSR) to\nstrictly\ntrack the\ntrial count\nbar.\n\nEnforce\nPurging and\nEmbargo to\nprevent data\nleakage.\n\nA WAR\n\n3. Score the\nProcedure\n\nMeasure\nProbability\nof Backtest\nOverfitting\n(PBO).\nCritical\nnote: PBO’s\nPBO’s null is\n0.5 (a coin\nfln'p)y not 1.\n\nA WAR\n\n4. Watch for\nIllusions\n\nUse plateau\nanalysis on\nnoise-\ndominated\nsearch\nsurfaces.\n\nA WAR\n\n5. Constrain\nthe Space\n\nEnforce hard\ncaps on\ndepth,\nfeatures, and\nturnover to\nregularize\nbefore\ndeflating.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "H2 — Conclusion\n\nArchitectural Value The Final Reality Check\n\ntsfresh / Featuretools for (based on tens of\nfeature generation thousands of backtests across five\nmajors):\nFLAML for budget optimization\n- DSR trials.\nOperator grammar for enumerable = weUe—\nalpha construction - Outcome:\n\nAutoML raises the trial count exponentially. Whatever it finds owes a proportionally massive\ndeflation. The useful output of an alpha factory is solely its survival rate after that deflation.\n\nGemini Notebook"
+    }
+  ]
+}
