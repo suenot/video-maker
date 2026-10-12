@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[{"id":"title","type":"string","label":"Title (| = line break)","default":"Causality & Lead-Lag|in Markets"},{"id":"lang","type":"string","label":"Language: en, ru, zh-CN, zh-TW","default":"en"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Causality and Lead-Lag in Markets: intro</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+/*__FONTS__*/
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0f1024; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #0f1024; }
+      #cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      #title { position: absolute; left: 0; top: 0; width: 1920px; height: 0; pointer-events: none; }
+      #title .ln { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap; line-height: 1; }
+      #title .ch { display: inline-block; will-change: transform, opacity; }
+      #title .l0 { font-family: "Yanone Kaffeesatz", "CJK SC", "CJK TC", sans-serif; font-weight: 700; color: #ece6d4; letter-spacing: 0.02em; text-shadow: 7px 8px 0 #0b0a12; -webkit-text-stroke: 3px #0b0a12; paint-order: stroke fill; }
+      #title .l1 { font-family: "Yanone Kaffeesatz", "CJK SC", "CJK TC", sans-serif; font-weight: 700; color: #ffb43f; letter-spacing: 0.04em; text-shadow: 7px 8px 0 #0b0a12; -webkit-text-stroke: 3px #0b0a12; paint-order: stroke fill; }
+      #title.cjk-sc .ln { font-family: "Yanone Kaffeesatz", "CJK SC", serif; }
+      #title.cjk-tc .ln { font-family: "Yanone Kaffeesatz", "CJK TC", serif; }
+      #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
+      #preload .y5 { font-family: "Yanone Kaffeesatz"; font-weight: 500; }
+      #preload .y7 { font-family: "Yanone Kaffeesatz"; font-weight: 700; }
+      #preload .m4 { font-family: "Cousine"; font-weight: 400; }
+      #preload .m7 { font-family: "Cousine"; font-weight: 700; }
+      #preload .sc { font-family: "CJK SC"; font-weight: 900; }
+      #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      #vig { background: radial-gradient(90% 80% at 50% 46%, rgba(0, 0, 0, 0) 55%, rgba(4, 3, 12, 0.62) 100%); }
+      #grain { opacity: 0.16; mix-blend-mode: overlay; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="64.5" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div id="title" data-layout-allow-overlap data-layout-allow-occlusion></div>
+      <div class="ov" id="vig"></div>
+      <div class="ov" id="grain"></div>
+      <audio id="song" src="song_full.m4a" data-start="0" data-duration="64.5" data-track-index="10" data-volume="1"></audio>
+      <div id="preload"><span class="y5">Aa Бб 0</span><span class="y7">Aa Бб 0</span><span class="m4">Aa Бб 0</span><span class="m7">Aa 0</span><span class="sc">市场因果</span><span class="tc">市場因果</span></div>
+    </div>
+    <script>
+(function () {
+/*__SCRIPT__*/
+})();
+    </script>
+  </body>
+</html>
