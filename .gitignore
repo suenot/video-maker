@@ -54,3 +54,7 @@ collections/complex-arbitrage-rust/intro/assets/
 collections/complex-arbitrage-rust/style/gallery/assets/
 collections/complex-arbitrage-rust/style/gallery/snapshots/
 collections/complex-arbitrage-rust/intro/preview/
+
+# collection songs (binary, regenerable via gaia)
+collections/**/intro/song_*.mp4
+collections/**/intro/song_*.m4a
