@@ -41,6 +41,8 @@ Slide content is always a **thing in this bazaar**, never a flat slide.
 | Asks (sellers, above) | `ask` / `askDark` / `askLight` | `#c23b32` / `#8a2420` / `#f08e7c` |
 | Raccoon fur / mask / muzzle | `fur` `furDark` `furLight` / `mask` / `muzzle` | `#8c8597` `#5d566a` `#c9c3cf` / `#2a2230` / `#f6efe4` |
 | Fez, vest | `fez` / `fezDark`, `vest` / `vestTrim` | `#a82a3a` / `#6f1726`, `#1f7a74` / `#f0a830` |
+| Gekko skin / spots / belly | `gecko` `geckoDark` `geckoLight` / `geckoSpot` / `geckoBelly` | `#3d79c2` `#24508a` `#8fb6e4` / `#f0a830` / `#e4ecef` |
+| Gekko apron | `apron` / `apronDark` | `#c4583a` / `#8f3a26` |
 | Wood, brass, plaster | `wood` / `woodDark` / `woodLight`, `brass`, `plaster` | `#a8693a` / `#6e4123` / `#cf9460`, `#d9a441`, `#ead2a6` |
 | Crates (orders) | `crate` / `crateDark` | `#c98d4e` / `#8e5a2a` |
 | Gold: our own order, money | `gold` / `goldDark` / `goldGlow` | `#e9b63c` / `#a8781a` / `#fff0b0` |
@@ -100,6 +102,30 @@ Animation rules:
 - Blinks are seeded at about 1 per 1.8 s (`K.blinkAt`) and forced open during surprise and shouts.
 - Expressions: `mouth` smile, smirk, grin, open, shout, o; `brow` -1..1.5; `eyeUp`; `!` mark; jagged speech burst `K.shout` with "!" or an arrow + number.
 - Signature gestures: tipping the fez, flicking abacus beads, the clap that slams the book shut, the "tight" pinch, pointing along the flow.
+
+## 6b. Gekko (the gecko apprentice, host B) and the duo
+
+Gekko is Tikki's young apprentice who runs errands between the stalls: carries crates, writes in the pocket ledger, asks the questions the viewer would ask. Tikki explains; Gekko is curious, quick to be amazed, and sometimes gets it wrong first.
+
+| Part | Value (scale 1, local px) |
+| --- | --- |
+| Skin | electric-blue day gecko (`gecko`), saffron spots, pale belly with fine stripes. Cool blue against the warm bazaar, so he never melts into the sky; red and green stay reserved for asks and bids |
+| Head | 132 x 96 wide flat head, centre y -186; huge bulging eyes r 19 in sockets on top (+/-34, -214); wide grin across the face |
+| Body | 72 x 104, centre y -92; terra apron with saffron zigzag hem and a pocket ledger; a saffron pencil tucked behind the head |
+| Arms / legs | IK 30 + 28 from shoulders (+/-30, -132); short squat legs; every hand and foot has round sticky toe pads (`open`, `point`, `fist`) |
+| Tail | tapered, 150 long, curls to the right; `tailUp` stiffens it straight up (surprise) |
+| Size | 0.72x Tikki at the same scale; in `duo` he is drawn at 1.2x, so both heads sit at about the same height. Readable from 180 px (checked in the gallery) |
+
+Acting:
+- Talking: `talk` 0..1 from the narration loudness opens the mouth; `vis` (a / e / o / m) changes its shape every 0.1 s (`K.visemeAt`). Both hosts share `K.talkMouth`.
+- Listening: the silent host looks at the speaker's head (`lookAt`), tilts the head towards them and nods now and then (`nod`). `K.hostPose` does this automatically when the other host talks.
+- Gestures (`K.GESTURE`, same names for both): `point` (arm stretches to a target, lean, eyes follow), `nod`, `surprise` (eyes pop, brows up, "!", tail up / fez lifts, hands up), `think` (paw on chin, eyes up, "?" for Gekko), `cheer`, `shrug`, `explain` (open palm lifts on stressed words).
+- Tikki keeps the abacus in his left paw in the duo, so he points and gestures with the right one.
+- Placement: `K.duo` puts both hosts on a small floor kilim, Tikki >= 300 px tall (390 px at the default `s` 1.15). Hosts are storytellers: never tiny in a corner. They own the bottom-left (or bottom-right with `side: -1`); explainer objects use the rest of the frame.
+
+QA (gallery, two critique rounds):
+1. Round 1: the crate Gekko carried was drawn between his raised hands, which covered his face (his arms are too short to lift it overhead). Fix: props are hugged at the belly. All geckos in the gesture sheet blinked on the same frame. Fix: a seed per host instance.
+2. Round 2: while Gekko pointed, the crate followed the raised hand back over his face. Fix: the carried prop is pinned to the belly, independent of the hands. Re-checked: talk mouths read at 180 px, listening gaze turns to the speaker, the pointing arm reads, and the "?" and "!" marks clear the head.
 
 ## 7. Camera and sets
 

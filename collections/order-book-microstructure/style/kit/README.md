@@ -10,7 +10,9 @@ The architecture is the same as the crab kit (`complex-arbitrage-rust/style/kit`
 | `05_palette.js` | `BK.P` colours and `BK.FONT` stacks (the only place they are defined) |
 | `10_ink.js` | camera `begin` / `applyCam` / `toScreen`; woodcut `shape` (misregistered colour block + pattern + shade band + gouge + specks + knotty key line), `line`, `dot`, `gouge`, `pattern` (stripes, zigzag, dots, diamonds), `specks`, `text` (never boils), `glow`; point generators `ellipsePts`, `blobPts`, `rectPts`, `archPts` |
 | `30_world.js` | `sky` (flat bands + `sunRosette`), `city` (domes, towers, arches), `bunting`, `lantern`, `lanternString`, `crate`, `stall` (shutter, awning, plaque with flip / ping, crate queue), `slotX`, `tower` (the whole book from data), `coin`, `sparkle`, `cart`, `rug` (kilim with roll) |
-| `40_raccoon.js` | `raccoon(ctx, x, y, s, pose)` with squash/stretch, two-bone IK paws (`ik2`), paw poses, blink, mouths, brows, mask, fez + tassel, ringed tail, `!`; `abacus`; `blinkAt(t, seed)` |
+| `40_raccoon.js` | `raccoon(ctx, x, y, s, pose)` (Tikki, host A) with squash/stretch, two-bone IK paws (`ik2`), paw poses, blink, mouths, brows, mask, fez + tassel, ringed tail, `!`, plus `talk` / `vis` (narration mouth), `lookAt`, `nod`; `abacus`; `blinkAt(t, seed)` (endless) |
+| `42_gecko.js` | `gecko(ctx, x, y, s, pose)` (Gekko, the apprentice, host B): squash/stretch, IK arms with sticky toe pads (`geckoToes`: open, point, fist), bulging eyes (`eyePop`, blink, `look` / `lookAt`), `talk` / `vis`, mouths smile / grin / o / flat / wow, `brow`, `nod`, `headTilt`, curled tail (`tail`, `tailUp`), `!` and `?` marks, `carry` (crate, ledger or a draw callback); `taper` (tapered ribbon) |
+| `45_hosts.js` | both hosts together: `talkMouth`, `visemeAt`, `lookDir`, `GESTURE` presets (point, nod, surprise, think, cheer, shrug, explain), `hostPose(who, t, o)` (idle + talk + listen + gestures), `floorRug`, `duo(ctx, t, o)` |
 | `50_explainer.js` | slide content as bazaar objects: `tag`, `shout`, `arrow`, `depthHills`, `signboard`, `rugTable`, `tileBoard`, `scrollChart` (line, bar, candle), `priceList`, `codeScroll`, `kilimBanner` |
 | `fonts/` | local woff2 (Yeseva One, Fira Sans Condensed, PT Mono, Noto Serif SC/TC subsets) plus `fonts.css`; refresh with `tools/fetch_fonts.py` |
 | `vendor/gsap.min.js` | GSAP 3.14.2 (local, no CDN) |
@@ -44,7 +46,30 @@ The architecture is the same as the crab kit (`complex-arbitrage-rust/style/kit`
 4. Build, then check: `python3 style/kit/tools/build.py <project>` and `cd <project> && npx hyperframes lint && npx hyperframes check`.
 5. Snapshot and look at the frames (`intro/tools/snap.sh`; `intro/tools/snap_lang.sh` for other languages). Render with `npx hyperframes render --quality high --variables '{"lang":"ru","title":"..."}' --output renders/x.mp4` (`intro/tools/render_all.sh` does all four).
 
-`style/gallery/` is a 6-second project that shows the world (0 - 3 s) and every explainer primitive (3 - 6 s). Rebuild and snapshot it (`style/gallery/tools/snap.sh "2,5.5"`) after you change the kit.
+`style/gallery/` is a 12-second project: the world (0 - 3 s), every explainer primitive (3 - 6 s), the duo with Tikki talking and pointing while Gekko listens (6 - 8 s), Gekko talking, pointing and hugging a crate while Tikki listens (8 - 10 s), the gesture sheet for both hosts (10 - 11 s) and Gekko at 180 / 280 / 400 px (11 - 12 s). Rebuild and snapshot it (`style/gallery/tools/snap.sh "2,5.5,7.2,9.3,10.6,11.5"`) after you change the kit.
+
+## The hosts in episodes
+
+Tikki (raccoon) is host A, the explainer: the lower NotebookLM voice (about 100 Hz). Gekko (gecko) is host B, the curious apprentice: the higher voice (about 180 Hz). Feed both a 0..1 loudness per frame from the narration sync; everything else is automatic.
+
+```js
+const hosts = K.duo(ctx, t, {
+  x: 380, y: 1010, s: 1.15,           // Tikki's feet in screen px; Tikki ~390 px tall, Gekko ~330 px
+  side: 1,                             // Gekko to the right; side: -1 with x ~1560 puts the pair bottom-right
+  talkA: env.A(t), talkB: env.B(t),    // loudness 0..1; the silent host listens: looks at the speaker, nods
+  point: K.toScreen(800, -200),        // a screen point; pointWho "A" | "B" | "both", pointAmt 0..1
+  pointWho: "A", pointAmt: K.inv(B.depth, B.depth + 0.4, t),
+  actsA: [{ kind: "explain", a: accentA }], // gestures: point nod surprise think cheer shrug explain, a 0..1
+  actsB: [{ kind: "surprise", a: K.inv(B.wow, B.wow + 0.3, t) }],
+  carryB: "crate",                     // or "ledger", or (ctx, hx, hy) => draw a prop at the belly
+  A: {}, B: {},                        // raw pose overrides (any field of raccoon() / gecko())
+});
+// hosts.A.head / hosts.B.head are screen points for speech bursts or tags
+```
+
+- Draw the duo in screen space (`K.screen(ctx)`) after the world and the explainer objects.
+- Gestures blend by `a`; ramp it in about 0.3 s and hold it. Hands lerp from rest to the gesture target, so they never pop.
+- Single host shots: `K.raccoon(ctx, x, y, s, K.hostPose("raccoon", t, { talk, listenTo, acts }))`, the same for `"gecko"`.
 
 ## Rules the kit relies on
 

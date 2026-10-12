@@ -21,6 +21,10 @@
      fez, fezTip deg, fezLift px, tassel deg (secondary motion; default follows lean)
      tail       -1..1 sway, ear [-1..1] flick, exclaim 0..1 ("!")
      legWalk    phase (radians)
+     talk       0..1   narration loudness: opens the mouth (overrides mouth while > 0.06)
+     vis        "a" | "e" | "o" | "m"  viseme-ish mouth shape while talking (K.visemeAt)
+     lookAt     [x, y] local point the pupils turn to (overrides look)
+     nod        0..1   head dips (listening nod)
    ============================================================ */
 var BK = window.BK || (window.BK = {});
 (function (K) {
@@ -71,8 +75,10 @@ var BK = window.BK || (window.BK = {});
   K.raccoon = function (ctx, x, y, s, st) {
     st = st || {};
     const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
-    const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1), seed = st.seed || 700;
-    const lean = st.lean || 0;
+    const hop = st.hop || 0, blink = clamp(st.blink || 0, 0, 1), seed = st.seed || 700;
+    const lean = st.lean || 0, nod = clamp(st.nod || 0, 0, 1);
+    const look = st.lookAt ? K.lookDir(st.lookAt, [0, -212 - hop]) : (st.look || [0, 0]).slice();
+    if (nod) look[1] = clamp(look[1] + nod * 0.5, -1, 1);
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
     ctx.rotate((lean * Math.PI) / 180);
     const air = clamp(hop / 40, 0, 1);
@@ -111,7 +117,7 @@ var BK = window.BK || (window.BK = {});
     });
     ctx.restore();
     /* head (rides the squash with a little lag) */
-    const headY = (-212 - hop) * syk + (st.headDrop || 0);
+    const headY = (-212 - hop) * syk + (st.headDrop || 0) + nod * 12;
     ctx.save(); ctx.translate(0, headY); ctx.rotate(((st.headTilt || 0) * Math.PI) / 180); ctx.scale(sxk * 0.98 + 0.02, syk * 0.98 + 0.02);
     /* ears (flick) */
     const ef = st.ear || 0;
@@ -140,8 +146,9 @@ var BK = window.BK || (window.BK = {});
     /* cheeks */
     [-1, 1].forEach((sd, i) => { ctx.save(); ctx.globalAlpha = 0.55; K.shape(ctx, K.ellipsePts(sd * 46, 30, 10, 6, 8), { fill: P.cheek, stroke: null, w: 0, boil: 0.5, seed: seed + 42 + i, reg: false }); ctx.restore(); });
     /* mouth */
-    const m = st.mouth || "smile";
-    if (m === "smile") K.line(ctx, [[-14, 34], [-6, 42], [0, 38], [6, 42], [14, 34]], { stroke: P.ink, w: 4, boil: 0.7, seed: seed + 44 });
+    const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1);
+    if (talk > 0.06) K.talkMouth(ctx, 0, 34, talk, st.vis, 1.15, seed + 44);
+    else if (m === "smile") K.line(ctx, [[-14, 34], [-6, 42], [0, 38], [6, 42], [14, 34]], { stroke: P.ink, w: 4, boil: 0.7, seed: seed + 44 });
     else if (m === "smirk") K.line(ctx, [[-10, 38], [4, 40], [16, 31]], { stroke: P.ink, w: 4, boil: 0.7, seed: seed + 44 });
     else if (m === "grin") K.shape(ctx, [[-20, 32], [20, 32], [12, 48], [0, 51], [-12, 48]], { fill: P.mouthIn, w: 4, boil: 0.7, seed: seed + 45, k: 0.6, nicks: 0 });
     else if (m === "open") K.shape(ctx, K.ellipsePts(0, 42, 12, 11, 10), { fill: P.mouthIn, w: 4, boil: 0.7, seed: seed + 46, k: 1, nicks: 0 });
@@ -199,7 +206,7 @@ var BK = window.BK || (window.BK = {});
   /* convenience: blink curve with seeded blink times (about 1 per 2 s), 0..1 */
   K.blinkAt = function (t, seed) {
     let b = 0;
-    for (let i = 0; i < 14; i++) {
+    for (let i = Math.max(0, Math.floor((t - 2.1) / 1.8)), i1 = Math.floor((t - 0.9) / 1.8) + 1; i <= i1; i++) {
       const tb = 0.9 + i * 1.8 + K.hash(i, seed || 7) * 1.0, d = t - tb;
       if (d > 0 && d < 0.15) b = Math.max(b, Math.sin((d / 0.15) * Math.PI));
     }

@@ -24,6 +24,9 @@ var BK = window.BK || (window.BK = {});
     eye: "#fffaf0", pupil: "#1a1218", nose: "#1f1720", cheek: "#e7867a", mouthIn: "#7a2433",
     fez: "#a82a3a", fezDark: "#6f1726", tassel: "#1f1720",
     vest: "#1f7a74", vestTrim: "#f0a830",
+    /* Gekko, the apprentice (host B): electric-blue day gecko, saffron spots, terra apron */
+    gecko: "#3d79c2", geckoDark: "#24508a", geckoLight: "#8fb6e4", geckoBelly: "#e4ecef", geckoSpot: "#f0a830",
+    apron: "#c4583a", apronDark: "#8f3a26",
     /* materials */
     wood: "#a8693a", woodDark: "#6e4123", woodLight: "#cf9460",
     brass: "#d9a441", brassDark: "#9c6f1e",

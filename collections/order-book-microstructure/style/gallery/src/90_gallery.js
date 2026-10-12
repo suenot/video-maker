@@ -1,6 +1,9 @@
 /* KIT GALLERY: the bazaar world and every explainer primitive, for visual QA of the kit.
-   0-3 s: the world (tower, raccoon, cart, strings); 3-6 s: explainer objects. */
-const K = BK, P = K.P, at = K.at, DUR = 6;
+   0-3 s: the world (tower, raccoon, cart, strings); 3-6 s: explainer objects;
+   6-8 s: duo, Tikki talks + points, Gekko listens; 8-10 s: Gekko talks + points with a crate,
+   Tikki listens; 10-11 s: gesture sheet (point, nod, surprise, think, cheer, shrug);
+   11-12 s: Gekko at 180 / 280 / 400 px for the readability check. */
+const K = BK, P = K.P, at = K.at, DUR = 12;
 K.G.BPM = 152;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const ap = (t, t0) => K.inv(t0, t0 + 0.4, t);
@@ -39,7 +42,58 @@ function explain(t) {
   K.arrow(ctx, [120, 1010], [700, 1010], { p: K.inv(4, 4.6, t), bend: -30 });
 }
 
-function render(t) { if (t < 3) world(t); else explain(t); const f = K.boilFrame(t); grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px"; }
+/* fake narration loudness: syllables on a phrase envelope */
+const loud = (t, ph) => K.clamp((0.55 + 0.45 * Math.sin(t * 13 + ph)) * Math.max(0, Math.sin(t * 2.1 + ph)) * 1.3, 0, 1);
+
+function stage(t) {
+  K.begin(ctx, t, { x: 960, y: 540, z: 1 });
+  K.applyCam(ctx, 1);
+  K.sky(ctx, -20, -20, 1940, 760, { sunX: 1500, sunY: 170, sunR: 70 });
+  K.city(ctx, -40, 1960, 760, { layer: 0, seed: 4, h: 170 });
+  K.shape(ctx, K.rectPts(-20, 800, 1960, 300, 4), { fill: P.terraLight, w: 5, boil: 1, seed: 5, pattern: { kind: "diamonds", color: P.terra, gap: 60, w: 12, alpha: 0.5 } });
+  K.screen(ctx);
+}
+
+function duoScene(t) {
+  stage(t);
+  const bTalks = t >= 8;
+  K.depthHills(ctx, 1380, 640, 760, 260, [6, 14, 19, 22], [5, 11, 17, 24], { a: 1, grow: 1 });
+  K.signboard(ctx, 1380, 250, 420, 130, [bTalks ? "queue #3" : "spread 0.01"], { a: 1, size: 56, colors: [P.terraDark], chains: 60 });
+  const target = bTalks ? [1180, 250] : [1380, 560];
+  K.duo(ctx, t, {
+    x: 330, y: 1012, s: 1.15,
+    talkA: bTalks ? 0 : loud(t, 0), talkB: bTalks ? loud(t, 1.3) : 0,
+    point: target, pointWho: bTalks ? "B" : "A", pointAmt: K.inv(bTalks ? 8.3 : 6.3, bTalks ? 8.7 : 6.7, t),
+    actsA: [{ kind: "explain", a: bTalks ? 0 : 0.6 * Math.max(0, Math.sin(t * 3)) }],
+    actsB: [{ kind: "nod", a: bTalks ? 0 : 1 }],
+    carryB: bTalks ? "crate" : null,
+  });
+  K.text(ctx, bTalks ? "Gekko talks, Tikki listens" : "Tikki talks, Gekko listens", 960, 1060, { size: 30, fill: P.ink, font: K.FONT.label, weight: 800, align: "center" });
+}
+
+function gestureSheet(t) {
+  stage(t);
+  const kinds = ["point", "nod", "surprise", "think", "cheer", "shrug"];
+  kinds.forEach((k, i) => {
+    const x = 170 + i * 316, a = K.inv(10.05, 10.35, t);
+    const pr = K.hostPose("raccoon", t, { seed: 30 + i * 7, acts: [{ kind: k, a, target: [160, -300], hold: "abacus" }], base: { hold: "abacus", beads: [0.4, 0.6, 0.2, 0.8], handL: { x: -76, y: -104, pose: "fist" } } });
+    const pg = K.hostPose("gecko", t, { seed: 60 + i * 5, acts: [{ kind: k, a, target: [160, -260] }] });
+    K.raccoon(ctx, x, 520, 0.95, pr);
+    K.gecko(ctx, x, 1000, 1.0, pg);
+    K.tag(ctx, x, 560, k, { string: 0 });
+  });
+}
+
+function sizes(t) {
+  stage(t);
+  [[300, 180], [760, 280], [1360, 400]].forEach(([x, h], i) => {
+    const s = h / 244;
+    K.gecko(ctx, x, 1000, s, K.hostPose("gecko", t, { seed: 90 + i * 3, talk: i === 1 ? loud(t, 2) : 0, acts: i === 2 ? [{ kind: "point", a: 1, target: [-200, -200] }] : [] }));
+    K.text(ctx, h + " px", x, 1060, { size: 30, fill: P.ink, font: K.FONT.label, weight: 800, align: "center" });
+  });
+}
+
+function render(t) { if (t < 3) world(t); else if (t < 6) explain(t); else if (t < 10) duoScene(t); else if (t < 11) gestureSheet(t); else sizes(t); const f = K.boilFrame(t); grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px"; }
 const grainEl = document.getElementById("grain");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .32  0 0 0 0 .25  0 0 0 1.5 -.25'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
 const TL = gsap.timeline({ paused: true });
