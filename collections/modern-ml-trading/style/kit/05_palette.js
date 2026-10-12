@@ -29,6 +29,8 @@ var LK = window.LK || (window.LK = {});
     coat: "#f7f1e2", coatShade: "#d9cfb6", glove: "#fffdf6", gloveShade: "#ddd5c2",
     beak: "#e8a33a", beakDark: "#b0721c", feet: "#e8a33a",
     eye: "#fffdf4", pupil: "#141a15", blush: "#e8907a",
+    /* the hummingbird: Pico */
+    hum: "#3f9a6e", humDark: "#2a6b4c", humLight: "#8fd6a8", gorget: "#b8323a",
     /* data meaning */
     train: "#5c9a3c",      /* in-sample, training fold */
     test: "#e0a33a",       /* out-of-sample, test fold */

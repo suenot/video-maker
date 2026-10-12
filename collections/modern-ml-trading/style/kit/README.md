@@ -10,7 +10,9 @@ The architecture matches the crab kit (`complex-arbitrage-rust/style/kit`), so t
 | `05_palette.js` | `LK.P` colours and `LK.FONT` stacks (the only place they are defined) |
 | `10_ink.js` | `begin`, camera `applyCam(ctx, parallax)`, `toScreen`; the dip-pen `brush` (open lines) and `ring` (closed contours), `stipple` halftone, `shape` (fill + shade band + dots + rim + boiled outline), `line`, `dot`, `hose` (rubber-hose limb), `text`, `glow`; point generators `ellipsePts`, `blobPts`, `rectPts`, `rrectPts`, `sample` |
 | `30_world.js` | set: `labWall` (deco wallpaper, wainscot), `archWindow`, `pipe`, `bench`, `shelf`, `lamp`; props: `pot`, `leaf`, `seed`, `flask`, `beaker`, `shears`, `magnifier`, `wateringCan`; effects: `sparkle`, `medal`, `sunburst`, `puff`, `check`, `cross` |
-| `40_owl.js` | `owl(ctx, x, y, s, pose)` with squash/stretch, head `yaw` swivel and `tilt`, pie-cut eyes, blink / wink, brows, beak mouths, tufts, rubber-hose IK arms that stretch, gloves (`glove`) with props via `hold`; `blinkAt(t, seed)` |
+| `40_owl.js` | `owl(ctx, x, y, s, pose)` with squash/stretch, head `yaw` swivel and `tilt`, pie-cut eyes, blink / wink, brows, beak mouths, tufts, rubber-hose IK arms that stretch, gloves (`glove`) with props via `hold`; talking beak `talk` 0..1 + `viseme` (a/o/e/m), listening `nod`; `blinkAt(t, seed)` |
+| `44_hummingbird.js` | `hummingbird(ctx, x, y, s, pose)`: Pico the co-host. Hover bob + wing beat, squash, `lean`, `look`, blink, `talk` + `viseme` (split needle beak), `nod`, `crest`, `goggles`, `eyeUp`, `think`, `exclaim`, wings as IK targets (`wingL/R` `{ mode: flap/point/hold, x, y, hold }`); `clipboard(ctx, x, y, s, rot, seed)` prop |
+| `46_duo.js` | `duo(ctx, t, o)`: both hosts large on one bench, driven by `talkA/talkB` loudness, `who`, accents, `pointA/pointB` targets, `reactA/reactB`, `holdA`; returns screen anchors `{ owl, bird, owlHead, birdHead }` (see STYLE.md 5b) |
 | `50_explainer.js` | `decoFrame`, `plate` + `plateMap`, `tube` / `tubePoint`, `tag`, `gauge`, `card`, `board`, `packets`, `typewriter`, `treePlant`, `netVine`, `marquee` |
 | `fonts/` | local woff2 (Oswald, Alegreya Sans, IBM Plex Mono, Noto Serif SC/TC subsets) plus `fonts.css`; refresh with `tools/fetch_fonts.py` |
 | `assets/logo.svg` | marketmaker.cc mark (`fill="currentColor"`), inlined by `build.py` at `<!--__LOGO__-->` |
@@ -43,7 +45,7 @@ The architecture matches the crab kit (`complex-arbitrage-rust/style/kit`), so t
 4. Build, then check: `python3 style/kit/tools/build.py <project>` and `cd <project> && npx hyperframes lint && npx hyperframes check`.
 5. Snapshot and look at the frames (`intro/tools/snap.sh "0.5,1.5,..."`). Render with `npx hyperframes render --quality high --output renders/x.mp4`.
 
-`style/gallery/` is a 4-second project that shows every explainer primitive and the owl. Rebuild and snapshot it after you change the kit.
+`style/gallery/` is a 14-second project: 0-4 s every explainer primitive and the owl; 4-14 s the duo (owl talks / Pico listens, Pico talks / owl listens, both point at a plate, reactions, Pico's gesture sheet at 180 px). Rebuild and snapshot it after you change the kit.
 
 ## Rules the kit relies on
 
@@ -52,4 +54,9 @@ The architecture matches the crab kit (`complex-arbitrage-rust/style/kit`), so t
 - **Appear parameter.** Every explainer takes `a` from 0 to 1 and pops with a back ease; feed it `K.inv(at(bar, beat), at(bar, beat) + 0.4, t)`.
 - **Retime to music** by setting `K.G.BPM` and `K.G.BARS` (measured downbeats) before any `K.at` call. Never hard-code seconds in a scene.
 - **Owl arms are targets.** Key `[time, x, y, hand, hold]` in owl-local space (see `intro/src/30_owl.js` `armAt`); the IK and the rubber-hose stretch do the rest.
+- **Hosts follow the voice.** In episodes feed `K.duo` the per-frame loudness of each speaker (0..1 RMS from the NotebookLM audio, smoothed about 60 ms) and who is talking; do not hand-key mouths.
+
+   ```js
+   const r = K.duo(ctx, t, { x: 400, y: 1010, talkA: loudA(t), talkB: loudB(t), who: whoAt(t), pointA: plateAnchor, pointAmtA: K.inv(t0, t0 + 0.4, t) });
+   ```
 - **Localised text** belongs in DOM elements fed by HyperFrames variables. The canvas world holds numbers, icons and code only.

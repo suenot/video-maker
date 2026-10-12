@@ -15,6 +15,8 @@
      eyeUp    0..1   eye pop (surprise), tufts 0..1 tufts perk up
      brow     -1..1.5 (+ raised, - frown)
      mouth    "closed" | "open" | "o" | "smile" | "grin"
+     talk     0..1   voice loudness: opens the beak (episodes), viseme "a"|"o"|"e"|"m" shapes it
+     nod      0..1   head dips forward (listening)
      wingL/R  { x, y, hand: "open"|"point"|"fist"|"thumb"|"hold", rot (deg, optional), hold: fn(ctx) }
      walk     phase (radians) for walking feet; 0 = standing
      exclaim  0..1   pops a brass "!" over the head
@@ -88,7 +90,7 @@ var LK = window.LK || (window.LK = {});
     const shoulderY = hipY + (by - 70 - hipY) * syk, shoulderX = 86 * sxk;
 
     /* ---- head (swivels) ---- */
-    const hx = 0, hy = hipY + (by - 168 - hipY) * syk;
+    const hx = 0, hy = hipY + (by - 168 - hipY) * syk + 14 * clamp(st.nod || 0, 0, 1);
     const yaw = ((st.yaw || 0) * Math.PI) / 180, cy = Math.cos(yaw), sy = Math.sin(yaw);
     ctx.save(); ctx.translate(hx, hy); ctx.rotate(((st.tilt || 0) * Math.PI) / 180); ctx.scale(sxk * 0.96 + 0.04, 1);
     /* tufts (behind the head outline) */
@@ -137,10 +139,14 @@ var LK = window.LK || (window.LK = {});
       });
       K.line(ctx, [[ex(-7), -6], [ex(7), -6]], { stroke: P.brass, w: 6, boil: 0.4, seed: seed + 84, taper: false }); /* bridge */
       /* beak */
-      const m = st.mouth || "closed", bx = ex(0), open = m === "open" ? 18 : m === "o" ? 10 : m === "grin" ? 6 : 0;
-      if (open > 0) K.shape(ctx, [[bx - 13 * ew, 40], [bx + 13 * ew, 40], [bx, 50 + open]], { fill: "#6b2a1c", w: 3, boil: 0.5, seed: seed + 85 });
+      /* talk 0..1 (voice loudness) opens the beak; viseme "a" | "o" | "e" | "m" shapes it */
+      const m = st.mouth || "closed", bx = ex(0), vis = st.viseme || "a";
+      const talkOpen = st.talk > 0 && vis !== "m" ? clamp(st.talk, 0, 1) * (vis === "e" ? 14 : 24) : 0;
+      const open = Math.max(m === "open" ? 18 : m === "o" ? 10 : m === "grin" ? 6 : 0, talkOpen);
+      const wf = talkOpen > 0 ? (vis === "o" ? 0.7 : vis === "e" ? 1.25 : 1) : 1;
+      if (open > 0) K.shape(ctx, [[bx - 13 * ew * wf, 40], [bx + 13 * ew * wf, 40], [bx, 50 + open]], { fill: "#6b2a1c", w: 3, boil: 0.5, seed: seed + 85 });
       K.shape(ctx, [[bx - 15 * ew, 30], [bx, 16], [bx + 15 * ew, 30], [bx, 46 - open * 0.2]], { fill: P.beak, w: 3.8, boil: 0.5, seed: seed + 86, shade: { color: P.beakDark, dx: 0, dy: -6 } });
-      if (open > 0) K.shape(ctx, [[bx - 11 * ew, 42 + open * 0.6], [bx + 11 * ew, 42 + open * 0.6], [bx, 54 + open]], { fill: P.beak, w: 3.4, boil: 0.5, seed: seed + 87 });
+      if (open > 0) K.shape(ctx, [[bx - 11 * ew * wf, 42 + open * 0.6], [bx + 11 * ew * wf, 42 + open * 0.6], [bx, 54 + open]], { fill: P.beak, w: 3.4, boil: 0.5, seed: seed + 87 });
       if (m === "smile" || m === "grin") K.line(ctx, [[bx - 30 * ew, 50], [bx, 60], [bx + 30 * ew, 50]], { stroke: P.ink, w: 3.5, boil: 0.5, seed: seed + 88 });
     }
     ctx.restore();

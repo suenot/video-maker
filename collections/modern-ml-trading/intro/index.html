@@ -279,6 +279,8 @@ var LK = window.LK || (window.LK = {});
     coat: "#f7f1e2", coatShade: "#d9cfb6", glove: "#fffdf6", gloveShade: "#ddd5c2",
     beak: "#e8a33a", beakDark: "#b0721c", feet: "#e8a33a",
     eye: "#fffdf4", pupil: "#141a15", blush: "#e8907a",
+    /* the hummingbird: Pico */
+    hum: "#3f9a6e", humDark: "#2a6b4c", humLight: "#8fd6a8", gorget: "#b8323a",
     /* data meaning */
     train: "#5c9a3c",      /* in-sample, training fold */
     test: "#e0a33a",       /* out-of-sample, test fold */
@@ -864,6 +866,8 @@ var LK = window.LK || (window.LK = {});
      eyeUp    0..1   eye pop (surprise), tufts 0..1 tufts perk up
      brow     -1..1.5 (+ raised, - frown)
      mouth    "closed" | "open" | "o" | "smile" | "grin"
+     talk     0..1   voice loudness: opens the beak (episodes), viseme "a"|"o"|"e"|"m" shapes it
+     nod      0..1   head dips forward (listening)
      wingL/R  { x, y, hand: "open"|"point"|"fist"|"thumb"|"hold", rot (deg, optional), hold: fn(ctx) }
      walk     phase (radians) for walking feet; 0 = standing
      exclaim  0..1   pops a brass "!" over the head
@@ -937,7 +941,7 @@ var LK = window.LK || (window.LK = {});
     const shoulderY = hipY + (by - 70 - hipY) * syk, shoulderX = 86 * sxk;
 
     /* ---- head (swivels) ---- */
-    const hx = 0, hy = hipY + (by - 168 - hipY) * syk;
+    const hx = 0, hy = hipY + (by - 168 - hipY) * syk + 14 * clamp(st.nod || 0, 0, 1);
     const yaw = ((st.yaw || 0) * Math.PI) / 180, cy = Math.cos(yaw), sy = Math.sin(yaw);
     ctx.save(); ctx.translate(hx, hy); ctx.rotate(((st.tilt || 0) * Math.PI) / 180); ctx.scale(sxk * 0.96 + 0.04, 1);
     /* tufts (behind the head outline) */
@@ -986,10 +990,14 @@ var LK = window.LK || (window.LK = {});
       });
       K.line(ctx, [[ex(-7), -6], [ex(7), -6]], { stroke: P.brass, w: 6, boil: 0.4, seed: seed + 84, taper: false }); /* bridge */
       /* beak */
-      const m = st.mouth || "closed", bx = ex(0), open = m === "open" ? 18 : m === "o" ? 10 : m === "grin" ? 6 : 0;
-      if (open > 0) K.shape(ctx, [[bx - 13 * ew, 40], [bx + 13 * ew, 40], [bx, 50 + open]], { fill: "#6b2a1c", w: 3, boil: 0.5, seed: seed + 85 });
+      /* talk 0..1 (voice loudness) opens the beak; viseme "a" | "o" | "e" | "m" shapes it */
+      const m = st.mouth || "closed", bx = ex(0), vis = st.viseme || "a";
+      const talkOpen = st.talk > 0 && vis !== "m" ? clamp(st.talk, 0, 1) * (vis === "e" ? 14 : 24) : 0;
+      const open = Math.max(m === "open" ? 18 : m === "o" ? 10 : m === "grin" ? 6 : 0, talkOpen);
+      const wf = talkOpen > 0 ? (vis === "o" ? 0.7 : vis === "e" ? 1.25 : 1) : 1;
+      if (open > 0) K.shape(ctx, [[bx - 13 * ew * wf, 40], [bx + 13 * ew * wf, 40], [bx, 50 + open]], { fill: "#6b2a1c", w: 3, boil: 0.5, seed: seed + 85 });
       K.shape(ctx, [[bx - 15 * ew, 30], [bx, 16], [bx + 15 * ew, 30], [bx, 46 - open * 0.2]], { fill: P.beak, w: 3.8, boil: 0.5, seed: seed + 86, shade: { color: P.beakDark, dx: 0, dy: -6 } });
-      if (open > 0) K.shape(ctx, [[bx - 11 * ew, 42 + open * 0.6], [bx + 11 * ew, 42 + open * 0.6], [bx, 54 + open]], { fill: P.beak, w: 3.4, boil: 0.5, seed: seed + 87 });
+      if (open > 0) K.shape(ctx, [[bx - 11 * ew * wf, 42 + open * 0.6], [bx + 11 * ew * wf, 42 + open * 0.6], [bx, 54 + open]], { fill: P.beak, w: 3.4, boil: 0.5, seed: seed + 87 });
       if (m === "smile" || m === "grin") K.line(ctx, [[bx - 30 * ew, 50], [bx, 60], [bx + 30 * ew, 50]], { stroke: P.ink, w: 3.5, boil: 0.5, seed: seed + 88 });
     }
     ctx.restore();
@@ -1024,6 +1032,281 @@ var LK = window.LK || (window.LK = {});
       if (d > 0 && d < 0.18) b = Math.max(b, Math.sin((d / 0.18) * Math.PI));
     }
     return b;
+  };
+})(LK);
+
+/* ============================================================
+   LAB KIT 44 HUMMINGBIRD: "Pico", the lab assistant (episode co-host, host B).
+   A quick, curious hummingbird in brass goggles who hovers beside
+   Professor Strix with a clipboard. Same rubber-hose line as the owl.
+   Local space: (0, 0) = the hover point under the body (or the feet on a
+   perch); faces dir (+1 = beak to the right). Height about 250 at scale 1.
+   Proportions (scale 1): body 88 x 124 tilted forward, head r 42,
+   needle beak 82, wings 100 long (two-bone IK when they gesture), forked tail.
+   Pose state (all optional):
+     dir      +1 | -1  facing (beak side)
+     squash   -1..1    volume kept
+     lean     deg      whole-body tilt (forward dash = + toward dir)
+     hover    0..1     wing beat + bob amount (0 = perched still)
+     look     [dx, dy] pupils, -1..1
+     blink    0..1
+     talk     0..1     voice loudness: opens the beak; viseme "a"|"o"|"e"|"m"
+     nod      0..1     head dips (listening)
+     crest    0..1     crest feathers perk up (surprise)
+     goggles  0..1     0 = pushed up on the forehead, 1 = over the eyes
+     eyeUp    0..1     eye pop
+     think    0..1     beak up, eyes up, thought dots
+     exclaim  0..1     brass "!" pop
+     wingL/R  { mode: "flap" | "point" | "hold", x, y, hold: fn(ctx) }  x, y = target in local space
+     clip     true     clipboard dangling from the feet (default true while hovering)
+   ============================================================ */
+var LK = window.LK || (window.LK = {});
+(function (K) {
+  const P = K.P, { clamp } = K;
+
+  /* clipboard with a brass clip and ruled paper (Pico's prop; also a kit prop) */
+  K.clipboard = function (ctx, x, y, s, rot, seed) {
+    seed = seed || 900;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot || 0); ctx.scale(s || 1, s || 1);
+    K.shape(ctx, K.rrectPts(-34, -44, 68, 92, 8), { fill: P.woodLight, w: 3.5, boil: 0.6, seed, shade: { color: P.wood, dx: 6, dy: 0 } });
+    K.shape(ctx, K.rectPts(-27, -34, 54, 76, 2), { fill: P.paper, w: 2.6, boil: 0.5, seed: seed + 1 });
+    for (let i = 0; i < 4; i++) K.line(ctx, [[-20, -20 + i * 15], [12 - (i % 2) * 10, -20 + i * 15]], { stroke: P.inkSoft, w: 2.2, boil: 0.4, seed: seed + 3 + i, taper: false });
+    K.check(ctx, 14, -22, 8, 1, seed + 9);
+    K.shape(ctx, K.rrectPts(-14, -52, 28, 16, 5), { fill: P.brass, w: 3, boil: 0.5, seed: seed + 2 });
+    ctx.restore();
+  };
+
+  /* one wing blade from the shoulder along angle a (radians), length L */
+  function blade(ctx, sx, sy, a, L, w, seed, alpha) {
+    ctx.save(); ctx.translate(sx, sy); ctx.rotate(a); if (alpha != null) ctx.globalAlpha *= alpha;
+    K.shape(ctx, [[0, -w * 0.45], [L * 0.45, -w * 0.62], [L * 0.85, -w * 0.38], [L, 0], [L * 0.8, w * 0.32], [L * 0.35, w * 0.5], [0, w * 0.4]],
+      { fill: P.humLight, w: 3.2, boil: 0.6, seed, shade: { color: P.hum, dx: 0, dy: w * 0.3 } });
+    for (let i = 1; i < 4; i++) K.line(ctx, [[L * (0.25 + i * 0.15), -w * 0.3], [L * (0.35 + i * 0.15), w * 0.28]], { stroke: P.hum, w: 2, boil: 0.4, seed: seed + i });
+    ctx.restore();
+  }
+
+  K.hummingbird = function (ctx, x, y, s, st) {
+    st = st || {};
+    const dir = st.dir || 1, hv = st.hover == null ? 1 : clamp(st.hover, 0, 1);
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
+    const look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1), talk = clamp(st.talk || 0, 0, 1);
+    const think = clamp(st.think || 0, 0, 1), crest = clamp(st.crest || 0, 0, 1), up = clamp(st.eyeUp || 0, 0, 1);
+    const seed = st.seed || 820, t = K.now;
+    const bob = hv * (Math.sin(t * 5.2) * 7 + Math.sin(t * 1.7) * 4);
+    ctx.save(); ctx.translate(x, y + bob); ctx.scale(s * dir, s);
+    ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    ctx.save(); ctx.scale(sxk, syk);
+    /* forked tail (behind) */
+    [[-0.5, 0], [-0.9, 1]].forEach((f, i) => { ctx.save(); ctx.translate(-22, -40); ctx.rotate(2.3 + f[0] * 0.5 + Math.sin(t * 3 + i) * 0.05 * hv);
+      K.shape(ctx, [[0, -9], [58, -12], [76, 0], [58, 10], [0, 9]], { fill: P.humDark, w: 3.4, boil: 0.6, seed: seed + i }); ctx.restore(); });
+    /* the far wing (behind the body) */
+    const wingAt = (w, side) => {
+      const sh = [side > 0 ? 10 : -14, -128];
+      if (w && w.mode && w.mode !== "flap") {
+        const r = K.ik2(sh, [w.x * dir, w.y], 52, 52, side > 0 ? -1 : 1);
+        K.hose(ctx, [sh, r.elbow, r.end], 16, P.hum, seed + 40 + side, 6);
+        const a = Math.atan2(r.end[1] - r.elbow[1], r.end[0] - r.elbow[0]);
+        if (w.mode === "point") { /* three primaries fanned into a pointing "finger" */
+          [-0.28, 0, 0.28].forEach((d, i) => blade(ctx, r.end[0], r.end[1], a + d * (i === 1 ? 0 : 1), i === 1 ? 46 : 32, 12, seed + 50 + side * 5 + i));
+        } else {
+          blade(ctx, r.end[0], r.end[1], a - 0.3, 34, 14, seed + 60 + side);
+          if (w.hold) { ctx.save(); ctx.translate(r.end[0], r.end[1]); ctx.scale(dir, 1); w.hold(ctx); ctx.restore(); }
+        }
+        return;
+      }
+      /* hovering: a fast figure-eight beat; a ghost trail stands in for motion blur */
+      const ph = t * 2 * Math.PI * 7.5 + (side > 0 ? 0 : 0.6);
+      for (let g = 2; g >= 0; g--) {
+        const a = -Math.PI / 2 + side * (0.9 + 0.75 * Math.sin(ph - g * 0.55)) * (0.35 + 0.65 * hv) * -1;
+        blade(ctx, sh[0], sh[1], a, 100, 30, seed + 70 + side * 3, g === 0 ? 1 : 0.28 - g * 0.06);
+      }
+    };
+    wingAt(st.wingL, -1);
+    /* body: a forward-tilted teardrop, iridescent green with a pale belly */
+    const body = K.ellipsePts(0, -92, 44, 64, 18, -0.38);
+    K.shape(ctx, body, { fill: P.hum, w: 5, boil: 1, seed: seed + 10, shade: { color: P.humDark, dx: -12, dy: 0 }, dots: { gap: 8, alpha: 0.2 }, rim: 2.5 });
+    K.shape(ctx, K.ellipsePts(12, -76, 24, 40, 12, -0.38), { fill: P.pane, w: 3, boil: 0.7, seed: seed + 11 });
+    /* tiny feet + clipboard dangling from them */
+    [-6, 10].forEach((fx, i) => K.line(ctx, [[fx, -34], [fx + 2, -14]], { stroke: P.ink, w: 4, boil: 0.4, seed: seed + 12 + i, taper: false }));
+    if (st.clip !== false && hv > 0.3 && !(st.wingR && st.wingR.hold) && !(st.wingL && st.wingL.hold)) K.clipboard(ctx, 6, 26, 0.7, 0.08 * Math.sin(t * 2.4), seed + 200);
+    ctx.restore();
+    /* head (does not squash with the body) */
+    const hx = 22 * sxk, hy = -170 * syk + 12 * clamp(st.nod || 0, 0, 1) - think * 4;
+    ctx.save(); ctx.translate(hx, hy); ctx.rotate(-think * 0.35 + clamp(st.nod || 0, 0, 1) * 0.18);
+    /* crest */
+    for (let i = 0; i < 3; i++) { ctx.save(); ctx.translate(-14 + i * 10, -36); ctx.rotate(-1.9 + i * 0.32 - crest * 0.4);
+      K.shape(ctx, [[0, -5], [26 + crest * 12, -3], [32 + crest * 14, 0], [26 + crest * 12, 3], [0, 5]], { fill: P.humDark, w: 2.8, boil: 0.5, seed: seed + 20 + i }); ctx.restore(); }
+    K.shape(ctx, K.ellipsePts(0, 0, 44, 41, 16), { fill: P.hum, w: 5, boil: 0.9, seed: seed + 21, shade: { color: P.humDark, dx: -10, dy: -8 }, rim: 2.5 });
+    /* ruby gorget (throat) */
+    K.shape(ctx, [[-10, 26], [30, 22], [40, 34], [14, 46], [-8, 40]], { fill: P.gorget, w: 3, boil: 0.6, seed: seed + 22, shade: { color: "#7e2028", dx: 0, dy: 6 } });
+    /* needle beak: talk splits the mandibles */
+    const vis = st.viseme || "a", op = vis === "m" ? 0 : talk * (vis === "e" ? 0.16 : vis === "o" ? 0.22 : 0.3);
+    ctx.save(); ctx.translate(38, 6);
+    if (op > 0.01) { ctx.save(); ctx.rotate(op); K.shape(ctx, [[0, -3], [72, 1], [74, 4], [0, 6]], { fill: P.ink, w: 2.6, boil: 0.4, seed: seed + 23 }); ctx.restore(); }
+    ctx.rotate(-op * 0.4 - think * 0.2);
+    K.shape(ctx, [[0, -7], [84, -1], [86, 2], [0, 6]], { fill: "#2b2f28", w: 3, boil: 0.4, seed: seed + 24 });
+    ctx.restore();
+    /* eyes: big, slightly toward the beak; pie-cut like the owl */
+    [[-6, 0.85], [26, 1]].forEach((e, i) => {
+      const cx = e[0], cy = -6 - up * 5, r = 15 * e[1] * (1 + up * 0.2), ry = r * 1.15 * (1 - 0.94 * blink);
+      K.shape(ctx, K.ellipsePts(cx, cy, r, Math.max(2, ry), 12), { fill: P.eye, w: 3.2, boil: 0.5, seed: seed + 30 + i });
+      if (blink < 0.6) {
+        const lx = (look[0] * dir) * 5 + think * 3, ly = (look[1] - think) * 5;
+        K.shape(ctx, K.ellipsePts(cx + lx + 2, cy + ly + 2, r * 0.5, r * 0.62 * (1 - blink), 10), { fill: P.pupil, stroke: null, w: 0, boil: 0.3, seed: seed + 32 + i });
+        ctx.save(); ctx.fillStyle = P.eye; ctx.beginPath(); ctx.moveTo(cx + lx + 3, cy + ly); ctx.arc(cx + lx + 3, cy + ly, r * 0.55, -1.25, -0.55); ctx.closePath(); ctx.fill(); ctx.restore();
+      } else K.line(ctx, [[cx - r, cy], [cx, cy + 4], [cx + r, cy]], { stroke: P.ink, w: 3.5, boil: 0.4, seed: seed + 34 + i });
+    });
+    /* brass goggles: up on the forehead, or down over the eyes */
+    const gg = clamp(st.goggles || 0, 0, 1), gy = K.lerp(-34, -6, gg);
+    K.line(ctx, [[-42, gy + 4], [44, gy + 2]], { stroke: P.woodDark, w: 7, boil: 0.4, seed: seed + 36, taper: false });
+    [[-6, 0.85], [26, 1]].forEach((e, i) => {
+      K.shape(ctx, K.ellipsePts(e[0], gy, 17 * e[1], 15 * e[1], 12), { fill: gg > 0.5 ? "rgba(214,240,226,0.45)" : P.glass, stroke: P.ink, w: 3, boil: 0.5, seed: seed + 37 + i });
+      K.shape(ctx, K.ellipsePts(e[0], gy, 17 * e[1], 15 * e[1], 12), { fill: null, stroke: P.brass, w: 4.5, boil: 0.5, seed: seed + 39 + i });
+    });
+    ctx.restore();
+    /* the near wing (in front) */
+    wingAt(st.wingR, 1);
+    /* thought dots and "!" (language-free) */
+    if (think > 0) for (let i = 0; i < 3; i++) { const a = clamp(think * 3 - i, 0, 1); if (a > 0) K.dot(ctx, hx - 30 + i * 4, hy - 70 - i * 26, (6 + i * 4) * K.E.back(a, 2), P.paper, P.ink, 2.5, seed + 90 + i); }
+    if (st.exclaim > 0) {
+      const a = K.E.back(clamp(st.exclaim, 0, 1), 2.5);
+      ctx.save(); ctx.translate(hx - 40, hy - 80); ctx.scale(a / dir, a); ctx.rotate(-0.2);
+      K.shape(ctx, [[-8, -46], [8, -46], [4, -10], [-4, -10]], { fill: P.brassLight, w: 3.5, boil: 0.7, seed: seed + 95 });
+      K.shape(ctx, K.ellipsePts(0, 3, 7, 7, 8), { fill: P.brassLight, w: 3.5, boil: 0.7, seed: seed + 96 });
+      ctx.restore();
+    }
+    ctx.restore();
+  };
+})(LK);
+
+/* ============================================================
+   LAB KIT 46 DUO: both hosts on stage, driven by their voices.
+   Professor Strix (owl, host A, the explainer) and Pico (hummingbird,
+   host B, the curious co-host). Mouths follow each voice's loudness, the
+   talker gestures on accents, the listener looks at the talker and nods.
+   Draw in SCREEN space (call after K.screen(ctx)); the hosts are big:
+   owl about 430 px tall at s 1, Pico about 290 px.
+
+   K.duo(ctx, t, o) -> { owl:[x,y], bird:[x,y], owlHead:[x,y], birdHead:[x,y] }
+   o (all optional):
+     x, y, s          owl feet (screen px) and scale (default 380, 1000, 1)
+     side             +1 Pico to the owl's right, -1 to the left (default +1)
+     talkA, talkB     0..1 voice loudness of each host this frame
+     visA, visB       viseme "a" | "o" | "e" | "m" (optional)
+     who              "a" | "b" | null: who is talking (default: the louder one)
+     accA, accB       0..1 accent envelope (stressed word); defaults to loudness peaks
+     gestA, gestB     gesture index for the current accent (default: changes every 1.6 s)
+     pointA, pointAmtA   [sx, sy] screen point the owl points at, 0..1 blend
+     pointB, pointAmtB   the same for Pico's wing
+     reactA           { kind: surprise|nod|think|grin|thumbs|shrug, amt 0..1 }
+     reactB           { kind: surprise|nod|think|write|flip, amt 0..1 }
+     holdA            fn(ctx) prop in the owl's left glove (e.g. a flask), drawn in the hand frame
+     stage            "bench" (default) | "none"
+     a                appear 0..1 (pops the duo in)
+   ============================================================ */
+var LK = window.LK || (window.LK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp } = K;
+  const mix = (a, b, u) => ({ x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u), hand: u > 0.5 ? b.hand : a.hand, hold: u > 0.5 ? b.hold : a.hold, mode: u > 0.5 ? b.mode : a.mode });
+  /* owl talking gestures (owl-local glove targets) */
+  const GEST_A = [
+    { R: { x: 150, y: -340, hand: "open" } },                                          /* a hand up: "here's the thing" */
+    { L: { x: -160, y: -250, hand: "open" }, R: { x: 160, y: -250, hand: "open" } },   /* both palms up */
+    { R: { x: 70, y: -380, hand: "point" } },                                          /* finger up: "one rule" */
+    { R: { x: 190, y: -190, hand: "open" }, L: { x: -110, y: -160, hand: "fist" } },   /* sweep out */
+    { L: { x: -190, y: -330, hand: "point" } },                                        /* finger up beside the head */
+  ];
+  /* Pico's talking gestures (bird-local wing targets, beak side = +x) */
+  const GEST_B = [
+    { R: { mode: "point", x: 120, y: -230 } },     /* wing forward: "but what if" */
+    { R: { mode: "point", x: 40, y: -300 } },      /* wing up: a question */
+    { R: { mode: "point", x: 130, y: -120 } },     /* wing out low */
+  ];
+  const envAt = (talk, acc) => (acc == null ? clamp((talk - 0.45) * 2.2, 0, 1) : clamp(acc, 0, 1));
+
+  K.duo = function (ctx, t, o) {
+    o = o || {};
+    const s = o.s || 1, x = o.x == null ? 380 : o.x, y = o.y == null ? 1000 : o.y, side = o.side || 1;
+    const app = o.a == null ? 1 : clamp(o.a, 0, 1);
+    if (app <= 0) return null;
+    const tA = clamp(o.talkA || 0, 0, 1), tB = clamp(o.talkB || 0, 0, 1);
+    const who = o.who !== undefined ? o.who : tA > tB + 0.04 ? "a" : tB > tA + 0.04 ? "b" : null;
+    const accA = envAt(tA, o.accA), accB = envAt(tB, o.accB);
+    /* Pico hovers clear of the owl's head (beak tip stays outside the head disc) */
+    const pointing = o.pointA && (o.pointAmtA == null || o.pointAmtA > 0) ? (o.pointAmtA == null ? 1 : o.pointAmtA) : 0;
+    const sB = s * 1.15, bx = x + side * 370 * s, by = y - (230 + 130 * pointing) * s; /* lifts so the owl's pointing arm passes under */
+    const pop = app >= 1 ? 1 : K.E.back(app, 2.2);
+
+    if (o.stage !== "none") { ctx.save(); ctx.translate(x + side * 140 * s, y); ctx.scale(s, s); K.bench(ctx, -420, 420, 0, { seed: 960 }); ctx.restore(); }
+
+    /* ---------- the owl ---------- */
+    const A = { seed: 700, blink: K.blinkAt(t, 3), mouth: "smile", talk: tA, viseme: o.visA, look: [0.15 * Math.sin(t * 0.7), 0], squash: 0.03 * Math.sin(t * 2.3), yaw: 0 };
+    let wR = { x: 125 + 5 * Math.sin(t * 2.1), y: -140 + 6 * Math.sin(t * 2.4), hand: "open" }, wL = { x: -125 + 5 * Math.sin(t * 1.9 + 1), y: -140 + 6 * Math.sin(t * 2.6), hand: "open", hold: o.holdA };
+    if (who === "a" && accA > 0) {
+      const G = GEST_A[(o.gestA != null ? o.gestA : Math.floor(K.hash(Math.floor(t / 1.6), 77) * GEST_A.length)) % GEST_A.length];
+      if (G.R) wR = mix(wR, G.R, accA);
+      if (G.L && !o.holdA) wL = mix(wL, G.L, accA);
+      A.squash += 0.1 * accA; A.brow = 0.5 * accA;
+    }
+    if (who === "b") { A.look = [0.9 * side, -0.4]; A.tilt = 6 * side; A.nod = 0.8 * accB; }
+    if (o.pointA && (o.pointAmtA == null || o.pointAmtA > 0)) {
+      const amt = o.pointAmtA == null ? 1 : o.pointAmtA, lx = (o.pointA[0] - x) / s, ly = (o.pointA[1] - y) / s, sd = lx >= 0 ? 1 : -1;
+      const sh = [sd * 86, -215], d = Math.hypot(lx - sh[0], ly - sh[1]) || 1, r = Math.min(d, 185);
+      const tgt = { x: sh[0] + ((lx - sh[0]) / d) * r, y: sh[1] + ((ly - sh[1]) / d) * r, hand: "point" };
+      if (sd > 0) wR = mix(wR, tgt, amt); else wL = mix(wL, tgt, amt);
+      A.look = [lerp(A.look[0], sd, amt), lerp(A.look[1], clamp(ly / 400 + 0.5, -1, 1), amt)];
+    }
+    const rA = o.reactA;
+    if (rA && rA.amt > 0) {
+      const u = clamp(rA.amt, 0, 1);
+      if (rA.kind === "surprise") { A.eyeUp = u; A.tufts = u; A.exclaim = u; A.mouth = "o"; A.blink = 0; }
+      if (rA.kind === "nod") A.nod = Math.max(A.nod || 0, u * (0.5 + 0.5 * Math.sin(t * 9)));
+      if (rA.kind === "think") { wR = mix(wR, { x: 62, y: -215, hand: "fist" }, u); A.look = [0.4, -0.9]; A.tilt = -8 * u; A.brow = 0.8 * u; }
+      if (rA.kind === "grin") A.mouth = "grin";
+      if (rA.kind === "thumbs") wR = mix(wR, { x: 160, y: -300, hand: "thumb" }, u);
+      if (rA.kind === "shrug") { wR = mix(wR, { x: 170, y: -240, hand: "open" }, u); wL = mix(wL, { x: -170, y: -240, hand: "open" }, u); A.tilt = 8 * u; }
+    }
+    A.wingR = wR; A.wingL = wL;
+
+    /* ---------- Pico ---------- */
+    const B = { seed: 820, dir: -side, blink: K.blinkAt(t + 0.9, 11), talk: tB, viseme: o.visB, look: [0.3, 0], squash: 0.04 * Math.sin(t * 3.1), hover: 1, goggles: 0 };
+    if (who === "b" && accB > 0) {
+      const G = GEST_B[(o.gestB != null ? o.gestB : Math.floor(K.hash(Math.floor(t / 1.6), 91) * GEST_B.length)) % GEST_B.length];
+      B.wingR = mix({ mode: "flap", x: 0, y: 0 }, G.R, accB); if (accB < 0.5) B.wingR = { mode: "flap" };
+      B.crest = 0.4 * accB; B.lean = 6 * accB; B.squash += 0.12 * accB;
+    }
+    if (who === "a") { B.look = [1, 0.1]; B.nod = 0.7 * accA; B.lean = 4; }
+    if (who === "b") B.look = [0.3, 0];
+    if (o.pointB && (o.pointAmtB == null || o.pointAmtB > 0)) {
+      const amt = o.pointAmtB == null ? 1 : o.pointAmtB, pd = o.pointB[0] >= bx ? 1 : -1;
+      B.dir = pd;
+      const lx = ((o.pointB[0] - bx) / sB) * pd, ly = (o.pointB[1] - by) / sB, sh = [10, -128], d = Math.hypot(lx - sh[0], ly - sh[1]) || 1, r = Math.min(d, 98);
+      if (amt > 0.5) B.wingR = { mode: "point", x: sh[0] + ((lx - sh[0]) / d) * r, y: sh[1] + ((ly - sh[1]) / d) * r };
+      B.look = [lerp(B.look[0], 1, amt), lerp(0, clamp(ly / 300, -1, 1), amt)]; B.lean = 8 * amt;
+    }
+    const rB = o.reactB;
+    if (rB && rB.amt > 0) {
+      const u = clamp(rB.amt, 0, 1);
+      if (rB.kind === "surprise") { B.crest = u; B.eyeUp = u; B.exclaim = u; B.lean = -10 * u; B.blink = 0; B.goggles = 0; }
+      if (rB.kind === "nod") B.nod = u * (0.5 + 0.5 * Math.sin(t * 10));
+      if (rB.kind === "think") { B.think = u; B.wingR = { mode: "point", x: 52, y: -150 }; }
+      if (rB.kind === "write") {
+        B.goggles = u; B.look = [0.2, 0.8];
+        B.wingL = { mode: "hold", x: 60, y: -60, hold: (c) => K.clipboard(c, 10, 0, 0.8, -0.3, 905) };
+        B.wingR = { mode: "point", x: 70 + 10 * Math.sin(t * 14), y: -70 + 6 * Math.cos(t * 11) };
+      }
+      if (rB.kind === "flip") B.lean = 360 * K.E.inOut(u);
+    }
+
+    /* draw: owl, then Pico (Pico hovers a little in front of the owl's shoulder line) */
+    ctx.save(); ctx.translate(x, y); ctx.scale(pop, pop); ctx.translate(-x, -y);
+    ctx.save(); ctx.globalAlpha = 0.22; ctx.fillStyle = P.woodDark; ctx.beginPath(); ctx.ellipse(x, y + 4, 120 * s, 14 * s, 0, 0, K.TAU); ctx.fill(); ctx.restore();
+    K.owl(ctx, x, y, s, A);
+    ctx.restore();
+    ctx.save(); ctx.translate(bx, by); ctx.scale(pop, pop); ctx.translate(-bx, -by);
+    K.hummingbird(ctx, bx, by, sB, B);
+    ctx.restore();
+    return { owl: [x, y], bird: [bx, by], owlHead: [x, y - 300 * s], birdHead: [bx + B.dir * 22 * sB, by - 170 * sB] };
   };
 })(LK);
 

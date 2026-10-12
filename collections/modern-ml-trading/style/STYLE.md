@@ -30,6 +30,7 @@ How it differs from the crab kit (`complex-arbitrage-rust`): warm sepia paper in
 | Owl feathers / facial disc | `owl` / `owlDark` / `disc` | `#8a5d3b` / `#5f3c24` / `#ecd3a8` |
 | Lab coat, gloves | `coat` / `glove` | `#f7f1e2` / `#fffdf6` |
 | Beak, feet | `beak` | `#e8a33a` |
+| Pico (hummingbird) | `hum` / `humDark` / `humLight` / `gorget` | `#3f9a6e` / `#2a6b4c` / `#8fd6a8` / `#b8323a` |
 | Data meaning | `train` / `test` / `good` / `bad` / `band` / `data` | `#5c9a3c` / `#e0a33a` / `#3f8f4e` / `#a8322c` / `#8fcfb0` / `#2f6b56` |
 | Chalkboard | `board` / `chalk` | `#24332b` / `#eef0e2` |
 
@@ -79,6 +80,35 @@ Animation rules:
 - Signature owl moves: head swivel (`yaw` 180 to 0 with back-ease overshoot; a 360 spin on landings), head tilt when curious, tufts perk on surprise.
 - Blinks seeded about every 2.1 s (`K.blinkAt`), forced open during surprise; `wink` for the sign-off.
 - Expressions: `mouth` closed, smile, grin, open, o; `brow` -1..1.5; `eyeUp` eye pop; brass `!` for discoveries.
+- Talking: `talk` 0..1 (voice loudness per frame) opens the beak up to 24 px; `viseme` "a" (wide), "o" (narrow round), "e" (flat, up to 14 px), "m" (closed). `nod` 0..1 dips the head 14 px for listening.
+
+## 5a. Pico (the hummingbird lab assistant, co-host)
+
+Pico is the curious one: asks the "but what if" questions, takes notes, darts to the evidence. Same rubber-hose line, stipple and rim as the owl, so the two read as one cast.
+
+| Part | Value (scale 1, local px, (0, 0) = hover point under the body) |
+| --- | --- |
+| Height | about 250 (crest to tail); in a duo Pico is drawn at 1.15 x the owl scale (about 290 px next to a 430 px owl) |
+| Body | emerald egg 88 x 124 tilted forward (`hum` #3f9a6e, shade `humDark`, belly `humLight`), ruby gorget (`gorget` #b8323a) |
+| Head | round, r 42; pie-cut eyes, brass goggles (`goggles` 0 pushed up, 1 over the eyes), three-spike crest that perks on surprise |
+| Beak | black needle 82 long; it splits open with `talk` (same visemes as the owl) |
+| Wings | while hovering: blurred ghost-trail flap; to gesture: two-bone IK hose plus feather blade (`wingL/R` mode `point` / `hold` / `flap`) |
+| Props | clipboard (`K.clipboard`) dangles from the feet while hovering; in `write` Pico holds it and scribbles |
+
+Readability: the silhouette (needle beak + crest + forked tail + clipboard) must read at 180 px; the gallery's last page checks the gesture sheet at 0.72 scale.
+
+Gestures (all poses are plain fields, mix them freely): point (wing `point` at a target), nod (`nod`), surprise (`crest` + `eyeUp` + `exclaim` + lean back), think (`think`: beak up, wing to chin, thought dots), write (goggles down, clipboard in wing), flip (`lean` 0 to 360 on a punchline). Idle: hover bob plus wing beat, blink seeded on a different track than the owl.
+
+## 5b. The duo (episodes)
+
+Both hosts stay big: the owl at least 300 px tall (default scale 1 = 430 px), Pico at about 290 px, never tucked into a corner. `K.duo(ctx, t, o)` places them on one bench and drives them from the voices:
+
+- **Placement.** Owl feet at `(x, y)` (default 380, 1000); Pico hovers at `x + side * 370 * s`, `y - 230 * s`, facing the owl; Pico lifts 130 * s while the owl points, so the arm passes under him. The other half of the frame is free for an explainer prop (plate at about x 1380).
+- **Talking.** `talkA` / `talkB` are 0..1 loudness per frame (from the narration's RMS), optional `visA` / `visB` visemes. The talker gestures on accents (`accA` / `accB`, default = loudness peaks): owl palms, finger up, sweep; Pico wing forward, wing up.
+- **Listening.** The listener looks at the talker's head and nods on the talker's accents. Never two talkers gesturing at once.
+- **Pointing.** `pointA` / `pointB` are screen points with `pointAmtA` / `pointAmtB` blends; the owl's reach is clamped (the hose does not cross the frame), Pico turns to face the target.
+- **Reactions.** `reactA` / `reactB` = `{ kind, amt }`: owl surprise, nod, think, grin, thumbs, shrug; Pico surprise, nod, think, write, flip.
+- **Props.** `holdA` puts a prop in the owl's left glove; Pico's clipboard comes with `write`.
 
 ## 6. Camera
 
@@ -129,5 +159,5 @@ The marketmaker.cc mark (`kit/assets/logo.svg`, monochrome `currentColor`) sits 
 
 ## 10. Do / don't
 
-Do: move through one lab with a camera; let the owl react to every reveal; land pops on beats; use green for generalisation, amber for out-of-sample, oxblood for overfit.
+Do: move through one lab with a camera; let the owl react to every reveal; let Pico ask and the owl answer, with the listener always reacting; land pops on beats; use green for generalisation, amber for out-of-sample, oxblood for overfit.
 Don't: draw flat slide cards; boil text; let the camera step at 12 fps; use neon or decorative gradients; put language-specific words in the drawn world (numbers, icons and code only), so one render path serves en, ru, zh-CN and zh-TW.
