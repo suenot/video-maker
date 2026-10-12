@@ -1,0 +1,64 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "Futures-Spot Arbitrage: From Cash-and-Carry to DeFi-CeFi\n\nComplex Arbitrage Chains Between Futures and Spot (Part 2)\n\nORDER BOOK FUTURES MARKET\n\nSPOT MARKET\nMARKET DEPTH DEFI LIQUIDITY\n\nCEFI CAPITAL\n\n|\nhi\n\nDATA_STREAN: : BID_ASK_SPREAD\n\neee oe\n\nSYNC: : CEFI_SPOT_PX\n\nvn BP\no fb\nSB &\nvoaevve ow w\nS&S © & S f S\n$38 FB 8 H8SBSBS SE\n; A\n\nf\n\n7\n\nTRANSFER: : FUNDING_PAYMENT\n\nBASIS_ARB: : EXECUTE_TRADE\n\nee\n\nCROSS_CHAIN: :DEFI_BRIDGE\n\nSS —————\n\nSe oe eS & &\nSse tSBS3268 GS\n\n2033, 598\n\n| AUTHORS: [\"suenot\"]\n\n| DATE: \"2026-02-24\"\n\n| TAGS: [\"arbitrage\", \"futures\", \"spot\", \"cash-and-carry\", \"funding rate\",\n\"basis\", \"DeFi\", \"CeFi\", \"rust\", \"deltaneutral\"]"
+    },
+    {
+      "page": 2,
+      "text": "Goes Up\n\nThe Delta-Neutral Paradigm\n\nProfit dimensions in cryptocurrency\nextend beyond simple graph-based\nasset swaps.\n\nMarket Independence\n\nDelta-neutral strategies decouple\nprofit generation from directional\nmarket movement.\n\nMarket\nGoes Down\n\nThe Mechanism\n\nmarkets for the exact same asset,\n\nrather than price speculation.\n\nThese strategies exploit structural price\ndifferences between Spot and Futures\n\nanchoring returns to market mechanics\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "H2 — 1. The Core Concept: Basis and Convergence\n\nDelivery / Settlement\n(Expiration Date)\n\nFutures Price (F)\n\nBasis = F - S\nSpot Price (S)\nThe Basis Theoretical Relation Convergence\nThe mathematical difference between the At the exact delivery/settlement date of a The inevitable, contract-dependent\nfutures price (F) and the spot price contract, a theoretical relation dictates closing of the Basis gap.\n(S). that the futures price MUST equal the\n\nspot price (F = S).\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "H3 — 1.1 Cash-and-Carry\n\nThe classic long spot plus short dated future strategy. By executing both legs,\nthe trader locks in the spread, waiting for mandatory convergence at expiration.\n\nSimplified Source Example: The article's exact $2,000 theoretical profit relies on perfect convergence. This is a simplified\neducational example and NEVER guaranteed income. Quoted \"risk-free\" wording explicitly ignores fees, borrowing costs, funding,\nsettlement rules, basis changes, collateral requirements, tax, execution slippage, and counterparty risk."
+    },
+    {
+      "page": 5,
+      "text": "H3 — 1.1 Cash-and-Carry\n\nAlgorithmic Tracking: Bots track these spreads across exchanges to compute annualized basis-yield\narithmetic, scanning for optimal capital deployment.\n\nfn calculate_annualized_yield(basis: £64, spot_price: 64, days_to_expiry: f64) -> £64 {\nlet yield_pct = basis / spot_price;\n(yield_pct / days_to_expiry) * 365.0 * 100.0\n\nTechnical Note: Rust snippets represent highly simplified pseudocode. They contain missing definitions,\n\nlack error controls, and are not validated trading systems.\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "H2 — 2. Perpetual Futures and Funding Rates\n\nThe Anchor: Because Perpetual Futures lack a dated delivery to force convergence, exchanges utilize a continuous\nFunding Rate to tether the Perp price to the Spot price based on the ongoing positive/negative funding direction.\n\nDated Futures Perpetual Futures (Perps)\n\nHas Expiry Date Never Expire\n\nAnchored by Mandatory Convergence Anchored by Ongoing Funding Rate\n\nNegative Funding Positive Funding\n(Bear Market) (Bull Market)\n\nFunding Rate\n\nShorts pay Longs Meanangen Longs pay Shorts\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "H3 — 2.1 Funding Arbitrage\n\nThe Strategy: Maintain a Long Spot position while holding a Short Perp position to continuously harvest positive\nfunding payments without waiting for a dated expiry.\n\n=\n\nOngoing Funding\nPayments\n\nIllustrative Arithmetic: An example variable funding rate of 0.01% per eight hours translates to about 11% simple annualization. This is illustrative article\narithmetic, NOT a forecast. It highlights the difference between an annualized nominal rate and a realized net return. \"Risk-free” framing is theoretical; it\nignores liquidation exposure and fluctuating variable funding.\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "H2 — 3. DeFi-CeFi Arbitrage: The New Frontier\n\nCentralized Finance (CeFi) Decentralized Finance (DeFi)\n\nCentralized Exchange Centralized REST APIs Uniswap (AMM)\n\n—— Liquidity Posl\n\nLimit Order Book > <— > Saart Contract\n\n4 —— Transaction Route\nPrice (USOT) Amsunt (8TC) Depth Chart oe ; a\n0.762355 0.6664\n\n0.702321 6.6609\n0.792335 0.6505 aa | REST API\n\n8.758330 2.6283 Endpoint as\n0.736350 3.6686 al\n6.725338 8.3353 | he\n\np 6,\n6.725256 0.8625 | | Zs S Z C |\n\n0.829323 (usoT)\n\n5 | > o a os\n0.889630 68,6655 SS ; Hyperliquid\n0.802335 3.0694 ay ee ; (DER)\n\n>\n\n6.802355 1.8895\n\n6.802345 2.5327 oe\n\n8.702993 3.8725 Nod 3\n\n6.782359 5.9789 i :\n8.782855 15.8485 . i dYdX = as Decentcalized\n0.782850 18.9810 (Pezp) (OEX)\n\nUniswap (AMM)\n\nThe Shift: The rise of AMMs and DEXs creates an entirely new structural landscape.\n\nThe Opportunity: Capturing price and funding discrepancies by routing arbitrage chains across fundamentally different\nmarket architectures, bridging traditional CeFi order books with on-chain DeFi liquidity pools."
+    },
+    {
+      "page": 9,
+      "text": "H3 — 3.1 The Chain\n\nExecuting the chain requires seamless interaction between centralized\nexchange logic and decentralized smart contract protocols.\n\n1\n\nDetect Discrepancy\n\nBTC Spot on Binance\n\n(CeFi) is $50,000\n\nBTC Perp on DEX (Deri)\nis $50,500 with massive\nfunding rate.\n\n2\n\nExecute\n\nBuy Spot on CeFi,\nSimultaneously Short\nPerp on Deri.\n\nPreserve cross-platform\nfunding signs.\n\n3\n\nOptimize Inventory\nManage collateral.\n\nChoose between pre-funded\ninventory on both venues\nOR rely on a ‘Bridge’ to\nmove assets across\nchains.\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 10,
+      "text": "H3 — 3.2 Cross-Chain Complexity\n\nCeFi\n\nREST/Websocket\nAPI\n\nInfrastructure Friction\n\nOperating across this divide introduces profound\n\ncomplexities compared to single-exchange arbitrage.\n\nBots must handle Ethereum/Solana RPC nodes and\ncentralized APIs simultaneously.\n\nDEX Smart\nContract via\nRPC Nodes\n\nRust\n\nArbitrage\nEngine\n\nExecution Bottlenecks\n\nProfitability depends on managing Gas costs, MEV\n(Maximal Extractable Value) threats, and latency\ndiscrepancies between venues.\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "H3 — 3.2 Cross-Chain Complexity\n\nPolling logic requires simultaneous asynchronous state monitoring across distinct market\nprotocols to detect actionable spreads.\n\nasync fn monitor_funding(dex_client: &DexClient, cefi_client: &CefiClient) {\nlet dex_funding = dex_client.get_funding_rate(\"BTC-USD\").await;\nlet cefi_funding = cefi_client.get_funding_rate(\"BTC-USDT\").await;\n\nlet spread = dex_funding - cefi_funding;\nif spread > THRESHOLD {\nexecute_trade().await;\n\nTechnical Note: Rust snippets are pseudocode with missing definitions and error controls; they are not\nvalidated trading systems. Do not endorse any current exchange API support, funding, or yield.\n\nv,\n(® Gemini Notebook"
+    },
+    {
+      "page": 12,
+      "text": "H2 — 4. Execution Risk: Leg Risk and Liquidation\n\nDelta-Neutral # No-Risk\n\nLeg Risk (One-Leg Execution Failure)\n\nYou successfully buy the spot, but due to slippage,\nRPC latency, or DEX liquidity shifts, the short future\nexecution fails. The spread vanishes, leaving you\nholding naked directional risk.\n\nLiquidation Risk (Collateral Exposure)\n\nlf the asset price suddenly doubles, your short\nposition requires massive margin. Even if the spot leg\nis equally profitable, the short position may face\nforced liquidation if sufficient collateral is unavailable\non that specific venue.\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 13,
+      "text": "H2 — 4. Execution Risk: Leg Risk and Liquidation\n\nVenue & Exchange Risk\n\nCentralized exchanges\nsuffering downtime,\nAPI rate limits, or\ncatastrophic hacks\nduring\n\nexecution windows.\n\nDeFi Systemic Risks\n\nSmart-contract\nvulnerabilities,\nRPC/API total failures,\ngas and slippage\nspikes, and blockchain\nreorganizations\n(reorgs).\n\n=|\n\nThe Inventory Dilemma\n\nTo avoid bridge delay/finality risks during a trade,\ntraders maintain pre-funded inventory on all platforms.\nHowever, this dramatically multiplies exposure to the\nvenue and smart-contract risks listed above.\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 14,
+      "text": "H2 — 5. Conclusion\n\nCapital Efficiency &\nRisk Management\n\nThe Institutional Reality\n\n|\nFutures-spot arbitrage represents |\nthe institutional side of crypto.\nIt demands vastly superior capital\nefficiency and robust risk\nmanagement compared to simple\ngraph-based asset swaps, but\noffers superior scalability.\n\nComing Next (Part 3)\n\nAn exploration of Vine\nCopulas—advanced mathematical\ntools used to model complex\ndependencies between dozens of\ndifferent assets and their\nderivatives simultaneously.\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 15,
+      "text": "Source Reference: MM article complex-arbitrage-futures-spot EN 1cce761ff956\nProject Repository: Maximizing carry? Explore the Delta Neutral Strategy Engine on GitHub (marketmaker-cc/delta-neutral-core).\n\nEditorial Audit Note: Historical, numerical, research, financial, exchange/API, performance, and mutable assertions remain attributed source claims\npending human editorial, formula, and primary-source review. External target-channel and NotebookLM artifact duplicates are not checked for clearance.\nEndorsement of any investment results is expressly disclaimed. Chinese regional terminology and Mandarin pronunciation await final human review.\n\n(® Gemini Notebook"
+    }
+  ]
+}
