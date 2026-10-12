@@ -1,0 +1,64 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "Anomaly Detection for\nTrading Bot Protection\n\nFrom Z-Score to Transformer: Building\na Cascading Architecture\n\nTARGET: Crypto Algo Trading\nSTATUS: Foundation without which algo trading becomes gambling."
+    },
+    {
+      "page": 2,
+      "text": "H2 — What Counts as an Anomaly in Crypto Trading\n\nPoint Anomalies\n\nIsolated extreme deviations.\nHigh risk of fake price entry or\nmargin-destroying slippage.\n\nExample: Candle with 50x\naverage volume, or BTC/USDT\nspread spiking to 0.5%.\n\nCollective Anomalies\n\nNormal individual events that\nform a manipulative aggregate.\nNote: Spoofing acts as a signal\nneeding corroboration.\n\nExample: Place-cancel\n\nspoofing loops with a 100:1\norder-to-trade ratio.\n\nContextual Anomalies\n\nNormal values occurring in the\nwrong environmental context.\n\nExample: London session\ntrading volumes occurring at\n3 AM UTC on a Sunday.\n\nGemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "H3 — Noise vs. Anomaly: The Context Problem\n\n[ANOMALY]: A sudden\nviolation of the\n\n[DRIFT]: A gradual shift in\nexpected pattern.\n\nmarket conditions (e.g.,\nlow-volatility night to\n\n[NOISE]: Random fluctuations\nactive morning).\n\nthat are part of the normal\nmarket regime.\n\nAnomaly is not just strange data—it is a deviation carrying information. The key challenge for\nany detector is isolating the dangerous anomaly from harmless noise and persistent market drift\n\nwithout triggering false positives.\n\nGemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "H2 — Simple Methods That Solve 80% of Problems\nH3 — Z-Score: Fast Extreme Filter\n\nLATENCY:\nTRIGGER: Z-Score > 3\nTARGETS: Abnormal volume,\nSpread monitoring,\nFutures funding rates.\nOUTLIER\n\n(Z > 3) PRACTICAL LIMITATION: FAT TAILS\n\nCrypto markets exhibit fat-tailed\ndistributions. By normal distribution,\na 60 event occurs once in a million\nyears; in crypto, it happens monthly.\n\nZ-score is a coarse filter, not a final\n\nNormal Distribution (Theoretical) | verdict.\n\n-20 -10 Mean +10 +20\n\nGemini Notebook"
+    },
+    {
+      "page": 5,
+      "text": "H3 — Level Shift Detector: When the Market Changes Regime\n\nWindow B (Recent)\nWindow A (Historical) e\n\nMechanism & Application TRIGGER LOGIC:\n\nCompares averages of two consecutive rolling\nwindows. If the delta exceeds a threshold, a regime IF (Level Shift_Count >= 2 Metrics) {\n\nshift is flagged minutes before price impact. Activate Defensive Mode();\nApplies simultaneously to average trade size, order }\nbook depth (first 5 levels), and trades per unit time.\n\n& Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "H3 — Volatility Shift Detector: Sensing the Storm\n\nCompression (The Calm) Expansion (The Storm)\n\nAbnormally low volatility frequently precedes hoop ; ; aeacitlia ty alles\nexplosive market moves. Comparing rolling Mee hee = ik aay ae re ra\nstandard deviations flags this tightening. vo slated oleae) hth au eh ates ta ahaa\n\nMechanism: Compares rolling standard deviations rather than averages. This catches both\nthe calm before the storm and the the storm itself, warning of regime drift.\n\nGemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "H3 — HBOS: Fast Multidimensional Analysis\n\n=\nHistogram-Based Outlier\n\nSelection\ni\n\ne Use Case: Monitoring 10+\nindicators simultaneously\nwithout the computational cost\nFeature 1 : ™ Joint Outlier in of deep ML.\n: Low-Density Tails\n\nMechanism: Assumes feature\nindependence. Builds a histogram\nfor each feature. The final\nanomaly score is the product of\ninverse densities across all\nhistograms.\n\ne Advantage: Significantly faster\nthan distance-based methods like\nLOF, making it ideal for high-\nfrequency filtering of\nmultidimensional state vectors.\n\n=]\n\nGemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "Tim\n\nH2 — Machine Learning: When Statistics Aren’t Enough\nH3 — Isolation Forest: Best Balance for Production\n\n=\nThe Need for ML\n\nHandles unusual\ncombinations of\nindicators. Volume +\nspread + rate of\nchange + order book\nimbalance together.\n\nMechanism\n\nEnsemble of decision\ntrees randomly\npartitioning feature\nspace. Fast millisecond\ninference. No labeled\ndata required.\n\né\n\nFeature B\n\nANOMALY\n(Isolated quickly)\n\nNORMAL DATA\n(Requires many partitions)\n\nFeature A\n\n>\n\nExplainability\n\n(SHAP values)\n\nExplains why an anomaly\ntriggered (e.g.,\npinpointing external\nvolume mismatch\n\nduring the 2021 Tesla\nBTC rejection or\n\nisolating unbalanced\nquotes in spoofing).\n\nPractical\nLimitation\n\nFalse positive risks.\n\nGemini Notebook"
+    },
+    {
+      "page": 9,
+      "text": "H3 — LOF: Best Choice for Multi-Exchange Monitoring\n\nHigh-Density Environment (Binance) Sparse Environment (Niche Exchange)\n\nGlobal thresholds fail here; LOF correctly Adapts to local context without generating\nidentifies local outliers by comparing a false positives on low-volume exchanges.\npoint’s density to its nearest neighbors.\n\n(Yj Validation: 2024 Springer study confirms LOF finds real anomalies with fewest false positives on BTC and Dogecoin.\n\nZ\\ Limitation: Quadratic computational complexity. Too slow for tick-level real-time, but ideal for minute\naggregates across 100+ exchanges.\n\nGemini Notebook"
+    },
+    {
+      "page": 10,
+      "text": "H3 — Autoencoders: Deep Order Book Analysis\n\nInput: 4@-D Vector\n\n(20 bid / 20 ask) ~  N Reconstruction\nLatent Representation ie eeeee ee eee\n\n(Compression)\n\nHigh Reconstruction Error = Anomaly\n\ni uechentea: \\aechaemetune: | WN Practical Limitation:\n\nCompresses normal data and attempts to Hybrid LSTM Autoencoder + One-Class SVM Deep extraction comes at a high\nreconstruct it. High reconstruction erro handles temporal dynamics (last N ticks) computational cost. Real-time\nSignals an anomaly. _| and classical ML decision-making. _| i_inference strictly requires a GPU. |\n\nGemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "H2 — Cascading Architecture: Putting It All regener\n\nlntaver 1 — Fast Path (< 1 ms)\n\nTools: Z-Score (volume/spread/price). Persistence check.\nResponse: Immediate trading pause. Protects against flash crashes & API errors.\n\nDilaver 2 — Near Real-Time (1-100 ms)\nTools: Isolation Forest + Level/Volatility Shift Detectors.\nResponse: Triggers mode switch & parameter adjustment (parallel thread). |\n\niiever 3 — Background Analysis (1-60 seconds) |\n\nTools: LOF (multi-exchange) + LSTM Autoencoder (order books). (-\n\nResponse: Tralerts & strategy parameter adjustments. Core Principle: Graceful\nDegradation. Independent\nprotection layers ensure\n\nLayer 4 — Batch Analysis (Hourly/Daily) fault tolerance-if Layer\n\nTools: DBSCAN (wash trading) + PCA (cross-exchange correlation).| | 3 fails, Layers 1&2\n\nResponse: Reports, model updates & threshold recalibration. \"Eistalopet defense.\n\n& Gemini Notebook"
+    },
+    {
+      "page": 12,
+      "text": "H2 — Practical Recommendations\n\n4\n\nSTART SIMPLE CONTAMINATION PARAMETER\n\nImplement Z-Score + Level/Volatility The most critical Isolation Forest\nShift first. This covers the majority of hyperparameter. Use 0.01-0.05 range.\nloss scenarios due to abnormal market Too low = missed anomalies; Too high =\nconditions before GPU clusters are false positives paralyze trading.\n_needed. L\n\na\n\nADAPTIVE THRESHOLDS DATA & INCIDENT TESTING\n\nCombat regime drift and non-stationary Log all anomalies to build supervised\ndata. Use EWMA (Exponentially Weighted datasets. Test systems against real\nMoving Average) to update thresholds, historic data errors and API incidents\nor periodically retrain models. (e.g., May 2021 flash crash, FTX\nliquidation cascade, LUNA collapse).\nL\n\nA Gemini Notebook"
+    },
+    {
+      "page": 13,
+      "text": "H2 — What’s Next\n\n=\n\nTransformer Models for Order Books Staged Sliding Window Transformer\n+ OC-SVM (315M records) |\n\nUse Case: Limit Order Book (LOB) anomaly Accuracy: 0.93\n\ndetection. Outperforms RF, LSTM, CNN. | Fa: @.91 | AUC-ROC: 0.95\n\nGANs (Generative Adversarial Networks) Gateueaey: 94.7%\n\nUse Case: Synthetic anomaly generation to Latency: < 3 ms\nsolve critical label scarcity by generating Throughput: 150,000 TPS\nrealistic manipulation scenarios. &\n\nChange Point Detection (CPD)\n\nUse Case: Identifying exact moments regime shifts (e.g., mean-\nstatistical properties change. cencreneueLe trend-following) ‘|\n\n| Goal: Automating structural"
+    },
+    {
+      "page": 14,
+      "text": "Anomalies are not an optional feature.\n\nIt is the foundation without which algo\ntrading becomes gambling. And the sooner\n\nyou build it, the fewer expensive\nlessons the market will need teach you."
+    },
+    {
+      "page": 15,
+      "text": "H2 — References\n\n. Anomaly detection in\ncryptocurrency markets using\nIsolation Forest\n\n. LOF: Identifying local outliers in\nhigh dimensional space\n\n. Isolation Forest for Anomaly\nDetection (Sklearn Documentation)\n. PyOD: A Comprehensive Python\nToolbox for Outlier Detection\n\n. Transformer-based models for Limit\n\nOrder Book anomaly detection\n\n. Ethical Issues and Market\n\nManipulation in Cryptocurrency\n\nH2 — Citation\n\n| asoftware{soloviov2626anonalydetectiona |\n\nlgotrading,\n\nauthor = {Soloviov, Eugen},\n\ntitle = {Anomaly Detection for\nTrading Bot Protection: From Z-Score to\nTransformer},\n\nyear = {2026},\n\nurl = {https://marketmaker.cc/en/blog\n/post/anomaly-detection-algotrading},\n\nversion = {0.1.0},\n\ndescription = {Which anomaly detection\nmethods actually work in crypto algo\ntrading, how to build a cascading\nprotection architecture, and why this\nis the foundation without which algo\ntrading becomes gambling. }"
+    }
+  ]
+}
