@@ -5,7 +5,8 @@ cd "$(dirname "$0")/.." || exit 1
 python3 ../style/kit/tools/build.py . >/dev/null || exit 1
 mkdir -p renders
 render() {
-  local lang="$1" title="$2" out="renders/intro_${lang}.mp4"
+  local lang="$1" title="$2"
+  local out="renders/intro_${lang}.mp4"
   for try in 1 2 3; do
     npx hyperframes render --quality high --output "$out" --variables "{\"title\":\"$title\",\"lang\":\"$lang\"}" > "renders/render_${lang}.log" 2>&1 && break
     sleep 60
