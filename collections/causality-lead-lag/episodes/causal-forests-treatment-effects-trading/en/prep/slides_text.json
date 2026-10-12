@@ -1,0 +1,64 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "Mode Splitting Criteria: MSE(Y,, Vicar)\n\nSplit X, > d)\n\nCausal Forests for\nHeterogeneous a\nTreatment Effects ee\n\nin Trading\n\nEstimating T(x) over u(x): Honest\n\nsplitting, adaptive kernels, and |\ncalibration tests for real signal yj cue ——\"\nheterogeneity.\n\nHeterogeoit:\nF(x) = ji(x, 1) — fi(x; 0)\n\nHeteregoeit:\n(x) = A(x. 1) — fi(s,0)\nKermel Weights W(x)\nAdactios Kernel\nXa(a-9,)\n\nHonest Partition Z,\nAuthor: suenot\n\nDate: 2026-08-01"
+    },
+    {
+      "page": 2,
+      "text": "H2 — From Average to Heterogeneous Effects\n\nH3 — The Conditional Average\nTreatment Effect\n\nStandard ML H3 — The Average Treatment Effect\n\nEstimand:\n\nT(x) = E[Y,(1) — ¥i(0) | Xi = x]\n\nEstimand: Estimand:\n\nu(x) = E[Y | X =x] TaTE = E[Y;(1) — ¥;(0))]\n\nThe expected return impact of this\nevent on this asset relative to the\nmissing counterfactual.\n\nEvery backtest estimates a conditional | | Useless for trading. If an event pushes\nmean. half the universe up and half down,\nATE is zero but opportunity is maximal.\n\nH3 — Why Not Just Use Linear Interaction Models? Linear Assumption Trading Reality\n\nbin | ¢ Convex (e.g., funding flip\nsensitivity to leverage)\n\nz vis ¢ Multiplicative (e.g., depth\nY; =a+ BW; + 7W; -X; + 6X; + 6; interacts with market cap)\n; ¢ Gated (e.g., volatility regime\n\nConclusion: Causal forests adaptively partition without imposing shape constraints.\n\nGemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "H2 — Causal Forests: The Algorithm\nH3 — Causal Trees\n\nNode-level effect\nestimates: Z\nToei = Seren ad aa een trl\n\na2 n2 n2\nA(split) =n,-7,+nR-Tp-—N- ‘ee\n\nSample sizes in\nthe left child, right\nchild, and parent.\n\nBetween-group\nvariance of treatment\neffects.\n\nParent Node\n\nLeft Child Right Child\n\nCore Mechanism: A causal tree maximizes treatment-effect variance across children, rather than\n\nminimizing squared prediction error. A split is good when the two children disagree about the effect.\nCovariates that strongly predict Y but are orthogonal to treatment W are completely ignored.\n\nfi Gemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "H3 — Honest Estimation\n\nFull Training Data\nSubset: Tspiit Subset: Lest\n\noO oe\n@ Observed/Treated ¥ *\n\ne - oe\ni Counterfactual\n1. Build the tree structure. ounterfactual/\n\nControl - 2. Estimate leaf effects.\nChooses split variables © e\nand points. Evaluates\nS\n\nx\ntructural splits only. e) ©) es) @\n\nGol z Ce) Drops into the frozen\nWhy Honesty Matters:\n\n¢ * i ‘ tree to calculate\n(N I~ 6”) [> actual leaf values.\n- Prevents Cheating: Without honesty, extreme leaves capture noise in the training sample and report it\nas signal (similar to probability of backtest overfitting).\n\n- Result: Asymptotic unbiasedness E[7(x) | X; = x] = 7(x) + o(1)\n- Trade-off: Sample efficiency drops by half. Data used to build structure cannot be used to fill it.\n\nGemini Notebook"
+    },
+    {
+      "page": 5,
+      "text": "H3 — From Trees to Forests\n\nA Causal Forest is a locally adaptive kernel estimator.\n- Aggregates B causal trees on subsample s < n.\n\nH3 — Asymptotic Theory\n\nCrucial Distinction\n\nAsymptotic pointwise intervals are for the\nCATE, driven by the infinitesimal jackknife.\nThese are strictly different from finite-sample\nmarginal conformal intervals used for predicting\noutcomes. Different estimand, different guarantees.\n\n- Weights a; (x) are driven by leaf co-occurrence frequency.\n- It learns its own definition of “similar” using only covariates that matter for effect heterogeneity,\n\nnot hand-scaled Euclidean distance.\n\nGemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "H2 — The Double Machine Learning Connection\n\nInputs Residualization Engine Causal Engine\n\nOutcomes Outcome Model\n(Y, X) m(X) = E[Y | X] CF =¥ am\n\nCausal Forest\n\nEngine\n\nTreatments Propensity Model\n(W, X) a(x) = E[w |x] | °C) OL = 0-2\n\nRequired when treatment is not randomly assigned.\n- Relies on cross-fitting to estimate m and é.\n- Neyman Orthogonality: Nuisance-estimation error enters only as a product.\n\n- mand é can converge slowly at n—1/4, but ¥ still converges cleanly at n 1/2,\n\nfm Gemini Not"
+    },
+    {
+      "page": 7,
+      "text": "H2 — Trading Application: Event Impact Heterogeneity\n\nPre-event Window\n\nFitting the market model.\n\nAbnormal Cumulative Return (CAR) Y;\n\nEvent Timestamp\nTreatment W; Fired\n\nH3 — Setup\n\n- Units: Coin-event observations.\n- Treatment W;: Binary indicator (1 = funding-rate\n\nflip / listing / cascade, @ = matched non-event).\n\n- Outcome Y;: Abnormal CAR over event window. Pre-\nfitted on market model to strip out market-wide\nmoves. (Raw returns are invalid here).\n\n- Modifiers X;: Market cap, realized vol, funding\nhistory, book depth.\n\n- Confounders W;: Regime variables shifting\nprobability and returns.\n\nH3 — The Trading Signal\n\n- Position Size: Scaled by |7| relative to interval\nwidth.\n\n- Edge Ratio: e = |7|/w\n\n- Absolute No-Trade Filter: Do not trade if the\ninterval straddles zero.\n\n- Construction: Market-neutral by balancing long\nand short legs.\n\nf Gemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "H2 — Python Implementation with EconML\n\ndef fit_causal_forest(Y, T, X, W, n_estimators=1000):\ncf = CausalForestDML (\nDouble Machine model_y=GradientBoostingRegressor(...),\n___ Learning model_t=GradientBoostingClassifier(...),\npredictive inputs. criterion='het', # heterogeneity-based splitting Crucial for\n\nhonest=True, # honest estimation —————————————— asymptotic\ninference=True, # infinitesimal-jackknife intervals unbiasedness.\n\ncv=5, # cross-fitting folds for DML\n) ie ee\ncf.fit(Y=Y, T=T, X=X, W=W) Seas ST\n\nresidualization folds.\nreturn cf\n\nNote: Presented as an illustrative workflow architecture, not a measured empirical result.\n\nGemini Notebook"
+    },
+    {
+      "page": 9,
+      "text": "H3 — Interpreting the CATE Surface\n\nSummarize_cate(cf, X, feature_names)\n\nplot_cate_by_feature(cf, X, feature_idx)\n\nA Feature Importance Shift\n\nHeterogeneity importance # outcome importance.\nA covariate can perfectly predict asset returns but\nscore absolute zero for effect heterogeneity.\nCausal forests rank variables purely by how much\nthey drive the difference in effect.\n\nA Marginal Plot Traps\n\nHolding other covariates at the median for 1D\nmarginal plots can force you into regions of\ncovariate space with zero actual support. Read these\npurely as mathematical descriptions of the fitted\nsurface, not as valid causal dose-response curves.\n\nGemini Notebook"
+    },
+    {
+      "page": 10,
+      "text": "H2 — Key Assumptions and Diagnostics\nViolate these and you get confident, precise, wrong effects.\n\nH3 — 1.\nUnconfoundedness\n(Selection on\nObservables)\n\nH3 — 2. Overlap\n(Positivity)\n\nY(0),Y(1) LW|X,W\n\nRisk: Fails instantly for\nmarket-reaction events driven by\nunobserved flows.\n\nOa PiW =i K—x) <a Nx\n\nEvery unit needs positive\nprobability in both arms.\n\nDiagnostic: Rosenbaum I’\nsensitivity analysis.\n\nHow large must I shift treatment\nodds before the estimated effect\nflips? (A design breaking at I'=1.1 is\nnot a finding).\n\nDiagnostic: Check propensity\nscores and trim.\nRetain 0.05 < p < 0.95. Always\n\nreport the retained fraction as\ntrimming redefines the target\n\nGemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "H3 — 3. SUTVA (Stable Unit Treatment Value Assumption)\n\nContagion Correlated\n\nPair MG — Y;(W;)\n\nDefinition: No interference\nbetween units. One unit's\n\ntreatment must not affect\n\nMarket Maker Shared another's outcome.\nInventory Collateral\n\nThe Crypto Reality: This is the weakest assumption in the crypto universe. A liquidation cascade\nin one perpetual swap propagates directly through shared collateral pools into correlated pairs.\nThis is interference by definition.\n\nMitigation: Clustering standard errors by correlation group partially addresses the mathematical\nfallout, but nothing fully resolves the structural violation.\n\nGemini Notebook"
+    },
+    {
+      "page": 12,
+      "text": "H2 — Beyond Binary Treatments\n\nMagnitude of the shock (e.g,.,\nfunding-rate change in basis\npoints), not just occurrence.\n\nY; = T(Xi) - T; + g(Ki, Wi) + &\n\nThe CATE becomes a\n\nper-basis-point effect.\n\nCode Transition (Regressor for Continuous) Estimation Execution Code\n\nmodel_t=GradientBoostingRegressor # Replaces Classifier | cf_continuous.effect(X_test, T@=@, T1=25)\n\ndiscrete_treatment=False Result: Estimates the specific impact of a\ncontinuous 0-to-25 bps shift.\n\nGemini Notebook"
+    },
+    {
+      "page": 13,
+      "text": "H2 — Practical Considerations\n\nH3 — Is the Heterogeneity Real?\n\n¥; — m = ao(W; — €) + a1(Wi — €)(7 — 7) + &\n\nAverage effect Calibration slope. a,;=0 means no heterogeneity.\n(Calibration null). a,=1 is perfect calibration. If >0 but <1, trade the\nranking, not the magnitudes.\n\nEconML RScorer: Compare candidate CATE models against a constant-effect baseline on a validation split.\n\nCATE requires significantly more data than outcome\nmodels (both arms must populate every leaf).\n\nUsable n is entirely empirical based on interval\nwidth dropping below trade thresholds.\n\n<\n—\n-2\no>\na\naS\n=> -\n<8)\n—_\n=\n\nSample Size (N)\n\nf Gemini Notebook"
+    },
+    {
+      "page": 14,
+      "text": "H3 — Walk-Forward, With Two Wrinkles\n\nWalk-Forward Validation\n\n- Anchored walk-forward must pass Deflated\nSharpe Ratio (DSR) and Probability of Backtest\nOverfitting (PBO) gates.\n\n- Wrinkle 1: Purge overlapping event windows to\nprevent out-of-sample contamination.\n\n- Wrinkle 2: Redraw honest splits (Zspiit /Zest)\nat every refit to avoid structural leakage.\n\nH3 — Costs\n\nSignal Edge Expected\n\n7 | ~ Half-Spread\n\n- The Catch: Short event shelf life.\n\n- Unlike continuous signals that pay the spread\nonce and hold, event signals pay the spread\nevery event.\n\n- Costs must be amortized over a fixed, short\nholding period.\n\nf Gemini Notebook"
+    },
+    {
+      "page": 15,
+      "text": "H2 — Conclusion H2 — References\n\n- Causal forests answer: “how much did - Athey & Imbens (2016)\nthis event move this asset relative to the\n\n- Requires unique machinery: - Athey, Tibshirani & Wager (2019)\n\nheterogeneity-maximizing splits, honest - Chernozhukov et al. (2018)\nestimation, adaptive weights, infinitesimal- |\njackknife intervals. - Battocchi et al. (2019)\n\n- Assumptions must be rigidly tested, not\nasserted: Unconfoundedness, Overlap,\nSUTVA.\n\nEditorial Flag / Source Claim Note: The source article explicitly lacks measured real CATE\ndistributions, diagnostic results, and live PnL. Every number is a placeholder. This\nrepresents a methodological tutorial framework, not a validated trading finding pending a\npublished ‘honest negative’. (Stale publication-sequencing comment preserved).\n\nGemini Notebook"
+    }
+  ]
+}
