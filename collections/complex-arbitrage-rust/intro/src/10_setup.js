@@ -60,6 +60,9 @@ const T = {
   snap: [at(13, 0), at(13, 1)],
   medals: at(13, 0),
   hatTip: at(14, 0),
+  pipIn: [at(10, 1), at(11, 0)],   /* outro: Pip flies in on the instrumental and lands on the banner */
+  pipSing: [at(11, 0), at(13, 0)],
+  sail: at(9, 0),                  /* the world scrolls from here: the ship sails on under the banner */
   /* retired verse beats (full-length version): kept out of range */
   pushIn: [-9, -8], pullOut: [-7, -6], rivets: -99, markets: -99,
 };

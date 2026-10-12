@@ -76,9 +76,16 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, 12 to 17 frames, p
 ## Round 10
 - `lint`: 0 errors. 4 languages rendered in sequence through `heavy_slot.sh`, plus silent copies. A 1 fps contact sheet was made from the en render.
 
+## Round 11 (outro was static)
+- Review note: 13 s of static title (18.35 - 31.5 s) is too long. The title stays on "sail with me", and the scene behind it now moves:
+  - the ship sails: islands scroll left, clouds speed up, and foam streaks peel off the stern;
+  - a slow 1.0 - 1.1x push-in runs through the instrumental;
+  - Pip, the first mate and episode co-host, swoops in on the instrumental (20.9 s) and glides in the empty left third. Pip sings on the beat with notes, cheers the medallions with "!", salutes with the cap tip and waves to the end.
+- The first try perched Pip on the banner top. Pip was clipped by the frame edge, and the notes went off-screen. Pip now glides at scale 1.3 instead.
+
 ## Known weaknesses
 - The crab's legs are simple 3-point limbs: readable, but less refined than the body and claws.
 - In the matrix shot the map tags are about 19 px. They are context only; the matrix shows the same numbers at 26 px.
 - The title-card crab is about 220 px wide. It is charming, but secondary to the banner.
 - One lint warning remains: the file is large, because it is built from the kit by design.
-- 19 - 31.5 s: the title card holds for 12 s of instrumental outro. The net haul, medallions and cap tip keep it alive, but the banner never moves after it unrolls.
+- 19 - 31.5 s: the banner itself only waves; the motion comes from the sailing world, the net, Pip and the medallions.

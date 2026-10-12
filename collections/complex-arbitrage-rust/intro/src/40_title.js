@@ -39,7 +39,54 @@ function drawTitleCanvas(t) {
       K.sparkle(ctx, SNAP_PT[0] + Math.cos(a) * r, SNAP_PT[1] + Math.sin(a) * r, 26 * (1 - d / 0.5), 1 - d / 0.5, i + k * 5);
     }
   });
+  drawPip(t);
   return box;
+}
+
+/* ---------- Pip, the first mate, joins on the instrumental outro ----------
+   Flies in from the left and glides alongside the sailing ship (the empty
+   left third of the frame), sings on the beat, cheers the medallions,
+   salutes with the captain and waves to the end. */
+const PIP = { x: 420, y: 750, s: 1.3 };
+function noteGlyph(x, y, s, a, seed) {
+  ctx.save(); ctx.globalAlpha *= a; ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(-0.15);
+  K.line(ctx, [[8, 0], [8, -38], [24, -30]], { stroke: P.ink, w: 4, boil: 0.6, seed, gap: 0 });
+  K.shape(ctx, K.ellipsePts(0, 0, 10, 7.5, 10), { fill: P.ink, stroke: null, w: 0, boil: 0.5, seed: seed + 1 });
+  ctx.restore();
+}
+function drawPip(t) {
+  const [f0, f1] = T.pipIn;
+  if (t < f0) return;
+  const fly = K.inv(f0, f1, t), e = K.E.out3(fly);
+  const flap = 0.5 + 0.5 * Math.sin(t * Math.PI * 2 * K.G.BPM / 60); /* one wingbeat per beat while gliding */
+  const st = { seed: 700, blink: K.blinkAt(t, 13), look: [0.5, 0.2], wingL: 0.25 + 0.6 * flap, wingR: 0.25 + 0.6 * flap, lean: 8 };
+  let x = PIP.x, y = PIP.y + 14 * Math.sin(t * 2.2) - 16 * K.pulse(t, 1, 6);
+  if (fly < 1) {
+    /* swoop in from the top-left, fast wingbeats, flare to a glide */
+    const fast = 0.5 + 0.5 * Math.sin(t * 34);
+    x = K.lerp(-180, x, e); y = K.lerp(380, y, e) + 90 * Math.sin(fly * Math.PI) * (1 - fly);
+    st.wingL = st.wingR = 0.3 + 0.65 * fast; st.lean = 26 * (1 - e) + 8; st.look = [1, 0]; st.squash = -0.1 * (1 - e);
+  }
+  /* sing: beak opens on every beat, head bobs, notes drift up */
+  const sing = win(t, T.pipSing[0], T.pipSing[1], 0.2, 0.3);
+  if (sing > 0) {
+    const b = K.pulse(t, 1, 6);
+    st.talk = sing * b; st.head = sing * 12 * Math.sin(t * Math.PI * K.G.BPM / 60); st.look = [0.6, -0.4];
+    for (let i = 0; i < 4; i++) {
+      const t0 = T.pipSing[0] + i * K.beatLen() * 2, d = (t - t0) % (K.beatLen() * 8);
+      if (t < t0 || d > 1.6) continue;
+      const u = d / 1.6;
+      noteGlyph(x + 60 + 110 * u + 16 * Math.sin(u * 7 + i), y - 190 - 120 * u, 1.5 + 0.3 * (i % 2), Math.sin(u * Math.PI) * sing, 1600 + i * 3);
+    }
+  }
+  /* medallions pop: "!" and a look down at them */
+  const m = win(t, T.medals - 0.1, T.hatTip - 0.2, 0.15, 0.3);
+  if (m > 0) { st.exclaim = K.inv(T.medals, T.medals + 0.4, t) * (1 - K.inv(T.medals + 1.2, T.medals + 1.5, t)); st.look = [1, 0.8]; st.head = -10 * m; st.brow = 1.2 * m; st.wingR = K.lerp(st.wingR, 0.75 + 0.25 * Math.sin(t * 16), m); }
+  /* salute with the captain's cap tip, then wave a wing to the end */
+  const sal = win(t, T.hatTip - 0.2, T.hatTip + 0.9, 0.2, 0.3);
+  if (sal > 0) { st.wingR = K.lerp(st.wingR, 0.98, sal); st.blink = Math.max(st.blink, sal > 0.6 ? 1 : 0); st.head = -14 * sal; }
+  if (t > T.hatTip + 1.0) { const r = K.ss(T.hatTip + 1.0, T.hatTip + 1.3, t); st.wingR = K.lerp(st.wingR, 0.6 + 0.35 * Math.sin((t - T.hatTip) * 9), r); st.look = [0.3, 0]; }
+  K.parrot(ctx, x, y, PIP.s, st);
 }
 /* screen point near the snapping claw (set by the title scene layout) */
 const SNAP_PT = [1000, 635];

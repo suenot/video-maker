@@ -105,7 +105,7 @@ function crabTitle(t) {
 }
 
 /* ---------- the side set ----------
-   o: horizon, warm, zoom/fx/fy (push-in), sunX/sunY, drift,
+   o: horizon, warm, zoom/fx/fy (push-in), sunX/sunY, drift, scroll (island parallax, px),
       shipX/Y/S, crab(t) -> pose, crabS, coins, swell, behind/front hooks,
       markets [{x, label, color, t0}] (coin flags on the horizon islands),
       rivets (time the spark run starts) */
@@ -124,9 +124,10 @@ function drawSide(t, o) {
     K.gull(ctx, gx, gy, 0.9 - i * 0.15, i * 2);
   }
   camAt(0.7);
-  K.farIsland(ctx, 330, horizon, 320, 70, 1);
-  K.farIsland(ctx, 1240, horizon, 200, 44, 2);
-  K.farIsland(ctx, 1720, horizon, 240, 52, 3);
+  const isl = (x) => ((((x - (o.scroll || 0)) % 2500) + 2500) % 2500) - 300; /* scroll > 0: the ship sails right, islands slide left */
+  K.farIsland(ctx, isl(630), horizon, 320, 70, 1);
+  K.farIsland(ctx, isl(1540), horizon, 200, 44, 2);
+  K.farIsland(ctx, isl(2020), horizon, 240, 52, 3);
   (o.markets || []).forEach((m, i) => {
     const a = K.inv(m.t0, m.t0 + 0.4, t); if (a <= 0) return;
     const s = K.E.back(a, 2.4), bob = Math.sin(t * 2 + i) * 4;
@@ -145,6 +146,10 @@ function drawSide(t, o) {
   const cs = o.crabS || 1, pose = o.crab(t);
   const crabFn = (c) => K.crab(c, 0, 0, cs, pose);
   K.ship(ctx, o.shipX, o.shipY + bob, o.shipS, { rock, coins: o.coins || 0, crab: crabFn, sail: 1 });
+  if (o.wake) for (let i = 0; i < 6; i++) { /* foam streaks peel off the stern while sailing */
+    const ph = (t * 0.9 + i / 6) % 1, wx = o.shipX - o.shipS * (150 + 260 * ph), wy = o.shipY + bob * 0.4 + o.shipS * (8 + 10 * (i % 3));
+    K.line(ctx, [[wx, wy], [wx - 70 * o.shipS * (1 - ph * 0.5), wy + 4]], { stroke: P.foam, w: 6 * (1 - ph), boil: 1, seed: 1500 + i, gap: 0 });
+  }
   if (o.front) o.front(t, bob, rock);
   /* "Rust-iron": a spark runs along the rivet row */
   if (o.rivets != null) {

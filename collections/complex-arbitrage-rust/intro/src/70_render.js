@@ -26,7 +26,10 @@ const SIDE_OPEN = (t) => {
   };
 };
 const SIDE_TITLE = (t) => ({
-  horizon: 640, warm: 0.7, zoom: K.tw(t, T.wipe2[0], T.wipe2[1] + 2, 1.06, 1.0, K.E.out3), fx: 960, fy: 700, drift: 600,
+  horizon: 640, warm: 0.7, fx: 960, fy: 760,
+  /* settle after the wipe, then a slow push-in through the instrumental outro */
+  zoom: t < T.pipIn[0] ? K.tw(t, T.wipe2[0], T.wipe2[1] + 2, 1.06, 1.0, K.E.out3) : K.tw(t, T.pipIn[0], DUR, 1.0, 1.1, K.E.inOut),
+  drift: 600 + 50 * Math.max(0, t - T.sail), scroll: 70 * Math.max(0, t - T.sail), wake: true,
   shipX: TITLE_SHIP.x, shipY: TITLE_SHIP.y, shipS: TITLE_SHIP.s, crabS: TITLE_SHIP.crabS, crab: crabTitle,
   coins: Math.round(22 + 12 * K.inv(T.dump + 0.2, T.dump + 0.9, t)), front: (tt, bob) => drawNet(tt, bob),
 });
