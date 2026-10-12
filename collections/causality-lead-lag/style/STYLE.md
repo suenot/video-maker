@@ -93,12 +93,13 @@ Animation rules:
 - **City map** (from above): dark roof blocks on a lighter road grid with lane dashes, lamp glows at crossings, the fox seen from above (fedora + tail).
 - **Lineup** and **cork board**: overhead cones, dark corners, flashlight beams cut through a darkness mask.
 - One virtual camera `{x, y, z, rot}` per set, keyed with monotone Hermite splines (`K.mkTrack`), never overshooting.
-- Transitions are diegetic: the **spinning newspaper** (camera rot + zoom), the **magnifier iris** (brass ring), a **whip pan** with streaks, **venetian blinds** closing and opening, and lights that clank on. Never a plain crossfade.
+- Transitions are diegetic: the **spinning newspaper** (camera rot + zoom), the **magnifier iris** (brass ring), a **lightning cut** on the downbeat, **venetian blinds** closing and opening, and lights that clank on. Never a plain crossfade.
 
 ## 7. Timing (beat grid)
 
-- The theme is a jazz-noir spy song at 120 BPM: a beat is 0.5 s, a bar is 2.0 s. Write times as `K.at(bar, beat)`.
-- The intro's grid is the measured downbeats `K.G.BARS = [1.82, 3.84, 5.84, 7.83, ..., 47.84]` (librosa), extrapolated at 120 BPM after bar 23.
+- The theme is a jazz-noir spy song at about 123.8 BPM (short cut): a bar is 1.94 s. Write times as `K.at(bar, beat)`.
+- The intro's grid is the measured downbeats `K.G.BARS = [0.16, 2.09, 4.04, ..., 31.15]` (librosa).
+- The marketmaker.cc logo (`kit/brand/logo.svg`, inlined by `build.py` at `<!--__LOGO__-->`) sits top-right on an ink plaque with an amber hairline, 48 px margin, 96 px tall; keep action and titles clear of it.
 - Each sung line gets its own picture (see `intro/src/10_setup.js` for the word timings and `intro/REVIEW.md` for the outline).
 - Pops land on beats with a back-ease overshoot of 0.3 - 0.45 s; paw prints stamp one per beat (street) or one per eighth (map).
 - Determinism: no `Math.random`, `Date.now` or `performance.now`, no infinite repeats. Seeded `mulberry` / `hash` only.

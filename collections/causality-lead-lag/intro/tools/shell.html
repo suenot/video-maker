@@ -28,15 +28,20 @@
       #preload .tc { font-family: "CJK TC"; font-weight: 900; }
       #vig { background: radial-gradient(90% 80% at 50% 46%, rgba(0, 0, 0, 0) 55%, rgba(4, 3, 12, 0.62) 100%); }
       #grain { opacity: 0.16; mix-blend-mode: overlay; }
+      /* marketmaker.cc logo: enamel plaque, top-right, whole intro */
+      #logo { position: absolute; top: 48px; right: 48px; height: 96px; display: flex; align-items: center; gap: 14px; padding: 0 26px 0 18px; border-radius: 14px; background: rgba(11, 10, 18, 0.72); box-shadow: inset 0 0 0 2px rgba(255, 180, 63, 0.55), 6px 7px 0 rgba(11, 10, 18, 0.55); color: #ece6d4; transform-origin: 100% 0; }
+      #logo svg { width: 64px; height: 64px; color: #ffb43f; }
+      #logo .wm { font-family: "Yanone Kaffeesatz", sans-serif; font-weight: 700; font-size: 50px; letter-spacing: 0.02em; line-height: 1; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="64.5" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="33.2" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div class="ov" id="vig" data-layout-allow-occlusion></div>
+      <div class="ov" id="grain" data-layout-allow-occlusion></div>
       <div id="title" data-layout-allow-overlap data-layout-allow-occlusion></div>
-      <div class="ov" id="vig"></div>
-      <div class="ov" id="grain"></div>
-      <audio id="song" src="song_full.m4a" data-start="0" data-duration="64.5" data-track-index="10" data-volume="1"></audio>
+      <div id="logo"><!--__LOGO__--><span class="wm">marketmaker.cc</span></div>
+      <audio id="song" src="song_short.m4a" data-start="0" data-duration="33.2" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="y5">Aa Бб 0</span><span class="y7">Aa Бб 0</span><span class="m4">Aa Бб 0</span><span class="m7">Aa 0</span><span class="sc">市场因果</span><span class="tc">市場因果</span></div>
     </div>
     <script>

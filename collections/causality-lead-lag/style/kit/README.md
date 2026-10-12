@@ -56,4 +56,4 @@ It uses plain browser JS with no modules. Each file attaches to the global `CK` 
 - **Retime to music** by setting `K.G.BPM` and `K.G.BARS` (measured downbeats) before any `K.at` call. Never hard-code seconds in a scene.
 - **Light is the storyteller.** Reveal with a lamp, flashlight beam (darkness mask with a cone cut out, see `intro/src/50_board.js`), lightning or the marquee, not with fades.
 - **Localised text** belongs in DOM elements fed by HyperFrames variables. The canvas world holds tickers, numbers and symbols only.
-- Long episodes: split the film into scene functions and select by time in `render`; use the diegetic transitions in `intro/src/70_render.js` (newspaper spin, magnifier iris, whip pan, venetian blinds).
+- Long episodes: split the film into scene functions and select by time in `render`; use the diegetic transitions in `intro/src/70_render.js` (newspaper spin, magnifier iris, lightning cut, venetian blinds).

@@ -64,15 +64,55 @@
       #preload .tc { font-family: "CJK TC"; font-weight: 900; }
       #vig { background: radial-gradient(90% 80% at 50% 46%, rgba(0, 0, 0, 0) 55%, rgba(4, 3, 12, 0.62) 100%); }
       #grain { opacity: 0.16; mix-blend-mode: overlay; }
+      /* marketmaker.cc logo: enamel plaque, top-right, whole intro */
+      #logo { position: absolute; top: 48px; right: 48px; height: 96px; display: flex; align-items: center; gap: 14px; padding: 0 26px 0 18px; border-radius: 14px; background: rgba(11, 10, 18, 0.72); box-shadow: inset 0 0 0 2px rgba(255, 180, 63, 0.55), 6px 7px 0 rgba(11, 10, 18, 0.55); color: #ece6d4; transform-origin: 100% 0; }
+      #logo svg { width: 64px; height: 64px; color: #ffb43f; }
+      #logo .wm { font-family: "Yanone Kaffeesatz", sans-serif; font-weight: 700; font-size: 50px; letter-spacing: 0.02em; line-height: 1; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="64.5" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="33.2" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div class="ov" id="vig" data-layout-allow-occlusion></div>
+      <div class="ov" id="grain" data-layout-allow-occlusion></div>
       <div id="title" data-layout-allow-overlap data-layout-allow-occlusion></div>
-      <div class="ov" id="vig"></div>
-      <div class="ov" id="grain"></div>
-      <audio id="song" src="song_full.m4a" data-start="0" data-duration="64.5" data-track-index="10" data-volume="1"></audio>
+      <div id="logo"><svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" preserveAspectRatio="xMidYMid meet">
+<g transform="translate(0, 1024) scale(0.1, -0.1)" fill="currentColor" stroke="none">
+<path d="M4815 9964 c-22 -2 -92 -9 -155 -14 -1263 -113 -2506 -762 -3284
+-1714 -595 -729 -940 -1541 -1053 -2481 -22 -188 -26 -815 -5 -990 74 -626
+245 -1198 509 -1705 501 -960 1276 -1694 2272 -2154 645 -298 1302 -439 2046
+-438 757 0 1402 147 2070 471 491 238 899 521 1264 876 813 789 1298 1766
+1438 2896 22 181 25 761 5 964 -58 577 -200 1087 -439 1585 -113 236 -184 361
+-334 585 -180 270 -349 476 -574 701 -368 369 -746 646 -1200 880 -563 290
+-1104 452 -1745 520 -146 15 -715 28 -815 18z m837 -559 c1134 -135 2191 -733
+2857 -1615 188 -249 385 -590 511 -885 132 -306 245 -719 294 -1071 37 -264
+48 -690 26 -939 -123 -1364 -861 -2559 -2003 -3243 -299 -179 -487 -266 -777
+-362 -836 -277 -1714 -292 -2579 -44 -119 35 -322 102 -330 110 -2 2 52 63
+120 135 519 553 1099 890 1714 996 73 12 159 17 320 18 300 0 359 -12 924
+-184 129 -39 263 -78 298 -86 187 -43 308 9 510 218 161 168 253 322 253 425
+0 76 -23 127 -156 349 -209 348 -358 662 -426 897 -15 54 -39 167 -53 250 -14
+83 -39 196 -57 250 -83 264 -268 406 -580 447 -54 7 -95 16 -92 20 9 16 120
+50 187 59 152 19 326 -17 779 -159 531 -166 733 -192 993 -126 178 45 317 127
+445 261 71 76 177 230 165 242 -2 3 -26 -9 -52 -26 -64 -41 -147 -77 -252
+-109 -78 -24 -102 -27 -256 -27 -139 -1 -191 3 -285 22 -203 41 -423 109 -725
+227 -654 254 -862 292 -1215 220 -188 -38 -298 -48 -371 -35 -35 6 -128 38
+-208 70 -266 106 -461 155 -716 181 -163 16 -480 6 -658 -21 -265 -40 -601
+-137 -916 -265 -86 -35 -244 -99 -351 -143 -205 -83 -335 -122 -435 -129 -71
+-5 -90 5 -81 40 8 33 99 147 209 262 48 50 87 95 87 100 0 20 -24 35 -58 35
+-49 0 -145 -54 -317 -180 -237 -173 -308 -199 -451 -166 -151 34 -520 172
+-614 228 -63 39 -88 70 -96 119 -10 59 13 113 101 236 171 240 249 360 299
+463 l51 105 0 210 c1 265 10 301 128 475 102 152 288 355 495 543 l74 66 -59
+58 c-68 67 -88 119 -81 208 6 68 40 115 118 162 89 54 172 77 280 76 52 0 120
+-5 152 -12 l56 -12 144 75 c268 140 477 214 835 296 304 69 480 127 700 230
+208 98 430 246 593 394 l95 87 155 -5 c85 -3 212 -13 282 -21z m1016 -5082
+c85 -41 130 -109 157 -240 8 -37 13 -68 12 -69 -1 -2 -48 19 -103 46 -121 59
+-139 79 -136 164 0 32 -5 76 -12 97 -14 39 -13 40 8 33 11 -3 45 -17 74 -31z"/>
+<path d="M2243 7035 c-92 -42 -196 -156 -205 -225 -4 -34 23 -37 94 -10 97 36
+180 131 202 233 6 23 3 27 -16 27 -13 0 -47 -11 -75 -25z"/>
+</g>
+</svg>
+<span class="wm">marketmaker.cc</span></div>
+      <audio id="song" src="song_short.m4a" data-start="0" data-duration="33.2" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="y5">Aa Бб 0</span><span class="y7">Aa Бб 0</span><span class="m4">Aa Бб 0</span><span class="m7">Aa 0</span><span class="sc">市场因果</span><span class="tc">市場因果</span></div>
     </div>
     <script>
@@ -1656,26 +1696,22 @@ var CK = window.CK || (window.CK = {});
 
 /* ============================================================
    INTRO 10 SETUP: variables, title DOM, timing (beat grid), story beats.
-   Song: song_full.m4a (song_raw.mp4 minus 0.20 s of lead silence, 64.5 s,
-   jazz-noir spy theme, 120 BPM: beat 0.5 s, bar 2.0 s). Downbeats were
-   measured with librosa (bars 0-23) and extrapolate at 120 BPM after.
-   Word timings (parakeet transcript, shifted -0.20 s):
-     3.84 "Lead and lag," 5.84 "step by step," 7.83 "Follow the trail that
-     the markets left," 11.85 "Find the cause and test it twice," 15.82
-     "Causality and Lead-Lag in Markets!" 19.82 "A detective fox with a
-     magnifying glass," 23.83 "Follows the footprints of prices that pass,"
-     27.83 "Who moved first and who followed behind," 31.84 "Correlation's a
-     clue but not proof, keep in mind!" 35.84 chorus again (lead and lag /
-     step by step / follow the trail / find the cause), 47.84 "Causality and
-     Lead-Lag in Markets", 51.84 break, 53.84 "find the cause and test it
-     twice", 55.84 "Causality and Lead-Lag in Markets!", 59.84 outro.
+   Song: song_short.m4a (song_short_raw.mp4 cut at 33.2 s with a 0.9 s fade,
+   -14 LUFS), jazz-noir spy theme at about 123.8 BPM (bar 1.94 s).
+   Downbeats measured with librosa. Word timings (whisper small.en + parakeet):
+     0 - 7.9   instrumental (4 bars)
+     7.92  "Lead and lag,"            9.87  "step by step,"
+     11.80 "Follow the trail that the markets left,"
+     15.67 "Find the cause and test it twice,"
+     19.53 "Causality and Lead-" 23.38 "-Lag in Markets!" (held to 27.9)
+     27.26 - 33.2 outro
    All story times are K.at(bar, beat) on these downbeats.
    ============================================================ */
 const K = CK, P = K.P, at = K.at;
-K.G.BPM = 120;
-K.G.BARS = [1.82, 3.84, 5.84, 7.83, 9.83, 11.85, 13.82, 15.82, 17.82, 19.82, 21.84, 23.83,
-  25.85, 27.83, 29.85, 31.84, 33.84, 35.84, 37.86, 39.85, 41.83, 43.85, 45.85, 47.84];
-const DUR = 64.5;
+K.G.BPM = 123.8;
+K.G.BARS = [0.16, 2.09, 4.04, 5.97, 7.92, 9.87, 11.80, 13.72, 15.67, 17.58, 19.53, 21.46,
+  23.38, 25.33, 27.26, 29.21, 31.15];
+const DUR = 33.2;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const BEAT = K.beatLen();
 /* pop helper: 0..1 over d seconds starting at t0 */
@@ -1683,13 +1719,12 @@ const ap = (t, t0, d) => K.inv(t0, t0 + (d || 0.4), t);
 
 /* ---------- scene windows (on downbeats) ---------- */
 const S = {
-  street: [0, at(7)],            /* 0 - 15.82  rain, lamp, the two trails, magnifier on the lag */
-  paper: [at(7), at(9)],         /* 15.82 - 19.82  spinning newspaper lands in the office */
-  office: [at(7), at(11)],       /* the office set (newspaper pull-back, fox, magnifier eye) */
-  map: [at(11) - 0.5, at(13)],   /* 23.33 - 27.83  iris through the lens: city map, footprints */
-  lineup: [at(13), at(15)],      /* 27.83 - 31.84  who moved first */
-  board: [at(15), at(26)],       /* 31.84 - 53.84  clue card, cork board, confounder */
-  title: [at(25, 2), DUR],       /* 52.84 - 64.5   blinds wipe, street, title */
+  open: [0, at(2)],              /* 0 - 4.04     moon, rain, the lamp comes on: the fox */
+  office: [at(2), at(4)],        /* 4.04 - 7.92  spinning newspaper "A → B", hat tip, lens eye */
+  street: [at(4) - 0.5, at(6)],  /* 7.42 - 11.80 iris onto the street: "Lead and lag, step by step" */
+  map: [at(6), at(8)],           /* 11.80 - 15.67 lightning cut: "Follow the trail" from above */
+  board: [at(8), at(12)],        /* 15.67 - 23.38 "Find the cause, test it twice", "Causality": confounder */
+  title: [at(11, 3), DUR],       /* 22.9 - 33.2  blinds wipe: "Lead-Lag in Markets!", title, outro */
 };
 
 /* ---------- variables (title text, language) ---------- */
@@ -1724,40 +1759,37 @@ TITLE_LINES.forEach((ln, li) => {
 const TITLE_LN = Array.from(titleEl.querySelectorAll(".ln"));
 
 /* ============================================================
-   INTRO 20 STREET: the rainy street set (opening and title).
+   INTRO 20 STREET: the rainy street set (opening, trails, title).
    World: curb at y 760, wet road below, lamp at x 900.
-   Opening (0 - 15.82):
      0     camera cranes down from the moon through the rain
-     1.82  the lamp flickers on: the fox is under it
-     2.82  he lifts his hat brim, eyes open (sly)
-     3.84  "Lead and lag": two paw trails stamp across the road, one print a
-           beat; A (amber, upper lane) leads, B (blue, lower lane) follows
-     5.84  "step by step": the fox walks after them, magnifier out
-     7.83  "follow the trail": camera trucks right with him
-     11.85 "find the cause": push in on the two jumps; Δt bracket
-     14.82 / 15.77 "test it twice": two stamps
+     2.09  the lamp flickers on: the fox is under it; 3.06 hat brim up
+     (4.04 - 7.42 the office, see 30_office.js)
+     7.92  "Lead and lag": two paw trails stamp across the road, a print
+           every eighth note; A (amber, upper lane) leads, B (blue) follows
+     8.9   magnifier out; he walks after them ("step by step")
+     10.83 push in on the two jumps: Δt bracket, tag "Δt = 2"
    ============================================================ */
 const CURB = 760, LAMP_X = 900;
 /* paw trails: same path shape, B's jump is two prints after A's (the lag) */
 const TR = { x0: 1250, dx: 150, n: 15, laneA: 880, laneB: 1010, jumpA: 6, lag: 2 };
 const jumpY = (i, j) => (i === j ? -150 : i === j - 1 || i === j + 1 ? -55 : 0) + (i === j + 4 ? -50 : 0);
 const trailPts = (lane, j) => { const p = []; for (let i = 0; i < TR.n; i++) p.push([TR.x0 + i * TR.dx, lane + jumpY(i, j)]); return p; };
-const PRINT_T = (k, lagBeats) => at(1) + (k + (lagBeats || 0)) * BEAT; /* one print per beat */
+const STEP = BEAT / 2; /* a print every eighth note */
 
 const camStreet = K.mkTrack([
   [0, { x: 960, y: -420, z: 1 }],
-  [at(0), { x: 1000, y: 520, z: 1 }],
-  [at(2), { x: 1150, y: 560, z: 1 }],
-  [at(4), { x: 1650, y: 680, z: 1.18 }],
-  [at(5), { x: 2250, y: 660, z: 1.08 }],
+  [at(1), { x: 1000, y: 520, z: 1 }],
+  [at(2), { x: 1030, y: 540, z: 1.04 }],
+  [at(4) - 0.5, { x: 1150, y: 560, z: 1 }],
+  [at(5), { x: 1700, y: 660, z: 1.1 }],
   [at(5, 2), { x: 2290, y: 780, z: 1.32 }],
-  [at(7), { x: 2300, y: 790, z: 1.38 }],
+  [at(6), { x: 2300, y: 790, z: 1.38 }],
 ]);
-const foxStreetX = K.mkSpline([[0, 1030], [at(2), 1030], [at(5), 1930], [at(7), 1960]]);
+const foxStreetX = K.mkSpline([[0, 1030], [at(4, 2), 1030], [at(5, 2), 1930], [at(6), 1960]]);
 
 function lampOn(t) {
-  if (t < at(0)) return 0;
-  const d = t - at(0);
+  if (t < at(1)) return 0;
+  const d = t - at(1);
   if (d < 0.5) return [1, 0, 0.7, 0, 1, 0.2, 1][Math.floor(d * 14) % 7]; /* flicker on */
   return 1;
 }
@@ -1803,9 +1835,9 @@ function drawStreetSet(t, cam, opt) {
 
 /* trails + fox + magnifier for the opening */
 function streetOpening(t) {
-  const fx = foxStreetX(t), walking = t > at(2) && t < at(5);
+  const fx = foxStreetX(t), walking = t > at(4, 2) && t < at(5, 2);
   /* trails: A prints on the beat, B half a beat behind */
-  const shownA = (t - PRINT_T(0)) / BEAT + 1, shownB = (t - PRINT_T(0) - BEAT / 2) / BEAT + 1;
+  const shownA = (t - at(4)) / STEP + 1, shownB = (t - at(4) - STEP / 2) / STEP + 1;
   [[TR.laneA, TR.jumpA, P.A, shownA, 3], [TR.laneB, TR.jumpA + TR.lag, P.B, shownB, 9]].forEach(([lane, j, col, sh, seed]) => {
     if (sh <= 0) return;
     ctx.save(); ctx.translate(0, lane); ctx.scale(1, 0.62); ctx.translate(0, -lane);
@@ -1820,8 +1852,8 @@ function streetOpening(t) {
     ctx.restore();
   });
   /* lane letters on tags at the start of each trail */
-  K.tag(ctx, TR.x0 - 120, TR.laneA - 10, "A", { a: ap(t, at(1)), hot: true, size: 34, seed: 4, anchor: [TR.x0 - 170, TR.laneA - 50] });
-  K.tag(ctx, TR.x0 - 120, TR.laneB - 10, "B", { a: ap(t, at(1, 0.5)), size: 34, seed: 6, anchor: [TR.x0 - 170, TR.laneB - 50] });
+  K.tag(ctx, TR.x0 - 120, TR.laneA - 10, "A", { a: ap(t, at(4)), hot: true, size: 34, seed: 4, anchor: [TR.x0 - 170, TR.laneA - 50] });
+  K.tag(ctx, TR.x0 - 120, TR.laneB - 10, "B", { a: ap(t, at(4, 0.5)), size: 34, seed: 6, anchor: [TR.x0 - 170, TR.laneB - 50] });
   /* Δt bracket over the two jumps */
   const xa = TR.x0 + TR.jumpA * TR.dx, xb = xa + TR.lag * TR.dx, bu = K.E.out3(ap(t, at(5, 1), 0.6));
   if (bu > 0) {
@@ -1832,19 +1864,19 @@ function streetOpening(t) {
     K.tag(ctx, (xa + xb) / 2 + 30, yA - 130, "Δt = 2", { a: ap(t, at(5, 2)), hot: true, size: 40, seed: 12, anchor: [(xa + xb) / 2, yA - 62] });
   }
   /* the fox */
-  const crouch = ap(t, at(5) - 0.3, 0.3) - ap(t, at(5) + 0.15, 0.3) * 0.6;
-  const lifted = ap(t, at(0, 2), 0.4);
-  const spotted = ap(t, at(1, 2), 0.3);
-  const magOut = ap(t, at(2) - 0.2, 0.4);
+  const crouch = ap(t, at(5, 2) - 0.3, 0.3) - ap(t, at(5, 2) + 0.15, 0.3) * 0.6;
+  const lifted = ap(t, at(1, 2), 0.4);
+  const spotted = ap(t, at(4), 0.3);
+  const magOut = ap(t, at(4, 1.5) - 0.2, 0.4);
   const lean = walking ? 6 : 4 * spotted * (1 - magOut);
   K.fox(ctx, fx, CURB + 40, 1.0, {
     seed: 700, light: lampOn(t) * (fx < 1400 ? 1 : 0.4),
     squash: 0.08 * K.pulse(t, 1, 6) + 0.25 * crouch, lean,
     legWalk: walking ? (fx - 1030) / 28 : 0, hop: walking ? Math.abs(Math.sin((fx - 1030) / 28)) * 5 : 0,
     lid: K.lerp(0.75, 0.32, lifted), blink: lifted > 0 ? K.blinkAt(t, 3) : 0,
-    eyeUp: spotted * (1 - magOut) * 0.9, exclaim: spotted * (1 - ap(t, at(2), 0.3)),
+    eyeUp: spotted * (1 - magOut) * 0.9, exclaim: spotted * (1 - ap(t, at(4, 2), 0.3)),
     look: magOut > 0 ? [0.9, 0.7] : [spotted * 0.6, spotted * 0.9],
-    mouth: spotted > 0 && magOut < 1 ? "o" : t > at(6) ? "grin" : "smirk",
+    mouth: spotted > 0 && magOut < 1 ? "o" : t > at(5, 3) ? "grin" : "smirk",
     hatLift: 14 * lifted * (1 - spotted), hatTip: -10 * lifted * (1 - spotted),
     pawL: lifted > 0 && spotted < 1 ? { x: -40, y: -360 + 30 * spotted } : { x: -86, y: -100 },
     pawR: { x: K.lerp(86, 150, magOut) + 20 * crouch, y: K.lerp(-100, -170, magOut) + 60 * crouch },
@@ -1867,29 +1899,28 @@ function drawStamps(t, times, pts) {
 
 function drawStreetOpening(t) {
   const cam = Object.assign({ rot: 0 }, camStreet(t));
-  drawStreetSet(t, cam, { extra: streetOpening, flash: K.flash(t, 1.0) * 0.35 + K.flash(t, at(4)) * 0.45 });
-  drawStamps(t, [at(6, 2), at(6, 3.9)], [[1380, 250], [1600, 300]]);
+  drawStreetSet(t, cam, { extra: streetOpening, flash: K.flash(t, 1.0) * 0.35 + K.flash(t, at(5)) * 0.4 });
 }
 
 /* ============================================================
-   INTRO 30 OFFICE: the fox's office (15.82 - 23.83).
-   15.82 the newspaper spins in (the camera spins and zooms onto it)
-   16.82 it lands: headline "A → B" and a lead-lag chart
-   17.82 pull back: the fox is reading it behind his desk, then peeks
-   19.82 "A detective fox": the paper drops, smirk, hat tip
-   21.84 "with a magnifying glass": the lens goes up to his eye (giant eye)
-   23.33 iris through the lens into the city map
+   INTRO 30 OFFICE: the fox's office (4.04 - 7.92, the instrumental).
+   4.04 the newspaper spins in (the camera spins and zooms onto it)
+   5.0  it lands: headline "A → B" and a lead-lag chart
+   5.5  pull back: the fox is reading it behind his desk
+   5.97 the paper drops: smirk, hat tip
+   6.94 the lens goes up to his eye (giant eye), a blink
+   7.42 iris through the lens onto the street
    ============================================================ */
 const NP = { x: 760, y: 560, s: 0.78 };
 const OFFICE_FOX = { x: 760, y: 1010, s: 1.62 };
 const camOffice = K.mkTrack([
-  [at(7), { x: NP.x, y: NP.y, z: 0.12, rot: -900 }],
-  [at(7, 2), { x: NP.x, y: NP.y, z: 1.6, rot: 0 }],
-  [at(8), { x: NP.x, y: NP.y + 10, z: 1.66, rot: 0 }],
-  [at(8, 3), { x: 900, y: 540, z: 1.0, rot: 0 }],
-  [at(10), { x: 920, y: 540, z: 1.0, rot: 0 }],
-  [at(10, 2), { x: 860, y: 440, z: 1.45, rot: 0 }],
-  [at(11), { x: 900, y: 420, z: 1.7, rot: 0 }],
+  [at(2), { x: NP.x, y: NP.y, z: 0.12, rot: -900 }],
+  [at(2, 2), { x: NP.x, y: NP.y, z: 1.6, rot: 0 }],
+  [at(2, 3), { x: NP.x, y: NP.y + 10, z: 1.62, rot: 0 }],
+  [at(3, 1), { x: 900, y: 540, z: 1.0, rot: 0 }],
+  [at(3, 2), { x: 910, y: 530, z: 1.05, rot: 0 }],
+  [at(4) - 0.5, { x: 870, y: 440, z: 1.45, rot: 0 }],
+  [at(4), { x: 900, y: 420, z: 1.7, rot: 0 }],
 ]);
 
 function cityOutside(c, t, x, y, w, h) {
@@ -1899,7 +1930,7 @@ function cityOutside(c, t, x, y, w, h) {
   K.skyline(c, x - 40, x + w + 40, y + h + 120, { seed: 29, tone: "near", hMin: 220, hMax: 380, wMin: 110, wMax: 180, lit: 0.2 });
   /* rain on the glass, world space inside the window */
   c.save(); c.translate(x, y); K.rain(c, t, { n: 70, w, h, alpha: 0.45, len: 50, seed: 91 }); c.restore();
-  const fl = K.flash(t, at(8, 1));
+  const fl = K.flash(t, at(3));
   if (fl > 0) { c.fillStyle = K.rgba(P.moon, 0.6 * fl); c.fillRect(x, y, w, h); }
 }
 
@@ -1908,7 +1939,7 @@ function frontPage(t) {
   return (c) => {
     /* masthead: stars and a heavy rule (no words) */
     for (let i = 0; i < 5; i++) K.text(c, "★", -160 + i * 80, -345, { size: 40, weight: 700, fill: P.ink });
-    const hu = ap(t, at(7, 2), 0.35), hs = hu > 0 ? 1 + 0.5 * (1 - K.E.out3(hu)) : 0;
+    const hu = ap(t, at(2, 2), 0.35), hs = hu > 0 ? 1 + 0.5 * (1 - K.E.out3(hu)) : 0;
     if (hs > 0) {
       c.save(); c.translate(0, -195); c.scale(hs, hs);
       K.text(c, "A", -170, 0, { size: 170, weight: 700, fill: P.amberDeep, stroke: P.ink, w: 8 });
@@ -1918,7 +1949,7 @@ function frontPage(t) {
     }
     /* the photo: two price lines, B is A two steps later */
     K.shape(c, K.rectPts(-260, -80, 520, 210, 4), { fill: P.greyLight, w: 4, boil: 0.8, seed: 141 });
-    const A = [0, 0, 0.2, 0.1, 1, 0.9, 0.6, 0.7, 0.4, 0.5], dr = ap(t, at(7, 3), 1.6), n = A.length;
+    const A = [0, 0, 0.2, 0.1, 1, 0.9, 0.6, 0.7, 0.4, 0.5], dr = ap(t, at(2, 2.5), 1.0), n = A.length;
     [[0, P.amberDeep], [2, P.B]].forEach(([lag, col], k) => {
       const pts = [];
       for (let i = 0; i < n; i++) { const v = i - lag >= 0 ? A[i - lag] : 0; if (i / (n - 1) <= dr) pts.push([-230 + i * 51, 100 - v * 150]); }
@@ -1939,14 +1970,14 @@ function drawOffice(t) {
   K.shape(ctx, K.rectPts(130, 170, 220, 170, 2), { fill: P.greyDark, w: 6, boil: 1, seed: 160, shade: { color: P.ink, dx: -10, dy: -10 } });
   K.text(ctx, "★", 240, 255, { size: 70, weight: 700, fill: P.brass });
   /* window with blinds: the city outside */
-  const open = 0.72 - 0.25 * ap(t, at(10, 2), 0.6);
+  const open = 0.72 - 0.25 * ap(t, at(3, 2), 0.6);
   K.blindsWindow(ctx, 1160, 110, 560, 600, { open, slats: 12, outside: (c) => cityOutside(c, t, 1160, 110, 560, 600) });
   /* desk lamp + desk */
-  const fox = OFFICE_FOX, held = 1 - ap(t, at(9), 0.45);
+  const fox = OFFICE_FOX, held = 1 - ap(t, at(3), 0.4);
   K.fox(ctx, fox.x, fox.y, fox.s, foxOfficePose(t, held));
   /* the newspaper in his paws */
   if (held > 0) {
-    const drop = (1 - held) * 700, peek = 330 * ap(t, at(8, 2), 0.4) * (1 - ap(t, at(8, 3.5), 0.3));
+    const drop = (1 - held) * 700, peek = 0;
     const rot = (1 - held) * 0.5;
     K.newspaper(ctx, NP.x, NP.y + drop + peek, NP.s, rot, frontPage(t), 121);
     /* paws over the edges */
@@ -1961,21 +1992,21 @@ function drawOffice(t) {
   K.screen(ctx);
   K.blindLight(ctx, 0, 0, 1920, 1080, { color: P.moonGlow, n: 9, a: 1.1, ang: -0.28, skew: 0.5 });
   /* spin-in darkness */
-  const dark = 1 - ap(t, at(7), at(7, 2) - at(7));
+  const dark = 1 - ap(t, at(2), at(2, 2) - at(2));
   if (dark > 0) {
     ctx.fillStyle = K.rgba(P.ink, 0.75 * dark); ctx.fillRect(0, 0, 1920, 1080);
   }
 }
 
 function foxOfficePose(t, held) {
-  const tip = ap(t, at(9, 2), 0.3) * (1 - ap(t, at(9, 3.5), 0.3));
-  const lens = ap(t, at(10) + 0.2, 0.5);
-  const peek = ap(t, at(8, 2), 0.4) * (1 - ap(t, at(8, 3.5), 0.3));
+  const tip = ap(t, at(3, 0.5), 0.25) * (1 - ap(t, at(3, 1.5), 0.25));
+  const lens = ap(t, at(3, 2) - 0.1, 0.35);
+  const peek = 0;
   const st = {
-    seed: 720, light: 0.6, squash: 0.06 * K.pulse(t, 1, 6) - 0.2 * ap(t, at(9), 0.15) * (1 - ap(t, at(9) + 0.15, 0.25)),
-    blink: K.blinkAt(t, 11), lid: 0.35, mouth: t > at(9) ? "smirk" : "flat", look: peek > 0 ? [-0.6, 0.2] : [0.2, 0],
+    seed: 720, light: 0.6, squash: 0.06 * K.pulse(t, 1, 6) - 0.2 * ap(t, at(3), 0.15) * (1 - ap(t, at(3) + 0.15, 0.25)),
+    blink: K.blinkAt(t, 11), lid: 0.35, mouth: t > at(3) ? "smirk" : "flat", look: peek > 0 ? [-0.6, 0.2] : [0.2, 0],
     hatTip: -16 * tip, hatLift: 18 * tip, tail: Math.sin(t * 2.6), turn: 0.15,
-    browTilt: t > at(9) && t < at(10) ? 0.6 : 0,
+    browTilt: t > at(3) && t < at(3, 2) ? 0.6 : 0,
   };
   if (held > 0) { st.pawL = { x: -170, y: -280 }; st.pawR = { x: 170, y: -280 }; }
   else {
@@ -1983,21 +2014,18 @@ function foxOfficePose(t, held) {
     st.pawR = { x: K.lerp(130, 112, lens), y: K.lerp(-160, -246, lens), rot: K.lerp(-50, -150, lens) };
     st.hold = "magnifier";
     st.lensEye = lens;
-    st.blink = lens > 0.5 ? Math.max(K.blinkAt(t, 11), Math.sin(K.inv(at(10, 2.5), at(10, 2.5) + 0.2, t) * Math.PI)) : st.blink;
+    st.blink = lens > 0.5 ? Math.max(K.blinkAt(t, 11), Math.sin(K.inv(at(3, 3), at(3, 3) + 0.2, t) * Math.PI)) : st.blink;
     st.look = lens > 0.5 ? [Math.sin(t * 2) * 0.6, 0] : [0.3, -0.2];
   }
   return st;
 }
 
 /* ============================================================
-   INTRO 40 MAP + LINEUP
-   23.83 "Follows the footprints of prices that pass": the city from above.
-         Two trails walk the streets like price paths: A (amber) first,
-         B (blue) takes the same turns two beats later. A tiny top-down fox
-         (fedora + tail) follows; price tags pop at the turns.
-   27.83 "Who moved first and who followed behind": police lineup. The
-         lights clank on; BTC steps forward first (1), ETH a bar later (2,
-         "+2"); in the shadow on the right two eyes glow (the confounder).
+   INTRO 40 MAP: "Follow the trail that the markets left" (11.80 - 15.67).
+   The city from above after a lightning cut. Two trails walk the streets
+   like price paths: A (amber) first, B (blue) takes the same turns two
+   beats later. A tiny top-down fox (fedora + tail) follows; price tags pop
+   at A's turns.
    ============================================================ */
 /* ---------- the map ---------- */
 const BLOCK = 300, ROAD = 90;
@@ -2012,9 +2040,9 @@ function routeAt(d, off) {
     d -= L;
   }
 }
-const MAP_T0 = at(11), STEP_D = 140, STEP_T = BEAT / 2; /* a print every eighth note */
+const MAP_T0 = at(6), STEP_D = 140, STEP_T = BEAT / 2; /* a print every eighth note */
 /* the camera rides between the newest A print and the fox */
-const camZ = K.mkSpline([[at(11) - 0.5, 1.5], [at(11), 1.05], [at(13), 0.9]]);
+const camZ = K.mkSpline([[at(6), 1.12], [at(8), 0.92]]);
 function camMap(t) {
   const el = Math.max(0, t - MAP_T0), a = routeAt(el / STEP_T * STEP_D, 0), f = routeAt(Math.max(0, (el - 3 * BEAT) / STEP_T * STEP_D), 0);
   return { x: (a[0] + f[0]) / 2 + 120, y: (a[1] + f[1]) / 2 - 40, z: camZ(t) };
@@ -2082,87 +2110,31 @@ function foxTop(x, y, ang, t) {
   ctx.restore();
 }
 
-/* ---------- the lineup ---------- */
-function lineupLight(t) {
-  const d = t - at(13); if (d < 0) return 0;
-  if (d < 0.35) return [1, 0.2, 1, 0, 1][Math.floor(d * 14) % 5];
-  return 1;
-}
-function drawLineup(t) {
-  const cam = { x: 960 + 30 * K.ss(at(13), at(15), t), y: 540, z: 1.0 + 0.06 * K.ss(at(13), at(15), t), rot: 0 };
-  K.begin(ctx, t, cam);
-  K.applyCam(ctx, 1);
-  const L = lineupLight(t);
-  K.lineupWall(ctx, -200, -100, 2400, 1000, 111);
-  ctx.fillStyle = P.street; ctx.fillRect(-200, 880, 2400, 400);
-  K.line(ctx, [[-200, 880], [2200, 880]], { stroke: P.ink, w: 8, boil: 0.8, seed: 500, taper: false });
-  /* overhead cones */
-  [760, 1180].forEach((x, i) => { K.cone(ctx, x, -60, Math.PI / 2, 1050, 0.62, P.amberGlow, L * 0.9); K.pool(ctx, x, 900, 260, 50, P.amberGlow, L); });
-  /* suspects step forward on their beats */
-  const fA = K.E.back(ap(t, at(13, 2), 0.4), 2), fB = K.E.back(ap(t, at(14), 0.4), 2);
-  K.suspect(ctx, 760, 900 + 40 * fA, 1.35 + 0.08 * fA, { color: P.A, label: "BTC", bob: 6 * K.pulse(t, 1, 6) + 30 * Math.sin(Math.PI * ap(t, at(13, 2), 0.4)), seed: 520, look: 0.6 });
-  K.suspect(ctx, 1180, 900 + 40 * fB, 1.35 + 0.08 * fB, { color: P.B, label: "ETH", bob: 6 * K.pulse(t - BEAT / 2, 1, 6) + 30 * Math.sin(Math.PI * ap(t, at(14), 0.4)), seed: 540, look: -0.6 });
-  /* number placards */
-  K.plank(ctx, 600, 950, 120, 110, ["1"], { a: ap(t, at(13, 2.5)), size: 76, seed: 560, colors: [P.amberDeep] });
-  K.plank(ctx, 1340, 950, 120, 110, ["2"], { a: ap(t, at(14, 0.5)), size: 76, seed: 561, colors: [P.ink] });
-  K.tag(ctx, 1420, 380, "+2", { a: ap(t, at(14, 1.5)), size: 48, seed: 562, anchor: [1300, 330] });
-  /* darkness outside the lights */
-  K.screen(ctx);
-  ctx.fillStyle = K.rgba(P.ink, 0.88 - 0.5 * L); ctx.fillRect(0, 0, 1920, 1080);
-  /* the shadow on the right: two eyes */
-  const eyes = ap(t, at(14, 2.5), 0.3);
-  if (eyes > 0) {
-    const g = ctx.createLinearGradient(1600, 0, 1920, 0); g.addColorStop(0, K.rgba(P.ink, 0)); g.addColorStop(1, K.rgba(P.ink, 0.95));
-    ctx.fillStyle = g; ctx.fillRect(1550, 0, 370, 1080);
-    const bl = Math.sin(K.inv(at(15) - 0.6, at(15) - 0.45, t) * Math.PI);
-    [-1, 1].forEach((sd) => { K.glow(ctx, 1760 + sd * 26, 360, 40, K.rgba(P.amberGlow, 0.8), eyes); K.shape(ctx, K.ellipsePts(1760 + sd * 26, 360, 14, 5 * (1 - bl) + 0.5, 8), { fill: P.amberGlow, stroke: null, w: 0, boil: 0.4, seed: 570 + sd, alpha: eyes }); });
-  }
-  /* the fox in the foreground, pointing his magnifier at BTC */
-  const pt = ap(t, at(13, 2), 0.4), pt2 = ap(t, at(14), 0.4), surprise = eyes;
-  K.fox(ctx, 230, 1180, 1.45, {
-    seed: 740, light: L * 0.7, turn: 0.4 - 0.8 * surprise, squash: 0.06 * K.pulse(t, 1, 6),
-    look: surprise > 0 ? [1, -0.3] : [0.8 - 0.4 * pt2, -0.2], lid: 0.3, blink: K.blinkAt(t, 13), mouth: surprise > 0 ? "o" : "smirk",
-    eyeUp: surprise * 0.8, exclaim: surprise,
-    pawR: { x: 150 + 30 * pt - 10 * pt2, y: -300 - 40 * pt + 20 * pt2, rot: -30 }, hold: "magnifier",
-    pawL: { x: -80, y: -140 }, tail: Math.sin(t * 3),
-  });
-}
-
 /* ============================================================
-   INTRO 50 BOARD: the cork board (31.84 - 53.84). The fox stands in the
+   INTRO 50 BOARD: the cork board (15.67 - 23.38). The fox stands in the
    screen-space foreground on the left; the camera pans along the board.
-   31.84 "Correlation's a clue": the clue card, dots, fit line
-   33.84 "but not proof": the ≠ stamp slams; head shake; "keep in mind": tap
-   35.84 "Lead and lag": BTC and ETH photos pinned
-   37.86 "step by step": red string BTC → ETH, tag "lag 2"
-   39.85 "follow the trail": SOL pinned, ETH → SOL, BTC → SOL (dim)
-   43.85 "find the cause": lights out, flashlight sweeps the dark corner
-   45.85 the hidden photo Z in the beam: "!"
-   47.84 "Causality and lead-lag": strings Z → BTC, Z → ETH glow amber
-   49.84 the BTC → ETH string snaps (it was the confounder all along)
-   51.84 lightning: lights on, Z unmasked
+   15.67 "Find the cause": BTC and ETH mugshots pinned, red string BTC → ETH
+   17.58 / 18.31 "test it twice": two green check stamps on the link
+   19.53 "Causality": lights out, the flashlight sweeps the dark corner
+   20.5  the hidden mugshot "?" in the beam: "!"
+   21.46 "and Lead-": lights back; strings Z → BTC, Z → ETH glow amber
+   22.43 lightning: the BTC → ETH string snaps, the confounder is unmasked (Z)
+   22.9  venetian blinds close (see 70_render.js)
    ============================================================ */
 const BOARD = { x: 1700, y: 560, w: 3700, h: 1000 };
-const PH = { BTC: [1300, 160], ETH: [2150, 200], SOL: [2650, 600], Z: [3200, 130] };
+const PH = { BTC: [1300, 160], ETH: [2150, 200], Z: [3150, 130] };
 const camBoard = K.mkTrack([
-  [at(15), { x: 820, y: 560, z: 1.0 }],
-  [at(17), { x: 840, y: 560, z: 1.0 }],
-  [at(17, 2), { x: 1760, y: 520, z: 0.95 }],
-  [at(19), { x: 1800, y: 520, z: 0.95 }],
-  [at(20), { x: 2200, y: 540, z: 0.8 }],
-  [at(21), { x: 2250, y: 540, z: 0.78 }],
-  [at(22), { x: 2380, y: 520, z: 0.68 }],
-  [at(23), { x: 2380, y: 520, z: 0.66 }],
-  [at(23, 3), { x: 2250, y: 470, z: 0.8 }],
-  [at(24, 1), { x: 1800, y: 420, z: 1.0 }],
-  [at(25), { x: 2500, y: 420, z: 0.85 }],
-  [at(26), { x: 2550, y: 420, z: 0.9 }],
+  [at(8), { x: 1760, y: 420, z: 0.98 }],
+  [at(10), { x: 1800, y: 430, z: 0.95 }],
+  [at(10, 2.5), { x: 2330, y: 450, z: 0.7 }],
+  [at(11), { x: 2330, y: 450, z: 0.68 }],
+  [at(11, 2), { x: 1850, y: 400, z: 0.92 }],
+  [at(12), { x: 2250, y: 420, z: 0.82 }],
 ]);
-const SCATTER = [[1, 2.1], [2, 2.6], [2.5, 3.9], [3, 3.2], [3.5, 4.4], [4, 4.1], [4.6, 5.2], [5, 4.6], [5.5, 6.1], [6, 5.8], [6.4, 6.9], [7, 6.5]];
 const FOX_B = { x: 240, y: 1190, s: 1.3 };
 
-function boardDark(t) { return ap(t, at(21), 0.5) * (1 - ap(t, at(23), 0.3)); }
-function beamAng(t) { return K.lerp(-0.05, -0.36, K.E.inOut(ap(t, at(21, 1), at(22) - at(21, 1)))) + 0.03 * Math.sin(t * 2.3); }
+function boardDark(t) { return ap(t, at(10), 0.4) * (1 - ap(t, at(11), 0.3)); }
+function beamAng(t) { return K.lerp(-0.05, -0.36, K.E.inOut(ap(t, at(10, 0.5), at(10, 2.5) - at(10, 0.5)))) + 0.03 * Math.sin(t * 2.3); }
 
 function drawBoard(t) {
   const cam = Object.assign({ rot: 0 }, camBoard(t));
@@ -2171,31 +2143,34 @@ function drawBoard(t) {
   K.applyCam(ctx, 1);
   ctx.fillStyle = P.bldg; ctx.fillRect(-600, -500, 4800, 2100);
   K.corkboard(ctx, BOARD.x, BOARD.y, BOARD.w, BOARD.h, { seed: 81 });
-  /* the clue card */
-  K.scatter(ctx, 980, 560, 640, 560, SCATTER, { a: ap(t, at(15), 0.5), seed: 91, color: P.B, title: "", fit: ap(t, at(15, 1), at(15, 3) - at(15, 1)), stamp: ap(t, at(16), 0.35) });
-  K.pin(ctx, 980, 300, P.string, 1.2 * K.E.back(ap(t, at(15), 0.4), 2));
-  /* photos (graph nodes) */
-  const Z = PH.Z, zIn = ap(t, at(22), 0.35), unmask = ap(t, at(25), 0.4);
-  const cutBE = t >= at(24);
+  const Z = PH.Z, zIn = ap(t, at(10, 2.5), 0.35), unmask = ap(t, at(11, 2), 0.4);
+  const cutBE = t >= at(11, 2);
   /* strings under the photos' pins */
   const e = (A, B, t0, t1, opt) => K.edge(ctx, A, B, Object.assign({ p: K.E.inOut(ap(t, t0, t1 - t0)), sag: 70, w: 6, seed: 600 }, opt));
-  e(PH.BTC, PH.ETH, at(18), at(18, 2), { label: cutBE ? "" : "lag 2", state: cutBE ? "cut" : "plain", seed: 601, labelSize: 40, lu: 0.45 });
-  e(PH.ETH, PH.SOL, at(19, 2), at(20), { label: "lag 1", seed: 602, labelSize: 38, lu: 0.55 });
-  e(PH.BTC, PH.SOL, at(20, 2), at(21), { state: "dim", seed: 603, sag: 120 });
-  e(Z, PH.BTC, at(23), at(23, 2), { state: "hot", seed: 604, sag: 150 });
-  e(Z, PH.ETH, at(23, 2), at(24), { state: "hot", seed: 605, sag: 90 });
-  K.node(ctx, PH.BTC[0], PH.BTC[1], 1.2, { label: "BTC", color: P.A, a: ap(t, at(17, 0.5)), seed: 610, tilt: -3, hot: ap(t, at(18, 2), 0.3) * (1 - ap(t, at(24), 0.3)) });
-  K.node(ctx, PH.ETH[0], PH.ETH[1], 1.2, { label: "ETH", color: P.B, a: ap(t, at(17, 2)), seed: 620, tilt: 4 });
-  K.node(ctx, PH.SOL[0], PH.SOL[1], 1.1, { label: "SOL", color: P.C, a: ap(t, at(19)), seed: 630, tilt: -5 });
-  K.node(ctx, Z[0], Z[1], 1.25, { label: unmask > 0.5 ? "Z" : "?", color: P.Z, a: zIn, seed: 640, tilt: 6, hidden: 1 - unmask, hot: unmask * (1 - ap(t, at(25, 2), 0.3)) });
+  e(PH.BTC, PH.ETH, at(8, 1.5), at(8, 3), { label: cutBE ? "" : "lag 2", state: cutBE ? "cut" : "plain", seed: 601, labelSize: 40, lu: 0.45 });
+  e(Z, PH.BTC, at(11), at(11, 1), { state: "hot", seed: 604, sag: 150 });
+  e(Z, PH.ETH, at(11, 0.5), at(11, 1.5), { state: "hot", seed: 605, sag: 90 });
+  K.node(ctx, PH.BTC[0], PH.BTC[1], 1.2, { label: "BTC", color: P.A, a: ap(t, at(8, 0.5)), seed: 610, tilt: -3, hot: ap(t, at(9), 0.3) * (1 - ap(t, at(11, 2), 0.3)) });
+  K.node(ctx, PH.ETH[0], PH.ETH[1], 1.2, { label: "ETH", color: P.B, a: ap(t, at(8, 1)), seed: 620, tilt: 4 });
+  K.node(ctx, Z[0], Z[1], 1.25, { label: unmask > 0.5 ? "Z" : "?", color: P.Z, a: zIn, seed: 640, tilt: 6, hidden: 1 - unmask, hot: unmask });
+  /* "test it twice": two stamps next to the lag tag */
+  const tagPt = K.edgePoint(PH.BTC, PH.ETH, 70, 0.45);
+  [[at(9), -70, 150], [at(9, 1.5), 90, 175]].forEach(([t0, dx, dy], i) => {
+    const u = ap(t, t0, 0.25); if (u <= 0) return;
+    const sc = 1 + 0.6 * (1 - K.E.out3(u)), fade = 1 - ap(t, at(11, 2), 0.3);
+    ctx.save(); ctx.translate(tagPt[0] + dx, tagPt[1] + dy); ctx.rotate(-0.2 + i * 0.3); ctx.scale(sc, sc); ctx.globalAlpha *= Math.min(1, u * 3) * 0.92 * fade;
+    K.shape(ctx, K.ellipsePts(0, 0, 62, 62, 22), { fill: K.rgba(P.ink, 0.3), stroke: P.good, w: 9, boil: 1, seed: 300 + i, gap: 0.08 });
+    K.line(ctx, [[-28, 0], [-6, 22], [32, -26]], { stroke: P.good, w: 14, boil: 0.8, seed: 310 + i, gap: 0, taper: false });
+    ctx.restore();
+  });
   /* the dark room and the flashlight beam (screen space) */
   K.screen(ctx);
-  const dk = boardDark(t), fl = K.flash(t, at(25));
+  const dk = boardDark(t), fl = K.flash(t, at(11, 2));
   const sp = foxBoardPaw(t), ang = beamAng(t), apex = [sp[0] + Math.cos(ang) * 62 * FOX_B.s, sp[1] + Math.sin(ang) * 62 * FOX_B.s];
   if (dk > 0) {
     const len = 2200, half = Math.tan(0.28) * len;
     ctx.save(); ctx.beginPath(); ctx.rect(0, 0, 1920, 1080);
-    const on = ap(t, at(21) + 0.2, 0.15);
+    const on = ap(t, at(10) + 0.15, 0.15);
     if (on > 0) {
       const dx = Math.cos(ang), dy = Math.sin(ang);
       ctx.moveTo(apex[0], apex[1]); ctx.lineTo(apex[0] + dx * len - dy * half, apex[1] + dy * len + dx * half); ctx.lineTo(apex[0] + dx * len + dy * half, apex[1] + dy * len - dx * half); ctx.closePath();
@@ -2212,44 +2187,42 @@ function foxBoardPaw(t) {
   const p = foxBoardPose(t).pawR; return [FOX_B.x + p.x * FOX_B.s, FOX_B.y + p.y * FOX_B.s];
 }
 function foxBoardPose(t) {
-  const shake = ap(t, at(16), 0.2) * (1 - ap(t, at(16, 2), 0.2));
-  const tap = ap(t, at(16, 2.5), 0.25) * (1 - ap(t, at(17), 0.25));
-  const panning = (t > at(17) && t < at(17, 2)) || (t > at(19) && t < at(20)) || (t > at(21) && t < at(22));
-  const torch = ap(t, at(21), 0.3) * (1 - ap(t, at(23), 0.3));
-  const found = ap(t, at(22), 0.25), snap = ap(t, at(24), 0.2), unm = ap(t, at(25), 0.3);
+  const panning = t > at(10) && t < at(10, 2.5);
+  const torch = ap(t, at(10), 0.25) * (1 - ap(t, at(11), 0.3));
+  const found = ap(t, at(10, 2.5), 0.25), snap = ap(t, at(11, 2), 0.2);
+  const nod = Math.sin(Math.PI * ap(t, at(9), 0.3)) + Math.sin(Math.PI * ap(t, at(9, 1.5), 0.3));
   const st = {
-    seed: 760, light: 0.5 * (1 - torch), squash: 0.07 * K.pulse(t, 1, 6) + 0.15 * Math.sin(Math.PI * ap(t, at(24), 0.3)),
+    seed: 760, light: 0.5 * (1 - torch), squash: 0.07 * K.pulse(t, 1, 6) + 0.12 * nod + 0.15 * Math.sin(Math.PI * snap),
     blink: found > 0 && found < 1 ? 0 : K.blinkAt(t, 17), lid: 0.3,
-    turn: 0.35 + shake * 0.6 * Math.sin((t - at(16)) * 18), look: [0.9, -0.3],
-    mouth: unm > 0 ? "grin" : snap > 0 ? "grin" : found > 0 ? "o" : shake > 0 ? "flat" : "smirk",
-    eyeUp: found * (1 - ap(t, at(23), 0.4)), exclaim: found * (1 - ap(t, at(23), 0.3)),
-    browTilt: tap > 0 ? 0.8 : 0, legWalk: panning ? t * 9 : 0, tail: Math.sin(t * 3),
-    pawL: tap > 0 ? { x: -30, y: -330 } : shake > 0 ? { x: -70, y: -250 + 20 * Math.sin((t - at(16)) * 18) } : { x: -86, y: -100 },
+    turn: 0.35, look: [0.9, -0.3 + 0.3 * nod],
+    mouth: snap > 0 ? "grin" : found > 0 ? "o" : nod > 0.2 ? "smile" : "smirk",
+    eyeUp: found * (1 - ap(t, at(11), 0.4)), exclaim: found * (1 - ap(t, at(11), 0.3)),
+    legWalk: panning ? t * 9 : 0, tail: Math.sin(t * 3),
+    pawL: { x: -86, y: -100 },
   };
   if (torch > 0) {
     const ang = beamAng(t);
-    st.hold = "flashlight"; st.flashOn = ap(t, at(21) + 0.2, 0.15);
+    st.hold = "flashlight"; st.flashOn = ap(t, at(10) + 0.15, 0.15);
     st.pawR = { x: 150, y: -240, rot: ang * 180 / Math.PI };
   } else {
     st.hold = "magnifier";
-    st.pawR = unm > 0 ? { x: 150, y: -330, rot: -40 } : { x: 140, y: -230, rot: -25 };
+    st.pawR = snap > 0 ? { x: 150, y: -330, rot: -40 } : { x: 140, y: -230, rot: -25 };
   }
   return st;
 }
 
 /* ============================================================
-   INTRO 60 TITLE: back on the rainy street (52.84 - 64.5).
-   52.84 venetian-blind wipe from the board
-   53.84 "find the cause and test it twice": the case file gets two stamps
-   55.84 "Causality and Lead-Lag in Markets!": the marquee plate unfolds,
-         title letters drop in (DOM text, one per language)
-   57.84 six case badges pop on eighth notes (one per episode topic)
-   59.84 hat tip; 61.84 wink; 63.84 the lamp goes out, the marquee stays
+   INTRO 60 TITLE: back on the rainy street (22.9 - 33.2).
+   22.9  venetian-blind wipe from the board
+   23.38 "-Lag in Markets!": the marquee plate unfolds, title letters drop
+         in (DOM text, one per language), the fox hops
+   25.33 six case badges pop on eighth notes (one per episode topic)
+   27.26 hat tip; 29.21 wink; 31.15 the lamp goes out, the marquee stays
    ============================================================ */
-const PLATE = { cx: 960, cy: 190, w: 1560, h: 290 };
+const PLATE = { cx: 960, cy: 300, w: 1560, h: 260 }; /* below the marketmaker.cc plaque (top-right, y 48 - 144) */
 const CAM_TITLE = { x: 1500, y: 540, z: 1, rot: 0 };
-const FOX_T = { x: 330, y: 820, s: 1.1 };
-const BADGE_Y = 478, BADGE_R = 54;
+const FOX_T = { x: 330, y: 930, s: 1.1 };
+const BADGE_Y = 560, BADGE_R = 54;
 
 /* six language-free episode icons: causal graph, Granger (lagged waves), transfer
    entropy (bits on an arrow), lead-lag paws, confounder (mask), causal forest (tree) */
@@ -2273,37 +2246,19 @@ function badge(c, x, y, r, a, i) {
   c.restore();
 }
 
-function caseFile(t) {
-  /* the manila folder the fox holds up; stamps land on it */
-  const u = ap(t, at(26), 0.4); if (u <= 0) return;
-  const lower = ap(t, at(27, 2), 0.5), x = 560, y = 650 + 700 * K.E.in3(lower), s = K.E.back(u, 2) * (1 - 0.3 * lower);
-  K.screen(ctx); ctx.save(); ctx.translate(x, y); ctx.rotate(-0.06); ctx.scale(s, s);
-  K.shape(ctx, [[-150, -100], [-60, -100], [-44, -118], [40, -118], [56, -100], [150, -100], [150, 100], [-150, 100]], { fill: "#c7a265", w: 5, boil: 1, seed: 820, shade: { color: "#9a7a45", dx: -10, dy: -10 } });
-  for (let i = 0; i < 4; i++) K.line(ctx, [[-110, -50 + i * 32], [i === 3 ? 20 : 110, -50 + i * 32]], { stroke: "#8a6a3a", w: 5, boil: 0.5, seed: 821 + i, taper: false });
-  [[at(26, 2), -60, 20], [at(26, 3), 70, 30]].forEach(([t0, sx, sy], k) => {
-    const v = ap(t, t0, 0.25); if (v <= 0) return;
-    const sc = 1 + 0.7 * (1 - K.E.out3(v));
-    ctx.save(); ctx.translate(sx, sy); ctx.rotate(-0.25 + k * 0.3); ctx.scale(sc * 0.75, sc * 0.75); ctx.globalAlpha *= Math.min(1, v * 3) * 0.9;
-    K.shape(ctx, K.ellipsePts(0, 0, 70, 70, 22), { stroke: "#2f7a3a", w: 10, boil: 1, seed: 830 + k, gap: 0.08 });
-    K.line(ctx, [[-32, 0], [-8, 24], [36, -28]], { stroke: "#2f7a3a", w: 15, boil: 0.8, seed: 832 + k, gap: 0, taper: false });
-    ctx.restore();
-  });
-  ctx.restore();
-}
-
 function titleLampOn(t) {
-  const d = t - at(31); if (d < 0) return 1;
+  const d = t - at(16); if (d < 0) return 1;
   if (d < 0.4) return [1, 0.2, 0.8, 0, 0.5, 0][Math.floor(d * 15) % 6];
   return 0;
 }
 function foxTitlePose(t) {
-  const tip = ap(t, at(29), 0.3) * (1 - ap(t, at(29, 2.5), 0.3));
-  const wink = ap(t, at(30), 0.12) * (1 - ap(t, at(30, 1.5), 0.15));
-  const hold = 1 - ap(t, at(27, 2), 0.4);
+  const tip = ap(t, at(14), 0.3) * (1 - ap(t, at(14, 2.5), 0.3));
+  const wink = ap(t, at(15), 0.12) * (1 - ap(t, at(15, 1.5), 0.15));
+  const hold = 0;
   return {
-    seed: 780, light: titleLampOn(t), squash: 0.08 * K.pulse(t, 1, 6) + 0.25 * Math.sin(Math.PI * ap(t, at(27), 0.3)),
-    hop: 30 * Math.sin(Math.PI * ap(t, at(27), 0.45)), blink: wink > 0 ? 0 : K.blinkAt(t, 19), lid: wink > 0.5 ? 0.3 : 0.3,
-    mouth: t > at(27) ? "grin" : "smirk", look: [0.7, -0.4], turn: 0.3,
+    seed: 780, light: titleLampOn(t), squash: 0.08 * K.pulse(t, 1, 6) + 0.25 * Math.sin(Math.PI * ap(t, at(12), 0.3)),
+    hop: 30 * Math.sin(Math.PI * ap(t, at(12), 0.45)), blink: wink > 0 ? 0 : K.blinkAt(t, 19), lid: wink > 0.5 ? 0.3 : 0.3,
+    mouth: t > at(12) ? "grin" : "smirk", look: [0.7, -0.4], turn: 0.3,
     hatTip: -18 * tip, hatLift: 20 * tip,
     pawL: tip > 0 ? { x: -60, y: -390 } : { x: -86, y: -100 },
     pawR: hold > 0 ? { x: 160, y: -190 } : { x: 140, y: -230, rot: -30 },
@@ -2313,9 +2268,9 @@ function foxTitlePose(t) {
 }
 function drawTitleScene(t) {
   const lamp = titleLampOn(t);
-  const drift = K.ss(at(26), DUR, t);
+  const drift = K.ss(at(12), DUR, t);
   drawStreetSet(t, { x: CAM_TITLE.x + 40 * drift, y: CAM_TITLE.y - 10 * drift, z: 1 + 0.04 * drift, rot: 0 }, {
-    lamp, flash: K.flash(t, at(27)) * 0.5,
+    lamp, flash: K.flash(t, at(12)) * 0.5,
     extra: (tt) => {
       const st = foxTitlePose(tt);
       K.fox(ctx, FOX_T.x + CAM_TITLE.x - 960, FOX_T.y, FOX_T.s, st);
@@ -2327,27 +2282,26 @@ function drawTitleScene(t) {
       }
     },
   });
-  caseFile(t);
   /* marquee plate + badges (screen space) */
   K.screen(ctx);
-  const u = K.inv(at(27), at(27, 1.2), t);
+  const u = K.inv(at(12), at(12, 1.2), t);
   if (u > 0) K.banner(ctx, PLATE.cx, PLATE.cy, PLATE.w, PLATE.h, u, { seed: 71 });
   for (let i = 0; i < 6; i++) {
-    const t0 = at(28) + i * BEAT / 2, a = ap(t, t0, 0.35); if (a <= 0) continue;
+    const t0 = at(13) + i * BEAT / 2, a = ap(t, t0, 0.35); if (a <= 0) continue;
     badge(ctx, 1085 + (i - 2.5) * 136, BADGE_Y + 6 * Math.sin(t * 2.4 + i) - 10 * K.pulse(t - i * 0.08, 1, 6), BADGE_R, a, i);
   }
   layoutTitleDom(t);
 }
 
 function layoutTitleDom(t) {
-  const u = K.inv(at(27), at(27, 1.2), t);
+  const u = K.inv(at(12), at(12, 1.2), t);
   titleEl.style.opacity = u > 0.5 ? "1" : "0";
   if (u <= 0.5) return;
   const n = TITLE_LN.length, sizes = TITLE_LN.map((d) => +d.dataset.size), gap = 6;
   const total = sizes.reduce((a, b) => a + b, 0) + gap * (n - 1);
   let y = PLATE.cy - total / 2 - 4;
   TITLE_LN.forEach((d, i) => { d.style.top = y.toFixed(1) + "px"; y += sizes[i] + gap; });
-  const T0 = at(27, 0.6);
+  const T0 = at(12, 0.6);
   TITLE_CH.forEach((c) => {
     const t0 = T0 + c.idx * 0.03, a = K.inv(t0, t0 + 0.4, t);
     const yy = (1 - K.E.back(a, 2.4)) * -120, land = K.inv(t0 + 0.28, t0 + 0.5, t);
@@ -2362,12 +2316,12 @@ function layoutTitleDom(t) {
    INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
    drives a proxy whose setter calls render(t). Scene order and the
    diegetic transitions between them:
-   0.00 - 15.82  street: lamp, two trails, the lag, two stamps
-   15.82 - 23.83 office: spinning newspaper lands, pull back, the fox, lens eye
-   23.33 - 27.83 iris through the magnifier: city map, footprints of prices
-   27.83 - 31.84 lineup (lights clank on): who moved first
-   31.84 - 53.84 whip pan to the cork board: clue card, strings, confounder
-   52.84 - 64.50 venetian-blind wipe to the street: title, badges, hat tip
+   0.00 - 4.04   street: moon, rain, the lamp comes on (instrumental)
+   4.04 - 7.92   office: the spinning newspaper lands, hat tip, lens eye
+   7.42 - 11.80  iris through the magnifier onto the street: the two trails
+   11.80 - 15.67 lightning cut to the city map: footprints of prices
+   15.67 - 23.38 lightning cut to the cork board: the link, the confounder
+   22.90 - 33.20 venetian-blind wipe to the street: title, badges, hat tip
    ============================================================ */
 /* ---------- screen-space shift for whip pans: wraps the kit camera ---------- */
 let SHIFT = 0;
@@ -2382,12 +2336,6 @@ function ringAt(cx, cy, r) {
   ctx.lineWidth = 6; ctx.strokeStyle = P.ink; ctx.beginPath(); ctx.arc(cx, cy, r + 25, 0, K.TAU); ctx.stroke();
   ctx.restore();
 }
-function streaks(a) {
-  if (a <= 0) return;
-  baseScreen(ctx); ctx.save(); ctx.strokeStyle = K.rgba(P.greyLight, 0.5 * a); ctx.lineCap = "round";
-  for (let i = 0; i < 34; i++) { const y = K.hash(i, 3) * 1080, x = K.hash(i, 4) * 1920, L = 300 + 700 * K.hash(i, 5); ctx.lineWidth = 2 + 6 * K.hash(i, 6); ctx.beginPath(); ctx.moveTo(x - L / 2, y); ctx.lineTo(x + L / 2, y); ctx.stroke(); }
-  ctx.restore();
-}
 /* venetian blinds closing (c = 0..1) over whatever is drawn */
 function blindsOver(c) {
   if (c <= 0) return;
@@ -2400,28 +2348,20 @@ function blindsOver(c) {
 }
 
 function drawFilm(t) {
-  const irisT = [at(11) - 0.5, at(11)], whip = [at(15) - 0.25, at(15) + 0.2], wipe = [at(25, 2), at(26)];
+  const irisT = [at(4) - 0.5, at(4)], wipe = [at(11, 3), at(12)];
+  if (t < S.office[0]) return drawStreetOpening(t);
   if (t < irisT[0]) return drawOffice(t);
   if (t < irisT[1]) {
     drawOffice(t);
     const u = K.E.inOut(K.inv(irisT[0], irisT[1], t)), L = K.lensPt || { x: 960, y: 400 }, r0 = K.lensR || 60;
     const cx = K.lerp(L.x, 960, u), cy = K.lerp(L.y, 540, u), r = K.lerp(r0, 1250, u);
     baseScreen(ctx); ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r, 0, K.TAU); ctx.clip();
-    drawMap(t); ctx.restore(); ringAt(cx, cy, r);
+    drawStreetOpening(t); ctx.restore(); ringAt(cx, cy, r);
     return;
   }
-  if (t < at(13)) return drawMap(t);
-  if (t < whip[0]) return drawLineup(t);
-  if (t < whip[1]) {
-    const u = K.E.inOut(K.inv(whip[0], whip[1], t));
-    baseScreen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(0, 0, 1920 * (1 - u), 1080); ctx.clip();
-    SHIFT = -1920 * u; drawLineup(t); ctx.restore();
-    baseScreen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(1920 * (1 - u), 0, 1920 * u, 1080); ctx.clip();
-    SHIFT = 1920 * (1 - u); drawBoard(t); ctx.restore();
-    SHIFT = 0; streaks(Math.sin(Math.PI * u));
-    return;
-  }
-  if (t < wipe[0]) return drawBoard(t);
+  if (t < S.map[0]) return drawStreetOpening(t);
+  if (t < S.board[0]) { drawMap(t); return lightningCut(t, S.map[0]); }
+  if (t < wipe[0]) { drawBoard(t); return lightningCut(t, S.board[0]); }
   if (t < wipe[1]) {
     const u = K.inv(wipe[0], wipe[1], t);
     if (u < 0.5) { drawBoard(t); blindsOver(K.E.inOut(u * 2)); }
@@ -2430,24 +2370,31 @@ function drawFilm(t) {
   }
   drawTitleScene(t);
 }
+/* a hard cut on the downbeat hidden in a lightning flash */
+function lightningCut(t, t0) {
+  const f = K.flash(t, t0 - 0.06); if (f <= 0) return;
+  baseScreen(ctx); ctx.fillStyle = K.rgba(P.moon, 0.7 * f); ctx.fillRect(0, 0, 1920, 1080);
+}
 
 function render(t) {
   try {
     K.begin(ctx, t, { x: 960, y: 540, z: 1, rot: 0 });
     titleEl.style.opacity = "0";
     SHIFT = 0;
-    if (t < S.street[1]) drawStreetOpening(t);
-    else if (typeof drawFilm === "function") drawFilm(t);
+    drawFilm(t);
   } catch (err) {
     /* never leave a black frame silently: draw the error so a snapshot shows it */
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);
   }
+  /* marketmaker.cc plaque: one small bounce on the first downbeat, then static */
+  const lb = Math.sin(Math.PI * K.inv(at(1), at(1) + 0.35, t));
+  logoEl.style.transform = lb > 0 ? `scale(${(1 + 0.1 * lb).toFixed(3)})` : "none";
   /* film grain steps at the boil rate */
   const f = K.boilFrame(t);
   grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px";
 }
 
-const grainEl = document.getElementById("grain");
+const grainEl = document.getElementById("grain"), logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1.4 -.2'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
 
 const TL = gsap.timeline({ paused: true });

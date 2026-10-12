@@ -1,12 +1,9 @@
 /* ============================================================
-   INTRO 40 MAP + LINEUP
-   23.83 "Follows the footprints of prices that pass": the city from above.
-         Two trails walk the streets like price paths: A (amber) first,
-         B (blue) takes the same turns two beats later. A tiny top-down fox
-         (fedora + tail) follows; price tags pop at the turns.
-   27.83 "Who moved first and who followed behind": police lineup. The
-         lights clank on; BTC steps forward first (1), ETH a bar later (2,
-         "+2"); in the shadow on the right two eyes glow (the confounder).
+   INTRO 40 MAP: "Follow the trail that the markets left" (11.80 - 15.67).
+   The city from above after a lightning cut. Two trails walk the streets
+   like price paths: A (amber) first, B (blue) takes the same turns two
+   beats later. A tiny top-down fox (fedora + tail) follows; price tags pop
+   at A's turns.
    ============================================================ */
 /* ---------- the map ---------- */
 const BLOCK = 300, ROAD = 90;
@@ -21,9 +18,9 @@ function routeAt(d, off) {
     d -= L;
   }
 }
-const MAP_T0 = at(11), STEP_D = 140, STEP_T = BEAT / 2; /* a print every eighth note */
+const MAP_T0 = at(6), STEP_D = 140, STEP_T = BEAT / 2; /* a print every eighth note */
 /* the camera rides between the newest A print and the fox */
-const camZ = K.mkSpline([[at(11) - 0.5, 1.5], [at(11), 1.05], [at(13), 0.9]]);
+const camZ = K.mkSpline([[at(6), 1.12], [at(8), 0.92]]);
 function camMap(t) {
   const el = Math.max(0, t - MAP_T0), a = routeAt(el / STEP_T * STEP_D, 0), f = routeAt(Math.max(0, (el - 3 * BEAT) / STEP_T * STEP_D), 0);
   return { x: (a[0] + f[0]) / 2 + 120, y: (a[1] + f[1]) / 2 - 40, z: camZ(t) };
@@ -89,50 +86,4 @@ function foxTop(x, y, ang, t) {
   K.shape(ctx, K.ellipsePts(0, 0, 24, 22, 12), { fill: P.hat, w: 3.5, boil: 0.6, seed: 457 });
   K.shape(ctx, K.ellipsePts(0, 0, 24, 22, 12), { fill: null, stroke: P.amber, w: 3, boil: 0.6, seed: 458 });
   ctx.restore();
-}
-
-/* ---------- the lineup ---------- */
-function lineupLight(t) {
-  const d = t - at(13); if (d < 0) return 0;
-  if (d < 0.35) return [1, 0.2, 1, 0, 1][Math.floor(d * 14) % 5];
-  return 1;
-}
-function drawLineup(t) {
-  const cam = { x: 960 + 30 * K.ss(at(13), at(15), t), y: 540, z: 1.0 + 0.06 * K.ss(at(13), at(15), t), rot: 0 };
-  K.begin(ctx, t, cam);
-  K.applyCam(ctx, 1);
-  const L = lineupLight(t);
-  K.lineupWall(ctx, -200, -100, 2400, 1000, 111);
-  ctx.fillStyle = P.street; ctx.fillRect(-200, 880, 2400, 400);
-  K.line(ctx, [[-200, 880], [2200, 880]], { stroke: P.ink, w: 8, boil: 0.8, seed: 500, taper: false });
-  /* overhead cones */
-  [760, 1180].forEach((x, i) => { K.cone(ctx, x, -60, Math.PI / 2, 1050, 0.62, P.amberGlow, L * 0.9); K.pool(ctx, x, 900, 260, 50, P.amberGlow, L); });
-  /* suspects step forward on their beats */
-  const fA = K.E.back(ap(t, at(13, 2), 0.4), 2), fB = K.E.back(ap(t, at(14), 0.4), 2);
-  K.suspect(ctx, 760, 900 + 40 * fA, 1.35 + 0.08 * fA, { color: P.A, label: "BTC", bob: 6 * K.pulse(t, 1, 6) + 30 * Math.sin(Math.PI * ap(t, at(13, 2), 0.4)), seed: 520, look: 0.6 });
-  K.suspect(ctx, 1180, 900 + 40 * fB, 1.35 + 0.08 * fB, { color: P.B, label: "ETH", bob: 6 * K.pulse(t - BEAT / 2, 1, 6) + 30 * Math.sin(Math.PI * ap(t, at(14), 0.4)), seed: 540, look: -0.6 });
-  /* number placards */
-  K.plank(ctx, 600, 950, 120, 110, ["1"], { a: ap(t, at(13, 2.5)), size: 76, seed: 560, colors: [P.amberDeep] });
-  K.plank(ctx, 1340, 950, 120, 110, ["2"], { a: ap(t, at(14, 0.5)), size: 76, seed: 561, colors: [P.ink] });
-  K.tag(ctx, 1420, 380, "+2", { a: ap(t, at(14, 1.5)), size: 48, seed: 562, anchor: [1300, 330] });
-  /* darkness outside the lights */
-  K.screen(ctx);
-  ctx.fillStyle = K.rgba(P.ink, 0.88 - 0.5 * L); ctx.fillRect(0, 0, 1920, 1080);
-  /* the shadow on the right: two eyes */
-  const eyes = ap(t, at(14, 2.5), 0.3);
-  if (eyes > 0) {
-    const g = ctx.createLinearGradient(1600, 0, 1920, 0); g.addColorStop(0, K.rgba(P.ink, 0)); g.addColorStop(1, K.rgba(P.ink, 0.95));
-    ctx.fillStyle = g; ctx.fillRect(1550, 0, 370, 1080);
-    const bl = Math.sin(K.inv(at(15) - 0.6, at(15) - 0.45, t) * Math.PI);
-    [-1, 1].forEach((sd) => { K.glow(ctx, 1760 + sd * 26, 360, 40, K.rgba(P.amberGlow, 0.8), eyes); K.shape(ctx, K.ellipsePts(1760 + sd * 26, 360, 14, 5 * (1 - bl) + 0.5, 8), { fill: P.amberGlow, stroke: null, w: 0, boil: 0.4, seed: 570 + sd, alpha: eyes }); });
-  }
-  /* the fox in the foreground, pointing his magnifier at BTC */
-  const pt = ap(t, at(13, 2), 0.4), pt2 = ap(t, at(14), 0.4), surprise = eyes;
-  K.fox(ctx, 230, 1180, 1.45, {
-    seed: 740, light: L * 0.7, turn: 0.4 - 0.8 * surprise, squash: 0.06 * K.pulse(t, 1, 6),
-    look: surprise > 0 ? [1, -0.3] : [0.8 - 0.4 * pt2, -0.2], lid: 0.3, blink: K.blinkAt(t, 13), mouth: surprise > 0 ? "o" : "smirk",
-    eyeUp: surprise * 0.8, exclaim: surprise,
-    pawR: { x: 150 + 30 * pt - 10 * pt2, y: -300 - 40 * pt + 20 * pt2, rot: -30 }, hold: "magnifier",
-    pawL: { x: -80, y: -140 }, tail: Math.sin(t * 3),
-  });
 }

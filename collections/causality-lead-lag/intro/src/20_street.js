@@ -1,38 +1,35 @@
 /* ============================================================
-   INTRO 20 STREET: the rainy street set (opening and title).
+   INTRO 20 STREET: the rainy street set (opening, trails, title).
    World: curb at y 760, wet road below, lamp at x 900.
-   Opening (0 - 15.82):
      0     camera cranes down from the moon through the rain
-     1.82  the lamp flickers on: the fox is under it
-     2.82  he lifts his hat brim, eyes open (sly)
-     3.84  "Lead and lag": two paw trails stamp across the road, one print a
-           beat; A (amber, upper lane) leads, B (blue, lower lane) follows
-     5.84  "step by step": the fox walks after them, magnifier out
-     7.83  "follow the trail": camera trucks right with him
-     11.85 "find the cause": push in on the two jumps; Δt bracket
-     14.82 / 15.77 "test it twice": two stamps
+     2.09  the lamp flickers on: the fox is under it; 3.06 hat brim up
+     (4.04 - 7.42 the office, see 30_office.js)
+     7.92  "Lead and lag": two paw trails stamp across the road, a print
+           every eighth note; A (amber, upper lane) leads, B (blue) follows
+     8.9   magnifier out; he walks after them ("step by step")
+     10.83 push in on the two jumps: Δt bracket, tag "Δt = 2"
    ============================================================ */
 const CURB = 760, LAMP_X = 900;
 /* paw trails: same path shape, B's jump is two prints after A's (the lag) */
 const TR = { x0: 1250, dx: 150, n: 15, laneA: 880, laneB: 1010, jumpA: 6, lag: 2 };
 const jumpY = (i, j) => (i === j ? -150 : i === j - 1 || i === j + 1 ? -55 : 0) + (i === j + 4 ? -50 : 0);
 const trailPts = (lane, j) => { const p = []; for (let i = 0; i < TR.n; i++) p.push([TR.x0 + i * TR.dx, lane + jumpY(i, j)]); return p; };
-const PRINT_T = (k, lagBeats) => at(1) + (k + (lagBeats || 0)) * BEAT; /* one print per beat */
+const STEP = BEAT / 2; /* a print every eighth note */
 
 const camStreet = K.mkTrack([
   [0, { x: 960, y: -420, z: 1 }],
-  [at(0), { x: 1000, y: 520, z: 1 }],
-  [at(2), { x: 1150, y: 560, z: 1 }],
-  [at(4), { x: 1650, y: 680, z: 1.18 }],
-  [at(5), { x: 2250, y: 660, z: 1.08 }],
+  [at(1), { x: 1000, y: 520, z: 1 }],
+  [at(2), { x: 1030, y: 540, z: 1.04 }],
+  [at(4) - 0.5, { x: 1150, y: 560, z: 1 }],
+  [at(5), { x: 1700, y: 660, z: 1.1 }],
   [at(5, 2), { x: 2290, y: 780, z: 1.32 }],
-  [at(7), { x: 2300, y: 790, z: 1.38 }],
+  [at(6), { x: 2300, y: 790, z: 1.38 }],
 ]);
-const foxStreetX = K.mkSpline([[0, 1030], [at(2), 1030], [at(5), 1930], [at(7), 1960]]);
+const foxStreetX = K.mkSpline([[0, 1030], [at(4, 2), 1030], [at(5, 2), 1930], [at(6), 1960]]);
 
 function lampOn(t) {
-  if (t < at(0)) return 0;
-  const d = t - at(0);
+  if (t < at(1)) return 0;
+  const d = t - at(1);
   if (d < 0.5) return [1, 0, 0.7, 0, 1, 0.2, 1][Math.floor(d * 14) % 7]; /* flicker on */
   return 1;
 }
@@ -78,9 +75,9 @@ function drawStreetSet(t, cam, opt) {
 
 /* trails + fox + magnifier for the opening */
 function streetOpening(t) {
-  const fx = foxStreetX(t), walking = t > at(2) && t < at(5);
+  const fx = foxStreetX(t), walking = t > at(4, 2) && t < at(5, 2);
   /* trails: A prints on the beat, B half a beat behind */
-  const shownA = (t - PRINT_T(0)) / BEAT + 1, shownB = (t - PRINT_T(0) - BEAT / 2) / BEAT + 1;
+  const shownA = (t - at(4)) / STEP + 1, shownB = (t - at(4) - STEP / 2) / STEP + 1;
   [[TR.laneA, TR.jumpA, P.A, shownA, 3], [TR.laneB, TR.jumpA + TR.lag, P.B, shownB, 9]].forEach(([lane, j, col, sh, seed]) => {
     if (sh <= 0) return;
     ctx.save(); ctx.translate(0, lane); ctx.scale(1, 0.62); ctx.translate(0, -lane);
@@ -95,8 +92,8 @@ function streetOpening(t) {
     ctx.restore();
   });
   /* lane letters on tags at the start of each trail */
-  K.tag(ctx, TR.x0 - 120, TR.laneA - 10, "A", { a: ap(t, at(1)), hot: true, size: 34, seed: 4, anchor: [TR.x0 - 170, TR.laneA - 50] });
-  K.tag(ctx, TR.x0 - 120, TR.laneB - 10, "B", { a: ap(t, at(1, 0.5)), size: 34, seed: 6, anchor: [TR.x0 - 170, TR.laneB - 50] });
+  K.tag(ctx, TR.x0 - 120, TR.laneA - 10, "A", { a: ap(t, at(4)), hot: true, size: 34, seed: 4, anchor: [TR.x0 - 170, TR.laneA - 50] });
+  K.tag(ctx, TR.x0 - 120, TR.laneB - 10, "B", { a: ap(t, at(4, 0.5)), size: 34, seed: 6, anchor: [TR.x0 - 170, TR.laneB - 50] });
   /* Δt bracket over the two jumps */
   const xa = TR.x0 + TR.jumpA * TR.dx, xb = xa + TR.lag * TR.dx, bu = K.E.out3(ap(t, at(5, 1), 0.6));
   if (bu > 0) {
@@ -107,19 +104,19 @@ function streetOpening(t) {
     K.tag(ctx, (xa + xb) / 2 + 30, yA - 130, "Δt = 2", { a: ap(t, at(5, 2)), hot: true, size: 40, seed: 12, anchor: [(xa + xb) / 2, yA - 62] });
   }
   /* the fox */
-  const crouch = ap(t, at(5) - 0.3, 0.3) - ap(t, at(5) + 0.15, 0.3) * 0.6;
-  const lifted = ap(t, at(0, 2), 0.4);
-  const spotted = ap(t, at(1, 2), 0.3);
-  const magOut = ap(t, at(2) - 0.2, 0.4);
+  const crouch = ap(t, at(5, 2) - 0.3, 0.3) - ap(t, at(5, 2) + 0.15, 0.3) * 0.6;
+  const lifted = ap(t, at(1, 2), 0.4);
+  const spotted = ap(t, at(4), 0.3);
+  const magOut = ap(t, at(4, 1.5) - 0.2, 0.4);
   const lean = walking ? 6 : 4 * spotted * (1 - magOut);
   K.fox(ctx, fx, CURB + 40, 1.0, {
     seed: 700, light: lampOn(t) * (fx < 1400 ? 1 : 0.4),
     squash: 0.08 * K.pulse(t, 1, 6) + 0.25 * crouch, lean,
     legWalk: walking ? (fx - 1030) / 28 : 0, hop: walking ? Math.abs(Math.sin((fx - 1030) / 28)) * 5 : 0,
     lid: K.lerp(0.75, 0.32, lifted), blink: lifted > 0 ? K.blinkAt(t, 3) : 0,
-    eyeUp: spotted * (1 - magOut) * 0.9, exclaim: spotted * (1 - ap(t, at(2), 0.3)),
+    eyeUp: spotted * (1 - magOut) * 0.9, exclaim: spotted * (1 - ap(t, at(4, 2), 0.3)),
     look: magOut > 0 ? [0.9, 0.7] : [spotted * 0.6, spotted * 0.9],
-    mouth: spotted > 0 && magOut < 1 ? "o" : t > at(6) ? "grin" : "smirk",
+    mouth: spotted > 0 && magOut < 1 ? "o" : t > at(5, 3) ? "grin" : "smirk",
     hatLift: 14 * lifted * (1 - spotted), hatTip: -10 * lifted * (1 - spotted),
     pawL: lifted > 0 && spotted < 1 ? { x: -40, y: -360 + 30 * spotted } : { x: -86, y: -100 },
     pawR: { x: K.lerp(86, 150, magOut) + 20 * crouch, y: K.lerp(-100, -170, magOut) + 60 * crouch },
@@ -142,6 +139,5 @@ function drawStamps(t, times, pts) {
 
 function drawStreetOpening(t) {
   const cam = Object.assign({ rot: 0 }, camStreet(t));
-  drawStreetSet(t, cam, { extra: streetOpening, flash: K.flash(t, 1.0) * 0.35 + K.flash(t, at(4)) * 0.45 });
-  drawStamps(t, [at(6, 2), at(6, 3.9)], [[1380, 250], [1600, 300]]);
+  drawStreetSet(t, cam, { extra: streetOpening, flash: K.flash(t, 1.0) * 0.35 + K.flash(t, at(5)) * 0.4 });
 }

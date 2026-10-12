@@ -1,44 +1,41 @@
 # Intro review log
 
-The intro runs the full song: 64.5 s, 1920x1080, 30 fps, with `song_full.m4a` muxed in (song_raw.mp4 minus 0.20 s of lead silence, 0.9 s fade at the end, gain + limiter to -13.9 LUFS integrated, -1.5 dBFS peak). There is also a silent copy of each render.
-Tempo is a steady 120 BPM (bar 2.0 s). Downbeats were measured with librosa for bars 0-23 (`K.G.BARS`, 1.82 ... 47.84 s) and extrapolate after that (librosa's own beat track drifted after 48 s, but the onsets stay on the 0.5 s grid).
-`lyrics.srt` was off by up to 4 s; word timings come from `npx hyperframes transcribe` (parakeet) and are listed in `src/10_setup.js`.
+**Current cut (UPDATE 3): the intro runs the full short song**, 33.2 s, 1920x1080, 30 fps, `song_short.m4a` muxed (song_short_raw.mp4 cut at 33.2 s, 0.9 s fade, gain + limiter: -14.0 LUFS integrated, -1.8 dBFS peak), plus silent copies. The marketmaker.cc logo sits on an ink plaque with an amber hairline in the top-right corner (48 px margin, 96 px tall) for the whole intro, with one bounce on the first downbeat.
+Tempo is about 123.8 BPM (bar 1.94 s); downbeats measured with librosa (`K.G.BARS`, 0.16 ... 31.15 s). `lyrics_short.srt` was coarse; word timings come from whisper small.en + parakeet via `npx hyperframes transcribe`.
 
-## Outline (second by second)
+## Outline (short cut, second by second)
 
 | Time | Line | Picture |
 | --- | --- | --- |
-| 0 - 1.8 | intro | crane down from the moon through the rain; lightning |
-| 1.8 - 3.8 | intro | the lamp flickers on: the fox under it; he lifts his hat brim, sly eyes |
-| 3.84 | "Lead and lag" | two paw trails stamp across the wet road, one print a beat: A (amber) leads, B (blue) half a beat behind; "!" |
-| 5.84 | "step by step" | magnifier out, the fox walks after the prints |
-| 7.83 - 11.8 | "Follow the trail that the markets left" | camera trucks and pushes in; lightning at 9.83; the trails trace two price lines, B's jump two prints after A's |
-| 11.85 | "Find the cause" | crouch, push in: Δt bracket between the two jumps, tag "Δt = 2" |
-| 14.82 / 15.77 | "test it twice" | two green check stamps |
-| 15.82 | "Causality and Lead-Lag in Markets" | spinning newspaper lands: "A → B", lagged price photo |
-| 17.82 | | pull back: the fox reads it at his desk (blinds, rain, desk lamp); he peeks over the paper |
-| 19.82 | "A detective fox" | paper drops, smirk, hat tip |
-| 21.84 | "with a magnifying glass" | lens up to his eye: the giant amber eye, a blink |
-| 23.33 | | iris through the lens |
-| 23.83 | "Follows the footprints of prices that pass" | the city from above: A and B trails follow the same streets, B two beats late; price tags at the turns; the top-down fox follows |
-| 27.83 | "Who moved first" | lineup, lights clank on; BTC steps forward (1) |
-| 29.85 | "and who followed behind" | ETH steps forward (2), tag "+2"; two eyes glow in the shadow on the right; "!" |
-| 31.84 | "Correlation's a clue" | whip pan to the cork board: clue card, dots, fit line |
-| 33.84 | "but not proof, keep in mind" | "≠" stamp slams; head shake; paw taps temple |
-| 35.84 | "Lead and lag" | BTC and ETH mugshots pinned |
-| 37.86 | "step by step" | red string BTC → ETH, tag "lag 2" |
-| 39.85 | "Follow the trail" | SOL pinned, ETH → SOL "lag 1", BTC → SOL dim |
-| 43.85 | "Find the cause and test it" | lights out, flashlight sweeps the dark corner |
-| 45.85 | | hidden mugshot "?" in the beam; "!" |
-| 47.84 | "Causality and lead-lag in markets" | lights back; Z → BTC and Z → ETH strings glow amber |
-| 49.84 | | push in: the BTC → ETH string snaps (spurious link) |
-| 51.84 | break | lightning: the confounder is unmasked, Z |
-| 52.84 | | venetian blinds close and open on the street |
-| 53.84 | "find the cause and test it twice" | the fox holds up the case file; two stamps |
-| 55.84 | "Causality and Lead-Lag in Markets!" | the marquee plate unfolds, title letters drop in, hop |
-| 57.84 | | six case badges (causal graph, Granger, transfer entropy, lead-lag, confounder, causal forest) |
-| 59.84 / 61.84 | outro | hat tip; wink |
-| 63.84 | end | the lamp goes out; the marquee stays lit |
+| 0 - 2.1 | instrumental | crane down from the moon through the rain; lightning |
+| 2.09 - 4.0 | instrumental | the lamp flickers on: the fox under it; hat brim up, sly eyes |
+| 4.04 | instrumental | spinning newspaper lands: "A → B" headline, lagged price photo |
+| 5.0 - 5.97 | instrumental | pull back: the fox at his desk (blinds, rain, desk lamp); paper drops, hat tip |
+| 6.94 | instrumental | magnifier up to his eye: the giant amber eye, a blink |
+| 7.42 | | iris through the lens onto the street |
+| 7.92 | "Lead and lag," | two paw trails stamp across the wet road on eighth notes: A (amber) leads, B (blue) follows; "!" |
+| 9.87 | "step by step," | magnifier out, he walks after the prints; the trails trace two price lines |
+| 10.83 | | push in: Δt bracket between the two jumps, tag "Δt = 2" |
+| 11.80 | "Follow the trail that the markets left," | lightning cut to the city from above: A and B trails follow the same streets, B two beats late, price tags at the turns, the top-down fox follows |
+| 15.67 | "Find the cause" | lightning cut to the cork board: BTC and ETH mugshots pinned, red string BTC → ETH, tag "lag 2" |
+| 17.58 / 18.31 | "and test it twice," | two green check stamps; the fox nods twice |
+| 19.53 | "Causality" | lights out; the flashlight sweeps the dark corner |
+| 20.5 | | hidden mugshot "?" in the beam; "!" |
+| 21.46 | "and Lead-" | lights back; Z → BTC and Z → ETH strings glow amber |
+| 22.43 | | lightning: the BTC → ETH string snaps (spurious), the confounder is unmasked: Z |
+| 22.9 | | venetian blinds close and open on the street |
+| 23.38 | "-Lag in Markets!" | the marquee plate unfolds, title letters drop in, the fox hops |
+| 25.33 | | six case badges (causal graph, Granger, transfer entropy, lead-lag, confounder, causal forest) |
+| 27.26 / 29.21 | outro | hat tip; wink |
+| 31.15 | end | the lamp goes out; the marquee stays lit |
+
+## Round 4 (short song + logo)
+- Retimed every scene to the short song's grid; the 4-bar instrumental now carries the opening and the office (newspaper, lens eye). The lineup and the clue card were dropped (no lines for them); the street trails, map, board and title keep their pictures.
+- Scene changes on downbeats are hidden in lightning flashes (map, board) or diegetic (iris, blinds).
+- Title plate covered the logo plaque; the plate moved down to y 170 - 430, badges to y 560, the fox lower.
+- `check` flagged the title spans as occluded by the vignette; `#title` now sits above `#vig` / `#grain`. Lint 0 errors, check passes, contrast 5/5 AA.
+
+The rounds below are from the first, full-song (64.5 s) build, which was superseded.
 
 ## Round 1 (first build, street only)
 - The two trails did not read as lead-lag: the jumps were 84 px squashed to 52 px. The jump is now 150 px, and each trail has a faint price line through its prints. Prints are placed on the line's vertices (`K.trail` spaced them by arc length, which put them off the line at the jumps).

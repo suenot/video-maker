@@ -1,25 +1,21 @@
 /* ============================================================
    INTRO 10 SETUP: variables, title DOM, timing (beat grid), story beats.
-   Song: song_full.m4a (song_raw.mp4 minus 0.20 s of lead silence, 64.5 s,
-   jazz-noir spy theme, 120 BPM: beat 0.5 s, bar 2.0 s). Downbeats were
-   measured with librosa (bars 0-23) and extrapolate at 120 BPM after.
-   Word timings (parakeet transcript, shifted -0.20 s):
-     3.84 "Lead and lag," 5.84 "step by step," 7.83 "Follow the trail that
-     the markets left," 11.85 "Find the cause and test it twice," 15.82
-     "Causality and Lead-Lag in Markets!" 19.82 "A detective fox with a
-     magnifying glass," 23.83 "Follows the footprints of prices that pass,"
-     27.83 "Who moved first and who followed behind," 31.84 "Correlation's a
-     clue but not proof, keep in mind!" 35.84 chorus again (lead and lag /
-     step by step / follow the trail / find the cause), 47.84 "Causality and
-     Lead-Lag in Markets", 51.84 break, 53.84 "find the cause and test it
-     twice", 55.84 "Causality and Lead-Lag in Markets!", 59.84 outro.
+   Song: song_short.m4a (song_short_raw.mp4 cut at 33.2 s with a 0.9 s fade,
+   -14 LUFS), jazz-noir spy theme at about 123.8 BPM (bar 1.94 s).
+   Downbeats measured with librosa. Word timings (whisper small.en + parakeet):
+     0 - 7.9   instrumental (4 bars)
+     7.92  "Lead and lag,"            9.87  "step by step,"
+     11.80 "Follow the trail that the markets left,"
+     15.67 "Find the cause and test it twice,"
+     19.53 "Causality and Lead-" 23.38 "-Lag in Markets!" (held to 27.9)
+     27.26 - 33.2 outro
    All story times are K.at(bar, beat) on these downbeats.
    ============================================================ */
 const K = CK, P = K.P, at = K.at;
-K.G.BPM = 120;
-K.G.BARS = [1.82, 3.84, 5.84, 7.83, 9.83, 11.85, 13.82, 15.82, 17.82, 19.82, 21.84, 23.83,
-  25.85, 27.83, 29.85, 31.84, 33.84, 35.84, 37.86, 39.85, 41.83, 43.85, 45.85, 47.84];
-const DUR = 64.5;
+K.G.BPM = 123.8;
+K.G.BARS = [0.16, 2.09, 4.04, 5.97, 7.92, 9.87, 11.80, 13.72, 15.67, 17.58, 19.53, 21.46,
+  23.38, 25.33, 27.26, 29.21, 31.15];
+const DUR = 33.2;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const BEAT = K.beatLen();
 /* pop helper: 0..1 over d seconds starting at t0 */
@@ -27,13 +23,12 @@ const ap = (t, t0, d) => K.inv(t0, t0 + (d || 0.4), t);
 
 /* ---------- scene windows (on downbeats) ---------- */
 const S = {
-  street: [0, at(7)],            /* 0 - 15.82  rain, lamp, the two trails, magnifier on the lag */
-  paper: [at(7), at(9)],         /* 15.82 - 19.82  spinning newspaper lands in the office */
-  office: [at(7), at(11)],       /* the office set (newspaper pull-back, fox, magnifier eye) */
-  map: [at(11) - 0.5, at(13)],   /* 23.33 - 27.83  iris through the lens: city map, footprints */
-  lineup: [at(13), at(15)],      /* 27.83 - 31.84  who moved first */
-  board: [at(15), at(26)],       /* 31.84 - 53.84  clue card, cork board, confounder */
-  title: [at(25, 2), DUR],       /* 52.84 - 64.5   blinds wipe, street, title */
+  open: [0, at(2)],              /* 0 - 4.04     moon, rain, the lamp comes on: the fox */
+  office: [at(2), at(4)],        /* 4.04 - 7.92  spinning newspaper "A → B", hat tip, lens eye */
+  street: [at(4) - 0.5, at(6)],  /* 7.42 - 11.80 iris onto the street: "Lead and lag, step by step" */
+  map: [at(6), at(8)],           /* 11.80 - 15.67 lightning cut: "Follow the trail" from above */
+  board: [at(8), at(12)],        /* 15.67 - 23.38 "Find the cause, test it twice", "Causality": confounder */
+  title: [at(11, 3), DUR],       /* 22.9 - 33.2  blinds wipe: "Lead-Lag in Markets!", title, outro */
 };
 
 /* ---------- variables (title text, language) ---------- */
