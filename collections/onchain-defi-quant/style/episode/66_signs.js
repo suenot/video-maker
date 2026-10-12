@@ -68,10 +68,10 @@ const SIGN = (function () {
     }
     ctx.save(); ctx.translate(x, y); ctx.scale(a, a); ctx.rotate(K.hs(o.seed, 3) * 0.02);
     const W = o.w, hy = -h / 2 + headH;
-    const pts = [[-W / 2, -h / 2], [W / 2, -h / 2], [W / 2, h / 2], [-W / 2, h / 2]];
+    const pts = K.rectPts(-W / 2, -h / 2, W, h, 6); /* many points per edge: crisp corners, not a bubble */
     K.shape(ctx, pts, { fill: P.cream, w: 4.5, boil: 1.1, seed: o.seed, shade: { color: P.creamShade, dx: -10, dy: -10 } });
     if (headH) {
-      K.shape(ctx, [[-W / 2, -h / 2], [W / 2, -h / 2], [W / 2, hy], [-W / 2, hy]], { fill: P.cherry, w: 4.5, boil: 1, seed: o.seed + 3, shade: { color: P.cherryDark, dx: 0, dy: -10 } });
+      K.shape(ctx, K.rectPts(-W / 2, -h / 2, W, headH, 6), { fill: P.cherry, w: 4.5, boil: 1, seed: o.seed + 3, shade: { color: P.cherryDark, dx: 0, dy: -10 } });
       /* ticket notches on both sides of the seam */
       [-1, 1].forEach((sd, i) => K.shape(ctx, K.ellipsePts(sd * W / 2, hy, 11, 11, 8), { fill: P.wall, w: 3, boil: 0.4, seed: o.seed + 5 + i, misreg: false }));
     }
