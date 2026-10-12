@@ -1,18 +1,18 @@
 /* ============================================================
    INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
    drives a proxy whose setter calls render(t).
-   0.00 - 1.76  diner: Nibbs pops up behind the counter, magnifier up
-   1.76 - 4.97  "MEV lurks in the mempool dark": dolly to the dark corner,
-                Slyce's red eye, he hops onto the counter
-   4.97 - 8.15  "sandwich attacks leave their mark": front + back tickets
-                around the victim, they fly into a tray as a sandwich, bite, -1.2 %
-   7.75 - 8.15  menu-card slap transition
-   8.15 - 11.35 "Read the book, read the book": order-book menu, the lens reads it
-   10.95- 11.35 whip pan
-   11.35- 14.56 "Microstructure off the hook": AMM scale + x*y=k placemat, 1 ETH trade
-   14.56        the order bell DING
-   15.36- 16.40 swing doors shut and open on the title set
-   16.18- 20.90 neon sign title, episode plates, Slyce caught
+   The whole song, 30.8 s, every sung line has its own picture:
+   0.12  "Order book at level two": level-2 menu card on the counter, L1/L2 tags
+   3.41  "bids and asks in plain view": depth bars grow, Nibbs presents the book
+   6.59  "MEV lurks in the mempool dark": dolly to the dark corner, Slyce's red eye
+   9.82  "sandwich attacks leave their mark": front + back tickets around the victim,
+         they fly into a tray as a sandwich (11.40), bite, -1.2 %
+   12.98 "Read the book, read the book": menu slap -> order book, the lens reads it
+   16.21 "Microstructure off the hook": whip to the AMM scale + x*y=k, 1 ETH trade
+   19.39 "rings the matching bell": DING
+   22.62 "Latency knows it well": whip to two order rails, 4 ms vs 120 ms
+   25.02 swing doors; 25.80 - 30.8 outro: neon sign title, episode plates, Slyce caught
+   The marketmaker.cc logo plate (DOM, top-right) stays for the whole film.
    ============================================================ */
 function slapCard(t, nb) {
   const u = inv(T.slap[0], T.slap[1], t), e = u * u;
@@ -46,12 +46,15 @@ function render(t) {
     /* never leave a black frame silently: draw the error so a snapshot shows it */
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);
   }
+  /* logo plate: one small bounce on the first downbeat, then static */
+  const lb = t > T.l2 ? Math.exp(-(t - T.l2) * 5) * Math.sin((t - T.l2) * 18) * 0.06 : 0;
+  logoEl.style.transform = "scale(" + (1 + lb).toFixed(4) + ")";
   /* paper grain steps at the boil rate */
   const f = K.boilFrame(t);
   grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px";
 }
 
-const grainEl = document.getElementById("grain");
+const grainEl = document.getElementById("grain"), logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .4  0 0 0 0 .4  0 0 0 1.4 -.2'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
 
 const TL = gsap.timeline({ paused: true });

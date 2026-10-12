@@ -1,6 +1,7 @@
 # Intro review log
 
-The intro is 20.9 s, 1920x1080, 30 fps, with the song muxed in (`song_20s.m4a`, about 150 BPM, -13.7 LUFS integrated). Renders: `renders/intro_{en,ru,zh-CN,zh-TW}.mp4` plus `_silent` copies.
+The intro runs the whole song: 30.8 s, 1920x1080, 30 fps, with `song_full.m4a` muxed in (the uncut "The Sandwich Gambit", about 150 BPM, loudnorm -14). Renders: `renders/intro_{en,ru,zh-CN,zh-TW}.mp4` plus `_silent` copies. The marketmaker.cc logo plate sits top-right for the whole film.
+Rounds 1-3 below were done on the first 20.9 s cut; round 4 is the full-length version.
 Each round comes from snapshots I looked at (`tools/snap.sh`, 10 to 19 frames) and the 1 fps sheet `snapshots/contact-sheet.jpg`.
 
 ## Song cut
@@ -31,9 +32,18 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, 10 to 19 frames) a
 - ru / zh-CN / zh-TW titles checked at 19.8 s: all fit inside the neon tube (title size is measured per frame against 1250 px); CJK subsets render.
 - 1 fps sheet: every second has a clear subject; no empty frames; moves land on downbeats (pan 1.76, front clip 4.97, sandwich 6.52, menu 8.15, whip 11.35, trade 12.96, DING 14.56, sign 16.18, plates 17.79, catch 19.37).
 
+## Round 4 (full song + logo, per brief UPDATE 2/3)
+- Song: no cut any more. `song_full.m4a` = `song_raw.mp4` audio, 0.5 s tail fade, loudnorm. Downbeats `BARS = [0.12, 1.81, 3.41, 5.02, 6.59, 8.20, 9.82, 11.40, 12.98, 14.61, 16.21, 17.81, 19.39, 21.01, 22.62, 24.22, 25.80, 27.38, 28.98, 30.58]`. The old story moved 3 bars later.
+- New pictures for the lines the cut had dropped: 0.12 "Order book at level two" = a level-2 menu card on the counter with L1/L2 tags; 3.41 "bids and asks in plain view" = depth bars grow, Nibbs presents the book with both paws; 22.62 "Latency knows it well" = whip pan to two order rails and a stopwatch, Slyce zips his ticket to the finish (4 ms), the victim's ticket crawls in (120 ms). The title card now plays over the 5 s instrumental outro.
+- Logo: DOM plate top-right (cream, ink border, cherry mark, Nunito 900 wordmark), inlined from `style/kit/assets/marketmaker-logo.svg` by `build.py`, one bounce on the first downbeat. The neon sign shrank to 1220 px and moved down so its top clears the plate.
+- Episode plates: coin radius 50 -> 70, plates 1.0x, spacing 186 px.
+- Fixes from the snapshots: the race tags were hidden behind Nibbs (moved left of the finish post); his glass covered the finish and, on the title card, his own toque and the plates. On the race and title he now holds it up-right in the other paw.
+- `lint` 0 errors (file-size warning), `check` passed: contrast 27/27, layout 0 issues.
+
 ## Known weaknesses
 - In the dark corner the magnified wall inside the glass is a plain dark disc for about a second before the tickets slide under it.
 - The bread slices stand upright around the burger, so the "sandwich" reads a little like a hot dog bun at small size.
 - Episode plates are small (r 50) next to the big sign; they are icons, not readable labels.
-- At 14.2 s, while Nibbs steps to the bell, the glass dips below the counter edge for a few frames.
+- At 19.0 s, while Nibbs steps to the bell, the glass dips below the counter edge for a few frames.
+- On the title card the magnifier is partly cut by the right frame edge.
 - One lint warning remains: the file is large because the kit is inlined by design.

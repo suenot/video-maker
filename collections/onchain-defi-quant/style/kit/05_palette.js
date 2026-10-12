@@ -24,6 +24,8 @@ var DK = window.DK || (window.DK = {});
     fur: "#e8a25e", furDark: "#b56f33", furLight: "#f7c993", belly: "#fbe3c2",
     eye: "#fffdf6", pupil: "#14100f", nose: "#f07f8a", cheek: "#ff9e9a",
     toque: "#fffdf8", toqueShade: "#d9dde2",
+    /* bee waitress (co-host) */
+    bee: "#ffcf3d", beeDark: "#d99a12", beeLight: "#ffe590", wing: "rgba(246,253,252,0.86)", wingEdge: "#2f8f8a",
     /* sandwich bot */
     bread: "#e9b56a", breadDark: "#b77c35", crust: "#8c5424", botMetal: "#5d6b73", botEye: "#ff4b4b",
     lettuce: "#7cc252", tomato: "#e8473f", cheese: "#ffcf4a",

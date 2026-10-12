@@ -1,13 +1,13 @@
 /* ============================================================
    INTRO 40 TITLE: kitchen swing doors + the neon sign title card.
-   15.36 - 16.18 the doors swing shut and open on the title set.
-   16.18 the neon sign flickers on, letters drop in (DOM, per language).
-   17.79 "Latency knows it well": six episode plates pop on half beats,
-         Nibbs tips his toque. 18.98 Slyce peeks in from the left;
-   19.37 the magnifier flashes, Slyce is caught and bolts.
+   25.02 - 25.80 the doors swing shut and open on the title set.
+   25.80 the neon sign flickers on, letters drop in (DOM, per language).
+   25.80 outro: the sign lights; 27.38 six episode plates pop on half beats,
+         Nibbs tips his toque; Slyce peeks in from the left;
+   28.98 the magnifier flashes, Slyce is caught and bolts.
    ============================================================ */
-const SIGN = { cx: 960, cy: 300, w: 1480, h: 330 };
-const PLATE_Y = 842, PLATE_R = 50;
+const SIGN = { cx: 940, cy: 362, w: 1220, h: 330 }; /* top edge clears the logo plate (y <= 150) */
+const PLATE_Y = 860, PLATE_R = 70;
 
 /* six episode icons, language-free: DEX analytics, AMM pools, MEV sandwich,
    prediction-market traders, onchain flows, blocks */
@@ -55,42 +55,39 @@ function drawTitleSet(t) {
   if (t > T.peek) {
     const pk = E.out3(inv(T.peek, T.peek + 0.35, t)), run = inv(T.caught + 0.2, T.caught + 0.8, t);
     const st = { glow: 0.6, look: t < T.caught ? 0.8 : -1, grin: 0.8, seed: 900, sliceR: true, armL: { x: -100, y: -150 }, armR: { x: 120, y: -190 } };
-    let x = K.lerp(150, 330, pk), y = K.lerp(1010, 905, pk);
+    let x = K.lerp(-40, 150, pk), y = K.lerp(1010, 905, pk);
     if (t > T.caught) { st.shock = 1; st.armL = { x: -110, y: -290 }; st.armR = { x: 110, y: -290 }; y -= Math.sin(Math.min(1, (t - T.caught) / 0.35) * Math.PI) * 90; }
-    if (run > 0) { x = K.lerp(330, -260, E.in3(run)); st.walk = t * 22; st.lean = -16; }
+    if (run > 0) { x = K.lerp(150, -300, E.in3(run)); st.walk = t * 22; st.lean = -16; }
     K.sandwichBot(ctx, x, y, 0.95, st);
   }
   K.counter(ctx, -300, 2220, 860, 260, { seed: 42 });
   /* episode plates pop on half beats */
   for (let i = 0; i < 6; i++) {
     const t0 = T.plates + i * BEAT / 2, a = inv(t0, t0 + 0.35, t); if (a <= 0) continue;
-    const s = E.back(a, 2.6), x = 960 + (i - 2.5) * 150, y = PLATE_Y - 6 * K.pulse(t - i * 0.06, 1, 6);
+    const s = E.back(a, 2.6), x = 850 + (i - 2.5) * 186, y = PLATE_Y - 6 * K.pulse(t - i * 0.06, 1, 6);
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
-    K.plate(ctx, 0, 18, 0.75, 610 + i);
-    K.coin(ctx, 0, -40, PLATE_R, { color: PLATE_COLORS[i], seed: 620 + i * 7 });
-    ctx.translate(0, -40); ICONS[i](ctx, PLATE_R);
+    K.plate(ctx, 0, 22, 1.0, 610 + i);
+    K.coin(ctx, 0, -60, PLATE_R, { color: PLATE_COLORS[i], seed: 620 + i * 7 });
+    ctx.translate(0, -60); ICONS[i](ctx, PLATE_R);
     ctx.restore();
   }
   nibbsTitle(t);
   return box;
 }
 function nibbsTitle(t) {
-  const st = { blink: K.blinkAt(t, 11), mouth: "grin", cheeks: 0.4, hold: "magnifier", magHand: "L", magS: 1.2, magAng: -115, seed: 700 };
+  const st = { blink: K.blinkAt(t, 11), mouth: "grin", cheeks: 0.4, hold: "magnifier", magS: 1.2, magAng: -58 + Math.sin(t * 2.2) * 3, seed: 700 };
   const enter = inv(T.doors[1], T.doors[1] + 0.45, t), down = (1 - E.back(enter, 1.8)) * 260;
   st.squash = enter < 1 ? -0.2 * Math.sin(enter * Math.PI) : 0.08 * K.pulse(t, 1, 6);
-  st.pawL = { x: -96, y: -150 + 10 * K.pulse(t, 1, 6) };
-  st.pawR = { x: 80, y: -40 };
+  st.pawR = { x: 100, y: -150 + 10 * K.pulse(t, 1, 6) };
+  st.pawL = { x: -80, y: -40 };
   const tip = inv(T.tip, T.tip + 0.3, t) * (1 - inv(T.tip + 0.8, T.tip + 1.1, t));
-  if (tip > 0) { st.pawR = { x: K.lerp(80, 40, tip), y: K.lerp(-40, -250, tip) }; st.toqueTip = 16 * tip; st.toqueLift = 26 * tip; st.wink = tip; }
-  if (t > T.peek + 0.1) { /* spots Slyce: swings the magnifier left, flash on the downbeat */
+  if (tip > 0) { st.pawL = { x: K.lerp(-80, -40, tip), y: K.lerp(-40, -250, tip) }; st.toqueTip = -16 * tip; st.toqueLift = 26 * tip; st.wink = tip; }
+  if (t > T.peek + 0.1) { /* spots Slyce on the left: glare, flash on the downbeat */
     const sw = E.inOut(inv(T.peek + 0.1, T.caught - 0.05, t));
-    st.magAng = K.lerp(-115, -178, sw); st.pawL = { x: K.lerp(-96, -112, sw), y: K.lerp(-150, -120, sw) };
-    st.look = [-sw, 0]; st.brow = -0.8 * sw; st.mouth = "smirk";
-    if (t > T.caught) { st.mouth = "grin"; st.brow = 0.8; }
-    const back = E.inOut(inv(T.caught + 0.5, T.caught + 0.9, t)); /* lens back up, clear of the plates */
-    if (back > 0) { st.magAng = K.lerp(-178, -115, back); st.pawL = { x: K.lerp(-112, -96, back), y: K.lerp(-120, -150, back) }; st.look = [-1 + back, 0]; }
+    st.look = [-sw, 0]; st.brow = -0.8 * sw; st.mouth = "smirk"; st.pawL = { x: -110, y: K.lerp(-40, -120, sw) };
+    if (t > T.caught) { st.mouth = "grin"; st.brow = 0.8; st.magAng = -58 - 20 * Math.exp(-(t - T.caught) * 6); }
   }
-  K.hamster(ctx, 1640, 1000 + down, 1.6, st);
+  K.hamster(ctx, 1650, 1000 + down, 1.6, st);
   if (t > T.caught && t < T.caught + 0.5 && K.lens) { /* magnifier flash */
     const k = inv(T.caught, T.caught + 0.5, t);
     K.screen(ctx); K.glow(ctx, K.lens.x, K.lens.y, 260 * (1 - k * 0.5), "rgba(255,255,230,1)", 1 - k);

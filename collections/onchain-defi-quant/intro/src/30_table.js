@@ -7,9 +7,11 @@
    10.95 whip pan to the AMM scale (x * y = k) and the placemat curve.
    12.96 1 ETH drops into the pool: beam tips, 1 818 USDC pop out, the
          price on the curve slides 2 000 -> 1 653.
-   14.56 Nibbs slams the order bell.
+   19.39 Nibbs slams the order bell ("rings the matching bell").
+   22.22 whip pan to two order rails: "Latency knows it well" - Slyce zips his
+         ticket to the finish in 4 ms, the victim's ticket crawls in at 120 ms.
    ============================================================ */
-const TABLE_Y = 800, AMM_X = 2400;
+const TABLE_Y = 800, AMM_X = 2400, RACE_X = 4800;
 const BOOK = [
   ["USDC", "ETH"],
   ["2 016", "1.2"], ["2 012", "4.1"], ["2 008", "2.5"],
@@ -27,7 +29,9 @@ const camTable = K.mkTrack([
   [T.whip[1], { x: AMM_X + 960, y: 540, z: 1.0 }],
   [T.trade, { x: AMM_X + 960, y: 530, z: 1.03 }],
   [T.ding, { x: AMM_X + 1080, y: 560, z: 1.12 }],
-  [T.doors[1], { x: AMM_X + 1100, y: 560, z: 1.14 }],
+  [T.raceWhip[0], { x: AMM_X + 1110, y: 560, z: 1.1 }],
+  [T.raceWhip[1], { x: RACE_X + 960, y: 540, z: 1.0 }],
+  [T.doors[1], { x: RACE_X + 1000, y: 530, z: 1.06 }],
 ]);
 
 /* curve data (thousands): y = 200 / x, ETH 5..20 */
@@ -146,9 +150,9 @@ function drawTable(t) {
     K.screen(ctx); ctx.save(); ctx.globalAlpha = 0.18; ctx.fillStyle = "#cdeff6"; ctx.beginPath(); ctx.arc(L.x, L.y, L.r * 0.97, 0, K.TAU); ctx.fill(); ctx.restore();
     K.line(ctx, [[L.x - L.r * 0.55, L.y - L.r * 0.2], [L.x - L.r * 0.35, L.y - L.r * 0.55], [L.x - L.r * 0.05, L.y - L.r * 0.7]], { stroke: "#ffffff", w: 8, boil: 0.5, seed: 77, alpha: 0.85 });
   }
-  if (t > T.whip[0] - 0.1) ammOverlay(t);
+  if (t > T.whip[0] - 0.1 && t < T.raceWhip[0]) ammOverlay(t);
   /* whip pan streaks */
-  const wu = inv(T.whip[0], T.whip[1], t);
+  const wu = Math.max(inv(T.whip[0], T.whip[1], t) * (t < T.whip[1] ? 1 : 0), t > T.raceWhip[0] && t < T.raceWhip[1] ? inv(T.raceWhip[0], T.raceWhip[1], t) : 0);
   if (wu > 0 && wu < 1) {
     K.screen(ctx); const a = Math.sin(wu * Math.PI);
     for (let i = 0; i < 14; i++) { const y = 60 + i * 72 + K.hs(i, K.bf) * 20, l = 500 + 600 * K.hash(i + 3, K.bf); const x = 960 + K.hs(i + 9, K.bf) * 700; K.line(ctx, [[x - l / 2, y], [x + l / 2, y]], { stroke: i % 3 ? P.cream : P.ink, w: 10, boil: 0.4, seed: 500 + i, alpha: a * 0.85 }); }
@@ -162,13 +166,48 @@ function drawTable(t) {
   }
 }
 function drawTableWorld(t, full) {
-  K.booth(ctx, -400, AMM_X + 2400, -200, TABLE_Y - 40, 5);
-  K.formica(ctx, -400, AMM_X + 2400, TABLE_Y - 40, 120, 7);
-  K.counter(ctx, -400, AMM_X + 2400, TABLE_Y + 80, 300, { seed: 41, top: 18 });
+  K.booth(ctx, -400, RACE_X + 2400, -200, TABLE_Y - 40, 5);
+  K.formica(ctx, -400, RACE_X + 2400, TABLE_Y - 40, 120, 7);
+  K.counter(ctx, -400, RACE_X + 2400, TABLE_Y + 80, 300, { seed: 41, top: 18 });
   /* napkin dispenser + ketchup: diner clutter behind the menu */
   K.shape(ctx, K.roundRectPts(1700, TABLE_Y - 150, 120, 140, 14), { fill: P.chrome, w: 5, boil: 1, seed: 90, misreg: false, shade: { color: P.chromeDark, dx: 14, dy: 0, dots: false }, shine: true });
   K.shape(ctx, [[1850, TABLE_Y - 20], [1850, TABLE_Y - 150], [1870, TABLE_Y - 190], [1890, TABLE_Y - 190], [1910, TABLE_Y - 150], [1910, TABLE_Y - 20]], { fill: P.cherry, w: 5, boil: 1, seed: 91, shine: true });
   const rowY = drawMenu(t);
   if (full && t < T.whip[1]) nibbsTable(t, rowY);
-  if (t > T.whip[0] - 0.1) { drawAmm(t); if (full) nibbsAmm(t); }
+  if (t > T.whip[0] - 0.1 && t < T.raceWhip[1] + 0.1) { drawAmm(t); if (full) nibbsAmm(t); }
+  if (t > T.raceWhip[0] - 0.1) drawRace(t, full);
+}
+
+/* ---------- latency race: two order rails, a stopwatch, a finish post ---------- */
+const RAIL_A = 430, RAIL_B = 640, R0 = RACE_X + 560, R1 = RACE_X + 1480;
+function drawRace(t, full) {
+  K.stopwatch(ctx, RACE_X + 300, 330, 125, Math.max(0, t - T.raceGo) / 1.6, 450);
+  [RAIL_A, RAIL_B].forEach((y, i) => K.ticketRail(ctx, R0 - 40, R1 + 60, y, 310 + i * 3));
+  /* finish post: checker strip */
+  K.shape(ctx, K.rectPts(R1 + 30, RAIL_A - 90, 40, RAIL_B - RAIL_A + 260, 4), { fill: P.cream, w: 5, boil: 0.9, seed: 330, misreg: false });
+  ctx.save(); ctx.fillStyle = P.ink; for (let j = 0; j < 14; j++) ctx.fillRect(R1 + 30 + (j % 2) * 20, RAIL_A - 90 + j * 25, 20, 25); ctx.restore();
+  /* the victim's ticket crawls along the lower rail */
+  const vu = E.inOut(inv(T.raceGo, T.vicArrive, t));
+  K.ticket(ctx, K.lerp(R0, R1 - 40, vu), RAIL_B + 6, 0.9, { color: P.mint, label: "ETH", amt: "2.0", arrow: "up", gas: 1, seed: 230, tilt: Math.sin(t * 5) * 0.05 });
+  /* Slyce zips his ticket along the upper rail (anticipation crouch, then a dash) */
+  const su = E.in3(inv(T.raceGo, T.slyArrive, t)), land = t - T.slyArrive;
+  const sx = K.lerp(R0, R1 - 40, su) + (land > 0 ? Math.sin(Math.min(1, land * 4) * Math.PI) * 18 : 0);
+  K.ticket(ctx, sx, RAIL_A + 6, 0.9, { color: P.cherry, label: "ETH", amt: "9.5", arrow: "up", gas: 3, seed: 240, tilt: su > 0 && su < 1 ? 0.25 : Math.sin(t * 6) * 0.04 });
+  const bst = { glow: 0.8, grin: 1, seed: 900, armL: { x: -90, y: -120 }, armR: { x: 90, y: -120 }, look: 1 };
+  if (t < T.raceGo) { bst.squash = 0.3 * inv(T.raceGo - 0.3, T.raceGo, t); bst.look = Math.sin(t * 3); }
+  if (su > 0 && su < 1) { bst.lean = -22; bst.squash = -0.15; bst.armL = { x: -130, y: -200 }; for (let i = 0; i < 4; i++) K.line(ctx, [[sx - 120 - 260 * K.hash(i, K.bf), RAIL_A - 140 + i * 30], [sx - 110, RAIL_A - 140 + i * 30]], { stroke: P.ink, w: 6, boil: 0.5, seed: 340 + i }); }
+  if (land > 0) { bst.squash = 0.3 * Math.exp(-land * 8); bst.armR = { x: 110, y: -230 }; bst.look = -1; }
+  K.sandwichBot(ctx, sx, RAIL_A - 14, 0.72, bst);
+  if (land > 0) {
+    K.burst(ctx, R1 + 50, RAIL_A - 40, 90 * E.back(Math.min(1, land * 4), 2) * (1 - inv(0.3, 0.6, land)), { seed: 350, spikes: 11 });
+    K.tag(ctx, R1 - 230, RAIL_A + 90, "4 ms", { a: inv(T.slyArrive + 0.05, T.slyArrive + 0.4, t), seed: 351, size: 44, fill: P.cherry, color: P.cream });
+  }
+  if (t > T.vicArrive) K.tag(ctx, R1 - 250, RAIL_B + 90, "120 ms", { a: inv(T.vicArrive, T.vicArrive + 0.35, t), seed: 352, size: 44, fill: P.mint });
+  if (!full) return;
+  /* Nibbs judges at the finish */
+  const st = { blink: K.blinkAt(t, 13), mouth: "smile", cheeks: 0.3, seed: 700, hold: "magnifier", magS: 1.2, magAng: -72 + Math.sin(t * 2.4) * 4, pawR: { x: 90, y: -170 }, pawL: { x: -90, y: -60 }, look: [-1, -0.3] };
+  st.squash = 0.07 * K.pulse(t, 1, 6);
+  if (t > T.slyArrive) { const k = inv(T.slyArrive, T.slyArrive + 0.3, t); st.mouth = "o"; st.eyeUp = 5 * k; st.brow = 1.2 * k; st.squash = -0.2 * Math.exp(-(t - T.slyArrive) * 5); }
+  if (t > T.vicArrive) { st.mouth = "frown"; st.brow = -1; st.eyeUp = 0; st.look = [-1, 0.5]; st.pawL = { x: -60, y: -40 }; }
+  K.hamster(ctx, RACE_X + 1730, TABLE_Y + 40, 1.5, st);
 }

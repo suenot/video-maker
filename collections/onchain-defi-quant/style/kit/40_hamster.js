@@ -12,6 +12,7 @@
      blink      0..1   (1 = closed)
      wink       0..1   right eye only
      mouth      "smile" | "grin" | "open" | "o" | "smirk" | "frown"
+     talk       0..1   speech loudness this frame: overrides mouth with a talking mouth (K.talkMouth)
      brow       -1..1.5  (negative = frown, slanted in; positive = raised)
      cheeks     0..1   pouch puff
      pawL/R     { x, y, rot }  target of the paw in local space
@@ -90,15 +91,16 @@ var DK = window.DK || (window.DK = {});
     const tw = Math.sin(K.now * 9) * 2 * (st.whisk == null ? 1 : st.whisk);
     [-1, 1].forEach((sd) => [0, 1, 2].forEach((k) => K.line(ctx, [[sd * 26, -12 + k * 7], [sd * 60, -20 + k * 12 + tw]], { stroke: P.ink, w: 2.5, boil: 0.5, seed: seed + 20 + k + (sd > 0 ? 4 : 0) })));
     /* mouth + buck teeth */
-    const m = st.mouth || "smile";
-    if (m === "smile") K.line(ctx, [[-16, -6], [-6, 2], [0, -4], [6, 2], [16, -6]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 30 });
+    const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1);
+    if (talk > 0.04) K.talkMouth(ctx, 0, -2, talk, 1, seed + 35, "#6a2028", true);
+    else if (m === "smile") K.line(ctx, [[-16, -6], [-6, 2], [0, -4], [6, 2], [16, -6]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 30 });
     else if (m === "smirk") K.line(ctx, [[-14, -2], [2, 0], [18, -10]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 31 });
     else if (m === "frown") K.line(ctx, [[-14, 2], [0, -4], [14, 2]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 32 });
     else {
       const big = m === "open" ? 1 : m === "grin" ? 0.8 : 0.5, wd = m === "o" ? 9 : m === "grin" ? 22 : 14;
       K.shape(ctx, m === "grin" ? [[-22, -8], [22, -8], [12, 10], [-12, 10]] : K.ellipsePts(0, 2, wd, 12 * big + 2, 10), { fill: "#6a2028", w: 4, boil: 0.6, seed: seed + 33 });
     }
-    if (m !== "frown") K.shape(ctx, K.roundRectPts(-7, -7, 14, 11, 3, 1), { fill: P.eye, w: 2.5, boil: 0.3, seed: seed + 34, misreg: false });
+    if (m !== "frown" && talk <= 0.04) K.shape(ctx, K.roundRectPts(-7, -7, 14, 11, 3, 1), { fill: P.eye, w: 2.5, boil: 0.3, seed: seed + 34, misreg: false });
     /* eyes: big, glossy */
     const eyeY = -46 - (st.eyeUp || 0);
     [-1, 1].forEach((sd, i) => {
@@ -153,6 +155,23 @@ var DK = window.DK || (window.DK = {});
     if (g > 0) K.line(ctx, [[cx - 24, -12], [cx - 14, -26], [cx + 2, -32]], { stroke: "#ffffff", w: 7, boil: 0.5, seed: seed + 3, alpha: g });
     const m = ctx.getTransform(), c = m.transformPoint(new DOMPoint(cx, 0));
     K.lens = { x: c.x, y: c.y, r: 41 * Math.sqrt(m.a * m.a + m.b * m.b) };
+    ctx.restore();
+  };
+
+  /* talking mouth driven by loudness a 0..1. Viseme-ish: the shape steps at 10 Hz between
+     "ah" (tall), "ee" (wide), "oo" (round) and "mm" (nearly shut), seeded, so it reads as speech.
+     teeth: draw the hamster's buck tooth on top. */
+  K.talkMouth = function (ctx, x, y, a, s, seed, inside, teeth) {
+    const k = Math.floor(K.now * 10), v = K.hash(k, seed || 3), q = clamp(a, 0, 1);
+    let w, h;
+    if (q < 0.12 || v < 0.12) { w = 13; h = 2.5 + 4 * q; }              /* mm */
+    else if (v < 0.45) { w = 14 + 4 * q; h = 6 + 16 * q; }              /* ah */
+    else if (v < 0.75) { w = 19 + 5 * q; h = 4 + 8 * q; }               /* ee */
+    else { w = 8 + 3 * q; h = 6 + 10 * q; }                              /* oo */
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    K.shape(ctx, K.ellipsePts(0, h * 0.5, w, h, 12), { fill: inside || "#6a2028", w: 3.5, boil: 0.5, seed: (seed || 3) + 1, misreg: false });
+    if (h > 8) K.shape(ctx, K.ellipsePts(0, h * 1.05, w * 0.55, h * 0.32, 8), { fill: P.nose, stroke: null, w: 0, boil: 0.3, seed: (seed || 3) + 2, misreg: false }); /* tongue */
+    if (teeth) K.shape(ctx, K.roundRectPts(-6, -2, 12, Math.min(10, 3 + h * 0.5), 3, 1), { fill: P.eye, w: 2.5, boil: 0.3, seed: (seed || 3) + 3, misreg: false });
     ctx.restore();
   };
 

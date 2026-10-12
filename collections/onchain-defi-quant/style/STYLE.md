@@ -77,6 +77,11 @@ Expressions: `mouth` smile, grin, open, o, smirk, frown; `brow` -1 (angry, slant
 
 **Slyce** (`K.sandwichBot`): club-sandwich wedge with lettuce / tomato / cheese layers, olive toothpick antenna, black visor with one scanning red eye (`look`, `glow`), crooked grin, rubber-hose chrome legs and arms, white gloves, bread slices in hand (`sliceL/R`), `walk`, `shock` (caught: wide eye, "o" mouth).
 
+**Bizzy** (`K.bee`, co-host / host B, higher voice): a bubbly bee waitress on cherry roller skates. Big round head with lashes and a cherry waitress cap, bobble antennae, mustard-and-ink striped body with a cream apron, buzzing wings, IK arms with white gloves, an order pad she scribbles on while listening, a pencil she holds out to point. Expressions: `talk`, `mouth` smile, grin, open, o, worry; `brow`; `head` tilt; `exclaim`; `think` ("?" bubble); `wink`.
+Slyce stays the villain and is never a host.
+
+Talking and listening (`55_hosts.js`): both mouths take a 0-1 loudness per frame and step through "ah / ee / oo / mm" shapes at 10 Hz (`K.talkMouth`); the talker gesticulates with the free paw/arm, the listener looks at the talker and nods on a slow rhythm. `K.duo` stages both large (Nibbs about 430 px, Bizzy about 420 px at `s` 1); never shrink them into a corner.
+
 Animation rules:
 - Squash with volume kept; 0.07 - 0.1 beat bounce while idle, 0.3 - 0.35 on landings, -0.2 to -0.3 stretch on pop-ups and jumps.
 - Anticipation before every big action (bell: raise 0.4 s, slam on the downbeat; menu slap: wind-up 0.4 s).
@@ -92,7 +97,8 @@ Animation rules:
 ## 7. Timing
 
 - Theme song "The Sandwich Gambit", vaudeville revival, about 150 BPM (beat 0.40 s, bar 1.60 s). Write times as `K.at(bar, beat)`.
-- The intro cut uses measured downbeats `BARS = [0.16, 1.76, 3.37, 4.97, 6.52, 8.15, 9.75, 11.35, 12.96, 14.56, 16.18, 17.79, 19.37, 20.97]`.
+- The intro uses the whole 30.8 s song; measured downbeats `BARS = [0.12, 1.81, 3.41, 5.02, 6.59, 8.20, 9.82, 11.40, 12.98, 14.61, 16.21, 17.81, 19.39, 21.01, 22.62, 24.22, 25.80, 27.38, 28.98, 30.58]`.
+- The marketmaker.cc logo plate (DOM, top-right, 48 px margin, 96 px tall) is on screen the whole film; keep titles and key action out of the top-right 400 x 160 px.
 - Pops land on beats with a back ease of 0.35 - 0.45 s; staggers 1/2 or 1/4 beat. No `Math.random`, `Date.now`, `performance.now`.
 
 ## 8. Explainer elements (for episodes)
@@ -110,6 +116,7 @@ Animation rules:
 | Bullets, agenda | felt letter board, each bullet pops on its beat | `K.letterBoard` |
 | Code (Solidity / Python / Rust) | register receipt tape, typed out | `K.receipt` |
 | AMM pool | balance scale, coin stacks per pan, live plaque | `K.ammScale` (`K.ammPans` = pan screen points) |
+| Latency, timing | chrome stopwatch, `sweep` in laps | `K.stopwatch` |
 | Impact, reveal | comic burst, speed lines, sparkle | `K.burst`, `K.speedLines`, `K.sparkle` |
 | Title | neon sign with marquee bulbs + DOM text | `K.neonSign` |
 

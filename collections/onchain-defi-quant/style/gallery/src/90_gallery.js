@@ -1,7 +1,9 @@
 /* KIT GALLERY: every explainer primitive in one diner, for visual QA of the kit.
    0-3 s: things pop in on beats; 3-4.8 s: hold (boil keeps them alive);
-   4.8-6 s: character + set sheet (hamster poses, sandwich bot, conveyor, props). */
-const K = DK, P = K.P, at = K.at, DUR = 6;
+   4.8-6 s: character + set sheet (hamster poses, sandwich bot, conveyor, props);
+   6-9 s: the two hosts (K.duo): left pair Nibbs talks / Bizzy listens and writes,
+   right pair Bizzy talks and points at the menu / Nibbs listens; acts on the beat. */
+const K = DK, P = K.P, at = K.at, DUR = 9;
 K.G.BPM = 150;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const ap = (t, b) => K.inv(at(0, b), at(0, b) + 0.4, t);
@@ -26,8 +28,21 @@ function sheet(t) {
   K.sandwichBot(ctx, 1620, 1040, 1.1, { grin: 0.9, glow: 1, look: Math.sin(t * 3), sliceL: true, sliceR: true, armL: { x: -150, y: -200 }, armR: { x: 150, y: -200 }, walk: t * 8 });
   K.sandwichBot(ctx, 1850, 1040, 0.8, { shock: 1, lean: -10, armL: { x: -110, y: -280 }, armR: { x: 110, y: -280 } });
 }
+/* fake speech loudness: syllables at ~5 Hz with phrase gaps */
+const fakeTalk = (t, seed) => { const syl = Math.max(0, Math.sin(t * 31 + K.hash(Math.floor(t * 5), seed) * 3)); const phrase = K.vnoise(t * 1.3, seed) > 0.3 ? 1 : 0; return K.clamp(syl * (0.5 + 0.6 * K.vnoise(t * 7, seed + 1)) * phrase, 0, 1); };
+function hosts(t) {
+  K.begin(ctx, t, { x: 960, y: 540, z: 1 });
+  K.applyCam(ctx, 1);
+  K.booth(ctx, -50, 1970, -50, 700, 5);
+  K.formica(ctx, -50, 1970, 700, 380, 7);
+  K.menu(ctx, 1500, 330, [170, 120], [["USDC", "ETH"], ["2 008", "2.5"], ["2 004", "3.0"]], { size: 30, rowH: 48, rowColors: [null, P.ask, P.bid], title: "ETH · USDC", seed: 24 });
+  K.duo(ctx, t, { x: 480, y: 1010, s: 0.82, talkA: fakeTalk(t, 3), talkB: 0, actsA: [{ kind: "cheer", at: 7.6, dur: 1 }], actsB: [{ kind: "surprise", at: 6.9, dur: 1 }, { kind: "think", at: 8.1, dur: 0.9 }], magnifier: true,
+    propA: (c, x, y) => K.coin(c, x, y - 30, 34, { color: P.ETH, label: "ETH", labelColor: P.cream, seed: 5, size: 18 }) });
+  K.duo(ctx, t, { x: 1440, y: 1010, s: 0.82, side: -1, talkA: 0, talkB: fakeTalk(t + 3, 9), pointB: [1500, 360], pointAmtB: K.inv(6.2, 6.6, t), actsA: [{ kind: "nod", at: 7.0, dur: 1 }, { kind: "think", at: 8.0, dur: 1 }], actsB: [{ kind: "twirl", at: 8.2, dur: 0.8 }] });
+}
 function render(t) {
   try {
+    if (t >= 6) { hosts(t); return; }
     if (t >= 4.8) { sheet(t); return; }
     K.begin(ctx, t, { x: 960, y: 540, z: 1 });
     K.applyCam(ctx, 1);

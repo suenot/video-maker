@@ -1,51 +1,57 @@
 /* ============================================================
    INTRO 10 SETUP: variables, title DOM, timing (beat grid)
-   Song: song_20s.m4a, "The Sandwich Gambit", vaudeville revival ~150 BPM
-   (beat 0.40 s, bar 1.60 s). Cut = 1 instrumental bar from the outro +
-   raw 6.39-25.75 s. Sung lines in the cut (whisper + downbeats):
-     1.76 "MEV lurks in the mempool dark"
-     4.97 "sandwich attacks leave their mark"
-     8.15 "Read the book, read the book"
-    11.35 "Microstructure off the hook"
-    14.56 "... rings the matching bell"
-    17.79 "Latency knows it well"          20.3-20.9 fade
+   Song: song_full.m4a = the whole "The Sandwich Gambit" (30.8 s, uncut),
+   vaudeville revival ~150 BPM (beat 0.40 s, bar 1.60 s). Sung lines
+   (whisper + downbeats), each starts on a downbeat, 2 bars long:
+     0.12 "Order book at level two"        3.41 "bids and asks in plain view"
+     6.59 "MEV lurks in the mempool dark"  9.82 "sandwich attacks leave their mark"
+    12.98 "Read the book, read the book"  16.21 "Microstructure off the hook"
+    19.39 "... rings the matching bell"   22.62 "Latency knows it well"
+    25.80 - 30.8 instrumental outro (title card)
    All story times are K.at(bar, beat) on the measured downbeats below.
    ============================================================ */
 const K = DK, P = K.P, at = K.at;
 K.G.BPM = 150;
-K.G.BARS = [0.16, 1.76, 3.37, 4.97, 6.52, 8.15, 9.75, 11.35, 12.96, 14.56, 16.18, 17.79, 19.37, 20.97];
-const DUR = 20.9;
+K.G.BARS = [0.12, 1.81, 3.41, 5.02, 6.59, 8.20, 9.82, 11.40, 12.98, 14.61, 16.21, 17.81, 19.39, 21.01, 22.62, 24.22, 25.80, 27.38, 28.98, 30.58];
+const DUR = 30.8;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const BEAT = K.beatLen();
 
 /* ---------- story beats (on the song's downbeats) ---------- */
 const T = {
-  popUp: [at(0, 1) - 0.2, at(0, 1)],   /* 0.36 crouch, 0.56 Nibbs pops up behind the counter */
-  magUp: at(0, 2.5),                   /* 1.16 magnifier up, looks right */
-  pan: [at(1, 0), at(2, 0)],           /* 1.76 - 3.37 "MEV lurks": camera dollies to the mempool corner */
-  dim: [at(1, 1.5), at(1, 3.5)],       /* the corner lamp flickers off */
-  eyes: at(1, 2),                      /* 2.56 red visor eye glows in the dark */
-  botUp: at(2, 0),                     /* 3.37 Slyce hops up onto the counter */
-  frontClip: at(3, 0),                 /* 4.97 "sandwich attacks": front-run ticket jumps the queue */
-  backClip: at(3, 2),                  /* 5.77 back-run ticket right behind the victim */
-  fly: at(4, 0),                       /* 6.52 the three tickets fly into the next tray: a sandwich */
-  bite: at(4, 2),                      /* 7.32 "leave their mark": bite + -1.2 % */
-  gasp: at(4, 2.5),                    /* Nibbs: "!" */
-  slap: [at(4, 3), at(5, 0)],          /* 7.75 - 8.15 the menu slaps into the camera */
-  rows: at(5, 0),                      /* 8.15 "Read the book": rows pop */
-  read2: at(6, 0),                     /* 9.75 second "read the book": best bid / ask + spread */
-  whip: [at(6, 3), at(7, 0)],          /* 10.95 - 11.35 whip pan to the counter */
-  amm: at(7, 0),                       /* 11.35 "Microstructure off the hook": scale + curve */
-  trade: at(8, 0),                     /* 12.96 1 ETH drops in, the beam tips, USDC pops out */
-  bellUp: at(8, 3),                    /* 14.16 paw raised */
-  ding: at(9, 0),                      /* 14.56 "rings the matching bell" */
-  doors: [at(9, 2), at(10, 0)],        /* 15.36 - 16.18 kitchen doors swing shut and open */
-  sign: at(10, 0),                     /* 16.18 neon sign lights */
-  letters: at(10, 0.5),
-  plates: at(11, 0),                   /* 17.79 "Latency knows it well": episode plates pop */
-  tip: at(11, 2),
-  peek: at(11, 3),                     /* Slyce peeks in from the left */
-  caught: at(12, 0),                   /* 19.37 caught by the magnifier flash */
+  l2: at(0, 0),                        /* 0.12 "Order book at level two": menu card on the counter, rows pop */
+  popUp: [at(1, 0) - 0.2, at(1, 0)],   /* 1.81 Nibbs pops up behind the counter */
+  level2: at(1, 2),                    /* 2.61 the two level-2 rows get "L2" tags */
+  plain: at(2, 0),                     /* 3.41 "bids and asks in plain view": depth bars grow, arms open */
+  magUp: at(3, 2.5),                   /* 6.02 magnifier up, looks right */
+  pan: [at(4, 0), at(5, 0)],           /* 6.59 - 8.20 "MEV lurks": camera dollies to the mempool corner */
+  dim: [at(4, 1.5), at(4, 3.5)],       /* the corner lamp flickers off */
+  eyes: at(4, 2),                      /* red visor eye glows in the dark */
+  botUp: at(5, 0),                     /* 8.20 Slyce hops up onto the counter */
+  frontClip: at(6, 0),                 /* 9.82 "sandwich attacks": front-run ticket jumps the queue */
+  backClip: at(6, 2),                  /* back-run ticket right behind the victim */
+  fly: at(7, 0),                       /* 11.40 the three tickets fly into the next tray: a sandwich */
+  bite: at(7, 2),                      /* "leave their mark": bite + -1.2 % */
+  gasp: at(7, 2.5),                    /* Nibbs: "!" */
+  slap: [at(7, 3), at(8, 0)],          /* the menu slaps into the camera */
+  rows: at(8, 0),                      /* 12.98 "Read the book": rows pop */
+  read2: at(9, 0),                     /* 14.61 second "read the book": best bid / ask + spread */
+  whip: [at(9, 3), at(10, 0)],         /* whip pan to the counter */
+  amm: at(10, 0),                      /* 16.21 "Microstructure off the hook": scale + curve */
+  trade: at(11, 0),                    /* 17.81 1 ETH drops in, the beam tips, USDC pops out */
+  bellUp: at(11, 3),                   /* paw raised */
+  ding: at(12, 0),                     /* 19.39 "rings the matching bell" */
+  raceWhip: [at(13, 3), at(14, 0)],    /* whip pan to the two order rails */
+  raceGo: at(14, 0),                   /* 22.62 "Latency knows it well": the race */
+  slyArrive: at(14, 2),                /* Slyce's ticket arrives first: 4 ms */
+  vicArrive: at(15, 1),                /* the victim's ticket arrives: 120 ms */
+  doors: [at(15, 2), at(16, 0)],       /* 25.02 - 25.80 kitchen doors swing shut and open */
+  sign: at(16, 0),                     /* 25.80 neon sign lights (outro) */
+  letters: at(16, 0.5),
+  plates: at(17, 0),                   /* 27.38 episode plates pop */
+  tip: at(17, 2),
+  peek: at(17, 3),                     /* Slyce peeks in from the left */
+  caught: at(18, 0),                   /* 28.98 caught by the magnifier flash */
 };
 
 /* ---------- variables (title text, language) ---------- */

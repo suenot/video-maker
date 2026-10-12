@@ -278,6 +278,21 @@ var DK = window.DK || (window.DK = {});
     ctx.restore();
   };
 
+  /* ---------- stopwatch (latency): chrome case, cream dial, cherry hand. sweep = turns (1 = full lap) ---------- */
+  K.stopwatch = function (ctx, x, y, r, sweep, seed) {
+    seed = seed || 450;
+    ctx.save(); ctx.translate(x, y);
+    K.shape(ctx, K.roundRectPts(-r * 0.16, -r * 1.32, r * 0.32, r * 0.3, 6, 2), { fill: P.chromeDark, w: 4, boil: 0.7, seed: seed + 1, misreg: false });
+    K.shape(ctx, K.roundRectPts(-r * 0.3, -r * 1.48, r * 0.6, r * 0.2, 8, 2), { fill: P.cherry, w: 4, boil: 0.7, seed: seed + 2 });
+    K.shape(ctx, K.ellipsePts(0, 0, r * 1.12, r * 1.12, 22), { fill: P.chrome, w: 6, boil: 1, seed, misreg: false, shade: { color: P.chromeDark, dx: r * 0.12, dy: r * 0.12, dots: false }, shine: { x: 0.28, y: 0.22 } });
+    K.shape(ctx, K.ellipsePts(0, 0, r * 0.94, r * 0.94, 22), { fill: P.cream, w: 4, boil: 0.8, seed: seed + 3, misreg: false });
+    for (let i = 0; i < 12; i++) { const a = (i / 12) * K.TAU, l = i % 3 ? 0.1 : 0.2; K.rule(ctx, [[Math.sin(a) * r * 0.86, -Math.cos(a) * r * 0.86], [Math.sin(a) * r * (0.86 - l), -Math.cos(a) * r * (0.86 - l)]], { stroke: P.ink, w: i % 3 ? 3 : 5, boil: 0.4, seed: seed + 10 + i }); }
+    const a = sweep * K.TAU;
+    K.rule(ctx, [[-Math.sin(a) * r * 0.15, Math.cos(a) * r * 0.15], [Math.sin(a) * r * 0.78, -Math.cos(a) * r * 0.78]], { stroke: P.cherry, w: 7, boil: 0.4, seed: seed + 30 });
+    K.dot(ctx, 0, 0, r * 0.08, P.cherryDark, P.ink, 3, seed + 31);
+    ctx.restore();
+  };
+
   /* ---------- food props ---------- */
   K.plate = function (ctx, x, y, s, seed) {
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s);

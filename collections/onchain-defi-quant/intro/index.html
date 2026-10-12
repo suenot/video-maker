@@ -78,15 +78,57 @@
       #preload .tc { font-family: "CJK TC"; font-weight: 900; }
       #vig { background: radial-gradient(100% 90% at 50% 46%, rgba(0, 0, 0, 0) 64%, rgba(26, 18, 22, 0.38) 100%); }
       #grain { opacity: 0.1; mix-blend-mode: multiply; }
+      /* marketmaker.cc logo plate: top-right, whole film, never covered (sits above every layer) */
+      #logo { position: absolute; top: 48px; right: 48px; height: 96px; display: flex; align-items: center; gap: 12px;
+        padding: 0 26px 0 16px; background: #fbf1dc; color: #1a1216; border: 4px solid #1a1216; border-radius: 26px;
+        box-shadow: 5px 6px 0 #1a1216; transform-origin: 100% 0; }
+      #logo .mm-logo-mark { width: 64px; height: 64px; display: block; color: #e23a3f; }
+      #logo .wm { font-family: "Nunito", sans-serif; font-weight: 900; font-size: 40px; line-height: 1; white-space: nowrap; }
+      #logo .wm span { color: #a8222c; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="20.9" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30.8" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div class="ov" id="vig"></div>
       <div class="ov" id="grain"></div>
       <div id="title" data-layout-allow-overlap></div>
-      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="20.9" data-track-index="10" data-volume="1"></audio>
+      <div id="logo"><svg version="1.0" xmlns="http://www.w3.org/2000/svg" class="mm-logo-mark" aria-hidden="true" viewBox="0 0 1024 1024" preserveAspectRatio="xMidYMid meet">
+<g transform="translate(0, 1024) scale(0.1, -0.1)" fill="currentColor" stroke="none">
+<path d="M4815 9964 c-22 -2 -92 -9 -155 -14 -1263 -113 -2506 -762 -3284
+-1714 -595 -729 -940 -1541 -1053 -2481 -22 -188 -26 -815 -5 -990 74 -626
+245 -1198 509 -1705 501 -960 1276 -1694 2272 -2154 645 -298 1302 -439 2046
+-438 757 0 1402 147 2070 471 491 238 899 521 1264 876 813 789 1298 1766
+1438 2896 22 181 25 761 5 964 -58 577 -200 1087 -439 1585 -113 236 -184 361
+-334 585 -180 270 -349 476 -574 701 -368 369 -746 646 -1200 880 -563 290
+-1104 452 -1745 520 -146 15 -715 28 -815 18z m837 -559 c1134 -135 2191 -733
+2857 -1615 188 -249 385 -590 511 -885 132 -306 245 -719 294 -1071 37 -264
+48 -690 26 -939 -123 -1364 -861 -2559 -2003 -3243 -299 -179 -487 -266 -777
+-362 -836 -277 -1714 -292 -2579 -44 -119 35 -322 102 -330 110 -2 2 52 63
+120 135 519 553 1099 890 1714 996 73 12 159 17 320 18 300 0 359 -12 924
+-184 129 -39 263 -78 298 -86 187 -43 308 9 510 218 161 168 253 322 253 425
+0 76 -23 127 -156 349 -209 348 -358 662 -426 897 -15 54 -39 167 -53 250 -14
+83 -39 196 -57 250 -83 264 -268 406 -580 447 -54 7 -95 16 -92 20 9 16 120
+50 187 59 152 19 326 -17 779 -159 531 -166 733 -192 993 -126 178 45 317 127
+445 261 71 76 177 230 165 242 -2 3 -26 -9 -52 -26 -64 -41 -147 -77 -252
+-109 -78 -24 -102 -27 -256 -27 -139 -1 -191 3 -285 22 -203 41 -423 109 -725
+227 -654 254 -862 292 -1215 220 -188 -38 -298 -48 -371 -35 -35 6 -128 38
+-208 70 -266 106 -461 155 -716 181 -163 16 -480 6 -658 -21 -265 -40 -601
+-137 -916 -265 -86 -35 -244 -99 -351 -143 -205 -83 -335 -122 -435 -129 -71
+-5 -90 5 -81 40 8 33 99 147 209 262 48 50 87 95 87 100 0 20 -24 35 -58 35
+-49 0 -145 -54 -317 -180 -237 -173 -308 -199 -451 -166 -151 34 -520 172
+-614 228 -63 39 -88 70 -96 119 -10 59 13 113 101 236 171 240 249 360 299
+463 l51 105 0 210 c1 265 10 301 128 475 102 152 288 355 495 543 l74 66 -59
+58 c-68 67 -88 119 -81 208 6 68 40 115 118 162 89 54 172 77 280 76 52 0 120
+-5 152 -12 l56 -12 144 75 c268 140 477 214 835 296 304 69 480 127 700 230
+208 98 430 246 593 394 l95 87 155 -5 c85 -3 212 -13 282 -21z m1016 -5082
+c85 -41 130 -109 157 -240 8 -37 13 -68 12 -69 -1 -2 -48 19 -103 46 -121 59
+-139 79 -136 164 0 32 -5 76 -12 97 -14 39 -13 40 8 33 11 -3 45 -17 74 -31z"/>
+<path d="M2243 7035 c-92 -42 -196 -156 -205 -225 -4 -34 23 -37 94 -10 97 36
+180 131 202 233 6 23 3 27 -16 27 -13 0 -47 -11 -75 -25z"/>
+</g>
+</svg><div class="wm">marketmaker<span>.cc</span></div></div>
+      <audio id="song" src="song_full.m4a" data-start="0" data-duration="30.8" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="lb">Aa Бб 0</span><span class="n6">Aa Бб 0</span><span class="n8">Aa Бб 0</span><span class="n9">Aa Бб 0</span><span class="m4">Aa Бб 0</span><span class="m7">Aa Бб 0</span><span class="sc">链上与量化</span><span class="tc">鏈上與量化</span></div>
     </div>
     <script>
@@ -227,6 +269,8 @@ var DK = window.DK || (window.DK = {});
     fur: "#e8a25e", furDark: "#b56f33", furLight: "#f7c993", belly: "#fbe3c2",
     eye: "#fffdf6", pupil: "#14100f", nose: "#f07f8a", cheek: "#ff9e9a",
     toque: "#fffdf8", toqueShade: "#d9dde2",
+    /* bee waitress (co-host) */
+    bee: "#ffcf3d", beeDark: "#d99a12", beeLight: "#ffe590", wing: "rgba(246,253,252,0.86)", wingEdge: "#2f8f8a",
     /* sandwich bot */
     bread: "#e9b56a", breadDark: "#b77c35", crust: "#8c5424", botMetal: "#5d6b73", botEye: "#ff4b4b",
     lettuce: "#7cc252", tomato: "#e8473f", cheese: "#ffcf4a",
@@ -784,6 +828,21 @@ var DK = window.DK || (window.DK = {});
     ctx.restore();
   };
 
+  /* ---------- stopwatch (latency): chrome case, cream dial, cherry hand. sweep = turns (1 = full lap) ---------- */
+  K.stopwatch = function (ctx, x, y, r, sweep, seed) {
+    seed = seed || 450;
+    ctx.save(); ctx.translate(x, y);
+    K.shape(ctx, K.roundRectPts(-r * 0.16, -r * 1.32, r * 0.32, r * 0.3, 6, 2), { fill: P.chromeDark, w: 4, boil: 0.7, seed: seed + 1, misreg: false });
+    K.shape(ctx, K.roundRectPts(-r * 0.3, -r * 1.48, r * 0.6, r * 0.2, 8, 2), { fill: P.cherry, w: 4, boil: 0.7, seed: seed + 2 });
+    K.shape(ctx, K.ellipsePts(0, 0, r * 1.12, r * 1.12, 22), { fill: P.chrome, w: 6, boil: 1, seed, misreg: false, shade: { color: P.chromeDark, dx: r * 0.12, dy: r * 0.12, dots: false }, shine: { x: 0.28, y: 0.22 } });
+    K.shape(ctx, K.ellipsePts(0, 0, r * 0.94, r * 0.94, 22), { fill: P.cream, w: 4, boil: 0.8, seed: seed + 3, misreg: false });
+    for (let i = 0; i < 12; i++) { const a = (i / 12) * K.TAU, l = i % 3 ? 0.1 : 0.2; K.rule(ctx, [[Math.sin(a) * r * 0.86, -Math.cos(a) * r * 0.86], [Math.sin(a) * r * (0.86 - l), -Math.cos(a) * r * (0.86 - l)]], { stroke: P.ink, w: i % 3 ? 3 : 5, boil: 0.4, seed: seed + 10 + i }); }
+    const a = sweep * K.TAU;
+    K.rule(ctx, [[-Math.sin(a) * r * 0.15, Math.cos(a) * r * 0.15], [Math.sin(a) * r * 0.78, -Math.cos(a) * r * 0.78]], { stroke: P.cherry, w: 7, boil: 0.4, seed: seed + 30 });
+    K.dot(ctx, 0, 0, r * 0.08, P.cherryDark, P.ink, 3, seed + 31);
+    ctx.restore();
+  };
+
   /* ---------- food props ---------- */
   K.plate = function (ctx, x, y, s, seed) {
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
@@ -875,6 +934,7 @@ var DK = window.DK || (window.DK = {});
      blink      0..1   (1 = closed)
      wink       0..1   right eye only
      mouth      "smile" | "grin" | "open" | "o" | "smirk" | "frown"
+     talk       0..1   speech loudness this frame: overrides mouth with a talking mouth (K.talkMouth)
      brow       -1..1.5  (negative = frown, slanted in; positive = raised)
      cheeks     0..1   pouch puff
      pawL/R     { x, y, rot }  target of the paw in local space
@@ -953,15 +1013,16 @@ var DK = window.DK || (window.DK = {});
     const tw = Math.sin(K.now * 9) * 2 * (st.whisk == null ? 1 : st.whisk);
     [-1, 1].forEach((sd) => [0, 1, 2].forEach((k) => K.line(ctx, [[sd * 26, -12 + k * 7], [sd * 60, -20 + k * 12 + tw]], { stroke: P.ink, w: 2.5, boil: 0.5, seed: seed + 20 + k + (sd > 0 ? 4 : 0) })));
     /* mouth + buck teeth */
-    const m = st.mouth || "smile";
-    if (m === "smile") K.line(ctx, [[-16, -6], [-6, 2], [0, -4], [6, 2], [16, -6]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 30 });
+    const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1);
+    if (talk > 0.04) K.talkMouth(ctx, 0, -2, talk, 1, seed + 35, "#6a2028", true);
+    else if (m === "smile") K.line(ctx, [[-16, -6], [-6, 2], [0, -4], [6, 2], [16, -6]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 30 });
     else if (m === "smirk") K.line(ctx, [[-14, -2], [2, 0], [18, -10]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 31 });
     else if (m === "frown") K.line(ctx, [[-14, 2], [0, -4], [14, 2]], { stroke: P.ink, w: 4, boil: 0.6, seed: seed + 32 });
     else {
       const big = m === "open" ? 1 : m === "grin" ? 0.8 : 0.5, wd = m === "o" ? 9 : m === "grin" ? 22 : 14;
       K.shape(ctx, m === "grin" ? [[-22, -8], [22, -8], [12, 10], [-12, 10]] : K.ellipsePts(0, 2, wd, 12 * big + 2, 10), { fill: "#6a2028", w: 4, boil: 0.6, seed: seed + 33 });
     }
-    if (m !== "frown") K.shape(ctx, K.roundRectPts(-7, -7, 14, 11, 3, 1), { fill: P.eye, w: 2.5, boil: 0.3, seed: seed + 34, misreg: false });
+    if (m !== "frown" && talk <= 0.04) K.shape(ctx, K.roundRectPts(-7, -7, 14, 11, 3, 1), { fill: P.eye, w: 2.5, boil: 0.3, seed: seed + 34, misreg: false });
     /* eyes: big, glossy */
     const eyeY = -46 - (st.eyeUp || 0);
     [-1, 1].forEach((sd, i) => {
@@ -1016,6 +1077,23 @@ var DK = window.DK || (window.DK = {});
     if (g > 0) K.line(ctx, [[cx - 24, -12], [cx - 14, -26], [cx + 2, -32]], { stroke: "#ffffff", w: 7, boil: 0.5, seed: seed + 3, alpha: g });
     const m = ctx.getTransform(), c = m.transformPoint(new DOMPoint(cx, 0));
     K.lens = { x: c.x, y: c.y, r: 41 * Math.sqrt(m.a * m.a + m.b * m.b) };
+    ctx.restore();
+  };
+
+  /* talking mouth driven by loudness a 0..1. Viseme-ish: the shape steps at 10 Hz between
+     "ah" (tall), "ee" (wide), "oo" (round) and "mm" (nearly shut), seeded, so it reads as speech.
+     teeth: draw the hamster's buck tooth on top. */
+  K.talkMouth = function (ctx, x, y, a, s, seed, inside, teeth) {
+    const k = Math.floor(K.now * 10), v = K.hash(k, seed || 3), q = clamp(a, 0, 1);
+    let w, h;
+    if (q < 0.12 || v < 0.12) { w = 13; h = 2.5 + 4 * q; }              /* mm */
+    else if (v < 0.45) { w = 14 + 4 * q; h = 6 + 16 * q; }              /* ah */
+    else if (v < 0.75) { w = 19 + 5 * q; h = 4 + 8 * q; }               /* ee */
+    else { w = 8 + 3 * q; h = 6 + 10 * q; }                              /* oo */
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    K.shape(ctx, K.ellipsePts(0, h * 0.5, w, h, 12), { fill: inside || "#6a2028", w: 3.5, boil: 0.5, seed: (seed || 3) + 1, misreg: false });
+    if (h > 8) K.shape(ctx, K.ellipsePts(0, h * 1.05, w * 0.55, h * 0.32, 8), { fill: P.nose, stroke: null, w: 0, boil: 0.3, seed: (seed || 3) + 2, misreg: false }); /* tongue */
+    if (teeth) K.shape(ctx, K.roundRectPts(-6, -2, 12, Math.min(10, 3 + h * 0.5), 3, 1), { fill: P.eye, w: 2.5, boil: 0.3, seed: (seed || 3) + 3, misreg: false });
     ctx.restore();
   };
 
@@ -1098,6 +1176,157 @@ var DK = window.DK || (window.DK = {});
       if (st["slice" + k]) K.breadSlice(ctx, r.end[0], r.end[1] - 6, 0.62, P.cherry, seed + 70 + sd * 4);
       K.dot(ctx, r.end[0], r.end[1], 13, P.cream, P.ink, 3.5, seed + 80 + sd); /* white cartoon glove */
     });
+    ctx.restore();
+  };
+})(DK);
+
+/* ============================================================
+   KIT 46 BEE: "Bizzy", the bee waitress on roller skates (co-host, host B).
+   The curious one: she takes the questions down on her order pad.
+   Local space: skate wheels on y = 0, faces the viewer.
+   Proportions (scale 1): big round head r 62 at (0, -262), striped body
+   112 x 100 at (0, -160), cream apron, cherry waitress cap, antennae with
+   bobbles (tip about y -372), two flutter wings, arms 32 + 30 (two-bone IK),
+   thin legs to cherry roller skates. About 380 px tall at s = 1.
+   Pose state (all optional):
+     squash   -1..1   (+ = squashed wide), volume kept
+     lean     deg     tilt around the wheels
+     hop      px      lift (wings buzz harder in the air)
+     roll     px      skate glide offset (wheels spin with it)
+     look     [dx, dy] pupils, -1..1;  head  deg  head tilt (curious)
+     blink    0..1;   wink 0..1
+     talk     0..1    talking mouth (K.talkMouth)
+     mouth    "smile" | "grin" | "open" | "o" | "worry"
+     brow     -1..1.5
+     armL/R   { x, y }  hand targets in local space
+     pad      true: order pad in the left hand;  write 0..1: pencil scribbles on it
+     pointHand "L" | "R", pointAng (rad), pointAmt 0..1: pencil held out toward a target
+     buzz     0..1    wing flutter amount (idle 0.35)
+     exclaim  0..1    "!" pop;  think 0..1 "?" bubble (thinkSide -1 left / +1 right)
+   ============================================================ */
+var DK = window.DK || (window.DK = {});
+(function (K) {
+  const P = K.P, { clamp } = K;
+
+  K.bee = function (ctx, x, y, s, st) {
+    st = st || {};
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
+    const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1), wink = clamp(st.wink || 0, 0, 1);
+    const seed = st.seed || 1200, talk = clamp(st.talk || 0, 0, 1);
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    /* legs + roller skates */
+    const roll = st.roll || 0;
+    [-1, 1].forEach((sd, i) => {
+      const fx = sd * 30, fy = -30 - hop;
+      K.limb(ctx, [[sd * 22, -118 * syk - hop], [sd * 30, -74 - hop], [fx, fy]], 9, P.beeDark, seed + i * 3);
+      K.shape(ctx, K.roundRectPts(fx - 30 + sd * 6, fy - 22, 54, 30, 12, 2), { fill: P.cherry, w: 4, boil: 0.8, seed: seed + 10 + i, shine: { x: 0.3, y: 0.25 } });
+      [-16, 14].forEach((wx, k) => {
+        const cx = fx + wx + sd * 6, cy = fy + 18, a = roll / 10 + k;
+        K.dot(ctx, cx, cy, 11, P.chrome, P.ink, 3.5, seed + 14 + i * 2 + k);
+        K.rule(ctx, [[cx + Math.cos(a) * 6, cy + Math.sin(a) * 6], [cx - Math.cos(a) * 6, cy - Math.sin(a) * 6]], { stroke: P.ink, w: 2.5, boil: 0.3, seed: seed + 18 + k });
+      });
+    });
+    const bodyY = -160 * syk - hop;
+    ctx.save(); ctx.translate(0, bodyY); ctx.scale(sxk, syk);
+    /* wings (behind): flutter at 40 Hz-ish, sampled per frame so it reads as a buzz blur */
+    const buzz = st.buzz == null ? 0.35 : st.buzz, fl = Math.sin(K.now * 52) * 0.5 * buzz + 0.15 * Math.sin(K.now * 3);
+    [-1, 1].forEach((sd, i) => {
+      ctx.save(); ctx.translate(sd * 34, -40); ctx.rotate(sd * (-0.5 - fl));
+      K.shape(ctx, K.ellipsePts(sd * 46, -30, 50, 30, 14, sd * -0.5), { fill: P.wing, stroke: P.wingEdge, w: 3.5, boil: 0.9, seed: seed + 20 + i, misreg: false });
+      K.shape(ctx, K.ellipsePts(sd * 34, 6, 32, 18, 12, sd * 0.3), { fill: P.wing, stroke: P.wingEdge, w: 3, boil: 0.8, seed: seed + 22 + i, misreg: false });
+      ctx.restore();
+    });
+    /* striped body + apron */
+    const body = K.ellipsePts(0, 0, 56, 52, 18);
+    K.shape(ctx, body, { fill: P.bee, w: 5.5, boil: 1.2, seed: seed + 30, shade: { color: P.beeDark, dx: 10, dy: 8 } });
+    ctx.save(); K.pathOf(ctx, body, true); ctx.clip();
+    [-22, 4, 30].forEach((sy, i) => K.line(ctx, [[-70, sy], [-20, sy + 5], [20, sy + 5], [70, sy]], { stroke: P.ink, w: 13, boil: 0.8, seed: seed + 31 + i, taper: 0 }));
+    ctx.restore();
+    K.shape(ctx, [[-30, -6], [30, -6], [38, 42], [0, 50], [-38, 42]], { fill: P.cream, w: 4, boil: 0.9, seed: seed + 34, shade: { color: P.creamShade, dx: 8, dy: 0 } });
+    K.rule(ctx, [[-30, -6], [30, -6]], { stroke: P.cherry, w: 6, boil: 0.5, seed: seed + 35 });
+    K.shape(ctx, K.roundRectPts(-14, 12, 28, 18, 5, 2), { fill: P.mintLight, w: 3, boil: 0.5, seed: seed + 36, misreg: false });
+    /* stinger */
+    K.shape(ctx, [[-8, 48], [8, 48], [0, 64]], { fill: P.ink, stroke: null, w: 0, boil: 0.4, seed: seed + 37, misreg: false });
+    /* head (tilts) */
+    ctx.save(); ctx.translate(0, -100); ctx.rotate(((st.head || 0) * Math.PI) / 180);
+    /* antennae */
+    const sw = Math.sin(K.now * 3.3) * 4;
+    [-1, 1].forEach((sd, i) => {
+      K.line(ctx, [[sd * 20, -50], [sd * 34 + sw, -86], [sd * 46 + sw * 1.4, -104]], { stroke: P.ink, w: 4.5, boil: 0.6, seed: seed + 40 + i, taper: 0 });
+      K.dot(ctx, sd * 46 + sw * 1.4, -108, 10, P.cherry, P.ink, 3, seed + 42 + i);
+    });
+    K.shape(ctx, K.ellipsePts(0, 0, 64, 60, 18), { fill: P.bee, w: 5.5, boil: 1.2, seed: seed + 44, shade: { color: P.beeDark, dx: 12, dy: 10 }, shine: { x: 0.28, y: 0.2 } });
+    /* waitress cap */
+    K.shape(ctx, [[-36, -46], [-24, -70], [24, -70], [36, -46], [20, -40], [-20, -40]], { fill: P.cherry, w: 4.5, boil: 0.9, seed: seed + 46, shade: { color: P.cherryDark, dx: 0, dy: 8 } });
+    K.rule(ctx, [[-30, -48], [30, -48]], { stroke: P.cream, w: 5, boil: 0.5, seed: seed + 47 });
+    /* cheeks */
+    [-1, 1].forEach((sd, i) => { ctx.save(); ctx.globalAlpha = 0.55; K.shape(ctx, K.ellipsePts(sd * 40, 18, 12, 8, 8), { fill: P.cheek, stroke: null, w: 0, boil: 0.5, seed: seed + 48 + i, misreg: false }); ctx.restore(); });
+    /* eyes with lashes */
+    [-1, 1].forEach((sd, i) => {
+      const ex = sd * 23, ey = -8 - (st.eyeUp || 0), bl = i === 1 ? Math.max(blink, wink) : blink;
+      if (bl < 0.6) {
+        K.shape(ctx, K.ellipsePts(ex, ey, 15, 19 * (1 - bl), 12), { fill: P.eye, w: 3.5, boil: 0.5, seed: seed + 50 + i, misreg: false });
+        const px = ex + look[0] * 6, py = ey + 3 + look[1] * 6;
+        K.shape(ctx, K.ellipsePts(px, py, 8.5, 10, 10), { fill: P.pupil, stroke: null, w: 0, boil: 0.3, seed: seed + 52 + i, misreg: false });
+        K.dot(ctx, px - 3, py - 4, 3, "#ffffff", null, 0, seed + 54 + i);
+        [-0.6, 0, 0.6].forEach((a, k) => K.rule(ctx, [[ex + sd * 10 + a * 8, ey - 17], [ex + sd * 16 + a * 12, ey - 26]], { stroke: P.ink, w: 3, boil: 0.3, seed: seed + 56 + k + i * 3 })); /* lashes */
+      } else K.line(ctx, [[ex - 14, ey], [ex, ey + 6], [ex + 14, ey]], { stroke: P.ink, w: 4, boil: 0.5, seed: seed + 60 + i });
+      const br = st.brow || 0, inner = br < 0 ? -br * 7 : 0;
+      K.line(ctx, [[ex - sd * 10, ey - 30 - br * 6 + inner], [ex + sd * 12, ey - 33 - br * 6 - inner * 0.5]], { stroke: P.ink, w: 4.5, boil: 0.4, seed: seed + 62 + i });
+    });
+    /* mouth */
+    const m = st.mouth || "smile";
+    if (talk > 0.04) K.talkMouth(ctx, 0, 26, talk, 0.9, seed + 70, "#6a2028", false);
+    else if (m === "smile") K.line(ctx, [[-14, 26], [0, 34], [14, 26]], { stroke: P.ink, w: 4, boil: 0.5, seed: seed + 71 });
+    else if (m === "worry") K.line(ctx, [[-12, 34], [-4, 28], [4, 32], [12, 28]], { stroke: P.ink, w: 4, boil: 0.5, seed: seed + 72 });
+    else if (m === "grin") K.shape(ctx, [[-18, 24], [18, 24], [10, 38], [-10, 38]], { fill: "#6a2028", w: 3.5, boil: 0.5, seed: seed + 73 });
+    else K.shape(ctx, K.ellipsePts(0, 32, m === "o" ? 7 : 11, m === "o" ? 8 : 12, 10), { fill: "#6a2028", w: 3.5, boil: 0.5, seed: seed + 74 });
+    ctx.restore();
+    /* "!" and "?" */
+    if (st.exclaim > 0) {
+      const a = K.E.back(clamp(st.exclaim, 0, 1), 2.5);
+      ctx.save(); ctx.translate(-96, -200); ctx.rotate(-0.22); ctx.scale(a, a);
+      K.shape(ctx, [[-9, -50], [9, -50], [5, -12], [-5, -12]], { fill: P.mustard, w: 4, boil: 0.8, seed: seed + 90 });
+      K.shape(ctx, K.ellipsePts(0, 4, 7, 7, 8), { fill: P.mustard, w: 4, boil: 0.8, seed: seed + 91 });
+      ctx.restore();
+    }
+    if (st.think > 0) {
+      const a = K.E.back(clamp(st.think, 0, 1), 2);
+      ctx.save(); ctx.translate((st.thinkSide || -1) * 100, -210); ctx.scale(a, a);
+      K.dot(ctx, 40, 40, 7, P.cream, P.ink, 3, seed + 93); K.dot(ctx, 22, 20, 10, P.cream, P.ink, 3, seed + 94);
+      K.shape(ctx, K.blobPts(-6, -18, 40, 32, 10, seed, 0.12), { fill: P.cream, w: 4, boil: 0.8, seed: seed + 95 });
+      K.text(ctx, "?", -6, -16, { size: 44, weight: 900, fill: P.cherry });
+      ctx.restore();
+    }
+    ctx.restore();
+    /* arms: IK to hand targets, white gloves; pad in the left hand, pencil in the right */
+    [["L", -1], ["R", 1]].forEach(([k, sd]) => {
+      const tg = st["arm" + k] || { x: sd * 64, y: -120 };
+      const S = [sd * 50 * sxk, bodyY - 26 * syk];
+      const r = K.ik2(S, [tg.x, tg.y - hop], 34, 32, sd > 0 ? -1 : 1);
+      K.limb(ctx, [S, r.elbow, r.end], 10, P.bee, seed + 80 + sd);
+      if (k === "L" && st.pad) K.orderPad(ctx, r.end[0] - 10, r.end[1] - 30, 0.7, st.write || 0, seed + 84);
+      if (k === "R" && st.pad && st.write > 0) K.rule(ctx, [[r.end[0], r.end[1]], [r.end[0] - 26, r.end[1] - 22]], { stroke: P.mustardDark, w: 7, boil: 0.4, seed: seed + 86 });
+      if (st.pointHand === k && st.pointAmt > 0.3) { /* pointing: the pencil sticks out along the line to the target */
+        const pl = 58 * Math.min(1, (st.pointAmt - 0.3) / 0.4), ca = Math.cos(st.pointAng), sa = Math.sin(st.pointAng);
+        K.rule(ctx, [[r.end[0], r.end[1]], [r.end[0] + ca * pl, r.end[1] + sa * pl]], { stroke: P.mustardDark, w: 9, boil: 0.4, seed: seed + 87 });
+        K.shape(ctx, [[r.end[0] + ca * (pl + 16), r.end[1] + sa * (pl + 16)], [r.end[0] + ca * pl - sa * 5, r.end[1] + sa * pl + ca * 5], [r.end[0] + ca * pl + sa * 5, r.end[1] + sa * pl - ca * 5]], { fill: P.ink, stroke: null, w: 0, boil: 0.3, seed: seed + 89, misreg: false });
+      }
+      K.dot(ctx, r.end[0], r.end[1], 13, P.cream, P.ink, 3.5, seed + 88 + sd);
+    });
+    ctx.restore();
+  };
+  /* order pad: cream sheets, cherry header, scribble lines grow with write 0..1 */
+  K.orderPad = function (ctx, x, y, s, write, seed) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(-0.12);
+    K.shape(ctx, K.roundRectPts(-46, -60, 92, 120, 8, 2), { fill: P.cream, w: 4, boil: 0.8, seed, shade: { color: P.creamShade, dx: 8, dy: 8 } });
+    K.shape(ctx, K.rectPts(-46, -60, 92, 22, 2), { fill: P.cherry, w: 4, boil: 0.6, seed: seed + 1 });
+    for (let i = 0; i < 4; i++) {
+      const u = clamp(write * 4 - i, 0, 1); if (u <= 0) continue;
+      const pts = []; for (let j = 0; j <= 6; j++) pts.push([-32 + j * 10 * u, -20 + i * 20 + Math.sin(j * 2.1 + i) * 4]);
+      K.line(ctx, pts, { stroke: P.inkSoft, w: 3, boil: 0.5, seed: seed + 3 + i });
+    }
     ctx.restore();
   };
 })(DK);
@@ -1418,53 +1647,194 @@ var DK = window.DK || (window.DK = {});
 })(DK);
 
 /* ============================================================
+   KIT 55 HOSTS: the two storytellers of an episode.
+     host A = Chef Nibbs (hamster, the explainer, lower voice)
+     host B = Bizzy (bee waitress, the curious co-host, higher voice)
+   Episode code feeds each host a loudness value per frame (`talk` 0..1,
+   0 while the other one speaks) and a list of acts; these helpers turn that
+   into full poses: talking gestures, listening (look at the speaker + nods
+   on a slow rhythm), idle breathing bob, and the acted gestures.
+
+   acts: [{ kind, at, dur }]   at = start time (s), dur default 1.6 s
+     both:   "point" (needs point target), "nod", "surprise", "think", "grin", "worry", "cheer"
+     Nibbs:  "magnify" (raises the glass to his eye), "tip" (toque tip)
+     Bizzy:  "write" (scribbles on the order pad), "twirl" (skate spin)
+
+   K.nibbsPose(t, o) / K.bizzyPose(t, o) -> pose object for K.hamster / K.bee
+     o: talk, listen (0..1), face (+1 = partner on the right, -1 left), acts,
+        point [lx, ly] local target, pointAmt 0..1, seed, magnifier (bool)
+   K.duo(ctx, t, o) draws both hosts large in screen space and returns anchors.
+   ============================================================ */
+var DK = window.DK || (window.DK = {});
+(function (K) {
+  const { clamp, ss, lerp } = K;
+  /* envelope of an act: rises 0.18 s, holds, falls 0.3 s */
+  const actEnv = (t, r) => { const d = r.dur || 1.6; return ss(r.at - 0.18, r.at, t) * (1 - ss(r.at + d - 0.3, r.at + d, t)); };
+  K.actEnv = actEnv;
+  const mixPt = (a, b, u) => ({ x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u) });
+  /* slow listening nods: two quick dips every ~2.4 s, phase seeded per host */
+  const nodAt = (t, seed) => { const ph = (t + K.hash(seed, 3) * 2.4) % 2.4; return ph < 0.5 ? Math.sin((ph / 0.5) * Math.PI * 2) * Math.sin((ph / 0.5) * Math.PI) : 0; };
+
+  K.nibbsPose = function (t, o) {
+    o = o || {};
+    const talk = clamp(o.talk || 0, 0, 1), listen = clamp(o.listen || 0, 0, 1), face = o.face || 1, seed = o.seed || 700;
+    const st = { seed, blink: K.blinkAt(t, seed % 97), talk, mouth: "smile", cheeks: 0.25, look: [0.25 * face, -0.1] };
+    st.squash = 0.04 * Math.sin(t * 2.6); /* breathing bob */
+    st.pawL = { x: -78, y: -44 }; st.pawR = { x: 78, y: -44 };
+    if (o.magnifier) { st.hold = "magnifier"; st.magS = 1.1; st.magAng = -60 + 4 * Math.sin(t * 1.9); st.pawR = { x: 88, y: -120 }; }
+    /* talking: the free paw gesticulates with the voice */
+    if (talk > 0.02) {
+      const g = Math.sin(t * 3.1 + 1) * 0.5 + 0.5;
+      st.pawL = { x: -90 - 20 * g * talk, y: -60 - 80 * talk - 20 * g };
+      st.lean = 3 * talk * Math.sin(t * 2.3); st.look = [0.5 * face, 0];
+      st.brow = 0.4 * talk;
+    }
+    if (listen > 0) { st.look = [face * listen, 0.1]; st.lean = (st.lean || 0) + 4 * nodAt(t, seed) * listen; st.squash += 0.04 * nodAt(t, seed) * listen; }
+    (o.acts || []).forEach((r) => {
+      const e = actEnv(t, r); if (e <= 0) return;
+      const u = t - r.at;
+      if (r.kind === "surprise") { st.exclaim = e; st.eyeUp = 6 * e; st.brow = 1.3 * e; if (talk < 0.1) st.mouth = "open"; st.squash -= 0.25 * Math.exp(-Math.max(0, u) * 6) * e; st.pawL = mixPt(st.pawL, { x: -110, y: -190 }, e); }
+      else if (r.kind === "think") { st.pawL = mixPt(st.pawL, { x: -26, y: -96 }, e); st.look = [0.6 * face, -1]; st.brow = 0.7 * e; if (talk < 0.1) st.mouth = "smirk"; }
+      else if (r.kind === "nod") { st.lean = (st.lean || 0) + 7 * Math.sin(Math.max(0, u) * 14) * e; }
+      else if (r.kind === "grin") { if (talk < 0.1) st.mouth = "grin"; st.cheeks = 0.9; st.wink = e; }
+      else if (r.kind === "worry") { st.brow = -0.9 * e; st.sweat = e; if (talk < 0.1) st.mouth = "frown"; }
+      else if (r.kind === "cheer") { st.hop = 40 * Math.abs(Math.sin(Math.max(0, u) * 6)) * e; st.pawL = mixPt(st.pawL, { x: -100, y: -230 }, e); if (!o.magnifier) st.pawR = mixPt(st.pawR, { x: 100, y: -230 }, e); if (talk < 0.1) st.mouth = "grin"; }
+      else if (r.kind === "magnify") { st.hold = "magnifier"; st.magS = 1.1; st.magAng = lerp(st.magAng || -60, -150, e); st.pawR = mixPt(st.pawR, { x: 20, y: -200 }, e); st.look = [0.3, -0.4]; }
+      else if (r.kind === "tip") { st.pawL = mixPt(st.pawL, { x: -40, y: -250 }, e); st.toqueTip = -14 * e; st.toqueLift = 24 * e; st.wink = e; }
+    });
+    /* pointing: free paw (or the glass) goes to the target */
+    const pa = clamp(o.pointAmt || 0, 0, 1);
+    if (pa > 0 && o.point) {
+      /* straight arm from the shoulder toward the target (shoulders at (+-60, -66)) */
+      const sx = o.point[0] >= 0 ? 60 : -60, dx = o.point[0] - sx, dy = o.point[1] + 66, L = Math.hypot(dx, dy) || 1;
+      const reach = { x: sx + (dx / L) * 64, y: -66 + (dy / L) * 64 };
+      if (o.magnifier || st.hold === "magnifier") { st.pawR = mixPt(st.pawR, reach, pa); st.magAng = lerp(st.magAng, (Math.atan2(dy, dx) * 180) / Math.PI, pa); }
+      else if (dx >= 0) st.pawR = mixPt(st.pawR, reach, pa);
+      else st.pawL = mixPt(st.pawL, reach, pa);
+      st.look = [clamp(dx / 200, -1, 1), clamp(dy / 300, -1, 1)];
+    }
+    return st;
+  };
+
+  K.bizzyPose = function (t, o) {
+    o = o || {};
+    const talk = clamp(o.talk || 0, 0, 1), listen = clamp(o.listen || 0, 0, 1), face = o.face || -1, seed = o.seed || 1200;
+    const st = { seed, blink: K.blinkAt(t, seed % 89), talk, mouth: "smile", look: [0.3 * face, 0], pad: true, buzz: 0.35, head: 5 * Math.sin(t * 0.9), thinkSide: -face };
+    st.squash = 0.05 * Math.sin(t * 3.1 + 1); st.roll = 6 * Math.sin(t * 1.3); st.hop = 6 + 4 * Math.sin(t * 2.2); /* hovering a bit on her wings */
+    st.armL = { x: -70, y: -150 }; st.armR = { x: 66, y: -112 };
+    if (talk > 0.02) {
+      const g = Math.sin(t * 3.4) * 0.5 + 0.5;
+      st.armR = { x: 84 + 20 * g * talk, y: -150 - 70 * talk };
+      st.head += 6 * talk * Math.sin(t * 4); st.buzz = 0.35 + 0.4 * talk; st.brow = 0.5 * talk; st.look = [0.6 * face, -0.1];
+    }
+    if (listen > 0) { st.look = [face * listen, 0]; st.head += 8 * nodAt(t, seed) * listen; st.write = ((t * 0.4) % 1) * listen; st.armR = mixPt(st.armR, { x: -30, y: -160 }, listen * 0.8); }
+    (o.acts || []).forEach((r) => {
+      const e = actEnv(t, r); if (e <= 0) return;
+      const u = t - r.at;
+      if (r.kind === "surprise") { st.exclaim = e; st.eyeUp = 5 * e; st.brow = 1.3 * e; if (talk < 0.1) st.mouth = "open"; st.hop += 50 * Math.sin(Math.min(1, Math.max(0, u) / 0.45) * Math.PI) * e; st.buzz = 1; st.armR = mixPt(st.armR, { x: 100, y: -260 }, e); }
+      else if (r.kind === "think") { st.think = e; st.armR = mixPt(st.armR, { x: 20, y: -205 }, e); st.look = [-0.6, -1]; st.head += 10 * e; if (talk < 0.1) st.mouth = "o"; }
+      else if (r.kind === "nod") { st.head += 10 * Math.sin(Math.max(0, u) * 14) * e; }
+      else if (r.kind === "grin") { if (talk < 0.1) st.mouth = "grin"; st.wink = e; }
+      else if (r.kind === "worry") { st.brow = -0.8 * e; if (talk < 0.1) st.mouth = "worry"; st.buzz = 0.15; }
+      else if (r.kind === "cheer") { st.hop += 60 * Math.abs(Math.sin(Math.max(0, u) * 6)) * e; st.armR = mixPt(st.armR, { x: 90, y: -280 }, e); st.armL = mixPt(st.armL, { x: -90, y: -280 }, e); st.buzz = 1; if (talk < 0.1) st.mouth = "grin"; }
+      else if (r.kind === "write") { st.write = clamp(u / Math.max(0.3, (r.dur || 1.6) - 0.3), 0, 1); st.armR = mixPt(st.armR, { x: -30, y: -165 }, e); st.look = [-0.5, 0.6]; }
+      else if (r.kind === "twirl") { st.lean = 14 * Math.sin(Math.max(0, u) * 9) * e; st.roll += 60 * u * e; st.squash += 0.1 * Math.sin(u * 18) * e; }
+    });
+    const pa = clamp(o.pointAmt || 0, 0, 1);
+    if (pa > 0 && o.point) {
+      const sx = o.point[0] >= 0 ? 50 : -50, dx = o.point[0] - sx, dy = o.point[1] + 186, L = Math.hypot(dx, dy) || 1;
+      const reach = { x: sx + (dx / L) * 62, y: -186 + (dy / L) * 62 };
+      if (o.point[0] >= 0) st.armR = mixPt(st.armR, reach, pa); else { st.armL = mixPt(st.armL, reach, pa); st.pad = pa < 0.5; }
+      st.pointHand = o.point[0] >= 0 ? "R" : "L"; st.pointAng = Math.atan2(dy, dx); st.pointAmt = pa; /* pencil held out along the line */
+      st.look = [clamp(dx / 200, -1, 1), clamp(dy / 300, -1, 1)];
+    }
+    return st;
+  };
+
+  /* both hosts, large, in screen space. o:
+       x, y      centre between them on screen, floor line (default 960, 1040)
+       s         overall scale (default 1: Nibbs ~430 px tall, Bizzy ~420 px)
+       side      1 = Nibbs left of Bizzy, -1 = mirrored order
+       gap       px between them (default 430 * s)
+       talkA/B, actsA/B, pointA/B ([sx, sy] screen), pointAmtA/B, a (0..1 slide-in from below)
+       magnifier (Nibbs holds the glass), propA(ctx, sx, sy) drawn at Nibbs's free paw,
+       propB(ctx, sx, sy) drawn at Bizzy's pad hand instead of the pad, shadow (default true)
+     returns { A: {x, y, s, head}, B: {...} } in screen px. */
+  K.duo = function (ctx, t, o) {
+    o = Object.assign({ x: 960, y: 1040, s: 1, side: 1, talkA: 0, talkB: 0, a: 1, shadow: true }, o || {});
+    const a = clamp(o.a, 0, 1); if (a <= 0) return null;
+    const gap = o.gap || 430 * o.s, sA = 1.45 * o.s, sB = 1.12 * o.s, drop = (1 - K.E.out3(a)) * 520;
+    const ax = o.x - (gap / 2) * o.side, bx = o.x + (gap / 2) * o.side, y = o.y + drop;
+    K.screen(ctx);
+    if (o.shadow) [[ax, 150 * sA], [bx, 70 * sB]].forEach((q) => { ctx.save(); ctx.globalAlpha = 0.22; ctx.fillStyle = K.P.ink; ctx.beginPath(); ctx.ellipse(q[0], y + 4, q[1], 16 * o.s, 0, 0, K.TAU); ctx.fill(); ctx.restore(); });
+    const listenA = o.talkB > 0.05 && o.talkA < 0.05 ? 1 : 0, listenB = o.talkA > 0.05 && o.talkB < 0.05 ? 1 : 0;
+    const loc = (p, x0, s) => (p ? [(p[0] - x0) / s, (p[1] - y) / s] : null);
+    const pa = K.nibbsPose(t, { talk: o.talkA, listen: listenA, face: o.side, acts: o.actsA, point: loc(o.pointA, ax, sA), pointAmt: o.pointAmtA, magnifier: o.magnifier });
+    const pb = K.bizzyPose(t, { talk: o.talkB, listen: listenB, face: -o.side, acts: o.actsB, point: loc(o.pointB, bx, sB), pointAmt: o.pointAmtB });
+    if (o.propB) pb.pad = false;
+    K.hamster(ctx, ax, y, sA, pa);
+    K.bee(ctx, bx, y, sB, pb);
+    const pawA = [ax + pa.pawL.x * sA, y + pa.pawL.y * sA], handB = [bx + pb.armL.x * sB, y + (pb.armL.y - (pb.hop || 0)) * sB];
+    if (o.propA) o.propA(ctx, pawA[0], pawA[1]);
+    if (o.propB) o.propB(ctx, handB[0], handB[1]);
+    return { A: { x: ax, y, s: sA, head: [ax, y - 150 * sA], paw: pawA }, B: { x: bx, y, s: sB, head: [bx, y - 262 * sB], hand: handB } };
+  };
+})(DK);
+
+/* ============================================================
    INTRO 10 SETUP: variables, title DOM, timing (beat grid)
-   Song: song_20s.m4a, "The Sandwich Gambit", vaudeville revival ~150 BPM
-   (beat 0.40 s, bar 1.60 s). Cut = 1 instrumental bar from the outro +
-   raw 6.39-25.75 s. Sung lines in the cut (whisper + downbeats):
-     1.76 "MEV lurks in the mempool dark"
-     4.97 "sandwich attacks leave their mark"
-     8.15 "Read the book, read the book"
-    11.35 "Microstructure off the hook"
-    14.56 "... rings the matching bell"
-    17.79 "Latency knows it well"          20.3-20.9 fade
+   Song: song_full.m4a = the whole "The Sandwich Gambit" (30.8 s, uncut),
+   vaudeville revival ~150 BPM (beat 0.40 s, bar 1.60 s). Sung lines
+   (whisper + downbeats), each starts on a downbeat, 2 bars long:
+     0.12 "Order book at level two"        3.41 "bids and asks in plain view"
+     6.59 "MEV lurks in the mempool dark"  9.82 "sandwich attacks leave their mark"
+    12.98 "Read the book, read the book"  16.21 "Microstructure off the hook"
+    19.39 "... rings the matching bell"   22.62 "Latency knows it well"
+    25.80 - 30.8 instrumental outro (title card)
    All story times are K.at(bar, beat) on the measured downbeats below.
    ============================================================ */
 const K = DK, P = K.P, at = K.at;
 K.G.BPM = 150;
-K.G.BARS = [0.16, 1.76, 3.37, 4.97, 6.52, 8.15, 9.75, 11.35, 12.96, 14.56, 16.18, 17.79, 19.37, 20.97];
-const DUR = 20.9;
+K.G.BARS = [0.12, 1.81, 3.41, 5.02, 6.59, 8.20, 9.82, 11.40, 12.98, 14.61, 16.21, 17.81, 19.39, 21.01, 22.62, 24.22, 25.80, 27.38, 28.98, 30.58];
+const DUR = 30.8;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const BEAT = K.beatLen();
 
 /* ---------- story beats (on the song's downbeats) ---------- */
 const T = {
-  popUp: [at(0, 1) - 0.2, at(0, 1)],   /* 0.36 crouch, 0.56 Nibbs pops up behind the counter */
-  magUp: at(0, 2.5),                   /* 1.16 magnifier up, looks right */
-  pan: [at(1, 0), at(2, 0)],           /* 1.76 - 3.37 "MEV lurks": camera dollies to the mempool corner */
-  dim: [at(1, 1.5), at(1, 3.5)],       /* the corner lamp flickers off */
-  eyes: at(1, 2),                      /* 2.56 red visor eye glows in the dark */
-  botUp: at(2, 0),                     /* 3.37 Slyce hops up onto the counter */
-  frontClip: at(3, 0),                 /* 4.97 "sandwich attacks": front-run ticket jumps the queue */
-  backClip: at(3, 2),                  /* 5.77 back-run ticket right behind the victim */
-  fly: at(4, 0),                       /* 6.52 the three tickets fly into the next tray: a sandwich */
-  bite: at(4, 2),                      /* 7.32 "leave their mark": bite + -1.2 % */
-  gasp: at(4, 2.5),                    /* Nibbs: "!" */
-  slap: [at(4, 3), at(5, 0)],          /* 7.75 - 8.15 the menu slaps into the camera */
-  rows: at(5, 0),                      /* 8.15 "Read the book": rows pop */
-  read2: at(6, 0),                     /* 9.75 second "read the book": best bid / ask + spread */
-  whip: [at(6, 3), at(7, 0)],          /* 10.95 - 11.35 whip pan to the counter */
-  amm: at(7, 0),                       /* 11.35 "Microstructure off the hook": scale + curve */
-  trade: at(8, 0),                     /* 12.96 1 ETH drops in, the beam tips, USDC pops out */
-  bellUp: at(8, 3),                    /* 14.16 paw raised */
-  ding: at(9, 0),                      /* 14.56 "rings the matching bell" */
-  doors: [at(9, 2), at(10, 0)],        /* 15.36 - 16.18 kitchen doors swing shut and open */
-  sign: at(10, 0),                     /* 16.18 neon sign lights */
-  letters: at(10, 0.5),
-  plates: at(11, 0),                   /* 17.79 "Latency knows it well": episode plates pop */
-  tip: at(11, 2),
-  peek: at(11, 3),                     /* Slyce peeks in from the left */
-  caught: at(12, 0),                   /* 19.37 caught by the magnifier flash */
+  l2: at(0, 0),                        /* 0.12 "Order book at level two": menu card on the counter, rows pop */
+  popUp: [at(1, 0) - 0.2, at(1, 0)],   /* 1.81 Nibbs pops up behind the counter */
+  level2: at(1, 2),                    /* 2.61 the two level-2 rows get "L2" tags */
+  plain: at(2, 0),                     /* 3.41 "bids and asks in plain view": depth bars grow, arms open */
+  magUp: at(3, 2.5),                   /* 6.02 magnifier up, looks right */
+  pan: [at(4, 0), at(5, 0)],           /* 6.59 - 8.20 "MEV lurks": camera dollies to the mempool corner */
+  dim: [at(4, 1.5), at(4, 3.5)],       /* the corner lamp flickers off */
+  eyes: at(4, 2),                      /* red visor eye glows in the dark */
+  botUp: at(5, 0),                     /* 8.20 Slyce hops up onto the counter */
+  frontClip: at(6, 0),                 /* 9.82 "sandwich attacks": front-run ticket jumps the queue */
+  backClip: at(6, 2),                  /* back-run ticket right behind the victim */
+  fly: at(7, 0),                       /* 11.40 the three tickets fly into the next tray: a sandwich */
+  bite: at(7, 2),                      /* "leave their mark": bite + -1.2 % */
+  gasp: at(7, 2.5),                    /* Nibbs: "!" */
+  slap: [at(7, 3), at(8, 0)],          /* the menu slaps into the camera */
+  rows: at(8, 0),                      /* 12.98 "Read the book": rows pop */
+  read2: at(9, 0),                     /* 14.61 second "read the book": best bid / ask + spread */
+  whip: [at(9, 3), at(10, 0)],         /* whip pan to the counter */
+  amm: at(10, 0),                      /* 16.21 "Microstructure off the hook": scale + curve */
+  trade: at(11, 0),                    /* 17.81 1 ETH drops in, the beam tips, USDC pops out */
+  bellUp: at(11, 3),                   /* paw raised */
+  ding: at(12, 0),                     /* 19.39 "rings the matching bell" */
+  raceWhip: [at(13, 3), at(14, 0)],    /* whip pan to the two order rails */
+  raceGo: at(14, 0),                   /* 22.62 "Latency knows it well": the race */
+  slyArrive: at(14, 2),                /* Slyce's ticket arrives first: 4 ms */
+  vicArrive: at(15, 1),                /* the victim's ticket arrives: 120 ms */
+  doors: [at(15, 2), at(16, 0)],       /* 25.02 - 25.80 kitchen doors swing shut and open */
+  sign: at(16, 0),                     /* 25.80 neon sign lights (outro) */
+  letters: at(16, 0.5),
+  plates: at(17, 0),                   /* 27.38 episode plates pop */
+  tip: at(17, 2),
+  peek: at(17, 3),                     /* Slyce peeks in from the left */
+  caught: at(18, 0),                   /* 28.98 caught by the magnifier flash */
 };
 
 /* ---------- variables (title text, language) ---------- */
@@ -1492,7 +1862,10 @@ TITLE_LINES.forEach((ln, li) => {
 const TITLE_LN = Array.from(titleEl.querySelectorAll(".ln"));
 
 /* ============================================================
-   INTRO 20 DINER: the long diner set (0 - 8.15 s).
+   INTRO 20 DINER: the long diner set (0 - 12.98 s).
+   0.12 "Order book at level two": a level-2 menu card stands on the counter;
+   1.81 Nibbs pops up and points at it; 3.41 "bids and asks in plain view":
+   depth bars grow. Then:
    World strip, x -400 .. 3700: pass window + conveyor chain of trays (the
    blockchain) across the back, the mempool ticket rail in the dark corner
    (x 2380 - 3100), the counter in front. The camera dollies from Nibbs to the
@@ -1503,7 +1876,10 @@ const inv = K.inv, tw = K.tw, E = K.E;
 const COUNTER_Y = 780, RAIL_Y = 470, BELT_Y = 340, BELT_V = 150, NIBBS_Y = 880, BOT_S = 1.0;
 
 const camDiner = K.mkTrack([
-  [0, { x: 760, y: 560, z: 1 }],
+  [0, { x: 470, y: 590, z: 1.16 }],
+  [T.popUp[1], { x: 520, y: 580, z: 1.12 }],
+  [T.plain, { x: 560, y: 570, z: 1.08 }],
+  [T.magUp - 0.5, { x: 760, y: 560, z: 1 }],
   [T.pan[0], { x: 760, y: 560, z: 1 }],
   [T.pan[1], { x: 2740, y: 520, z: 1.06 }],
   [T.frontClip, { x: 2790, y: 500, z: 1.1 }],
@@ -1552,6 +1928,13 @@ function nibbsDiner(t) {
   const st = { blink: K.blinkAt(t, 3), mouth: "smile", look: [0, 0], cheeks: 0.25 };
   st.squash = pop < 1 ? -0.3 * Math.sin(pop * Math.PI) : land < 0.35 ? 0.32 * Math.exp(-land * 9) * Math.cos(land * 22) : bounce;
   st.pawL = { x: -78, y: -40 }; st.pawR = { x: 78, y: -40 };
+  if (t > T.popUp[1] && t < T.magUp - 0.25) { /* presents the order book on the counter */
+    const pt = E.back(inv(T.popUp[1], T.popUp[1] + 0.35, t), 2), op = E.back(inv(T.plain, T.plain + 0.35, t), 2);
+    st.look = [-1, 0.2]; st.mouth = "grin";
+    st.pawL = { x: K.lerp(-78, -110, pt), y: K.lerp(-40, -170, pt) + 14 * K.pulse(t, 1, 6) };
+    if (op > 0) { st.pawR = { x: K.lerp(78, 110, op), y: K.lerp(-40, -160, op) }; st.look = [-0.4, 0]; st.cheeks = 0.7; }
+    if (t > T.level2 && t < T.level2 + 0.4) { st.eyeUp = 4; st.mouth = "open"; }
+  }
   if (t > T.magUp - 0.25) {
     const u = E.back(inv(T.magUp - 0.25, T.magUp + 0.1, t), 2);
     st.hold = "magnifier"; st.magS = 1.35; st.magAng = K.lerp(40, -18, u); st.pawR = { x: K.lerp(70, 104, u), y: K.lerp(-40, -150, u) };
@@ -1697,7 +2080,7 @@ function drawDinerWorld(t, full) {
   K.counter(ctx, -500, 3800, COUNTER_Y, 290, { seed: 40 });
   K.checkerFloor(ctx, -500, 3800, COUNTER_Y + 290, COUNTER_Y + 700, { seed: 9 });
   K.coffee(ctx, 1180, COUNTER_Y + 16, 0.8, 410);
-  K.plate(ctx, 300, COUNTER_Y + 20, 0.9, 420);
+  drawL2(t);
   if (dark > 0.2) { ctx.save(); ctx.globalAlpha = (dark - 0.12) * 0.8; ctx.fillStyle = P.nightDark; ctx.fillRect(2420, COUNTER_Y, 1400, 320); ctx.restore(); }
   slyceDiner(t, true);
   flyingTickets(t);
@@ -1716,6 +2099,20 @@ function drawDinerWorld(t, full) {
   return nb;
 }
 
+/* ---------- the level-2 menu card standing on the counter (opening) ---------- */
+const L2_ROWS = [["USDC", "ETH"], ["2 012", "4.1"], ["2 008", "2.5"], ["2 004", "3.0"], ["2 001", "6.2"]];
+function drawL2(t) {
+  const pop = inv(T.l2 - 0.1, T.l2 + 0.35, t); if (pop <= 0) return;
+  const shown = inv(T.l2 + BEAT, T.l2 + BEAT * 4, t) * 4 / 5 + 1 / 5;
+  const bars = [0, 0.66, 0.4, 0.48, 1].map((b, i) => b * E.out3(inv(T.plain + (i - 1) * BEAT / 2, T.plain + (i - 1) * BEAT / 2 + 0.5, t)));
+  const x = 270, y = COUNTER_Y - 230;
+  K.menu(ctx, x, y, [190, 140], L2_ROWS, { a: pop, size: 34, rowH: 54, seed: 22, reveal: shown, rowColors: [null, P.ask, P.ask, P.bid, P.bid], bars, barColors: [null, P.cherryLight, P.cherryLight, P.mint, P.mint], title: "ETH · USDC" });
+  /* "L2" tags on the outer rows */
+  const top = y - (5 * 54 + 60 + 90) / 2 + 30 + 90;
+  [1, 4].forEach((ri, k) => K.tag(ctx, x - 260, top + ri * 54 + 27, "L2", { a: inv(T.level2 + k * BEAT / 2, T.level2 + k * BEAT / 2 + 0.35, t), seed: 23 + k, size: 30, hot: true }));
+  [2, 3].forEach((ri, k) => K.tag(ctx, x - 260, top + ri * 54 + 27, "L1", { a: inv(T.level2 + 0.1 + k * BEAT / 2, T.level2 + 0.45 + k * BEAT / 2, t), seed: 25 + k, size: 26 }));
+}
+
 /* ============================================================
    INTRO 30 TABLE: the booth table set (8.15 - 16.2 s).
    World strip: menu set at x 0..1920, AMM counter at x 2400..4320.
@@ -1725,9 +2122,11 @@ function drawDinerWorld(t, full) {
    10.95 whip pan to the AMM scale (x * y = k) and the placemat curve.
    12.96 1 ETH drops into the pool: beam tips, 1 818 USDC pop out, the
          price on the curve slides 2 000 -> 1 653.
-   14.56 Nibbs slams the order bell.
+   19.39 Nibbs slams the order bell ("rings the matching bell").
+   22.22 whip pan to two order rails: "Latency knows it well" - Slyce zips his
+         ticket to the finish in 4 ms, the victim's ticket crawls in at 120 ms.
    ============================================================ */
-const TABLE_Y = 800, AMM_X = 2400;
+const TABLE_Y = 800, AMM_X = 2400, RACE_X = 4800;
 const BOOK = [
   ["USDC", "ETH"],
   ["2 016", "1.2"], ["2 012", "4.1"], ["2 008", "2.5"],
@@ -1745,7 +2144,9 @@ const camTable = K.mkTrack([
   [T.whip[1], { x: AMM_X + 960, y: 540, z: 1.0 }],
   [T.trade, { x: AMM_X + 960, y: 530, z: 1.03 }],
   [T.ding, { x: AMM_X + 1080, y: 560, z: 1.12 }],
-  [T.doors[1], { x: AMM_X + 1100, y: 560, z: 1.14 }],
+  [T.raceWhip[0], { x: AMM_X + 1110, y: 560, z: 1.1 }],
+  [T.raceWhip[1], { x: RACE_X + 960, y: 540, z: 1.0 }],
+  [T.doors[1], { x: RACE_X + 1000, y: 530, z: 1.06 }],
 ]);
 
 /* curve data (thousands): y = 200 / x, ETH 5..20 */
@@ -1864,9 +2265,9 @@ function drawTable(t) {
     K.screen(ctx); ctx.save(); ctx.globalAlpha = 0.18; ctx.fillStyle = "#cdeff6"; ctx.beginPath(); ctx.arc(L.x, L.y, L.r * 0.97, 0, K.TAU); ctx.fill(); ctx.restore();
     K.line(ctx, [[L.x - L.r * 0.55, L.y - L.r * 0.2], [L.x - L.r * 0.35, L.y - L.r * 0.55], [L.x - L.r * 0.05, L.y - L.r * 0.7]], { stroke: "#ffffff", w: 8, boil: 0.5, seed: 77, alpha: 0.85 });
   }
-  if (t > T.whip[0] - 0.1) ammOverlay(t);
+  if (t > T.whip[0] - 0.1 && t < T.raceWhip[0]) ammOverlay(t);
   /* whip pan streaks */
-  const wu = inv(T.whip[0], T.whip[1], t);
+  const wu = Math.max(inv(T.whip[0], T.whip[1], t) * (t < T.whip[1] ? 1 : 0), t > T.raceWhip[0] && t < T.raceWhip[1] ? inv(T.raceWhip[0], T.raceWhip[1], t) : 0);
   if (wu > 0 && wu < 1) {
     K.screen(ctx); const a = Math.sin(wu * Math.PI);
     for (let i = 0; i < 14; i++) { const y = 60 + i * 72 + K.hs(i, K.bf) * 20, l = 500 + 600 * K.hash(i + 3, K.bf); const x = 960 + K.hs(i + 9, K.bf) * 700; K.line(ctx, [[x - l / 2, y], [x + l / 2, y]], { stroke: i % 3 ? P.cream : P.ink, w: 10, boil: 0.4, seed: 500 + i, alpha: a * 0.85 }); }
@@ -1880,27 +2281,62 @@ function drawTable(t) {
   }
 }
 function drawTableWorld(t, full) {
-  K.booth(ctx, -400, AMM_X + 2400, -200, TABLE_Y - 40, 5);
-  K.formica(ctx, -400, AMM_X + 2400, TABLE_Y - 40, 120, 7);
-  K.counter(ctx, -400, AMM_X + 2400, TABLE_Y + 80, 300, { seed: 41, top: 18 });
+  K.booth(ctx, -400, RACE_X + 2400, -200, TABLE_Y - 40, 5);
+  K.formica(ctx, -400, RACE_X + 2400, TABLE_Y - 40, 120, 7);
+  K.counter(ctx, -400, RACE_X + 2400, TABLE_Y + 80, 300, { seed: 41, top: 18 });
   /* napkin dispenser + ketchup: diner clutter behind the menu */
   K.shape(ctx, K.roundRectPts(1700, TABLE_Y - 150, 120, 140, 14), { fill: P.chrome, w: 5, boil: 1, seed: 90, misreg: false, shade: { color: P.chromeDark, dx: 14, dy: 0, dots: false }, shine: true });
   K.shape(ctx, [[1850, TABLE_Y - 20], [1850, TABLE_Y - 150], [1870, TABLE_Y - 190], [1890, TABLE_Y - 190], [1910, TABLE_Y - 150], [1910, TABLE_Y - 20]], { fill: P.cherry, w: 5, boil: 1, seed: 91, shine: true });
   const rowY = drawMenu(t);
   if (full && t < T.whip[1]) nibbsTable(t, rowY);
-  if (t > T.whip[0] - 0.1) { drawAmm(t); if (full) nibbsAmm(t); }
+  if (t > T.whip[0] - 0.1 && t < T.raceWhip[1] + 0.1) { drawAmm(t); if (full) nibbsAmm(t); }
+  if (t > T.raceWhip[0] - 0.1) drawRace(t, full);
+}
+
+/* ---------- latency race: two order rails, a stopwatch, a finish post ---------- */
+const RAIL_A = 430, RAIL_B = 640, R0 = RACE_X + 560, R1 = RACE_X + 1480;
+function drawRace(t, full) {
+  K.stopwatch(ctx, RACE_X + 300, 330, 125, Math.max(0, t - T.raceGo) / 1.6, 450);
+  [RAIL_A, RAIL_B].forEach((y, i) => K.ticketRail(ctx, R0 - 40, R1 + 60, y, 310 + i * 3));
+  /* finish post: checker strip */
+  K.shape(ctx, K.rectPts(R1 + 30, RAIL_A - 90, 40, RAIL_B - RAIL_A + 260, 4), { fill: P.cream, w: 5, boil: 0.9, seed: 330, misreg: false });
+  ctx.save(); ctx.fillStyle = P.ink; for (let j = 0; j < 14; j++) ctx.fillRect(R1 + 30 + (j % 2) * 20, RAIL_A - 90 + j * 25, 20, 25); ctx.restore();
+  /* the victim's ticket crawls along the lower rail */
+  const vu = E.inOut(inv(T.raceGo, T.vicArrive, t));
+  K.ticket(ctx, K.lerp(R0, R1 - 40, vu), RAIL_B + 6, 0.9, { color: P.mint, label: "ETH", amt: "2.0", arrow: "up", gas: 1, seed: 230, tilt: Math.sin(t * 5) * 0.05 });
+  /* Slyce zips his ticket along the upper rail (anticipation crouch, then a dash) */
+  const su = E.in3(inv(T.raceGo, T.slyArrive, t)), land = t - T.slyArrive;
+  const sx = K.lerp(R0, R1 - 40, su) + (land > 0 ? Math.sin(Math.min(1, land * 4) * Math.PI) * 18 : 0);
+  K.ticket(ctx, sx, RAIL_A + 6, 0.9, { color: P.cherry, label: "ETH", amt: "9.5", arrow: "up", gas: 3, seed: 240, tilt: su > 0 && su < 1 ? 0.25 : Math.sin(t * 6) * 0.04 });
+  const bst = { glow: 0.8, grin: 1, seed: 900, armL: { x: -90, y: -120 }, armR: { x: 90, y: -120 }, look: 1 };
+  if (t < T.raceGo) { bst.squash = 0.3 * inv(T.raceGo - 0.3, T.raceGo, t); bst.look = Math.sin(t * 3); }
+  if (su > 0 && su < 1) { bst.lean = -22; bst.squash = -0.15; bst.armL = { x: -130, y: -200 }; for (let i = 0; i < 4; i++) K.line(ctx, [[sx - 120 - 260 * K.hash(i, K.bf), RAIL_A - 140 + i * 30], [sx - 110, RAIL_A - 140 + i * 30]], { stroke: P.ink, w: 6, boil: 0.5, seed: 340 + i }); }
+  if (land > 0) { bst.squash = 0.3 * Math.exp(-land * 8); bst.armR = { x: 110, y: -230 }; bst.look = -1; }
+  K.sandwichBot(ctx, sx, RAIL_A - 14, 0.72, bst);
+  if (land > 0) {
+    K.burst(ctx, R1 + 50, RAIL_A - 40, 90 * E.back(Math.min(1, land * 4), 2) * (1 - inv(0.3, 0.6, land)), { seed: 350, spikes: 11 });
+    K.tag(ctx, R1 - 230, RAIL_A + 90, "4 ms", { a: inv(T.slyArrive + 0.05, T.slyArrive + 0.4, t), seed: 351, size: 44, fill: P.cherry, color: P.cream });
+  }
+  if (t > T.vicArrive) K.tag(ctx, R1 - 250, RAIL_B + 90, "120 ms", { a: inv(T.vicArrive, T.vicArrive + 0.35, t), seed: 352, size: 44, fill: P.mint });
+  if (!full) return;
+  /* Nibbs judges at the finish */
+  const st = { blink: K.blinkAt(t, 13), mouth: "smile", cheeks: 0.3, seed: 700, hold: "magnifier", magS: 1.2, magAng: -72 + Math.sin(t * 2.4) * 4, pawR: { x: 90, y: -170 }, pawL: { x: -90, y: -60 }, look: [-1, -0.3] };
+  st.squash = 0.07 * K.pulse(t, 1, 6);
+  if (t > T.slyArrive) { const k = inv(T.slyArrive, T.slyArrive + 0.3, t); st.mouth = "o"; st.eyeUp = 5 * k; st.brow = 1.2 * k; st.squash = -0.2 * Math.exp(-(t - T.slyArrive) * 5); }
+  if (t > T.vicArrive) { st.mouth = "frown"; st.brow = -1; st.eyeUp = 0; st.look = [-1, 0.5]; st.pawL = { x: -60, y: -40 }; }
+  K.hamster(ctx, RACE_X + 1730, TABLE_Y + 40, 1.5, st);
 }
 
 /* ============================================================
    INTRO 40 TITLE: kitchen swing doors + the neon sign title card.
-   15.36 - 16.18 the doors swing shut and open on the title set.
-   16.18 the neon sign flickers on, letters drop in (DOM, per language).
-   17.79 "Latency knows it well": six episode plates pop on half beats,
-         Nibbs tips his toque. 18.98 Slyce peeks in from the left;
-   19.37 the magnifier flashes, Slyce is caught and bolts.
+   25.02 - 25.80 the doors swing shut and open on the title set.
+   25.80 the neon sign flickers on, letters drop in (DOM, per language).
+   25.80 outro: the sign lights; 27.38 six episode plates pop on half beats,
+         Nibbs tips his toque; Slyce peeks in from the left;
+   28.98 the magnifier flashes, Slyce is caught and bolts.
    ============================================================ */
-const SIGN = { cx: 960, cy: 300, w: 1480, h: 330 };
-const PLATE_Y = 842, PLATE_R = 50;
+const SIGN = { cx: 940, cy: 362, w: 1220, h: 330 }; /* top edge clears the logo plate (y <= 150) */
+const PLATE_Y = 860, PLATE_R = 70;
 
 /* six episode icons, language-free: DEX analytics, AMM pools, MEV sandwich,
    prediction-market traders, onchain flows, blocks */
@@ -1948,42 +2384,39 @@ function drawTitleSet(t) {
   if (t > T.peek) {
     const pk = E.out3(inv(T.peek, T.peek + 0.35, t)), run = inv(T.caught + 0.2, T.caught + 0.8, t);
     const st = { glow: 0.6, look: t < T.caught ? 0.8 : -1, grin: 0.8, seed: 900, sliceR: true, armL: { x: -100, y: -150 }, armR: { x: 120, y: -190 } };
-    let x = K.lerp(150, 330, pk), y = K.lerp(1010, 905, pk);
+    let x = K.lerp(-40, 150, pk), y = K.lerp(1010, 905, pk);
     if (t > T.caught) { st.shock = 1; st.armL = { x: -110, y: -290 }; st.armR = { x: 110, y: -290 }; y -= Math.sin(Math.min(1, (t - T.caught) / 0.35) * Math.PI) * 90; }
-    if (run > 0) { x = K.lerp(330, -260, E.in3(run)); st.walk = t * 22; st.lean = -16; }
+    if (run > 0) { x = K.lerp(150, -300, E.in3(run)); st.walk = t * 22; st.lean = -16; }
     K.sandwichBot(ctx, x, y, 0.95, st);
   }
   K.counter(ctx, -300, 2220, 860, 260, { seed: 42 });
   /* episode plates pop on half beats */
   for (let i = 0; i < 6; i++) {
     const t0 = T.plates + i * BEAT / 2, a = inv(t0, t0 + 0.35, t); if (a <= 0) continue;
-    const s = E.back(a, 2.6), x = 960 + (i - 2.5) * 150, y = PLATE_Y - 6 * K.pulse(t - i * 0.06, 1, 6);
+    const s = E.back(a, 2.6), x = 850 + (i - 2.5) * 186, y = PLATE_Y - 6 * K.pulse(t - i * 0.06, 1, 6);
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
-    K.plate(ctx, 0, 18, 0.75, 610 + i);
-    K.coin(ctx, 0, -40, PLATE_R, { color: PLATE_COLORS[i], seed: 620 + i * 7 });
-    ctx.translate(0, -40); ICONS[i](ctx, PLATE_R);
+    K.plate(ctx, 0, 22, 1.0, 610 + i);
+    K.coin(ctx, 0, -60, PLATE_R, { color: PLATE_COLORS[i], seed: 620 + i * 7 });
+    ctx.translate(0, -60); ICONS[i](ctx, PLATE_R);
     ctx.restore();
   }
   nibbsTitle(t);
   return box;
 }
 function nibbsTitle(t) {
-  const st = { blink: K.blinkAt(t, 11), mouth: "grin", cheeks: 0.4, hold: "magnifier", magHand: "L", magS: 1.2, magAng: -115, seed: 700 };
+  const st = { blink: K.blinkAt(t, 11), mouth: "grin", cheeks: 0.4, hold: "magnifier", magS: 1.2, magAng: -58 + Math.sin(t * 2.2) * 3, seed: 700 };
   const enter = inv(T.doors[1], T.doors[1] + 0.45, t), down = (1 - E.back(enter, 1.8)) * 260;
   st.squash = enter < 1 ? -0.2 * Math.sin(enter * Math.PI) : 0.08 * K.pulse(t, 1, 6);
-  st.pawL = { x: -96, y: -150 + 10 * K.pulse(t, 1, 6) };
-  st.pawR = { x: 80, y: -40 };
+  st.pawR = { x: 100, y: -150 + 10 * K.pulse(t, 1, 6) };
+  st.pawL = { x: -80, y: -40 };
   const tip = inv(T.tip, T.tip + 0.3, t) * (1 - inv(T.tip + 0.8, T.tip + 1.1, t));
-  if (tip > 0) { st.pawR = { x: K.lerp(80, 40, tip), y: K.lerp(-40, -250, tip) }; st.toqueTip = 16 * tip; st.toqueLift = 26 * tip; st.wink = tip; }
-  if (t > T.peek + 0.1) { /* spots Slyce: swings the magnifier left, flash on the downbeat */
+  if (tip > 0) { st.pawL = { x: K.lerp(-80, -40, tip), y: K.lerp(-40, -250, tip) }; st.toqueTip = -16 * tip; st.toqueLift = 26 * tip; st.wink = tip; }
+  if (t > T.peek + 0.1) { /* spots Slyce on the left: glare, flash on the downbeat */
     const sw = E.inOut(inv(T.peek + 0.1, T.caught - 0.05, t));
-    st.magAng = K.lerp(-115, -178, sw); st.pawL = { x: K.lerp(-96, -112, sw), y: K.lerp(-150, -120, sw) };
-    st.look = [-sw, 0]; st.brow = -0.8 * sw; st.mouth = "smirk";
-    if (t > T.caught) { st.mouth = "grin"; st.brow = 0.8; }
-    const back = E.inOut(inv(T.caught + 0.5, T.caught + 0.9, t)); /* lens back up, clear of the plates */
-    if (back > 0) { st.magAng = K.lerp(-178, -115, back); st.pawL = { x: K.lerp(-112, -96, back), y: K.lerp(-120, -150, back) }; st.look = [-1 + back, 0]; }
+    st.look = [-sw, 0]; st.brow = -0.8 * sw; st.mouth = "smirk"; st.pawL = { x: -110, y: K.lerp(-40, -120, sw) };
+    if (t > T.caught) { st.mouth = "grin"; st.brow = 0.8; st.magAng = -58 - 20 * Math.exp(-(t - T.caught) * 6); }
   }
-  K.hamster(ctx, 1640, 1000 + down, 1.6, st);
+  K.hamster(ctx, 1650, 1000 + down, 1.6, st);
   if (t > T.caught && t < T.caught + 0.5 && K.lens) { /* magnifier flash */
     const k = inv(T.caught, T.caught + 0.5, t);
     K.screen(ctx); K.glow(ctx, K.lens.x, K.lens.y, 260 * (1 - k * 0.5), "rgba(255,255,230,1)", 1 - k);
@@ -2030,18 +2463,18 @@ function layoutTitleDom(t, box) {
 /* ============================================================
    INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
    drives a proxy whose setter calls render(t).
-   0.00 - 1.76  diner: Nibbs pops up behind the counter, magnifier up
-   1.76 - 4.97  "MEV lurks in the mempool dark": dolly to the dark corner,
-                Slyce's red eye, he hops onto the counter
-   4.97 - 8.15  "sandwich attacks leave their mark": front + back tickets
-                around the victim, they fly into a tray as a sandwich, bite, -1.2 %
-   7.75 - 8.15  menu-card slap transition
-   8.15 - 11.35 "Read the book, read the book": order-book menu, the lens reads it
-   10.95- 11.35 whip pan
-   11.35- 14.56 "Microstructure off the hook": AMM scale + x*y=k placemat, 1 ETH trade
-   14.56        the order bell DING
-   15.36- 16.40 swing doors shut and open on the title set
-   16.18- 20.90 neon sign title, episode plates, Slyce caught
+   The whole song, 30.8 s, every sung line has its own picture:
+   0.12  "Order book at level two": level-2 menu card on the counter, L1/L2 tags
+   3.41  "bids and asks in plain view": depth bars grow, Nibbs presents the book
+   6.59  "MEV lurks in the mempool dark": dolly to the dark corner, Slyce's red eye
+   9.82  "sandwich attacks leave their mark": front + back tickets around the victim,
+         they fly into a tray as a sandwich (11.40), bite, -1.2 %
+   12.98 "Read the book, read the book": menu slap -> order book, the lens reads it
+   16.21 "Microstructure off the hook": whip to the AMM scale + x*y=k, 1 ETH trade
+   19.39 "rings the matching bell": DING
+   22.62 "Latency knows it well": whip to two order rails, 4 ms vs 120 ms
+   25.02 swing doors; 25.80 - 30.8 outro: neon sign title, episode plates, Slyce caught
+   The marketmaker.cc logo plate (DOM, top-right) stays for the whole film.
    ============================================================ */
 function slapCard(t, nb) {
   const u = inv(T.slap[0], T.slap[1], t), e = u * u;
@@ -2075,12 +2508,15 @@ function render(t) {
     /* never leave a black frame silently: draw the error so a snapshot shows it */
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);
   }
+  /* logo plate: one small bounce on the first downbeat, then static */
+  const lb = t > T.l2 ? Math.exp(-(t - T.l2) * 5) * Math.sin((t - T.l2) * 18) * 0.06 : 0;
+  logoEl.style.transform = "scale(" + (1 + lb).toFixed(4) + ")";
   /* paper grain steps at the boil rate */
   const f = K.boilFrame(t);
   grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px";
 }
 
-const grainEl = document.getElementById("grain");
+const grainEl = document.getElementById("grain"), logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .4  0 0 0 0 .4  0 0 0 1.4 -.2'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
 
 const TL = gsap.timeline({ paused: true });

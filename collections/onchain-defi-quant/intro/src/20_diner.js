@@ -1,5 +1,8 @@
 /* ============================================================
-   INTRO 20 DINER: the long diner set (0 - 8.15 s).
+   INTRO 20 DINER: the long diner set (0 - 12.98 s).
+   0.12 "Order book at level two": a level-2 menu card stands on the counter;
+   1.81 Nibbs pops up and points at it; 3.41 "bids and asks in plain view":
+   depth bars grow. Then:
    World strip, x -400 .. 3700: pass window + conveyor chain of trays (the
    blockchain) across the back, the mempool ticket rail in the dark corner
    (x 2380 - 3100), the counter in front. The camera dollies from Nibbs to the
@@ -10,7 +13,10 @@ const inv = K.inv, tw = K.tw, E = K.E;
 const COUNTER_Y = 780, RAIL_Y = 470, BELT_Y = 340, BELT_V = 150, NIBBS_Y = 880, BOT_S = 1.0;
 
 const camDiner = K.mkTrack([
-  [0, { x: 760, y: 560, z: 1 }],
+  [0, { x: 470, y: 590, z: 1.16 }],
+  [T.popUp[1], { x: 520, y: 580, z: 1.12 }],
+  [T.plain, { x: 560, y: 570, z: 1.08 }],
+  [T.magUp - 0.5, { x: 760, y: 560, z: 1 }],
   [T.pan[0], { x: 760, y: 560, z: 1 }],
   [T.pan[1], { x: 2740, y: 520, z: 1.06 }],
   [T.frontClip, { x: 2790, y: 500, z: 1.1 }],
@@ -59,6 +65,13 @@ function nibbsDiner(t) {
   const st = { blink: K.blinkAt(t, 3), mouth: "smile", look: [0, 0], cheeks: 0.25 };
   st.squash = pop < 1 ? -0.3 * Math.sin(pop * Math.PI) : land < 0.35 ? 0.32 * Math.exp(-land * 9) * Math.cos(land * 22) : bounce;
   st.pawL = { x: -78, y: -40 }; st.pawR = { x: 78, y: -40 };
+  if (t > T.popUp[1] && t < T.magUp - 0.25) { /* presents the order book on the counter */
+    const pt = E.back(inv(T.popUp[1], T.popUp[1] + 0.35, t), 2), op = E.back(inv(T.plain, T.plain + 0.35, t), 2);
+    st.look = [-1, 0.2]; st.mouth = "grin";
+    st.pawL = { x: K.lerp(-78, -110, pt), y: K.lerp(-40, -170, pt) + 14 * K.pulse(t, 1, 6) };
+    if (op > 0) { st.pawR = { x: K.lerp(78, 110, op), y: K.lerp(-40, -160, op) }; st.look = [-0.4, 0]; st.cheeks = 0.7; }
+    if (t > T.level2 && t < T.level2 + 0.4) { st.eyeUp = 4; st.mouth = "open"; }
+  }
   if (t > T.magUp - 0.25) {
     const u = E.back(inv(T.magUp - 0.25, T.magUp + 0.1, t), 2);
     st.hold = "magnifier"; st.magS = 1.35; st.magAng = K.lerp(40, -18, u); st.pawR = { x: K.lerp(70, 104, u), y: K.lerp(-40, -150, u) };
@@ -204,7 +217,7 @@ function drawDinerWorld(t, full) {
   K.counter(ctx, -500, 3800, COUNTER_Y, 290, { seed: 40 });
   K.checkerFloor(ctx, -500, 3800, COUNTER_Y + 290, COUNTER_Y + 700, { seed: 9 });
   K.coffee(ctx, 1180, COUNTER_Y + 16, 0.8, 410);
-  K.plate(ctx, 300, COUNTER_Y + 20, 0.9, 420);
+  drawL2(t);
   if (dark > 0.2) { ctx.save(); ctx.globalAlpha = (dark - 0.12) * 0.8; ctx.fillStyle = P.nightDark; ctx.fillRect(2420, COUNTER_Y, 1400, 320); ctx.restore(); }
   slyceDiner(t, true);
   flyingTickets(t);
@@ -221,4 +234,18 @@ function drawDinerWorld(t, full) {
   }
   if (full) { K.stool(ctx, 360, 1150, 1, 70); K.stool(ctx, 1060, 1150, 1, 71); K.stool(ctx, 1760, 1150, 1, 72); K.stool(ctx, 2460, 1150, 1, 73); K.stool(ctx, 3160, 1150, 1, 74); }
   return nb;
+}
+
+/* ---------- the level-2 menu card standing on the counter (opening) ---------- */
+const L2_ROWS = [["USDC", "ETH"], ["2 012", "4.1"], ["2 008", "2.5"], ["2 004", "3.0"], ["2 001", "6.2"]];
+function drawL2(t) {
+  const pop = inv(T.l2 - 0.1, T.l2 + 0.35, t); if (pop <= 0) return;
+  const shown = inv(T.l2 + BEAT, T.l2 + BEAT * 4, t) * 4 / 5 + 1 / 5;
+  const bars = [0, 0.66, 0.4, 0.48, 1].map((b, i) => b * E.out3(inv(T.plain + (i - 1) * BEAT / 2, T.plain + (i - 1) * BEAT / 2 + 0.5, t)));
+  const x = 270, y = COUNTER_Y - 230;
+  K.menu(ctx, x, y, [190, 140], L2_ROWS, { a: pop, size: 34, rowH: 54, seed: 22, reveal: shown, rowColors: [null, P.ask, P.ask, P.bid, P.bid], bars, barColors: [null, P.cherryLight, P.cherryLight, P.mint, P.mint], title: "ETH · USDC" });
+  /* "L2" tags on the outer rows */
+  const top = y - (5 * 54 + 60 + 90) / 2 + 30 + 90;
+  [1, 4].forEach((ri, k) => K.tag(ctx, x - 260, top + ri * 54 + 27, "L2", { a: inv(T.level2 + k * BEAT / 2, T.level2 + k * BEAT / 2 + 0.35, t), seed: 23 + k, size: 30, hot: true }));
+  [2, 3].forEach((ri, k) => K.tag(ctx, x - 260, top + ri * 54 + 27, "L1", { a: inv(T.level2 + 0.1 + k * BEAT / 2, T.level2 + 0.45 + k * BEAT / 2, t), seed: 25 + k, size: 26 }));
 }

@@ -30,15 +30,23 @@
       #preload .tc { font-family: "CJK TC"; font-weight: 900; }
       #vig { background: radial-gradient(100% 90% at 50% 46%, rgba(0, 0, 0, 0) 64%, rgba(26, 18, 22, 0.38) 100%); }
       #grain { opacity: 0.1; mix-blend-mode: multiply; }
+      /* marketmaker.cc logo plate: top-right, whole film, never covered (sits above every layer) */
+      #logo { position: absolute; top: 48px; right: 48px; height: 96px; display: flex; align-items: center; gap: 12px;
+        padding: 0 26px 0 16px; background: #fbf1dc; color: #1a1216; border: 4px solid #1a1216; border-radius: 26px;
+        box-shadow: 5px 6px 0 #1a1216; transform-origin: 100% 0; }
+      #logo .mm-logo-mark { width: 64px; height: 64px; display: block; color: #e23a3f; }
+      #logo .wm { font-family: "Nunito", sans-serif; font-weight: 900; font-size: 40px; line-height: 1; white-space: nowrap; }
+      #logo .wm span { color: #a8222c; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="20.9" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30.8" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div class="ov" id="vig"></div>
       <div class="ov" id="grain"></div>
       <div id="title" data-layout-allow-overlap></div>
-      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="20.9" data-track-index="10" data-volume="1"></audio>
+      <div id="logo"><!--__LOGO__--><div class="wm">marketmaker<span>.cc</span></div></div>
+      <audio id="song" src="song_full.m4a" data-start="0" data-duration="30.8" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="lb">Aa Бб 0</span><span class="n6">Aa Бб 0</span><span class="n8">Aa Бб 0</span><span class="n9">Aa Бб 0</span><span class="m4">Aa Бб 0</span><span class="m7">Aa Бб 0</span><span class="sc">链上与量化</span><span class="tc">鏈上與量化</span></div>
     </div>
     <script>

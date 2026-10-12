@@ -8,11 +8,14 @@ It uses plain browser JS with no modules. Each file attaches to the global `DK` 
 | `00_core.js` | `clamp lerp inv ss tw E.*` eases, `mulberry` / `hash` / `fbm` seeded noise, `mkSpline` / `mkTrack`, the beat grid `G.BPM`, `G.BARS`, `at(bar, beat)`, `pulse`, and the boil clock `boilFrame(t)` at 12 fps |
 | `05_palette.js` | `DK.P` colours and `DK.FONT` stacks (the only place they are defined) |
 | `10_ink.js` | `begin`, camera `applyCam` / `toScreen`; `shape` (off-register fill + shadow band with Ben-Day dots + `shine` + brush outline), `line` (tapered), `rule` (constant width), `dot`, `dotFill` / `dotPattern`, `text` (never boils, optional `drop` shadow), `glow`; point generators `ellipsePts`, `blobPts`, `rectPts`, `roundRectPts`; `samplePath` |
-| `30_world.js` | diner set: `wall`, `chromeBar`, `booth`, `formica`, `passWindow`, `window`, `lamp`, `checkerFloor` (perspective, follows the camera), `counter`, `stool`, `conveyor`, `block` (tray), `trayItem`, `chainIcon`, `ticket`, `ticketRail`, `bell`, `plate`, `breadSlice`, `burger` (with `bite`), `coffee`, `steam`, `coin`, `sparkle`, `burst`, `speedLines` |
-| `40_hamster.js` | `hamster(ctx, x, y, s, pose)` (Chef Nibbs), `ik2`, `limb`, `paw`, `magnifier` (writes `K.lens`), `blinkAt` |
+| `30_world.js` | diner set: `wall`, `chromeBar`, `booth`, `formica`, `passWindow`, `window`, `lamp`, `checkerFloor` (perspective, follows the camera), `counter`, `stool`, `conveyor`, `block` (tray), `trayItem`, `chainIcon`, `ticket`, `ticketRail`, `bell`, `stopwatch`, `plate`, `breadSlice`, `burger` (with `bite`), `coffee`, `steam`, `coin`, `sparkle`, `burst`, `speedLines` |
+| `40_hamster.js` | `hamster(ctx, x, y, s, pose)` (Chef Nibbs, host A; `talk` 0..1 drives `talkMouth`), `ik2`, `limb`, `paw`, `magnifier` (writes `K.lens`), `blinkAt` |
 | `45_bot.js` | `sandwichBot(ctx, x, y, s, pose)` (Slyce, the MEV bot) |
+| `46_bee.js` | `bee(ctx, x, y, s, pose)` (Bizzy, the bee waitress on roller skates, co-host / host B): `talk`, `armL/R` IK, `head` tilt, `buzz` wings, `roll` skates, `pad` + `write`, pencil pointer (`pointHand`, `pointAng`, `pointAmt`), `exclaim`, `think` bubble; `orderPad` |
+| `55_hosts.js` | `nibbsPose(t, o)`, `bizzyPose(t, o)`: talking gestures from loudness, listening (look at the speaker + nods), idle bob, acts; `duo(ctx, t, o)`: both hosts large in screen space with pointing and props; `actEnv`; `talkMouth` lives in `40_hamster.js` |
 | `50_explainer.js` | `node`, `edge` / `edgePoint` / `tag`, `register`, `menu`, `chalkboard`, `placemat`, `letterBoard`, `receipt`, `ammScale`, `neonSign` |
 | `fonts/` | local woff2 (Lobster, Nunito, Anonymous Pro, CJK subsets) plus `fonts.css`; refresh with `tools/fetch_fonts.py` |
+| `assets/marketmaker-logo.svg` | the marketmaker.cc mark; `build.py` inlines it where the shell has `<!--__LOGO__-->` |
 | `vendor/gsap.min.js` | GSAP 3.14.2 (local, no CDN) |
 
 ## Using the kit in an episode
@@ -42,7 +45,7 @@ It uses plain browser JS with no modules. Each file attaches to the global `DK` 
 4. Build and check: `python3 style/kit/tools/build.py <project>` then `cd <project> && npx hyperframes lint && npx hyperframes check`.
 5. Snapshot (`intro/tools/snap.sh "1,2,3"`), look at the frames, render with `npx hyperframes render --quality high --output renders/x.mp4`.
 
-`style/gallery/` is a 6-second project: 0-4.8 s every explainer primitive, 4.8-6 s a character + set sheet. Rebuild and snapshot it (`--at 4.5` and `--at 5.3`) after any kit change.
+`style/gallery/` is a 9-second project: 0-4.8 s every explainer primitive, 4.8-6 s a character + set sheet, 6-9 s the two hosts talking, listening, pointing and acting. Rebuild and snapshot it (`--at 4.5,5.3,6.8,8.4`) after any kit change.
 
 ## Rules the kit relies on
 
@@ -52,3 +55,23 @@ It uses plain browser JS with no modules. Each file attaches to the global `DK` 
 - **Retime to music** with `K.G.BPM` and `K.G.BARS` before any `K.at` call. Never hard-code seconds in a scene.
 - **Localised text** lives in DOM elements fed by HyperFrames variables; the canvas holds tickers, numbers and icons only.
 - **Lens zoom**: draw the world, then clip to `K.lens` and draw it again with a camera of `z * 1.6` centred so the lens point stays fixed (see `drawDiner` in the intro). Leave the character holding the glass out of the second pass.
+
+## Hosts in an episode (two voices)
+
+Host A = Chef Nibbs (lower voice, the explainer), host B = Bizzy (higher voice, the curious one). Feed each a loudness value per frame (0 while the other talks):
+
+```js
+const hosts = K.duo(ctx, g, {
+  x: 520, y: 1040, s: 1,                 /* centre + floor line on screen; Nibbs ~430 px, Bizzy ~420 px */
+  talkA: NR.talk(g, "a"), talkB: NR.talk(g, "b"),
+  actsA: [{ kind: "surprise", at: B.reveal }], actsB: [{ kind: "think", at: B.question, dur: 2 }],
+  pointA: K.toScreen(1300, 400), pointAmtA: K.inv(B.reveal, B.reveal + 0.4, g),
+  magnifier: true,                       /* Nibbs holds the glass; pointing aims it */
+  propA: (c, x, y) => K.coin(c, x, y - 30, 34, { color: P.ETH, label: "ETH", labelColor: P.cream }),
+});
+```
+
+- Listening is automatic: when only the other host talks, the listener looks at the speaker and nods (Bizzy also scribbles on her pad).
+- Acts (`{kind, at, dur}`): both `point`, `nod`, `surprise`, `think`, `grin`, `worry`, `cheer`; Nibbs `magnify`, `tip`; Bizzy `write`, `twirl`.
+- `side: -1` puts Nibbs on the right. Keep the duo large (`s` >= 0.8, so Nibbs >= 340 px); explainer objects go in the other half of the frame.
+- For custom staging call `K.hamster(ctx, x, y, s, K.nibbsPose(t, o))` and `K.bee(ctx, x, y, s, K.bizzyPose(t, o))` directly.
