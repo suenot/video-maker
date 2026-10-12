@@ -10,7 +10,7 @@
 ## State
 | Collection | Mascot | Intro | Sidekick (host B) |
 |---|---|---|---|
-| complex-arbitrage-rust | crab captain | 31.5 s done; fix pending: 13 s static title | parrot Pip (done) |
+| complex-arbitrage-rust | crab captain | 31.5 s done (title fix re-rendered, Pip glides in) | parrot Pip (done) |
 | ai-agents-trading | robot Beepo | 24.3 s done | done: analyst bot Ping, K.duo + episode layer 65_host.js |
 | modern-ml-trading | owl Strix | 26.6 s done | done: hummingbird Pico, K.duo |
 | order-book-microstructure | raccoon Tikki | 26.4 s done | done: gecko Gekko, K.duo |
