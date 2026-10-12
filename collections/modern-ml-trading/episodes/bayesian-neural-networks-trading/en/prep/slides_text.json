@@ -1,0 +1,64 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "Aleatoric Uncertainty\n(Market Noise)\n\nEpistemic Uncertainty\n(Model Ignorance)\n\nVas( (i, ))\n\nThe Prism\n\nEpistemic vs Aleatoric: Measuring\n\nInherent System\nVariance, Irreducible\n\nhat a Return Model Doesn’t Know\n\nMC Dropout and deep ensembles split uncertainty into model ignorance\nand market noise — and those two deserve different position sizes.\n\nALEATORIC\nCOMPONENT POSITION SIZING\n(CYAN)  Valmarket\nRETURN MODEL UNCERTAINTY\n(BASE) DECOMPOSITION\n\n— al\nOFetal = Tajeatorie + epistemic Time\n\nMARKET NOISE (ALEATORIC) - CYAN MODEL IGNORANCE (EPISTEMIC) - MAGENTA\n\nLack of Data/Knowledge,\nReducible\n\nModel Output f(x)\n\nFeature Space X\n\nCOMPONENT\n\nEPISTEMIC POSITION SIZING\n\n¢ Causes: Latent variables, observation\nnoise, chaotic dynamics.\n\n¢ Solution: Model cannot fix, account\nfor in risk budget.\n\n* Position Sizing Implication: Wider\nstop-losses, adjust for volatility.\n\ndef calculate_epistemic(model, x, T=16):\ny_preds = [model.predict(x) for _ in range(T)]\n# Monte Carlo Dropout variance\nreturn np.var(y_preds)\n\ndef calculate_aleatoric(y_pred, y_true):\nloss = np.mean((y_pred - y_true)®*2)\n# Data-dependent return Loss\n\nAuthor: suenot | Date: 2626-07-31 | Tags: bayesian, uncertainty, neural-network, risk, position-sizing\n\n* Causes: Limited training data, model\nbias, insufficient capacity.\n\n* Solution: Collect more data, improve\nmodel architecture, use ensembles.\n\n* Position Sizing Implication: Reduce\nexposure, conservative allocation,\nuse Bayesian updates.\n\ni Gemini Notebook"
+    },
+    {
+      "page": 2,
+      "text": "1. H2 — The Thesis: Two Uncertainties Demand Two Responses\n\nEpistemic Aleatoric\nReducible?: Yes (more data helps) Reducible?: No\n\nTrading action: Reduce position or abstain\n\nTrading action: Widen stops, reduce leverage\n\nSignal: I haven't seen this regime Signal: This market is noisy right now\n\nStandard rules (Kelly, Conformal, GARCH) treat uncertainty as one number. But market\n\nnoise is priced; model ignorance is an unknown unknown with no risk premium.\n\nf Gemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "2. H3 — The Decomposition\n\nP(y |x, D) = / P(y |x, 8) p(@| D) dé p(y |x, 0) = N(y; Wo(x), 09(x))\n\nmares Baa Ss\n\nUncertainty over model parameters 0. The heteroscedastic\nIntegrates over the distribution rather Gaussian head. Emits\nrather than using a single 6”. input-dependent\nShrinks as dataset D grows. conditional variance.\n\nNote: This NN head estimates the exact same object as a live GARCH(1,1)\nconditional forecast—but GARCH cannot provide the Epistemic term."
+    },
+    {
+      "page": 4,
+      "text": "3. H2 — Where This Sits Relative to What’s Already Published\n\nKeep conformal on top for coverage. Buy the Bayesian\ndecomposition to know why the interval widened.\n\nConformal Prediction E Bayesian Networks (This Deck)\n\ne Provides finite-sample e Provides Variance\ncoverage guarantees. Decomposition (Epistemic vs.\n\ne Provides inverse-width sizing Aleatoric).\nand edge-ratio no-trade\nfilters.\n\n, oe | Constraint: No finite-sample\ni Constraint: Gives you a ' coverage guarantee (intervals\nguarantee but only one number ‘are only as good as the\n\nI\n| (not decomposable) . | approximate posterior).\n\nTemporal Fusion Transformers (TFT) emit quantiles directly, but pinball-loss quantiles are not automatically calibrated out of sample.\nf Gemini Notebook"
+    },
+    {
+      "page": 5,
+      "text": "4. H2 — Method 1: Variational Inference (Bayes by Backprop)\n\nCosts / Trade-offs\n\ne Doubles\nparameter count.\n\nL(o) = Egg(8) log p(D | @)] — KL(q¢(9) || p(8)) Raises gradient\n\nsara cama rae beam variance.\n\nPushes qg toward Keeps gg near Mean-field\nexplaining the data. the prior. assumption\nignores weight\ncorrelations,\ntending to\nunderestimate\nepistemic\nuncertainty.\n\nReparameterization Trick\n@6=pw+oaOe (where e~ N(0,1))\n\nReplaces intractable posterior with factorized\nGaussian q¢g(0) = [];.V(0;; 4,07).\n\nf Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "5. H2 — Method 2: MC Dropout & 6. H3 — Predictive Statistics\n\nSingle Network Predictions\n\nDropout stays ON at\ntest time to sample\n\nT parallel stochastic\nforward passes\n(dropout active)\n\nthe implicit\nposterior (deep\nGaussian process).\n\nThe Law of Total Variance\n\nee Epistemic Aleatoric\nPredictive mean (Disagreement between passes) | (Mean of predicted noise)\n\nOlea 7a"
+    },
+    {
+      "page": 7,
+      "text": "7. H3 — PyTorch Implementation &\n8. H3 — Choosing the Number of Forward Passes\n\neq Apchisecture THE GOTCHA: Calling model .eval()\nself .head_mu = nn.Linear(hidden_dim, 1) inside mc_predict silently disables\nself .head_logvar = nn.Linear(hidden_dim, 1) dropout. Every pass returns\n\nidentical values. o..,; collapses to\nexactly zero, reverting the system\n# 2. Heteroscedastic Loss to plain Kelly on aleatoric\n\nQ.5 * precision * (target - mu) ** 2 + Q\n\nvariance without erroring.\n0.5 * log_var\n\n# 3. MC Predict Loop Pass Counts (7)\n\nmodel. train() e 7 = 30: stable mean lower bound\nmodel.train() # Explicitly active e 7 = 100: workable default\n\nfor _ in range(n_samples): e 7 = 500+: diminishing returns\n\nmu, log_var = model(x) (unless tail quantiles needed)\n\n& Gemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "H2 — Method 3: Deep Ensembles\n\nNetwork 1\n(Seed A)\n\nbi ee oe Aggregation Node\n\nNetwork M\n(Seed X)\n\ne Not formally Bayesian, but consistently beats principled methods on\nuncertainty calibration benchmarks.\n\ne Disagreement between independent members is the explicit epistemic estimate.\n\ne Distinct from standard aggregation (like regime detection) because the\ninter-member spread is the uncertainty estimator.\n\n| f Gemini Notebook"
+    },
+    {
+      "page": 9,
+      "text": "10. H3 — Ensemble Implementation\n\ndef __init__(self...):\nfor seed in range(n_models):\ntorch.manual_seed(seed) # different init\n\ndef fit(self...):\nfor seed, model in enumerate(self.models):\ntorch.manual_seed(1000 + seed) # different shuffle\n\ndef predict(self, x):\nfor model in self.models:\nmodel.eval() # Correct here\n\nDiversity requires independent training.\nSkipping the distinct fit() loop yields o2,; = 0\n(identical members) or pure noise.\n\nSTATE CONTRAST\nEXECUTION RULE:\n\nIn Deep Ensembles, model. eval ()\n\nIS correct during inference.\nThe stochasticity comes from\n\nindependent training seeds and\nshuffles, not live dropout masks.\n\n& Gemini Notebook"
+    },
+    {
+      "page": 10,
+      "text": "11. H3 — Trade-offs: MC Dropout vs Deep Ensembles\n\n[Dimension] [Deep Ensembles]\nTraining cost Mx (M models)\n\nInference cost M forward passes\n\nMemory Mx parameters\n\nUncertainty quality Better calibrated overall\nEase of implementation Trivial (train M models)\nParallelism Embarrassingly parallel\n\nThe Pragmatic Hybrid\n\nTrain a small ensemble (M = 3-5) where each member also uses MC Dropout to capture\nboth inter-model disagreement and intra-model stochasticity.\n\nf Gemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "1a\n\nH2 — The Payoff: Asymmetric Sizing\nStandard Gaussian Kelly: f* =  / 0% (quarter-Kelly fraction)\n\n+2A-0%..,(A>1)\n\nRationale: Aleatoric noise earns a premium. Epistemic variance correlates\nwith a broken uy estimate, compounding sizing error. Penalize it superlinearly.\n\nNew Denominator: a\n\nOslea epi!\n\ndef uncertainty_adjusted_position_size(...):\neffective_var = aleatoric_std ** 2 + lam * epistemic_std *x* 2\nposition = (pred_mean / effective_var) * base_kelly_fraction\n\n# The Confidence Gate Detects a state total-\n\nepi_ratio = epistemic_std / (aleatoric_std + 1e-8) | uncertainty gating cannot: a\n\nif epi_ratio > max_epi_ratio: calm-but-unfamiliar regime.\nposition x= max(0.0, 1.0 - epi_ratio)"
+    },
+    {
+      "page": 12,
+      "text": "13. H2 — Calibration: Hand This Off\n\nCore Warning: Do NOT roll your own\nGaussian-quantile reliability check on fat-tailed\nreturn residuals for a nominal 95% interval.\n\nAdaptive Conformal Inference (ACT) Linear Rescaling\n[Recommended ] (Post-hoc)\n\n- Maintains an online miscoverage level - 6 =ao+f fit on a validation set.\na, with a long-run coverage bound. - Weaker static fix, but explicitly\n\n- The stronger optine miscoverage level preserves the Epistemic/Aleatoric\na, with a long-run coverage bound. ratio (which the model ignorance ACT)\n\n- The stronger option to absorb model (which ACI’s single width does not).\nstaleness."
+    },
+    {
+      "page": 13,
+      "text": "i 14. H2 — What Has To Be Measured Before This Publishes\n\nTODO / Pending Validation\n\n+—\n\nDataset/Target: Define instrument, bar size, features, target.\n\nThe Split Ratio: Track epi/alea fraction across named calm vs. volatile\nwindows. (Hypothesis: The ratio spikes *before* realized volatility).\n\nCoverage vs Conformal: Head-to-head out-of-sample coverage of MC\n| Dropout against split-conformal intervals.\n\nAll evaluation must run under strictly disciplined Walk-Forward\n\noolooo\n\nDoes A buy PnL?: Sweep the epistemic penalty on validation vs a A=1\nbaseline. (An honest negative is a valid result).\n\nInference Cost: Measure latency at T on target hardware.\n\nOptimization. A A tuned on the full sample is not a result.\n\n& Gemini Not\n\nebook"
+    },
+    {
+      "page": 14,
+      "text": "15. H2 — Practical Tips for Production\n\n1. Warm-up prior\n\nInitialize variational mean from\npre-trained deterministic\nnetwork (halves convergence\ntime).\n\n4. Ensemble diversity\n\nDifferent seeds/shuffles per\nmember. The fit() loop\ninitialization is mandatory.\n\n2. Watch variance collapse\n\nLearned oj can drift to zero,\nreverting BNN to\ndeterministic. Add KL\nannealing if needed.\n\n5. Log the decomposition\n\nStore epi/alea separately to\nanswer *why* a sizer cut\nexposure post-trade.\n\n3. Rolling recalibration\n\nRetrain on walk-forward\nwindows or use AC]! online.\nFixed fits decay.\n\n6. Uncertainty as a feature\n\nTest rolling epistemic\nStatistics as predictive\nfeatures for drawdowns.\n\n& Gemini Notebook"
+    },
+    {
+      "page": 15,
+      "text": "Honest Caveats\n\nApproximations aren’t ground truth;\nno coverage guarantees.\n\nNovel regimes break calibration\n(out-of-distribution inputs yield\n\nout-of-distribution uncertainty).\n\nCrucial Failure Mode: A flexible\naleatoric head can absorb epistemic\nSignal, quietly collapsing o,,; and\ndefeating the split.\n\nAX is a free parameter requiring\nwalk-forward justification.\n\n. H2 — Limitations and Honest Caveats & 17. H2 — Conclusion\n\nConclusion\n\nConformal gives coverage. Kelly gives\nsizing. Bayesian splitting tells you\nwhy an interval is wide.\n\nMarket noise is compensated risk.\nModel ignorance is not. The sizing\ndenominator must reflect this.\n\nBoth MC Dropout and Ensembles feed\nthe same asymmetric sizing:\n0\" slea +) 0 ani:\n\nEmpirical measurements remain the\nstrict price of publication.\n\nReferences: Blundell 2015, Gal 2016, Lakshminarayanan 2017, Kendall 2017, Gibbs 2021, Kelly 1956\n\nf Gemini Notebook"
+    }
+  ]
+}
