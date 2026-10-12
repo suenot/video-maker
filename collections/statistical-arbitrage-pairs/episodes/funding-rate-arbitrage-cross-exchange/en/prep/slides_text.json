@@ -1,0 +1,64 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "Funding Rate Arbitrage\nAcross Exchanges\n\nA structural blueprint for extracting\nprofit from cross-venue rate discrepancies.\n\n—\n\nAlgo Trading| ‘Market Making! |(Delta-Neutral|\n\nEditorial draft. Data and calculations are strictly illustrative.\n@® Gemini Notebook"
+    },
+    {
+      "page": 2,
+      "text": "The Structural Divergence\n\nFunding rate arbitrage extracts profit from structural divergences between venues without predicting |\n_ market direction. Someone pays more, someone pays less; arbitrageurs capture the difference. |\n\nBinance Environment Bybit Environment\n\nETHUSDT\n\nVS) _ ETHUSDT\n\nPays 0.01% Pays 0.035%"
+    },
+    {
+      "page": 3,
+      "text": "The Four Drivers of Divergence\n\n-\nag\n1. Trader\nComposition\n\nRetail dominance\n\n(e.g., Binance,\n\nheavily skewed\nlong) vs.\nProfessional\nparticipants\n\n(e.g., Bybit/OKX).\n\nx->\n+—=\nxX+);\n\n2. Calculation\nFormulas\n\nVariations in\npremium index\nweights, interest\nrate baselines, and\naveraging periods\nacross\nexchanges.\n\n3. Liquidity\nVariance\n\nLower liquidity\nenvironments lead\nto volatile\nspot/futures\npremiums, Causing\nwider funding\nfluctuations.\n\n4. Payment\nIntervals\n\nStandard payments\n(every 8 hours) vs.\nAccelerated\npayments\n(hourly on platforms\nlike dYdX or specific\nBybit pairs).\n\n® Gemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "| Spread Behavior Across Market Phases\n\nPhase Binance Bybit — OKX dYdX Spread\n\nCalm 8.01% 8.012% 8.009% 8.01% ~8 .003%\n\nBullish 8.03% 8.05% 0.025% 8.04%\n\nExtreme\n\nBullish 8.1% Q@.2% 8.08% Q@.15% re |\n\nBearish -8.02% -8@.01%  -@.025% -@.015%\n\nKey Insight: Volatility breeds opportunity. Spreads widen significantly during\nextreme market phases.\n\n( Gemini Notebook —"
+    },
+    {
+      "page": 5,
+      "text": "The Mirror Position Mechanism\n\nNeutral\nPrice Risk\n\nSide A (Target Exchange - Bybit) Side B (Hedge Exchange - Binance)\n\nOpen LONG\n\nOpen SHORT\n\nAction: Receive 0.04% (every 8h). Action: Pay 0.01% (every 8h).\n\nThe Net Result\n\nPrice Risk: Neutralized.\nNet Spread Captured: 0.03% per 8 hours (0.09% per day).\n\nA WARNING: Gross scenario before fees, slippage, and margin costs.\n\n( Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "Calculating Potential Yield\n\nDaily PnL = (Short Rate - Long Rate) x Payments per Day x Position Size\n\nY\n\nCalculated Output ($100K Position)\n\nInput Spread : 0.03%\n\nFrequency : 3x daily payments\nGross Daily : $90\n\nGross Monthly: ~$2,700 (30 days)\n\nVIVO VV\n\nlllustrative calculations derived from article claim scenarios only. Not guaranteed or risk-free returns.\n\n(& Gemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "Pitfalls Part |: Execution Frictions\n\nFriction 1: Price Divergence Friction 2: Rate Reversals Friction 3: Trading Commissions\n\nRisk: Risk:\n\nVenues trade at different Spreads can compress or\nprices (0.01%-1% flip, forcing the trader to\nvariance). pay on both sides.\n\nAsynchronous execution\nexecution instantly erases\n\nfunding profits. Engineered Fix:\nReal-time monitoring and\nEngineered Fix: auto-close triggers.\n\nColocated servers,\nLow-Latency API execution.\n\nRisk:\n\n4 orders required\n(open/close x2).\n\nTotal commissions heavily\nimpact breakeven time.\n\nBreakeven Math:\n\nTime = Total Commissions\nSpread x Payments per Day\nExample:\n\nTaker fees (0.20% total)\nrequire >2.2 days holding to\nbreak even on a 0.03% spread.\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "Pitfalls Part Il: Margin & Liquidation\n\nThe Collateral Trap: Mirrored positions cannot\nshare margin across different exchanges.\n\nCapital Inefficiency: A $100K position at\n5x Leverage requires $40K total locked\ncollateral ($20K per exchange).\n\nArticle estimated ROC: ~6.75% per month.\n\nLiquidation Risk: As the underlying asset\n\nprice swings, one exchange generates deep\n\nunrealized Losses requiring margin mainte-\nnance, while the offsetting profit remains\ntrapped on the other exchange.\n\nProtocol Solutions\n\n[¥] Maintain minimum 2x margin reserve.\n\nTih\n—=™€—=~S—s=S\neer |\n\nLocked Profits\n(Cannot Offset)\n\n['V] Implement strict margin level alerts.\n[V] Execute automated inter-exchange\nrebalancing transfers.\n\nUnrealized Losses\n(Requires Maintenance Margin)\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 9,
+      "text": "Data Infrastructure: The Monitoring System\n\n| 1. Fetch (Async) Scanner Output\n\nQuery APIs across all target\nexchanges simultaneously.\n\nTerminal\n\n4 ETHUSDT | Long: Binance (0.010%)\n| Short: Bybit (0.040%) | Spread: 0.030%\n\nSpread: 0.030% | APR: 32.9%\n\nAggregate all rate snapshots BTCUSDT | Long: OKX (0.008%)\nby symbol (e.g., ETHUSDT). | Short: Binance (0.020%)| Spread: 0.012%\nL Spread: 0.012% | APR: 13.1%\nSOLUSDT | Long: Binance (0.015%)\n3. Calculate ———> | Short: dYdX (0.055%) | Spread: 0.040%\n\nSpread: 0.040% | APR: 43.8%\n\nSort rates to identify the Lowest\n(Long target) and highest (Short\ntarget) to derive the Spread."
+    },
+    {
+      "page": 10,
+      "text": "Execution & Lifecycle Management\n\n| Phase 1: Entry (Simultaneous Opening)\n\n1. Check price 2. Reject if 3. Fire async Market\n\nspread immediately divergence > max Buy + Market Sell\nbefore execution. Slippage allowance. SimuLtaneousLy.\n\nPhase 2: Continuous Monitoring (Closing Conditions)\n\nTrigger A: Funding spread\ncontracts below minimum\nprofitability threshold.\n\nTrigger B: Total unrealized\nloss (Price Divergence)\nexceeds safety Limits.\n\n|\nSystem Action: |\nUpon any trigger, fire async |\nMarket Orders to auto-close\nboth Legs immediately.\n\nTrigger C: Margin balance on\neither venue falls below\nSafe Levels.\n\nie"
+    },
+    {
+      "page": 11,
+      "text": "Advanced Variants: Spot-Perp Carry\n\nMechanic: Hold Spot (no funding) + Short Perpetual (receives funding)\nexecuted on a Single exchange.\n\nee: High, bifurcated across Zero cross-exchange risk,\nViability Always viable, regardless of | Only functions when funding is\nPhase market direction. positive (longs pay shorts).\n\nMarket Opportunistic spikes across Typically viable ~70% of the\nEnvironment all phases. time during bull cycles.\n: Requires overcoming 4x order |Overcomes Spot Fee + Perp Fee\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 12,
+      "text": "Multi-Venue Routing & Predictive Modeling\n\nMulti-Exchange Rotation\n\n-@~\n\n@-<-®\nAs Execution —\n\nEngine\n\nScan 5+ venues concurrently > Find maximum spread\n> Validate Liquidity and depth > Execute.\n\nSystem continuously rescans and rotates capital as\nspreads shift across the market.\n\nRate Prediction (Front-Running)\n\nPREMIUM INDEX UPDATE\n\n1 Minute 1 Minute 1 Minute 1 Minute\n\nFUNDING INTERVAL PAYMENT AACS\n\nee a a ce P|\n\n8 Hours 8 Hours 8 Hours 8 Hours\n\nThe Math: Funding = f(Premium Index).\n\nThe Advantage: The Premium Index updates every\nminute, while funding intervals are typically 8\nhours.\n\nThe Execution: Predictive systems calculate the next\nfunding rate before payment, allowing early entry\nbefore the spread attracts competing arbitrageurs.\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 13,
+      "text": "Institutional-Grade Infrastructure\n\nTechnical Specifications Matrix\nee Component | Minimum ik |\n\nCloud VPS Colocated near exchanges\n\nData Feed REST API Polling WebSocket Streaming\n\nEconomics of Scale (Illustrative 5x Leverage, 0.03% Spread)\n$10K Capital: ~$675/mo $50K Capital: ~$3,375/mo $200K Capital: ~$13,500/mo\n(May not justify (Optimal starting tier). (Institutional tier).\ninfrastructure costs).\n\nInsight: Return on Capital (ROC) remains constant, but absolute profit must scale to\njustify fixed latency and infrastructure costs.\n\n® Gemini Notebook"
+    },
+    {
+      "page": 14,
+      "text": "Summary: The Arbitrage Reality\n\nThe Reality: Funding rate arbitrage is a pure, structural, delta-neutral\nstrategy. It eliminates price prediction entirely, replacing it with a demand\nfor intense technical engineering.\n\n2. Infrastructure\n\nSimultaneous execution across Requires real-time, multi-venue\nvenues is non-negotiable. data streams.\n3. Risk Control 4. Capital\n\nDemands margin isolation and Scale is strictly required to\nruthless auto-close algorithms. offset fixed latency/server costs."
+    },
+    {
+      "page": 15,
+      "text": "Sources & Literature\n\nPrimary Source: Soloviov, E. (2026). 'Funding Rate Arbitrage Across\nExchanges: How to Profit from Rate Differences’. MarketMaker.cc.\n\nProtocol References:\n\nBinance — Funding Rate History & Introduction\nBybit — Understanding Funding Rates\n\ndYdX — Perpetual Funding Rate Mechanism\nCoinglass — Funding Rate Monitor\n\nDisclaimer: This deck is an editorial draft. Sample code is illustrative and not production-ready.\nFinancial figures are gross theoretical scenarios before fees/slippage. This document does not constitute\ninvestment advice. _\n\n(® Gemini Notebook"
+    }
+  ]
+}
