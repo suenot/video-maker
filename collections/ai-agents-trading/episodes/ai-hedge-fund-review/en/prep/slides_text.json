@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "AI Hedge Fund: Hype vs. Architectural Reality\nThe Hype (As Cited)\nsv 12,000+ Disclaimer from the\n_ GitHub Stars project author: This is\nYe be 4 This is not a system\nLe Hundreds — system for real money =\nA)! cal Ac it’s a sandbox for\n| y Viral experiments.\nTwitter Momentum\n\nThe true value is an architectural pattern, not a neural network that makes money.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 2,
+      "text": "THE PARADIGM SHIFT: FROM SINGLE GURU TO COMMITTEE\nTHE MULTI-AGENT COMMITTEE\n\n© ATA STREAMS »\ncats ay\n\n=\n\nSPECIALIZED AGENTS\n\nAgent 1: tar ae Correl i\nz ati elation\nTrend Analysis Assessment Check\n\nTHE FLAWED SINGLE GURU\n\nEach agent contributes\nspecialized expertise\nsequentially.\n\nY STRICT RISK FILTER\n\na ae\n| TRADE EXECUTION !\n&, —__________ J\n\n& Gemini"
+    },
+    {
+      "page": 3,
+      "text": "THE 6-NODE DECISION ARCHITECTURE\n\nTechnical Analyst Sentiment Analyst\n\nValue Analyst\n\nFocus: Valuation Focus: Technical analysis Focus: Market sentiment\n\nData Diet: P/E, P/B, DCF,\nmargins\n\nData Diet: RSI, MACD,\nmoving averages, levels\n\nData Diet: News, social\nmedia, tone\n\nFundamentals Analyst Portfolio Manager\n\nFocus: Fundamental analysis Focus: Final decision\n\nData Diet: Revenue, profit,\ndebt, growth\n\nAction: Aggregates\nOpinions, creates orders\n\n& Gemini"
+    },
+    {
+      "page": 4,
+      "text": "Risk First, Action Second\n\nRisk Budget Aperture\n\nIn investing, what matters isn’t just the signal, but the right to |\nposition size. The foundation-first approach dictates asolid\nconstraint framework before tegen\n\n= 100% Portfolio Allocation\n“<.-~ (The Signal / AUS)\nee Zz\n\noe\n\n____ Gemini Notebook"
+    },
+    {
+      "page": 5,
+      "text": "The Decision-Making Sequence\n\nStep 1: Risk Budget Assessment\n\nEvaluates how much risk the portfolio can absorb prior to any trade monceal\n: system checks: volatility, current positions, and asset correlations.\n\name 2: Size Filtering\n\nHard constraints. An agent cannot fantasize a position size. If the limit allows\n>. only 5%, then only 5% is permitted, no matter how convincing the signal.\n\nStep 3: Opinion Aggregation\n\n_ The Portfolio Manager reviews detailed arguments from each analyst, not just\nbinary outputs, forming the final order.\n\nie M™ Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "—— - - —— _ a a |\n\nDiverging Opinions as a Safety Feature\n\nClear logic for why a\ntrade size is what it Is.\n\nFewer chances for\nimpulsive portfolio skews.\n\n“is }\na\n\n| Outcome: Instead of a system crash, detailed arguments are aggregated || _\nQ _ and position size mechanically decreases due to lack of consensus. ||"
+    },
+    {
+      "page": 7,
+      "text": "The Practical Sandbox Advantage\n\nYou can improve individual\nanalysts without breaking the\n\noverarching risk framework.\n\nThe Portfolio Manager sees\ndetailed arguments, providing\n\nProvides more stable ground\nfor backtesting experiments\n\n4; compared to unconstrained\nsingle-prompt models."
+    },
+    {
+      "page": 8,
+      "text": "Reading Results Without Self-Deception\n\n[4 Stability Across Markets |,\n\n(?) Overfitting\n\nIs the prompt logic suspiciously\n\nDoes it work in ranging markets\n\nLas well as trending ones?\noe\n\nSEE\nWhat happens during panics, |}\n| s, and sharp reversals?\n\nee\n\n0 eo"
+    },
+    {
+      "page": 9,
+      "text": "Evaluating Data Integrity & Reproducibility\n\nee\nla a a | |\na Hoke\nmE hhc Eee\nLima ihyEewT\nnes h(l6UL6m Pe\nhE lk Ta\neS Pre Se\nae ik Bier\nData Quality Reproducibility\nAre real-world frictions accounted for? Will the same prompts give the\n\nsame result in a week?\n\n, a Slippage LLMs are non-deterministic.\n\n} Z\\ Models with temperature > 0\n— ——7 inject randomness. :\n[Yj Stock Splits | = — ="
+    },
+    {
+      "page": 10,
+      "text": "Honest Assessment: What Al Hedge Fund Is Not\nAiea te Reality\n\nIC sondboxtimt Sandbox Limit Mi a\n\nEe CeUUC UD a 7 >< No real execution routing Vx Live market connectivity\n\nSY 2 No liquidity,ondepth Volume and eet\n— Hauidity >< 7 Nolet\n~~ | <2 No historical equity curve Continuous historical\npacktesting i On 5\\years of data S validation\n\nThis ts strictly a prototyping environment. You cannot run this —\n~ on years of historical data to guarantee an equity curve.\n\nSS ———$———— —,"
+    },
+    {
+      "page": 11,
+      "text": "The LLM Dependency Risk\n\nSystem Output\n\nIdentical inputs will yield different answers over time.\nStrict determinism is impossible in this architecture.\n\nTemperature Controls\n\nLLMs with temperature > 0 inherently inject\nrandomness into the evaluation pipeline.\n\nModel Quality\n\nDecision quality is entirely determined by foundational model quality.\n\nGPT-4 and GPT-3.5 will give fundamentally different results."
+    },
+    {
+      "page": 12,
+      "text": "— a\n\nV V Y¥ VEY\n\nSystem Repository Specs\n\nPROJECT _NAME: ai-hedge-fund\nREPOSITORY: virattt/ai-hedge-fund\nPLATFORM: GitHub\n\nLICENSE TYPE: MIT\n\nSTATUS: Open-Source Experimental\n\nNote: Specs and metrics represent dated claims from the source article requiring primary-source review."
+    },
+    {
+      "page": 13,
+      "text": "Technical\n\nhae\n\nValue\nonan\n\n“S\n‘$\n\nSentiment l= Fundamentals| Portfolio\nease » anal lili\n\nThe true value of this architecture is how it makes decisions explainable.\nlt forces consensus and physically separates idea generation from risk control."
+    },
+    {
+      "page": 14,
+      "text": "The Leap to Production\nee\n\nvcaneie\n\nModel ae\n\n_ Execution | ; Control\nicles Ensuring feal- -time \\ oni nr In Estabishine Hm er\n\nrisk committee at the\nabsolute rules/code level,\nnot just via LLM prompts.\n\npaper trading to\n\nactual live market integrity and ere"
+    }
+  ]
+}
