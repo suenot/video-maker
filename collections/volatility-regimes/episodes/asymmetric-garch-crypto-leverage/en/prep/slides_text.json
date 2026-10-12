@@ -1,0 +1,64 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "Kurtosis\nExcess\n\nCal\n\n>- Asymmetrical Shock & \"Fat Tail\" : ;\nGaussian Tail\n\n(Theoretical)\n\nGaussian Tail\n(Theoretical)\n\nKurtosis\n\nExcess Volatility Spike > Gaussian Model\n\nReal-World Event (e.g., Crypto Crash)\n\nAsymmetric and Heavy-Tailed GARCH: EGARCH, GJR, and Student-t\nFixing the structural defects of GARCH(1,1) for honest VaR and Expected Shortfall in crypto.\n\nThe Leverage Effect, and Why Crypto Is Messier\ne The Equity Baseline (Black, 1976): Bad news lowers equity value, raises leverage, and spikes future volatility more than equally-sized good news.\ne The Crypto Reality: No corporate balance-sheet leverage. Asymmetry persists via forced liquidations of over-collateralized loans and perp longs.\n\nThe Messy Caveat: Violent up-moves (squeezes, ETF gaps) also spike volatility. Asymmetry must be treated as an empirical question, not a strict law.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 2,
+      "text": "Testing for Asymmetry Before You Model It\n\nRun the Engle-Ng (1993) sign-bias tests on a fitted symmetric GARCH to prove asymmetry exists before adding parameters.\n\npl Dah tal NS tach\n\nstatsmodels.api sm\n\nSign_bias_test(symmetric_res):\n_— - - + z = symmetric_res.std_resid.dropna()\nZ = ag + A541 + a254_1Et-1 + 354\" 1€t-1 + Ut | z2 = (z ** 2).values[1:]\n1 eae ] eps_lag = z.values[:-1]\n\nIndicator for pera neg = (eps_lag < 0).astype(float)\nnegative shocks: ~~ ~° Positive-size-bias X = np.column_stack( [np.ones_like(eps_lag),\n1{e;_1; < 0} neg, neg * eps_lag, (1 - neg) * eps_lag])\nols = sm.OLS(z2, X).fit()\nSign-bias °— —o Negative-size-bias 1 ols\nTAKEAWAY\n\nA significant joint F-test provides empirical license to proceed to GJR or EGARCH.\n\nfh Gemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "e ]\n\nGJR-GARCH: Asymmetry via a Threshold Term\n\nAn extension to GARCH allowing negative and positive shocks to have different effects on volatility.\n\nSwitch ON (Ty-1 — 1): If ee 0.\nImpact is a + ¥.\n\nSign Convention:\n\n2 2 9 2 ‘y > 0 means negative\nOO, —~Wt+ae_e +v7yI+_41€ + bo hocks raise volatilit\n2 tyheaehs + B024-— ee\nto symmetric GARCH.\nIf rae | z2All)\nSwitch OFF (;_-1 = 0): | Impact isa.\n\nPositivity and Stationarity Constraints\n\nPositivity: Covariance Stationarity: Long-run Variance:\n\nw>0,a>0,a+7>0,8>0. a+B6+1/2y<1 o* =w/(1—-a—B-1/2y)\n\n(Note: y can be negative if a+y > 0).\n\n& Gemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "om |\n\nEGARCH: Modeling log-Variance, No Positivity Constraints\n\nlogo? =w+ Plog On, a (21-1 — E| %-1|) +9 2-1 The News Impact Curve\n\n5 5 ;\n\\\n\nMagnitude Term [a]: Responds to shock size. Centered so an\naverage shock contributes nothing.\n\ndee\n\nSign Term [4]: Is linear. A negative z;_; pushes log-variance o-\nin the opposite direction from a positive one.\n\nConstraints: Because it models log-variance, oa? is strictly positive\n\nby exponentiation. Stationarity only requires |8| < 1.\n\nThe Sign Convention Trap: In EGARCH, y < 0 denotes the Visualizes asymmetry: EGARCH yields\nleverage effect (the exact opposite of GJR). an asymmetric exponential V-shape.\n\nGemini Notebook"
+    },
+    {
+      "page": 5,
+      "text": "Heavy Tails: Student-t and Skewed-t Innovations\n\nThe Flaw: A Gaussian 99% VaR uses quantile -2.326. A Student-t true 1% quantile is near -3.36.\n\nGaussian models are blindly optimistic.\n[Standardized Student-t\n\n¢ Must be standardized to unit variance.\nRequires degrees-of-freedom v > 2.\n\n¢ Crypto daily returns typically land at\nv ~ 3 to 6 (heavy tails, finite kurtosis).\n\n¢ Log-likelihood Jacobian term: —1/2 log a?\n\nThe Danger Zone\n\nDeep Left Tail: The\nGaussian model drops to\nzero while t-curves retain\nthick probability mass.\n\n4\n\n| Dffeneens Skewed-t 7)\n\n« Adds skewness parameter A € (—1, 1).\n\n¢ A < Oyields a left-skewed distribution\n(heavier downside), aligning with crypto\ncrash dynamics.\n\n¢ Mis-modeling the left tail is uniquely costly\ndue to the asymmetry of position loss vs\nprofit recovery.\n\nGemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "Python Implementation\n\nSetup and Data\n\nimport numpy as np\n\nCrypto Caveat: Scale . :\nte import yfinance as yf\ndaily returns by 100 for P y y\n\nnumerical conditioning.\n\nAnntializey S65.dnvsinct Jem px = yf.download('BTC-USD', start='2019-01-01') ['Close'].dropna()\n\nret = 100.0 * np.log(px / px.shift(1)).dropna()\n\nFitting Four Models\n\nfrom arch import arch_model\n\ndef fit(returns, vol, o=0, dist='normal'):\nam = arch_model(returns, mean='Constant', vol=vol, p=1, o=0o, q=1, dist=dist)\nreturn am. fit(disp='off')\nEGARCH Model Student-t Distribution\n\nmodels = {\n'GARCH-N': fit(r, vol='Garch',/ o=0, dist='normal'), # Baseline\n‘GJR-t': mmel(te Wole(Ce irene Sth obi # Asymmetry + tails\n\"EGARCH-t': fit(r, vol='EGARCH', o=1, dist= ; # Log-var asymmetry\n'GJR-skewt': fit(r, vol='Garch', o=1, dist= # + skew\n\n& Gemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "Reading the GJR Fit\n(Illustrative BTC Data)\n\ncoef stderr\n\nomega\nalpha[1]\ngamma [1]\n\nbeta[1]\nnu\n\ne gamma is significant (t > 3). Bad news impact =\n\\alpha + \\gamma = @.153. Good news impact =\n\\alpha = @.062. (~2.5x variance asymmetry).\n\ne nu = 4.3 confirms heavy tails.\n\nPersistence: \\alpha + \\beta + 1/2\\gamma = 0.062\n+ 0.885 + 0.0455 = 8.993 (highly clustered).\n\nComparing Models by\nInformation Criteria\n\nModel Fits\nComputed\n\nBIC (Bayesian\nInformation\nCriterion)\n\nLog-Likelihood\nAlone\n\nReject:\nAlways\nrewards\n\ncomplexity.\n\nAccept:\nPenalizes\nparameter\n\ncount.\n\nRule of Thumb for BIC: Improvement > 6 is strong\nevidence. 1-2 points is noise. If GJR-t beats GARCH-N\nby 30 but skew-t only adds 1 point, drop the skew.\n\nGemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "Plotting the News Impact Curve\n\nGARCH-N  —— EGARCH-t\n\nVisual Verification: If\nEGARCH's left arm sits above\nits right, the leverage effect is\n\nconfirmed and the negative\nsign convention is verified.\n\nLast shock €+_}\n\nA Side-by-Side Comparison of the Four Models\n\nProperty GARCH-N GJR-t EGARCH-t GJR-skewt\nAsymmetry none threshold Signed threshold\nTails Gaussian Student-t Student-t Skewed-t\nConstraints yes yes none yes\nStationarity atB <1 a+B+1/2y <1 IB| <1 a+B+P(z<@)y <1\n\nSynthesis Insight: The jump from GARCH-N to GJR-t contains almost all the risk-calibration\nimprovement. Further refinements are often second-order noise.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 9,
+      "text": "Risk Application: VaR and Expected Shortfall\n\nRisk Threshold Graphic From Conditional Distribution to VaR\n\n_ VaR Threshold: -F,\" = Return formula: ris; = Weer + Obey Zt+1\n\n= VaR formula: VaR,(t+1) = -(Hia, + On, F,'(1-a))\n\n= VaR is an affine transform of the standardized\ndistribution quantile.\n\nExpected Shortfall (ES)\n\nExpected\n\nShortfall « Captures average loss conditional on breaching\nIntegral VaR. Coherent (subadditive) metric used by Basel.\na)\n\n= Formula:\nESa(tt1) = =u, + G4 Elz | zs Fy (1-0) 3)\n\n«= The t-distribution tail is fatter. ES reveals the\nextreme downside Gaussian models actively hide.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 10,
+      "text": "Computing VaR and ES from a Fitted arch Model\n\ndist.ppf(1 - alpha)\n\n= Gaussian uses Z , ~ -2.33.\n-(yu + sigma * Z_q) -\n\n= Student-t (v ~ 4.3) pushes it to\n\na ~ -3.3.\n\nnum, _ = scipy. integrate. quad( z: z * pdf(z), -30, z_q)\nes_z = num / (1 - alpha)\nes = -(mu + Sigma * es_z)\n\n= Result: Materially larger, honest VaR.\n\nCAVEAT: One Step vs Multi-Step |\n\n= Mean Reversion: Variance forecasts revert to unconditional mean. Naive square-root-of-time\nscaling VaR(h) = VAVaR(1) is dangerously wrong post-shock.\n\n= Shape Change: Summing t-distributed daily shocks does not yield a multi-day t-distribution.\n\n= The Honest Route: Multi-horizon VaR requires simulation of innovation paths, not analytic\none-step formulas.\n\n& Gemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "[Seas rekon menace Meee ee ean ere) eign ce eer ates, Sane ad gare 4. ot 7a a rr |\nBacktesting VaR: Kupiec and Christoffersen\n\nL a\nEvaluate dynamically via walk-forward evaluation (out-of-sample). Never backtest VaR in-sample.\nIL\n\nKupiec’s Unconditional Coverage (LR,,.)\noO oO\nIs the violation rate ~ 1-a? (Did we get 1%\n\nbreaches on a 99% VaR?)\n\nChristoffersen's Independence (LR;,,,)\nCheck 2: O\nIndependence\n\nAre violations independent, or do they cluster?\nEvaluated via Markov transition counts.\n\nB at\nThe Crypto Reality\nGARCH-Normal routinely fails Kupiec. GJR-t and EGARCH-t pass. If t-models fail Christoffersen\n(bunching during crash weeks), the volatility dynamics are still misspecified.\na)\n\nfe a"
+    },
+    {
+      "page": 12,
+      "text": "Ranking Models by Tail Loss, Not Just Pass/Fail\n\nBasel Traffic-Light Claim (Attributed)\n1B (r, q) = (7 — 1{r < q})(r —- q) Over 250 trading days for 99% VaR\n\nO\n¢ Pinball (Quantile) Loss: Minimizing this\nrewards models that are well\nharp (not lazily wide).\n\n-Callbratecd\n\n; ; ; ' Green: 0-4 Yellow: 5-9 Red: 10+\nExpected Shortfall Wrinkle: ES is f ae violations violations violations\n. -_ Evaluate jointly with Acceptable model. Scrutiny required. Model rejected,\nVaR (Fissler-Ziggel) or compare average capital multipliers\nrise.\n\nbreach magnitude to predicted ES.\n\nO\n\nA Gemini Notebook"
+    },
+    {
+      "page": 13,
+      "text": "Practical Considerations\n\nComplexity Traps Architectural Foundation\n\nIlliquid/Short Samples: When Extra Parameters These Are the Marginals\nWith < 500 days, Do Not Pay Off. Everyone Else Builds On.\nSell odte att\n\noften the safest ceiling. The Skew Beste You extract these\n\nHigher Frequency: to skew- t is Seiten rie\n\nHourly/minute bars are marginal noise.\n\ndominated by\n\nmicrostructure. Plain Id ske y V\n\ndaily-style GARCH fails IC clearly den nand S it. Garbage marginals =\nregardless of asymmetry. garbage joint risk.\n\nPR Ae ee oe a OE sr\n\nA Gemini Notebook"
+    },
+    {
+      "page": 14,
+      "text": "[ 3\nA Distribution-Free Alternative and Numerical Hygiene\n\n| Hygiene Checklist\n\ni Numerical and Workflow Hygiene ]\n\n[v] Scaling: Always scale returns by 100 for\noptimizer stability.\n\n—o A Distribution-Free Alternative [v] Persistence Limits: Flag models where\n\\a ++6 + 1/2\\yy ~ 0.999 (near-integrated;\n—o Conformal Prediction: Offers finite-sample long-horizon forecasts break).\ncoverage guarantees without parametric\nassumptions about tail shape. [v] Convergence Fallbacks: Wrap EGARCH fit()\nin try/except blocks to fallback on previous\n——o Use parametric GARCH-t for the full window parameters during rolling re-estimation.\nconditional density (ES), and conformal as\na distribution-free cross-check for [“] Mean Model: Default to constant mean;\ncoverage. daily crypto returns are swamped by volatility.\n\n—_—\n\nA Gemini Notebook"
+    },
+    {
+      "page": 15,
+      "text": "Summary\n\nReferences\n\nPlain GARCH(1,1) costs money via optimistic VaR; it ignores\nasymmetry and Gaussian tails.\n\nGJR-GARCH captures asymmetry via threshold (\\gamma > @ = downside\nasymmetry); requires positivity constraints.\n\nEGARCH captures asymmetry via log-variance (\\gamma < @ = downside\nasymmetry); avoids positivity constraints. Verified via News\nImpact Curve.\n\nStudent-t and Skew-t expose the true depth of crypto’s left tail,\ninflating VaR and Expected Shortfall to honest levels.\n\nBacktest out-of-sample with Kupiec and Christoffersen. Reject\nmodels that cluster violations. Add complexity only when BIC and\nwalk-forward VaR demand it.\n\nNelson (1991)\nGlosten et al. (1993)\nBollerslev (1987)\nHansen (1994)\n\nEngle & Ng (1993)\nChristoffersen (1998)\nKupiec (1995)\n\nBlack (1976)\n\nMcNeil et al. (2015)\nSheppard (arch, 2023)\n\nA Gemini Notebook"
+    }
+  ]
+}
