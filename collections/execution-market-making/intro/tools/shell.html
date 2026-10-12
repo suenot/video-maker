@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[{"id":"title","type":"string","label":"Title (| = line break)","default":"Execution &|Market Making"},{"id":"lang","type":"string","label":"Language: en, ru, zh-CN, zh-TW","default":"en"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Execution &amp; Market Making: intro</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+/*__FONTS__*/
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #f1dfb5; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #f1dfb5; }
+      #cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      #title { position: absolute; left: 0; top: 0; width: 1920px; height: 0; pointer-events: none; }
+      #title .ln { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap; line-height: 1; perspective: 900px; }
+      #title .ch { display: inline-block; will-change: transform, opacity; transform-origin: 50% 50%; }
+      #title .l0 { font-family: "Jost", "CJK SC", "CJK TC", sans-serif; font-weight: 800; color: #f3e6c8; text-transform: uppercase; letter-spacing: 0.04em; }
+      #title .l1 { font-family: "Jost", "CJK SC", "CJK TC", sans-serif; font-weight: 800; color: #f3c95f; text-transform: uppercase; letter-spacing: 0.04em; }
+      #title.cjk-sc .ln { font-family: "Jost", "CJK SC", sans-serif; letter-spacing: 0.12em; }
+      #title.cjk-tc .ln { font-family: "Jost", "CJK TC", sans-serif; letter-spacing: 0.12em; }
+      #preload .sc { font-family: "CJK SC"; font-weight: 900; }
+      #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
+      #preload .j5 { font-family: "Jost"; font-weight: 500; }
+      #preload .j7 { font-family: "Jost"; font-weight: 700; }
+      #preload .j8 { font-family: "Jost"; font-weight: 800; }
+      #preload .m5 { font-family: "IBM Plex Mono"; font-weight: 500; }
+      #preload .m7 { font-family: "IBM Plex Mono"; font-weight: 700; }
+      #vig { background: radial-gradient(95% 85% at 50% 48%, rgba(0, 0, 0, 0) 64%, rgba(30, 24, 14, 0.34) 100%); }
+      #grain { opacity: 0.16; mix-blend-mode: multiply; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="19.8" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div id="title" data-layout-allow-overlap></div>
+      <div class="ov" id="vig"></div>
+      <div class="ov" id="grain"></div>
+      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="19.8" data-track-index="10" data-volume="1"></audio>
+      <div id="preload"><span class="j5">Aa Бб 0</span><span class="j7">Aa Бб 0</span><span class="j8">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span><span class="sc">执行与做市</span><span class="tc">執行與造市</span></div>
+    </div>
+    <script>
+(function () {
+/*__SCRIPT__*/
+})();
+    </script>
+  </body>
+</html>

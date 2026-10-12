@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Clockwork Station kit gallery</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+/*__FONTS__*/
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #f1dfb5; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #f1dfb5; }
+      #cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
+      #preload .j5 { font-family: "Jost"; font-weight: 500; }
+      #preload .j7 { font-family: "Jost"; font-weight: 700; }
+      #preload .j8 { font-family: "Jost"; font-weight: 800; }
+      #preload .m5 { font-family: "IBM Plex Mono"; font-weight: 500; }
+      #preload .m7 { font-family: "IBM Plex Mono"; font-weight: 700; }
+      #vig { background: radial-gradient(95% 85% at 50% 48%, rgba(0, 0, 0, 0) 64%, rgba(30, 24, 14, 0.34) 100%); }
+      #grain { opacity: 0.16; mix-blend-mode: multiply; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div class="ov" id="vig"></div>
+      <div class="ov" id="grain"></div>
+      <div id="preload"><span class="j5">Aa Бб 0</span><span class="j7">Aa Бб 0</span><span class="j8">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span></div>
+    </div>
+    <script>
+(function () {
+/*__SCRIPT__*/
+})();
+    </script>
+  </body>
+</html>

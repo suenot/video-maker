@@ -1,0 +1,1293 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Clockwork Station kit gallery</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+@font-face { font-family: "Jost"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Jost-500-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Jost"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Jost-500-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Jost"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/Jost-500-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Jost"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/Jost-700-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Jost"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/Jost-700-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Jost"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/Jost-700-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Jost"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Jost-800-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Jost"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Jost-800-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Jost"; font-weight: 800; font-display: block;
+  src: url("assets/fonts/Jost-800-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-500-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-500-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-500-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 500; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-500-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-700-cyrillic-ext.woff2") format("woff2"); unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-700-cyrillic.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-700-latin-ext.woff2") format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 700; font-display: block;
+  src: url("assets/fonts/IBMPlexMono-700-latin.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "CJK SC"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/NotoSansSC-900-subset.woff2") format("woff2"); }
+@font-face { font-family: "CJK TC"; font-weight: 900; font-display: block;
+  src: url("assets/fonts/NotoSansTC-900-subset.woff2") format("woff2"); }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #f1dfb5; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #f1dfb5; }
+      #cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
+      #preload .j5 { font-family: "Jost"; font-weight: 500; }
+      #preload .j7 { font-family: "Jost"; font-weight: 700; }
+      #preload .j8 { font-family: "Jost"; font-weight: 800; }
+      #preload .m5 { font-family: "IBM Plex Mono"; font-weight: 500; }
+      #preload .m7 { font-family: "IBM Plex Mono"; font-weight: 700; }
+      #vig { background: radial-gradient(95% 85% at 50% 48%, rgba(0, 0, 0, 0) 64%, rgba(30, 24, 14, 0.34) 100%); }
+      #grain { opacity: 0.16; mix-blend-mode: multiply; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div class="ov" id="vig"></div>
+      <div class="ov" id="grain"></div>
+      <div id="preload"><span class="j5">Aa Бб 0</span><span class="j7">Aa Бб 0</span><span class="j8">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span></div>
+    </div>
+    <script>
+(function () {
+/* ============================================================
+   KIT 00 CORE: math, seeded random, noise, splines, beat grid, boil clock
+   Every frame is a pure function of time t (seconds). No Math.random,
+   no Date.now, no performance.now anywhere in the kit.
+   ============================================================ */
+var SK = window.SK || (window.SK = {});
+(function (K) {
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const inv = (a, b, v) => clamp((v - a) / (b - a), 0, 1);
+  const ss = (a, b, t) => { const u = inv(a, b, t); return u * u * (3 - 2 * u); };
+  const f1 = (n) => Math.round(n * 10) / 10;
+  const f2 = (n) => Math.round(n * 100) / 100;
+
+  /* eases (u in 0..1) */
+  const E = {
+    inOut: (u) => u * u * (3 - 2 * u),
+    out3: (u) => 1 - Math.pow(1 - u, 3),
+    in3: (u) => u * u * u,
+    back: (u, s) => { s = s == null ? 1.7 : s; const v = u - 1; return 1 + v * v * ((s + 1) * v + s); },
+    elastic: (u) => (u <= 0 ? 0 : u >= 1 ? 1 : Math.pow(2, -9 * u) * Math.sin((u * 10 - 0.75) * (2 * Math.PI) / 3) + 1),
+  };
+  /* tween value from a to b during [t0, t1] with an ease */
+  const tw = (t, t0, t1, a, b, ease) => lerp(a, b, (ease || E.inOut)(inv(t0, t1, t)));
+
+  /* seeded PRNG (mulberry32) */
+  function mulberry(seed) {
+    let s = seed | 0;
+    return function () {
+      s = (s + 0x6d2b79f5) | 0;
+      let q = Math.imul(s ^ (s >>> 15), 1 | s);
+      q = (q + Math.imul(q ^ (q >>> 7), 61 | q)) ^ q;
+      return ((q ^ (q >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  /* stateless hash -> [0,1) for (i, seed) */
+  function hash(i, s) {
+    let h = (Math.imul(i | 0, 374761393) + Math.imul(s | 0, 668265263)) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+  }
+  const hs = (i, s) => hash(i, s) * 2 - 1; /* signed */
+  function vnoise(x, s) { const i = Math.floor(x), f = x - i, u = f * f * (3 - 2 * f); return lerp(hash(i, s), hash(i + 1, s), u); }
+  function fbm(x, s, oct) { let a = 0.5, v = 0, fr = 1, n = 0; for (let k = 0; k < (oct || 3); k++) { v += a * vnoise(x * fr, s + k * 17); n += a; a *= 0.5; fr *= 2.03; } return v / n; }
+
+  /* monotone cubic Hermite spline through [[t, v], ...] (no overshoot) */
+  function mkSpline(pts) {
+    const n = pts.length, T = pts.map((p) => p[0]), V = pts.map((p) => p[1]);
+    if (n === 1) return () => V[0];
+    const d = [], m = new Array(n).fill(0);
+    for (let i = 0; i < n - 1; i++) d[i] = (V[i + 1] - V[i]) / (T[i + 1] - T[i]);
+    m[0] = d[0]; m[n - 1] = d[n - 2];
+    for (let i = 1; i < n - 1; i++) m[i] = d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2;
+    for (let i = 0; i < n - 1; i++) {
+      if (d[i] === 0) { m[i] = 0; m[i + 1] = 0; continue; }
+      const a = m[i] / d[i], b = m[i + 1] / d[i], s = a * a + b * b;
+      if (s > 9) { const tau = 3 / Math.sqrt(s); m[i] = tau * a * d[i]; m[i + 1] = tau * b * d[i]; }
+    }
+    return function (x) {
+      x = clamp(x, T[0], T[n - 1]);
+      let i = 0; while (i < n - 2 && x >= T[i + 1]) i++;
+      const h = T[i + 1] - T[i], u = (x - T[i]) / h, u2 = u * u, u3 = u2 * u;
+      return (2 * u3 - 3 * u2 + 1) * V[i] + (u3 - 2 * u2 + u) * h * m[i] + (-2 * u3 + 3 * u2) * V[i + 1] + (u3 - u2) * h * m[i + 1];
+    };
+  }
+  /* keys: [[t, {a:.., b:..}], ...] -> fn(t) -> {a, b} (one spline per channel) */
+  function mkTrack(keys) {
+    const names = Object.keys(keys[0][1]), sp = {};
+    names.forEach((k) => { sp[k] = mkSpline(keys.map((q) => [q[0], q[1][k]])); });
+    return (t) => { const o = {}; names.forEach((k) => (o[k] = sp[k](t))); return o; };
+  }
+
+  /* ---------- beat grid (retime to the real song by changing BPM/OFFSET or BARS) ----------
+     BARS: optional list of measured downbeat times (seconds). Songs cut from
+     several takes drift a few ms per splice, so measured downbeats beat a
+     single OFFSET. Past the list, bars extrapolate at BPM. */
+  const G = { BPM: 120, OFFSET: 0, BEATS_PER_ACCENT: 4, BARS: null };
+  const beatLen = () => 60 / G.BPM;
+  const barLen = () => beatLen() * G.BEATS_PER_ACCENT;
+  function barStart(b) {
+    const B = G.BARS;
+    if (!B || !B.length) return G.OFFSET + b * barLen();
+    if (b < 0) return B[0] + b * barLen();
+    if (b < B.length) return B[b];
+    return B[B.length - 1] + (b - B.length + 1) * barLen();
+  }
+  /* time of bar b (0-based, an "accent" = 4 beats) plus beat k (fractional ok) */
+  const at = (bar, beat) => barStart(Math.floor(bar)) + ((bar - Math.floor(bar)) * G.BEATS_PER_ACCENT + (beat || 0)) * beatLen();
+  /* index of the bar containing t (-1 before the first downbeat) */
+  function barAt(t) {
+    if (t < barStart(0)) return -1;
+    let b = 0; while (barStart(b + 1) <= t) b++;
+    return b;
+  }
+  /* 1 on the beat, decaying to 0 before the next beat (k = sharpness) */
+  function pulse(t, everyBeats, k) {
+    const b = barAt(t); if (b < 0) return 0;
+    const L = beatLen() * (everyBeats || 1), x = t - barStart(b);
+    return Math.exp(-(k || 7) * ((x % L) / L));
+  }
+  const beatIndex = (t) => { const b = barAt(t); return b < 0 ? -1 : b * G.BEATS_PER_ACCENT + Math.floor((t - barStart(b)) / beatLen()); };
+
+  /* ---------- line boil clock: drawings change 12 times per second ---------- */
+  const BOIL_FPS = 12;
+  const boilFrame = (t) => Math.floor(t * BOIL_FPS);
+
+  Object.assign(K, { clamp, lerp, inv, ss, f1, f2, E, tw, mulberry, hash, hs, vnoise, fbm, mkSpline, mkTrack,
+    G, beatLen, barLen, barStart, barAt, at, pulse, beatIndex, BOIL_FPS, boilFrame, TAU: Math.PI * 2 });
+})(SK);
+
+/* ============================================================
+   KIT 05 PALETTE + TYPE: the only place colours and fonts are defined.
+   1950s screen-print poster: four inks (mustard, teal, cream, charcoal)
+   plus one tomato accent used only for impact, loss and the ask side.
+   STYLE.md documents the same values; change both together.
+   ============================================================ */
+var SK = window.SK || (window.SK = {});
+(function (K) {
+  K.P = {
+    /* the four inks */
+    ink: "#2a2a2e",          /* key plate: all lines, dark type */
+    inkSoft: "#4d4b52",      /* secondary lines, halftone on cream */
+    cream: "#f3e6c8",        /* paper, signs, light type */
+    creamShade: "#e0cfa6",
+    creamDeep: "#cdb88a",
+    mustard: "#e2a42b", mustardDark: "#b07a12", mustardLight: "#f3c95f",
+    teal: "#2a7b78", tealDark: "#1b5654", tealLight: "#5fa79c", tealPale: "#a7d0c3",
+    /* the one accent (impact, loss, ask) */
+    tomato: "#d65a3a", tomatoDark: "#a23e26", tomatoLight: "#ec8a6c",
+    /* mascot: Mr. Tick, the stationmaster mouse */
+    fur: "#b4aa9c", furDark: "#8a8073", furLight: "#d8d0c2", earPink: "#ec9a86", nose: "#2a2a2e",
+    eye: "#fffaf0", pupil: "#1f1e22", glove: "#fbf6ea", gloveShade: "#ddd3bf",
+    /* sky and land */
+    sky: "#f1dfb5", skyHigh: "#e9d3a0", sun: "#e2a42b",
+    hillFar: "#a7d0c3", hillMid: "#5fa79c", hillNear: "#2a7b78",
+    steel: "#5c6168", steelDark: "#3c4046", steelLight: "#8b9097",
+    wood: "#a8743a", woodDark: "#7a5126",
+    water: "#5fa79c", waterDeep: "#2a7b78", foam: "#f3e6c8",
+    /* data / explainer */
+    bid: "#2a7b78",          /* buy side, passive quotes, "good" */
+    ask: "#d65a3a",          /* sell side, impact, "bad" */
+    profit: "#e2a42b",       /* money, the chosen schedule */
+    board: "#2a2a2e",        /* split-flap / departure board */
+    flap: "#3a3a40", flapText: "#f3e6c8",
+    enamel: "#2a7b78",       /* enamel sign (formulas, titles) */
+  };
+  K.FONT = {
+    display: '"Jost", "CJK SC", "CJK TC", sans-serif',   /* titles, labels (700/800) */
+    text: '"Jost", "CJK SC", "CJK TC", sans-serif',      /* body (500) */
+    mono: '"IBM Plex Mono", monospace',                  /* numbers, flaps, code, tables */
+    cjk: { "zh-CN": '"CJK SC", "Jost", sans-serif', "zh-TW": '"CJK TC", "Jost", sans-serif' },
+  };
+})(SK);
+
+/* ============================================================
+   KIT 10 PRINT: screen-print poster primitives + the camera.
+   The look is a 1950s two-plate print:
+     - a flat colour plate (fill), printed slightly out of register,
+     - a thin charcoal key plate (outline) on top, clean and unbroken,
+     - halftone dots instead of hatching for shadow and tone.
+   Contours still "boil" at 12 fps (vertex jitter from a hash of
+   vertex, seed and boil frame), but gently: this is ink on paper, not
+   a pencil test. Text never boils.
+   ============================================================ */
+var SK = window.SK || (window.SK = {});
+(function (K) {
+  const { hs, hash, clamp } = K;
+  K.MIN_PX = 1.6;
+  K.REG = 3.2; /* misregistration of the colour plate, world px */
+  K.now = 0; K.bf = 0; K.zoom = 1;
+
+  /* ---------- camera: world -> screen. cam = {x, y, z, rot} (centre, zoom, degrees) ---------- */
+  K.W = 1920; K.H = 1080;
+  K.begin = function (ctx, t, cam) {
+    K.ctx = ctx; K.now = t; K.bf = K.boilFrame(t); K.cam = cam; K.zoom = cam.z;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.lineJoin = "round"; ctx.lineCap = "round";
+  };
+  /* apply camera with an optional parallax factor p (1 = world plane, 0 = fixed to screen).
+     A layer with p < 1 moves p times as far as the camera, measured from K.REF: when the
+     camera sits at K.REF every layer lines up with world coordinates, so backgrounds
+     are laid out in the same numbers as the foreground (horizon at y 760 means 760). */
+  K.REF = { x: 960, y: 540 };
+  K.applyCam = function (ctx, p) {
+    p = p == null ? 1 : p;
+    const c = K.cam, z = 1 + (c.z - 1) * p;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.translate(K.W / 2, K.H / 2);
+    if (c.rot) ctx.rotate((c.rot * Math.PI) / 180 * p);
+    ctx.scale(z, z);
+    ctx.translate(-(K.REF.x + (c.x - K.REF.x) * p), -(K.REF.y + (c.y - K.REF.y) * p));
+    K.zoom = z;
+  };
+  K.screen = function (ctx) { ctx.setTransform(1, 0, 0, 1, 0, 0); K.zoom = 1; };
+  K.toScreen = function (x, y) {
+    const c = K.cam, r = ((c.rot || 0) * Math.PI) / 180, dx = (x - c.x) * c.z, dy = (y - c.y) * c.z;
+    return [K.W / 2 + dx * Math.cos(r) - dy * Math.sin(r), K.H / 2 + dx * Math.sin(r) + dy * Math.cos(r)];
+  };
+  const curScale = (ctx) => { const m = ctx.getTransform(); return Math.sqrt(m.a * m.a + m.b * m.b) || 1; };
+  K.lw = (ctx, w) => Math.max(w, K.MIN_PX / curScale(ctx));
+
+  /* ---------- point generators (geometric first: this world is built from shapes) ---------- */
+  K.ellipsePts = function (cx, cy, rx, ry, n, rot) {
+    const out = [], r = rot || 0, cr = Math.cos(r), sr = Math.sin(r);
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * K.TAU, x = Math.cos(a) * rx, y = Math.sin(a) * ry;
+      out.push([cx + x * cr - y * sr, cy + x * sr + y * cr]);
+    }
+    return out;
+  };
+  K.arcPts = function (cx, cy, r, a0, a1, n) {
+    const out = [];
+    for (let i = 0; i <= n; i++) { const a = a0 + ((a1 - a0) * i) / n; out.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); }
+    return out;
+  };
+  K.rectPts = function (x, y, w, h, n) {
+    n = n || 2; const out = [];
+    for (let i = 0; i < n; i++) out.push([x + (w * i) / n, y]);
+    for (let i = 0; i < n; i++) out.push([x + w, y + (h * i) / n]);
+    for (let i = 0; i < n; i++) out.push([x + w - (w * i) / n, y + h]);
+    for (let i = 0; i < n; i++) out.push([x, y + h - (h * i) / n]);
+    return out;
+  };
+  /* rounded rectangle as a polyline (corner arcs of radius r, k points each) */
+  K.rrectPts = function (x, y, w, h, r, k) {
+    r = Math.min(r, w / 2, h / 2); k = k || 4; const out = [];
+    const C = [[x + w - r, y + r, -Math.PI / 2], [x + w - r, y + h - r, 0], [x + r, y + h - r, Math.PI / 2], [x + r, y + r, Math.PI]];
+    C.forEach((c) => { for (let i = 0; i <= k; i++) { const a = c[2] + (i / k) * (Math.PI / 2); out.push([c[0] + Math.cos(a) * r, c[1] + Math.sin(a) * r]); } });
+    return out;
+  };
+  K.polyPts = function (cx, cy, r, n, rot) {
+    const out = [];
+    for (let i = 0; i < n; i++) { const a = (rot || 0) + (i / n) * K.TAU; out.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); }
+    return out;
+  };
+  /* irregular closed blob (puffs, bushes): fixed by seed, not by time */
+  K.blobPts = function (cx, cy, rx, ry, n, seed, irr) {
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * K.TAU, k = 1 + (irr || 0.18) * (K.fbm(i * 0.9, seed, 2) * 2 - 1);
+      out.push([cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]);
+    }
+    return out;
+  };
+
+  /* ---------- boil ---------- */
+  K.boil = function (pts, seed, amp, frameOverride) {
+    const f = frameOverride == null ? K.bf : frameOverride, s = (seed | 0) + f * 7919;
+    return pts.map((p, i) => [p[0] + hs(i * 2 + 1, s) * amp, p[1] + hs(i * 2 + 2, s) * amp]);
+  };
+
+  /* ---------- paths: polyline (geometric, default) or Catmull-Rom (organic) ---------- */
+  function segs(pts, closed) {
+    const n = pts.length, out = [];
+    const P = (i) => (closed ? pts[(i + n) % n] : pts[clamp(i, 0, n - 1)]);
+    const last = closed ? n : n - 1;
+    for (let i = 0; i < last; i++) {
+      const p0 = P(i - 1), p1 = P(i), p2 = P(i + 1), p3 = P(i + 2);
+      out.push([p1, [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6], [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6], p2]);
+    }
+    return out;
+  }
+  K.pathOf = function (ctx, pts, closed, smooth, dx, dy) {
+    dx = dx || 0; dy = dy || 0;
+    ctx.beginPath();
+    if (!smooth) {
+      ctx.moveTo(pts[0][0] + dx, pts[0][1] + dy);
+      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0] + dx, pts[i][1] + dy);
+    } else {
+      const S = segs(pts, closed); ctx.moveTo(S[0][0][0] + dx, S[0][0][1] + dy);
+      S.forEach((s) => ctx.bezierCurveTo(s[1][0] + dx, s[1][1] + dy, s[2][0] + dx, s[2][1] + dy, s[3][0] + dx, s[3][1] + dy));
+    }
+    if (closed) ctx.closePath();
+  };
+
+  /* world-space box of the visible screen under the current transform */
+  function visibleBox(ctx) {
+    const m = ctx.getTransform().inverse();
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    [[0, 0], [K.W, 0], [0, K.H], [K.W, K.H]].forEach(([sx, sy]) => {
+      const x = m.a * sx + m.c * sy + m.e, y = m.b * sx + m.d * sy + m.f;
+      x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y);
+    });
+    return [x0, y0, x1, y1];
+  }
+  /* ---------- halftone: a rotated dot screen clipped to a path ----------
+     opt: color, gap (dot pitch), r (dot radius at the light end), r2 (at the
+     dark end), dir (angle of the light->dark ramp), ang (screen angle, 15 deg),
+     alpha. Dots do not boil (it is a printed screen), they only follow the plate. */
+  K.halftone = function (ctx, pts, opt) {
+    const o = Object.assign({ color: K.P.ink, gap: 11, r: 1.2, r2: 4.2, dir: Math.PI * 0.25, ang: 0.26, alpha: 0.35, smooth: false, dx: 0, dy: 0 }, opt || {});
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    pts.forEach((p) => { x0 = Math.min(x0, p[0]); y0 = Math.min(y0, p[1]); x1 = Math.max(x1, p[0]); y1 = Math.max(y1, p[1]); });
+    const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, R = Math.hypot(x1 - x0, y1 - y0) / 2 + o.gap;
+    /* only dots inside both the shape box and the visible screen (big skies stay cheap) */
+    const v = visibleBox(ctx), bx0 = Math.max(x0, v[0]) - o.gap, by0 = Math.max(y0, v[1]) - o.gap, bx1 = Math.min(x1, v[2]) + o.gap, by1 = Math.min(y1, v[3]) + o.gap;
+    if (bx0 >= bx1 || by0 >= by1) return;
+    const ca = Math.cos(o.ang), sa = Math.sin(o.ang), cd = Math.cos(o.dir), sd = Math.sin(o.dir);
+    ctx.save(); K.pathOf(ctx, pts, true, o.smooth); ctx.clip();
+    ctx.globalAlpha *= o.alpha; ctx.fillStyle = o.color; ctx.beginPath();
+    /* lattice coordinates of the visible box corners -> index ranges */
+    let i0 = 1e9, i1 = -1e9, j0 = 1e9, j1 = -1e9;
+    [[bx0, by0], [bx1, by0], [bx0, by1], [bx1, by1]].forEach(([qx, qy]) => {
+      const dx = qx - cx - o.dx, dy = qy - cy - o.dy, li = (dx * ca + dy * sa) / o.gap, lj = (-dx * sa + dy * ca) / o.gap;
+      i0 = Math.min(i0, li); i1 = Math.max(i1, li); j0 = Math.min(j0, lj); j1 = Math.max(j1, lj);
+    });
+    for (let i = Math.floor(i0) - 1; i <= Math.ceil(i1) + 1; i++) for (let j = Math.floor(j0) - 1; j <= Math.ceil(j1) + 1; j++) {
+      const lx = i * o.gap, ly = j * o.gap + (i & 1 ? o.gap / 2 : 0);
+      const x = cx + lx * ca - ly * sa + o.dx, y = cy + lx * sa + ly * ca + o.dy;
+      const u = clamp(((x - cx) * cd + (y - cy) * sd) / R * 0.5 + 0.5, 0, 1); /* 0 light .. 1 dark */
+      const r = o.r + (o.r2 - o.r) * u;
+      if (r < 0.35) continue;
+      ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, K.TAU);
+    }
+    ctx.fill(); ctx.restore();
+  };
+
+  /* plate offset for a seed: fixed direction per object, tiny drift per boil frame */
+  K.regOf = function (seed, amt) {
+    const a = hash(seed, 77) * K.TAU, d = amt == null ? K.REG : amt;
+    return [Math.cos(a) * d + hs(K.bf, seed + 3) * 0.5, Math.sin(a) * d * 0.7 + hs(K.bf, seed + 5) * 0.5];
+  };
+
+  /* ---------- the workhorse: colour plate + shade band + halftone + key line ----------
+     opt: fill, key (outline colour, null = none), w (key width), boil (amp), seed,
+          smooth (organic curve instead of polyline), shade ({color, dx, dy}: flat
+          shadow band = shape minus its offset copy), tone (halftone opts; band: true
+          limits the dots to the shade band), reg (misregistration px), closed, alpha */
+  K.shape = function (ctx, pts, opt) {
+    const o = Object.assign({ key: K.P.ink, w: 3, boil: 0.9, seed: 1, closed: true, smooth: false }, opt || {});
+    const bp = o.boil ? K.boil(pts, o.seed, o.boil) : pts;
+    const fp = o.boil ? K.boil(pts, o.seed + 500, o.boil * 0.6) : pts;
+    const rg = o.reg === 0 || !o.fill ? [0, 0] : K.regOf(o.seed, o.reg);
+    ctx.save();
+    if (o.alpha != null) ctx.globalAlpha *= o.alpha;
+    if (o.fill && o.closed !== false) {
+      K.pathOf(ctx, fp, true, o.smooth, rg[0], rg[1]); ctx.fillStyle = o.fill; ctx.fill();
+      if (o.shade) {
+        ctx.save(); K.pathOf(ctx, fp, true, o.smooth, rg[0], rg[1]); ctx.clip();
+        ctx.beginPath(); ctx.rect(-1e5, -1e5, 2e5, 2e5);
+        const op = fp.map((p) => [p[0] + rg[0] + (o.shade.dx || 0), p[1] + rg[1] + (o.shade.dy || 0)]);
+        if (o.smooth) { const S = segs(op, true); ctx.moveTo(S[0][0][0], S[0][0][1]); S.forEach((s) => ctx.bezierCurveTo(s[1][0], s[1][1], s[2][0], s[2][1], s[3][0], s[3][1])); }
+        else { ctx.moveTo(op[0][0], op[0][1]); op.forEach((p) => ctx.lineTo(p[0], p[1])); }
+        ctx.closePath(); ctx.fillStyle = o.shade.color; ctx.fill("evenodd");
+        ctx.restore();
+      }
+      if (o.tone) K.halftone(ctx, fp.map((p) => [p[0] + rg[0], p[1] + rg[1]]), Object.assign({ smooth: o.smooth }, o.tone));
+    }
+    if (o.key && o.w > 0) {
+      ctx.strokeStyle = o.key; ctx.lineWidth = K.lw(ctx, o.w);
+      K.pathOf(ctx, bp, o.closed !== false, o.smooth); ctx.stroke();
+    }
+    ctx.restore();
+  };
+  /* open line (rails, wires, motion lines) */
+  K.line = function (ctx, pts, opt) {
+    const o = Object.assign({ key: K.P.ink, w: 3, boil: 0.7, seed: 1, smooth: false }, opt || {});
+    if (o.color) o.key = o.color;
+    const bp = o.boil ? K.boil(pts, o.seed, o.boil) : pts;
+    ctx.save(); if (o.alpha != null) ctx.globalAlpha *= o.alpha;
+    if (o.dash) ctx.setLineDash(o.dash.map((d) => d)), ctx.lineDashOffset = o.dashOffset || 0;
+    ctx.lineCap = o.cap || "round";
+    ctx.strokeStyle = o.key; ctx.lineWidth = K.lw(ctx, o.w);
+    K.pathOf(ctx, bp, false, o.smooth); ctx.stroke(); ctx.restore();
+  };
+  K.dot = function (ctx, x, y, r, fill, key, w, seed) {
+    K.shape(ctx, K.ellipsePts(x, y, r, r, Math.max(10, Math.min(28, Math.round(r / 2)))), { fill, key: key === undefined ? K.P.ink : key, w: w || 2.5, boil: Math.min(1.2, r * 0.04 + 0.3), seed: seed || 5, smooth: true, reg: Math.min(K.REG, r * 0.2) });
+  };
+
+  /* ---------- atomic-age ornaments ---------- */
+  /* four- or eight-point sparkle star (the "atomic" star of 50s posters) */
+  K.star = function (ctx, x, y, r, opt) {
+    const o = Object.assign({ color: K.P.mustard, n: 4, a: 1, rot: 0, seed: 1, key: K.P.ink, w: 2.2 }, opt || {});
+    if (o.a <= 0 || r <= 0.5) return;
+    const pts = [];
+    for (let i = 0; i < o.n * 2; i++) { const a = o.rot + (i / (o.n * 2)) * K.TAU - Math.PI / 2, rr = i % 2 ? r * 0.22 : r; pts.push([x + Math.cos(a) * rr, y + Math.sin(a) * rr]); }
+    K.shape(ctx, pts, { fill: o.color, key: o.key, w: o.w, boil: 0.4, seed: o.seed, alpha: o.a, reg: 1.5 });
+  };
+  /* radiating thin rays (sunburst) */
+  K.rays = function (ctx, x, y, r0, r1, n, opt) {
+    const o = Object.assign({ color: K.P.ink, w: 2.4, rot: 0, alpha: 1, seed: 3 }, opt || {});
+    ctx.save(); ctx.globalAlpha *= o.alpha; ctx.strokeStyle = o.color; ctx.lineWidth = K.lw(ctx, o.w); ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      const a = o.rot + (i / n) * K.TAU, j = hs(i, o.seed + K.bf * 3) * 2;
+      ctx.moveTo(x + Math.cos(a) * (r0 + j), y + Math.sin(a) * (r0 + j)); ctx.lineTo(x + Math.cos(a) * (r1 + j), y + Math.sin(a) * (r1 + j));
+    }
+    ctx.stroke(); ctx.restore();
+  };
+
+  /* ---------- text: stable (never boils) ---------- */
+  K.text = function (ctx, str, x, y, opt) {
+    const o = Object.assign({ size: 40, weight: 700, font: K.FONT.display, fill: K.P.ink, stroke: null, w: 0, align: "center", base: "middle", alpha: 1, track: 0 }, opt || {});
+    ctx.save(); ctx.globalAlpha *= o.alpha;
+    ctx.font = `${o.weight} ${o.size}px ${o.font}`; ctx.textAlign = o.align; ctx.textBaseline = o.base;
+    if (o.track) ctx.letterSpacing = o.track + "px";
+    if (o.stroke && o.w) { ctx.lineJoin = "round"; ctx.strokeStyle = o.stroke; ctx.lineWidth = o.w; ctx.strokeText(str, x, y); }
+    ctx.fillStyle = o.fill; ctx.fillText(str, x, y);
+    ctx.restore();
+  };
+  K.textW = function (ctx, str, size, weight, font) {
+    ctx.save(); ctx.font = `${weight || 700} ${size}px ${font || K.FONT.display}`; const w = ctx.measureText(str).width; ctx.restore(); return w;
+  };
+})(SK);
+
+/* ============================================================
+   KIT 30 WORLD: the clockwork railway station.
+   Side view, ground line usually at y = 860 (rail top). Everything is
+   built from geometric shapes in four inks, with halftone shadow.
+     sky / sun / cloud / hills / mesas      backgrounds (draw with parallax)
+     clockTower / gear                      the clockwork
+     platform / track / lampPost            the station
+     wheel / wagon / crate / loco / puff    rolling stock (child orders)
+     pond / ripple / splash                 the price pond (market impact)
+     coin / booth / gauge                   money, quote windows, dials
+   ============================================================ */
+var SK = window.SK || (window.SK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp, hash, hs } = K;
+
+  /* ---------- sky: flat cream, a halftone glow above the horizon, the sun ---------- */
+  K.sky = function (ctx, opt) {
+    const o = Object.assign({ horizon: 760, x0: -2000, x1: 6000, y0: -1600, sun: [1500, 300], sunR: 130, rays: true, warm: 0 }, opt || {});
+    ctx.fillStyle = P.sky; ctx.fillRect(o.x0, o.y0, o.x1 - o.x0, o.horizon + 400 - o.y0);
+    K.halftone(ctx, [[o.x0, o.y0], [o.x1, o.y0], [o.x1, o.horizon - 180], [o.x0, o.horizon - 180]], { color: P.skyHigh, gap: 16, r: 6, r2: 0, dir: Math.PI / 2, alpha: 0.9, ang: 0.26 });
+    K.halftone(ctx, [[o.x0, o.horizon - 340], [o.x1, o.horizon - 340], [o.x1, o.horizon + 40], [o.x0, o.horizon + 40]], { color: P.mustardLight, gap: 14, r: 0.3, r2: 4.6 + o.warm * 2, dir: Math.PI / 2, alpha: 0.75, ang: 0.26 });
+    if (o.sun) {
+      const [sx, sy] = o.sun, R = o.sunR;
+      if (o.rays) K.rays(ctx, sx, sy, R * 1.25, R * 1.85, 28, { color: P.mustardDark, w: 3, rot: K.now * 0.08, alpha: 0.55 });
+      K.shape(ctx, K.ellipsePts(sx, sy, R, R, 40), { fill: P.sun, key: null, boil: 0.6, seed: 31, reg: 0 });
+      K.shape(ctx, K.ellipsePts(sx, sy, R * 0.72, R * 0.72, 36), { fill: P.mustardLight, key: null, boil: 0.5, seed: 32, reg: 0 });
+    }
+  };
+  /* mid-century cloud: three stacked pills */
+  K.cloud = function (ctx, x, y, w, seed) {
+    const h = w * 0.2;
+    [[0, 0, 1], [w * 0.18, -h * 0.85, 0.62], [-w * 0.2, h * 0.75, 0.55]].forEach((c, i) => {
+      const ww = w * c[2];
+      K.shape(ctx, K.rrectPts(x + c[0] - ww / 2, y + c[1] - h / 2, ww, h, h / 2, 5), { fill: P.cream, key: P.ink, w: 2.5, boil: 0.6, seed: seed + i, reg: 2.5, shade: { color: P.creamShade, dx: 0, dy: -h * 0.3 } });
+    });
+  };
+  /* rounded hills or angular mountains across [x0, x1] */
+  K.hills = function (ctx, x0, x1, base, opt) {
+    const o = Object.assign({ h: 160, color: P.hillMid, seed: 1, n: 6, kind: "round", tone: true, key: P.ink, w: 2.5 }, opt || {});
+    const pts = [[x0, base + 400]];
+    const N = o.n * 8;
+    for (let i = 0; i <= N; i++) {
+      const u = i / N, x = lerp(x0, x1, u), k = u * o.n;
+      let y;
+      if (o.kind === "tri") { const f = k - Math.floor(k), hh = o.h * (0.6 + 0.4 * hash(Math.floor(k), o.seed)); y = base - hh * (1 - Math.abs(f * 2 - 1)); }
+      else y = base - o.h * (0.55 + 0.45 * K.fbm(k * 0.9, o.seed, 2)) * Math.pow(Math.sin(Math.PI * (k - Math.floor(k))), 0.6);
+      pts.push([x, y]);
+    }
+    pts.push([x1, base + 400]);
+    K.shape(ctx, pts, { fill: o.color, key: o.key, w: o.w, boil: 0.8, seed: o.seed, tone: o.tone ? { color: P.ink, gap: 12, r: 0, r2: 2.6, dir: Math.PI / 2, alpha: 0.18 } : null });
+  };
+
+  /* ---------- the clockwork ---------- */
+  K.gear = function (ctx, x, y, r, teeth, rot, opt) {
+    const o = Object.assign({ color: P.mustard, seed: 1, hole: 0.32, w: 2.5 }, opt || {});
+    const pts = [], n = teeth * 4;
+    for (let i = 0; i < n; i++) {
+      const a = rot + (i / n) * K.TAU, q = i % 4, rr = q === 1 || q === 2 ? r : r * 0.82;
+      pts.push([x + Math.cos(a) * rr, y + Math.sin(a) * rr]);
+    }
+    K.shape(ctx, pts, { fill: o.color, w: o.w, boil: 0.5, seed: o.seed, shade: { color: P.mustardDark, dx: r * 0.08, dy: r * 0.1 } });
+    K.shape(ctx, K.ellipsePts(x, y, r * o.hole, r * o.hole, 16), { fill: P.ink, key: null, boil: 0.3, seed: o.seed + 1, smooth: true, reg: 0 });
+    for (let i = 0; i < 4; i++) { const a = rot + (i / 4) * K.TAU + 0.4; K.dot(ctx, x + Math.cos(a) * r * 0.58, y + Math.sin(a) * r * 0.58, r * 0.09, P.cream, P.ink, 1.8, o.seed + 3 + i); }
+  };
+  /* clock face; hour and minute in "clock hours" (minute hand = frac part) */
+  K.clockFace = function (ctx, x, y, r, opt) {
+    const o = Object.assign({ hour: 10, minute: 10, seed: 1, rim: P.mustard, face: P.cream }, opt || {});
+    K.shape(ctx, K.ellipsePts(x, y, r * 1.12, r * 1.12, 40), { fill: o.rim, w: 3.5, boil: 0.6, seed: o.seed, smooth: true, shade: { color: P.mustardDark, dx: r * 0.06, dy: r * 0.08 } });
+    K.shape(ctx, K.ellipsePts(x, y, r, r, 40), { fill: o.face, w: 3, boil: 0.5, seed: o.seed + 1, smooth: true, tone: { color: P.creamDeep, gap: 9, r: 0, r2: 3, dir: Math.PI * 0.3, alpha: 0.5 } });
+    ctx.save(); ctx.strokeStyle = P.ink; ctx.lineCap = "butt";
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * K.TAU, big = i % 3 === 0, r0 = r * (big ? 0.72 : 0.8);
+      ctx.lineWidth = K.lw(ctx, big ? r * 0.09 : r * 0.04); ctx.beginPath();
+      ctx.moveTo(x + Math.sin(a) * r0, y - Math.cos(a) * r0); ctx.lineTo(x + Math.sin(a) * r * 0.9, y - Math.cos(a) * r * 0.9); ctx.stroke();
+    }
+    ctx.restore();
+    const ah = (o.hour / 12) * K.TAU, am = (o.minute / 60) * K.TAU;
+    const hand = (a, L, w, c, s) => K.shape(ctx, [[x - Math.sin(a) * L * 0.15 - Math.cos(a) * w, y + Math.cos(a) * L * 0.15 - Math.sin(a) * w], [x + Math.sin(a) * L, y - Math.cos(a) * L], [x - Math.sin(a) * L * 0.15 + Math.cos(a) * w, y + Math.cos(a) * L * 0.15 + Math.sin(a) * w]], { fill: c, w: 2, boil: 0.3, seed: s, reg: 1 });
+    hand(ah, r * 0.5, r * 0.07, P.ink, o.seed + 5);
+    hand(am, r * 0.78, r * 0.05, P.tomato, o.seed + 6);
+    K.dot(ctx, x, y, r * 0.07, P.mustard, P.ink, 2, o.seed + 7);
+  };
+  /* tower with a big clock and a gear window; y = ground */
+  K.clockTower = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ hour: 10, minute: 10, gearRot: 0, seed: 40 }, opt || {});
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    const W = 260, H = 640;
+    K.shape(ctx, K.rectPts(-W / 2, -H, W, H, 3), { fill: P.teal, w: 3.5, seed: o.seed, shade: { color: P.tealDark, dx: -46, dy: 0 }, tone: { color: P.ink, gap: 12, r: 0, r2: 2.4, dir: 0, alpha: 0.2 } });
+    /* mustard trim bands */
+    [-H + 40, -330].forEach((yy, i) => K.shape(ctx, K.rectPts(-W / 2 - 14, yy, W + 28, 26, 3), { fill: P.mustard, w: 3, seed: o.seed + 1 + i, shade: { color: P.mustardDark, dx: 0, dy: -9 } }));
+    K.shape(ctx, K.rectPts(-W / 2 - 20, -24, W + 40, 24, 3), { fill: P.ink, w: 3, seed: o.seed + 4, reg: 0 });
+    /* roof: tall triangle with a star finial */
+    K.shape(ctx, [[-W / 2 - 30, -H + 40], [0, -H - 220], [W / 2 + 30, -H + 40]], { fill: P.tomato, w: 3.5, seed: o.seed + 5, shade: { color: P.tomatoDark, dx: -60, dy: 0 } });
+    K.line(ctx, [[0, -H - 220], [0, -H - 270]], { w: 4, seed: o.seed + 6 });
+    K.star(ctx, 0, -H - 290, 30, { rot: K.now * 0.6, seed: o.seed + 7 });
+    /* clock */
+    K.clockFace(ctx, 0, -H + 170, 104, { hour: o.hour, minute: o.minute, seed: o.seed + 10 });
+    /* gear window (porthole into the clockwork) */
+    const gy = -205;
+    K.shape(ctx, K.ellipsePts(0, gy, 92, 92, 32), { fill: P.ink, w: 3.5, seed: o.seed + 20, reg: 0, smooth: true });
+    ctx.save(); K.pathOf(ctx, K.ellipsePts(0, gy, 86, 86, 32), true, true); ctx.clip();
+    K.gear(ctx, -24, gy - 18, 58, 10, o.gearRot, { seed: o.seed + 21 });
+    K.gear(ctx, 50, gy + 46, 42, 8, -o.gearRot * 1.25 + 0.2, { seed: o.seed + 24, color: P.cream });
+    K.gear(ctx, -46, gy + 66, 30, 6, -o.gearRot * 2 + 0.4, { seed: o.seed + 27, color: P.tealLight });
+    ctx.restore();
+    K.shape(ctx, K.ellipsePts(0, gy, 92, 92, 32), { fill: null, key: P.mustard, w: 8, seed: o.seed + 29, smooth: true });
+    ctx.restore();
+  };
+
+  /* ---------- the station ---------- */
+  K.platform = function (ctx, x0, x1, y, opt) {
+    const o = Object.assign({ h: 70, seed: 60 }, opt || {});
+    K.shape(ctx, K.rectPts(x0, y, x1 - x0, o.h, 6), { fill: P.creamShade, w: 3, seed: o.seed, tone: { color: P.ink, gap: 10, r: 0.5, r2: 2.8, dir: Math.PI / 2, alpha: 0.25 } });
+    K.shape(ctx, K.rectPts(x0, y, x1 - x0, 14, 6), { fill: P.mustard, w: 2.5, seed: o.seed + 1 });
+    /* safety stripes */
+    ctx.save(); ctx.fillStyle = P.ink;
+    for (let x = x0 + 10; x < x1 - 20; x += 36) { ctx.beginPath(); ctx.moveTo(x, y + 14); ctx.lineTo(x + 16, y + 14); ctx.lineTo(x + 6, y); ctx.lineTo(x - 10, y); ctx.closePath(); ctx.globalAlpha = 0.85; ctx.fill(); }
+    ctx.restore();
+  };
+  /* side-view track: sleepers + one rail; y = rail top */
+  K.track = function (ctx, x0, x1, y, opt) {
+    const o = Object.assign({ seed: 70, ballast: true }, opt || {});
+    if (o.ballast) K.shape(ctx, [[x0, y + 26], [x1, y + 26], [x1, y + 60], [x0, y + 60]], { fill: P.creamDeep, w: 2.5, seed: o.seed, tone: { color: P.ink, gap: 8, r: 1.6, r2: 1.6, alpha: 0.35 } });
+    ctx.save(); ctx.fillStyle = P.woodDark;
+    for (let x = Math.ceil(x0 / 46) * 46; x < x1; x += 46) { const j = hs(x, o.seed + K.bf) * 0.6; ctx.fillRect(x - 12 + j, y + 8, 24, 20); }
+    ctx.restore();
+    K.shape(ctx, K.rectPts(x0, y, x1 - x0, 10, 12), { fill: P.steelLight, w: 2.5, seed: o.seed + 1, boil: 0.4 });
+  };
+  K.lampPost = function (ctx, x, y, h, seed) {
+    K.shape(ctx, K.rectPts(x - 6, y - h, 12, h, 3), { fill: P.ink, w: 2, seed, reg: 0 });
+    K.shape(ctx, [[x - 34, y - h], [x + 34, y - h], [x + 20, y - h - 30], [x - 20, y - h - 30]], { fill: P.teal, w: 2.5, seed: seed + 1 });
+    K.dot(ctx, x, y - h + 12, 14, P.mustardLight, P.ink, 2.5, seed + 2);
+  };
+
+  /* ---------- rolling stock ---------- */
+  K.wheel = function (ctx, x, y, r, rot, seed) {
+    K.shape(ctx, K.ellipsePts(x, y, r, r, 20), { fill: P.steel, w: 3, seed, smooth: true, shade: { color: P.steelDark, dx: r * 0.15, dy: r * 0.2 } });
+    ctx.save(); ctx.strokeStyle = P.ink; ctx.lineWidth = K.lw(ctx, Math.max(2, r * 0.1)); ctx.beginPath();
+    for (let i = 0; i < 3; i++) { const a = rot + (i / 3) * Math.PI; ctx.moveTo(x - Math.cos(a) * r * 0.78, y - Math.sin(a) * r * 0.78); ctx.lineTo(x + Math.cos(a) * r * 0.78, y + Math.sin(a) * r * 0.78); }
+    ctx.stroke(); ctx.restore();
+    K.dot(ctx, x, y, r * 0.24, P.mustard, P.ink, 2, seed + 1);
+  };
+  /* freight crate; (x, y) = bottom centre */
+  K.crate = function (ctx, x, y, w, h, opt) {
+    const o = Object.assign({ color: P.mustard, shade: P.mustardDark, label: "", labelSize: 0, seed: 80, slices: 0, sliceU: 0, a: 1, labelColor: P.ink }, opt || {});
+    if (o.a <= 0) return;
+    ctx.save(); ctx.globalAlpha *= clamp(o.a, 0, 1);
+    K.shape(ctx, K.rectPts(x - w / 2, y - h, w, h, 3), { fill: o.color, w: 3.5, seed: o.seed, shade: { color: o.shade, dx: -w * 0.08, dy: -h * 0.06 } });
+    /* planks */
+    ctx.save(); ctx.strokeStyle = P.ink; ctx.globalAlpha *= 0.55; ctx.lineWidth = K.lw(ctx, 2);
+    const np = Math.max(2, Math.round(h / 34)); ctx.beginPath();
+    for (let i = 1; i < np; i++) { const yy = y - h + (h * i) / np; ctx.moveTo(x - w / 2 + 6, yy); ctx.lineTo(x + w / 2 - 6, yy); }
+    ctx.stroke(); ctx.restore();
+    /* corner brackets */
+    const b = Math.min(w, h) * 0.16;
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sy], i) => {
+      const cx = x + sx * (w / 2), cy = y - h / 2 + sy * (h / 2);
+      K.shape(ctx, [[cx, cy], [cx - sx * b, cy], [cx - sx * b, cy - sy * b * 0.35], [cx - sx * b * 0.35, cy - sy * b * 0.35], [cx - sx * b * 0.35, cy - sy * b], [cx, cy - sy * b]], { fill: P.ink, key: null, boil: 0.3, seed: o.seed + 10 + i, reg: 0 });
+    });
+    if (o.label) K.text(ctx, o.label, x, y - h / 2 + 2, { size: o.labelSize || Math.min(h * 0.36, w / (o.label.length * 0.62)), weight: 700, font: K.FONT.mono, fill: o.labelColor });
+    /* slicing: dashed cut lines draw one after another (vertical cuts, then
+       horizontal cuts when rows > 1), so a parent order splits into slices x rows pieces */
+    const rows = o.rows || 1, cuts = [];
+    for (let i = 1; i < o.slices; i++) cuts.push([x - w / 2 + (w * i) / o.slices, y - h - 14, 0, h + 28]);
+    for (let j = 1; j < rows; j++) cuts.push([x - w / 2 - 14, y - h + (h * j) / rows, w + 28, 0]);
+    if (cuts.length && o.sliceU > 0) cuts.forEach((q, i) => {
+      const u = clamp(o.sliceU * cuts.length - i, 0, 1); if (u <= 0) return;
+      K.line(ctx, [[q[0], q[1]], [q[0] + q[2] * u, q[1] + q[3] * u]], { key: P.ink, w: 4, boil: 0.4, seed: o.seed + 40 + i, dash: [16, 10], cap: "butt" });
+    });
+    ctx.restore();
+  };
+  /* flat wagon; (x, y) = rail top under the wagon centre. roll = distance travelled (wheel spin) */
+  K.wagon = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ color: P.teal, shade: P.tealDark, roll: 0, seed: 90, load: null, bob: 0, coupler: true }, opt || {});
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    const r = 22, rot = o.roll / r;
+    K.wheel(ctx, -50, -r, r, rot, o.seed);
+    K.wheel(ctx, 50, -r, r, rot + 0.5, o.seed + 3);
+    ctx.translate(0, o.bob);
+    if (o.coupler) { K.line(ctx, [[-96, -40], [-80, -40]], { w: 6, seed: o.seed + 9 }); K.line(ctx, [[80, -40], [96, -40]], { w: 6, seed: o.seed + 10 }); }
+    K.shape(ctx, K.rectPts(-82, -58, 164, 26, 4), { fill: o.color, w: 3, seed: o.seed + 6, shade: { color: o.shade, dx: 0, dy: -10 } });
+    if (o.load) o.load(ctx); /* drawn in wagon space: deck top is y = -58 */
+    ctx.restore();
+  };
+  /* steam locomotive facing right; (x, y) = rail top under the cab/boiler joint.
+     cab(ctx) draws whoever rides in the cab window (wagon space, window centre (-92, -158)) */
+  K.loco = function (ctx, x, y, s, opt) {
+    const o = Object.assign({ roll: 0, seed: 120, cab: null, bob: 0 }, opt || {});
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    const rot = o.roll / 34;
+    /* chassis */
+    K.shape(ctx, K.rectPts(-150, -78, 330, 30, 4), { fill: P.ink, w: 3, seed: o.seed, reg: 0 });
+    /* driving wheels + rod */
+    const wx = [-110, -30, 50];
+    wx.forEach((xx, i) => K.wheel(ctx, xx, -34, 34, rot + i * 0.3, o.seed + 2 + i * 3));
+    K.wheel(ctx, 135, -22, 22, o.roll / 22, o.seed + 14);
+    const rx = Math.cos(rot) * 16, ry = Math.sin(rot) * 16;
+    K.shape(ctx, K.rrectPts(-118 + rx, -40 + ry, 176, 12, 6, 3), { fill: P.steelLight, w: 2.5, seed: o.seed + 16 });
+    ctx.translate(0, o.bob);
+    /* cowcatcher */
+    K.shape(ctx, [[176, -78], [214, -10], [176, -10]], { fill: P.tomato, w: 3, seed: o.seed + 18 });
+    /* boiler */
+    K.shape(ctx, K.rrectPts(-40, -190, 220, 112, 40, 5), { fill: P.teal, w: 3.5, seed: o.seed + 20, shade: { color: P.tealDark, dx: 0, dy: -36 }, tone: { color: P.ink, gap: 11, r: 0, r2: 2.6, dir: Math.PI / 2, alpha: 0.22 } });
+    [10, 80, 150].forEach((bx, i) => K.shape(ctx, K.rectPts(bx - 7, -192, 14, 116, 2), { fill: P.mustard, w: 2.5, seed: o.seed + 22 + i }));
+    /* smoke box front */
+    K.shape(ctx, K.rrectPts(168, -184, 30, 100, 12, 3), { fill: P.ink, w: 3, seed: o.seed + 26, reg: 0 });
+    K.dot(ctx, 200, -160, 16, P.mustardLight, P.ink, 3, o.seed + 27);
+    /* chimney + dome */
+    K.shape(ctx, [[118, -188], [148, -188], [158, -262], [108, -262]], { fill: P.ink, w: 3, seed: o.seed + 28, reg: 0 });
+    K.shape(ctx, K.rectPts(102, -274, 62, 16, 2), { fill: P.mustard, w: 3, seed: o.seed + 29 });
+    K.shape(ctx, K.arcPts(50, -188, 30, Math.PI, K.TAU, 8), { fill: P.mustard, w: 3, seed: o.seed + 30 });
+    /* cab */
+    K.shape(ctx, K.rectPts(-160, -250, 130, 172, 3), { fill: P.mustard, w: 3.5, seed: o.seed + 32, shade: { color: P.mustardDark, dx: 34, dy: 0 } });
+    K.shape(ctx, [[-176, -246], [-14, -246], [-24, -276], [-166, -276]], { fill: P.tomato, w: 3.5, seed: o.seed + 33, shade: { color: P.tomatoDark, dx: 0, dy: -10 } });
+    K.shape(ctx, K.rrectPts(-138, -226, 86, 82, 16, 3), { fill: P.cream, w: 3, seed: o.seed + 34, tone: { color: P.creamDeep, gap: 8, r: 0, r2: 2.4, dir: Math.PI * 0.3, alpha: 0.7 } });
+    if (o.cab) { ctx.save(); K.pathOf(ctx, K.rrectPts(-138, -226, 86, 160, 16, 3), true); ctx.clip(); o.cab(ctx); ctx.restore(); }
+    ctx.restore();
+  };
+  /* smoke / steam puff: u 0..1 life (grows, rises is the caller's job, fades at the end) */
+  K.puff = function (ctx, x, y, r, u, seed, color) {
+    if (u <= 0 || u >= 1) return;
+    const g = 0.35 + 0.65 * K.E.out3(clamp(u * 1.6, 0, 1)), a = 1 - K.ss(0.6, 1, u);
+    ctx.save(); ctx.globalAlpha *= a;
+    [[0, 0, 1], [-0.62, 0.22, 0.66], [0.6, 0.18, 0.7], [0.1, -0.5, 0.62]].forEach((c, i) => {
+      const rr = r * g * c[2];
+      K.shape(ctx, K.ellipsePts(x + c[0] * r * g, y + c[1] * r * g, rr, rr, 18), { fill: color || P.cream, key: P.ink, w: 2.5, smooth: true, boil: 1, seed: seed * 7 + i, shade: { color: P.creamShade, dx: rr * 0.2, dy: rr * 0.25 } });
+    });
+    ctx.restore();
+  };
+
+  /* ---------- the price pond (market impact) ---------- */
+  K.pond = function (ctx, x, y, w, h, seed) {
+    K.shape(ctx, K.ellipsePts(x, y, w / 2, h / 2, 36), { fill: P.water, w: 3, seed, smooth: true, shade: { color: P.waterDeep, dx: 0, dy: h * 0.18 }, tone: { color: P.cream, gap: 12, r: 2.4, r2: 0, dir: Math.PI / 2, alpha: 0.4 } });
+  };
+  /* one ripple ring; u 0..1 */
+  K.ripple = function (ctx, x, y, size, u, seed) {
+    if (u <= 0 || u >= 1) return;
+    const r = size * K.E.out3(u);
+    K.shape(ctx, K.ellipsePts(x, y, r, r * 0.32, 24), { fill: null, key: P.cream, w: 4 * (1 - u) + 1.5, smooth: true, boil: 0.5, seed, alpha: 1 - u });
+  };
+  /* crown splash: a column and drops; size = height in px; u 0..1 */
+  K.splash = function (ctx, x, y, size, u, seed, color) {
+    if (u <= 0 || u >= 1) return;
+    const c = color || P.water, up = Math.sin(Math.PI * clamp(u * 1.3, 0, 1));
+    ctx.save(); ctx.globalAlpha *= 1 - K.ss(0.75, 1, u);
+    const hw = size * 0.22, hh = size * up;
+    if (hh > 2) K.shape(ctx, [[x - hw, y], [x - hw * 0.5, y - hh * 0.7], [x - hw * 0.2, y - hh], [x + hw * 0.25, y - hh * 0.85], [x + hw * 0.55, y - hh * 0.6], [x + hw, y]], { fill: c, w: 3, smooth: true, seed, shade: { color: P.cream, dx: hw * 0.3, dy: 0 } });
+    for (let i = 0; i < 9; i++) {
+      const a = -Math.PI / 2 + (i / 8 - 0.5) * 2.4, sp = size * (0.6 + 0.6 * hash(i, seed));
+      const px = x + Math.cos(a) * sp * u * 1.1, py = y + Math.sin(a) * sp * u * 1.3 + size * 1.6 * u * u;
+      K.dot(ctx, px, py, size * 0.06 * (1 - u * 0.5), c, P.ink, 2, seed + 10 + i);
+    }
+    ctx.restore();
+  };
+
+  /* ---------- money, quote windows, dials ---------- */
+  K.coin = function (ctx, x, y, r, opt) {
+    const o = Object.assign({ color: P.mustard, label: "", seed: 1, labelColor: P.ink, size: 0 }, opt || {});
+    K.shape(ctx, K.ellipsePts(x, y, r, r, 24), { fill: o.color, w: Math.max(2, r * 0.07), smooth: true, boil: 0.4, seed: o.seed, shade: { color: P.mustardDark, dx: r * 0.12, dy: r * 0.14 } });
+    K.shape(ctx, K.ellipsePts(x - r * 0.04, y - r * 0.04, r * 0.7, r * 0.7, 20), { fill: null, key: P.ink, w: Math.max(1.6, r * 0.05), smooth: true, boil: 0.3, seed: o.seed + 1 });
+    if (o.label) K.text(ctx, o.label, x - r * 0.04, y - r * 0.02, { size: o.size || r * 0.7, weight: 800, fill: o.labelColor, font: K.FONT.mono });
+  };
+  /* kiosk with a striped awning and an open window; (x, y) = ground centre */
+  K.booth = function (ctx, x, y, w, h, opt) {
+    const o = Object.assign({ color: P.teal, shade: P.tealDark, seed: 140, lit: 0 }, opt || {});
+    K.shape(ctx, K.rectPts(x - w / 2, y - h, w, h, 3), { fill: o.color, w: 3.5, seed: o.seed, shade: { color: o.shade, dx: -w * 0.12, dy: 0 } });
+    /* window */
+    const wy = y - h * 0.78, wh = h * 0.42;
+    K.shape(ctx, K.rectPts(x - w * 0.36, wy, w * 0.72, wh, 3), { fill: o.lit > 0 ? P.mustardLight : P.ink, w: 3, seed: o.seed + 1, reg: 0 });
+    K.shape(ctx, K.rectPts(x - w * 0.44, wy + wh, w * 0.88, 16, 3), { fill: P.cream, w: 3, seed: o.seed + 2 });
+    /* awning: alternating stripes with a scalloped edge */
+    const ay = y - h - 10, n = 6, sw = (w + 40) / n;
+    for (let i = 0; i < n; i++) {
+      const x0 = x - w / 2 - 20 + i * sw;
+      const pts = [[x0 + 8, ay - 40], [x0 + sw + 8, ay - 40], [x0 + sw, ay + 20]].concat(K.arcPts(x0 + sw / 2, ay + 20, sw / 2, 0, Math.PI, 5));
+      K.shape(ctx, pts, { fill: i % 2 ? P.cream : o.color, w: 2.5, seed: o.seed + 5 + i, boil: 0.5 });
+    }
+  };
+  /* dial gauge: v 0..1; green-ish (teal) low zone, tomato high zone */
+  K.gauge = function (ctx, x, y, r, v, opt) {
+    const o = Object.assign({ seed: 160, lo: 0.35, hi: 0.7, label: "" }, opt || {});
+    K.shape(ctx, K.ellipsePts(x, y, r * 1.12, r * 1.12, 32), { fill: P.ink, w: 3, seed: o.seed, smooth: true, reg: 0 });
+    K.shape(ctx, K.ellipsePts(x, y, r, r, 32), { fill: P.cream, w: 2.5, seed: o.seed + 1, smooth: true });
+    const a0 = Math.PI * 0.8, a1 = Math.PI * 2.2, A = (u) => lerp(a0, a1, u);
+    const band = (u0, u1, c, s) => K.shape(ctx, K.arcPts(x, y, r * 0.86, A(u0), A(u1), 10).concat(K.arcPts(x, y, r * 0.62, A(u1), A(u0), 10)), { fill: c, w: 2, seed: s, boil: 0.3 });
+    band(0, o.lo, P.teal, o.seed + 2); band(o.lo, o.hi, P.mustard, o.seed + 3); band(o.hi, 1, P.tomato, o.seed + 4);
+    const a = A(clamp(v, 0, 1));
+    K.shape(ctx, [[x + Math.cos(a + Math.PI / 2) * r * 0.06, y + Math.sin(a + Math.PI / 2) * r * 0.06], [x + Math.cos(a) * r * 0.9, y + Math.sin(a) * r * 0.9], [x - Math.cos(a + Math.PI / 2) * r * 0.06, y - Math.sin(a + Math.PI / 2) * r * 0.06]], { fill: P.ink, w: 2, seed: o.seed + 6, boil: 0.3, reg: 0 });
+    K.dot(ctx, x, y, r * 0.1, P.mustard, P.ink, 2, o.seed + 7);
+    if (o.label) K.text(ctx, o.label, x, y + r * 0.5, { size: r * 0.22, font: K.FONT.mono, weight: 700 });
+  };
+})(SK);
+
+/* ============================================================
+   KIT 40 MOUSE: "Mr. Tick", the stationmaster mouse.
+   Local space: feet on y = 0, faces the viewer. Scale 1 = 300 px tall
+   (ears included). Head centre (0, -212), r ~64; body (coat) -48..-150.
+   Pose state (all optional):
+     squash   -1..1 (+ wide, - tall), volume kept     lean  deg around the feet
+     hop      px lift (legs tuck)                     look  [dx, dy] pupils -1..1
+     blink    0..1                                     brow  -1..1.5 (raised)
+     mouth    "smile" | "grin" | "open" | "o" | "whistle"
+     puff     0..1 cheeks puffed (blowing the whistle)
+     eyeUp    px eye pop                               exclaim 0..1 ("!" pops)
+     ear      -1..1 extra ear flick                    tail  phase (radians)
+     handL/R  { x, y, open, hold: "watch" | "whistle" | "flag" | "thumb" | null, lid 0..1 }
+     hatTip   deg, hatLift px                          legWalk phase (radians)
+   ============================================================ */
+var SK = window.SK || (window.SK = {});
+(function (K) {
+  const P = K.P, { clamp } = K;
+
+  /* two-bone IK: shoulder S, target T, lengths a, b, bend +1/-1 -> elbow, end */
+  K.ik2 = function (S, T, a, b, bend) {
+    let dx = T[0] - S[0], dy = T[1] - S[1], d = Math.hypot(dx, dy);
+    const dm = clamp(d, Math.abs(a - b) + 0.01, a + b - 0.01);
+    if (d < 1e-6) { dx = 1; dy = 0; d = 1; }
+    const ux = dx / d, uy = dy / d;
+    const ca = clamp((a * a + dm * dm - b * b) / (2 * a * dm), -1, 1), A = Math.acos(ca) * (bend || 1);
+    const ex = S[0] + a * (ux * Math.cos(A) - uy * Math.sin(A)), ey = S[1] + a * (ux * Math.sin(A) + uy * Math.cos(A));
+    return { elbow: [ex, ey], end: [S[0] + ux * dm, S[1] + uy * dm] };
+  };
+  /* outlined tube: key line underlay then the colour on top */
+  K.tube = function (ctx, pts, w, color, seed, smooth) {
+    K.line(ctx, pts, { key: P.ink, w: w + 6, boil: 0.6, seed, smooth: smooth !== false });
+    K.line(ctx, pts, { key: color, w, boil: 0.6, seed, smooth: smooth !== false });
+  };
+
+  /* small props, drawn in hand space (origin = palm centre) */
+  K.pocketWatch = function (ctx, x, y, r, lid, t, seed) {
+    K.shape(ctx, K.ellipsePts(x, y, r, r, 20), { fill: P.mustard, w: 2.5, smooth: true, boil: 0.4, seed, shade: { color: P.mustardDark, dx: r * 0.15, dy: r * 0.18 } });
+    K.shape(ctx, K.ellipsePts(x, y, r * 0.74, r * 0.74, 18), { fill: P.cream, w: 2, smooth: true, boil: 0.3, seed: seed + 1 });
+    const a = t * 2.2; /* the seconds hand sweeps */
+    K.line(ctx, [[x, y], [x + Math.sin(a) * r * 0.6, y - Math.cos(a) * r * 0.6]], { w: 2.2, boil: 0, key: P.tomato });
+    K.line(ctx, [[x, y], [x + r * 0.35, y - r * 0.2]], { w: 2.6, boil: 0 });
+    K.dot(ctx, x, y - r - 5, 5, P.mustard, P.ink, 2, seed + 2);
+    if (lid < 1) { /* lid swings open around the top hinge */
+      const k = Math.cos(clamp(lid, 0, 1) * Math.PI * 0.5);
+      if (k > 0.04) K.shape(ctx, K.ellipsePts(x, y - r * (1 - k), r, r * k, 18), { fill: P.mustardLight, w: 2.5, smooth: true, boil: 0.4, seed: seed + 3 });
+    }
+  };
+  K.whistle = function (ctx, x, y, ang, s, seed) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(s, s);
+    K.shape(ctx, K.rrectPts(-6, -9, 40, 18, 6, 2), { fill: P.mustard, w: 2.5, seed, boil: 0.3, shade: { color: P.mustardDark, dx: 0, dy: 5 } });
+    K.shape(ctx, K.ellipsePts(-6, 6, 14, 14, 14), { fill: P.mustard, w: 2.5, smooth: true, seed: seed + 1, boil: 0.3 });
+    K.shape(ctx, K.rectPts(8, -9, 8, 6, 1), { fill: P.ink, key: null, seed: seed + 2, boil: 0.2, reg: 0 });
+    ctx.restore();
+  };
+
+  K.glove = function (ctx, x, y, ang, s, opt, seed) {
+    const o = opt || {};
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.scale(s, s);
+    /* cuff */
+    K.shape(ctx, K.rrectPts(-16, -11, 10, 22, 3, 1), { fill: P.glove, w: 2.5, seed: seed + 1, boil: 0.4 });
+    /* palm (a mitten with a thumb) */
+    K.shape(ctx, K.ellipsePts(6, 0, 15, 13, 14), { fill: P.glove, w: 3, smooth: true, boil: 0.5, seed, shade: { color: P.gloveShade, dx: -3, dy: 4 } });
+    if (o.hold === "thumb") K.shape(ctx, K.rrectPts(0, -30, 11, 24, 5, 2), { fill: P.glove, w: 3, seed: seed + 2, boil: 0.4 });
+    else if (o.hold === "point") K.shape(ctx, K.rrectPts(12, -5, 26, 10, 5, 2), { fill: P.glove, w: 3, seed: seed + 2, boil: 0.4 });
+    else K.shape(ctx, K.ellipsePts(4, -12, 6, 5, 8), { fill: P.glove, w: 2.5, smooth: true, seed: seed + 2, boil: 0.3 });
+    ctx.restore();
+  };
+
+  K.mouse = function (ctx, x, y, s, st) {
+    st = st || {};
+    const sq = clamp(st.squash || 0, -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
+    const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1), seed = st.seed || 700;
+    const t = K.now;
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    const air = clamp(hop / 30, 0, 1), bodyBase = -44 * syk - hop;
+    /* shadow */
+    ctx.save(); ctx.globalAlpha *= 0.25 * (1 - air * 0.5);
+    ctx.fillStyle = P.ink; ctx.beginPath(); ctx.ellipse(0, 2, 62 * (1 - air * 0.3), 9, 0, 0, K.TAU); ctx.fill(); ctx.restore();
+    /* tail: a long curl that sways */
+    const tp = st.tail == null ? t * 2.2 : st.tail;
+    const tail = [];
+    for (let i = 0; i <= 10; i++) { const u = i / 10; tail.push([30 + u * 80 + Math.sin(tp + u * 3) * 10 * u, bodyBase - 12 - u * 70 + Math.cos(tp * 0.8 + u * 4) * 12 * u - Math.sin(u * Math.PI) * 26]); }
+    K.tube(ctx, tail, 6, P.furDark, seed + 1);
+    /* legs + shoes */
+    [-1, 1].forEach((sd, i) => {
+      const ph = (st.legWalk || 0) + (sd > 0 ? Math.PI : 0), lift = st.legWalk ? Math.max(0, Math.sin(ph)) * 12 : 0;
+      const fx = sd * (24 - 8 * air) + (st.legWalk ? Math.cos(ph) * 8 : 0), fy = -lift - hop * 0.9 - 6 * air;
+      K.tube(ctx, [[sd * 18 * sxk, bodyBase + 6], [fx, fy - 10]], 13, P.furDark, seed + 5 + i, false);
+      K.shape(ctx, K.ellipsePts(fx + sd * 8, fy - 6, 20, 10, 14), { fill: P.ink, w: 2.5, smooth: true, boil: 0.4, seed: seed + 8 + i, reg: 0 });
+    });
+    /* ---- body (coat), squashes around its base ---- */
+    ctx.save(); ctx.translate(0, bodyBase); ctx.scale(sxk, syk);
+    const coat = [[-32, -106], [-44, -70], [-54, -18], [-58, 6], [-22, 2], [0, -6], [22, 2], [58, 6], [54, -18], [44, -70], [32, -106], [0, -112]];
+    K.shape(ctx, coat, { fill: P.teal, w: 3.5, smooth: true, boil: 0.8, seed: seed + 10, shade: { color: P.tealDark, dx: 14, dy: 0 }, tone: { color: P.ink, gap: 9, r: 0, r2: 2.2, dir: 0, alpha: 0.22 } });
+    /* shirt V + bow tie */
+    K.shape(ctx, [[-20, -108], [0, -66], [20, -108]], { fill: P.cream, w: 2.5, seed: seed + 11, boil: 0.5 });
+    K.shape(ctx, [[0, -100], [-16, -110], [-16, -90]], { fill: P.tomato, w: 2.2, seed: seed + 12, boil: 0.3 });
+    K.shape(ctx, [[0, -100], [16, -110], [16, -90]], { fill: P.tomato, w: 2.2, seed: seed + 13, boil: 0.3 });
+    /* buttons + pocket with the watch chain */
+    [-56, -36, -16].forEach((yy, i) => K.dot(ctx, 0, yy, 5.5, P.mustard, P.ink, 2, seed + 14 + i));
+    K.shape(ctx, K.rectPts(-40, -50, 22, 6, 1), { fill: P.tealDark, w: 2, seed: seed + 18, boil: 0.3 });
+    ctx.restore();
+    /* ---- head ---- */
+    const headY = bodyBase - 112 * syk - 50;
+    ctx.save(); ctx.translate(0, headY); ctx.scale(1 + sq * 0.12, 1 - sq * 0.12);
+    const earA = Math.sin(t * 3.1) * 0.05 + (st.ear || 0) * 0.3;
+    [-1, 1].forEach((sd, i) => {
+      ctx.save(); ctx.translate(sd * 50, -46); ctx.rotate(sd * (0.25 + earA * (i ? 1 : -1)));
+      K.shape(ctx, K.ellipsePts(0, -12, 44, 42, 22), { fill: P.fur, w: 3.5, smooth: true, boil: 0.7, seed: seed + 20 + i, shade: { color: P.furDark, dx: sd * 10, dy: 8 } });
+      K.shape(ctx, K.ellipsePts(0, -10, 28, 27, 18), { fill: P.earPink, w: 2, smooth: true, boil: 0.5, seed: seed + 22 + i, tone: { color: P.tomatoDark, gap: 7, r: 0, r2: 2, dir: Math.PI / 2, alpha: 0.35 } });
+      ctx.restore();
+    });
+    /* skull: slightly pear-shaped, wider at the cheeks */
+    const head = [];
+    for (let i = 0; i < 24; i++) { const a = (i / 24) * K.TAU, c = Math.cos(a), sn = Math.sin(a); head.push([c * (60 + 6 * Math.max(0, sn)), sn * (sn > 0 ? 54 : 58)]); }
+    K.shape(ctx, head, { fill: P.fur, w: 3.5, smooth: true, boil: 0.8, seed: seed + 25, shade: { color: P.furDark, dx: 12, dy: 8 }, tone: { color: P.ink, gap: 8, r: 0, r2: 2, dir: Math.PI * 0.2, alpha: 0.2 } });
+    /* muzzle */
+    const pf = clamp(st.puff || 0, 0, 1);
+    K.shape(ctx, K.ellipsePts(0, 24, 36 + pf * 10, 25 + pf * 4, 18), { fill: P.furLight, w: 2.5, smooth: true, boil: 0.5, seed: seed + 26 });
+    /* cheeks */
+    [-1, 1].forEach((sd, i) => { ctx.save(); ctx.globalAlpha *= 0.55 + pf * 0.3; K.shape(ctx, K.ellipsePts(sd * (40 + pf * 6), 18, 11 + pf * 7, 7 + pf * 5, 10), { fill: P.earPink, key: null, smooth: true, boil: 0.4, seed: seed + 27 + i, reg: 0 }); ctx.restore(); });
+    /* whiskers */
+    [-1, 1].forEach((sd) => [-6, 2, 10].forEach((dy, k) => K.line(ctx, [[sd * 26, 16 + dy * 0.3], [sd * (66 + k * 4), 8 + dy * 1.2 + Math.sin(t * 4 + k + sd) * 1.5]], { w: 1.8, boil: 0.5, seed: seed + 30 + k + (sd > 0 ? 5 : 0) })));
+    /* mouth */
+    const m = st.mouth || "smile";
+    if (m === "smile") K.line(ctx, [[-14, 30], [-6, 37], [0, 33], [6, 37], [14, 30]], { w: 3, boil: 0.4, seed: seed + 40, smooth: true });
+    else if (m === "grin") {
+      K.shape(ctx, [[-20, 28], [20, 28], [12, 44], [0, 47], [-12, 44]], { fill: "#6e2a1c", w: 2.5, boil: 0.4, seed: seed + 41, smooth: true });
+      K.shape(ctx, K.rectPts(-7, 28, 14, 9, 1), { fill: P.cream, w: 2, boil: 0.2, seed: seed + 42 });
+    } else if (m === "open") K.shape(ctx, K.ellipsePts(0, 38, 11, 11, 12), { fill: "#6e2a1c", w: 2.5, smooth: true, boil: 0.4, seed: seed + 43 });
+    else if (m === "o" || m === "whistle") K.shape(ctx, K.ellipsePts(0, 36, 5.5, 6.5, 10), { fill: "#6e2a1c", w: 2.2, smooth: true, boil: 0.3, seed: seed + 44 });
+    /* nose */
+    K.dot(ctx, 0, 14, 9, P.nose, P.ink, 2, seed + 45);
+    K.dot(ctx, -3, 11, 2.6, P.cream, null, 0, seed + 46);
+    /* eyes */
+    [-1, 1].forEach((sd, i) => {
+      const ex = sd * 23, ey = -12 - (st.eyeUp || 0), rx = 13 + (st.eyeUp ? 2 : 0), ry = 17 * (1 - 0.92 * blink) + (st.eyeUp ? 3 : 0);
+      K.shape(ctx, K.ellipsePts(ex, ey, rx, Math.max(1.4, ry), 16), { fill: P.eye, w: 3, smooth: true, boil: 0.4, seed: seed + 50 + i, reg: 1.2 });
+      if (blink < 0.6) {
+        const px = ex + look[0] * 5, py = ey + 2 + look[1] * 6 * (1 - blink);
+        K.shape(ctx, K.ellipsePts(px, py, 7, 9 * (1 - blink), 12), { fill: P.pupil, key: null, smooth: true, boil: 0.3, seed: seed + 52 + i, reg: 0 });
+        K.shape(ctx, K.ellipsePts(px + 2.5, py - 3.5, 2.6, 2.6, 6), { fill: "#ffffff", key: null, smooth: true, boil: 0.2, seed: seed + 54 + i, reg: 0 });
+      } else K.line(ctx, [[ex - rx, ey], [ex, ey + 4], [ex + rx, ey]], { w: 3, boil: 0.3, seed: seed + 56 + i, smooth: true });
+      const br = st.brow || 0;
+      K.line(ctx, [[ex - 12, ey - 24 - br * 7 + sd * br * 2], [ex + 12, ey - 24 - br * 7 - sd * br * 2]], { w: 3.5, boil: 0.3, seed: seed + 58 + i });
+    });
+    /* stationmaster cap */
+    ctx.save(); ctx.translate(0, -52 - (st.hatLift || 0)); ctx.rotate(((st.hatTip || 0) * Math.PI) / 180);
+    K.shape(ctx, [[-50, -2], [-56, -34], [-30, -46], [30, -46], [56, -34], [50, -2]], { fill: P.teal, w: 3.5, seed: seed + 60, boil: 0.6, shade: { color: P.tealDark, dx: 12, dy: 0 } });
+    K.shape(ctx, K.rectPts(-50, -14, 100, 14, 3), { fill: P.mustard, w: 2.5, seed: seed + 61, boil: 0.4 });
+    K.shape(ctx, [[-52, -2], [52, -2], [44, 12], [-44, 12]], { fill: P.ink, w: 2.5, seed: seed + 62, boil: 0.4, reg: 0 });
+    K.star(ctx, 0, -30, 11, { seed: seed + 63, color: P.mustard, w: 1.8 });
+    ctx.restore();
+    /* "!" (language-neutral surprise) */
+    if (st.exclaim > 0) {
+      const a = K.E.back(clamp(st.exclaim, 0, 1), 2.5);
+      ctx.save(); ctx.translate(96, -96); ctx.rotate(0.22); ctx.scale(a, a);
+      K.shape(ctx, [[-9, -54], [9, -54], [5, -12], [-5, -12]], { fill: P.tomato, w: 3, seed: seed + 64 });
+      K.shape(ctx, K.ellipsePts(0, 2, 7, 7, 10), { fill: P.tomato, w: 3, smooth: true, seed: seed + 65 });
+      ctx.restore();
+    }
+    ctx.restore();
+    /* ---- arms: shoulders at the coat's top corners, IK to hand targets ---- */
+    [["L", -1], ["R", 1]].forEach(([k, sd]) => {
+      const h = st["hand" + k] || { x: sd * 62, y: -66 };
+      const S = [sd * 34 * sxk, bodyBase - 100 * syk];
+      const r = K.ik2(S, [h.x, h.y - hop], 36, 34, sd > 0 ? -1 : 1);
+      K.tube(ctx, [S, r.elbow, r.end], 14, P.teal, seed + 70 + (sd > 0 ? 1 : 0), false);
+      const ang = h.rot != null ? (h.rot * Math.PI) / 180 : Math.atan2(r.end[1] - r.elbow[1], r.end[0] - r.elbow[0]);
+      if (h.hold === "watch") {
+        /* chain from the coat pocket to the watch */
+        const px = -29 * sxk, py = bodyBase - 48 * syk;
+        const wx = r.end[0] + Math.cos(ang) * 12, wy = r.end[1] + Math.sin(ang) * 12 - 22;
+        K.line(ctx, [[px, py], [(px + wx) / 2, Math.max(py, wy) + 18], [wx, wy + 18]], { key: P.mustardDark, w: 2.5, smooth: true, boil: 0.5, seed: seed + 80 });
+        K.glove(ctx, r.end[0], r.end[1], ang, 1, h, seed + 84);
+        K.pocketWatch(ctx, wx, wy, 20, h.lid == null ? 1 : h.lid, t, seed + 86);
+      } else if (h.hold === "whistle") {
+        K.whistle(ctx, r.end[0] + Math.cos(ang) * 8, r.end[1] + Math.sin(ang) * 8 - 6, h.wAng == null ? Math.PI : h.wAng, 1, seed + 90);
+        K.glove(ctx, r.end[0], r.end[1], ang, 1, h, seed + 94);
+      } else if (h.hold === "flag") {
+        const fx = r.end[0], fy = r.end[1];
+        K.line(ctx, [[fx, fy + 20], [fx, fy - 110]], { w: 4, seed: seed + 96, key: P.woodDark });
+        const wv = Math.sin(t * 6) * 6;
+        K.shape(ctx, [[fx, fy - 110], [fx + 70, fy - 96 + wv], [fx, fy - 70]], { fill: P.mustard, w: 3, seed: seed + 97, boil: 0.5 });
+        K.glove(ctx, fx, fy, ang, 1, h, seed + 98);
+      } else K.glove(ctx, r.end[0], r.end[1], ang, 1, h, seed + 100 + (sd > 0 ? 3 : 0));
+    });
+    ctx.restore();
+  };
+
+  /* seeded blink curve, about one blink per 1.9 s, 0..1 */
+  K.blinkAt = function (t, seed) {
+    let b = 0;
+    for (let i = 0; i < 14; i++) {
+      const tb = 0.8 + i * 1.9 + K.hash(i, seed || 7) * 1.1, d = t - tb;
+      if (d > 0 && d < 0.16) b = Math.max(b, Math.sin((d / 0.16) * Math.PI));
+    }
+    return b;
+  };
+})(SK);
+
+/* ============================================================
+   KIT 50 EXPLAINER: slide content as objects of the railway station.
+   Never draw a flat slide. Each primitive is a physical thing:
+     big number      -> split-flap display               K.flap
+     table           -> departure board                  K.board
+     formula         -> enamel sign with screws          K.plaque
+     chart           -> framed travel poster             K.poster
+     bullets         -> row of tickets                   K.tickets
+     code            -> teletype paper tape              K.teletype
+     graph node/edge -> rail-map stop / line             K.stop / K.route
+     small number    -> luggage tag                      K.tag
+     title           -> hanging enamel sign              K.sign
+   All take `a` (appear 0..1) and pop with a back ease on a beat.
+   Text never boils; frames, plates and paper edges do.
+   ============================================================ */
+var SK = window.SK || (window.SK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp, hash, hs } = K;
+  const popS = (a) => (a <= 0 ? 0 : a >= 1 ? 1 : K.E.back(a, 2.2));
+  K.popS = popS;
+  /* scale around (x, y) for a pop */
+  function popAt(ctx, x, y, a) { const s = popS(a); ctx.translate(x, y); ctx.scale(s, s); ctx.translate(-x, -y); return s; }
+  const screws = (ctx, x, y, w, h, inset, seed) => [[x + inset, y + inset], [x + w - inset, y + inset], [x + inset, y + h - inset], [x + w - inset, y + h - inset]].forEach((q, i) => {
+    K.dot(ctx, q[0], q[1], 6, P.creamShade, P.ink, 2, seed + i);
+    K.line(ctx, [[q[0] - 4, q[1] - 2], [q[0] + 4, q[1] + 2]], { w: 1.8, boil: 0.2, seed: seed + 10 + i });
+  });
+
+  /* ---------- split-flap tile: one character; flip 0..1 shows prev -> ch ---------- */
+  K.flapChar = function (ctx, x, y, w, h, ch, opt) {
+    const o = Object.assign({ flip: 1, prev: " ", size: h * 0.74, color: P.flapText, seed: 1 }, opt || {});
+    const r = w * 0.14;
+    K.shape(ctx, K.rrectPts(x, y, w, h, r, 3), { fill: P.flap, key: P.ink, w: 2.5, boil: 0.3, seed: o.seed, reg: 0 });
+    const f = clamp(o.flip, 0, 1), cy = y + h / 2;
+    const glyph = (c, clipTop) => {
+      ctx.save(); ctx.beginPath(); ctx.rect(x, clipTop ? y : cy, w, h / 2); ctx.clip();
+      K.text(ctx, c, x + w / 2, cy + o.size * 0.04, { size: o.size, weight: 700, font: K.FONT.mono, fill: o.color });
+      ctx.restore();
+    };
+    /* static halves: top shows new char once the flap has fallen past the hinge */
+    glyph(f < 1 ? o.prev : ch, true);
+    glyph(f < 0.5 ? o.prev : ch, false);
+    glyph(ch, true); /* new top is behind the falling flap */
+    if (f < 1) {
+      /* the falling flap: first half shows prev top squashing, second half new bottom growing */
+      ctx.save();
+      if (f < 0.5) {
+        const k = Math.cos(f * Math.PI);
+        ctx.beginPath(); ctx.rect(x, y, w, h / 2); ctx.clip();
+        K.shape(ctx, K.rectPts(x, y, w, h / 2, 1), { fill: P.flap, key: null, boil: 0, reg: 0 });
+        ctx.translate(0, cy); ctx.scale(1, k); ctx.translate(0, -cy);
+        K.shape(ctx, K.rrectPts(x, y, w, h / 2 + r, r, 3), { fill: P.flap, key: null, boil: 0, reg: 0 });
+        K.text(ctx, o.prev, x + w / 2, cy + o.size * 0.04, { size: o.size, weight: 700, font: K.FONT.mono, fill: o.color });
+      } else {
+        const k = Math.cos((1 - f) * Math.PI);
+        ctx.beginPath(); ctx.rect(x, cy, w, h / 2); ctx.clip();
+        ctx.translate(0, cy); ctx.scale(1, -k); ctx.scale(1, -1); ctx.translate(0, -cy);
+        K.shape(ctx, K.rrectPts(x, cy - r, w, h / 2 + r, r, 3), { fill: P.flap, key: null, boil: 0, reg: 0 });
+        K.text(ctx, ch, x + w / 2, cy + o.size * 0.04, { size: o.size, weight: 700, font: K.FONT.mono, fill: o.color });
+      }
+      ctx.restore();
+    }
+    ctx.save(); ctx.strokeStyle = P.ink; ctx.lineWidth = K.lw(ctx, 2.5); ctx.beginPath(); ctx.moveTo(x + 2, cy); ctx.lineTo(x + w - 2, cy); ctx.stroke(); ctx.restore();
+  };
+  /* split-flap display centred on (x, y). flip 0..1 runs the characters left to right */
+  K.flap = function (ctx, x, y, str, opt) {
+    const o = Object.assign({ h: 90, a: 1, flip: 1, prev: "", color: P.flapText, seed: 200, frame: true, colors: null }, opt || {});
+    if (o.a <= 0) return;
+    const n = str.length, w = o.h * 0.66, gap = o.h * 0.07, W = n * w + (n - 1) * gap;
+    ctx.save(); popAt(ctx, x, y, o.a);
+    if (o.frame) K.shape(ctx, K.rrectPts(x - W / 2 - 18, y - o.h / 2 - 16, W + 36, o.h + 32, 14, 3), { fill: P.ink, key: P.ink, w: 3, seed: o.seed, reg: 0, shade: { color: "#1c1c20", dx: 0, dy: 10 } });
+    for (let i = 0; i < n; i++) {
+      const fi = clamp(o.flip * (n + 2) - i, 0, 1);
+      K.flapChar(ctx, x - W / 2 + i * (w + gap), y - o.h / 2, w, o.h, str[i], { flip: fi, prev: o.prev[i] || " ", seed: o.seed + 3 + i, color: o.colors ? o.colors[i] || o.color : o.color });
+    }
+    ctx.restore();
+    return W + 36;
+  };
+
+  /* ---------- departure board (table): x, y = top-left ---------- */
+  K.board = function (ctx, x, y, cols, rows, opt) {
+    const o = Object.assign({ a: 1, hi: -1, size: 28, rowH: 50, seed: 220, shown: 99, headColor: P.mustard }, opt || {});
+    if (o.a <= 0) return;
+    const W = cols.reduce((a, b) => a + b, 0) + 40, H = rows.length * o.rowH + 40;
+    ctx.save(); popAt(ctx, x + W / 2, y, o.a);
+    K.shape(ctx, K.rrectPts(x, y, W, H, 16, 3), { fill: P.board, w: 3.5, seed: o.seed, reg: 0, shade: { color: "#1c1c20", dx: 0, dy: 12 } });
+    K.shape(ctx, K.rrectPts(x + 10, y + 22, W - 20, o.rowH - 4, 8, 2), { fill: o.headColor, w: 2.5, seed: o.seed + 1 });
+    rows.forEach((row, ri) => {
+      if (ri > o.shown) return;
+      const ry = y + 20 + ri * o.rowH + o.rowH / 2;
+      if (ri === o.hi) K.shape(ctx, K.rrectPts(x + 12, ry - o.rowH / 2 + 4, W - 24, o.rowH - 8, 6, 2), { fill: P.tealDark, w: 2, seed: o.seed + 5 });
+      let cx = x + 20;
+      row.forEach((cell, ci) => {
+        const head = ri === 0;
+        K.text(ctx, String(cell), cx + 12, ry + 1, { size: o.size, weight: head ? 700 : 500, font: K.FONT.mono, align: "left", fill: head ? P.ink : ri === o.hi ? P.mustardLight : P.cream });
+        cx += cols[ci];
+      });
+    });
+    screws(ctx, x, y, W, H, -2, o.seed + 30);
+    ctx.restore();
+  };
+
+  /* ---------- enamel sign (formula): lines written letter by letter ---------- */
+  K.plaque = function (ctx, x, y, w, h, lines, opt) {
+    const o = Object.assign({ a: 1, write: 1, size: 44, seed: 240, color: P.enamel, shade: P.tealDark }, opt || {});
+    if (o.a <= 0) return;
+    ctx.save(); popAt(ctx, x + w / 2, y + h / 2, o.a);
+    K.shape(ctx, K.rrectPts(x, y, w, h, 26, 4), { fill: o.color, w: 3.5, seed: o.seed, shade: { color: o.shade, dx: 0, dy: 12 }, tone: { color: P.cream, gap: 12, r: 1.8, r2: 0, dir: Math.PI * 0.35, alpha: 0.18 } });
+    K.shape(ctx, K.rrectPts(x + 14, y + 14, w - 28, h - 28, 16, 4), { fill: null, key: P.cream, w: 3.5, seed: o.seed + 1 });
+    screws(ctx, x, y, w, h, 28, o.seed + 10);
+    const total = lines.reduce((s, l) => s + (typeof l === "string" ? l : l.t).length, 0);
+    let budget = Math.floor(o.write * total + 0.001);
+    const lh = o.size * 1.3, y0 = y + h / 2 - ((lines.length - 1) * lh) / 2;
+    lines.forEach((ln, i) => {
+      const str = typeof ln === "string" ? ln : ln.t, col = typeof ln === "string" ? P.cream : ln.c || P.mustardLight;
+      const shown = str.slice(0, Math.max(0, budget)); budget -= str.length;
+      if (shown) K.text(ctx, shown, x + 48, y0 + i * lh, { size: o.size, weight: 700, font: K.FONT.mono, align: "left", fill: col });
+    });
+    ctx.restore();
+  };
+
+  /* ---------- travel poster (chart): bars grow, lines draw left to right ----------
+     series: [{data: [...], color, kind: "line" | "bars"}]; opt.draw 0..1 */
+  K.poster = function (ctx, x, y, w, h, series, opt) {
+    const o = Object.assign({ a: 1, draw: 1, seed: 260, title: "", xLabels: null, min: null, max: null, sun: true }, opt || {});
+    if (o.a <= 0) return;
+    ctx.save(); popAt(ctx, x + w / 2, y + h / 2, o.a);
+    K.shape(ctx, K.rectPts(x - 16, y - 16, w + 32, h + 32, 3), { fill: P.mustard, w: 3.5, seed: o.seed, shade: { color: P.mustardDark, dx: 10, dy: 10 } });
+    K.shape(ctx, K.rectPts(x, y, w, h, 3), { fill: P.cream, w: 2.5, seed: o.seed + 1, tone: { color: P.mustardLight, gap: 12, r: 0, r2: 3.6, dir: -Math.PI / 2, alpha: 0.6 } });
+    const px = x + 70, py = y + (o.title ? 80 : 40), pw = w - 110, ph = h - (o.title ? 80 : 40) - (o.xLabels ? 70 : 40);
+    if (o.title) K.text(ctx, o.title, x + w / 2, y + 44, { size: 36, weight: 800, fill: P.ink });
+    let mn = o.min, mx = o.max;
+    if (mn == null || mx == null) { const all = series.flatMap((s) => s.data); mn = mn == null ? Math.min(0, ...all) : mn; mx = mx == null ? Math.max(...all) * 1.1 : mx; }
+    const X = (i, n) => px + (n > 1 ? (pw * i) / (n - 1) : pw / 2), Y = (v) => py + ph - ((v - mn) / (mx - mn)) * ph;
+    K.line(ctx, [[px, py - 10], [px, py + ph], [px + pw + 10, py + ph]], { w: 3.5, seed: o.seed + 2 });
+    series.forEach((s, si) => {
+      const n = s.data.length;
+      if (s.kind === "bars") {
+        const bw = (pw / n) * 0.66;
+        s.data.forEach((v, i) => {
+          const g = K.E.back(clamp(o.draw * (n + 3) / 3 - i * 0.33, 0, 1), 1.6);
+          if (g <= 0) return;
+          const cx = px + (pw * (i + 0.5)) / n, top = lerp(py + ph, Y(v), g);
+          K.shape(ctx, K.rectPts(cx - bw / 2, top, bw, py + ph - top, 1), { fill: s.color || P.teal, w: 2.5, seed: o.seed + 10 + si * 40 + i, shade: { color: P.tealDark, dx: -bw * 0.28, dy: 0 } });
+        });
+      } else {
+        const m = o.draw * (n - 1); if (m <= 0) return;
+        const pts = [];
+        for (let i = 0; i <= Math.floor(m); i++) pts.push([X(i, n), Y(s.data[i])]);
+        const f = m - Math.floor(m);
+        if (f > 0 && Math.floor(m) < n - 1) { const i = Math.floor(m); pts.push([lerp(X(i, n), X(i + 1, n), f), lerp(Y(s.data[i]), Y(s.data[i + 1]), f)]); }
+        if (pts.length > 1) {
+          K.line(ctx, pts, { key: P.ink, w: (s.w || 6) + 5, seed: o.seed + 80 + si, smooth: !!s.smooth });
+          K.line(ctx, pts, { key: s.color || P.tomato, w: s.w || 6, seed: o.seed + 80 + si, smooth: !!s.smooth });
+        }
+        const last = pts[pts.length - 1];
+        if (s.dot !== false) K.dot(ctx, last[0], last[1], 9, s.color || P.tomato, P.ink, 2.5, o.seed + 90 + si);
+      }
+    });
+    if (o.xLabels) o.xLabels.forEach((l, i, arr) => K.text(ctx, l, px + (pw * (i + 0.5)) / arr.length, py + ph + 34, { size: 26, weight: 500, font: K.FONT.mono, fill: P.inkSoft }));
+    ctx.restore();
+  };
+
+  /* ---------- tickets (bullets): each ticket pops on its own beat ---------- */
+  K.tickets = function (ctx, x, y, w, items, opt) {
+    const o = Object.assign({ a: 1, shown: 99, size: 34, gap: 18, seed: 300, h: 76 }, opt || {});
+    if (o.a <= 0) return;
+    items.forEach((it, i) => {
+      const a = clamp(o.shown - i, 0, 1) * clamp(o.a, 0, 1); if (a <= 0) return;
+      const ty = y + i * (o.h + o.gap);
+      ctx.save(); popAt(ctx, x, ty + o.h / 2, a); ctx.translate(x, ty); ctx.rotate((hash(i, o.seed) - 0.5) * 0.04); ctx.translate(-x, -ty);
+      const pts = K.rrectPts(x, ty, w, o.h, 8, 2);
+      K.shape(ctx, pts, { fill: i % 2 ? P.cream : P.mustardLight, w: 3, seed: o.seed + i * 5, shade: { color: P.creamShade, dx: 0, dy: -8 } });
+      /* perforated stub */
+      ctx.save(); ctx.setLineDash([6, 7]); K.line(ctx, [[x + 84, ty + 6], [x + 84, ty + o.h - 6]], { w: 2.5, boil: 0, seed: o.seed + i * 5 + 1 }); ctx.restore();
+      K.text(ctx, String(i + 1), x + 42, ty + o.h / 2 + 1, { size: o.size * 1.05, weight: 800, font: K.FONT.mono, fill: P.teal });
+      K.text(ctx, it, x + 108, ty + o.h / 2 + 1, { size: o.size, weight: 700, align: "left", fill: P.ink });
+      ctx.restore();
+    });
+  };
+
+  /* ---------- teletype tape (code): typed out character by character ---------- */
+  const KW = /\b(fn|let|mut|for|in|if|else|return|def|import|from|while|struct|impl|pub|use|const|class|self)\b/;
+  K.teletype = function (ctx, x, y, w, lines, opt) {
+    const o = Object.assign({ a: 1, typed: 1, size: 26, seed: 320 }, opt || {});
+    if (o.a <= 0) return;
+    const lh = o.size * 1.5, h = lines.length * lh + 60;
+    ctx.save(); popAt(ctx, x + w / 2, y, o.a);
+    K.shape(ctx, K.rectPts(x, y, w, h, 4), { fill: P.cream, w: 3, seed: o.seed, shade: { color: P.creamShade, dx: -12, dy: 0 } });
+    /* sprocket holes */
+    ctx.save(); ctx.fillStyle = P.creamDeep;
+    for (let yy = y + 16; yy < y + h - 8; yy += 22) { ctx.beginPath(); ctx.arc(x + 16, yy, 4.5, 0, K.TAU); ctx.arc(x + w - 16, yy, 4.5, 0, K.TAU); ctx.fill(); }
+    ctx.restore();
+    const total = lines.reduce((s, l) => s + l.length, 0);
+    let budget = Math.floor(o.typed * total + 0.001);
+    ctx.save(); ctx.font = `500 ${o.size}px ${K.FONT.mono}`; ctx.textBaseline = "middle";
+    lines.forEach((ln, i) => {
+      const str = ln.slice(0, Math.max(0, budget)); budget -= ln.length; if (!str) return;
+      let cx = x + 44; const cy = y + 30 + lh / 2 + i * lh;
+      const comment = str.indexOf("//") >= 0 ? str.indexOf("//") : str.indexOf("#");
+      const toks = str.split(/(\s+|[(){}\[\],;:.<>=+\-*\/&|"]|"[^"]*")/).filter((q) => q !== "" && q != null);
+      let pos = 0;
+      toks.forEach((tk) => {
+        let c = P.ink;
+        if (comment >= 0 && pos >= comment) c = P.inkSoft;
+        else if (KW.test(tk)) c = P.teal;
+        else if (/^[0-9.]+$/.test(tk)) c = P.tomato;
+        else if (/^".*"$/.test(tk)) c = P.mustardDark;
+        ctx.fillStyle = c; ctx.font = `${KW.test(tk) ? 700 : 500} ${o.size}px ${K.FONT.mono}`;
+        ctx.fillText(tk, cx, cy); cx += ctx.measureText(tk).width; pos += tk.length;
+      });
+      /* typing head */
+      if (budget < 0 && budget > -ln.length) { ctx.fillStyle = P.tomato; ctx.fillRect(cx + 2, cy - o.size * 0.45, o.size * 0.55, o.size * 0.9); }
+    });
+    ctx.restore(); ctx.restore();
+  };
+
+  /* ---------- rail map (graph): stops and lines ---------- */
+  K.routePoint = function (A, B, bend, u) {
+    const mx = (A[0] + B[0]) / 2, my = (A[1] + B[1]) / 2, dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1;
+    const C = [mx - (dy / L) * bend, my + (dx / L) * bend];
+    const x = (1 - u) * (1 - u) * A[0] + 2 * (1 - u) * u * C[0] + u * u * B[0];
+    const y = (1 - u) * (1 - u) * A[1] + 2 * (1 - u) * u * C[1] + u * u * B[1];
+    const tx = 2 * (1 - u) * (C[0] - A[0]) + 2 * u * (B[0] - C[0]), ty = 2 * (1 - u) * (C[1] - A[1]) + 2 * u * (B[1] - C[1]);
+    return [x, y, Math.atan2(ty, tx)];
+  };
+  K.route = function (ctx, A, B, opt) {
+    const o = Object.assign({ p: 1, color: P.teal, bend: 0, w: 14, seed: 340, dim: false, label: "", lu: 0.5 }, opt || {});
+    if (o.p <= 0) return;
+    const pts = []; for (let i = 0; i <= 24; i++) pts.push(K.routePoint(A, B, o.bend, (i / 24) * o.p));
+    const al = o.dim ? 0.35 : 1;
+    K.line(ctx, pts, { key: P.ink, w: o.w + 6, seed: o.seed, boil: 0.5, alpha: al });
+    K.line(ctx, pts, { key: o.color, w: o.w, seed: o.seed, boil: 0.5, alpha: al });
+    if (o.label && o.p > 0.7) { const q = K.routePoint(A, B, o.bend, o.lu); K.tag(ctx, q[0], q[1] - 34, o.label, { a: (o.p - 0.7) / 0.3, seed: o.seed + 5 }); }
+  };
+  K.stop = function (ctx, x, y, r, opt) {
+    const o = Object.assign({ a: 1, label: "", seed: 360, hot: 0, size: 30 }, opt || {});
+    if (o.a <= 0) return;
+    ctx.save(); popAt(ctx, x, y, o.a);
+    if (o.hot > 0) K.rays(ctx, x, y, r * 1.4, r * 2.1, 12, { color: P.mustardDark, w: 3, alpha: o.hot, rot: K.now * 0.5 });
+    K.dot(ctx, x, y, r, P.cream, P.ink, 5, o.seed);
+    if (o.label) K.text(ctx, o.label, x, y + r + o.size * 0.9, { size: o.size, weight: 700, font: K.FONT.mono });
+    ctx.restore();
+  };
+  /* luggage tag with a number */
+  K.tag = function (ctx, x, y, str, opt) {
+    const o = Object.assign({ a: 1, size: 30, seed: 380, color: P.cream, textColor: P.ink }, opt || {});
+    if (o.a <= 0) return;
+    ctx.save(); popAt(ctx, x, y, clamp(o.a, 0, 1));
+    const w = K.textW(ctx, str, o.size, 700, K.FONT.mono) + 46, h = o.size * 1.5;
+    K.shape(ctx, [[x - w / 2 + 16, y - h / 2], [x + w / 2, y - h / 2], [x + w / 2, y + h / 2], [x - w / 2 + 16, y + h / 2], [x - w / 2, y]], { fill: o.color, w: 2.5, seed: o.seed, boil: 0.4 });
+    K.dot(ctx, x - w / 2 + 14, y, 4, P.ink, null, 0, o.seed + 1);
+    K.text(ctx, str, x + 8, y + 1, { size: o.size, weight: 700, font: K.FONT.mono, fill: o.textColor });
+    ctx.restore();
+  };
+
+  /* ---------- title sign: hangs from two chains, drops and swings in ----------
+     u 0..1 entry; returns the sign box (screen space when drawn in screen space) */
+  K.sign = function (ctx, cx, cy, w, h, u, opt) {
+    const o = Object.assign({ seed: 400, color: P.enamel, shade: P.tealDark }, opt || {});
+    if (u <= 0) return null;
+    const drop = (1 - K.E.back(clamp(u, 0, 1), 1.6)) * -(cy + h);
+    const sw = Math.sin(K.now * 1.7) * 0.6 * Math.PI / 180 + (1 - clamp(u * 1.3, 0, 1)) * 0.06 * Math.sin(u * 12);
+    ctx.save(); ctx.translate(cx, cy + drop); ctx.rotate(sw);
+    /* chains */
+    [-w * 0.36, w * 0.36].forEach((xx, i) => {
+      ctx.save(); ctx.strokeStyle = P.ink; ctx.lineWidth = K.lw(ctx, 3);
+      for (let yy = -h / 2 - 8; yy > -cy - 400; yy -= 22) { ctx.beginPath(); ctx.ellipse(xx, yy, 5, 11, 0, 0, K.TAU); ctx.stroke(); }
+      ctx.restore();
+    });
+    K.shape(ctx, K.rrectPts(-w / 2, -h / 2, w, h, 34, 5), { fill: o.color, w: 4, seed: o.seed, shade: { color: o.shade, dx: 0, dy: 16 }, tone: { color: P.cream, gap: 13, r: 2, r2: 0, dir: Math.PI * 0.3, alpha: 0.16 } });
+    K.shape(ctx, K.rrectPts(-w / 2 + 16, -h / 2 + 16, w - 32, h - 32, 22, 5), { fill: null, key: P.mustard, w: 5, seed: o.seed + 1 });
+    screws(ctx, -w / 2, -h / 2, w, h, 34, o.seed + 10);
+    ctx.restore();
+    return { x: cx, y: cy + drop, w, h, rot: sw };
+  };
+})(SK);
+
+/* KIT GALLERY: the station world and every explainer primitive in one frame, for visual QA of the kit.
+   0-3 s: things pop in on beats; 3-6 s: hold (boil keeps them alive). */
+const K = SK, P = K.P, at = K.at, DUR = 6;
+K.G.BPM = 129.2;
+const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+const ap = (t, b) => K.inv(at(0, b), at(0, b) + 0.4, t);
+function render(t) {
+  try { draw(t); } catch (err) { K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "26px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 150), 20, 50); }
+}
+function draw(t) {
+  K.begin(ctx, t, { x: 960, y: 540, z: 1 });
+  K.applyCam(ctx, 1);
+  K.sky(ctx, { horizon: 900, sun: [1780, 140], sunR: 70 });
+  K.hills(ctx, -100, 2100, 900, { h: 120, color: P.hillFar, seed: 3, n: 5, tone: false });
+  K.plaque(ctx, 40, 40, 560, 170, ["x(t) = X·(1 - t/T)", { t: "min E + λ·Var" }], { a: ap(t, 0), size: 36, write: K.inv(0.3, 1.8, t) });
+  K.board(ctx, 640, 40, [130, 150, 170], [["time", "qty", "price"], ["10:00", "1 250", "100.01"], ["10:15", "1 250", "100.02"], ["10:30", "1 250", "100.02"]], { a: ap(t, 1), hi: 2, size: 26, rowH: 46 });
+  K.flap(ctx, 1500, 110, "10 000", { a: ap(t, 2), h: 80, flip: K.inv(0.9, 1.8, t), prev: "000000" });
+  K.poster(ctx, 50, 300, 560, 380, [{ data: [9, 6, 4, 3, 3, 4, 6, 10], kind: "bars", color: P.teal }, { data: [2, 3, 3.5, 4, 4.2, 4.6, 5, 5.2], color: P.tomato }], { a: ap(t, 3), draw: K.inv(1.0, 3.0, t), title: "VWAP", xLabels: ["9", "10", "11", "12", "13", "14", "15", "16"] });
+  K.tickets(ctx, 660, 300, 420, ["TWAP", "VWAP", "POV"], { a: ap(t, 3), shown: K.inv(1.4, 3.0, t) * 3 });
+  K.teletype(ctx, 1130, 260, 620, ["def twap(q, n):", "  # equal slices", "  return [q / n] * n"], { a: ap(t, 4), typed: K.inv(2.0, 3.6, t) });
+  K.stop(ctx, 1200, 560, 22, { a: ap(t, 5), label: "BID", hot: 1 });
+  K.route(ctx, [1200, 560], [1500, 600], { p: K.inv(2.4, 3.0, t), color: P.mustard, bend: -40, label: "0.04" });
+  K.stop(ctx, 1500, 600, 22, { a: ap(t, 5), label: "ASK" });
+  K.gauge(ctx, 1730, 560, 80, 0.2 + 0.05 * Math.sin(t * 3));
+  K.track(ctx, -100, 2100, 960);
+  K.wagon(ctx, 1140, 960, 1, { roll: t * 120, load: (c) => K.crate(c, 0, -58, 120, 70, { label: "1 250", seed: 81 }) });
+  K.loco(ctx, 1520, 960, 1, { roll: t * 120 });
+  K.puff(ctx, 1652, 640 - t * 30, 50, (t % 2) / 2, 3);
+  K.clockTower(ctx, 260, 960, 0.4, { hour: 10 + t / 12, minute: t * 10, gearRot: t });
+  K.coin(ctx, 450, 900, 30, { label: "¢" });
+  K.mouse(ctx, 720, 960, 1, { blink: K.blinkAt(t, 2), squash: 0.08 * K.pulse(t, 1, 6), handR: { x: 70, y: -120, hold: "watch", lid: K.inv(1, 1.4, t) }, handL: { x: -78, y: -110 - 20 * K.pulse(t, 1, 6), hold: "thumb" }, mouth: "grin" });
+  K.mouse(ctx, 920, 960, 0.8, { blink: K.blinkAt(t, 5), handR: { x: 22, y: -196, hold: "whistle" }, handL: { x: -60, y: -60 }, mouth: "whistle", puff: 0.8, look: [0.6, -0.2], exclaim: K.inv(1, 1.3, t) });
+}
+const TL = gsap.timeline({ paused: true });
+const drv = { _t: 0 };
+Object.defineProperty(drv, "t", { get() { return this._t; }, set(v) { this._t = v; render(v); } });
+TL.to(drv, { t: DUR, duration: DUR, ease: "none" }, 0);
+render(0);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => render(drv._t));
+window.__timelines["main"] = TL;
+
+})();
+    </script>
+  </body>
+</html>

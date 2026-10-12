@@ -1,0 +1,10 @@
+# media and build copies stay local (sources, kit fonts and contact sheets are tracked)
+*.mp4
+*.m4a
+*.wav
+renders/
+preview/
+node_modules/
+intro/assets/
+style/gallery/assets/
+snapshots/frame-*.png
