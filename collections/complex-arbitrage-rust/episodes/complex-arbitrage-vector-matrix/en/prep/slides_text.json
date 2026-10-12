@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "IN ae\n\na —— 5 —— @- — 5\n%\n\nSED RY VAS,\n\nys\n\nl Algebra\n\n[Lf\n\n‘2\n\niCa\n\n=\n(eo)\nar\n©\n®\npe\n®\nQO\n®\n‘On\nis}\na\n=\nhe}\nSS\n6\n—\n(eo)\nan\nis}\n|\n—\n®\n‘op\n<x\n\na\nOo\nok\n\nWY\n\noO\n=\nfa)\nWw\nca)\na\n= |\n\njan)\n2]\n\nLi\ne\n®\n®\n=\n\nofan\n®\n\naa)\nw\n\n‘=\n©\n\na a\n\nO\n®\njel8)\nfe)\n_\n\n=\n\naa\nSues\n<\nx<\n\ni)\nak\n&\nO\n\nO\n\nst\n\nofan?\n}\nfae)\n\nGF\n\n2026-02-26\n\nMatrices, Tensors, and Trop\n\nLinear\n\nDate:"
+    },
+    {
+      "page": 2,
+      "text": "1. The Exchange Rate Matrix: The Foundation\n\nMarket Chaos Structural Clarity\n11\n\n0.00235 2 ETH 2 BTC ETH\n8T¢\n1.000 18.5000 | 51200.00\n0.0540 1.000 2767.00\n0.0000195 | 0.000361 1.000\n\nModel: The Exchange Rate Matrix R\n\n=\na\n.o2)\noO\n—|\nI\n<>)\n<>)\n©\n©\nN\nm\n—|\n=\n\n-0.0001\n\nProblem: Hundreds of traders, asynchronous Definition: R[i][j]\n\nrates, and venue quirks create a labyrinth of Units of asset j obtained per unit\nexchange routes. of asset i.\n\ni Gemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "1.1 From Chaos to Table\n\nDiagonal: R[i][i] = 1.0\n\nPositivity: R[i][j] > 0\n\nReciprocity (Idealized):\n\nREG) (5) * ROG)Li] = 1\n\nfn build_exchange_rate_matrix(\n\nassets: &[&str],\nrates: &[(usize, usize), £64)],\n\n) -> DMatrix<f64> {\n\n// ... [setup boilerplate omitted]\n\nfor icin) O-en: 7 Marri. 1) = see:\nfor &((i, j), rate) in rates {\nmatrix[(i, j)] = rate;\nif matrix[(j, i)] == 0.0 {\nmatrix{(j, i)] = 1.0 / rate;\n}\n}\n\nmatrix\n\nQUANT CHECK:\nExecution Caveat\n\nThe reciprocal\nidealization is a\ntheoretical\nconstruct.\nInitializing an\nunquoted rate edge\nto 0,0; .oF ruling\na missing\n\nmissing reciprocal\nstrictly with 1.0 /\nrate, assumes\nfrictionless\nmarkets. These\nmathematically\nconstructed values\ndo not represent\nexecutable market\nquotes.\n\nGemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "1.2 The No-Arbitrage Condition\n\nThe Theorem\n\nTheorem: A market is free of arbitrage if and only if\nfor any cycle of assets, the product of exchange\nrates along the cycle is equal to one.\n\nRUG) [i2d..% RZ) 07S) se... oe REIKI [id = 2\n\nRank-One Factorization\n\nCycle Product = 1\n\nVector Convention Check\n\nUnder the multiplicative rank-1 formulation R[i][j] = P;/P,,\nthe vector p represents equilibrium prices. Verifying\nwhether an eigenvector represents standard prices or a\nreciprocal-price convention is critical; silent relabeling\nwill break the mathematical model.\n\nGemini Notebook"
+    },
+    {
+      "page": 5,
+      "text": "2. The Eigenvalue Method: Arbitrage in O(n?)\n\nArbitrage Detection in\n\nO(n?) Complexity\n\nThe Computational\nShift:\n\nThe 0(n?)\nAdvantage:\n\nInstead of checking\ninfinite node-path\ncombinations\n\nEigenvalue\ndecomposition\nalgorithms provide\n\n(cycles), we analyze\nthe singular\nspectral footprint\nof the entire matrix\nsimultaneously.\n\na deterministic,\nbounded timeframe\nto evaluate the\nglobal market\nstate.\n\nGemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "2.1 Ming Ma's Theorem\n\nArbitrage\nExists\n\nThe Rules QUANT CHECK: Foundational Assumptions\n\n. If arbitrage-free, largest eigenvalue The Amax > N criterion is mathematically\nAmax = 0, and all other eigenvalues = 0. pristine but strictly assumes a completely\n\nexecution environment. It fundamentally does\n\n. Arbitrage exists if and only if Apa, > n. not account for executable bid/ask spreads.\n\n4. Spread 6 estimates opportunity scale.\n\nGemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "3. Tropical (Max-Plus) Algebra: The Most Elegant Method\n\nFrom Detection\n+r x to Optimization &\n\nThe Paradigm Shift: The Transformation:\n\nLinear algebra tells us an arbitrage By redefining the fundamental rules of\nopportunity exists. arithmetic, standard matrix\nmultiplication automatically routes the\nmost profitable path through the\n\nTropical algebra identifies the precise\nmathematical path required to market graph.\noptimally execute it.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "3.1 When Addition Becomes Maximum\n\nClassical Algebra Tropical (Max-Plus) Algebra\na a+b a © b= max(a, db)\n\nes axb a@b=a+b\nMultiplication (Product) (Path Weight Addition)\n\nThe Core Mechanism:\n\nUnder these redefined rules, executing a matrix multiplication operation\ninherently calculates the maximum sum of logarithmic weights across all\npossible structural routes.\n\n& Gemini Not"
+    },
+    {
+      "page": 9,
+      "text": "3.2 Tropical Eigenvalue and Arbitrage\nfn tropical_matmul(a: &DMatrix<f64>,\n\nb: &DMatrix<f64>) -> DMatrix<f64> { Lfil fj] = In(R[1)[3])\niif oc Rates are transformed into logarithms to\nfor iin 0..n { for j in 0..m { for convert multiplicative paths into additive\n1 in 0..k { pores\nlet val = alrG,4)1). + DE, Signal: A tropical eigenvalue A > 0 strictly\nj)]; // Tropical multiplication (+) indicates an arbitrage cycle.\nif val > result[(i, j)] i\n\nAe 2 ea hs\n\nTropical addition (max)\n} The source's unqualified claim that exp(A) is\n\nthe \"profit multiplier of the best cycle\"\n\n$33 requires precision. Technically, tropical A is\nresult the maximum max-plus cycle mean. Thus, exp(A)\n\nt represents a per-edge geometric-mean factor. A\n\nspecific k-edge cycle will multiply by exp(kA).\n\nf& Gemini Notebook"
+    },
+    {
+      "page": 10,
+      "text": "4. PCA and Factor Models: Statistical Arbitrage\n\nSystematic Factor\n\nThe general market drift\n(e.g., broad crypto index).\n\nr(t) =a, + Y(By*F,(t)) + €,(t)\n\nThe Factor Residual\n\nThe isolated variable that\nrepresents the raw statistical\narbitrage signal.\n\nAsset Loading\nThe specific sensitivity of\n\nthe asset to the\nsystematic factor.\n\nMoving from deterministic discrepancies (direct price lags) to statistical arbitrage by\n\ndecomposing asset returns into systematic factors and idiosyncratic residuals.\n\n& Gemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "4.1 Random Matrix Theory (RMT)\n\n1.0 1.5\nEigenvalue Magnitude\n\nIdiosyncratic Noise Systematic Structure (The Arbitrage Zone)\n\nEigenvalues inside the Marchenko-Pastur bound How many factors are actually real? Only\nare mathematically indistinguishable from eigenvalues exceeding the A+ upper bound carry\nrandom covariance. These are discarded. genuine structural market reality.\n\nGemini Notebook"
+    },
+    {
+      "page": 12,
+      "text": "5. Tensor Methods: The Third Dimension of Arbitrage\n\nT(asset, exchange, instrument) = price/rate Arbitrage signal\n\nThe 3D Market Reality:\n\nA 2D exchange matrix is\n\nDn — only a single slice.\n\n09 © CP-Decomposition factorizes\nOo the entire 3D tensor into a\n9 ne sum of rank-1 tensors.\n\nLu gy\n\nOe Isolating Anomalies:\n\n2a The residuals (T - T_approx)\n\nreveal highly localized\nmispricing anomalies where\nspecific price/exchange/\ninstrument combinations\ndeviate from the overall\nmarket factor structure.\n\nGemini Notebook"
+    },
+    {
+      "page": 13,
+      "text": "The Execution Reality Gap\n\n| Pristine Mathematical Signals: Eigenvalues, Factor Residuals, Tropical A, Spread 6 |\n\nOrder-Book Depth: Is there sufficient volume\nat the theoretical price to absorb the trade?\n\nSlippage & Venue Risk: Can execution &,\nbridge the latency between calculating | ¥ | im \\e7it\n\nthe tropical path and routing across\n\nRealized Executable Profit\n\nEngineering Reality: Factor residuals and eigenvalue thresholds alone do not establish\n\nexecutable profit. The provided Rust models require massive concurrency, latency\n\noptimization, and liquidity parsing for production HFT implementation.\n\nGemini Notebook"
+    },
+    {
+      "page": 14,
+      "text": "Conclusion\n\n2D Matrices Eigenvalues & Spectra\n\nStructuring the labyrinth of Deterministic detection of arbitrage\nexchange chaos into a rigorous cycles bounded within O(n?)\nfoundational baseline. complexity.\n\nTropical Algebra PCA & Tensors\n\nRedefining arithmetic logic to map Isolating localized statistical\nand optimize the maximum log cycle residual anomalies across multi-\nmean. venue, multi-instrument dimensions.\n\nSynthesis & Next Steps: Open Source Reference:\n\nLinear algebra provides the formal language required to map, filter, Crunching high-dimensional signals? Check\nand conquer market chaos, whille Rust provides the theoretical speed the Tensor-Based Trading Engine on GitHub\nengine. Next, the series explores neural network trading (marketmaker.cc/tensor-trade-rust).\n\napplications via GNN, Transformers, and RL for Arbitrage. PEE ere"
+    }
+  ]
+}
