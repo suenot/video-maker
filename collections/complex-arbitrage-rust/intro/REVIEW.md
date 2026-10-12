@@ -64,9 +64,21 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, 12 to 17 frames, p
 ## Round 7
 - At zoom 0.92 the opening showed the canvas edge. Side zoom is never below 1.0 now.
 
+## Round 8 (short song, 31.5 s)
+- The brief changed: the intro is the full length of a short song, not 60 - 74 s. The story was retimed to `song_short.m4a` (120 BPM, downbeats at 0.35 + 2n). The jig, sail chart and logbook break were cut; `38_break.js` was removed.
+- The marketmaker.cc logo plate was added top-right. The sun was moved left, and the matrix was lowered to y 190 so neither touches the plate.
+- The title banner covered the plate. Banner centre 292, medallions 480, ship lowered, so the banner top (y 167) clears the plate bottom (y 144).
+
+## Round 9
+- 24-frame contact sheet checked. The logo is legible in every frame and never covered: not by the iris, wave wipes, matrix or banner.
+- Every sung line has its own picture: salute (1 s), spyglass (3 s), iris to BTC (4 s), the loop draws (5 - 6 s), rates fly into the matrix (7 - 8 s), two ships with a basis rope (9 - 11 s), lap 2 at +0.92 % (13 s), tensor (15.8 s), sunset ships (17 s), and the title on "sail with me" (18.35 s).
+
+## Round 10
+- `lint`: 0 errors. 4 languages rendered in sequence through `heavy_slot.sh`, plus silent copies. A 1 fps contact sheet was made from the en render.
+
 ## Known weaknesses
 - The crab's legs are simple 3-point limbs: readable, but less refined than the body and claws.
 - In the matrix shot the map tags are about 19 px. They are context only; the matrix shows the same numbers at 26 px.
 - The title-card crab is about 220 px wide. It is charming, but secondary to the banner.
 - One lint warning remains: the file is large, because it is built from the kit by design.
-- 52-58 s: the title card is dense (banner, net, coins). The banner never moves after it unrolls.
+- 19 - 31.5 s: the title card holds for 12 s of instrumental outro. The net haul, medallions and cap tip keep it alive, but the banner never moves after it unrolls.

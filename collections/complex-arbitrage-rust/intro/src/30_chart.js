@@ -25,15 +25,13 @@ const MATRIX_CAM = { x: 2157, y: 840, z: 0.42 };
 const camB = K.mkTrack([
   [T.iris[0], { x: 1350, y: 250, z: 1.45 }],
   [T.iris[1], { x: 1310, y: 720, z: 0.74 }],
-  [T.lap1[1], { x: 1300, y: 720, z: 0.76 }],
-  [T.hot, { x: 1300, y: 760, z: 0.74 }],
-  [at(11, 3), { x: 1310, y: 930, z: 0.6 }],
-  [at(12, 0.6), MATRIX_CAM],
+  [T.lap1[1] - 0.6, { x: 1300, y: 730, z: 0.75 }],
+  [at(3, 0.2), { x: 1310, y: 930, z: 0.6 }],
+  [at(3, 0.9), MATRIX_CAM],
   [T.irisOut[1], { x: 2120, y: 850, z: 0.44 }],
-  [T.iris2[0], { x: 420, y: 760, z: 1.5 }],
-  [T.iris2[1] + 0.3, { x: 1300, y: 740, z: 0.74 }],
+  [T.wipe1[0], { x: 1300, y: 740, z: 0.7 }],
   [T.lap2[1], { x: 1300, y: 740, z: 0.76 }],
-  [at(24, 0.6), MATRIX_CAM],
+  [at(7, 0.6), MATRIX_CAM],
   [T.irisOut2[1], { x: 2120, y: 850, z: 0.44 }],
 ]);
 function camChart(t) { const c = camB(t); return { x: c.x, y: c.y, z: c.z, rot: 0 }; }
@@ -53,7 +51,7 @@ function crabChart(t) {
 }
 
 /* ---------- rate matrix (screen space) ---------- */
-const MX = { order: ["USDT", "BTC", "ETH", "SOL", "EUR"], x: 1100, y: 150, head: 130, cw: 116, hh: 70, ch: 84, pad: 20 };
+const MX = { order: ["USDT", "BTC", "ETH", "SOL", "EUR"], x: 1100, y: 190, head: 130, cw: 116, hh: 70, ch: 84, pad: 20 };
 MX.w = MX.pad * 2 + MX.head + MX.cw * 5; MX.h = MX.pad * 2 + MX.hh + MX.ch * 5;
 const cellXY = (r, c) => [MX.x + MX.pad + MX.head + MX.cw * (c + 0.5), MX.y + MX.pad + MX.hh + MX.ch * (r + 0.5)];
 const FLY = EDGES.map((e, i) => ({ r: MX.order.indexOf(e[0]), c: MX.order.indexOf(e[1]), v: e[2], t0: T.fly + bl(i / 4), loop: LOOP.indexOf(i) >= 0, i }));

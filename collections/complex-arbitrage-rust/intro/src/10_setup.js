@@ -1,80 +1,67 @@
 /* ============================================================
    INTRO 10 SETUP: beat grid, story times, variables, title DOM, world data.
-   Song: song_full.m4a (song_raw.mp4 0 - 64.2 s, end fade 62.4 s, -14 LUFS),
-   a sea shanty at ~125.9 BPM: beat 0.4767 s, bar 1.9067 s, first downbeat 0.60 s
-   (tempo from line starts 23 bars apart; whisper word times in REVIEW.md).
+   Song: song_short.m4a (song_short_raw.mp4 0 - 31.5 s, fade from 30.3 s,
+   -14 LUFS), sea shanty at 120 BPM: beat 0.5 s, bar 2.0 s, downbeats at
+   0.35 + 2n s (onset grid search; sung lines start every 2.0 s).
      0.0  instrumental intro
-     5.9  verse: "A crab sails out in a Rust-iron ship" / 9.9 "Through markets wide
-          on a currency trip" / 13.7 "Three ports in a loop and the prices don't
-          match" / 17.6 "Haul in the spread before the gap's too late to catch!"
-    21.4  chorus: "Heave ho, the cycle flows" / 23.3 "Graph and matrix, the
-          Rust-crab knows" / 25.3 "Futures, spot and copula sea" / 29.1
-          "Complex arbitrage, sail with me!"
-    33.0  instrumental break (accordion + fiddle)
-    44.3  chorus again / 51.9 "sail with me!" / 53.9 "Haul in the spread..."
-    58.8  "Heave ho..." / 60.2 "Graph and matrix..." / 62.3 "Futures!" (fade)
-   Story times are K.at(bar, beat); bar n starts at 0.60 + n * 1.9067 s.
+     4.1  "Heave ho, the cycle flows" / 6.1 "Graph and matrix, the Rust-crab
+          knows" / 8.0 "Futures, spot and copula sea" / 10.0 "Complex
+          arbitrage, sail with me!"
+    12.2  the chorus again (14.2 / 16.0 / 18.3 "sail with me!", ends 21.4)
+    21.5  instrumental outro, fade 30.3 - 31.5
+   Story times are K.at(bar, beat).
    ============================================================ */
 const K = CK, P = K.P, at = K.at;
-K.G.BPM = 240 / 1.9067;
-K.G.BARS = Array.from({ length: 35 }, (_, n) => Math.round((0.60 + n * 1.9067) * 1000) / 1000);
-const DUR = 64.2;
+K.G.BPM = 120;
+K.G.BARS = Array.from({ length: 17 }, (_, n) => Math.round((0.35 + n * 2.0) * 1000) / 1000);
+const DUR = 31.5;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const bl = (k) => k * K.beatLen();
 
 /* ---------- story beats (on the song's downbeats) ---------- */
 const T = {
-  /* intro + verse 1: the side set */
-  shipIn: [0, at(1, 2)],          /* ship sails in */
-  pushIn: [at(2, 2), at(3, 2)],   /* camera closes on the crab for "A crab sails out" */
-  salute: at(3, 1),               /* cap tip */
-  rivets: at(4, 0),               /* "Rust-iron ship": sparks run along the rivets */
-  pullOut: [at(4, 3), at(5, 1)],  /* "Through markets wide": wide again */
-  markets: at(5, 1),              /* coin flags pop on the horizon islands, one per beat */
-  spyUp: at(7, 0),                /* "Three ports in a loop" */
-  spot: at(7, 2),
-  iris: [at(7, 3), at(8, 1)],     /* spyglass iris into the chart */
-  /* chart set, chorus 1 */
-  loopDraw: at(8, 0.5),           /* "the prices don't match": the three loop routes */
-  lap1: [at(9, 0), at(10, 2)],    /* "Haul in the spread": legs of 2 beats; gain on "catch!" */
-  hot: at(11, 0),                 /* "Heave ho, the cycle flows" */
-  others: at(11, 0.5),
-  matrix: at(12, 0),              /* "Graph and matrix" */
-  fly: at(12, 0.5),
-  knows: at(12, 2),               /* "the Rust-crab knows" */
-  irisOut: [at(12, 3.5), at(13, 0.5)],
-  /* two ships, chorus 1 */
-  two1: at(13, 0),                /* "Futures" */
-  rope1: at(14, 0),               /* "spot" */
-  swell1: at(14, 2),              /* "copula sea" */
-  beckon: at(15, 0),              /* "Complex arbitrage, sail with me!" */
-  wink: at(16, 1.5),
-  wipe1: [at(16, 2.4), at(17, 0)],
-  /* instrumental break */
-  jig: [at(17, 0), at(19, 0)],    /* accordion jig at sunset */
-  sail: [at(19, 0), at(21, 0)],   /* the sail becomes a chart */
-  log: [at(21, 0), at(23, 0)],    /* the captain's logbook: Rust */
-  spyUp2: at(22, 2),
-  iris2: [at(22, 3), at(23, 0)],
-  /* chart set, chorus 2 */
-  lap2: [at(23, 0), at(23, 3)],   /* fast lap, legs of 1 beat */
-  tensor: at(24, 0),              /* "Graph and matrix": matrix -> stacked tensor */
-  knows2: at(24, 2.5),
-  irisOut2: [at(24, 3.5), at(25, 0.5)],
-  /* two ships at sunset, chorus 2 */
-  two2: at(25, 0),
-  rope2: at(26, 0),
-  swell2: at(26, 2),
-  wipe2: [at(26, 2.4), at(27, 0)],
-  /* title: "Complex arbitrage, sail with me!" and the ending */
-  banner: [at(27, 0), at(27, 1.2)],
-  letters: at(27, 0.4),
-  haul: [at(28, 0), at(30, 0)],   /* "Haul in the spread": the net comes up on every beat */
-  dump: at(30, 0),
-  jump: at(30, 2),                /* "Heave ho" */
-  snap: [at(31, 0), at(31, 1)],   /* "Graph and matrix": snap + episode medallions */
-  medals: at(31, 0),
-  hatTip: at(32, 0),              /* "Futures!" */
+  /* instrumental intro: the side set */
+  shipIn: [0, at(0, 3.3)],        /* ship sails in */
+  salute: at(0, 1),               /* cap tip + wink while sailing in */
+  spyUp: at(1, 0),                /* 2.35 spyglass */
+  spot: at(1, 1.5),               /* "!" */
+  iris: [at(1, 2.5), at(2, 0)],   /* iris into the chart, lands on the first sung line */
+  /* chorus 1 in the chart */
+  loopDraw: at(2, 0),             /* "Heave ho, the cycle flows": loop routes draw... */
+  hot: at(2, 1.5),                /* ...and glow */
+  lap1: [at(2, 1.5), at(2, 4.5)], /* one lap, legs of 1 beat; +0.46 % */
+  others: at(3, 0),               /* "Graph and matrix": the rest of the graph */
+  matrix: at(3, 1),
+  fly: at(3, 1.5),
+  knows: at(3, 2.5),              /* "the Rust-crab knows" */
+  irisOut: [at(3, 3.5), at(4, 0.5)],
+  /* two ships */
+  two1: at(4, 0),                 /* "Futures" */
+  rope1: at(4, 2),                /* "spot" */
+  swell1: at(4, 3),               /* "copula sea" */
+  beckon: at(5, 0),               /* "Complex arbitrage, sail with me!" */
+  wink: at(5, 3),                 /* "me!" */
+  wipe1: [at(5, 3.2), at(6, 0)],  /* wave wipe back to the chart */
+  /* chorus 2 */
+  lap2: [at(6, 0), at(6, 3)],     /* fast lap: +0.92 % */
+  tensor: at(7, 0),               /* "Graph and matrix": matrix -> tensor */
+  knows2: at(7, 2.5),
+  irisOut2: [at(7, 3.5), at(8, 0.5)],
+  two2: at(8, 0),
+  rope2: at(8, 1.5),
+  swell2: at(8, 2.5),
+  wipe2: [at(8, 3), at(9, 0)],
+  /* title on the last "Complex arbitrage, sail with me!", held through the outro */
+  banner: [at(9, 0), at(9, 1.2)],
+  letters: at(9, 0.4),
+  haul: [at(10, 0), at(12, 0)],   /* outro: the net comes up on every beat */
+  dump: at(12, 0),
+  jump: at(12, 2),
+  snap: [at(13, 0), at(13, 1)],
+  medals: at(13, 0),
+  hatTip: at(14, 0),
+  /* retired verse beats (full-length version): kept out of range */
+  pushIn: [-9, -8], pullOut: [-7, -6], rivets: -99, markets: -99,
 };
 
 /* ---------- variables (title text, language) ---------- */
@@ -110,16 +97,16 @@ const TITLE_LN = Array.from(titleEl.querySelectorAll(".ln"));
 
 /* ---------- chart-view world: currency islands (graph nodes) and routes (edges) ---------- */
 const NODES = {
-  USDT: { x: 300, y: 900, c: P.USDT, seed: 11, lighthouse: true, palms: 1, pop: at(8, 0) },
-  BTC: { x: 1350, y: 380, c: P.BTC, seed: 23, palms: 2, pop: at(7, 2.5) },
-  ETH: { x: 2300, y: 880, c: P.ETH, seed: 37, palms: 2, pop: at(8, 0.5) },
-  SOL: { x: 1480, y: 1440, c: P.SOL, seed: 41, palms: 1, pop: at(11, 0.5) },
-  EUR: { x: 520, y: 1620, c: P.EUR, seed: 53, palms: 2, pop: at(11, 1) },
+  USDT: { x: 300, y: 900, c: P.USDT, seed: 11, lighthouse: true, palms: 1, pop: at(1, 3) },
+  BTC: { x: 1350, y: 380, c: P.BTC, seed: 23, palms: 2, pop: at(1, 2) },
+  ETH: { x: 2300, y: 880, c: P.ETH, seed: 37, palms: 2, pop: at(1, 3.5) },
+  SOL: { x: 1480, y: 1440, c: P.SOL, seed: 41, palms: 1, pop: at(3, 0) },
+  EUR: { x: 520, y: 1620, c: P.EUR, seed: 53, palms: 2, pop: at(3, 0.5) },
 };
 const NODE_S = 0.9;
 /* rate on each route: price of the second asset in the first. [from, to, rate, bend, drawAt, labelPos] */
 const EB = (k) => T.loopDraw + bl(k / 2);
-const OB = (k) => T.others + bl(k / 2);
+const OB = (k) => T.others + bl(k / 4);
 const EDGES = [
   ["USDT", "BTC", "62 000", -70, EB(0)],
   ["BTC", "ETH", "0.0525", -70, EB(1)],

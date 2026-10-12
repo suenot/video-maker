@@ -3,8 +3,8 @@
    The title text lives in the DOM (crisp type, variable per language);
    the banner it sits on is canvas ink and follows the same wave.
    ============================================================ */
-const BANNER = { cx: 960, cy: 215, w: 1520, h: 250 };
-const MEDAL_Y = 440, MEDAL_R = 48;
+const BANNER = { cx: 960, cy: 292, w: 1520, h: 250 }; /* top edge clears the logo plate (y <= 144) */
+const MEDAL_Y = 480, MEDAL_R = 48;
 
 /* six episode icons, language-free: graph, basis, matrix, copula, ML, execution */
 const ICONS = [
@@ -42,7 +42,7 @@ function drawTitleCanvas(t) {
   return box;
 }
 /* screen point near the snapping claw (set by the title scene layout) */
-const SNAP_PT = [1000, 600];
+const SNAP_PT = [1000, 635];
 
 function layoutTitleDom(t) {
   const u = K.inv(T.banner[0], T.banner[1], t);
@@ -63,7 +63,7 @@ function layoutTitleDom(t) {
 }
 
 /* ---------- "Haul in the spread": a net of coins comes up, one pull per beat ---------- */
-const TITLE_SHIP = { x: 960, y: 1000, s: 1.45, crabS: 1.22 };
+const TITLE_SHIP = { x: 960, y: 1035, s: 1.45, crabS: 1.22 };
 function netState(t) {
   const steps = (T.haul[1] - T.haul[0]) / K.beatLen(); /* 8 pulls */
   const k = K.clamp((t - T.haul[0]) / K.beatLen(), 0, steps), whole = Math.floor(k), fr = k - whole;

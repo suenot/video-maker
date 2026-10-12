@@ -1,35 +1,27 @@
 /* ============================================================
-   INTRO 70 RENDER: render(t) is the whole film (64.2 s). One paused GSAP
+   INTRO 70 RENDER: render(t) is the whole film (31.5 s). One paused GSAP
    timeline drives a proxy whose setter calls render(t).
-    0.0 - 15.4  side set: ship sails in, cap tip, rivets, horizon markets, spyglass "!"
-   15.4 - 16.3  iris through the spyglass into the chart
-   16.3 - 25.2  chart: three ports, loop lap (+0.46 %), cycle glows, rates -> matrix
-   25.2 - 25.6  iris closes on the ship -> two ships (futures/spot, basis rope, swell)
-   29.2 - 33.0  "sail with me!": push-in, the crab beckons and winks
-   32.3 - 33.0  wave wipe -> break: accordion jig, sail chart, logbook (dusk)
-   44.0 - 44.5  spyglass iris -> chart: fast lap (+0.92 %), matrix -> tensor
-   48.0 - 48.5  iris out -> two ships at sunset
-   51.3 - 52.1  wave wipe -> title: banner, net haul, jump, snap, medallions, cap tip
+    0.0 - 3.6   side set: ship sails in, cap tip + wink, spyglass "!"
+    3.6 - 4.35  spyglass iris into the chart (first sung line)
+    4.35- 8.6   "cycle flows": loop draws, glows, one lap (+0.46 %);
+                "graph and matrix": full graph, rates fly into a matrix
+    8.1 - 8.6   iris closes on the ship -> two ships (futures/spot, rope, swell)
+   10.35-12.35  "sail with me!": push-in, the crab beckons and winks
+   11.95-12.35  wave wipe -> chart: fast lap (+0.92 %), matrix -> tensor
+   16.1 - 16.6  iris out -> two ships at sunset
+   17.85-18.35  wave wipe -> title on the last "sail with me!"; outro: net
+                haul, jump, snap + medallions, cap tip, wave
+   The marketmaker.cc logo plate (DOM, top-right) stays for the whole film.
    ============================================================ */
 const OPEN_CAM = K.mkTrack([
   [0, { z: 1.0, fx: 900, fy: 640, toX: 900 }],
-  [T.pushIn[0], { z: 1.08, fx: 900, fy: 640, toX: 900 }],
-  [T.pushIn[1], { z: 1.55, fx: 650, fy: 720, toX: 860 }],
-  [T.pullOut[0], { z: 1.55, fx: 650, fy: 720, toX: 860 }],
-  [T.pullOut[1], { z: 1.0, fx: 960, fy: 600, toX: 960 }],
-  [T.spyUp, { z: 1.0, fx: 900, fy: 640, toX: 900 }],
-  [T.iris[1], { z: 1.15, fx: 800, fy: 660, toX: 820 }],
+  [T.spyUp, { z: 1.05, fx: 800, fy: 660, toX: 820 }],
+  [T.iris[1], { z: 1.18, fx: 800, fy: 660, toX: 820 }],
 ]);
-const MARKETS = [
-  { x: 270, label: "BTC", color: P.BTC, t0: T.markets },
-  { x: 1240, label: "ETH", color: P.ETH, t0: T.markets + bl(1) },
-  { x: 1700, label: "USDT", color: P.USDT, t0: T.markets + bl(2) },
-  { x: 410, label: "SOL", color: P.SOL, t0: T.markets + bl(3) },
-];
 const SIDE_OPEN = (t) => {
   const c = OPEN_CAM(t);
   return {
-    horizon: 600, warm: 0, zoom: c.z, fx: c.fx, fy: c.fy, toX: c.toX, markets: MARKETS, rivets: T.rivets,
+    horizon: 600, warm: 0, zoom: c.z, fx: c.fx, fy: c.fy, toX: c.toX,
     shipX: K.tw(t, T.shipIn[0], T.shipIn[1], -520, 800, K.E.out3), shipY: 930, shipS: 1.6, crabS: 1.15, crab: crabOpening,
   };
 };
@@ -80,7 +72,6 @@ function waveWipe(t, win, drawOld, drawNew) {
   drawOld(); K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(-10, -10, x + 10, 1100); ctx.clip(); drawNew(); ctx.restore();
   K.screen(ctx); drawWaveFront(x);
 }
-const drawBreak = (t) => { drawSide(t, SIDE_BREAK(t)); drawSailChart(t); drawLogbook(t); };
 const drawTitleSet = (t) => { drawSide(t, SIDE_TITLE(t)); K.screen(ctx); if (t >= T.banner[0]) drawTitleCanvas(t); };
 
 function render(t) {
@@ -93,9 +84,7 @@ function render(t) {
     else if (t < T.irisOut[0]) drawChart(t);
     else if (t < T.irisOut[1]) irisOutOnShip(t, T.irisOut, two1);
     else if (t < T.wipe1[0]) two1();
-    else if (t < T.wipe1[1]) waveWipe(t, T.wipe1, two1, () => drawBreak(t));
-    else if (t < T.iris2[0]) drawBreak(t);
-    else if (t < T.iris2[1]) irisIn(t, T.iris2, () => drawBreak(t), () => drawChart(t));
+    else if (t < T.wipe1[1]) waveWipe(t, T.wipe1, two1, () => drawChart(t));
     else if (t < T.irisOut2[0]) drawChart(t);
     else if (t < T.irisOut2[1]) irisOutOnShip(t, T.irisOut2, two2);
     else if (t < T.wipe2[0]) two2();
@@ -111,7 +100,7 @@ function render(t) {
   grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px";
 }
 
-const grainEl = document.getElementById("grain");
+const grainEl = document.getElementById("grain"), logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .45  0 0 0 0 .35  0 0 0 1.4 -.2'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
 
 const TL = gsap.timeline({ paused: true });

@@ -1,7 +1,6 @@
 /* ============================================================
    INTRO 20 SIDE SET: horizon, big ship, the crab close up.
-   Used by the opening + verse, the two-ship choruses, the accordion jig
-   and the title card. Crab poses are pure functions of t.
+   Used by the opening, the two-ship choruses and the title card. Crab poses are pure functions of t.
    ============================================================ */
 const pulseB = (t) => K.pulse(t, 1, 6);          /* every beat */
 const pulseA = (t) => K.pulse(t, 4, 5);          /* every bar */
@@ -44,33 +43,6 @@ function crabOpening(t) {
     st.squash -= 0.25 * pop;
   }
   return st;
-}
-
-/* ---------- break: accordion jig (claws squeeze on every beat) ---------- */
-function crabJig(t) {
-  const b = pulseB(t), ph = ((t - K.G.BARS[0]) / K.beatLen()) % 2; /* two-beat bellows cycle */
-  const squeeze = 0.5 + 0.5 * Math.cos(ph * Math.PI);
-  const st = { seed: 500, blink: K.blinkAt(t, 17), mouth: "grin", look: [0.4 * Math.sin(t * 2), -0.4], squash: 0.14 * b - 0.05 };
-  st.hop = 10 * b; st.lean = 7 * Math.sin(t * Math.PI / K.beatLen() / 2);
-  st.clawL = { x: -58 - 34 * squeeze, y: -6, open: 0.05, rot: 180 };
-  st.clawR = { x: 58 + 34 * squeeze, y: -6, open: 0.05, rot: 0 };
-  st.accordion = squeeze;
-  return st;
-}
-/* accordion between the claws, drawn in crab-local space after the crab */
-function drawAccordion(c, st, s) {
-  if (st.accordion == null) return;
-  const L = st.clawL.x + 14, R = st.clawR.x - 14, y = st.clawL.y - (st.hop || 0), n = 7;
-  c.save(); c.scale(s, s); c.rotate(((st.lean || 0) * Math.PI) / 180);
-  K.shape(c, K.rectPts(L - 26, y - 28, 26, 56, 2), { fill: P.loss, w: 4, boil: 0.8, seed: 940 });
-  K.shape(c, K.rectPts(R, y - 28, 26, 56, 2), { fill: P.loss, w: 4, boil: 0.8, seed: 941 });
-  for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) K.dot(c, L - 18 + j * 10, y - 14 + i * 14, 3, P.paper, P.ink, 1.5, 942 + i * 2 + j);
-  /* bellows: zigzag edges, dark cloth, cream pleat lines */
-  const top = [], bot = [];
-  for (let i = 0; i <= n * 2; i++) { const x = K.lerp(L, R, i / (n * 2)); top.push([x, y - (i % 2 ? 18 : 26)]); bot.push([x, y + (i % 2 ? 18 : 26)]); }
-  K.shape(c, top.concat(bot.reverse()), { fill: P.capNavy, w: 4, boil: 0.8, seed: 950, gap: 0 });
-  for (let i = 1; i < n * 2; i++) K.line(c, [[K.lerp(L, R, i / (n * 2)), y - 20], [K.lerp(L, R, i / (n * 2)), y + 20]], { stroke: i % 2 ? P.paper : P.capNavyDark, w: 2.5, boil: 0.6, seed: 951 + i, gap: 0 });
-  c.restore();
 }
 
 /* ---------- chorus: "sail with me!" beckon + wink ---------- */
@@ -171,7 +143,7 @@ function drawSide(t, o) {
   const bob = 7 * Math.sin(t * 2.2) - 6 * pulseA(t) - 34 * sw * Math.sin(t * 2.4), rock = 2.4 * Math.sin(t * 1.6 + 0.4) + 3 * sw * Math.cos(t * 2.4);
   if (o.behind) o.behind(t, bob, rock);
   const cs = o.crabS || 1, pose = o.crab(t);
-  const crabFn = (c) => { K.crab(c, 0, 0, cs, pose); drawAccordion(c, pose, cs); };
+  const crabFn = (c) => K.crab(c, 0, 0, cs, pose);
   K.ship(ctx, o.shipX, o.shipY + bob, o.shipS, { rock, coins: o.coins || 0, crab: crabFn, sail: 1 });
   if (o.front) o.front(t, bob, rock);
   /* "Rust-iron": a spark runs along the rivet row */

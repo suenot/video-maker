@@ -29,15 +29,23 @@
       #preload .tc { font-family: "CJK TC"; font-weight: 900; }
       #vig { background: radial-gradient(95% 85% at 50% 48%, rgba(0, 0, 0, 0) 62%, rgba(20, 10, 4, 0.42) 100%); }
       #grain { opacity: 0.13; mix-blend-mode: multiply; }
+      /* marketmaker.cc logo plate: top-right, whole film, never covered (sits above every layer) */
+      #logo { position: absolute; top: 48px; right: 48px; height: 96px; display: flex; align-items: center; gap: 14px;
+        padding: 0 26px 0 16px; background: #f6e8c8; color: #2b1d16; border: 4px solid #2b1d16; border-radius: 24px;
+        box-shadow: 0 6px 0 rgba(43, 29, 22, 0.35); transform-origin: 100% 0; }
+      #logo .mm-logo-mark { width: 66px; height: 66px; display: block; }
+      #logo .wm { font-family: "Rubik", sans-serif; font-weight: 800; font-size: 40px; line-height: 1; letter-spacing: -0.01em; white-space: nowrap; }
+      #logo .wm span { color: #c2471d; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="64.2" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="31.5" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div id="title" data-layout-allow-overlap></div>
       <div class="ov" id="vig"></div>
       <div class="ov" id="grain"></div>
-      <audio id="song" src="song_full.m4a" data-start="0" data-duration="64.2" data-track-index="10" data-volume="1"></audio>
+      <div id="logo"><!--__LOGO__--><div class="wm">marketmaker<span>.cc</span></div></div>
+      <audio id="song" src="song_short.m4a" data-start="0" data-duration="31.5" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="r5">Aa Бб 0</span><span class="r8">Aa Бб 0</span><span class="r9">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span><span class="sc">复杂套利</span><span class="tc">複雜套利</span></div>
     </div>
     <script>
