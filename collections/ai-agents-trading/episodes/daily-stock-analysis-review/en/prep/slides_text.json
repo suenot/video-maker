@@ -1,0 +1,48 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "Daily Stock Analysis: An AI\nSystem That Turns a Watchlist\nInto a Daily Decision Dashboard\n\nA deep dive into ZhuLinsen's open-source architecture\nfor asynchronous, LLM-driven market research.\n\nA SYSTEM PROMPT / DISCLAIMER\nAuthor's Explicit Disclaimer: This system is for Learning and research only. It is not investment advice. Markets carry risk.\n\nEditorial Note: System claims (supported markets, provider fallback, feature execution) are based on the published repository\nsnapshot and are pending current primary-project verification. External duplicates are not_checked."
+    },
+    {
+      "page": 2,
+      "text": "Core Idea: Not a Bot, a Daily Analyst-Reporter\n\nThe AI Trading Fantasy The Analyst-Reporter Premise\n\nThe true difficulty of\ninvesting isn’t generating\nOne more signal-it’s\nassembling a complete,\nconsistent picture of a name\nand writing it down the same\nway every day.\n\nThe Output: Produces a structured,\nexplainable analytical report from a\nwatchlist and delivers it where you\nactually read things.\n\nNot a black-box price predictor\nor proven source of alpha"
+    },
+    {
+      "page": 3,
+      "text": "The Linear Pipeline\n\nStage 1:\n\nData fetch\n\nQuotes, daily\ncandles,\nindicators,\ncapital flow,\nfundamentals,\nchips\n\nStage 2:\nTechnical\nanalysis\n\nMoving averages,\nRSI, volume,\nbias ratio,\ntrend\nclassification\n\nStage 3:\nNews &\nintelligence\n\nSearches recent\nnews,\nannouncements,\nsentiment per\nticker\n\nSchedule & Coverage Panel\n\nRuns weekdays (after the close), skips non-trading days.\n\nStage 4:\nLLM analysis\n\nBuilds a context\npack and prompt,\nproduces a\nstrict JSON\ndecision\ndashboard\n\nStage 5:\n\nReport\nrender\n\nGenerates a\nMarkdown report,\noptionally\nconverted to an\nimage\n\nStage 6:\nNotification\n\nPushes to WeCom,\nFeishu,\nTelegram,\nDiscord, Slack,\nor email\n\nSupports A-shares, HK, US stocks, and ETFs (Japanese/Korean markets supported at a reduced\nlevel due to data reach).\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "The Quietly Smart Part: Data Fallback\n\nData Fallback Funnel\n\nBaostock (P3) |\nYfinance (P4)\n\nCore Principle: Data is unreliable\n\nby default. A single data source\n\nfailing should never take down the\nwhole analysis.\n\nTreat every feed as best-effort.\n\nUS & HK Tickers\nbypass China-only\nfeeds\n\nPrompt Constraints: The LLM is\nexpLicitly fed\nfallback/partial/missing status\ntags. It is strictly\n\nrequired to write ‘data\nunavailable' rather than\nhallucinate or invent a missing\nnumber.\n\nae.\n\n-->\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 5,
+      "text": "The Decision Dashboard\n\n“ticker”: \"XYZ\",\n\"timestamp\": “2024-68-27714:30:682\",\n“analysis”: {\n\"conclusion\": \"BUY\",\n\"timeframe\": \"SHORT_TERM\",\n\"split_advice\": {\n\"holding\": \"HOLD\",\n\"cash\": \"BUY_DIP\"\n\n\"data_perspective\": {\n\"“ma_alignwent®: \"BULLISH\",\n“prace_vs_sr\": “ABOVE_SUPPORT\",\n\"bias_ratio”: 1.2,\n\n\"volume\": \"ELEVATED\"\n\n\"intelligence\": {\n\"risks\": [\n\n\"avent\": \"EARNINGS\",\n\"date\": \"2024-09-05\"\n\n1},\n\"catalysts\": [\n{\n\n\"event\": \"NEW_PRODUCT\",\n“date”: \"2024-69-12\"\n\n]\n\nIY\n\n\"“battle_plan”: {\n\"ideal_buy”: 156.60,\n“stop_loss\": 145.50,\n\"target\": 165.60,\n“position_size\": \"MODERATE\"\n\n\"checklist\": {\n\"bullish_alignment”: true,\n\"bias_in_range\": true,\n\"volume_confirwed\": true,\n\"ne_najor_news\": true,\n“valuation_attactive\": true\n\nCore conclusion\n\nOne sentence: buy, hold,\nor wait, plus time\nsensitivity.\n\nIntelligence\n\nRisk alerts and positive\ncatalysts (each required\nto carry a specific\ndate).\n\nSplit advice\n\nDifferent guidance for\nsomeone holding the\nposition vs. someone in\ncash.\n\nBattle plan\n\nConcrete sniper points:\nideal buy, stop-Loss,\n\ntarget, position sizing.\n\nData perspective\n\nMA alignment, price vs.\nsupport/resistance,\nbias ratio, volume read.\n\nChecklist\n\nEvery condition marked\nwith visual indicators:\n%/A/ © (bullish\nalignment, bias in\nrange, volume, no major\nbad news, valuation).\n\n¥ bullish alignment\nbias in range\nY volume\nno major bad news\n¥Y valuation\n\n& Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "Opinionated Prompt Logic\n\nConcept: The discipline baked into the prompt forces the LLM to adhere to strict\n\ntechnical guidelines rather than wandering.\n\nRule 1: Bullish Alignment Required\n\nOnly trade bullish MA\n\na\nalignment (MA5 > MA10\n> MA20).\n\na\n\nRule 3: Volume & Support\nPrefer buying a shrink- A i Fa\nvolume pullback to\nestablished support\nlevels.\n\nSUPPORT\n\nIp, shrink\nVolume\n\nNote: These are configurable article examples requiring individual research and risk validation, not personalized investment advice.\n\nRule 2: Don’t Chase (Hard No Buy)\n\n>5%\nA bias ratio of more bias\nthan 5% above the MA5 Caution\n\ntriggers a strict ‘no s\\\n\nbuy’ threshold.\n\nRule 4: Consistency\n\nNever flip between buy\nand sell on a single\nday's price move.\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "Agent Strategies: Ask the System a Question\n\nArchitecture: Beyond the daily report, the agent mode allows interrogation per ticker\nusing 15 built-in YAML strategy playbooks. Each has its own rules, required tools, and\n\nscoring adjustments.\n\n[trend_ma.yam1]\n\n[structure.yaml ]\n\n[behavior .yam1 ]\n\n| [catalyst.yam1]\n\n[quality.yaml ]\n\nTrend / moving\naverages\n\nMA golden cross,\nbull trend\n\nStructure\ntheory\n\nChan (Zen) theory,\nElliott wave\n\nBehavior /\nliquidity\nEmotion cycle,\nvolume breakout,\n\nbottom volume,\nshrink pullback\n\nCatalyst /\nnarrative\n\nHot theme,\nevent-driven,\n_ expectation\n_repricing\n\nQuality /\ngrowth\n\nGrowth quality\n\n® Gemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "How to Read It Without Self-Deception\n\nSystem Component\n\nReading Risk A\n\nNews source quality\n\nA The intelligence block relies entirely on configured\nsearch providers. Without them, sentiment/catalysts empty\nout and the report leans solely on technicals. Risk of\nprompt-injection from untrusted news text.\n\nDeterminism\n\nCoverage by market\n\nA LLM outputs vary. Identical inputs can yield slightly\ndifferent dashboards across runs. Treat the output as a\nstructured opinion, not fixed truth.\n\nAy Deep A-share data (capital flow, chips) gracefully\ndegrades to not_supported on markets without coverage.\n\nData freshness\n\nA Watch for fallback/partial/missing flags. Degraded inputs\nmust lower confidence, as instructed by the prompt.\n\nBacktesting # profit\n\nA A generated dashboard or backtest is decision support,\nnot a verified edge.\n\n® Gemini Notebook"
+    },
+    {
+      "page": 9,
+      "text": "Limitations and Honest Assessment\n\n4\n4\n4\n4\n4\ny\n4\n4\n4\n\nNot an execution\nsystem\n\nAnalyzes and reports\nonly. It does not place\norders or model market\n\nliquidity.\n\nEditorial Flag: Example deployment Language doe\n\nModel-dependent\n\nOutput quality\ncompletely tracks the\ncapabilities of the\nspecific LLM it is\npointed at.\n\nSearch-dependent\n\nThe qualitative half of\nthe report thins out\nentirely without active\nnews API keys.\n\nNon-deterministic\n\nAs a Language model,\nidentical inputs can\nyield slightly different\ndashboards. It is not a\n\nrigid mathematical parser.\n\nlot evidence a production-vaLlidated system.\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 10,
+      "text": "Links\n\n[2 GitHub: ZhuLinsen/daily_stock_analysis\nB License: MIT\nProject Author: ZhuLinsen\n\nNote: Target-channel duplicates or external forks are\nnot_checked and require strict reconciliation before\nSubmission or deployment.\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "Conclusion: A Repeatable Analytical Habit\n\nThe Prototype Value (What it does well) The Production Reality (What is missing)\n\nStandardizes what ‘looking at a stock’ For learning and prototyping, it’s well-\nmeans, every single day. built. But the next layer requires:\n\nTreats data as unreliable, making gaps Validated data pipelines\nexplicitly visible.\n\nStrict model-drift control\nMakes the conclusion explainable via\nscores, exact levels, checklists, and\n\nrisk mapping. Realistic execution integration\n\nSeparates pure idea generation (the 15\nstrategies) from a disciplined decision\nframe.\n\nRisk rules that live in hard code, not\njust in LLM prompts."
+    }
+  ]
+}
