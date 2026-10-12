@@ -57,7 +57,7 @@ const B = {
 };
 
 /* ---------- the s02a triangle (keep identical: the scene starts with a cut) ---------- */
-const N = { BTC: [1350, 330], ETH: [1000, 860], USDT: [1700, 860] };
+const N = { BTC: [1350, 330], ETH: [1110, 830], USDT: [1700, 860] };
 const NODE_S = 0.8, SEEDS = { BTC: 23, ETH: 37, USDT: 11 };
 const EDGE = { bend: 60, trim: 120, w: 7 };
 const LEGS = [["BTC", "USDT", TXT.rBU, 2400], ["USDT", "ETH", TXT.rUE, 2410], ["ETH", "BTC", TXT.rEB, 2420]];
@@ -111,13 +111,7 @@ function flyer(ctx, x, y, s, g, o) {
 
 /* the duo, with the parrot optionally away from its perch (math kept identical to HOST.duo) */
 function duo(ctx, g, o) {
-  const s = 1.15, x = 300, y = 1010 + 5 * Math.sin(g * 1.5);
-  const px = x + 205 * s, py = y - 8 * s;
-  HOST.raft(ctx, x + 90 * s, y + 6 * s, s, g);
-  K.perch(ctx, px, py, 92 * s, 731);
-  if (!o.away) K.parrot(ctx, px, py - 92 * s, s * 0.95, HOST.parrotPose(g, Object.assign({}, o, { _px: px })));
-  K.crab(ctx, x, y, s, HOST.crabPose(g, Object.assign({}, o, { x, y, s, parrot: o.away ? false : undefined })));
-  return [px, py - 92 * s];
+  return HOST.duo(ctx, g, Object.assign({}, o, { x: 300, y: 1010, s: 1.15, perchOnly: o.away })).parrot;
 }
 
 /* flight plan: perch -> BTC, then the three legs of the loop, then home */

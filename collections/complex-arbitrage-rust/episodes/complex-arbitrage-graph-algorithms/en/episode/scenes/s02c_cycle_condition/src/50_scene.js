@@ -62,7 +62,7 @@ const FORM = [
 ];
 
 /* ---------- the s02b end state (keep identical: the scene starts with a cut) ---------- */
-const N = { BTC: [1350, 330], ETH: [1000, 860], USDT: [1700, 860] };
+const N = { BTC: [1350, 330], ETH: [1110, 830], USDT: [1700, 860] };
 const NODE_S = 0.8, SEEDS = { BTC: 23, ETH: 37, USDT: 11 };
 const EDGE = { bend: 60, trim: 120, w: 7 };
 const LEGS = [["BTC", "USDT", TXT.rBU, 2400], ["USDT", "ETH", TXT.rUE, 2410], ["ETH", "BTC", TXT.rEB, 2420]];
@@ -81,31 +81,8 @@ const CAM = K.mkTrack([
   [SCENE.end, { x: 2960, y: 1600, z: 0.84 }],
 ]);
 
-/* ---------- rich text with subscripts: "R(i_1, i_2)" (_x = subscript x) ---------- */
-function richW(ctx, str, size) {
-  let w = 0; for (let i = 0; i < str.length; i++) { if (str[i] === "_" && i + 1 < str.length) { w += K.textW(ctx, str[i + 1], size * 0.62, 700, K.FONT.mono); i++; } else w += K.textW(ctx, str[i], size, 700, K.FONT.mono); }
-  return w;
-}
-function rich(ctx, str, x, y, o) {
-  o = Object.assign({ size: 40, fill: P.ink, n: 1e9 }, o || {});
-  let cx = x, shown = 0;
-  for (let i = 0; i < str.length && shown < o.n; i++) {
-    const sub = str[i] === "_" && i + 1 < str.length, ch = sub ? str[++i] : str[i], sz = sub ? o.size * 0.62 : o.size;
-    K.text(ctx, ch, cx, y + (sub ? o.size * 0.28 : 0), { size: sz, weight: 700, font: K.FONT.mono, fill: o.fill, align: "left" });
-    cx += K.textW(ctx, ch, sz, 700, K.FONT.mono); shown++;
-  }
-  return cx - x;
-}
-const glyphs = (str) => str.replace(/_/g, "").length;
-function richTag(ctx, x, y, str, o) {
-  o = Object.assign({ a: 1, size: 40, hot: false, seed: 2700 }, o || {});
-  const a = o.a <= 0 ? 0 : o.a >= 1 ? 1 : K.E.back(o.a, 2.2); if (a <= 0) return;
-  const w = richW(ctx, str, o.size) + 30, h = o.size + 22;
-  ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
-  K.shape(ctx, K.rectPts(-w / 2, -h / 2, w, h, 3), { fill: o.hot ? P.profit : P.paper, w: 3.5, boil: 1, seed: o.seed, shade: { color: o.hot ? P.goldDark : P.paperShade, dx: 0, dy: -5 } });
-  rich(ctx, str, -w / 2 + 15, 0, { size: o.size });
-  ctx.restore();
-}
+/* subscript text ("R(i_1, i_2)"): the crab layer helper RICH (69_rich.js) */
+const { w: richW, draw: rich, glyphs, tag: richTag } = RICH;
 
 /* ---------- the far archipelago ("thousands of assets"), fixed by seed ---------- */
 const ARCH = (function () {

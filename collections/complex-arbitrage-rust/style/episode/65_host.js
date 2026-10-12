@@ -20,7 +20,10 @@
                     surprise | grin | worry | shrug | thumbs | jump | spyglass | nod | think
      preacts        the same for the parrot: surprise | flap | worry | grin | think
      stage          "raft" (default) | "none" (draw your own ground)
-     parrot         false to hide the parrot (crab alone)
+     parrot         false to hide the parrot AND its perch (crab alone)
+     perchOnly      true: the parrot is away (flying) but its perch stays on the raft; the crab does
+                    not look for it. Draw the flying parrot yourself (K.parrot) from the returned
+                    parrot point.
      a              appear 0..1 (pops the duo in, e.g. after a transition)
      carryR/carryL  fn(ctx, x, y, g): draw an item held in that claw (a tag, a coin, a plank, a
                     lantern, a scroll) at the claw tip; carryPoseR/L {x, y, open} moves the claw
@@ -179,9 +182,9 @@ const HOST = (function () {
     if (o.stage !== "none") raft(ctx, x + side * 90 * s, y + 6 * s, s, g);
     if (o.parrot !== false) {
       K.perch(ctx, px, py, 92 * s, 731);
-      K.parrot(ctx, px, py - 92 * s, s * 0.95, parrotPose(g, Object.assign({}, o, { _px: px })));
+      if (!o.perchOnly) K.parrot(ctx, px, py - 92 * s, s * 0.95, parrotPose(g, Object.assign({}, o, { _px: px })));
     }
-    const cp = crabPose(g, Object.assign({}, o, { x, y, s }));
+    const cp = crabPose(g, Object.assign({}, o, { x, y, s, parrot: o.perchOnly ? false : o.parrot }));
     /* carrying: the claw goes to a "hold" pose and the item is drawn at the claw tip, on top */
     if (o.carryR) cp.clawR = Object.assign({ x: 92, y: -120, open: 0.35 }, o.carryPoseR || {});
     if (o.carryL) cp.clawL = Object.assign({ x: -92, y: -120, open: 0.35 }, o.carryPoseL || {});

@@ -138,12 +138,17 @@ What the assembler does:
 
 Renders and audio are never committed.
 
+## 8b. Crab layer helpers (additive, in `complex-arbitrage-rust/style/episode/`)
+
+- `RICH` (`69_rich.js`): text with subscripts, `"R(i_1, i_2)"` (`_` + one char = subscript). `RICH.w(ctx, str, size)`, `RICH.glyphs(str)`, `RICH.draw(ctx, str, x, y, {size, fill, n})` (n = glyphs shown, for chalking term by term), `RICH.tag(ctx, x, y, str, {a, size, hot, seed})`. Another collection copies the file as is.
+- `HOST.duo(..., { perchOnly: true })`: the parrot is away (flying, drawn by the scene), the perch stays on the raft and the crab does not look for the parrot. `parrot: false` still hides parrot and perch.
+
 ## 9. Resume plan (paused 2026-10-12)
 
 State: the engine and the crab collection layer are done. The pilot `complex-arbitrage-graph-algorithms/en` has s01a-s02c rendered (0-344.9 s). The last preview is `renders/preview_en.mp4`, 394.2 s: intro 31.5 s, scenes 344.9 s, end card 19 s.
 
 To resume, in order:
-1. **Pilot fixes (lead, small):**
+1. **Pilot fixes (lead, small) - DONE 2026-10-12:** (ETH island moved to world [1110, 830] in s02a-s02c, re-rendered, preview re-assembled.)
    - Move into the crab layer: a shared subscript-formula helper (copy it from `s02c_cycle_condition`) and a perch-only option on `HOST.duo` (the parrot is away, the perch stays).
    - Fix the parrot perch covering the ETH island in s02a-s02c.
 2. **Pilot scene packages (one helper agent each, whole slides so cuts stay inside one builder):**

@@ -48,7 +48,7 @@ const B = {
 };
 
 /* ---------- world layout (the triangle must match s02b's first frame) ---------- */
-const N = { BTC: [1350, 330], ETH: [1000, 860], USDT: [1700, 860] };
+const N = { BTC: [1350, 330], ETH: [1110, 830], USDT: [1700, 860] };
 const NODE_S = 0.8, SEEDS = { BTC: 23, ETH: 37, USDT: 11 };
 const EDGE = { bend: 60, trim: 120, w: 7 };
 const BOOK = [-150, 690];  /* order book sail-cloth centre */
