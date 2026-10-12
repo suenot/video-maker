@@ -1,0 +1,55 @@
+{
+  "timeline": [
+    {
+      "slide": 0,
+      "start": 0.0,
+      "end": 101.2
+    },
+    {
+      "slide": 1,
+      "start": 101.2,
+      "end": 239.6
+    },
+    {
+      "slide": 2,
+      "start": 239.6,
+      "end": 346.5
+    },
+    {
+      "slide": 3,
+      "start": 346.5,
+      "end": 413.6
+    },
+    {
+      "slide": 4,
+      "start": 413.6,
+      "end": 505.5
+    },
+    {
+      "slide": 5,
+      "start": 505.5,
+      "end": 677.3
+    },
+    {
+      "slide": 6,
+      "start": 677.3,
+      "end": 937.0
+    },
+    {
+      "slide": 7,
+      "start": 937.0,
+      "end": 1129.9
+    },
+    {
+      "slide": 8,
+      "start": 1129.9,
+      "end": 1207.3
+    },
+    {
+      "slide": 9,
+      "start": 1207.3,
+      "end": 1284.13
+    }
+  ],
+  "slide_count": 10
+}
