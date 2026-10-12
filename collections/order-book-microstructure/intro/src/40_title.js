@@ -16,8 +16,14 @@ const ICONS = [
 ];
 const MEDAL_COLORS = [P.teal, P.saffron, P.terra, P.indigo, P.tealDark];
 
-/* banner unroll: down over everything, then up into the banner */
+/* banner unroll. Chorus 1 (tease): it drops over the world to the banner height,
+   stays for the sung title, then rolls back up. Ending: down over everything,
+   then up into the title card. */
 function bannerDrop(t) {
+  if (t < T.drop[0] - 0.5) {
+    const up = K.E.out3(K.inv(T.tease[0], T.tease[1], t)) * (1 - K.E.in3(K.inv(T.tease[2], T.tease[3], t)));
+    return up * (1 - BAN.stop);
+  }
   if (t < T.drop[0]) return 0;
   if (t < T.rise[0]) return K.E.in3(K.inv(T.drop[0], T.drop[1], t)) * 0.999 + 0.001;
   return K.lerp(1, 1 - BAN.stop, K.E.out3(K.inv(T.rise[0], T.rise[1], t)));
@@ -64,21 +70,23 @@ function drawTitleCanvas(t) {
   K.raccoon(ctx, 470, 1050, 1.5, tikkiTitle(t));
 }
 
+/* the title is stamped twice: on chorus 1 (tease) and on the final chorus */
 function layoutTitleDom(t) {
-  const d = bannerDrop(t), vis = t >= T.title - 0.05;
-  titleEl.style.opacity = vis ? "1" : "0";
-  if (!vis) return;
+  const d = bannerDrop(t), fin = t >= T.title - 0.05, tease = t >= T.tease[1] - 0.05 && t < T.tease[3];
+  const t0 = fin ? T.title : T.tease[1], t1 = fin ? T.line2 : T.tease[1] + 2 * BEAT;
+  titleEl.style.opacity = fin ? "1" : tease ? (1 - K.inv(T.tease[2], T.tease[2] + 0.25, t)).toFixed(2) : "0";
+  if (!fin && !tease) return;
   const bh = BAN.h * d, n = TITLE_LN.length, sizes = TITLE_LN.map((x) => +x.dataset.size), gap = 14;
   const total = sizes.reduce((a, b) => a + b, 0) + gap * (n - 1);
   let y = Math.max(90, (bh + 30) / 2 - total / 2); /* below the triangle band, above the roll */
   TITLE_LN.forEach((x, i) => { x.style.top = y.toFixed(1) + "px"; y += sizes[i] + gap; });
   /* block-stamp: each letter drops from 1.7x, slams down with a squash, staggered */
   TITLE_CH.forEach((c) => {
-    const base = c.line === 0 ? T.title : T.line2, t0 = base + c.li * 0.03;
-    const a = K.inv(t0, t0 + 0.16, t), land = K.inv(t0 + 0.16, t0 + 0.4, t);
+    const base = c.line === 0 ? t0 : t1, tc = base + c.li * 0.03;
+    const a = K.inv(tc, tc + 0.16, t), land = K.inv(tc + 0.16, tc + 0.4, t);
     const sc = a < 1 ? K.lerp(1.7, 1, K.E.in3(a)) : 1 + 0.1 * Math.sin(land * Math.PI) * (1 - land);
     const sq = a >= 1 ? Math.sin(land * Math.PI) * 0.14 * (1 - land) : 0;
-    const hop = c.line === n - 1 ? -5 * K.pulse(t, 4, 6) * K.inv(T.line2 + 1, T.line2 + 1.2, t) : 0;
+    const hop = c.line === n - 1 ? -5 * K.pulse(t, 4, 6) * K.inv(t1 + 1, t1 + 1.2, t) : 0;
     c.el.style.opacity = a > 0 ? Math.min(1, a * 2.5).toFixed(2) : "0";
     c.el.style.transform = `translateY(${hop.toFixed(1)}px) scale(${(sc * (1 + sq)).toFixed(3)}, ${(sc * (1 - sq)).toFixed(3)}) rotate(${(K.hs(c.idx, 3) * 3 * (1 - land)).toFixed(2)}deg)`;
   });

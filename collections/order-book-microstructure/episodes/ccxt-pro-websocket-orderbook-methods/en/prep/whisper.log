@@ -1,0 +1,2 @@
+/Users/suenot/projects/trading/marketmaker/video_maker/.venv/lib/python3.12/site-packages/whisper/transcribe.py:132: UserWarning: FP16 is not supported on CPU; using FP32 instead
+  warnings.warn("FP16 is not supported on CPU; using FP32 instead")

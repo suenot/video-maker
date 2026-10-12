@@ -67,12 +67,12 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="20.1" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="71.3" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div id="title" data-layout-allow-overlap></div>
       <div class="ov" id="vig"></div>
       <div class="ov" id="grain"></div>
-      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="20.1" data-track-index="10" data-volume="1"></audio>
+      <audio id="song" src="song_full.m4a" data-start="0" data-duration="71.3" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="y4">Aa Бб 0</span><span class="f6">Aa Бб 0</span><span class="f8">Aa Бб 0</span><span class="m4">Aa 0</span><span class="sc">订单簿</span><span class="tc">訂單簿</span></div>
     </div>
     <script>
@@ -745,9 +745,10 @@ var BK = window.BK || (window.BK = {});
     ctx.restore();
   };
 
-  /* ---------------- MARKET ORDER: a hand cart that crosses the spread ---------------- */
+  /* ---------------- MARKET ORDER: a hand cart that crosses the spread ----------------
+     side "buy" (green up arrow, takes asks) | "sell" (red down arrow, takes bids); dir -1 faces left */
   K.cart = function (ctx, x, y, s, opt) {
-    const o = Object.assign({ color: P.saffron, dir: 1, seed: 81, label: "", roll: 0 }, opt || {});
+    const o = Object.assign({ color: P.saffron, dir: 1, seed: 81, label: "", roll: 0, side: "buy" }, opt || {});
     ctx.save(); ctx.translate(x, y); ctx.scale(s * o.dir, s);
     const bump = Math.abs(Math.sin(o.roll * 2)) * 4;
     ctx.translate(0, -bump);
@@ -757,7 +758,8 @@ var BK = window.BK || (window.BK = {});
     K.line(ctx, [[70, -110], [70, -230]], { stroke: P.ink, w: 5, boil: 0.8, seed: o.seed + 2 });
     const fw = Math.sin(K.now * 8) * 6;
     K.shape(ctx, [[70, -230], [160, -222 + fw], [150, -190 + fw], [70, -182]], { fill: P.paper, w: 4, boil: 0.9, seed: o.seed + 3, k: 0.3 });
-    K.shape(ctx, [[96, -192], [122, -220 + fw * 0.6], [140, -194 + fw * 0.6], [128, -194], [128, -186], [108, -186], [108, -192]], { fill: P.ask, w: 3, boil: 0.6, seed: o.seed + 4, k: 0, nicks: 0 });
+    const up = o.side !== "sell", ay = (v) => (up ? v : -412 - v + fw * 1.2); /* sell = arrow mirrored to point down */
+    K.shape(ctx, [[96, ay(-192)], [122, ay(-220 + fw * 0.6)], [140, ay(-194 + fw * 0.6)], [128, ay(-194)], [128, ay(-186)], [108, ay(-186)], [108, ay(-192)]].map((p) => [p[0], p[1]]), { fill: up ? P.up : P.down, w: 3, boil: 0.6, seed: o.seed + 4, k: 0, nicks: 0 });
     /* wheels */
     [-60, 60].forEach((wx, i) => {
       K.shape(ctx, K.ellipsePts(wx, -24, 30, 30, 14), { fill: P.wood, w: 5, boil: 0.9, seed: o.seed + 5 + i, k: 1 });
@@ -1089,21 +1091,22 @@ var BK = window.BK || (window.BK = {});
   };
 
   /* ---------- depth chart as two terraced hills ----------
-     bids / asks: cumulative sizes per level (best first). Bids grow to the left,
+     bids / asks: cumulative sizes per level (best first); mid = half-width of the valley; growBid / growAsk raise each side separately. Bids grow to the left,
      asks to the right, the spread is the valley between them. */
   K.depthHills = function (ctx, x, y, w, h, bids, asks, opt) {
-    const o = Object.assign({ a: 1, grow: 1, seed: 13, max: null }, opt || {});
+    const o = Object.assign({ a: 1, grow: 1, growBid: null, growAsk: null, seed: 13, max: null, mid: 30 }, opt || {});
     const a = popS(o.a); if (a <= 0) return;
-    const mx = o.max || Math.max(bids[bids.length - 1] || 1, asks[asks.length - 1] || 1), g = clamp(o.grow, 0, 1);
+    const mx = o.max || Math.max(bids[bids.length - 1] || 1, asks[asks.length - 1] || 1);
     ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
-    const half = w / 2 - 30, side = (arr, sd, fill, dark, seed) => {
-      const n = arr.length, step = half / n, pts = [[sd * 30, 0]];
-      arr.forEach((v, i) => { const hh = (v / mx) * h * g; pts.push([sd * (30 + step * i), -hh], [sd * (30 + step * (i + 1)), -hh]); });
-      pts.push([sd * (30 + half), 0]);
+    const m = o.mid, half = w / 2 - m, side = (arr, sd, fill, dark, seed, g) => {
+      g = clamp(g, 0, 1); if (g <= 0) return;
+      const n = arr.length, step = half / n, pts = [[sd * m, 0]];
+      arr.forEach((v, i) => { const hh = (v / mx) * h * g; pts.push([sd * (m + step * i), -hh], [sd * (m + step * (i + 1)), -hh]); });
+      pts.push([sd * (m + half), 0]);
       K.shape(ctx, pts, { fill, w: 5, boil: 1.1, seed, k: 0, shade: { color: dark, dx: sd * -12, dy: 0 }, gouge: { ang: sd * 0.9, alpha: 0.3, color: dark, gap: 16 } });
     };
-    side(bids, -1, P.bid, P.bidDark, o.seed);
-    side(asks, 1, P.ask, P.askDark, o.seed + 40);
+    side(bids, -1, P.bid, P.bidDark, o.seed, o.growBid == null ? o.grow : o.growBid);
+    side(asks, 1, P.ask, P.askDark, o.seed + 40, o.growAsk == null ? o.grow : o.growAsk);
     K.line(ctx, [[-w / 2, 0], [w / 2, 0]], { stroke: P.ink, w: 5, boil: 1, seed: o.seed + 80 });
     ctx.restore();
   };
@@ -1287,51 +1290,88 @@ var BK = window.BK || (window.BK = {});
 
 /* ============================================================
    INTRO 10 SETUP: variables, title DOM, the book data, timing (beat grid)
-   Song: song_20s.m4a, Balkan brass band at 152 BPM (beat 0.395 s, bar 1.58 s),
-   cut from song_raw.mp4: raw 0.74-19.95 (4 instrumental bars + the 8-bar chorus,
-   one take, no splice) + raw bar 5.57-7.17 as an instrumental tail, 0.8 s fade.
-   Sung lines (cut time, measured with parakeet):
-     6.43  "Hey! The spread is tight"           (spread 7.58, tight 8.30)
-     9.62  "Depth and flow from left to right"
-     13.0  "Every tick and every queue"         (queue 14.70)
-     16.0  "Order Book and Market Microstructure!"
-   All story times are K.at(bar, beat) on the measured downbeats below.
+   Song: song_full.m4a = the whole song_raw.mp4 (raw 0.70 - 72.0, leading
+   silence trimmed, 0.7 s fade, loudnorm), 71.3 s, Balkan brass at 152 BPM
+   (beat 0.395 s, bar 1.60 s). Film time = raw time - 0.70.
+   Sections (bars on the measured downbeats below):
+     bars 0-3    instrumental intro
+     bars 4-11   chorus 1: "Hey! The spread is tight / Depth and flow from left
+                 to right / Every tick and every queue / Order Book and Market
+                 Microstructure!" (6.47, 9.66, 12.86, 16.04)
+     bars 12-19  verse: "Bids on the left and the asks up high / Stacked like a
+                 tower reaching to the sky / Limit orders wait in a price-time
+                 queue / Market orders come and they cross right through!"
+                 (19.25, 22.43, 25.63, 28.84)
+     bars 20-27  chorus 2 (32.04 ... 41.63)
+     bars 28-35  instrumental break (44.83 - 57.63)
+     bars 36-43  final chorus (57.63 ... "Order Book" 67.22), song ends 70.7
+   Word timings: parakeet + whisper (lyrics.srt windows are coarse).
    ============================================================ */
 const K = BK, P = K.P, at = K.at;
 K.G.BPM = 152;
-K.G.BARS = [0.00, 1.63, 3.23, 4.83, 6.43, 8.01, 9.62, 11.22, 12.82, 14.40, 16.00, 17.60, 19.18];
-const DUR = 20.1, BEAT = K.beatLen();
+K.G.BARS = [0.04, 1.67, 3.27, 4.87, 6.47, 8.05, 9.66, 11.26, 12.86, 14.44, 16.04, 17.64, 19.25, 20.85, 22.43, 24.05,
+  25.63, 27.23, 28.84, 30.44, 32.04, 33.64, 35.24, 36.85, 38.43, 40.03, 41.63, 43.23, 44.83, 46.44, 48.02, 49.64,
+  51.22, 52.82, 54.42, 56.03, 57.63, 59.23, 60.81, 62.41, 64.01, 65.62, 67.22, 68.82];
+const DUR = 71.3, BEAT = K.beatLen();
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 
 /* ---------- story beats (on the song's downbeats) ---------- */
 const T = {
-  curtain: [0.15, at(1, 0)],        /* 0.15 - 1.63 the kilim curtain rolls up on the bazaar */
-  stalls: at(1, 0),                 /* 1.63 awnings drop open on eighth notes, top to bottom */
-  swing: at(2, 0),                  /* 3.23 Tikki swings in on a rope from the left */
-  release: at(2, 0) + 1.22,         /* 4.45 lets go of the rope */
-  land: at(3, 0),                   /* 4.83 lands on the balcony at the alley */
-  fez: at(3, 1),                    /* 5.22 tips the fez */
-  beads: at(3, 2),                  /* 5.62 flicks abacus beads on the beat */
-  inhale: at(3, 3),                 /* 6.02 anticipation: big breath */
-  hey: at(4, 0),                    /* 6.43 "Hey!" */
-  clap: at(4, 2),                   /* 7.22 claps: the two halves of the book slide together */
-  slam: at(4, 3),                   /* 7.61 "spread": the alley slams narrow, ask prices flip */
-  tight: at(5, 0),                  /* 8.01 "tight": spread tag 0.05 -> 0.01, pinch gesture */
-  depth: at(6, 0),                  /* 9.62 "Depth and flow from left to right": crates flow in */
-  arrow: at(6, 2),                  /* 10.41 flow arrow */
-  cart: [at(7, 0) + 0.03, at(7, 3.5)], /* 11.25 - 12.60 a market order cart races through the alley */
-  take: [at(7, 1.5), at(7, 2)],     /* 11.81, 12.01 it takes two crates from the best ask */
-  shout: at(7, 2.5),                /* 12.21 Tikki shouts the imbalance */
-  ticks: at(8, 0.3),                /* 12.94 "Every tick": plaques flash bottom to top */
-  queueCam: at(8, 2),               /* 13.61 close on the best bid queue */
-  fills: [at(8, 3), at(9, 0), at(9, 1)], /* 14.0 / 14.4 / 14.8 "every queue": front crates fill, ours moves up */
-  drop: [at(9, 2), at(9, 3)],       /* 15.19 - 15.58 kilim curtain drops over everything */
-  rise: [at(9, 3), at(10, 0)],      /* 15.58 - 16.00 it rolls up into the title banner */
-  title: at(10, 0),                 /* 16.00 "Order Book and Market Microstructure!" */
-  line2: at(10, 2),                 /* 16.79 second title line stamps in */
-  medals: at(11, 0),                /* 17.60 episode medallions pop on eighth notes */
-  jump: at(11, 2),                  /* 18.39 jump */
-  bow: at(12, 0),                   /* 19.18 tips the fez, end */
+  /* intro */
+  curtain: [0.15, at(1, 0)],        /* the kilim curtain rolls up on the bazaar */
+  stalls: at(1, 0),                 /* shutters roll up, awnings drop on eighth notes, top to bottom */
+  swing: at(2, 0),                  /* Tikki swings in on a rope from the left */
+  release: at(2, 0) + 1.22,         /* lets go of the rope */
+  land: at(3, 0),                   /* lands on the balcony at the alley */
+  fez: at(3, 1),                    /* tips the fez */
+  beads: at(3, 2),                  /* flicks abacus beads on the beat */
+  inhale: at(3, 3),                 /* a big breath */
+  /* chorus 1 */
+  hey: at(4, 0),                    /* "Hey!" */
+  clap: at(4, 2),                   /* clap: the two halves of the book slide together */
+  slam: at(4, 3),                   /* "spread": the alley slams narrow, ask prices flip */
+  tight: at(5, 0),                  /* "tight": spread tag 0.05 -> 0.01, pinch gesture */
+  depth: at(6, 0),                  /* "Depth and flow from left to right": crates flow in */
+  arrow: at(6, 2),
+  cart: [at(7, 0) + 0.03, at(7, 3.5)], /* a buy market order races through the alley */
+  take: [at(7, 1.5), at(7, 2)],     /* it takes two crates from the best ask */
+  shout: at(7, 2.5),                /* imbalance shout */
+  ticks: at(8, 0.3),                /* "Every tick": plaques flash bottom to top */
+  queueCam: at(8, 2),               /* close on the best bid queue */
+  fills: [at(8, 3), at(9, 0), at(9, 1)], /* "every queue": our crate #4 -> #1 */
+  tease: [at(9, 3), at(10, 0), at(11, 3), at(12, 0)], /* title banner drops, stamps "Order Book...", rolls back up */
+  /* verse */
+  hills: [at(12, 0), at(13, 0)],    /* "Bids on the left" / "and the asks up high": terraced depth hills */
+  sky: [at(14, 1), at(14, 3), at(15, 0)], /* "Stacked like a tower reaching to the sky": two levels drop in, flag */
+  prio: at(16, 0),                  /* "Limit orders wait in a price-time queue": arrival numbers */
+  newbie: at(17, 0),                /* a newcomer joins the back */
+  cart2: [at(18, 0), at(19, 3)],    /* "Market orders ... cross right through!": a sell cart, right to left */
+  take2: [at(18, 2.5), at(18, 3)],  /* it fills our crate and the next one */
+  coin: at(19, 0),                  /* our fill: a gold coin flies to Tikki */
+  /* chorus 2 (dusk) */
+  dusk: [at(19, 2), at(20, 2)],
+  hey2: at(20, 0),                  /* "Hey!" */
+  rope: at(21, 0),                  /* "tight": Tikki pulls the lantern rope tight */
+  flow2: at(22, 0),                 /* second flow wave, the hills rise */
+  tickChart: [at(24, 0), at(25, 2)],/* "Every tick": a tick chart scroll drops, draws tick by tick */
+  fireworks: at(26, 0),             /* "Order Book and Market Microstructure!": every plaque pings, coins */
+  /* break (night) */
+  dance: [at(28, 0), at(30, 0)],
+  ofi: [at(30, 0), at(32, 0)],      /* tile board: OFI */
+  candles: [at(32, 0), at(34, 0)],  /* scroll: volume bars as candles */
+  code: [at(34, 0), at(36, 0)],     /* code scroll: watch_order_book */
+  dawn: [at(35, 0), at(36, 2)],
+  /* final chorus */
+  hey3: at(36, 0),
+  flow3: at(38, 0),
+  ticks3: at(40, 0.3),
+  drop: [at(41, 2), at(41, 3)],     /* the kilim curtain drops over everything */
+  rise: [at(41, 3), at(42, 0)],     /* it rolls up into the title banner */
+  title: at(42, 0),                 /* "Order Book and Market Microstructure!" */
+  line2: at(42, 2),
+  medals: at(43, 0),
+  jump: at(43, 2),
+  bow: at(44, 0),
 };
 
 /* ---------- variables (title text, language) ---------- */
@@ -1368,59 +1408,75 @@ const TITLE_LN = Array.from(titleEl.querySelectorAll(".ln"));
 /* ---------- the book (world units; the tower stands on its bid half) ----------
    asks best first (bottom of the upper half), bids best first (top of the lower half).
    Before the slam the inside of the spread is empty: best ask 101.30, best bid 101.25
-   (spread 0.05). On "spread" new sellers step in: the ask ladder becomes 101.26-101.30. */
+   (spread 0.05). On "spread" new sellers step in: the ask ladder becomes 101.26-101.30.
+   Levels 5 and 6 (101.31, 101.32) drop in from the sky in the verse. */
 const TW = 1100, LH = 150, YB0 = 115;          /* tower width, level height, top of the bid half */
 const GAP0 = 230, GAP1 = 84;                   /* alley height before / after the slam */
 const ASKS = [
-  { p0: "101.30", p1: "101.26", n0: 1, n1: 4 },
-  { p0: "101.31", p1: "101.27", n0: 2, n1: 6 },
-  { p0: "101.32", p1: "101.28", n0: 1, n1: 5 },
-  { p0: "101.33", p1: "101.29", n0: 2, n1: 7 },
-  { p0: "101.34", p1: "101.30", n0: 1, n1: 6 },
+  { p0: "101.30", p1: "101.26", n0: 1, n1: 4, n2: 6 },
+  { p0: "101.31", p1: "101.27", n0: 2, n1: 6, n2: 7 },
+  { p0: "101.32", p1: "101.28", n0: 1, n1: 5, n2: 6 },
+  { p0: "101.33", p1: "101.29", n0: 2, n1: 7, n2: 7 },
+  { p0: "101.34", p1: "101.30", n0: 1, n1: 6, n2: 7 },
+  { p0: "101.31", p1: "101.31", n0: 5, n1: 5, n2: 6, sky: 0 },  /* dropped in from the sky */
+  { p0: "101.32", p1: "101.32", n0: 4, n1: 4, n2: 5, sky: 1 },
 ];
 const BIDS = [
-  { p0: "101.25", p1: "101.25", n0: 2, n1: 5 },
-  { p0: "101.24", p1: "101.24", n0: 1, n1: 7 },
-  { p0: "101.23", p1: "101.23", n0: 2, n1: 6 },
-  { p0: "101.22", p1: "101.22", n0: 1, n1: 8 },
-  { p0: "101.21", p1: "101.21", n0: 2, n1: 6 },
+  { p0: "101.25", p1: "101.25", n0: 2, n1: 5, n2: 8 },
+  { p0: "101.24", p1: "101.24", n0: 1, n1: 7, n2: 8 },
+  { p0: "101.23", p1: "101.23", n0: 2, n1: 6, n2: 7 },
+  { p0: "101.22", p1: "101.22", n0: 1, n1: 8, n2: 8 },
+  { p0: "101.21", p1: "101.21", n0: 2, n1: 6, n2: 7 },
 ];
 const STAR = { side: "bid", level: 0, k: 3 };  /* our own resting order: 4th in the best-bid queue */
-/* after the cart takes 2 of 4 crates at the best ask: best level 5 bids vs 2 asks,
+/* after the buy cart takes 2 of 4 crates at the best ask: best level 5 bids vs 2 asks,
    imbalance (5 - 2) / (5 + 2) = +0.43 */
 const IMB = "+0.43";
+const PRIO = { side: "ask", level: 1 };        /* the queue that gets arrival numbers in the verse */
 
 /* every crate: arrival time (flow-in), removal time + kind, star */
 const CRATES = { ask: [], bid: [] };
+const levelLand = (i) => T.sky[ASKS[i].sky];   /* when a sky level lands */
 (function buildCrates() {
-  const openAt = (side, i) => T.stalls + (side === "ask" ? 4 - i : 5 + i) * BEAT / 2;
-  let flowIdx = [];
+  const openAt = (side, i) => T.stalls + (side === "ask" ? 4 - Math.min(i, 4) : 5 + i) * BEAT / 2;
+  const flow1 = [], flow2 = [];
   ["ask", "bid"].forEach((side) => (side === "ask" ? ASKS : BIDS).forEach((L, i) => {
     const arr = [];
-    for (let k = 0; k < L.n1; k++) {
+    for (let k = 0; k < L.n2; k++) {
       const c = { k, star: side === STAR.side && i === STAR.level && k === STAR.k, remove: null, kind: null };
-      if (k < L.n0) c.arrive = openAt(side, i) + 0.12 + k * 0.06, c.flow = false;
-      else { c.flow = true; flowIdx.push(c); c.order = (k - L.n0) * 10 + (side === "ask" ? i : 5 + i); }
+      if (L.sky != null && k < L.n1) { c.arrive = levelLand(i) - 1; c.flow = false; }
+      else if (k < L.n0) { c.arrive = openAt(side, i) + 0.12 + k * 0.06; c.flow = false; }
+      else if (k < L.n1) { c.flow = true; flow1.push(c); c.order = (k - L.n0) * 10 + (side === "ask" ? i : 5 + i); }
+      else { c.flow = true; flow2.push(c); c.order = (k - L.n1) * 12 + (side === "ask" ? i : 7 + i); }
       arr.push(c);
     }
     CRATES[side].push(arr);
   }));
-  /* flow-in: all newcomers arrive during bar 6, sorted so every stall fills at once */
-  flowIdx.sort((a, b) => a.order - b.order).forEach((c, j) => { c.arrive = T.depth + 0.05 + j * (1.25 / flowIdx.length); });
-  /* the cart takes the first two crates of the best ask */
+  /* flow-ins: every stall fills at once, crates slide in from the left */
+  flow1.sort((a, b) => a.order - b.order).forEach((c, j) => { c.arrive = T.depth + 0.05 + j * (1.25 / flow1.length); });
+  flow2.sort((a, b) => a.order - b.order).forEach((c, j) => { c.arrive = T.flow2 + 0.05 + j * (2.6 / flow2.length); });
+  /* the newcomer at the back of the price-time queue is the first of the second wave on that level */
+  /* the buy cart takes the first two crates of the best ask */
   CRATES.ask[0][0].remove = T.take[0]; CRATES.ask[0][0].kind = "cart";
   CRATES.ask[0][1].remove = T.take[1]; CRATES.ask[0][1].kind = "cart";
   /* market sells fill the first three crates of the best bid: our crate moves from #4 to #1 */
   T.fills.forEach((tf, j) => { CRATES.bid[0][j].remove = tf; CRATES.bid[0][j].kind = "fill"; });
+  /* the sell cart fills our crate and the one behind it */
+  CRATES.bid[0][3].remove = T.take2[0]; CRATES.bid[0][3].kind = "cart2";
+  CRATES.bid[0][4].remove = T.take2[1]; CRATES.bid[0][4].kind = "cart2";
+  /* the price-time newcomer arrives on its own beat */
+  const nb = CRATES[PRIO.side][PRIO.level][ASKS[PRIO.level].n1]; nb.arrive = T.newbie; nb.flow = true;
 })();
 
 /* ============================================================
-   INTRO 20 BAZAAR SET: sky, city, the stall tower (the order book), the
-   balcony at the alley, crates flowing in, the market-order cart, tags.
+   INTRO 20 BAZAAR SET: sky, city, depth hills, the stall tower (the order
+   book), the balcony at the alley, crates flowing in, the two market-order
+   carts, levels dropping from the sky, tags, explainer boards of the break.
    World units; the camera lives in 70_render.js.
    ============================================================ */
 const pulseB = (t) => K.pulse(t, 1, 6);          /* every beat */
 const pulseA = (t) => K.pulse(t, 4, 5);          /* every bar */
+const win = (t, a, b, fi, fo) => K.inv(a, a + (fi || 0.35), t) * (1 - K.inv(b - (fo || 0.3), b, t)); /* appear inside [a, b] */
 
 /* alley height: wide, then slammed narrow on "spread" with a small rebound */
 function gapAt(t) {
@@ -1428,11 +1484,13 @@ function gapAt(t) {
   const reb = t > T.slam ? 16 * Math.exp(-7 * (t - T.slam)) * Math.sin((t - T.slam) * 26) : 0;
   return K.lerp(GAP0, GAP1, u) + reb;
 }
-const alleyMid = (t) => YB0 - gapAt(t) / 2;
 const towerX0 = -TW / 2;
 const bidFloor = (i) => YB0 + (i + 1) * LH;
 const askFloor = (i, t) => YB0 - gapAt(t) - i * LH;
 const stallOpenAt = (side, i) => T.stalls + (side === "ask" ? 4 - i : 5 + i) * BEAT / 2;
+const askCount = (t) => 5 + ASKS.filter((L) => L.sky != null && t >= levelLand(ASKS.indexOf(L))).length;
+/* dusk: chorus 2 and the break are at night, the final chorus at dawn */
+const duskAt = (t) => K.ss(T.dusk[0], T.dusk[1], t) * (1 - K.ss(T.dawn[0], T.dawn[1], t));
 
 /* queue slot of crate k at time t: it moves up as crates ahead of it leave */
 function slotOf(arr, k, t) {
@@ -1451,44 +1509,80 @@ function crateState(side, i, t) {
     return { a: 1, star: c.star, slot, dx: -(slot * 63 + 330) * (1 - e), dy: -26 * Math.sin(u * Math.PI), tilt: -0.25 * (1 - e) * Math.sin(u * 9) };
   });
 }
+/* resting size per level right now (for the depth hills: they follow the crates) */
+function levelSize(side, i, t) {
+  return CRATES[side][i].reduce((s, c) => s + (t >= c.arrive && !(c.remove != null && t >= c.remove) ? K.clamp((t - c.arrive) / 0.4, 0, 1) : 0), 0);
+}
+const cum = (arr) => arr.reduce((o, v) => (o.push((o.length ? o[o.length - 1] : 0) + v), o), []);
 
-/* the market order cart: races through the alley left to right */
-function cartX(t) { return K.lerp(-1320, 1260, K.inv(T.cart[0], T.cart[1], t)); }
+/* the market-order carts */
+const cartX = (t) => K.lerp(-1320, 1260, K.inv(T.cart[0], T.cart[1], t));            /* buy: left to right */
+const cart2X = (t) => K.lerp(1380, -1500, K.E.inOut(K.inv(T.cart2[0], T.cart2[1], t)) * 0.3 + K.inv(T.cart2[0], T.cart2[1], t) * 0.7); /* sell: right to left */
 
-function drawBackground(t) {
-  /* screen-fixed folk sky, sun slightly parallaxed */
+/* night palette for the background (sky, city, ground); the lantern-lit tower keeps its day colours */
+const NIGHT = { skyTop: "#262b5a", skyMid: "#4f437c", skyLow: "#c8664e", sun: "#f3e3c3", saffronDark: "#3a3466", cityFar: "#5e4a6c", cityMid: "#1b4650", saffronLight: "#8c6a8a", saffron: "#b98a5a", terraLight: "#9a5a48", terraDark: "#5a2a2a", tealDark: "#0f3a3a" };
+const mixHex = (a, b, u) => { const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16), ch = (s) => Math.round(((pa >> s) & 255) * (1 - u) + ((pb >> s) & 255) * u); return "#" + ((1 << 24) | (ch(16) << 16) | (ch(8) << 8) | ch(0)).toString(16).slice(1); };
+function withNight(t, fn) {
+  const d = duskAt(t); if (d <= 0) return fn();
+  const saved = {}; Object.keys(NIGHT).forEach((k) => { saved[k] = P[k]; P[k] = mixHex(P[k], NIGHT[k], d); });
+  try { fn(); } finally { Object.assign(P, saved); }
+}
+function drawBackground(t) { withNight(t, () => drawBackgroundDay(t)); }
+function drawBackgroundDay(t) {
   K.screen(ctx);
-  K.sky(ctx, -20, -20, 1940, 1100, { sunX: 1520 - (K.cam.x + 360) * 0.06, sunY: 200 - (K.cam.y) * 0.05, sunR: 78 });
-  /* far city */
+  K.sky(ctx, -20, -20, 1940, 1100, { sunX: 1520 - (K.cam.x + 360) * 0.06, sunY: 200 - (K.cam.y) * 0.05 + 260 * duskAt(t), sunR: 78 });
   K.applyCam(ctx, 0.3);
   K.city(ctx, -2600, 2600, 520, { layer: 0, seed: 4, h: 260 });
   K.applyCam(ctx, 0.5);
   K.city(ctx, -2800, 2800, 700, { layer: 1, seed: 9, h: 190 });
+  /* stars at night */
+  const d = duskAt(t);
+  if (d > 0) { K.screen(ctx); for (let i = 0; i < 40; i++) K.sparkle(ctx, 1920 * K.hash(i, 71), 420 * K.hash(i, 73), 7 + 6 * K.hash(i, 75) + 3 * Math.sin(t * 3 + i), d * (0.6 + 0.4 * K.hash(i, 77)), i); }
 }
 
-function drawGround() {
+function drawGround(t) { withNight(t, () => drawGroundDay()); }
+function drawGroundDay() {
   K.shape(ctx, K.rectPts(-4200, 860, 8400, 2400, 6), { fill: P.terraLight, w: 6, boil: 1.2, seed: 5, k: 0.1, pattern: { kind: "diamonds", color: P.terra, gap: 90, w: 16, alpha: 0.45 }, specks: 40 });
+}
+
+/* "Bids on the left and the asks up high": the book's depth as terraced hills behind the tower */
+function drawHills(t) {
+  if (t < T.hills[0]) return;
+  const nA = askCount(t), bids = cum(BIDS.map((L, i) => levelSize("bid", i, t))), asks = cum(ASKS.slice(0, nA).map((L, i) => levelSize("ask", i, t)));
+  const pulse = 1 + 0.04 * (K.pulse(t, 4, 5) * (t > T.flow2 ? 1 : 0));
+  K.depthHills(ctx, 0, 862, 4300, 900 * pulse, bids, asks, { a: 1, growBid: K.E.out3(K.inv(T.hills[0], T.hills[0] + 0.9, t)), growAsk: K.E.out3(K.inv(T.hills[1], T.hills[1] + 0.9, t)), max: 46, mid: TW / 2 + 70, seed: 13 });
 }
 
 /* tower + everything attached to it, in world space */
 function drawTower(t) {
-  const gap = gapAt(t);
+  const gap = gapAt(t), nA = askCount(t), topY = askFloor(nA - 1, t) - LH;
   /* bunting from the battlements out to the city */
-  K.bunting(ctx, [-TW / 2 - 30, askFloor(4, t) - LH - 70], [-2100, askFloor(4, t) + 160], { n: 12, sag: 90, seed: 11, size: 60 });
-  K.bunting(ctx, [TW / 2 + 30, askFloor(4, t) - LH - 70], [2100, askFloor(4, t) + 160], { n: 12, sag: 90, seed: 23, size: 60 });
-  const ping = (i, side) => { const idx = side === "bid" ? 4 - i : 5 + i, tk = T.ticks + idx * 0.068; return Math.max(0, 1 - Math.abs(t - tk) / 0.2); };
+  K.bunting(ctx, [-TW / 2 - 30, topY - 70], [-2100, topY + 310], { n: 12, sag: 90, seed: 11, size: 60 });
+  K.bunting(ctx, [TW / 2 + 30, topY - 70], [2100, topY + 310], { n: 12, sag: 90, seed: 23, size: 60 });
+  const pingAt = (tk0) => (i, side) => { const idx = side === "bid" ? 4 - i : 5 + i, tk = tk0 + idx * 0.068; return Math.max(0, 1 - Math.abs(t - tk) / 0.2); };
+  const pings = [pingAt(T.ticks), pingAt(T.fireworks), pingAt(T.fireworks + 2 * BEAT), pingAt(T.ticks3)];
   K.tower(ctx, 0, YB0 - gap / 2, {
-    asks: ASKS.map((L) => ({ p: L.p0, p2: L.p1, q: L.n1 })), bids: BIDS.map((L) => ({ p: L.p0, p2: L.p1, q: L.n1 })),
-    gap, lh: LH, w: TW, seed: 300, hot: 0.35 + 0.35 * K.inv(T.tight, T.tight + 0.4, t),
-    open: (i, side) => K.inv(stallOpenAt(side, i), stallOpenAt(side, i) + 0.4, t),
-    priceA: (i, side) => K.inv(stallOpenAt(side, i) + 0.1, stallOpenAt(side, i) + 0.45, t),
-    flip: (i, side) => (side === "ask" ? K.inv(T.slam + 0.05 + i * BEAT / 4, T.slam + 0.35 + i * BEAT / 4, t) : 0),
-    ping,
+    asks: ASKS.slice(0, nA).map((L) => ({ p: L.p0, p2: L.p1, q: L.n2 })), bids: BIDS.map((L) => ({ p: L.p0, p2: L.p1, q: L.n2 })),
+    gap, lh: LH, w: TW, seed: 300, hot: 0.35 + 0.35 * K.inv(T.tight, T.tight + 0.4, t) + 0.3 * duskAt(t),
+    open: (i, side) => (side === "ask" && i > 4 ? 1 : K.inv(stallOpenAt(side, i), stallOpenAt(side, i) + 0.4, t)),
+    priceA: (i, side) => (side === "ask" && i > 4 ? 1 : K.inv(stallOpenAt(side, i) + 0.1, stallOpenAt(side, i) + 0.45, t)),
+    flip: (i, side) => (side === "ask" && i < 5 ? K.inv(T.slam + 0.05 + i * BEAT / 4, T.slam + 0.35 + i * BEAT / 4, t) : 0),
+    ping: (i, side) => Math.max(...pings.map((f) => f(i, side))),
     crates: (i, side) => crateState(side, i, t),
   });
-  /* lanterns across the alley */
-  const top = YB0 - gap;
-  K.lanternString(ctx, [-TW / 2 - 20, top + 4], [TW / 2 + 20, top + 4], { n: 6, sag: 10, s: 0.5, glow: 0.4, seed: 31 });
+  /* the flag on top: "reaching to the sky" */
+  const fl = K.inv(T.sky[2], T.sky[2] + 0.45, t);
+  if (fl > 0) {
+    const h = 260 * K.E.back(fl, 1.8), fx = 0, fy = topY - 100, wv = Math.sin(t * 6) * 10;
+    K.line(ctx, [[fx, fy], [fx, fy - h]], { stroke: P.ink, w: 9, boil: 0.8, seed: 520 });
+    if (fl > 0.5) K.shape(ctx, [[fx, fy - h], [fx + 190, fy - h + 20 + wv], [fx + 170, fy - h + 70 + wv], [fx, fy - h + 100]], { fill: P.teal, w: 5, boil: 1, seed: 521, k: 0.4, pattern: { kind: "zigzag", color: P.saffron, gap: 24, w: 5 } });
+    K.dot(ctx, fx, fy - h, 12, P.brass, P.ink, 3, 522);
+  }
+  /* lanterns across the alley: sag at night, pulled tight on "tight" (with a twang) */
+  const top = YB0 - gap, d = duskAt(t);
+  const pull = K.ss(T.rope - 0.2, T.rope + 0.05, t), tw = t > T.rope ? 14 * Math.exp(-5 * (t - T.rope)) * Math.sin((t - T.rope) * 30) : 0;
+  const sag = 10 + 34 * d * (1 - pull) + tw;
+  K.lanternString(ctx, [-TW / 2 - 20, top + 4], [TW / 2 + 20, top + 4], { n: 6, sag, s: 0.5, glow: 0.4 + 0.5 * d, seed: 31 });
   /* spread tag hanging in the alley */
   const tagA = K.inv(T.stalls + 2.0, T.stalls + 2.35, t);
   if (t < T.tight) {
@@ -1496,13 +1590,35 @@ function drawTower(t) {
     ctx.save(); ctx.translate(330, YB0 - gap / 2); ctx.scale(1 / sq, sq);
     K.tag(ctx, 0, 0, "0.05", { a: tagA * (1 - K.inv(T.tight - 0.08, T.tight, t)), size: 34, seed: 3 });
     ctx.restore();
-  } else K.tag(ctx, 330, YB0 - gap / 2, "0.01", { a: K.inv(T.tight, T.tight + 0.35, t), size: 34, seed: 4, fill: P.goldGlow });
-  /* dust puffs where the halves slam */
-  const dd = t - T.slam;
-  if (dd > 0 && dd < 0.6) for (let i = 0; i < 8; i++) {
-    const sd = i % 2 ? 1 : -1, r = 18 + 70 * dd + 14 * K.hash(i, 3), x = sd * (TW / 2 + 30 + 120 * dd * (1 + K.hash(i, 5))), y = YB0 - gap / 2 + (K.hash(i, 7) - 0.5) * 80;
-    ctx.save(); ctx.globalAlpha = 1 - dd / 0.6; K.shape(ctx, K.blobPts(x, y, r, r * 0.8, 9, i, 0.25), { fill: P.paper, w: 4, boil: 1.2, seed: 700 + i, k: 0.9 }); ctx.restore();
+  } else {
+    const bump = [T.rope, T.hey3 + 2 * BEAT].reduce((m, tb) => Math.max(m, t > tb ? Math.exp(-6 * (t - tb)) : 0), 0);
+    ctx.save(); ctx.translate(330, YB0 - gap / 2); ctx.scale(1 + 0.3 * bump, 1 + 0.3 * bump);
+    K.tag(ctx, 0, 0, "0.01", { a: K.inv(T.tight, T.tight + 0.35, t), size: 34, seed: 4, fill: P.goldGlow });
+    ctx.restore();
   }
+  /* dust puffs: the slam, and each sky level landing */
+  const puff = (t0, y, spread) => {
+    const dd = t - t0; if (dd < 0 || dd > 0.6) return;
+    for (let i = 0; i < 8; i++) {
+      const sd = i % 2 ? 1 : -1, r = 18 + 70 * dd + 14 * K.hash(i, 3), x = sd * (TW / 2 + 30 + spread * dd * (1 + K.hash(i, 5))), yy = y + (K.hash(i, 7) - 0.5) * 80;
+      ctx.save(); ctx.globalAlpha = 1 - dd / 0.6; K.shape(ctx, K.blobPts(x, yy, r, r * 0.8, 9, i, 0.25), { fill: P.paper, w: 4, boil: 1.2, seed: 700 + i, k: 0.9 }); ctx.restore();
+    }
+  };
+  puff(T.slam, YB0 - gap / 2, 120);
+  ASKS.forEach((L, i) => { if (L.sky != null) puff(levelLand(i), askFloor(i, t), 160); });
+}
+
+/* a level falling from the sky onto the tower ("stacked like a tower") */
+function drawFallingLevels(t) {
+  ASKS.forEach((L, i) => {
+    if (L.sky == null) return;
+    const tl = levelLand(i), u = K.inv(tl - 0.55, tl, t);
+    if (u <= 0 || u >= 1) return;
+    const dy = -(1 - K.E.in3(u)) * 1500, fy = askFloor(i, t) + dy;
+    K.shape(ctx, K.rectPts(-TW / 2 - 40, fy - LH, TW + 80, LH, 4), { fill: P.plaster, w: 6, boil: 1.2, seed: 530 + i, k: 0.2 });
+    K.stall(ctx, towerX0, fy, TW, LH - 6, { side: "ask", price: L.p1, crates: crateState("ask", i, t), seed: 300 + 10 + i * 13 });
+    for (let k = 0; k < 3; k++) K.line(ctx, [[-300 + k * 300, fy - LH - 40], [-300 + k * 300, fy - LH - 200]], { stroke: P.paper, w: 6, boil: 1, seed: 540 + k + i * 3 });
+  });
 }
 
 /* wooden balcony at the alley mouth (Tikki's stand), rides the bid half */
@@ -1510,12 +1626,11 @@ function drawBalcony() {
   const y = YB0, x0 = -1010, x1 = -TW / 2 - 30;
   [x0 + 330, x1 - 10].forEach((bx, i) => K.shape(ctx, [[bx - 110, y + 20], [bx, y + 20], [bx, y + 120]], { fill: P.woodDark, w: 4.5, boil: 0.9, seed: 640 + i, k: 0, gouge: { alpha: 0.3, gap: 10, color: P.ink } }));
   K.shape(ctx, K.rectPts(x0, y - 4, x1 - x0, 30, 4), { fill: P.wood, w: 5, boil: 1, seed: 642, k: 0.1, shade: { color: P.woodDark, dx: 0, dy: -10 } });
-  /* a small rug hangs over the front edge */
   K.shape(ctx, [[x0 + 60, y + 22], [x0 + 250, y + 22], [x0 + 240, y + 110], [x0 + 70, y + 112]], { fill: P.teal, w: 4, boil: 1, seed: 643, k: 0.1, pattern: [{ kind: "zigzag", color: P.saffron, gap: 26, w: 5 }] });
   for (let i = 0; i <= 8; i++) { const fx = x0 + 72 + (168 * i) / 8; K.line(ctx, [[fx, y + 111], [fx, y + 130]], { stroke: P.paper, w: 3.5, boil: 0.6, seed: 650 + i }); }
 }
 
-/* crates in the air: carried off to the cart, or filled and flying up */
+/* crates in the air: carried off by a cart, or filled and flying up */
 function drawFlying(t) {
   [["ask", 0], ["bid", 0]].forEach(([side, i]) => {
     const arr = CRATES[side][i], floor = side === "ask" ? askFloor(i, t) : bidFloor(i);
@@ -1523,11 +1638,12 @@ function drawFlying(t) {
       if (c.remove == null) return;
       const d = t - c.remove; if (d < 0 || d > 0.7) return;
       const sx = K.slotX(towerX0, slotOf(arr, c.k, c.remove), 0.95), sy = floor - 16;
-      if (c.kind === "cart") {
-        const u = K.inv(0, 0.36, d), tx = cartX(c.remove + 0.36) + (c.k ? 12 : -30), ty = YB0 - 60;
+      if (c.kind === "cart" || c.kind === "cart2") {
         if (d > 0.36) return;
+        const cx = c.kind === "cart" ? cartX(c.remove + 0.36) : cart2X(c.remove + 0.36);
+        const u = K.inv(0, 0.36, d), tx = cx + (c.k % 2 ? 12 : -30), ty = YB0 - 60;
         const x = K.lerp(sx, tx, u), y = K.lerp(sy, ty, u) - 120 * Math.sin(u * Math.PI);
-        K.crate(ctx, x, y, 0.95 * (1 - 0.45 * u), { side, seed: 900 + c.k, tilt: u * 5 });
+        K.crate(ctx, x, y, 0.95 * (1 - 0.45 * u), { side, star: c.star, seed: 900 + c.k, tilt: u * 5 });
       } else {
         const u = K.inv(0, 0.7, d), x = sx + 520 * u, y = sy - 300 * K.E.out3(u);
         ctx.save(); ctx.globalAlpha = 1 - K.inv(0.3, 0.55, d);
@@ -1540,51 +1656,103 @@ function drawFlying(t) {
   });
 }
 
-function drawCart(t) {
-  if (t < T.cart[0] || t > T.cart[1]) return;
-  const x = cartX(t), taken = CRATES.ask[0].filter((c) => t > c.remove + 0.36).length;
-  /* speed lines behind the cart */
-  for (let i = 0; i < 3; i++) K.line(ctx, [[x - 150 - i * 26, YB0 - 40 - i * 20], [x - 330 - i * 40, YB0 - 40 - i * 20]], { stroke: P.paper, w: 5, boil: 1, seed: 960 + i });
-  K.cart(ctx, x, YB0 + 2, 0.6, { roll: x / 18, seed: 81 });
-  for (let k = 0; k < taken; k++) K.crate(ctx, x - 30 + k * 42, YB0 - 58 - k * 8, 0.7, { side: "ask", seed: 970 + k, tilt: 0.1 * (k ? 1 : -1) });
+function drawCarts(t) {
+  const one = (x, side, dir, taken, starIn) => {
+    for (let i = 0; i < 3; i++) K.line(ctx, [[x - dir * (150 + i * 26), YB0 - 40 - i * 20], [x - dir * (330 + i * 40), YB0 - 40 - i * 20]], { stroke: P.paper, w: 5, boil: 1, seed: 960 + i });
+    K.cart(ctx, x, YB0 + 2, 0.6, { roll: x / 18, seed: side === "buy" ? 81 : 85, side, dir, color: side === "buy" ? P.saffron : P.tealLight });
+    for (let k = 0; k < taken; k++) K.crate(ctx, x - 30 + k * 42, YB0 - 58 - k * 8, 0.7, { side: side === "buy" ? "ask" : "bid", star: starIn && k === 0, seed: 970 + k, tilt: 0.1 * (k ? 1 : -1) });
+  };
+  if (t > T.cart[0] && t < T.cart[1]) one(cartX(t), "buy", 1, CRATES.ask[0].filter((c) => c.kind === "cart" && t > c.remove + 0.36).length, false);
+  if (t > T.cart2[0] && t < T.cart2[1]) one(cart2X(t), "sell", -1, CRATES.bid[0].filter((c) => c.kind === "cart2" && t > c.remove + 0.36).length, true);
 }
 
-/* queue position tag over our crate ("#4" -> "#1") */
-function drawQueueTag(t) {
-  if (t < T.queueCam - 0.3 || t > T.drop[1]) return;
-  const arr = CRATES.bid[0], c = arr[STAR.k], left = arr.filter((q) => q.remove != null && t >= q.remove + 0.3).length;
-  const x = K.slotX(towerX0, slotOf(arr, c.k, t), 0.95), y = bidFloor(0) - 16 - 104;
-  const bump = arr.reduce((m, q) => (q.remove != null ? Math.max(m, Math.exp(-8 * Math.max(0, t - q.remove - 0.3)) * (t > q.remove + 0.3 ? 1 : 0)) : m), 0);
-  ctx.save(); ctx.translate(x, y); ctx.scale(1 + 0.18 * bump, 1 + 0.18 * bump);
-  K.tag(ctx, 0, 0, "#" + (STAR.k + 1 - left), { a: K.inv(T.queueCam - 0.3, T.queueCam, t), size: 30, seed: 6, fill: left >= 3 ? P.goldGlow : P.paper, string: 30 });
-  ctx.restore();
+/* tags over crates: queue position of ours (#4 -> #1), then price-time arrival numbers */
+function drawQueueTags(t) {
+  if (t > T.queueCam - 0.3 && t < T.tease[1]) {
+    const arr = CRATES.bid[0], c = arr[STAR.k], left = arr.filter((q) => q.kind === "fill" && t >= q.remove + 0.3).length;
+    const x = K.slotX(towerX0, slotOf(arr, c.k, t), 0.95), y = bidFloor(0) - 16 - 104;
+    const bump = T.fills.reduce((m, tf) => Math.max(m, t > tf + 0.3 ? Math.exp(-8 * (t - tf - 0.3)) : 0), 0);
+    ctx.save(); ctx.translate(x, y); ctx.scale(1 + 0.18 * bump, 1 + 0.18 * bump);
+    K.tag(ctx, 0, 0, "#" + (STAR.k + 1 - left), { a: K.inv(T.queueCam - 0.3, T.queueCam, t) * (1 - K.inv(T.tease[1] - 0.25, T.tease[1], t)), size: 30, seed: 6, fill: left >= 3 ? P.goldGlow : P.paper, string: 30 });
+    ctx.restore();
+  }
+  if (t > T.prio - 0.1 && t < T.cart2[0]) {
+    const arr = CRATES[PRIO.side][PRIO.level], y = askFloor(PRIO.level, t) - 16 - 100;
+    arr.forEach((c, k) => {
+      const t0 = k < ASKS[PRIO.level].n1 ? T.prio + k * BEAT / 2 : T.newbie + 0.5;
+      const a = K.inv(t0, t0 + 0.3, t) * (1 - K.inv(T.cart2[0] - 0.3, T.cart2[0], t));
+      if (a <= 0 || t < c.arrive) return;
+      K.tag(ctx, K.slotX(towerX0, slotOf(arr, k, t), 0.95), y, String(k + 1), { a, size: 22, seed: 40 + k, fill: k === arr.length - 1 && t > T.newbie ? P.goldGlow : P.paper, string: 26 });
+    });
+  }
 }
 
-/* flow arrow across the street ("from left to right") */
+/* flow arrow across the street ("from left to right"): chorus 1 and the final chorus */
 function drawFlowArrow(t) {
-  const a = K.inv(T.arrow, T.arrow + 0.5, t) * (1 - K.inv(T.cart[0] - 0.2, T.cart[0] + 0.2, t));
+  const a = Math.max(K.inv(T.arrow, T.arrow + 0.5, t) * (1 - K.inv(T.cart[0] - 0.2, T.cart[0] + 0.2, t)),
+    K.inv(T.flow3 + 2 * BEAT, T.flow3 + 2 * BEAT + 0.5, t) * (1 - K.inv(T.ticks3 - 0.2, T.ticks3 + 0.1, t)),
+    K.inv(T.flow2 + 2 * BEAT, T.flow2 + 2 * BEAT + 0.5, t) * (1 - K.inv(T.tickChart[0] - 0.2, T.tickChart[0] + 0.1, t)));
   if (a <= 0) return;
   ctx.save(); ctx.globalAlpha = Math.min(1, a * 2);
   K.arrow(ctx, [-1150, 930], [1150, 930], { p: a, w: 64, bend: -30, color: P.teal, seed: 980 });
   ctx.restore();
 }
 
-/* jagged speech bursts: "!" on "Hey!", the imbalance shout at the cart */
+/* jagged speech bursts near Tikki's head */
 function drawShouts(t) {
   const hx = -1040, hy = -330;
-  const h1 = K.inv(T.hey - 0.02, T.hey + 0.3, t) * (1 - K.inv(T.clap - 0.1, T.clap + 0.1, t));
-  if (h1 > 0) K.shout(ctx, hx, hy, 230, 190, { a: h1, text: "!", size: 120, tail: [0.9, 0.8], seed: 990, color: P.paper });
+  [[T.hey, T.clap], [T.hey2, T.hey2 + 3 * BEAT], [T.hey3, T.hey3 + 3 * BEAT]].forEach(([a, b], i) => {
+    const h = K.inv(a - 0.02, a + 0.3, t) * (1 - K.inv(b - 0.2, b, t));
+    if (h > 0) K.shout(ctx, hx, hy, 230, 190, { a: h, text: "!", size: 120, tail: [0.9, 0.8], seed: 990 + i, color: P.paper });
+  });
   const h2 = K.inv(T.shout, T.shout + 0.28, t) * (1 - K.inv(T.ticks + 0.4, T.ticks + 0.6, t));
   if (h2 > 0) K.shout(ctx, hx - 20, hy - 40, 380, 210, { a: h2, text: IMB, arrow: 1, size: 66, tail: [0.9, 0.8], seed: 995 });
 }
 
+/* coin fountain from the alley ("Order Book and Market Microstructure!" in chorus 2) */
+function drawFireworks(t) {
+  const d = t - T.fireworks; if (d < 0 || d > 3.2) return;
+  for (let i = 0; i < 26; i++) {
+    const t0 = (i % 13) * BEAT / 4 + (i < 13 ? 0 : 1.6), u = (d - t0) / 1.3; if (u < 0 || u > 1) continue;
+    const ang = -Math.PI / 2 + (K.hash(i, 3) - 0.5) * 2.2, v = 1400 + 500 * K.hash(i, 5);
+    const x = 330 * (K.hash(i, 9) - 0.5) + Math.cos(ang) * v * u, y = YB0 - 40 + Math.sin(ang) * v * u + 1500 * u * u;
+    K.coin(ctx, x, y, 30, { spin: t * 10 + i, seed: 930 + i });
+    if (u < 0.3) K.sparkle(ctx, x, y, 40 * (1 - u / 0.3), 1 - u / 0.3, i);
+  }
+}
+
+/* the coin from our filled order flies to Tikki's paw */
+function drawOurCoin(t) {
+  const d = t - T.take2[0]; if (d < 0 || t > T.cart2[1] + 1.2) return;
+  const sx = K.slotX(towerX0, 0, 0.95), sy = bidFloor(0) - 60, u = K.inv(0, T.coin - T.take2[0] + 0.1, d);
+  const paw = tikkiPaw(t);
+  const x = u < 1 ? K.lerp(sx, paw[0], u) : paw[0], y = u < 1 ? K.lerp(sy, paw[1], u) - 260 * Math.sin(u * Math.PI) : paw[1] - 30;
+  K.coin(ctx, x, y, 34, { spin: u < 1 ? d * 16 : 0, seed: 950 });
+  if (u >= 1) for (let k = 0; k < 4; k++) { const ph = (t * 1.6 + k / 4) % 1; K.sparkle(ctx, x + Math.cos(k * 1.7) * 60 * ph, y + Math.sin(k * 1.7) * 60 * ph, 22 * Math.sin(ph * Math.PI), 1, k); }
+}
+
+/* explainer boards: the tick chart (chorus 2) and the three boards of the break */
+const TICKS = [101.25, 101.26, 101.26, 101.25, 101.26, 101.27, 101.26, 101.27, 101.28, 101.27, 101.27, 101.28, 101.29, 101.28, 101.29, 101.30];
+const CANDLES = [{ o: 101.25, h: 101.27, l: 101.24, c: 101.27 }, { o: 101.27, h: 101.28, l: 101.25, c: 101.26 }, { o: 101.26, h: 101.29, l: 101.26, c: 101.29 }, { o: 101.29, h: 101.30, l: 101.27, c: 101.28 },
+  { o: 101.28, h: 101.31, l: 101.28, c: 101.31 }, { o: 101.31, h: 101.32, l: 101.29, c: 101.30 }, { o: 101.30, h: 101.33, l: 101.30, c: 101.33 }, { o: 101.33, h: 101.34, l: 101.31, c: 101.32 }];
+const CODE = ["import ccxt.pro as ccxtpro", "ex = ccxtpro.binance()", "while True:", "    ob = await ex.watch_order_book('BTC/USDT')", "    bid, ask = ob['bids'][0], ob['asks'][0]", "    spread = ask[0] - bid[0]"];
+function drawBoards(t) {
+  const hang = (t0, t1) => { const a = win(t, t0, t1, 0.4, 0.3); return { a, dy: -700 * (1 - K.E.out3(K.inv(t0, t0 + 0.45, t))) }; };
+  let h = hang(T.tickChart[0], T.tickChart[1] + 2 * BEAT);
+  if (h.a > 0) K.scrollChart(ctx, 640, -380 + h.dy, 760, 470, [{ data: TICKS, color: P.teal }], { a: Math.min(1, h.a * 3), draw: K.inv(T.tickChart[0] + 0.3, T.tickChart[0] + 0.3 + 12 * BEAT / 2, t), seed: 41, yMin: 101.24, yMax: 101.31 });
+  h = hang(T.ofi[0], T.ofi[1]);
+  if (h.a > 0) K.tileBoard(ctx, -160, -400 + h.dy, 760, 230, ["OFI = Δbid − Δask", { t: "(5 − 2) / (5 + 2) = " + IMB, c: P.terraDark }], { a: Math.min(1, h.a * 3), size: 46, write: K.inv(T.ofi[0] + 0.35, T.ofi[0] + 0.35 + 5.5 * BEAT, t), seed: 31 });
+  h = hang(T.candles[0], T.candles[1]);
+  if (h.a > 0) K.scrollChart(ctx, -120, -360 + h.dy, 760, 480, [{ kind: "candle", data: CANDLES }], { a: Math.min(1, h.a * 3), draw: K.inv(T.candles[0] + 0.3, T.candles[0] + 0.3 + 8 * BEAT * 0.9, t), seed: 45, yMin: 101.23, yMax: 101.35 });
+  h = hang(T.code[0], T.code[1]);
+  if (h.a > 0) K.codeScroll(ctx, -60, -330 + h.dy, 1000, CODE, { a: Math.min(1, h.a * 3), size: 30, typed: K.inv(T.code[0] + 0.35, T.code[0] + 0.35 + 6.5 * BEAT, t), seed: 61 });
+}
+
 /* ============================================================
    INTRO 30 TIKKI: where the raccoon is and what it does, as a pure function of t.
-   3.23 - 4.45  swings in from the left on a rope (pendulum, legs running in the air)
-   4.45 - 4.83  lets go, lands on the balcony on the downbeat (squash)
-   then: fez tip, abacus flicks, a big breath, "Hey!", the clap that slams the
-   book together, the "tight" pinch, pointing with the flow, a hop over the cart,
-   the imbalance shout, counting the queue on the abacus.
+   Gestures are small functions with their own anchor times, so each chorus can
+   reuse them (shout, clap, pinch, point along the flow, hop over a cart ...).
+   The acts are listed in tikki(t) in film order; later acts win.
    ============================================================ */
 const RAC = { x: -790, y: YB0, s: 1.2 };
 const PIV = [-900, -1700], ROPE = 1600, OMEGA = 1.4, TH0 = -0.82;
@@ -1606,15 +1774,88 @@ function drawRope(t) {
   K.line(ctx, pts, { stroke: P.saffronDark, w: 4, boil: 1, seed: 601 });
 }
 
-/* abacus rows: show the best-level sizes, then count the queue */
+/* abacus rows: best-level sizes, then the queue count, later the imbalance */
 function beadsAt(t) {
   const flick = (t0) => K.ss(t0, t0 + 0.12, t);
   if (t < T.depth) return [0.2 + 0.2 * flick(T.beads), 0.6 - 0.2 * flick(T.beads + BEAT / 2), 0.4 + 0.4 * flick(T.beads + BEAT), 0.8];
-  const left = CRATES.bid[0].filter((q) => q.remove != null && t >= q.remove + 0.2).length;
-  return [(STAR.k + 1 - left) / 5, 0.4, 0.8, 0.2];
+  if (t < T.prio) { const left = CRATES.bid[0].filter((q) => q.kind === "fill" && t >= q.remove + 0.2).length; return [(STAR.k + 1 - left) / 5, 0.4, 0.8, 0.2]; }
+  const k = Math.max(0, Math.floor((t - T.prio) / (BEAT / 2)));
+  if (t < T.cart2[0]) return [Math.min(5, k) / 5, Math.min(7, k) > 5 ? (k - 5) / 5 : 0, 0.6, 0.2];
+  if (t < T.candles[0]) return [1, 0.4, 0.4 + 0.2 * Math.sin(t * 3) * 0, 0.6];
+  const j = Math.floor((t - T.candles[0]) / BEAT) % 6;
+  return [j / 5, (5 - j) / 5, 0.6, 0.4];
 }
 
-/* returns { mode: "hang" | "stand", x, y, s, rot, pose } */
+/* ---------- gestures (each edits the pose st in place; t0.. anchors) ---------- */
+function gInhale(st, t, tH) {
+  const inh = K.ss(tH - 0.42, tH - 0.05, t) * (1 - K.ss(tH - 0.05, tH + 0.02, t));
+  if (inh > 0) { st.squash = -0.22 * inh; st.handL = { x: -100, y: -100 - 20 * inh, pose: "fist" }; st.handR = { x: 100, y: -110 - 30 * inh, pose: "open" }; st.mouth = "o"; st.brow = 0.4 * inh; st.ear = 0.8 * inh; st.look = [0.4, -0.4]; }
+}
+function gShout(st, t, tH, tEnd) {
+  const hey = K.inv(tH - 0.03, tH + 0.08, t) * (1 - K.ss(tEnd - 0.25, tEnd - 0.05, t));
+  if (hey <= 0) return;
+  const hh = Math.sin(K.inv(tH, tH + 0.4, t) * Math.PI);
+  st.mouth = "shout"; st.brow = 1.3; st.hop = 26 * hh; st.squash = 0.18 * (1 - hey) - 0.2 * hh; st.ear = 1; st.blink = 0;
+  st.handL = { x: -120, y: -250, pose: "fist" }; st.handR = { x: 130, y: -260, pose: "open" }; st.look = [0.8, -0.3];
+  st.tassel = 30 * Math.sin((t - tH) * 14) * Math.exp(-3 * (t - tH));
+}
+function gClap(st, t, tC, tS, tEnd) {
+  const cl = K.ss(tC - 0.2, tS - 0.02, t) * (1 - K.ss(tEnd - 0.15, tEnd + 0.05, t));
+  if (cl <= 0) return;
+  const meet = K.ss(tS - 0.15, tS - 0.02, t);
+  st.handL = { x: K.lerp(-130, -14, meet), y: K.lerp(-230, -118, meet), pose: "open", rot: K.lerp(-60, 0, meet) };
+  st.handR = { x: K.lerp(130, 14, meet), y: K.lerp(-230, -118, meet), pose: "open", rot: K.lerp(240, 180, meet) };
+  st.hold = null; st.mouth = meet > 0.5 ? "grin" : "open"; st.blink = meet > 0.9 && t < tS + 0.15 ? 1 : 0;
+  st.squash = t > tS ? 0.2 * Math.exp(-6 * (t - tS)) : 0;
+  st.headTilt = 6 * Math.sin((t - tC) * 8) * Math.exp(-2 * Math.max(0, t - tS));
+}
+function gPinch(st, t, t0, t1) {
+  const ti = K.ss(t0 - 0.15, t0 + 0.05, t) * (1 - K.ss(t1 - 0.25, t1, t));
+  if (ti <= 0) return;
+  st.handR = { x: K.lerp(84, 96, ti), y: K.lerp(-84, -232, ti), pose: "pinch", rot: -100 };
+  st.mouth = "smirk"; st.brow = -0.5 * ti; st.look = [0.9, -0.5]; st.lean = -4 * ti; st.blink = Math.max(st.blink, t > t0 + 0.5 && t < t0 + 0.7 ? 0.7 : 0);
+}
+function gPointFlow(st, t, t0, t1, b) {
+  const fl = K.ss(t0 - 0.1, t0 + 0.2, t) * (1 - K.ss(t1 - 0.2, t1, t));
+  if (fl <= 0) return;
+  const sw = K.inv(t0, t1 - 0.2, t);
+  st.handR = { x: 140, y: K.lerp(-220, -120, sw) + 10 * b, pose: "point", rot: K.lerp(-40, 10, sw) };
+  st.look = [K.lerp(-0.4, 1, sw), 0.1]; st.mouth = "grin"; st.lean = 3;
+}
+/* a cart zooms past along the alley floor: crouch, hop over it, land */
+function gHop(st, t, tc, dirRight) {
+  if (t < tc - 0.2 || t > tc + 0.9) return;
+  const crouch = K.ss(tc - 0.2, tc - 0.04, t) * (1 - K.ss(tc - 0.04, tc, t));
+  const j = K.inv(tc, tc + 0.44, t), hh = Math.sin(j * Math.PI);
+  st.squash = 0.3 * crouch - 0.3 * hh * (j < 1 ? 1 : 0); st.hop = 110 * hh;
+  st.mouth = "o"; st.brow = 1.2; st.blink = 0; st.handL = { x: -120, y: -170 - 40 * hh, pose: "fist" }; st.handR = { x: 120, y: -200 - 40 * hh, pose: "open" };
+  st.look = [dirRight ? 1 : -1, 0.6]; st.tassel = 40 * hh;
+  const ld = K.inv(tc + 0.44, tc + 0.7, t); if (ld > 0 && ld < 1) st.squash += 0.3 * Math.sin(ld * Math.PI);
+}
+function gNodTicks(st, t, t0, t1) {
+  if (t < t0 - 0.1 || t > t1) return;
+  const u = K.inv(t0, t0 + 0.7, t); st.look = [0.9, K.lerp(0.8, -1, u)]; st.headTilt = 4 * Math.sin(t * 26); st.mouth = "o";
+}
+/* bouncy dance on the beat: hops, alternating arms, legs kicking */
+function gDance(st, t, t0, t1, amp) {
+  const w = K.ss(t0 - 0.1, t0 + 0.1, t) * (1 - K.ss(t1 - 0.2, t1, t));
+  if (w <= 0) return;
+  const b = pulseB(t), ph = Math.floor((t - t0) / BEAT) % 2 ? 1 : -1, sw = Math.sin(((t - t0) / BEAT) * Math.PI);
+  st.hop = (amp || 34) * b * w; st.squash = 0.16 * (1 - b) * w - 0.08 * b;
+  st.handL = { x: -110 - 20 * sw, y: -170 - 70 * Math.max(0, ph) * b, pose: "open" };
+  st.handR = { x: 120 + 20 * sw, y: -170 - 70 * Math.max(0, -ph) * b, pose: "open" };
+  st.legWalk = (t - t0) * 9; st.lean = 7 * sw * w; st.tassel = -22 * sw; st.tail = sw; st.mouth = "grin"; st.look = [sw * 0.6, -0.3];
+}
+/* point at something (world point) with the right paw */
+function gPointAt(st, t, t0, t1, wx, wy, look) {
+  const w = K.ss(t0 - 0.1, t0 + 0.2, t) * (1 - K.ss(t1 - 0.2, t1, t));
+  if (w <= 0) return;
+  const lx = (wx - RAC.x) / RAC.s, ly = (wy - RAC.y) / RAC.s, a = Math.atan2(ly + 134, lx - 48), r = 76;
+  st.handR = { x: K.lerp(st.handR.x, 48 + Math.cos(a) * r, w), y: K.lerp(st.handR.y, -134 + Math.sin(a) * r, w), pose: "point", rot: (a * 180) / Math.PI };
+  st.look = look || [Math.cos(a), Math.sin(a)]; st.lean = 3 * w;
+}
+
+/* returns { mode: "hang" | "stand", ... , st } */
 function tikki(t) {
   const st = { seed: 700, blink: K.blinkAt(t, 5), mouth: "smile", look: [0.3, 0], hold: "abacus", beads: beadsAt(t) };
   const b = pulseB(t);
@@ -1629,84 +1870,98 @@ function tikki(t) {
   }
   /* --- flight from the rope to the balcony --- */
   if (t < T.land) {
-    const u = K.inv(T.release, T.land, t), e = ropeEnd(ropeTheta(T.release) + 0.0001);
-    const th = TH0 * Math.cos(OMEGA * (T.release - T.swing));
-    const c = Math.cos(th * 0.9), s = Math.sin(th * 0.9);
+    const u = K.inv(T.release, T.land, t), e = ropeEnd(ropeTheta(T.release));
+    const th = TH0 * Math.cos(OMEGA * (T.release - T.swing)), c = Math.cos(th * 0.9), s = Math.sin(th * 0.9);
     const fx = e[0] - (HAND_UP[0] * c - HAND_UP[1] * s), fy = e[1] - (HAND_UP[0] * s + HAND_UP[1] * c);
     const x = K.lerp(fx, RAC.x, u), y = K.lerp(fy, RAC.y, u) - 90 * Math.sin(u * Math.PI);
     Object.assign(st, { handR: { x: 96, y: -230, pose: "open" }, handL: { x: -110, y: -200, pose: "fist" }, mouth: "open", squash: -0.25 * (1 - u), tassel: 30 * (1 - u), look: [0, 0.6], blink: 0, ear: 1 });
     return { mode: "stand", x, y, s: RAC.s, lean: th * 50 * (1 - u), st };
   }
-  /* --- on the balcony --- */
+  /* --- intro, on the balcony --- */
   const land = K.inv(T.land, T.land + 0.35, t);
   if (land < 1) { st.squash += 0.42 * Math.sin(land * Math.PI) * (1 - land * 0.5); st.tassel = -24 * Math.sin(land * Math.PI * 2) * (1 - land); }
-  /* fez tip */
   const f = K.ss(T.fez - 0.2, T.fez, t) * (1 - K.ss(T.fez + 0.35, T.fez + 0.6, t));
   if (f > 0) { st.handR = { x: K.lerp(84, 44, f), y: K.lerp(-84, -268, f), pose: "pinch" }; st.fezTip = -18 * f; st.fezLift = 12 * f; st.mouth = "smirk"; st.brow = -0.4 * f; }
-  /* abacus flicks on the beat */
   if (t > T.beads - 0.15 && t < T.inhale) {
     const k = Math.max(0, Math.floor((t - T.beads + 0.15) / (BEAT / 2))), ph = ((t - T.beads + 0.15) % (BEAT / 2)) / (BEAT / 2);
     st.handR = { x: -40 + 30 * Math.sin(ph * Math.PI) + k * 6, y: -110 - 30 * Math.sin(ph * Math.PI), pose: "point" };
     st.look = [-0.6, 0.5];
   }
-  /* anticipation: a big breath before "Hey!" */
-  const inh = K.ss(T.inhale, T.hey - 0.05, t) * (1 - K.ss(T.hey - 0.05, T.hey + 0.02, t));
-  if (inh > 0) { st.squash = -0.22 * inh; st.handL = { x: -100, y: -100 - 20 * inh, pose: "fist" }; st.handR = { x: 100, y: -110 - 30 * inh, pose: "open" }; st.mouth = "o"; st.brow = 0.4 * inh; st.ear = 0.8 * inh; st.look = [0.4, -0.4]; }
-  /* "Hey!": shout, arms up, a little hop */
-  const hey = K.inv(T.hey - 0.03, T.hey + 0.08, t) * (1 - K.ss(T.clap - 0.25, T.clap - 0.05, t));
-  if (hey > 0) {
-    const hh = Math.sin(K.inv(T.hey, T.hey + 0.4, t) * Math.PI);
-    st.mouth = "shout"; st.brow = 1.3; st.hop = 26 * hh; st.squash = 0.18 * (1 - hey) - 0.2 * hh; st.ear = 1; st.blink = 0;
-    st.handL = { x: -120, y: -250, pose: "fist" }; st.handR = { x: 130, y: -260, pose: "open" }; st.look = [0.8, -0.3];
-    st.tassel = 30 * Math.sin((t - T.hey) * 14) * Math.exp(-3 * (t - T.hey));
-  }
-  /* the clap: hands meet in front, the book slams shut on "spread" */
-  const cl = K.ss(T.clap - 0.2, T.slam - 0.02, t) * (1 - K.ss(T.tight - 0.15, T.tight + 0.05, t));
-  if (cl > 0) {
-    const meet = K.ss(T.slam - 0.15, T.slam - 0.02, t);
-    st.handL = { x: K.lerp(-130, -14, meet), y: K.lerp(-230, -118, meet), pose: "open", rot: K.lerp(-60, 0, meet) };
-    st.handR = { x: K.lerp(130, 14, meet), y: K.lerp(-230, -118, meet), pose: "open", rot: K.lerp(240, 180, meet) };
-    st.hold = null; st.mouth = meet > 0.5 ? "grin" : "open"; st.blink = meet > 0.9 && t < T.slam + 0.15 ? 1 : 0; st.squash = 0.2 * Math.exp(-6 * Math.max(0, t - T.slam)) * (t > T.slam ? 1 : 0);
-    st.headTilt = 6 * Math.sin((t - T.clap) * 8) * Math.exp(-2 * Math.max(0, t - T.slam));
-  }
-  /* "tight": pinch gesture by the face, sly grin */
-  const ti = K.ss(T.tight - 0.15, T.tight + 0.05, t) * (1 - K.ss(T.depth - 0.25, T.depth, t));
-  if (ti > 0) {
-    st.handR = { x: K.lerp(84, 96, ti), y: K.lerp(-84, -232, ti), pose: "pinch", rot: -100 };
-    st.mouth = "smirk"; st.brow = -0.5 * ti; st.look = [0.9, -0.5]; st.lean = -4 * ti; st.blink = Math.max(st.blink, t > T.tight + 0.5 && t < T.tight + 0.7 ? 0.7 : 0);
-  }
-  /* "Depth and flow from left to right": points along the flow */
-  const fl = K.ss(T.depth - 0.1, T.depth + 0.2, t) * (1 - K.ss(T.cart[0] - 0.2, T.cart[0], t));
-  if (fl > 0) {
-    const sw = K.inv(T.depth, T.cart[0] - 0.2, t);
-    st.handR = { x: 140, y: K.lerp(-220, -120, sw) + 10 * b, pose: "point", rot: K.lerp(-40, 10, sw) };
-    st.look = [K.lerp(-0.4, 1, sw), 0.1]; st.mouth = "grin"; st.lean = 3;
-  }
-  /* the cart zooms past: hop over it, then the imbalance shout */
-  const cx = cartX(t), dist = Math.abs(cx - RAC.x);
-  if (t > T.cart[0] - 0.12 && t < T.shout) {
-    const crouch = K.ss(T.cart[0] - 0.12, T.cart[0] + 0.04, t) * (1 - K.ss(T.cart[0] + 0.04, T.cart[0] + 0.08, t));
-    const j = K.inv(T.cart[0] + 0.06, T.cart[0] + 0.5, t), hh = Math.sin(j * Math.PI);
-    st.squash = 0.3 * crouch - 0.3 * hh * (j < 1 ? 1 : 0); st.hop = 110 * hh;
-    st.mouth = "o"; st.brow = 1.2; st.blink = 0; st.handL = { x: -120, y: -170 - 40 * hh, pose: "fist" }; st.handR = { x: 120, y: -200 - 40 * hh, pose: "open" };
-    st.look = [cx > RAC.x ? 1 : -1, 0.8 * (1 - K.clamp(dist / 600, 0, 1))]; st.tassel = 40 * hh;
-    const ld = K.inv(T.cart[0] + 0.5, T.cart[0] + 0.75, t); if (ld > 0 && ld < 1) st.squash += 0.3 * Math.sin(ld * Math.PI);
-    if (t > T.take[0] - 0.1) { st.exclaim = K.inv(T.take[0] - 0.1, T.take[0] + 0.1, t); st.eyeUp = 14; st.look = [1, -0.2]; }
-  }
+  /* --- chorus 1 --- */
+  gInhale(st, t, T.hey);
+  gShout(st, t, T.hey, T.clap);
+  gClap(st, t, T.clap, T.slam, T.tight);
+  gPinch(st, t, T.tight, T.depth);
+  gPointFlow(st, t, T.depth, T.cart[0], b);
+  gHop(st, t, T.cart[0] + 0.06, true);
+  if (t > T.take[0] - 0.1 && t < T.shout) { st.exclaim = K.inv(T.take[0] - 0.1, T.take[0] + 0.1, t); st.eyeUp = 14; st.look = [1, -0.2]; st.blink = 0; }
   const sh = K.ss(T.shout - 0.05, T.shout + 0.08, t) * (1 - K.ss(T.ticks + 0.2, T.ticks + 0.5, t));
-  if (sh > 0) {
-    st.mouth = "shout"; st.brow = 1.2; st.blink = 0; st.handR = { x: 150, y: -270, pose: "point", rot: -70 }; st.handL = { x: -110, y: -120, pose: "fist" };
-    st.squash = -0.12 * sh + 0.1 * pulseB(t); st.tassel = 22 * Math.sin((t - T.shout) * 12); st.look = [0.8, -0.4];
-  }
-  /* "Every tick": nods to each tick, eyes follow the plaques upward */
-  if (t > T.ticks - 0.1 && t < T.queueCam) { const u = K.inv(T.ticks, T.ticks + 0.7, t); st.look = [0.9, K.lerp(0.8, -1, u)]; st.headTilt = 4 * Math.sin(t * 26); st.mouth = "o"; }
-  /* "every queue": counts the queue on the abacus, beams when ours is first */
-  if (t > T.queueCam) {
+  if (sh > 0) { st.mouth = "shout"; st.brow = 1.2; st.blink = 0; st.handR = { x: 150, y: -270, pose: "point", rot: -70 }; st.handL = { x: -110, y: -120, pose: "fist" }; st.squash = -0.12 * sh + 0.1 * b; st.tassel = 22 * Math.sin((t - T.shout) * 12); st.look = [0.8, -0.4]; }
+  gNodTicks(st, t, T.ticks, T.queueCam);
+  if (t > T.queueCam && t < T.tease[0]) {
     const near = T.fills.reduce((m, tf) => Math.max(m, Math.exp(-10 * Math.abs(t - tf))), 0);
     st.handR = { x: -30 + 20 * near, y: -112 - 26 * near, pose: "point" }; st.look = [0.8, 0.6]; st.mouth = "smile";
-    if (t > T.fills[2] + 0.2) { st.mouth = "grin"; st.handR = { x: 120, y: -240, pose: "fist", rot: -90 }; st.brow = 0.8; st.look = [0.7, 0.2]; st.hop = 14 * pulseB(t); }
+    if (t > T.fills[2] + 0.2) { st.mouth = "grin"; st.handR = { x: 120, y: -240, pose: "fist", rot: -90 }; st.brow = 0.8; st.look = [0.7, 0.2]; st.hop = 14 * b; }
   }
+  gDance(st, t, T.tease[0], T.tease[3], 26);
+  /* --- verse --- */
+  /* "Bids on the left": points left at the green hills; "asks up high": up-right at the red ones */
+  gPointAt(st, t, T.hills[0], T.hills[1], -2200, 500, [-1, 0.2]);
+  if (t > T.hills[0] && t < T.hills[1]) st.handL = { x: -150, y: -150, pose: "open" };
+  gPointAt(st, t, T.hills[1], T.sky[0] - 0.3, 1800, -900, [1, -1]);
+  /* "Stacked like a tower reaching to the sky": looks up, flinches on each landing, cheers at the flag */
+  if (t > T.sky[0] - 0.4 && t < T.prio) {
+    st.look = [0.7, -1]; st.mouth = "o"; st.brow = 0.8;
+    const thump = [T.sky[0], T.sky[1]].reduce((m, tl) => Math.max(m, t > tl ? Math.exp(-7 * (t - tl)) : 0), 0);
+    st.squash += 0.25 * thump; st.ear = thump; st.blink = thump > 0.6 ? 1 : 0;
+    if (t > T.sky[2]) { st.mouth = "grin"; st.handR = { x: 130, y: -280, pose: "open" }; st.handL = { x: -130, y: -270, pose: "fist" }; st.hop = 20 * b; }
+  }
+  /* "Limit orders wait in a price-time queue": counts the crates on the beats with the abacus */
+  if (t > T.prio - 0.1 && t < T.cart2[0]) {
+    const ph = ((t - T.prio) % (BEAT / 2)) / (BEAT / 2);
+    st.handR = { x: -40 + 30 * Math.sin(ph * Math.PI), y: -110 - 30 * Math.sin(ph * Math.PI), pose: "point" }; st.look = [0.9, -0.6]; st.mouth = "smile";
+    if (t > T.newbie && t < T.newbie + 0.9) { st.exclaim = K.inv(T.newbie, T.newbie + 0.15, t); st.look = [1, -0.7]; st.mouth = "o"; }
+  }
+  /* "Market orders come and they cross right through!": the sell cart, hop, our fill pays a coin */
+  const cross = (() => { for (let x = 0; x < 200; x++) { const tt = T.cart2[0] + x * 0.01; if (cart2X(tt) < RAC.x + 120) return tt; } return T.cart2[1]; })();
+  if (t > T.cart2[0] && t < cross - 0.2) { st.look = [1, 0.5]; st.mouth = "o"; st.brow = 0.8; }
+  if (t > T.take2[0] - 0.05 && t < T.coin) { st.exclaim = K.inv(T.take2[0] - 0.05, T.take2[0] + 0.1, t); st.look = [1, 0.3]; st.eyeUp = 12; st.blink = 0; }
+  gHop(st, t, cross - 0.1, false);
+  if (t > T.coin && t < T.dusk[1] + 0.2) { const c = K.ss(T.coin - 0.05, T.coin + 0.1, t); st.handR = { x: 110, y: -250 - 10 * b, pose: "fist" }; st.mouth = "grin"; st.brow = 0.9; st.look = [0.7, -0.8]; st.hop = Math.max(st.hop || 0, 16 * b * c); }
+  /* --- chorus 2 (dusk) --- */
+  gInhale(st, t, T.hey2);
+  gShout(st, t, T.hey2, T.hey2 + 3 * BEAT);
+  /* "tight": grabs the lantern rope at the alley mouth and pulls it taut */
+  const rp = K.ss(T.rope - 0.6, T.rope - 0.3, t) * (1 - K.ss(T.flow2 - 0.3, T.flow2, t));
+  if (rp > 0) {
+    const pull = K.ss(T.rope - 0.2, T.rope + 0.05, t);
+    st.handR = { x: K.lerp(190, 150, pull), y: -150 + 6 * pull, pose: "fist" }; st.handL = { x: K.lerp(140, 100, pull), y: -150, pose: "fist" }; st.hold = null;
+    st.lean = -10 * pull; st.mouth = pull > 0.5 ? "grin" : "o"; st.brow = -0.3; st.look = [1, 0];
+  }
+  gPointFlow(st, t, T.flow2, T.tickChart[0], b);
+  gPointAt(st, t, T.tickChart[0], T.fireworks, 380, -380, [1, -0.6]);
+  gDance(st, t, T.fireworks, T.dance[0], 46);
+  /* --- break (night) --- */
+  gDance(st, t, T.dance[0], T.dance[1], 40);
+  if (t > T.ofi[0] - 0.1 && t < T.ofi[1]) { st.handR = { x: 70, y: -236, pose: "pinch", rot: -110 }; st.look = [0.8, -0.6]; st.brow = -0.3; st.mouth = "smirk"; st.headTilt = 3 * Math.sin(t * 2); }
+  gPointAt(st, t, T.ofi[0] + 4 * BEAT, T.ofi[1], -400, -360, [1, -0.6]);
+  if (t > T.ofi[0] + 4 * BEAT && t < T.ofi[1]) st.mouth = "grin";
+  gPointAt(st, t, T.candles[0], T.candles[1], -300 + 80 * Math.floor(K.clamp((t - T.candles[0]) / BEAT, 0, 7)), -400, [1, -0.5]);
+  if (t > T.code[0] - 0.1 && t < T.code[1] - 0.3) { st.look = [1, -0.5]; st.handR = { x: 66, y: -232, pose: "pinch", rot: -110 }; st.mouth = "o"; if (t > T.code[0] + 6 * BEAT) { st.handR = { x: 130, y: -250, pose: "fist", rot: -90 }; st.mouth = "grin"; } }
+  /* --- final chorus (dawn) --- */
+  gInhale(st, t, T.hey3);
+  gShout(st, t, T.hey3, T.hey3 + 2 * BEAT - 0.05);
+  gClap(st, t, T.hey3 + 2 * BEAT - 0.2, T.hey3 + 2 * BEAT + 0.15, T.hey3 + 4 * BEAT);
+  gPinch(st, t, T.hey3 + 4 * BEAT, T.flow3);
+  gPointFlow(st, t, T.flow3, T.ticks3 - 0.1, b);
+  gNodTicks(st, t, T.ticks3, T.drop[1]);
   return { mode: "stand", x: RAC.x, y: RAC.y, s: RAC.s, lean: st.lean || 0, st };
+}
+
+/* world position of Tikki's right paw (approximate: target, hop and scale) */
+function tikkiPaw(t) {
+  const r = tikki(t), h = r.st.handR;
+  return [RAC.x + h.x * RAC.s, RAC.y + (h.y - (r.st.hop || 0)) * RAC.s];
 }
 
 function drawTikki(t) {
@@ -1740,8 +1995,14 @@ const ICONS = [
 ];
 const MEDAL_COLORS = [P.teal, P.saffron, P.terra, P.indigo, P.tealDark];
 
-/* banner unroll: down over everything, then up into the banner */
+/* banner unroll. Chorus 1 (tease): it drops over the world to the banner height,
+   stays for the sung title, then rolls back up. Ending: down over everything,
+   then up into the title card. */
 function bannerDrop(t) {
+  if (t < T.drop[0] - 0.5) {
+    const up = K.E.out3(K.inv(T.tease[0], T.tease[1], t)) * (1 - K.E.in3(K.inv(T.tease[2], T.tease[3], t)));
+    return up * (1 - BAN.stop);
+  }
   if (t < T.drop[0]) return 0;
   if (t < T.rise[0]) return K.E.in3(K.inv(T.drop[0], T.drop[1], t)) * 0.999 + 0.001;
   return K.lerp(1, 1 - BAN.stop, K.E.out3(K.inv(T.rise[0], T.rise[1], t)));
@@ -1788,21 +2049,23 @@ function drawTitleCanvas(t) {
   K.raccoon(ctx, 470, 1050, 1.5, tikkiTitle(t));
 }
 
+/* the title is stamped twice: on chorus 1 (tease) and on the final chorus */
 function layoutTitleDom(t) {
-  const d = bannerDrop(t), vis = t >= T.title - 0.05;
-  titleEl.style.opacity = vis ? "1" : "0";
-  if (!vis) return;
+  const d = bannerDrop(t), fin = t >= T.title - 0.05, tease = t >= T.tease[1] - 0.05 && t < T.tease[3];
+  const t0 = fin ? T.title : T.tease[1], t1 = fin ? T.line2 : T.tease[1] + 2 * BEAT;
+  titleEl.style.opacity = fin ? "1" : tease ? (1 - K.inv(T.tease[2], T.tease[2] + 0.25, t)).toFixed(2) : "0";
+  if (!fin && !tease) return;
   const bh = BAN.h * d, n = TITLE_LN.length, sizes = TITLE_LN.map((x) => +x.dataset.size), gap = 14;
   const total = sizes.reduce((a, b) => a + b, 0) + gap * (n - 1);
   let y = Math.max(90, (bh + 30) / 2 - total / 2); /* below the triangle band, above the roll */
   TITLE_LN.forEach((x, i) => { x.style.top = y.toFixed(1) + "px"; y += sizes[i] + gap; });
   /* block-stamp: each letter drops from 1.7x, slams down with a squash, staggered */
   TITLE_CH.forEach((c) => {
-    const base = c.line === 0 ? T.title : T.line2, t0 = base + c.li * 0.03;
-    const a = K.inv(t0, t0 + 0.16, t), land = K.inv(t0 + 0.16, t0 + 0.4, t);
+    const base = c.line === 0 ? t0 : t1, tc = base + c.li * 0.03;
+    const a = K.inv(tc, tc + 0.16, t), land = K.inv(tc + 0.16, tc + 0.4, t);
     const sc = a < 1 ? K.lerp(1.7, 1, K.E.in3(a)) : 1 + 0.1 * Math.sin(land * Math.PI) * (1 - land);
     const sq = a >= 1 ? Math.sin(land * Math.PI) * 0.14 * (1 - land) : 0;
-    const hop = c.line === n - 1 ? -5 * K.pulse(t, 4, 6) * K.inv(T.line2 + 1, T.line2 + 1.2, t) : 0;
+    const hop = c.line === n - 1 ? -5 * K.pulse(t, 4, 6) * K.inv(t1 + 1, t1 + 1.2, t) : 0;
     c.el.style.opacity = a > 0 ? Math.min(1, a * 2.5).toFixed(2) : "0";
     c.el.style.transform = `translateY(${hop.toFixed(1)}px) scale(${(sc * (1 + sq)).toFixed(3)}, ${(sc * (1 - sq)).toFixed(3)}) rotate(${(K.hs(c.idx, 3) * 3 * (1 - land)).toFixed(2)}deg)`;
   });
@@ -1811,16 +2074,16 @@ function layoutTitleDom(t) {
 /* ============================================================
    INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
    drives a proxy whose setter calls render(t).
-   0.00 - 1.63  the kilim curtain rolls up on the bazaar tower (wide)
-   1.63 - 3.40  awnings drop open on eighth notes, top to bottom
-   3.23 - 4.83  Tikki swings in on a rope and lands on the balcony (camera follows in)
-   4.83 - 6.43  fez tip, abacus flicks, a big breath
-   6.43 - 9.62  "Hey! The spread is tight": shout, clap, the book slams shut, 0.05 -> 0.01
-   9.62 - 11.22 "Depth and flow from left to right": wide, crates flow in, flow arrow
-   11.22- 12.82 a market-order cart races through the alley, takes 2 crates; imbalance shout
-   12.82- 15.19 "Every tick and every queue": plaques flash, close-up, our crate #4 -> #1
-   15.19- 16.00 the kilim curtain drops and rolls up into the title banner
-   16.00- 20.10 "Order Book and Market Microstructure!": stamped title, medallions, jump, bow
+   intro      0 - 6.5   curtain rolls up, shutters open, Tikki swings in, lands, fez, abacus
+   chorus 1   6.5 - 19  "Hey!" shout, clap slams the book (0.05 -> 0.01), depth flow, buy cart
+              + imbalance shout, ticks, our queue #4 -> #1, title tease banner
+   verse      19 - 32   depth hills, two levels drop from the sky + flag, price-time
+              numbers, a sell cart fills our crate and pays Tikki a coin
+   chorus 2   32 - 45   dusk: shout, lantern rope pulled tight, second flow wave,
+              tick chart scroll, plaque ripple + coin fountain
+   break      45 - 58   night: dance, OFI tile board, candle scroll, CCXT code scroll
+   final      58 - 71.3 dawn: shout + clap + pinch, flow, ticks, curtain -> title card,
+              medallions, jump, fez tip
    ============================================================ */
 const CAM = K.mkTrack([
   [0.0, { x: 0, y: -40, z: 0.5 }],
@@ -1835,15 +2098,53 @@ const CAM = K.mkTrack([
   [T.ticks, { x: -240, y: -30, z: 0.84 }],
   [T.queueCam, { x: -230, y: -10, z: 0.88 }],
   [T.queueCam + 0.4, { x: -170, y: 150, z: 1.22 }],
-  [T.drop[1], { x: -150, y: 150, z: 1.26 }],
+  [T.tease[0], { x: -170, y: 150, z: 1.24 }],
+  [T.tease[1], { x: -330, y: 40, z: 0.8 }],
+  [T.tease[3], { x: -320, y: 20, z: 0.78 }],
+  /* verse */
+  [T.hills[0] + 0.8, { x: 0, y: -200, z: 0.36 }],
+  [T.hills[1] + 0.9, { x: 0, y: -260, z: 0.37 }],
+  [T.sky[0] - 0.4, { x: 0, y: -560, z: 0.46 }],
+  [T.sky[2] + 0.3, { x: -60, y: -700, z: 0.5 }],
+  [T.prio - 0.25, { x: -80, y: -620, z: 0.5 }],
+  [T.prio + 0.35, { x: -300, y: -180, z: 1.1 }],
+  [T.cart2[0] - 0.1, { x: -280, y: -170, z: 1.1 }],
+  [T.cart2[0] + 0.5, { x: -300, y: -20, z: 0.86 }],
+  [T.coin, { x: -330, y: -40, z: 0.88 }],
+  [T.coin + 1.2, { x: -460, y: -90, z: 1.02 }],
+  /* chorus 2 */
+  [T.hey2, { x: -380, y: -80, z: 0.98 }],
+  [T.rope, { x: -330, y: -60, z: 1.0 }],
+  [T.flow2, { x: -320, y: -50, z: 0.98 }],
+  [T.flow2 + 0.8, { x: -100, y: 40, z: 0.55 }],
+  [T.tickChart[0] - 0.1, { x: -60, y: 20, z: 0.57 }],
+  [T.tickChart[0] + 0.5, { x: 150, y: -200, z: 0.72 }],
+  [T.fireworks - 0.1, { x: 150, y: -200, z: 0.74 }],
+  [T.fireworks + 0.6, { x: 0, y: -260, z: 0.45 }],
+  [T.dance[0] - 0.1, { x: 0, y: -260, z: 0.46 }],
+  /* break */
+  [T.dance[0] + 0.5, { x: -700, y: -100, z: 1.3 }],
+  [T.ofi[0] - 0.1, { x: -690, y: -100, z: 1.32 }],
+  [T.ofi[0] + 0.5, { x: -430, y: -170, z: 0.95 }],
+  [T.candles[0] + 0.4, { x: -420, y: -150, z: 0.95 }],
+  [T.code[0] + 0.4, { x: -360, y: -170, z: 0.98 }],
+  [T.hey3 - 0.4, { x: -390, y: -100, z: 0.95 }],
+  /* final chorus */
+  [T.hey3, { x: -380, y: -80, z: 0.98 }],
+  [T.flow3, { x: -330, y: -50, z: 0.98 }],
+  [T.flow3 + 0.8, { x: -150, y: 90, z: 0.6 }],
+  [T.ticks3, { x: -200, y: -120, z: 0.68 }],
+  [T.drop[1], { x: -220, y: -140, z: 0.72 }],
 ]);
-/* accents: punch-in on "Hey!" and a shake on the slam */
+/* accents: punch-in on each "Hey!", a shake on the slam and on each level landing from the sky */
 function camAt(t) {
   const c = CAM(t);
-  const hey = t > T.hey ? Math.exp(-5 * (t - T.hey)) * K.inv(T.hey, T.hey + 0.06, t) : 0;
-  c.z *= 1 + 0.09 * hey;
-  const sd = t - T.slam;
-  if (sd > 0 && sd < 0.45) { const a = 14 * (1 - sd / 0.45); c.x += a * Math.sin(sd * 70); c.y += a * Math.cos(sd * 53); }
+  const punch = [T.hey, T.hey2, T.hey3].reduce((m, th) => Math.max(m, t > th ? Math.exp(-5 * (t - th)) * K.inv(th, th + 0.06, t) : 0), 0);
+  c.z *= 1 + 0.09 * punch;
+  [[T.slam, 14], [T.sky[0], 10], [T.sky[1], 10]].forEach(([t0, amp]) => {
+    const sd = t - t0;
+    if (sd > 0 && sd < 0.45) { const a = amp * (1 - sd / 0.45); c.x += a * Math.sin(sd * 70); c.y += a * Math.cos(sd * 53); }
+  });
   c.rot = 0;
   return c;
 }
@@ -1855,16 +2156,21 @@ function drawWorld(ts, cam, t, titleSet) {
   K.begin(ctx, t, cam);
   drawBackground(ts);
   K.applyCam(ctx, 1);
-  drawGround();
+  drawGround(ts);
+  drawHills(ts);
   drawTower(ts);
+  drawFallingLevels(ts);
   drawBalcony();
   if (titleSet) return;
   drawFlowArrow(ts);
+  drawFireworks(ts);
+  drawBoards(ts);
   drawRope(ts);
-  drawCart(ts);
+  drawCarts(ts);
   drawTikki(ts);
   drawFlying(ts);
-  drawQueueTag(ts);
+  drawOurCoin(ts);
+  drawQueueTags(ts);
   drawShouts(ts);
 }
 
@@ -1875,7 +2181,7 @@ function render(t) {
     if (!titleSet) drawWorld(t, camAt(t), t, false);
     else {
       /* title set: the bazaar seen wide behind the banner, Tikki in front */
-      drawWorld(T.drop[0], TITLE_CAM, t, true);
+      drawWorld(T.drop[1], TITLE_CAM, t, true);
       /* faded-print wash: the bazaar steps back so the title, medallions and Tikki read */
       K.screen(ctx); ctx.fillStyle = "rgba(243, 227, 195, 0.5)"; ctx.fillRect(0, 0, 1920, 1080);
       drawTitleCanvas(t);
@@ -1885,8 +2191,8 @@ function render(t) {
       K.screen(ctx);
       K.rug(ctx, -30, -40, 1980, 1160, { roll: K.E.inOut(K.inv(T.curtain[0], T.curtain[1], t)), seed: 91, base: P.terra, band: P.saffron, motif: P.teal });
     }
-    /* closing curtain -> title banner */
-    if (t >= T.drop[0]) {
+    /* title banner: the tease in chorus 1, then the closing curtain -> title card */
+    if (bannerDrop(t) > 0) {
       K.screen(ctx);
       K.kilimBanner(ctx, BAN.cx, BAN.top, BAN.w, BAN.h, bannerDrop(t), { seed: 71, field: 400 });
     }

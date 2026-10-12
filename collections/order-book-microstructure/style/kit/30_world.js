@@ -248,9 +248,10 @@ var BK = window.BK || (window.BK = {});
     ctx.restore();
   };
 
-  /* ---------------- MARKET ORDER: a hand cart that crosses the spread ---------------- */
+  /* ---------------- MARKET ORDER: a hand cart that crosses the spread ----------------
+     side "buy" (green up arrow, takes asks) | "sell" (red down arrow, takes bids); dir -1 faces left */
   K.cart = function (ctx, x, y, s, opt) {
-    const o = Object.assign({ color: P.saffron, dir: 1, seed: 81, label: "", roll: 0 }, opt || {});
+    const o = Object.assign({ color: P.saffron, dir: 1, seed: 81, label: "", roll: 0, side: "buy" }, opt || {});
     ctx.save(); ctx.translate(x, y); ctx.scale(s * o.dir, s);
     const bump = Math.abs(Math.sin(o.roll * 2)) * 4;
     ctx.translate(0, -bump);
@@ -260,7 +261,8 @@ var BK = window.BK || (window.BK = {});
     K.line(ctx, [[70, -110], [70, -230]], { stroke: P.ink, w: 5, boil: 0.8, seed: o.seed + 2 });
     const fw = Math.sin(K.now * 8) * 6;
     K.shape(ctx, [[70, -230], [160, -222 + fw], [150, -190 + fw], [70, -182]], { fill: P.paper, w: 4, boil: 0.9, seed: o.seed + 3, k: 0.3 });
-    K.shape(ctx, [[96, -192], [122, -220 + fw * 0.6], [140, -194 + fw * 0.6], [128, -194], [128, -186], [108, -186], [108, -192]], { fill: P.ask, w: 3, boil: 0.6, seed: o.seed + 4, k: 0, nicks: 0 });
+    const up = o.side !== "sell", ay = (v) => (up ? v : -412 - v + fw * 1.2); /* sell = arrow mirrored to point down */
+    K.shape(ctx, [[96, ay(-192)], [122, ay(-220 + fw * 0.6)], [140, ay(-194 + fw * 0.6)], [128, ay(-194)], [128, ay(-186)], [108, ay(-186)], [108, ay(-192)]].map((p) => [p[0], p[1]]), { fill: up ? P.up : P.down, w: 3, boil: 0.6, seed: o.seed + 4, k: 0, nicks: 0 });
     /* wheels */
     [-60, 60].forEach((wx, i) => {
       K.shape(ctx, K.ellipsePts(wx, -24, 30, 30, 14), { fill: P.wood, w: 5, boil: 0.9, seed: o.seed + 5 + i, k: 1 });

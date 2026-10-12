@@ -73,21 +73,22 @@ var BK = window.BK || (window.BK = {});
   };
 
   /* ---------- depth chart as two terraced hills ----------
-     bids / asks: cumulative sizes per level (best first). Bids grow to the left,
+     bids / asks: cumulative sizes per level (best first); mid = half-width of the valley; growBid / growAsk raise each side separately. Bids grow to the left,
      asks to the right, the spread is the valley between them. */
   K.depthHills = function (ctx, x, y, w, h, bids, asks, opt) {
-    const o = Object.assign({ a: 1, grow: 1, seed: 13, max: null }, opt || {});
+    const o = Object.assign({ a: 1, grow: 1, growBid: null, growAsk: null, seed: 13, max: null, mid: 30 }, opt || {});
     const a = popS(o.a); if (a <= 0) return;
-    const mx = o.max || Math.max(bids[bids.length - 1] || 1, asks[asks.length - 1] || 1), g = clamp(o.grow, 0, 1);
+    const mx = o.max || Math.max(bids[bids.length - 1] || 1, asks[asks.length - 1] || 1);
     ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
-    const half = w / 2 - 30, side = (arr, sd, fill, dark, seed) => {
-      const n = arr.length, step = half / n, pts = [[sd * 30, 0]];
-      arr.forEach((v, i) => { const hh = (v / mx) * h * g; pts.push([sd * (30 + step * i), -hh], [sd * (30 + step * (i + 1)), -hh]); });
-      pts.push([sd * (30 + half), 0]);
+    const m = o.mid, half = w / 2 - m, side = (arr, sd, fill, dark, seed, g) => {
+      g = clamp(g, 0, 1); if (g <= 0) return;
+      const n = arr.length, step = half / n, pts = [[sd * m, 0]];
+      arr.forEach((v, i) => { const hh = (v / mx) * h * g; pts.push([sd * (m + step * i), -hh], [sd * (m + step * (i + 1)), -hh]); });
+      pts.push([sd * (m + half), 0]);
       K.shape(ctx, pts, { fill, w: 5, boil: 1.1, seed, k: 0, shade: { color: dark, dx: sd * -12, dy: 0 }, gouge: { ang: sd * 0.9, alpha: 0.3, color: dark, gap: 16 } });
     };
-    side(bids, -1, P.bid, P.bidDark, o.seed);
-    side(asks, 1, P.ask, P.askDark, o.seed + 40);
+    side(bids, -1, P.bid, P.bidDark, o.seed, o.growBid == null ? o.grow : o.growBid);
+    side(asks, 1, P.ask, P.askDark, o.seed + 40, o.growAsk == null ? o.grow : o.growAsk);
     K.line(ctx, [[-w / 2, 0], [w / 2, 0]], { stroke: P.ink, w: 5, boil: 1, seed: o.seed + 80 });
     ctx.restore();
   };

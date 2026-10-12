@@ -1,0 +1,64 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "CCXT: How WebSocket Orderbook Methods Really Work\nH2 — Introduction: Why This Matters\n\nSupport Physics\n\nVerification\nWhich WebSocket methods for How do methods differ in traffic\n\nWhy do automated tests show\n\norderbooks are actually volume and data structure? “4” when methods fail in\n\nsupported across exchanges? practice?"
+    },
+    {
+      "page": 2,
+      "text": "H2 — Overview of Key Methods\nH3 — 1. watchOrderBook’ - Classic Approach\n\nSubscribe to orderbook updates for one pair.\nConnection type: | Persistent WebSocket connection.\n\nFull orderbook (usually 100-1000 levels per\nside).\n\nTraffic: Medium to high (depends on update\nfrequency and depth).\n\nPersistent\n\nDeep Orderbook\n(100-1000 levels)\n\nconst exchange = new ccxt.pro.binance();\nconst orderbook = await exchange.watchOrderBook(‘BTC/USDT');\nconsole. Log(orderbook) ;\n\nf Gemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "H3 — 2. watchOrderBookForSymbols: - Bulk Subscription\n\nSubscribe to multiple pairs at once.\n\nConnection type: | Persistent WebSocket (often one connection\nmultiplexed).\n\nData; Full orderbook for each pair.\n\nTraffic: Very high (100-1000 levels x 2 sides x\nnumber of pairs).\n\n'BTC/USDT': {\n'pids': [[50000.1, 1.5], [50000.0, 2.1]],\n‘'asks': [[50001.0, 1.2], [50001.1, 0.8]],\n'timestamp': 1717398000000,\n‘datetime’: '2025-06-03T12:00:00Z'\n}\n}\n\n& Gemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "H3 — 3. watchBidsAsks\n\n-of- :\nv7 Tr of-book slice\n\n- Optimized Monitoring\n\nPurpose: Subscribe only to best prices (top of book)\nfor multiple pairs.\n\nConnection type: | Persistent WebSocket (often one connection\nfor all pairs).\n\nOnly one price per side (bid/ask). Usually via\nticker endpoint.\n\nTraffic: Minimal, highly economical for bulk\nmonitoring.\n\n‘BTC/USDT': {\n‘bids’: [[50000. i, a5\n'asks': [[50001.0, Peed.\n‘timestamp': 1717398000000\n\n\"ETH/USDT' : {\n‘bids ' : [[3000.5, 10.2]],\n'asks': [[300 01.0, 8.3]],\n\n} \"timestamp': 1717398000000\n\n& Gemini Notebook"
+    },
+    {
+      "page": 5,
+      "text": "H3 — 4. ‘fetchOrderBookWs  - One-time Requests\n\nie ec\n<s Purpose: One-time orderbook request via\nve WebSocket (REST-like).\nConnection type: | Temporary WebSocket (connection closes\nafter receiving data).\nTemporary\n\nDates | Orderbook snapshot.\n\ni eae ak a\n\nTeardown\n\n\"\\_ Orderbook A Editorial Flag: Verify runtime behavior. The\nSnapshot assertion that fetchOrderBookWs seamlessly\n: uses and tears down a temporary connection\nrequires live version-pinned testing.\n\nJe eee ee\n\nA Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "‘X) ¢¢¢) aauanaaanauanananann\nC0900) pnaaaneaaarenanenannl\n\n‘\n\nASIN) TS\n\n@ Gemini Notebook\n\nH2 — Important Differences and Method Comparison\n\nic Comparison\n\nTraff\nffic Math (Article Assertion for 100 pairs):\n\nH3 —\n\nistent vs Temporary\n\nH3 — Pers\nConnections\n\nThe Tra\n\nA\n\nDKK KK\nRS\nBRI\nMS\n\nSy\n\n(LILLLLILLLLLLLLLLL LLL\n\n8\n\n1 bid/ask per pair).\n\n(\n\nMinimal Traffic.\n\n“watchBidsAsks':\n~100 records\n\n®\n=\n$43)\noO\neb)\n—_\na\n2\n+~\n©\n@®\n<=\nO\n©\n~\na\n4)\n—_\nRL\nWw\n_—\n®\na\neb)\n~\n14°)\n®\n—_\nO\n\n7p)\n®\n~\n9°)\nOo\no.\n—\n©\n‘=\n=\nO\n®\nt\no\n&\noO\n<0)\n,\n~\nw\n\nWatch Methods\nFetch Methods\n\n(100-1000 levels x 2 sides x 100 pairs).\n\n*watchOrderBookForSymbols :\nHeavy Traffic.\n\n~100,000-1,000,000 records\n\nUse WebSocket only for one-time request,\n\nsimilar to REST API.\n\nResult: The article claims ‘watchBidsAsks is 100-\n\n1000 times more economical."
+    },
+    {
+      "page": 7,
+      "text": "H2 — Practical Case: Gate.io and Reality vs Documentation\n\nH3 — Test: watchOrderBookForSymbols on Gate.io\n\nconst symbols = [ NotSupported: gateio\n‘1CAT/USDT :USDT' , watchOrderBookForSymbols() is not\n‘ TINCH/USDT :USDT' , supported yet\n'A8/USDT:USDT' ,\n‘ AAVE/USDT : USDT'\nTF\nconst orderbooks = await\nexchange .watchOrderBookForSymbols(symbols) ;\n\nThe Lesson: Documentation declaration # functionality.\n\n_ oe f~ +, - r —*. a aé La cAatand ~~ TT +1, nam 4 laAtp j hiactr le aw l,\nmelitels inis Gate.io NotS a ted failur re Must De Treated SUICUY aS a Gated NIStOFiCa exampie\nOT Gocumentation gaps, nota declaration of Gate 2 10S current capabilities."
+    },
+    {
+      "page": 8,
+      "text": "H2 — Automated Audit: H3 — Audit Results\nWhat's Actually Supported (Fragment of Top Exchanges)\n\n// The Audit Script Logic: Spot (0B/BA/OBS) th\nconst hasWatchOrderBook = typeof Te tthhs /\\\nexchange.watchOrderBook === ‘function’; bybit sg\n\nconst hasWatchBidsAsks = typeof ar aaa\nexchange.watchBidsAsks === ‘function’ ; nN ES ce) \\\\. LZ)\n\nconst hasWatchOrderBookForSymbols = typeof meh J a VE Qe yw\n\nexchange.watchOrderBookForSymbols === fkucomh = ANY Lo VivV/iVv\nfunction’ obi poste Tv | vIviv\nV/iV IV VIiV IV\n\nwN Crucial Editorial Flag: The 75+ exchange audit establishes JavaScript method presence only. It does |\n\nNOT verify successful subscription, market type routing, or survival under live load testing."
+    },
+    {
+      "page": 9,
+      "text": "H2 — Practical Recommendations for Method Selection\ncS\n\nH3 — For Different Use Case\n\nUse ~fetchOrderBookWs-°\nor REST\n\nInitialization\n/ Snapshots\n\nMulti-Pair\nFull Depth\n\nArbitrage /\n100+ Pairs\n(Minimal traffic\nfor best prices)\n\nUser Intent &\nRequirements\n\nUse ‘“watchBidsAsks’\n\nMarket Making /\nSingle Pair\n(Full market depth)\n\nUse ‘“watchOrderBook~™\n\nTry ‘watchOrderBookForSymbols—\n\nFallback: multiple\n“watchOrderBook streams\n(monitor Limits)\n\nA Gemini Notebook"
+    },
+    {
+      "page": 10,
+      "text": "H3 — Performance Optimization\n\nBad: Chaotic Individual Connections || Good: Multiplexed with Fallback Loop\n\no\n\nMultiplexed Connection\n\nExchange Exchange\nServer Server\n\n742\n\nSeeena = bY\nFallback Promise.all Loop\n\nDepth Management Strategy: Truncate data volume aggressively by limiting orderbook depth on the request.\nconst orderbook = await exchange.watchOrderBook('BTC/USDT', 20); // only 20 levels\n\nA Gemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "H2 — Error Handling and Connection Recovery\n\nPremise: WebSockets drop inherently;\n\nresilient connection recovery with exponential\nbackoff is mandatory.\n\n1000 * Math.pow(2, retries)\n\na,\n\n1000 * Math.pow(2, retries)\n\nasync function robustWatchOrderBook(exchange, symbol, maxRetries = 3) {\nlet retries = 0;\nwhile (retries < maxRetries) {\ntry {\nconst orderbook = await exchange.watchOrderBook(symbol) ;\nretries = 6; return orderbook;\n\n} catch (error) {\nretries++;\nif (retries >= maxRetries) throw new Error(‘Failed');\nawait new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retries)));\n\nGemini Notebook"
+    },
+    {
+      "page": 12,
+      "text": "H2 — Data Quality Monitoring\n\n1. Structure 2. Freshness 3. Spread Logic\n\nReject if missing core components: Alert on stale data. Code threshold: Alert on impossible market states\n“torderbook.bids || !orderbook.asks’ ‘dataAge > 10000 (crossed spread):\n(10 seconds older than timestamp) “bestBid >= bestAsk”\n\nfunction validateOrderBook(orderbook) {\nif (!orderbook.bids || !orderbook.asks) throw new Error('Invalid structure’);\n\nconst dataAge = Date.now() - orderbook.timestamp;\nif (dataAge > 10000) console.warn('Stale data:', dataAge, 'ms');\n\nconst bestBid = orderbook.bids[@] ? orderbook.bids[Q] [0] : Q;\n\nconst bestAsk = orderbook.asks[@] ? orderbook.asks[@] [0] : 0;\n\nif (bestBid >= bestAsk && bestBid > 0 && bestAsk > 0) {\nconsole.warn('Crossed spread:'', { bestBid, bestAsk });\n\nA Gemini Notebook"
+    },
+    {
+      "page": 13,
+      "text": "H2 — Conclusions and Best Practices\n\nFa\n\nH3 — 1. Don't Rely Only on Documentation\nTest real data; method presence injan API wrapper # functionality.\n\nH3 — 2. Choose Method for the Task\nMatch task to method (‘watchBidsAsks° for bulk, watchOrderBook’ for detail).\n\nH3 — 3. Optimize Traffic\n\n1000x efficiency gains are geometrically possible by selecting the correct endpoint.\n\nH3 — 4. Prepare for Failures\nExponential backoff and structure/freshness quality checks are non-negotiable.\n\nH3 — 5. Test at Production Loads\nAPI behavior differs dramatically under live load versus singular test requests."
+    },
+    {
+      "page": 14,
+      "text": "H2 — Future of WebSocket APIs for Orderbooks\nH2 — Conclusion\n\nH3 — Industry Vectors\n\nMoving toward:\nMethod unification between venues\nAccurate living documentation\nEfficient data compression protocols\nImproved debugging tools\n\nH3 — Final Synthesis\n\nCCXT significantly simplifies integration by unifying\ninterfaces, but the underlying reality remains vastly\nmore complex than the documentation suggests.\nReliable data infrastructure requires localized\ntesting, rigorous monitoring, and right-sizing the\nsubscription method to the exact venue limit."
+    },
+    {
+      "page": 15,
+      "text": "H2 — Useful Links\n\n- CCXT Documentation\n(github.com/cext/cext)\n\n- WebSocket API Best Practices\n(docs.ccxt.com/#/ccxt.pro.manual)\n\n- Demo Script Sources\n(github.com/suenot/ccxt-orderbooks-\nexample/)\n\nH2 — Citation\n\n@software{soloviov2025ccxtprowebsocketorderbook,\n\nauthor = {Soloviov, Eugen},\n\ntitle = {CCXT: How WebSocket Orderbook Methods\nReally Work},\n\nyear = {2025},\n\nurl = {https://marketmaker .cc/en/blog/post/ccxt-\npro-websocket-orderbook-methods},\n\nversion = {0.1.0},\n\ndescription = {Detailed breakdown of CCXT\nWebSocket methods for orderbooks: watchOrderBook,\nwatchBidsAsks, watchOrderBookForSymbols. Real\ntests on 75+ exchanges. }\n\nHistorical, numerical, research, and mutable assertions (including the 75+ exchange count and\nspecific traffic ratios) are dated article claims pending primary-source review. Formula and\n\nsoftware risk reviews are pending. Target-channel duplicates have not been checked."
+    }
+  ]
+}

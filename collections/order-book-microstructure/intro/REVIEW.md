@@ -1,9 +1,10 @@
 # Intro review log
 
-The intro is 20.1 s, 1920x1080, 30 fps, with the song muxed in (`song_20s.m4a`, 152 BPM, -14.0 LUFS, true peak -1.6 dBTP). There is also a silent copy of each render.
+The intro runs the full song: 71.3 s, 1920x1080, 30 fps, with `song_full.m4a` muxed in (152 BPM, -14.1 LUFS, true peak -1.5 dBTP). There is also a silent copy of each render.
+Rounds 0-3 built the first 20 s cut; round 4 onward extends it to the whole song (user decision 2026-10-12, see INTRO_BRIEF.md).
 Each round comes from snapshots I looked at (`tools/snap.sh`, 9 to 20 frames, `tools/snap_lang.sh` for the other languages).
 
-## Song cut
+## Song (20 s cut, superseded by the full song below)
 - `song_raw.mp4` is 74 s. Parakeet word timings put the chorus at raw 7.20 ("Hey!") to about 19.5 ("...microstructure!"), and the verse starts at 19.96 ("Bids on the left").
 - librosa tracks 152 BPM. Its beats sit on the off-beat brass (sub-bass onsets are stronger half a beat later), but the sung accents "Hey" 7.20, "Order" 16.72 and "Bids" 19.96 all fall on tracked beats with index 0 mod 4, so those are the downbeats.
 - Cut: raw 0.74 - 19.95 (4 instrumental bars + the 8-bar chorus, one continuous take), then raw bar 5.57 - 7.17 as an instrumental tail with a 30 ms crossfade and a 0.8 s fade out, loudnorm (target -15 gives a measured -14.0 LUFS).
@@ -32,7 +33,32 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, 9 to 20 frames, `t
 - 15.5 s: while the curtain was down the frame was empty paper. The kilim pattern was pinned to the top edge (the cloth winds into the roll), and `field: 400` keeps a plain title area with diamond motifs below it, so the full curtain is patterned and the rolled-up banner is plain.
 - ru: "Стакан и" crowded the top triangle band. Title size cap 116 -> 106 and the block now centres between the band and the roll. ru, zh-CN and zh-TW all fit with margin.
 
-## Story (each sung line has its own picture)
+## Full song (round 4)
+- `song_full.m4a` = raw 0.70 - 72.0 (0.71 s of leading silence trimmed, the song ends at 71.42), 0.7 s fade out, loudnorm. Film time = raw - 0.70.
+- Sections from parakeet (0 - 44 s) and whisper small.en (43 - 73 s; whisper runs about 0.45 s late, corrected): intro 4 bars, chorus 1 (6.47), verse (19.25), chorus 2 (32.04), an 8-bar instrumental break (44.83), final chorus (57.63, "Order Book" at 67.22).
+- 44 measured downbeats (`K.G.BARS`), bar 1.58 - 1.63 s, no drift over the song.
+
+## Round 4 (full song)
+- The 20 s title moved to the ending. On chorus 1 the banner now only teases: it drops to banner height over the world, the title is stamped on "Order Book", and it rolls back up on the verse downbeat.
+- New pictures for every line: depth hills (bids left, asks up high), two ask levels drop from the sky with a flag, price-time arrival numbers plus a newcomer, a sell cart that fills our crate and pays Tikki a coin; chorus 2 at dusk (lantern rope pulled tight, second flow wave, tick chart scroll, plaque ripple + coin fountain); the break at night (dance, OFI tile board, candle scroll, CCXT code scroll); the final chorus at dawn.
+- Tikki's acting was split into reusable gestures (inhale, shout, clap, pinch, point, hop over a cart, dance, point at a world point) so each chorus repeats the language without repeating the shot.
+
+## Round 5
+- Dusk was a flat brown wash over the sky. It is now a night palette for sky, city and ground (mixed by `duskAt`), with stars and a cream moon rosette; the lantern-lit tower keeps its day colours.
+- Price-time number tags overlapped at 28 px; now 22 px.
+- The code scroll text was 24 px on screen; now 30 world px on a 1000 px scroll with the camera at 0.98.
+- The OFI board, tick chart and code finished writing after their windows closed. Writing now ends a beat before each board leaves.
+- 1 fps contact sheet (71 frames) checked: no empty frames, a new picture every 2 - 4 s.
+
+## Story (full song)
+- 0 - 6.5 intro: curtain rolls up, shutters open on eighth notes, Tikki swings in on a rope (3.3), lands on the balcony on the downbeat (4.9), fez tip, abacus, a big breath.
+- 6.5 - 19.2 chorus 1: "Hey!" shout, clap slams the book (0.05 -> 0.01), crates flow in, a buy cart takes 2 crates, "+0.43" imbalance shout, plaques tick, our crate #4 -> #1, title tease banner.
+- 19.2 - 32 verse: depth hills, levels drop from the sky, price-time queue 1..7, a sell cart fills our crate, coin to Tikki.
+- 32 - 44.8 chorus 2 (dusk): shout, rope pulled tight, second flow wave and taller hills, tick chart, coin fountain.
+- 44.8 - 57.6 break (night): dance, OFI = Δbid − Δask with (5 − 2) / (5 + 2) = +0.43, candles, CCXT `watch_order_book` code.
+- 57.6 - 71.3 final chorus (dawn): shout, clap, pinch, flow, ticks; 66.4 curtain drops, 67.2 title stamped, 68.8 medallions, 69.6 jump, 70.4 fez tip.
+
+## Story (first 20 s cut, kept for reference)
 - 0 - 1.6 kilim curtain rolls up on the bazaar tower; 1.6 - 3.4 shutters roll up and awnings drop on eighth notes, top to bottom.
 - 3.2 - 4.8 Tikki swings in on a rope and lands on the balcony at the alley on the downbeat; fez tip, abacus flicks, a big breath.
 - 6.43 "Hey!": shout with a "!" burst and a punch-in. 7.22 clap, 7.61 "spread": the book slams shut (shake, dust), the ask plaques flip from 101.30.. to 101.26.., the spread tag goes 0.05 -> 0.01 on "tight" with a pinch gesture.
@@ -43,7 +69,7 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, 9 to 20 frames, `t
 
 ## Checks
 - `npx hyperframes lint`: 0 errors, 1 warning (the file is large because it is built from the kit by design).
-- `npx hyperframes check`: passed; contrast 30/30. The remaining `content_overlap` notes are letters mid-stamp (they grow 1.7x while landing); `#title` is marked `data-layout-allow-overlap`.
+- `npx hyperframes check` (full song): passed. The remaining `content_overlap` notes are letters mid-stamp (they grow 1.7x while landing); `#title` is marked `data-layout-allow-overlap`.
 
 ## Known weaknesses
 - The cart is still small in the medium shot (about 100 px); it reads by motion and the arrow flag.

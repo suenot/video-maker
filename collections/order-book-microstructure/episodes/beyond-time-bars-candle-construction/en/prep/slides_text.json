@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "OHLCV\nARCHITECTURAL\nDISSOLUTION\n\nRIGID 17x3 DATA MATRIX\n(51 GEOMETRIC BLOCKS)\n\nlel slele |\nHee [é\n\n8 |\nPP\nw\n\n|\n\nus ||| ca5|\n\nGRUB\nBEBE\n\no\nPRP\nS\nNm\nrace\n\n|\n\neels ts |e\n\n|\ntll\n\nAZ — be Dk\n\nCandle construction is governed by two independent\naxes: bar type and aggregation method.\n\n17 base bar types: time, tick, volume, dollar,\nRenko, range, volatility, Heikin-Ashi, Kagi,\n\nLine Break, P&F, tick imbalance (TIB), volume\n\nimbalance (VIB), run, CUSUM, entropy, delta.\n\n3 aggregation methods: calendar-aligned, rolling\n\nwindow, adaptive rolling.\n\n17 x 3 = 51 combinations. Most systems use only 1\n(calendar time bars ). The other 50 are untapped.\n\nRecommendation: Use combinations in layers—\n\nrolling time for signals, calendar for structure,\ninformation-driven for microstructure.\n\nAll claims, code identifiers, and numerical data are pendin\n\nhuman editorial, mathematical, and primary\n\n-solrce review\n\nGemini Notebook"
+    },
+    {
+      "page": 2,
+      "text": "Y-Axis\n\nTime\nTick\nVolume\n\nEire do you decide nn\na new bar closes? (Time,\nN trades, Price movement,\n\n[ee arrival). oF\n\nPow do you compose\nbase bars into higher\ntimeframes?\n(Calendar\nboundaries,\n\nRolling N bars,\n\nj—voauilty adaptive). =\n\nRange\nRenko\n\n>\n\nKagi\n\nPoint & Figure\nVolumen\n\nDelta\nInformation Arrival\nHyrometrole\nLao_Kaga\n\nRange\n\nVolume\n\nTick\n\nTime\n\n__ H2 — Two Axes of Candle Construction\n\n4 : Rolling volume bars |\nLew eweeeeee '--\"-- eoewae?\n\na ci\nSc eee Sel eee ee ee\nSS ee ee ee\n72S PSE ME SP wer seers ese eoee\nuc i D(a Pal | Ct De | P\nSE SSE SSP Peer ae? ae ees\nMOU |\n\nDi a PP PLE MC LP | PP ld BPP i,\n\nCalendar Boundaries X-Axis\n\n\"CAB'\n\nRolling N Bars Volatility Adaptive\n'NB' 'VA'\n\nAxis 2: Aggregation Method (3 Methods)\n\n[he Standard Hou Cane}\n\np Pending Primary/Editor Gemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "H2 — 1. Time Bars (Standard)\n\n5\n\n4, Time Bars\n\nRestart at 14:37:05\n— first valid 1h candle at 16:00:00 (82m 55s dead time)\n\n[iz i\n[” H3 — Terminal dashboard a\nAcceict Wenk N_- Sdlrt %\nTick 1,000 trades = ~1n | |\nVolume 100 = ~2-3m = ~th ee.\nDollar $1M ~Im = $50M ~1h\nfe a)\n\n| H2 — 2-4. Activity-Based Bars\n\n'H3 — 2. Tick Bars\n\na\n\nBar closes after N trades. Equal opinions.\n\nooo000 > RH a\n\nTy a “|\n\nrr) — 4. Dollar Bars\n\n3 — 3. Volume Bars\n\n100 BIC\n\n= $10,000 = $10,000\n\nBar closes after USD/USDT\n\nA a ||\nHERES 1 Bic\nOOOOOOOOoOoO+\\\n\nBar closes after base-asset notional units. Robust to\n|_ units. Hy |_ price regime shifts. |\n'H3 — Choosing the Threshold |\n\nIllustrative BTCUSDT Thresholds\n1,000 trades = ~1m 50,000 trades = ~1h\n\n100 BTC = ~2-3m 2,400 BTC = ~1h\n$1M = ~1n $50M = ~1h\n\n| Pending Primary/Ec ™ Gemini Notebook |"
+    },
+    {
+      "page": 4,
+      "text": "H2 — 5—/7. Price-Based Bars\n\nSamples only when price moves enough to matter, ignoring the clock entirely.\n\n\"H3 — 5. Renko Bars =\n\nir a | Forms only when closing price\n—> diff = price - last_close moves by fixed N units.\nBo =| Tracks direction only.\n[\n\nSSS S55\n_\n3) —\"68 Range Bars |\ni =\n: Preserves the full OHLCV\n\nale genoa fish — tow >= range size structure within a fixed range.\n[ts ae\n13 —7. Volatility Bars 2.\n\nir w | Dynamic boxes scaling\n—> = ecm Mma-l( eee ieeleties with an ATR-adaptive\nOH cH hs =, threshold.\n3]\n\n: Pending Primary /Ec i Gemini Notebook |"
+    },
+    {
+      "page": 5,
+      "text": "H2 — 8. Heikin-Ashi (Smoothed Transformation) | H2 — 9-11. Japanese Reversal Charts\n\n\"3 — 8. Heikin-Ashi\n\nr\n\nHAN Cos ct oe ae OtaLOWiaz CLOSE)\n\n4\n\n(Prev HA Open + Prev HA Close)\n\nHA Open =\n: 2\n\nWarning: Heikin-Ashi is a\ntransformation, not a base bar. It\nresults in a loss of exact prices.\nNever use HA close for order execution.\n\n5\n\ncal\n\naf\n\nAct as macro trend filters discarding time entirely.\n\n\"3 — 9. Kagi Charts a\n\n| Yang/thick vs yin/thin lines based on support/resistance breaks. |\n\n'H3 — 10. Line Break Charts |\nDla i\na a\n__ Draws a new bar only if close exceeds high/low of N=3 lookback.\n[H3 — 11. Point & Figure Charts a\nXX r-_|_|X|x|x|O\nxXxxXXOO xXxOoO oook\nXxX KX OO xXOOO xXxO0O\nxX X OxxO OO\n\nX's (rising), 0's (falling) with a 3-box reversal rule.\n\nPending Primary/Ec Ai Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "H2 — 12-14. Information-Driven Bars\n\nl H3 — 12. Tick Imbalance Bars (TIB) | H3—13. Volume Imbalance Bars (VIB) | H3 — 14. Run Bars dl\ni TI VIB e\nBae get (Tick Imbalance) (Volume Imbalance) Run Len gth=5\nPree eit aes iid\nsa TERRA\n\nRun Length = 3\n\n_ =\n\neet =-1 Measures Net Signed Volume\nImbalance vs. Net Tick Count.\n\nContrasts Net Imbalance (buys minus\nsells) against Run Bars (maximum\npes _I\n\nconsecutive run length of either).\n\n- 4\n[ H3 — The Explosion Problem \"\nEWMA\nExpected\nThreshold een sacs\n: min_ticks /\n. max_ticks\nexploding bar limits\ngeneration\n\n. =\n\nEx Pending Primary/Editc Gemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "H2 — 15. CUSUM Filter Bars | H2— 16. Entropy Bars | H2 — 17. Delta Bars (Order Flow)\n\nCumulative Sum of Log-Returns\n\nEa\nSampling\n\nTriggers on cumulative sum of log-returns\noff 1m OHLCV. No raw tick data required.\nAdvantage over Bollinger Bands:\nrequires a full magnitude run, no\nrepeated triggers on hovering.\n\nSamples when information purity\ncrosses threshold. Applied over a\n10-bin return distribution. High\ntheoretical purity.\n\nAggressive buy volume minus sell\nvolume. Requires trade-level side\nclassification (is_buyer_maker).\n\nThese methods sample exactly when the market indicates a structural or physical shift.\nL a\n\nL Pending Primary/Editc “ Gemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "H2 — Method A: Calendar-Aligned Aggregation\n\nrc\n\nCrowd-aligned boundaries |\n\n[ Wall clock alignment |————_ at\n\nSoy Essential for PIQ triggers |\n\ni | Suffers from “cold start” wait time. ] 00:00 7\nH2 — Method B: Rolling Window Aggregation\nfe “1\n\nAlways valid after warmup Guarantees\n\n(no cold start) | \\ deque[OHLCV] BZ | backtest/live parity\n\nee\nBESBEEEESE ite\n\n[ Introduces phase shift (e.g., closing at :37). |\nL J\n\ni Pending Primary/Editc “ Gemini Notebook"
+    },
+    {
+      "page": 9,
+      "text": "H2 — Method C: Adaptive Rolling Aggregation | H3— Combination Examples\n\n~~ y —>\n\nalana aden tec bet alana\n1-30-15 #15 T#30\n————\n\nLOW VOL\n\n——_—  —->\n\n| narrower in volatility | ATR_window_size\n=]\n\n- Calendar structure 7 - 80:00 01:00 02:00 vd\nJUWOUEUULUUULL | voLuMe | force close early\nHH: MM :@0 HH: MM: @0 CLUSTER on vol_threshold\nDATA FEED : ; : vol_threshold :\n(OHLCV) Rolling signals a eertrrryerrrrrrerrr seer  —\ndeque[OHLCV]\n\n86:08 81:08 62:80\n\nNegligible memory overhead maintaining parallel states.\n\n_. These hybrid structures ensure seamless transitions between structured market time and dynamic volatility regimes. _|\n\n= Pending Primary/Editc “ Gemini Notebook"
+    },
+    {
+      "page": 10,
+      "text": "| H2— Practical Aggregation: Cascading Preload TT\n\n-\nH3 — Multi-Exchange Limits\n\n| Exchange | Max Candles per REST Request\n\nBinance 1,080 candles\n\nOHLCV Composability\n\n(a | OKX 300 candles\na\n\n1-hour\n\nH3 — Aggregation Consistency Check\n\n[row\n=\n\n=a\n1-hour ook\n\n7 |\n=I\n\n1-hour\n\navery\n\nGea\n\n> validate_aggregation(native_1m, computed_1th)\n\nChecking sum(volume)... OK\nChecking high/low boundaries... OK\nChecking close vs. open... OK\n\n(reminate\n-minute |\nPt\n\ncae\nfas]\newe\n\n- aL\n| tolerance_pct = 8.001\n\nEngineering mandate: If consistency check\nfails, compute higher timeframes directly from\nnative 1-minute data.\n\nLt Pending Primary/Editorial Review |\n\nGemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "H2 — Comparison Matrix\n\nH3 — Axis 1: Base Bar Types\n\n[Category] | [Category] [Trigger] | [Tick Data Required]\n\nTime Fixed interval No N trades\nTick N trades Yes High-frequency, scalping\nVolume N units Yes Momentum, volume analysis\nDollar $N notional Yes Large cap, liquidity analysis\nRenko Price + N units No Trend following, noise reduction\nPrice Range High-Low 2 N Yes Volatiity breakout, ranging markets\nVolatility | Adaptive range Yes Dynamic market conditions\nInformation Tick imbalance Yes Order book pressure, short-term direction\nVolume imbalance Yes Significant buy/sell pressure\nRun length Yes Consecutive tick patterns\nStats/Flow CUSUM Cumulative return No Change detection, anomaly identification\nEntropy Shannon entropy Yes Information flow, market efficiency\nDelta Order flow delta Yes Market aggressiveness, delta hedging\n\nActivity\n\nH3 — Axis 2: Aggregation Methods\n\nMethod] ‘| (Alignment) | {cold Start) | (Phase Shift] | (Gest For]\n\nPending Primary/Edi: Gemini Notebook"
+    },
+    {
+      "page": 12,
+      "text": "|\nH2 — Practical Recommendations\n\nThe marketmaker.cc multi-layered framework. Implementation constrained by 1m OHLCV vs. tick data availability.\n\nrel ey\n\nT Heikin-Ashi transformation or\nLine Break over daily closes.\n,. Aligns Signals with macro direction.\n\n5\n\nT Dollar/VIB + rolling, or Delta + calendar.\n\nRequires tick/aggTrades data.\n, Detects informed flow and order splitting. |\n\nHybrid calendar time bars.\nTracks crowd behavior,\n, Support/resistance Levels, and PIQ.\n\nT Rolling time bars. No new data needed.\nFixes the cold start problem for\nNe perfect backtest parity.\n\nPending Primary/Editorial Review\n\nGemini Notebook"
+    },
+    {
+      "page": 13,
+      "text": "« Candle construction\nrequires two distinct\ndecisions:\n\nWhat defines the bar?\nHow is it aggregated?\n\n« The standard Binance\ncandle is just one cell\n\nin a 51-cell matrix.\n\nH2 — Conclusion\n\nhy LK Aggregation —{ |\n\n— -\n\nThe Atomic Unit:\nThe Closed Base Bar.\n\n« The true edge in\nquantitative systems\nlies in mapping and\n\ntapping the remaining\n50 combinations.\n\n« Scale further via\nbacktest granularity\n\ncontrols and Parquet\ncaches.\n\nPending Primary/Edito! aGemini notebook"
+    },
+    {
+      "page": 14,
+      "text": "H2 — Useful Links\n\nLopez de Prado — Advances in Financial Machine Learning\n= Easley et al. — The Volume Clock\n\nmifinlab — Python library for information-driven bars\n\n= Binance — Historical Data\n\n= Apache Parquet — Storage format\n\n7 H2 — Citation :\n\n| @article{soloviov2026bartypes, rl\nauthor = {Soloviov, Eugen},\ntitle = {Bar Types and Aggregation Methods for Algorithmic Trading},\nyear = {2026},\nurl = {https://marketmaker .cc/en/blog/post/beyond-time-bars-candle-construction}\n\nis a\n\nTarget-channel duplicates and external identities remain unchecked. All mutable data, Chinese translations\n\n(if applicable), and, and financial statements require primary-source validation. No investment advice.\n\n| Pending Primary/Editorial peeioe |\n| @& Gemini Notebook"
+    }
+  ]
+}

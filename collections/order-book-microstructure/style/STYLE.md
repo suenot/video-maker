@@ -25,6 +25,7 @@ Slide content is always a **thing in this bazaar**, never a flat slide.
 | Sky | soft gradient | flat bands with carved wavy borders, a rosette sun |
 | Fonts | Rubik, JetBrains Mono, Noto Sans | Yeseva One, Fira Sans Condensed, PT Mono, Noto Serif |
 | Transitions | spyglass iris, wave wipe | kilim curtain roll-up / drop, roll-up stall shutters |
+| Time of day | always sunny | day -> dusk/night (night palette, stars, moon rosette) -> dawn |
 
 ## 3. Palette (hex)
 
@@ -111,7 +112,7 @@ Animation rules:
 ## 8. Timing (beat grid)
 
 - The theme song is a Balkan brass band at 152 BPM: a beat is 0.395 s and a bar is 1.58 s. Write times as `K.at(bar, beat)`.
-- The intro's measured downbeats: `BARS = [0.00, 1.63, 3.23, 4.83, 6.43, 8.01, 9.62, 11.22, 12.82, 14.40, 16.00, 17.60, 19.18]` (beat tracking + the sung "Hey", "Order", "Bids" onsets; librosa's tracker locks onto the off-beat brass, so trust the vocal accents for phase).
+- The intro runs the whole song (71.3 s) on 44 measured downbeats in `intro/src/10_setup.js` (`BARS[0] = 0.04`, chorus 1 at 6.47, verse 19.25, chorus 2 32.04, break 44.83, final chorus 57.63) (beat tracking + the sung "Hey", "Order", "Bids" onsets; librosa's tracker locks onto the off-beat brass, so trust the vocal accents for phase).
 - Pops (stalls, crates, tags, medallions) land on beats with a back-ease overshoot of 0.3 - 0.4 s. Staggers are 1/2 or 1/4 beat.
 - Determinism: no `Math.random`, `Date.now` or `performance.now`, no infinite repeats. Seeded `mulberry` / `hash` only.
 
