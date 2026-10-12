@@ -3,8 +3,11 @@
    p1 forecastBoard + tikiSign + medal row (all K.ICON) + turtle
    p2 posterChart (zig returns, sigma line, calm/storm bands) + hump calm/storm
    p3 tideTable + menuBoard + postcard + buoys, currents, loop currents
+   p4 K.duo: Siggy talks and points at the formula board, Gully listens (looks, nods)
+   p5 K.duo bottom-right: Gully talks and points at a chart, Siggy listens
+   p6 gesture sheet: turtle point / surprise / think / thumbs, gull surprise / think / whistle / binos
    ============================================================ */
-const K = VK, P = K.P, DUR = 6, PAGE = 2;
+const K = VK, P = K.P, DUR = 12, PAGE = 2;
 const ctx = document.getElementById("cv").getContext("2d");
 
 /* seeded returns: calm regime (sigma 0.8) then storm (sigma 2.6), plus a GARCH-ish sigma line */
@@ -71,13 +74,30 @@ function page3(t) {
   K.loopCurrent(ctx, [B[0], B[1] - 165], 90, { p: K.inv(1.0, 1.4, t), label: "0.90", seed: 14 });
 }
 
+/* fake narration loudness: syllables at ~5 Hz with pauses (seeded, seek-safe) */
+const loud = (t, seed) => { const k = Math.floor(t * 5), on = K.hash(Math.floor(t * 1.2), seed) > 0.25 ? 1 : 0; return on * (0.35 + 0.65 * K.hash(k, seed)) * Math.abs(Math.sin(t * 5 * Math.PI)); };
+
+function page4(t) {
+  K.forecastBoard(ctx, 1220, 360, 1060, 290, [{ t: "σ^2_t = ω + α·ε^2_{t-1} + β·σ^2_{t-1}", size: 54 }], { a: 1, write: 1, hi: /σ/, seed: 31 });
+  K.duo(ctx, t, { x: 360, y: 1020, s: 1.3, side: 1, talkA: loud(t, 3), talkB: 0, pointA: [880, 380], pointAmt: K.inv(0.2, 0.6, t) });
+}
+function page5(t) {
+  K.posterChart(ctx, 640, 430, 1060, 620, [{ kind: "zig", data: RET, colorAt: (i, v) => (v >= 0 ? P.up : P.down) }, { kind: "line", data: SIG.map((x) => 2 * x), color: P.sigma }], { bands: BANDS, zero: true, seed: 44 });
+  K.duo(ctx, t, { x: 1600, y: 1020, s: 1.3, side: -1, talkA: 0, talkB: loud(t, 9), pointB: [960, 400], pointBmt: K.inv(0.2, 0.6, t) });
+}
+function page6(t) {
+  const u = 0.5;
+  ["point", "surprise", "think", "thumbs"].forEach((k, i) => K.turtle(ctx, 300 + i * 440, 560, 0.85, Object.assign({ seed: 700, mouth: "smile" }, K.turtleGesture(k, u, { target: [220, -260] }))));
+  ["surprise", "think", "whistle", "binos"].forEach((k, i) => K.gull(ctx, 300 + i * 440, 1030, 0.95, Object.assign({ seed: 900, face: 1 }, K.gullGesture(k, u, { face: 1 }))));
+}
+
 function render(t) {
   try {
-    const pg = Math.min(2, Math.floor(t / PAGE)), lt = t - pg * PAGE;
+    const pg = Math.min(5, Math.floor(t / PAGE)), lt = t - pg * PAGE;
     K.begin(ctx, t, { x: 960, y: 540, z: 1 });
     K.applyCam(ctx, 1);
-    bg(pg === 1 ? 0.6 : 0, pg === 2 ? 900 : 760);
-    [page1, page2, page3][pg](lt);
+    bg(pg === 1 ? 0.6 : 0, pg === 2 ? 900 : pg === 5 ? 640 : 760);
+    [page1, page2, page3, page4, page5, page6][pg](lt);
   } catch (e) { K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(e && e.stack || e).slice(0, 160), 20, 50); }
 }
 const TL = gsap.timeline({ paused: true }), drv = { _t: 0 };

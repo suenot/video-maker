@@ -279,6 +279,10 @@ var VK = window.VK || (window.VK = {});
     shell: "#b5763a", shellDark: "#8a5427", shellLight: "#e0a65c", scute: "#d9a05a",
     shades: "#16323a", shadesFrame: "#f2675a", shadesShine: "#7fd8cf", cheek: "#f59a8a",
     eye: "#fffaf0", pupil: "#142a30",
+    /* sidekick: Gully the seagull lifeguard */
+    gull: "#fdf8ee", gullShade: "#dfe6e2", gullGrey: "#9fb3b8", gullGreyDark: "#6e8a90", gullTip: "#2f5a5c",
+    beak: "#f7a24c", beakDark: "#d9822e", beakSpot: "#e8566a", gullLeg: "#f27d58", gullEye: "#fffaf0",
+    capRed: "#e8566a", capRedDark: "#b83b4c", whistle: "#f6b93b", cord: "#2bb0a8", binocular: "#2f5a5c",
     /* surfboards + tiki wood */
     board: "#fbeed3", boardStripe: "#f2675a", boardStripe2: "#2bb0a8",
     wood: "#a8693a", woodDark: "#6e4224", woodLight: "#cf9256", woodNight: "#4a2c18",
@@ -910,7 +914,10 @@ var VK = window.VK || (window.VK = {});
      brow     -1..1.5 (raised = surprise, negative = focus)
      flipL/R  { x, y, rot? } flipper tip target (local px)
      footL/R  { x, y } foot target (local px); default stance
-     exclaim  0..1 a "!" pops above the head
+     exclaim  0..1 a "!" pops above the head;  think 0..1 a "?" bubble
+     talk     0..1 talking mouth (narration loudness, overrides mouth while > 0.06)
+     viseme   "a" | "o" | "e" | "m" (optional; default picks one per 1/8 s from talk, see K.viseme)
+     nod      -1..1 head pitch (+ = chin down); listening hosts nod on the speaker's accents
    ============================================================ */
 var VK = window.VK || (window.VK = {});
 (function (K) {
@@ -979,7 +986,8 @@ var VK = window.VK || (window.VK = {});
     /* neck + head */
     const neck = 1 + 0.6 * (st.neck || 0), headY = -132 - 22 * neck, tx = turn * 10;
     K.limb(ctx, [[0, -96], [tx * 0.5, -112 - 6 * neck], [tx, headY + 26]], 34, P.skin, seed + 50);
-    ctx.save(); ctx.translate(tx, headY); ctx.rotate(((st.headTilt || 0) * Math.PI) / 180);
+    const nod = clamp(st.nod || 0, -1, 1);
+    ctx.save(); ctx.translate(tx, headY + 8 * nod); ctx.rotate(((st.headTilt || 0) * Math.PI) / 180); ctx.scale(1, 1 - 0.07 * nod);
     const head = K.ellipsePts(0, 0, 50, 42, 18);
     K.shape(ctx, head, { fill: P.skin, w: 5.5, boil: 1, seed: seed + 60, shade: { color: P.skinDark, dx: -8, dy: -10 }, shine: { color: P.skinLight, a0: 3.6, a1: 4.3, w: 6 } });
     /* sea-turtle head plates */
@@ -988,8 +996,9 @@ var VK = window.VK || (window.VK = {});
     /* cheeks */
     [-1, 1].forEach((sd, i) => K.shape(ctx, K.ellipsePts(fx + sd * 34, 14, 9, 6, 8), { fill: P.cheek, stroke: null, w: 0, boil: 0.3, seed: seed + 66 + i, alpha: 0.65, reg: false }));
     /* mouth: a beak-ish wide smile */
-    const m = st.mouth || "smile";
-    if (m === "smile") K.line(ctx, [[fx - 24, 14], [fx - 10, 24], [fx + 10, 24], [fx + 26, 12]], { stroke: P.ink, w: 4.5, boil: 0.6, seed: seed + 70 });
+    const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1);
+    if (talk > 0.06) K.talkMouth(ctx, fx, 20, talk, st.viseme || K.viseme(K.now, talk, seed), 1, seed + 77);
+    else if (m === "smile") K.line(ctx, [[fx - 24, 14], [fx - 10, 24], [fx + 10, 24], [fx + 26, 12]], { stroke: P.ink, w: 4.5, boil: 0.6, seed: seed + 70 });
     else if (m === "flat") K.line(ctx, [[fx - 16, 20], [fx + 16, 19]], { stroke: P.ink, w: 4.5, boil: 0.5, seed: seed + 71 });
     else if (m === "grin") { K.shape(ctx, [[fx - 28, 12], [fx + 28, 12], [fx + 16, 30], [fx, 33], [fx - 16, 30]], { fill: "#7a2f2a", w: 4, boil: 0.6, seed: seed + 72, reg: false }); K.shape(ctx, [[fx - 22, 13], [fx + 22, 13], [fx + 18, 19], [fx - 18, 19]], { fill: P.cream, stroke: null, w: 0, boil: 0.3, seed: seed + 73, reg: false }); }
     else if (m === "open") K.shape(ctx, K.ellipsePts(fx, 22, 15, 12, 10), { fill: "#7a2f2a", w: 4, boil: 0.6, seed: seed + 74, reg: false });
@@ -1031,6 +1040,7 @@ var VK = window.VK || (window.VK = {});
       K.shape(ctx, K.ellipsePts(0, 2, 7, 7, 8), { fill: P.sigma, w: 4, boil: 0.6, seed: seed + 111 });
       ctx.restore();
     }
+    if (st.think > 0) K.thinkMark(ctx, -70, -86, st.think, seed + 115);
     ctx.restore(); /* head */
     ctx.restore(); /* body group */
     /* front flippers (arms) in front, unsquashed space */
@@ -1046,6 +1056,36 @@ var VK = window.VK || (window.VK = {});
   };
   function lerp(a, b, u) { return a + (b - a) * u; }
 
+  /* ---------- talking (shared by every host) ---------- */
+  /* pick a mouth shape per 1/8 s from loudness: louder -> "a"/"o", quiet -> "e"/"m" (seeded, seek-safe) */
+  K.viseme = function (t, talk, seed) {
+    const h = K.hash(Math.floor(t * 8), (seed || 1) + 404);
+    if (talk < 0.2) return h < 0.5 ? "m" : "e";
+    if (talk > 0.6) return h < 0.6 ? "a" : "o";
+    return h < 0.34 ? "e" : h < 0.67 ? "a" : "o";
+  };
+  /* open talking mouth at (x, y): size from talk, shape from viseme; k = scale */
+  K.talkMouth = function (ctx, x, y, talk, vis, k, seed) {
+    const W = { a: [1, 1], o: [0.62, 1.05], e: [1.15, 0.5], m: [0.9, 0.12] }[vis] || [1, 1];
+    const w = (14 + 8 * talk) * W[0] * k, h = (4 + 18 * talk) * W[1] * k;
+    K.shape(ctx, [[x - w, y - 2], [x - w * 0.4, y - 4], [x + w * 0.4, y - 4], [x + w, y - 2], [x + w * 0.7, y + h * 0.7], [x, y + h], [x - w * 0.7, y + h * 0.7]], { fill: "#7a2f2a", w: 4 * k, boil: 0.5, seed, reg: false });
+    if (h > 10 * k) K.shape(ctx, K.ellipsePts(x, y + h * 0.66, w * 0.45, h * 0.22, 8), { fill: "#e8766a", stroke: null, w: 0, boil: 0.3, seed: seed + 1, reg: false });
+  };
+  /* "?" thought bubble (thinking gesture) */
+  K.thinkMark = function (ctx, x, y, a, seed) {
+    const s = K.E.back(clamp(a, 0, 1), 2.2);
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    [[30, 40, 6], [16, 22, 9]].forEach((d, i) => K.dot(ctx, d[0], d[1], d[2], P.cream, P.ink, 3, seed + i));
+    K.shape(ctx, K.ellipsePts(0, -12, 30, 28, 14), { fill: P.cream, w: 4, boil: 0.6, seed: seed + 3 });
+    K.text(ctx, "?", 0, -10, { size: 40, weight: 900, fill: P.storm });
+    ctx.restore();
+  };
+  /* aim a host at a target: returns { turn, look } for a host whose head is at (hx, hy) */
+  K.lookToward = function (hx, hy, tx, ty) {
+    const dx = tx - hx, dy = ty - hy, d = Math.hypot(dx, dy) || 1;
+    return { turn: clamp(dx / 400, -1, 1), look: [clamp(dx / d, -1, 1), clamp(dy / d, -1, 1)] };
+  };
+
   /* seeded blink curve, about one blink per 2.1 s */
   K.blinkAt = function (t, seed) {
     let b = 0;
@@ -1057,6 +1097,249 @@ var VK = window.VK || (window.VK = {});
   };
   /* where the board goes under a surfing turtle: feet span, so call surfboard at (x - len*0.5, y) */
   K.surfStance = { footL: { x: -58, y: 0 }, footR: { x: 52, y: 0 }, lean: 0 };
+})(VK);
+
+/* ============================================================
+   KIT 42 GULL (Surf Turtle kit): "Gully", the seagull lifeguard, Siggy's
+   co-host (episode host B, the curious higher voice).
+   Local space: feet on y = 0, 3/4 view facing `face` (+1 right, -1 left).
+   Scale 1: about 230 px tall (0.9 of Siggy). Plump white body, grey back,
+   coral lifeguard cap with a cream cross, a whistle on a turquoise cord,
+   binoculars on a strap. Wings are two-bone IK arms with a feather fan,
+   legs are two-bone IK to webbed feet.
+   Pose state (all optional):
+     squash   -1..1   volume kept;  lean deg;  hop px (legs tuck)
+     face     +1 | -1 which way the beak points
+     look     [dx, dy] pupils -1..1;  blink 0..1;  brow -1..1.5
+     talk     0..1    beak opening (narration loudness);  viseme as K.viseme
+     nod      -1..1   head pitch;  headTilt deg
+     wingL/R  { x, y } wing-tip target (local px); default folded at the sides
+     footL/R  { x, y } foot target
+     whistle  0..1    whistle in the beak, cheeks puffed (a call to attention)
+     binos    0..1    binoculars raised to the eyes (spotting a wave)
+     exclaim  0..1    "!";  think 0..1 "?" bubble;  puff 0..1 surprise feather puff
+   ============================================================ */
+var VK = window.VK || (window.VK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp } = K;
+
+  /* feathered wing: limb + a fan of three primaries pointing along the forearm */
+  function wing(ctx, S, T, sd, seed) {
+    const r = K.ik2(S, T, 36, 32, sd > 0 ? 1 : -1);
+    K.limb(ctx, [S, r.elbow, r.end], 26, P.gullGrey, seed);
+    const a = Math.atan2(r.end[1] - r.elbow[1], r.end[0] - r.elbow[0]);
+    ctx.save(); ctx.translate(r.end[0], r.end[1]); ctx.rotate(a);
+    [-0.42, 0, 0.42].forEach((o, i) => { /* three broad, round-tipped primaries */
+      ctx.save(); ctx.rotate(o * sd);
+      const fz = i === 1 ? 1.12 : 0.95;
+      K.shape(ctx, [[-4, -12], [20 * fz, -13], [38 * fz, -8], [46 * fz, 0], [38 * fz, 8], [20 * fz, 13], [-4, 12]], { fill: i === 1 ? P.gullGreyDark : P.gullGrey, w: 3.5, boil: 0.5, seed: seed + 3 + i, reg: false });
+      K.shape(ctx, [[30 * fz, -9], [42 * fz, -5], [46 * fz, 0], [42 * fz, 5], [30 * fz, 9]], { fill: P.gullTip, stroke: null, w: 0, boil: 0.3, seed: seed + 6 + i, reg: false });
+      ctx.restore();
+    });
+    ctx.restore();
+    return r.end;
+  }
+
+  K.gull = function (ctx, x, y, s, st) {
+    st = st || {};
+    const sq = clamp((st.squash || 0) - 0.12 * (st.puff || 0), -0.6, 0.6), sxk = 1 + sq * 0.5, syk = 1 / sxk;
+    const hop = st.hop || 0, look = st.look || [0, 0], blink = clamp(st.blink || 0, 0, 1), face = st.face == null ? 1 : st.face;
+    const talk = clamp(st.talk || 0, 0, 1), seed = st.seed || 900, puff = clamp(st.puff || 0, 0, 1);
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(((st.lean || 0) * Math.PI) / 180);
+    const air = clamp(hop / 40, 0, 1), hipY = -44 * syk - hop;
+    /* legs: thin orange two-bone IK, webbed feet */
+    [["L", -1], ["R", 1]].forEach(([k, sd]) => {
+      const f = st["foot" + k] || { x: sd * 22, y: 0 };
+      const H = [sd * 16, hipY], T = [lerp(f.x, sd * 12, air), lerp(f.y, -hop - 4, air)];
+      const r = K.ik2(H, T, 24, 24, sd > 0 ? 1 : -1);
+      K.line(ctx, [H, r.elbow, r.end], { stroke: P.ink, w: 11, boil: 0.5, seed: seed + sd });
+      K.line(ctx, [H, r.elbow, r.end], { stroke: P.gullLeg, w: 6, boil: 0.5, seed: seed + sd });
+      K.shape(ctx, [[r.end[0] - 4, r.end[1] - 3], [r.end[0] + face * 26, r.end[1] - 2], [r.end[0] + face * 30, r.end[1] + 5], [r.end[0] - 10, r.end[1] + 5]], { fill: P.gullLeg, w: 3.5, boil: 0.4, seed: seed + 3 + sd, reg: false });
+    });
+    ctx.save(); ctx.translate(0, hipY); ctx.scale(sxk * (1 + 0.08 * puff), syk * (1 + 0.08 * puff));
+    /* body: plump teardrop, grey back mantle, white belly */
+    const body = K.ellipsePts(0, -52, 50, 60, 20);
+    K.shape(ctx, body, { fill: P.gull, w: 5.5, boil: 0.9, seed: seed + 10, shade: { color: P.gullShade, dx: -face * 12, dy: -10, dots: true, cell: 8, density: 0.6 }, shine: { color: "#ffffff", a0: 3.6, a1: 4.3 } });
+    K.shape(ctx, [[-face * 50, -60], [-face * 44, -96], [-face * 16, -110], [-face * 4, -80], [-face * 20, -30], [-face * 44, -24]], { fill: P.gullGrey, w: 4.5, boil: 0.7, seed: seed + 11 });
+    /* tail feathers peeking out */
+    K.shape(ctx, [[-face * 40, -14], [-face * 70, -4], [-face * 66, 8], [-face * 38, 2]], { fill: P.gullGreyDark, w: 4, boil: 0.6, seed: seed + 12 });
+    /* whistle cord + whistle (on the chest unless it is being blown) */
+    const wh = clamp(st.whistle || 0, 0, 1);
+    K.line(ctx, [[-22, -100], [-8, -70], [6, -64], [22, -100]], { stroke: P.cord, w: 4, boil: 0.4, seed: seed + 13 });
+    if (wh < 0.5) K.shape(ctx, K.roundPts(-4, -70, 26, 14, 6), { fill: P.whistle, w: 3.5, boil: 0.4, seed: seed + 14, reg: false });
+    /* binocular strap + binoculars resting on the belly (unless raised) */
+    const bn = clamp(st.binos || 0, 0, 1);
+    if (bn < 0.5) { K.line(ctx, [[-30, -96], [-26, -40]], { stroke: P.ink, w: 3, boil: 0.3, seed: seed + 15 }); [-1, 1].forEach((k, i) => K.shape(ctx, K.roundPts(-36 + k * 11, -44, 18, 24, 7), { fill: P.binocular, w: 3, boil: 0.3, seed: seed + 16 + i, reg: false })); }
+    /* neck + head */
+    const nod = clamp(st.nod || 0, -1, 1), hx = face * 10, hy = -134 - 6 * puff + 7 * nod;
+    ctx.save(); ctx.translate(hx, hy); ctx.rotate(((st.headTilt || 0) * Math.PI) / 180); ctx.scale(1, 1 - 0.06 * nod);
+    ctx.scale(1.15, 1.15);
+    K.shape(ctx, K.ellipsePts(0, 0, 40, 36, 18), { fill: P.gull, w: 5, boil: 0.8, seed: seed + 20, shade: { color: P.gullShade, dx: -face * 8, dy: -8 } });
+    if (puff > 0) for (let i = 0; i < 3; i++) K.line(ctx, [[-14 + i * 12, -34], [-18 + i * 14, -50 - 8 * puff]], { stroke: P.ink, w: 3.5, boil: 0.4, seed: seed + 21 + i, alpha: puff });
+    /* eyes (3/4: both toward the face side) */
+    const ex = (i) => face * (6 + i * 22) - face * 4;
+    [0, 1].forEach((i) => {
+      const cx = ex(i), r = 11 + 3 * puff, ry = r * (1 - 0.92 * blink);
+      K.shape(ctx, K.ellipsePts(cx, -6, r, Math.max(1.5, ry), 12), { fill: P.gullEye, w: 3.5, boil: 0.4, seed: seed + 24 + i, reg: false });
+      if (blink < 0.6) K.dot(ctx, cx + look[0] * 4 + face * 1.5, -6 + look[1] * 4, 5.5, P.pupil, null, 0, seed + 26 + i);
+      const br = st.brow || 0;
+      K.line(ctx, [[cx - 10, -22 - br * 6 + (i ? -br : br) * 2], [cx + 10, -22 - br * 6 + (i ? br : -br) * 2]], { stroke: P.ink, w: 4, boil: 0.3, seed: seed + 28 + i });
+    });
+    /* beak: upper + lower mandible, opening with talk; red spot on the lower */
+    const open = wh > 0.5 ? 0.15 : talk > 0.06 ? (0.2 + 0.8 * talk) * ({ a: 1, o: 0.8, e: 0.55, m: 0.15 }[st.viseme || K.viseme(K.now, talk, seed)] || 1) : 0;
+    const bx = face * 30, by = 6;
+    K.shape(ctx, [[bx - face * 8, by + 2], [bx + face * 46, by + 8 + 12 * open], [bx + face * 40, by + 16 + 22 * open], [bx - face * 6, by + 14 + 14 * open]], { fill: P.beakDark, w: 4, boil: 0.4, seed: seed + 31, reg: false });
+    K.dot(ctx, bx + face * 30, by + 14 + 18 * open, 4, P.beakSpot, null, 0, seed + 32);
+    K.shape(ctx, [[bx - face * 10, by - 8], [bx + face * 30, by - 4], [bx + face * 52, by + 6 - 6 * open], [bx + face * 30, by + 6], [bx - face * 8, by + 6]], { fill: P.beak, w: 4, boil: 0.4, seed: seed + 33, reg: false });
+    if (wh > 0.5) { /* blowing the whistle: whistle at the beak tip, cheek puffed, sound lines */
+      K.shape(ctx, K.roundPts(bx + face * 40 - 13, by - 2, 26, 14, 6), { fill: P.whistle, w: 3.5, boil: 0.4, seed: seed + 34, reg: false });
+      K.dot(ctx, -face * 6, 14, 12, P.cheek, null, 0, seed + 35);
+      for (let i = 0; i < 3; i++) K.line(ctx, [[bx + face * 74, by - 14 + i * 12], [bx + face * (90 + 6 * Math.sin(K.now * 20 + i)), by - 20 + i * 14]], { stroke: P.ink, w: 3.5, boil: 0.5, seed: seed + 36 + i });
+    }
+    /* lifeguard cap: coral dome, cream cross, brim toward the face */
+    K.shape(ctx, [[-36, -18], [-30, -42], [-8, -54], [16, -52], [34, -38], [38, -18]], { fill: P.capRed, w: 4.5, boil: 0.6, seed: seed + 40, shade: { color: P.capRedDark, dx: -face * 8, dy: 0 } });
+    K.shape(ctx, [[face * 10, -20], [face * 60, -16], [face * 56, -8], [face * 8, -12]], { fill: P.capRedDark, w: 3.5, boil: 0.4, seed: seed + 41, reg: false });
+    K.shape(ctx, [[-5, -48], [5, -48], [5, -40], [13, -40], [13, -30], [5, -30], [5, -22], [-5, -22], [-5, -30], [-13, -30], [-13, -40], [-5, -40]], { fill: P.cream, stroke: null, w: 0, boil: 0.3, seed: seed + 42, reg: false });
+    if (st.exclaim > 0) { const a = K.E.back(clamp(st.exclaim, 0, 1), 2.5); ctx.save(); ctx.translate(-face * 50, -60); ctx.scale(a, a); K.shape(ctx, [[-8, -48], [8, -48], [5, -10], [-5, -10]], { fill: P.sigma, w: 4, boil: 0.6, seed: seed + 50 }); K.shape(ctx, K.ellipsePts(0, 4, 6.5, 6.5, 8), { fill: P.sigma, w: 4, boil: 0.6, seed: seed + 51 }); ctx.restore(); }
+    if (st.think > 0) K.thinkMark(ctx, -face * 62, -70, st.think, seed + 55);
+    ctx.restore(); /* head */
+    ctx.restore(); /* body */
+    /* wings in front (unsquashed space). binos / whistle pull the tips to the head */
+    const headP = [hx, hipY + hy * syk];
+    [["L", -1], ["R", 1]].forEach(([k, sd]) => {
+      let T = st["wing" + k] || { x: sd * 56, y: -66 }; /* folded at the sides */
+      if (bn > 0) T = { x: lerp(T.x, headP[0] + face * 20 + sd * 14, bn), y: lerp(T.y, headP[1] + 10, bn) };
+      wing(ctx, [sd * 40 * sxk, hipY - 92 * syk], [T.x, T.y - hop], sd, seed + 60 + sd * 10);
+    });
+    /* binoculars raised: in front of the wings that hold them */
+    if (bn >= 0.5) {
+      ctx.save(); ctx.translate(0, hipY); ctx.scale(sxk, syk); ctx.translate(hx, hy); ctx.scale(1.15, 1.15);
+      [0, 1].forEach((i) => K.shape(ctx, K.roundPts(face * (2 + i * 22) - 13, -24, 26, 34, 10), { fill: P.binocular, w: 4, boil: 0.4, seed: seed + 44 + i, reg: false, shine: { color: P.shadesShine, w: 3 } }));
+      K.line(ctx, [[face * 2, -8], [face * 24, -8]], { stroke: P.ink, w: 4, boil: 0.3, seed: seed + 46 });
+      ctx.restore();
+    }
+    ctx.restore();
+  };
+
+  /* lifeguard stand: a small wooden tower Gully sits on (lifts the co-host to the mascot's height) */
+  K.lifeguardStand = function (ctx, x, y, h, seed) {
+    seed = seed || 950;
+    [-1, 1].forEach((sd, i) => K.limb(ctx, [[x + sd * 60, y], [x + sd * 36, y - h]], 14, P.wood, seed + i));
+    K.line(ctx, [[x - 52, y - h * 0.4], [x + 52, y - h * 0.4]], { stroke: P.woodDark, w: 8, boil: 0.5, seed: seed + 3 });
+    K.shape(ctx, K.roundPts(x - 70, y - h - 16, 140, 22, 8), { fill: P.woodLight, w: 4.5, boil: 0.6, seed: seed + 4, shade: { color: P.wood, dx: 0, dy: -8 } });
+    K.shape(ctx, K.roundPts(x - 64, y - h - 10 - 46, 128, 30, 8), { fill: P.capRed, w: 4, boil: 0.5, seed: seed + 5 }); /* backrest sign (red, no words) */
+    K.shape(ctx, [[x - 6, y - h - 52], [x + 6, y - h - 52], [x + 6, y - h - 46], [x + 14, y - h - 46], [x + 14, y - h - 36], [x + 6, y - h - 36], [x + 6, y - h - 30], [x - 6, y - h - 30], [x - 6, y - h - 36], [x - 14, y - h - 36], [x - 14, y - h - 46], [x - 6, y - h - 46]], { fill: P.cream, stroke: null, w: 0, boil: 0.2, seed: seed + 6, reg: false });
+    return [x, y - h - 16];
+  };
+})(VK);
+
+/* ============================================================
+   KIT 45 HOSTS (Surf Turtle kit): the two hosts of an episode together.
+   Siggy (turtle) = host A, the explainer. Gully (seagull lifeguard) = host B,
+   the curious co-host. Everything here returns or draws poses from
+   (time, loudness, gestures), so a scene only says who talks how loud and
+   which reaction plays when.
+     K.hostPose(who, t, o)        idle bob + blink + talking mouth/gestures + listening (look, nod) + a gesture
+     K.turtleGesture(kind, u, o)  "point" "nod" "surprise" "think" "shaka" "thumbs" "shrug" "worry"
+     K.gullGesture(kind, u, o)    "point" "nod" "surprise" "think" "whistle" "binos" "flap" "worry"
+     K.duo(ctx, t, o)             both hosts big on a patch of sand (Gully on his lifeguard stand),
+                                  pointing at screen targets and holding props; returns anchor points
+   u = gesture progress 0..1 (use K.hold-like envelopes: 0 -> 1 -> 0).
+   ============================================================ */
+var VK = window.VK || (window.VK = {});
+(function (K) {
+  const P = K.P, { clamp, lerp } = K;
+  const env = (u) => Math.sin(clamp(u, 0, 1) * Math.PI); /* 0 -> 1 -> 0 over a gesture */
+
+  /* ---------- gestures: partial poses (local px, scale 1) ---------- */
+  K.turtleGesture = function (kind, u, o) {
+    o = o || {}; const e = env(u), p = {};
+    if (u <= 0 || u >= 1) return p;
+    if (kind === "point") { /* the flipper on the target's side reaches for it */
+      const T = o.target || [260, -260], sd = T[0] < 0 ? -1 : 1, k = Math.min(1, e * 1.6);
+      p[sd > 0 ? "flipR" : "flipL"] = { x: lerp(sd * 110, T[0], k), y: lerp(-80, T[1], k) }; p.mouth = "smile"; p.brow = 0.3 * e;
+    }
+    else if (kind === "nod") { p.nod = Math.sin(u * Math.PI * 4) * 0.9 * e; }
+    else if (kind === "surprise") { p.shades = 22 * e; p.eyeUp = 3 * e; p.brow = 1.4 * e; p.mouth = "wow"; p.exclaim = Math.min(1, u * 3); p.squash = -0.22 * e; p.neck = 0.8 * e; p.blink = 0; }
+    else if (kind === "think") { p.flipL = { x: lerp(-90, -14, e), y: lerp(-80, -188, e) }; p.headTilt = -10 * e; p.look = [-0.6, -1]; p.shades = 16 * e; p.mouth = "flat"; p.think = Math.min(1, u * 3) * (u < 0.9 ? 1 : 0); }
+    else if (kind === "shaka") { p.flipR = { x: 112 + Math.sin(u * 30) * 22 * e, y: lerp(-90, -250, Math.min(1, e * 1.5)) }; p.mouth = "grin"; }
+    else if (kind === "thumbs") { p.flipR = { x: 140, y: lerp(-90, -210, Math.min(1, e * 1.5)), rot: -80 }; p.mouth = "grin"; p.squash = 0.1 * e; }
+    else if (kind === "shrug") { p.flipL = { x: -150, y: lerp(-80, -150, e) }; p.flipR = { x: 150, y: lerp(-80, -150, e) }; p.headTilt = 12 * e; p.mouth = "flat"; p.brow = 0.8 * e; }
+    else if (kind === "worry") { p.brow = -0.8 * e; p.mouth = "o"; p.shades = 12 * e; p.squash = 0.12 * e; p.flipL = { x: -60, y: -120 }; p.flipR = { x: 60, y: -120 }; }
+    return p;
+  };
+  K.gullGesture = function (kind, u, o) {
+    o = o || {}; const e = env(u), p = {};
+    if (u <= 0 || u >= 1) return p;
+    const f = o.face || -1;
+    if (kind === "point") {
+      /* a "presenting" wing: aimed toward the target but kept near shoulder height, so it never crosses the beak */
+      const T = o.target || [f * 220, -220], sh = [f * 40, -136], dx = T[0] - sh[0], el = clamp(Math.atan2(T[1] - sh[1], Math.abs(dx) || 1), -0.2, 0.35);
+      const tip = { x: sh[0] + Math.sign(dx || f) * 74 * Math.cos(el), y: sh[1] + 74 * Math.sin(el) }, k = Math.min(1, e * 1.6);
+      p[f > 0 ? "wingR" : "wingL"] = { x: lerp(f * 56, tip.x, k), y: lerp(-66, tip.y, k) }; p.brow = 0.4 * e; p.headTilt = -f * 6 * e;
+    }
+    else if (kind === "nod") { p.nod = Math.sin(u * Math.PI * 4) * 0.9 * e; }
+    else if (kind === "surprise") { p.puff = e; p.brow = 1.4 * e; p.exclaim = Math.min(1, u * 3); p.hop = 26 * e; p.blink = 0; p.wingL = { x: -110, y: -150 * e - 40 }; p.wingR = { x: 110, y: -150 * e - 40 }; }
+    else if (kind === "think") { p.wingL = { x: lerp(-58, f * 34, e), y: lerp(-40, -128, e) }; p.headTilt = 12 * e * -f; p.look = [-f * 0.4, -1]; p.think = Math.min(1, u * 3) * (u < 0.9 ? 1 : 0); }
+    else if (kind === "whistle") { p.whistle = u > 0.08 && u < 0.85 ? 1 : 0; p.brow = -0.5 * e; p.wingR = { x: 80, y: -100 }; }
+    else if (kind === "binos") { p.binos = u > 0.1 && u < 0.9 ? 1 : 0; p.headTilt = -6 * e; }
+    else if (kind === "flap") { const w = Math.sin(u * 40) * 50 * e; p.wingL = { x: -100, y: -80 - w }; p.wingR = { x: 100, y: -80 - w }; p.hop = 18 * e; }
+    else if (kind === "worry") { p.brow = -0.8 * e; p.squash = 0.14 * e; p.wingL = { x: -30, y: -70 }; p.wingR = { x: 30, y: -70 }; }
+    return p;
+  };
+
+  /* ---------- a host's full pose at time t ----------
+     o: { talk (own loudness 0..1), other (the other host's loudness), face (+1/-1 toward the partner),
+          gesture: {kind, u, target}, seed } */
+  K.hostPose = function (who, t, o) {
+    o = o || {};
+    const talk = clamp(o.talk || 0, 0, 1), other = clamp(o.other || 0, 0, 1), seed = o.seed || (who === "A" ? 3 : 7), face = o.face || 1;
+    const p = { seed: who === "A" ? 700 : 900, blink: K.blinkAt(t, seed), squash: 0.05 * Math.sin(t * 2.3 + seed), talk };
+    /* talking: the free limb rises with the loud syllables, the head bobs */
+    const beatH = K.hash(Math.floor(t * 2.5), seed + 31), lift = talk > 0.15 ? talk * (0.4 + 0.6 * beatH) : 0;
+    if (who === "A") {
+      p.turn = 0.35 * face; p.look = [face * 0.6, 0];
+      p.flipL = { x: -110, y: -80 - 70 * lift }; p.flipR = { x: 110, y: -80 };
+      if (talk > 0.15) p.headTilt = 6 * Math.sin(t * 3.1) * talk;
+      if (talk < 0.1 && other > 0.1) { p.look = [face, -0.2]; p.nod = 0.6 * other * Math.max(0, Math.sin(t * 6.5)); p.mouth = "smile"; }
+    } else {
+      p.face = face; p.look = [face * 0.7, 0];
+      p.wingL = { x: -56, y: -66 - (face < 0 ? 90 * lift : 0) }; p.wingR = { x: 56, y: -66 - (face > 0 ? 90 * lift : 0) };
+      if (talk > 0.15) p.headTilt = 5 * Math.sin(t * 3.7) * talk;
+      if (talk < 0.1 && other > 0.1) { p.look = [face, 0.1]; p.nod = 0.6 * other * Math.max(0, Math.sin(t * 6.1 + 1)); }
+    }
+    if (o.gesture) Object.assign(p, (who === "A" ? K.turtleGesture : K.gullGesture)(o.gesture.kind, o.gesture.u, Object.assign({ face }, o.gesture)));
+    return p;
+  };
+
+  /* ---------- both hosts on a patch of sand, screen space ----------
+     o: { x: Siggy's feet x, y: ground y, s: scale (1.3 -> Siggy ~ 325 px tall), side: +1 = Gully to the right,
+          gap: px between them, talkA, talkB (0..1), gestureA/B {kind, u}, pointA/B [sx, sy] screen targets,
+          holdA (ctx, x, y) => draw a prop in Siggy's free flipper, stand: true (Gully on the stand), sand: true, a: 0..1 appear } */
+  K.duo = function (ctx, t, o) {
+    o = Object.assign({ x: 380, y: 1010, s: 1.3, side: 1, gap: 330, talkA: 0, talkB: 0, stand: true, sand: true, a: 1 }, o || {});
+    const a = K.E.out3(clamp(o.a, 0, 1)); if (a <= 0) return null;
+    K.screen(ctx); ctx.save(); ctx.globalAlpha *= a;
+    const s = o.s, ax = o.x, ay = o.y + (1 - a) * 200, bx = o.x + o.side * o.gap * s / 1.3, by = ay;
+    if (o.sand) K.shape(ctx, K.blobPts((ax + bx) / 2, ay + 18, Math.abs(bx - ax) / 2 + 260 * s / 1.3, 44, 16, 31, 0.12), { fill: P.sand, w: 5, boil: 0.8, seed: 960, dots: { color: P.sandDark, cell: 12, density: 0.32, alpha: 0.6 } });
+    const seat = o.stand ? K.lifeguardStand(ctx, bx, by, 150 * s / 1.3, 950) : [bx, by];
+    const local = (pt, x0, y0, sc) => (pt ? [(pt[0] - x0) / sc, (pt[1] - y0) / sc] : null);
+    const gA = o.gestureA || (o.pointA ? { kind: "point", u: o.pointAmt == null ? 0.5 : o.pointAmt * 0.5 } : null);
+    const gB = o.gestureB || (o.pointB ? { kind: "point", u: o.pointBmt == null ? 0.5 : o.pointBmt * 0.5 } : null);
+    if (gA && o.pointA) gA.target = local(o.pointA, ax, ay, s);
+    const gs = s * 0.92;
+    if (gB && o.pointB) gB.target = local(o.pointB, seat[0], seat[1], gs);
+    /* each host faces the partner, or the thing it points at */
+    const faceA = o.pointA ? Math.sign(o.pointA[0] - ax) || o.side : o.side, faceB = o.pointB ? Math.sign(o.pointB[0] - seat[0]) || -o.side : -o.side;
+    const pa = K.hostPose("A", t, { talk: o.talkA, other: o.talkB, face: faceA, gesture: gA });
+    const pb = K.hostPose("B", t, { talk: o.talkB, other: o.talkA, face: faceB, gesture: gB });
+    if (o.holdA) pa.flipL = { x: -120, y: -150 };
+    K.gull(ctx, seat[0], seat[1], gs, pb);
+    K.turtle(ctx, ax, ay, s, pa);
+    if (o.holdA) o.holdA(ctx, ax - 120 * s, ay - 150 * s);
+    ctx.restore();
+    return { A: [ax, ay - 250 * s], B: [seat[0], seat[1] - 200 * gs], feetA: [ax, ay], feetB: seat };
+  };
 })(VK);
 
 /* ============================================================

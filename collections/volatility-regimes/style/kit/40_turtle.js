@@ -19,7 +19,10 @@
      brow     -1..1.5 (raised = surprise, negative = focus)
      flipL/R  { x, y, rot? } flipper tip target (local px)
      footL/R  { x, y } foot target (local px); default stance
-     exclaim  0..1 a "!" pops above the head
+     exclaim  0..1 a "!" pops above the head;  think 0..1 a "?" bubble
+     talk     0..1 talking mouth (narration loudness, overrides mouth while > 0.06)
+     viseme   "a" | "o" | "e" | "m" (optional; default picks one per 1/8 s from talk, see K.viseme)
+     nod      -1..1 head pitch (+ = chin down); listening hosts nod on the speaker's accents
    ============================================================ */
 var VK = window.VK || (window.VK = {});
 (function (K) {
@@ -88,7 +91,8 @@ var VK = window.VK || (window.VK = {});
     /* neck + head */
     const neck = 1 + 0.6 * (st.neck || 0), headY = -132 - 22 * neck, tx = turn * 10;
     K.limb(ctx, [[0, -96], [tx * 0.5, -112 - 6 * neck], [tx, headY + 26]], 34, P.skin, seed + 50);
-    ctx.save(); ctx.translate(tx, headY); ctx.rotate(((st.headTilt || 0) * Math.PI) / 180);
+    const nod = clamp(st.nod || 0, -1, 1);
+    ctx.save(); ctx.translate(tx, headY + 8 * nod); ctx.rotate(((st.headTilt || 0) * Math.PI) / 180); ctx.scale(1, 1 - 0.07 * nod);
     const head = K.ellipsePts(0, 0, 50, 42, 18);
     K.shape(ctx, head, { fill: P.skin, w: 5.5, boil: 1, seed: seed + 60, shade: { color: P.skinDark, dx: -8, dy: -10 }, shine: { color: P.skinLight, a0: 3.6, a1: 4.3, w: 6 } });
     /* sea-turtle head plates */
@@ -97,8 +101,9 @@ var VK = window.VK || (window.VK = {});
     /* cheeks */
     [-1, 1].forEach((sd, i) => K.shape(ctx, K.ellipsePts(fx + sd * 34, 14, 9, 6, 8), { fill: P.cheek, stroke: null, w: 0, boil: 0.3, seed: seed + 66 + i, alpha: 0.65, reg: false }));
     /* mouth: a beak-ish wide smile */
-    const m = st.mouth || "smile";
-    if (m === "smile") K.line(ctx, [[fx - 24, 14], [fx - 10, 24], [fx + 10, 24], [fx + 26, 12]], { stroke: P.ink, w: 4.5, boil: 0.6, seed: seed + 70 });
+    const m = st.mouth || "smile", talk = clamp(st.talk || 0, 0, 1);
+    if (talk > 0.06) K.talkMouth(ctx, fx, 20, talk, st.viseme || K.viseme(K.now, talk, seed), 1, seed + 77);
+    else if (m === "smile") K.line(ctx, [[fx - 24, 14], [fx - 10, 24], [fx + 10, 24], [fx + 26, 12]], { stroke: P.ink, w: 4.5, boil: 0.6, seed: seed + 70 });
     else if (m === "flat") K.line(ctx, [[fx - 16, 20], [fx + 16, 19]], { stroke: P.ink, w: 4.5, boil: 0.5, seed: seed + 71 });
     else if (m === "grin") { K.shape(ctx, [[fx - 28, 12], [fx + 28, 12], [fx + 16, 30], [fx, 33], [fx - 16, 30]], { fill: "#7a2f2a", w: 4, boil: 0.6, seed: seed + 72, reg: false }); K.shape(ctx, [[fx - 22, 13], [fx + 22, 13], [fx + 18, 19], [fx - 18, 19]], { fill: P.cream, stroke: null, w: 0, boil: 0.3, seed: seed + 73, reg: false }); }
     else if (m === "open") K.shape(ctx, K.ellipsePts(fx, 22, 15, 12, 10), { fill: "#7a2f2a", w: 4, boil: 0.6, seed: seed + 74, reg: false });
@@ -140,6 +145,7 @@ var VK = window.VK || (window.VK = {});
       K.shape(ctx, K.ellipsePts(0, 2, 7, 7, 8), { fill: P.sigma, w: 4, boil: 0.6, seed: seed + 111 });
       ctx.restore();
     }
+    if (st.think > 0) K.thinkMark(ctx, -70, -86, st.think, seed + 115);
     ctx.restore(); /* head */
     ctx.restore(); /* body group */
     /* front flippers (arms) in front, unsquashed space */
@@ -154,6 +160,36 @@ var VK = window.VK || (window.VK = {});
     ctx.restore();
   };
   function lerp(a, b, u) { return a + (b - a) * u; }
+
+  /* ---------- talking (shared by every host) ---------- */
+  /* pick a mouth shape per 1/8 s from loudness: louder -> "a"/"o", quiet -> "e"/"m" (seeded, seek-safe) */
+  K.viseme = function (t, talk, seed) {
+    const h = K.hash(Math.floor(t * 8), (seed || 1) + 404);
+    if (talk < 0.2) return h < 0.5 ? "m" : "e";
+    if (talk > 0.6) return h < 0.6 ? "a" : "o";
+    return h < 0.34 ? "e" : h < 0.67 ? "a" : "o";
+  };
+  /* open talking mouth at (x, y): size from talk, shape from viseme; k = scale */
+  K.talkMouth = function (ctx, x, y, talk, vis, k, seed) {
+    const W = { a: [1, 1], o: [0.62, 1.05], e: [1.15, 0.5], m: [0.9, 0.12] }[vis] || [1, 1];
+    const w = (14 + 8 * talk) * W[0] * k, h = (4 + 18 * talk) * W[1] * k;
+    K.shape(ctx, [[x - w, y - 2], [x - w * 0.4, y - 4], [x + w * 0.4, y - 4], [x + w, y - 2], [x + w * 0.7, y + h * 0.7], [x, y + h], [x - w * 0.7, y + h * 0.7]], { fill: "#7a2f2a", w: 4 * k, boil: 0.5, seed, reg: false });
+    if (h > 10 * k) K.shape(ctx, K.ellipsePts(x, y + h * 0.66, w * 0.45, h * 0.22, 8), { fill: "#e8766a", stroke: null, w: 0, boil: 0.3, seed: seed + 1, reg: false });
+  };
+  /* "?" thought bubble (thinking gesture) */
+  K.thinkMark = function (ctx, x, y, a, seed) {
+    const s = K.E.back(clamp(a, 0, 1), 2.2);
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    [[30, 40, 6], [16, 22, 9]].forEach((d, i) => K.dot(ctx, d[0], d[1], d[2], P.cream, P.ink, 3, seed + i));
+    K.shape(ctx, K.ellipsePts(0, -12, 30, 28, 14), { fill: P.cream, w: 4, boil: 0.6, seed: seed + 3 });
+    K.text(ctx, "?", 0, -10, { size: 40, weight: 900, fill: P.storm });
+    ctx.restore();
+  };
+  /* aim a host at a target: returns { turn, look } for a host whose head is at (hx, hy) */
+  K.lookToward = function (hx, hy, tx, ty) {
+    const dx = tx - hx, dy = ty - hy, d = Math.hypot(dx, dy) || 1;
+    return { turn: clamp(dx / 400, -1, 1), look: [clamp(dx / d, -1, 1), clamp(dy / d, -1, 1)] };
+  };
 
   /* seeded blink curve, about one blink per 2.1 s */
   K.blinkAt = function (t, seed) {

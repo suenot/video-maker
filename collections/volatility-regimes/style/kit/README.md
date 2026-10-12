@@ -9,7 +9,9 @@ It uses plain browser JS with no modules. Each file attaches to the global `VK` 
 | `05_palette.js` | `VK.P` colours (calm / storm / sigma roles), `VK.FONT` stacks, `VK.mix` (the only place they are defined) |
 | `10_print.js` | frame setup `begin(ctx, t, cam)`, the camera `applyCam(ctx, parallax)`, `toScreen`; screen-print `shape` (off-register fill + halftone or solid shade band + brush outline), `brush`, `line`, `dot`, `halftone`, `woodgrain`, `bands` (stepped sky), `text` (never wobbles, optional poster drop shadow), `glow`; point generators `ellipsePts`, `blobPts`, `rectPts`, `roundPts`, `evenPts`, `polyPts` |
 | `30_world.js` | `sky` (banded sunset or storm, striped `retroSun`, lozenge `cloud`s), `rain`, `ocean` (wave rows, `vol` = wave height), `waveRow`, `surfWave` (the curling hero wave), `spray`, `beach`, `palm`, `farIsle`, `lighthouse` (beam = regime), `gull`, `surfboard` (long / gun, with the tiny gauge), `gauge` |
-| `40_turtle.js` | `turtle(ctx, x, y, s, pose)`: Siggy with squash/stretch, two-bone IK flippers and legs (`ik2`), sunglasses that slide (`shades`), blinks, brows, mouths, neck stretch, `!`; `blinkAt(t, seed)` |
+| `40_turtle.js` | `turtle(ctx, x, y, s, pose)`: Siggy (host A) with squash/stretch, two-bone IK flippers and legs (`ik2`), sunglasses that slide (`shades`), blinks, brows, mouths, `talk` + `viseme`, `nod`, neck stretch, `!`, `think`; `blinkAt(t, seed)`; shared `viseme`, `talkMouth`, `thinkMark`, `lookToward` |
+| `42_gull.js` | `gull(ctx, x, y, s, pose)`: Gully the seagull lifeguard (host B): `face`, `talk` beak, IK wings (`wingL/R`) and legs, blink, brows, `nod`, `whistle`, `binos`, `puff`, `!`, `?`; `lifeguardStand` |
+| `45_hosts.js` | both hosts together: `hostPose(who, t, {talk, other, face, gesture})` (idle, talking, listening), `turtleGesture` / `gullGesture(kind, u, opt)`, `duo(ctx, t, opt)` (both hosts big on sand, pointing at screen targets, holding props) |
 | `50_explainer.js` | slide content as beach objects: `forecastBoard` + `formula` markup, `tikiSign`, `posterChart` (regime bands), `hump`, `tideTable`, `menuBoard`, `postcard`, `buoy`, `current` / `loopCurrent` / `tag`, `medal` + `ICON`, `posterFrame`, `tikiFace`, `starfish` |
 | `fonts/` | local woff2 (Lobster, Nunito, Fira Mono with Greek, CJK subsets) plus `fonts.css`; refresh with `tools/fetch_fonts.py` |
 | `vendor/gsap.min.js` | GSAP 3.14.2 (local, no CDN) |
@@ -44,6 +46,17 @@ It uses plain browser JS with no modules. Each file attaches to the global `VK` 
 5. Snapshot and look at the frames (`intro/tools/snap.sh` shows the loop, `tools/sheet.sh` tiles a contact sheet, `tools/snap_lang.sh` checks a language). Render with `npx hyperframes render --quality high --output renders/x.mp4` (`intro/tools/render_all.sh` does all four languages).
 
 `style/gallery/` is a 6-second project that shows every explainer primitive. Rebuild and snapshot it after you change the kit, to catch regressions.
+
+## Hosts in an episode
+
+```js
+/* per frame: talkA / talkB = each voice's loudness 0..1 from the narration sync */
+K.duo(ctx, g, { x: 380, y: 1010, s: 1.3, side: 1, talkA, talkB,
+  pointA: board ? [900, 380] : null, pointAmt: K.inv(B.formula, B.formula + 0.4, g),      /* screen point */
+  gestureB: { kind: "binos", u: K.inv(B.storm - 0.5, B.storm + 1.5, g) } });             /* u runs 0 -> 1 */
+```
+
+Gestures are envelopes: pass `u` running from 0 to 1 over the gesture (the pose goes out and back by itself). `style/gallery` pages 4 - 6 show the duo talking, listening and pointing, and every gesture.
 
 ## Rules the kit relies on
 

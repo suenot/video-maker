@@ -94,6 +94,28 @@ Animation rules:
 - Always something alive: beat bounce, balancing flippers, board bob, the wobble.
 - On a board: `surfer(x, y, ang, s, pose, gauge)` in the intro, or `K.surfboard` + `K.turtle` with `lean = board angle`. The board carries the **tiny volatility gauge** on a stalk at the nose (`gauge` 0..1); after drawing, `K.gaugePt` holds its screen point for dial transitions.
 
+## 5b. Gully (the sidekick, host B)
+
+Gully is a seagull lifeguard and Siggy's co-host in episodes. Siggy (host A, the lower voice) explains; Gully (host B, the higher voice) asks, doubts, spots the wave coming.
+
+| Part | Value (scale 1, local px) |
+| --- | --- |
+| Overall | feet on y = 0, about 230 tall (0.9 of Siggy), 3/4 view toward `face` (+1 right, -1 left) |
+| Body | plump white teardrop (50 x 60) with a grey mantle and tail, halftone shadow |
+| Head | white, 1.15x, two eyes on the face side, orange beak (upper + lower mandible, coral spot) that opens with `talk` |
+| Lifeguard kit | coral cap with a cream cross and brim, a whistle on a turquoise cord, binoculars on a strap |
+| Wings | two-bone IK 36 + 32 with a fan of three broad primaries (dark tips); folded at the sides by default |
+| Legs | thin orange two-bone IK to webbed feet; they tuck in a hop |
+| Stand | `K.lifeguardStand` lifts him so both heads sit at about the same height |
+
+Gestures (`K.gullGesture(kind, u)`): `point` (a "presenting" wing aimed at the target, kept at shoulder height so it never crosses the beak), `nod`, `surprise` (feathers puff, eyes pop, hop, "!"), `think` (wing to the beak, "?" bubble), `whistle` (whistle in the beak, sound lines: a call to attention, use on warnings), `binos` (binoculars to the eyes: spotting the next wave or a regime change), `flap`, `worry`.
+Siggy's gestures (`K.turtleGesture`): `point` (the flipper on the target's side), `nod`, `surprise`, `think` (flipper to the chin, "?"), `shaka`, `thumbs`, `shrug`, `worry`.
+
+Talking and listening (both hosts):
+- `talk` 0..1 is the narration loudness of that host's voice per frame. The mouth opens with it, and the shape follows a viseme (`a`, `o`, `e`, `m`), chosen per 1/8 s from the loudness by `K.viseme` (seeded, seek-safe) unless a scene passes one.
+- `K.hostPose(who, t, {talk, other, face, gesture})` adds the idle bob, blinks, the free limb rising on loud syllables and the head bob; when the other host talks, the listener looks at the speaker and nods on their loud syllables.
+- `K.duo(ctx, t, {x, y, s, side, talkA, talkB, pointA, pointB, gestureA, gestureB, holdA})` puts both hosts big on a patch of sand in screen space: Siggy at s 1.3 is about 325 px tall, Gully on his stand beside him. Each host faces the partner, or the thing it points at. Use `side: -1` with x about 1600 for the bottom-right corner, and keep explainer objects in the rest of the frame.
+
 ## 6. Camera and transitions
 
 - One virtual camera `{x, y, z, rot}` per set, keyed with a monotone Hermite track (`K.mkTrack`), never overshooting. Push-ins are at most 1.6x, onto a reason (the gauge, the board).

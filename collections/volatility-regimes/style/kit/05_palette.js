@@ -28,6 +28,10 @@ var VK = window.VK || (window.VK = {});
     shell: "#b5763a", shellDark: "#8a5427", shellLight: "#e0a65c", scute: "#d9a05a",
     shades: "#16323a", shadesFrame: "#f2675a", shadesShine: "#7fd8cf", cheek: "#f59a8a",
     eye: "#fffaf0", pupil: "#142a30",
+    /* sidekick: Gully the seagull lifeguard */
+    gull: "#fdf8ee", gullShade: "#dfe6e2", gullGrey: "#9fb3b8", gullGreyDark: "#6e8a90", gullTip: "#2f5a5c",
+    beak: "#f7a24c", beakDark: "#d9822e", beakSpot: "#e8566a", gullLeg: "#f27d58", gullEye: "#fffaf0",
+    capRed: "#e8566a", capRedDark: "#b83b4c", whistle: "#f6b93b", cord: "#2bb0a8", binocular: "#2f5a5c",
     /* surfboards + tiki wood */
     board: "#fbeed3", boardStripe: "#f2675a", boardStripe2: "#2bb0a8",
     wood: "#a8693a", woodDark: "#6e4224", woodLight: "#cf9256", woodNight: "#4a2c18",
