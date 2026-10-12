@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[{"id":"title","type":"string","label":"Title (| = line break)","default":"Onchain &amp; DeFi|Quant"},{"id":"lang","type":"string","label":"Language: en, ru, zh-CN, zh-TW","default":"en"}]'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Onchain and DeFi Quant: intro</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+/*__FONTS__*/
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #f4dcc0; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #f4dcc0; }
+      #cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      #title { position: absolute; left: 0; top: 0; width: 1920px; height: 0; pointer-events: none; }
+      #title .ln { position: absolute; left: 0; width: 1920px; text-align: center; white-space: nowrap; line-height: 1; }
+      #title .ch { display: inline-block; will-change: transform, opacity; }
+      #title .l0 { font-family: "Lobster", "CJK SC", "CJK TC", cursive; font-weight: 400; color: #fbf1dc; -webkit-text-stroke: 9px #1a1216; paint-order: stroke fill; text-shadow: 6px 7px 0 #1a1216; letter-spacing: 0.01em; }
+      #title .l1 { font-family: "Nunito", "CJK SC", "CJK TC", sans-serif; font-weight: 900; color: #8fd8c0; -webkit-text-stroke: 8px #1a1216; paint-order: stroke fill; text-shadow: 5px 6px 0 #1a1216; letter-spacing: 0.04em; }
+      #title.cjk-sc .ln { font-family: "Nunito", "CJK SC", sans-serif; font-weight: 900; }
+      #title.cjk-tc .ln { font-family: "Nunito", "CJK TC", sans-serif; font-weight: 900; }
+      #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
+      #preload .lb { font-family: "Lobster"; font-weight: 400; }
+      #preload .n6 { font-family: "Nunito"; font-weight: 600; }
+      #preload .n8 { font-family: "Nunito"; font-weight: 800; }
+      #preload .n9 { font-family: "Nunito"; font-weight: 900; }
+      #preload .m4 { font-family: "Anonymous Pro"; font-weight: 400; }
+      #preload .m7 { font-family: "Anonymous Pro"; font-weight: 700; }
+      #preload .sc { font-family: "CJK SC"; font-weight: 900; }
+      #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      #vig { background: radial-gradient(100% 90% at 50% 46%, rgba(0, 0, 0, 0) 64%, rgba(26, 18, 22, 0.38) 100%); }
+      #grain { opacity: 0.1; mix-blend-mode: multiply; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="20.9" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div class="ov" id="vig"></div>
+      <div class="ov" id="grain"></div>
+      <div id="title" data-layout-allow-overlap></div>
+      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="20.9" data-track-index="10" data-volume="1"></audio>
+      <div id="preload"><span class="lb">Aa Бб 0</span><span class="n6">Aa Бб 0</span><span class="n8">Aa Бб 0</span><span class="n9">Aa Бб 0</span><span class="m4">Aa Бб 0</span><span class="m7">Aa Бб 0</span><span class="sc">链上与量化</span><span class="tc">鏈上與量化</span></div>
+    </div>
+    <script>
+(function () {
+/*__SCRIPT__*/
+})();
+    </script>
+  </body>
+</html>
