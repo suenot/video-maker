@@ -28,17 +28,22 @@
       #preload .m7 { font-family: "Fira Mono"; font-weight: 700; }
       #preload .sc { font-family: "CJK SC"; font-weight: 900; }
       #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      /* marketmaker.cc mark: a cream poster sticker, top right, always on top of the action */
+      #logo { position: absolute; top: 48px; right: 48px; height: 96px; padding: 0 26px 0 16px; display: flex; align-items: center; gap: 12px; background: #fbeed3; border: 5px solid #16323a; border-radius: 48px; box-shadow: 6px 7px 0 #16323a; color: #16323a; z-index: 5; }
+      #logo svg { width: 66px; height: 66px; display: block; }
+      #logo span { font-family: "Nunito", sans-serif; font-weight: 900; font-size: 38px; letter-spacing: 0.01em; line-height: 1; }
       #vig { background: radial-gradient(100% 90% at 50% 46%, rgba(0, 0, 0, 0) 64%, rgba(22, 50, 58, 0.38) 100%); }
       #grain { opacity: 0.16; mix-blend-mode: multiply; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="20.1" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="31" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div id="title" data-layout-allow-overlap></div>
       <div class="ov" id="vig"></div>
+      <div id="logo"><!--__LOGO__--><span>marketmaker.cc</span></div>
       <div class="ov" id="grain"></div>
-      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="20.1" data-track-index="10" data-volume="1"></audio>
+      <audio id="song" src="song_short.m4a" data-start="0" data-duration="31" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="lo">Aa Бб 0</span><span class="n6">Aa Бб 0</span><span class="n8">Aa Бб 0</span><span class="n9">Aa Бб 0</span><span class="m5">Aa σαβω 0</span><span class="m7">Aa σ 0</span><span class="sc">波动率建模</span><span class="tc">波動率建模</span></div>
     </div>
     <script>

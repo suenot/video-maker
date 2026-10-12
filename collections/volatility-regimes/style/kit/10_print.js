@@ -175,10 +175,11 @@ var VK = window.VK || (window.VK = {});
     }
     return ctx.createPattern(patCache[key], "repeat");
   }
-  /* fill region pts with dots (density 0..1 sets dot radius) */
+  /* fill region pts with dots (density 0..1 sets dot radius); straight: polygon, not smoothed */
   K.halftone = function (ctx, pts, opt) {
-    const o = Object.assign({ color: K.P.inkSoft, cell: 9, density: 0.55, alpha: 0.5, closed: true }, opt || {});
-    ctx.save(); K.pathOf(ctx, pts, true);
+    const o = Object.assign({ color: K.P.inkSoft, cell: 9, density: 0.55, alpha: 0.5, closed: true, straight: false }, opt || {});
+    ctx.save();
+    if (o.straight) { ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]))); ctx.closePath(); } else K.pathOf(ctx, pts, true);
     ctx.globalAlpha *= o.alpha; ctx.fillStyle = dotPattern(ctx, o.color, o.cell, o.cell * 0.5 * clamp(o.density, 0.05, 1));
     ctx.fill(); ctx.restore();
   };

@@ -8,7 +8,7 @@ const FC = { horizon: 450, sand: 700, board: { x: 690, y: 330, w: 1120, h: 290 }
 const FORMULA = ["σ^2_t = ω + α·ε^2_{t-1} + β·σ^2_{t-1}", "ω = 0.02   α = 0.10   β = 0.88"];
 const RACK = { long: [1530, 905], gun: [1700, 905] };
 
-const camFc = (t) => ({ x: 960 + 14 * Math.sin(t * 0.7), y: K.tw(t, T.tilt[0], T.tilt[1], 540, -520, K.E.in3), z: K.tw(t, T.board - 0.4, T.forecast + 1, 1.04, 1.0, K.E.out3), rot: 0 });
+const camFc = (t) => ({ x: 960 + 14 * Math.sin(t * 0.7), y: K.tw(t, T.tilt[0], T.tilt[1], 540, -620, K.E.in3), z: K.tw(t, T.board - 0.4, T.forecast + 1, 1.04, 1.0, K.E.out3), rot: 0 });
 
 function fcPose(t) {
   const p = { seed: 700, blink: K.blinkAt(t, 5), squash: 0.07 * K.pulse(t, 1, 6), footL: { x: -44, y: 0 }, footR: { x: 44, y: 0 } };

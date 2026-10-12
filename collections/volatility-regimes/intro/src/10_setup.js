@@ -1,49 +1,59 @@
 /* ============================================================
    INTRO 10 SETUP: beat grid, story beats, variables, title DOM, data.
-   Song: song_20s.m4a, 60s surf rock at 161.5 BPM (beat 0.372 s, bar 1.486 s).
-   Cut = raw 0.45-18.50 (4 instrumental bars + the whole chorus) spliced on
-   the downbeat into raw 2.02-4.03 (instrumental tail, 0.85 s fade).
-   Sung lines (whisper word times, shifted to the cut):
-     6.41 "Ride the calm,"   7.89 "ride the storm,"
-     9.38 "Every regime has its form,"
-    12.40 "Measure the swell and read the sea,"
-    15.39 "Volatility Modeling and Regimes!"
+   Song: song_short.m4a = song_short_raw.mp4 trimmed to 31.0 s (silence cut,
+   0.8 s fade, loudnorm -14). 60s surf rock at 161.5 BPM (beat 0.372 s,
+   bar 1.486 s). Sung lines (whisper word times):
+     3.37 "Ride the calm,"   4.85 "ride the storm,"
+     6.34 "Every regime has its form,"
+     9.29 "Measure the swell and read the sea,"
+    12.24 "Volatility Modeling and Regimes!"
+   15.16 - 31.0 is instrumental: hidden states switch (HMM), the leverage
+   effect, a cluster of big sets, then the title card on the ending.
    Every story time below is K.at(bar, beat) on the measured downbeats.
    ============================================================ */
 const K = VK, P = K.P, at = K.at;
 K.G.BPM = 161.5;
-K.G.BARS = [0.35, 1.88, 3.39, 4.90, 6.41, 7.89, 9.38, 10.89, 12.40, 13.89, 15.39, 16.86, 18.35, 19.84];
-const DUR = 20.1;
+K.G.BARS = [0.44, 1.93, 3.37, 4.85, 6.34, 7.80, 9.29, 10.75, 12.24, 13.70, 15.16, 16.65, 18.09, 19.57, 21.06, 22.52, 23.99, 25.47, 26.94, 28.42, 29.90];
+const DUR = 31.0;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const BEAT = K.beatLen();
 
 /* ---------- story beats (on the song's downbeats) ---------- */
 const T = {
-  tiltDown: [0, at(1)],            /* 0 - 1.88 camera tilts down from the striped sun to the sea */
-  surfIn: [0.2, at(1)],            /* Siggy glides in on glassy little waves, lands on the downbeat */
-  shaka: at(1),                    /* 1.88 waves hello (shaka), shades glint on beat 2 */
-  gauge: at(2),                    /* 3.39 looks down at the tiny gauge on the board, taps it */
-  tap: at(2, 2),
-  horizon: at(3),                  /* 4.90 turns to the horizon: a storm bank rolls up */
-  surprise: at(3, 1.5),            /* shades slide down, eyes pop, "!" */
-  crouch: at(3, 3),                /* anticipation before the ride */
-  calm: at(4),                     /* 6.41 "Ride the calm": carving small waves, turquoise beam */
-  storm: at(5),                    /* 7.89 "ride the storm": REGIME FLIP, beam turns coral, the wave stands up */
-  cluster: at(5, 2),               /* big waves follow big waves (a second set rolls in) */
-  dial: [at(5, 3.4), at(6)],       /* 9.15 - 9.38 dive into the board's gauge (dial iris) */
-  chart: at(6),                    /* 9.38 "Every regime has its form": wave heights become a chart */
-  forms: at(7),                    /* 10.89 the two distributions (narrow calm, fat storm) */
-  point: at(7, 2),                 /* Siggy pops up and points at the storm band */
-  roll: [at(8, -1), at(8)],        /* 12.03 - 12.40 the poster rolls up onto the beach */
-  board: at(8),                    /* 12.40 "Measure the swell": the surf-report board, GARCH written in chalk */
-  forecast: at(9),                 /* 13.89 "read the sea": the forecast gauge swings to storm */
-  grab: at(9, 2),                  /* Siggy picks the storm gun board */
-  tilt: [at(10, -1.5), at(10)],    /* 14.83 - 15.39 camera tilts up into the clearing sky */
-  title: at(10),                   /* 15.39 "Volatility Modeling and Regimes!" title hit */
-  line2: at(10, 2),
-  medals: at(11),                  /* 16.86 five episode medals pop on eighth notes */
-  hang: at(12),                    /* 18.35 hop on the wave, spray */
-  tip: at(12, 2),                  /* shades up on the head, happy squint */
+  tiltDown: [0, at(1)],            /* 0 - 1.93 camera tilts down from the striped sun to the sea */
+  surfIn: [0.1, at(1)],            /* Siggy glides in on glassy little waves, lands on the downbeat */
+  shaka: at(1),                    /* 1.93 waves hello (shaka), shades glint on beat 2 */
+  gauge: at(1, 2),                 /* 2.67 looks down at the tiny gauge on the board, taps it */
+  tap: at(1, 3),
+  calm: at(2),                     /* 3.37 "Ride the calm": hop, carving small waves, turquoise beam */
+  horizon: at(2, 1),               /* a storm bank rolls up on the horizon */
+  surprise: at(2, 2),              /* shades slide down, eyes pop, "!" */
+  crouch: at(2, 3.3),              /* anticipation before the drop */
+  storm: at(3),                    /* 4.85 "ride the storm": REGIME FLIP, beam turns coral, the wave stands up */
+  cluster: at(3, 2),               /* big waves follow big waves (a second set rolls in) */
+  dial: [at(3, 3.4), at(4)],       /* dive into the board's gauge (dial iris) */
+  chart: at(4),                    /* 6.34 "Every regime has its form": wave heights become a chart */
+  forms: at(5),                    /* 7.80 "...has its form": the two distributions */
+  point: at(5, 2),                 /* Siggy pops up and points at the storm band */
+  roll: [at(6, -1), at(6)],        /* the poster rolls up onto the beach */
+  board: at(6),                    /* 9.29 "Measure the swell": the surf-report board, GARCH in chalk */
+  forecast: at(7),                 /* 10.75 "read the sea": the forecast dial swings to storm */
+  grab: at(7, 2),                  /* Siggy picks the storm gun board */
+  tilt: [at(8, -1.5), at(8)],      /* camera tilts up into the sky, cut on the downbeat */
+  hmm: at(8),                      /* 12.24 "Volatility Modeling and Regimes!": two hidden states (buoys) */
+  hmmSw: [at(9, 2), at(10, 2), at(11), at(11, 2)], /* instrumental: hidden states switch */
+  unroll: [at(12, -1), at(12)],    /* a poster unrolls down over the sea */
+  lev: at(12),                     /* 18.09 leverage effect: drops raise volatility more than rises */
+  levPoint: at(13),                /* 19.57 Siggy points at the drop's spike */
+  roll2: [at(14, -1), at(14)],     /* the poster rolls up onto the sea again */
+  ride: at(14),                    /* 21.06 a cluster of big sets, then calm comes back */
+  calmBack: at(16),                /* 23.99 the beam turns turquoise again */
+  tilt2: [at(17, -1.5), at(17)],   /* tilt up into the sunset */
+  title: at(17),                   /* 25.47 title card on the ending */
+  line2: at(17, 2),
+  medals: at(18),                  /* 26.94 five episode medals pop on eighth notes */
+  hang: at(19),                    /* 28.42 hop on the wave, spray */
+  tip: at(19, 2),                  /* shades up on the head, happy squint */
 };
 
 /* ---------- variables (title text, language) ---------- */

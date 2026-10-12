@@ -9,12 +9,10 @@ const BOARD_LEN = 400;
 
 const camSea = K.mkTrack([
   [0, { x: 960, y: 140, z: 1 }],
-  [T.tiltDown[1], { x: 960, y: 540, z: 1 }],
-  [T.gauge, { x: 960, y: 540, z: 1 }],
-  [T.gauge + 0.9, { x: 930, y: 700, z: 1.55 }],
-  [T.horizon, { x: 980, y: 640, z: 1.3 }],
-  [T.surprise + 0.5, { x: 1080, y: 610, z: 1.2 }],
-  [T.calm, { x: 960, y: 545, z: 1.0 }],
+  [T.tiltDown[1], { x: 960, y: 560, z: 1.05 }],
+  [T.gauge + 0.45, { x: 940, y: 700, z: 1.5 }],
+  [T.calm + 0.35, { x: 960, y: 560, z: 1.02 }],
+  [T.surprise + 0.3, { x: 1060, y: 600, z: 1.14 }],
   [T.storm, { x: 960, y: 540, z: 1.0 }],
   [T.storm + 0.6, { x: 900, y: 600, z: 1.07 }],
   [T.dial[1], { x: 900, y: 620, z: 1.16 }],
@@ -44,33 +42,31 @@ function seaPose(t) {
   if (t < T.shaka) { p.squash += 0.12; p.mouth = "smile"; }
   else if (t < T.gauge) {
     /* shaka: right flipper up and waving, grin to camera, a glint on the shades */
-    const u = K.inv(T.shaka, T.shaka + 0.25, t), wv = Math.sin((t - T.shaka) * K.TAU * 2.7) * 26 * K.inv(T.shaka + 0.2, T.shaka + 0.4, t);
+    const u = K.inv(T.shaka, T.shaka + 0.2, t), wv = Math.sin((t - T.shaka) * K.TAU * 2.7) * 26 * K.inv(T.shaka + 0.15, T.shaka + 0.3, t);
     p.flipR = { x: K.lerp(118, 110 + wv, u), y: K.lerp(-112, -250, K.E.back(u, 1.6)) };
     p.mouth = "grin"; p.turn = 0.25; p.headTilt = -6 + 4 * Math.sin(t * 5);
-  } else if (t < T.horizon) {
-    /* looks down at the gauge on the nose of the board, taps it on beat 2 */
+  } else if (t < T.calm) {
+    /* looks down at the gauge on the nose of the board, taps it */
     p.turn = 0.75; p.headTilt = 14; p.mouth = "o"; p.shades = 16; p.look = [0.8, 0.9]; p.brow = 0.3;
     const tap = Math.exp(-14 * Math.max(0, t - T.tap)) * (t > T.tap ? 1 : 0);
-    p.flipR = { x: 150, y: -60 + 50 * tap - 20 * K.inv(T.gauge, T.gauge + 0.3, t) };
+    p.flipR = { x: 150, y: -60 + 50 * tap - 20 * K.inv(T.gauge, T.gauge + 0.25, t) };
     p.squash = 0.05 + 0.1 * tap;
-    if (t > T.tap + 0.25) p.mouth = "smile";
-  } else if (t < T.calm) {
-    /* turns to the horizon; the storm bank: shades slide, eyes pop, "!" ; crouch */
-    p.turn = 0.9; p.headTilt = -4;
-    const sp = K.inv(T.surprise, T.surprise + 0.18, t);
-    p.shades = 22 * sp; p.eyeUp = 3 * sp; p.brow = 1.4 * sp; p.mouth = sp > 0 ? "wow" : "smile"; p.look = [1, -0.3];
-    p.exclaim = K.inv(T.surprise, T.surprise + 0.35, t) * (1 - K.inv(T.crouch + 0.2, T.calm, t));
-    p.neck = 0.8 * sp * (1 - K.inv(T.crouch, T.crouch + 0.2, t));
-    p.squash = -0.22 * sp * (1 - K.inv(T.crouch, T.crouch + 0.15, t)) + 0.32 * K.inv(T.crouch, T.crouch + 0.2, t);
-    if (t > T.crouch) { p.mouth = "flat"; p.brow = -0.5; p.shades = 22 * (1 - K.inv(T.crouch, T.crouch + 0.2, t)); }
-    p.blink = sp > 0 ? 0 : p.blink;
-    p.flipL = { x: -100, y: -100 + 30 * sp }; p.flipR = { x: 110, y: -150 - 40 * sp };
-  } else if (t < T.storm) {
+    if (t > T.tap + 0.15) p.mouth = "smile";
+  } else if (t < T.surprise) {
     /* "Ride the calm": hop up, carve lazily, one flipper on the hip */
     const hopU = K.inv(T.calm, T.calm + 0.36, t);
     p.hop = Math.sin(hopU * Math.PI) * 34; p.squash = hopU < 1 ? -0.15 * Math.sin(hopU * Math.PI) : 0.06 * K.pulse(t, 1, 6);
     p.mouth = "smile"; p.turn = -0.15; p.headTilt = 6 * Math.sin(t * 2.4);
     p.flipL = { x: -64, y: -60 }; p.flipR = { x: 140, y: -150 + 12 * Math.sin(t * 4) };
+  } else if (t < T.storm) {
+    /* the storm bank: shades slide, eyes pop, "!" ; then a crouch before the drop */
+    p.turn = 0.9; p.headTilt = -4;
+    const sp = K.inv(T.surprise, T.surprise + 0.15, t), cr = K.inv(T.crouch, T.crouch + 0.15, t);
+    p.shades = 22 * sp * (1 - cr); p.eyeUp = 3 * sp; p.brow = 1.4 * sp - 1.9 * cr; p.mouth = cr > 0 ? "flat" : "wow"; p.look = [1, -0.3];
+    p.exclaim = K.inv(T.surprise, T.surprise + 0.3, t) * (1 - cr);
+    p.neck = 0.8 * sp * (1 - cr);
+    p.squash = -0.22 * sp * (1 - cr) + 0.32 * cr; p.blink = 0;
+    p.flipL = { x: -100, y: -100 + 30 * sp }; p.flipR = { x: 110, y: -150 - 40 * sp };
   } else {
     /* "ride the storm": crouched, flippers out, big grin */
     const k = K.inv(T.storm, T.storm + 0.3, t);
@@ -98,7 +94,7 @@ function drawSea(t) {
   K.farIsle(ctx, 380, SEA_H, 420, storm, 61);
   for (let i = 0; i < 3; i++) K.gull(ctx, ((300 + i * 260 + t * 60) % 2200) - 100, 160 + i * 50 + 10 * Math.sin(t + i), 0.9, 50 + i);
   /* lighthouse: beam colour = regime; it blinks on downbeats while calm, flashes on the flip */
-  const flash = t > T.storm ? Math.exp(-4 * (t - T.storm)) : 0.5 * K.pulse(t, 4, 5) * K.inv(T.calm - 0.5, T.calm, t);
+  const flash = t > T.storm ? Math.exp(-4 * (t - T.storm)) : 0.5 * K.pulse(t, 4, 5) * K.inv(T.calm - 0.3, T.calm, t);
   K.lighthouse(ctx, 1730, SEA_H + 40, 0.72, { beam: K.mix(P.beamCalm, P.beamStorm, storm), ang: 0.22 + 0.16 * Math.sin(t * 1.1), flash, seed: 120 });
   K.ocean(ctx, SEA_H, { storm, vol: 0.12 + 0.88 * storm, bottom: 1240 });
   /* clustering: a second big set stands up behind */
@@ -110,7 +106,7 @@ function drawSea(t) {
   /* Siggy's path: glide in, drift, then lifted onto the wave face */
   const bob = 8 * Math.sin(t * 2.6);
   let x = K.tw(t, T.surfIn[0], T.surfIn[1], -300, 820, K.E.out3) + 26 * Math.sin(t * 0.9) * K.inv(T.shaka, T.shaka + 1, t), y = 890 + bob, ang = -3 + 3 * Math.sin(t * 2.6 + 1);
-  if (t > T.calm && t < T.storm + 0.5) { x += 60 * Math.sin((t - T.calm) * 2.2); ang += 6 * Math.sin((t - T.calm) * 2.2); }
+  if (t > T.calm && t < T.storm + 0.5) { x += 60 * Math.sin((t - T.calm) * 3); ang += 6 * Math.sin((t - T.calm) * 3); }
   const k = K.E.inOut(K.inv(T.storm, T.storm + 0.5, t));
   if (k > 0) {
     const v = 0.5, wx = cx + 60 + (600 - 60) * (1 - v), wy = 1080 - h * (0.2 + 0.72 * v);
@@ -120,7 +116,7 @@ function drawSea(t) {
   surfer(x, y, ang, 1.3, seaPose(t), gauge);
   if (t > T.storm) K.spray(ctx, x + 160, y - 10, t - T.storm - 0.1, 1.4, 501);
   /* glint on the shades */
-  const ga = Math.max(0, 1 - Math.abs(t - T.shaka - 2 * BEAT) / 0.15);
+  const ga = Math.max(0, 1 - Math.abs(t - T.shaka - BEAT) / 0.15);
   glint(x + 50, y - 345, 34, ga);
   K.rain(ctx, storm * K.inv(T.storm, T.storm + 0.3, t), { x: cam.x - 1100, y: cam.y - 700, w: 2400, h: 1500 });
 }

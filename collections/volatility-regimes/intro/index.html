@@ -84,17 +84,57 @@
       #preload .m7 { font-family: "Fira Mono"; font-weight: 700; }
       #preload .sc { font-family: "CJK SC"; font-weight: 900; }
       #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      /* marketmaker.cc mark: a cream poster sticker, top right, always on top of the action */
+      #logo { position: absolute; top: 48px; right: 48px; height: 96px; padding: 0 26px 0 16px; display: flex; align-items: center; gap: 12px; background: #fbeed3; border: 5px solid #16323a; border-radius: 48px; box-shadow: 6px 7px 0 #16323a; color: #16323a; z-index: 5; }
+      #logo svg { width: 66px; height: 66px; display: block; }
+      #logo span { font-family: "Nunito", sans-serif; font-weight: 900; font-size: 38px; letter-spacing: 0.01em; line-height: 1; }
       #vig { background: radial-gradient(100% 90% at 50% 46%, rgba(0, 0, 0, 0) 64%, rgba(22, 50, 58, 0.38) 100%); }
       #grain { opacity: 0.16; mix-blend-mode: multiply; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="20.1" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="31" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div id="title" data-layout-allow-overlap></div>
       <div class="ov" id="vig"></div>
+      <div id="logo"><svg viewBox="0 0 1024 1024" aria-hidden="true">
+<g transform="translate(0, 1024) scale(0.1, -0.1)" fill="currentColor" stroke="none">
+<path d="M4815 9964 c-22 -2 -92 -9 -155 -14 -1263 -113 -2506 -762 -3284
+-1714 -595 -729 -940 -1541 -1053 -2481 -22 -188 -26 -815 -5 -990 74 -626
+245 -1198 509 -1705 501 -960 1276 -1694 2272 -2154 645 -298 1302 -439 2046
+-438 757 0 1402 147 2070 471 491 238 899 521 1264 876 813 789 1298 1766
+1438 2896 22 181 25 761 5 964 -58 577 -200 1087 -439 1585 -113 236 -184 361
+-334 585 -180 270 -349 476 -574 701 -368 369 -746 646 -1200 880 -563 290
+-1104 452 -1745 520 -146 15 -715 28 -815 18z m837 -559 c1134 -135 2191 -733
+2857 -1615 188 -249 385 -590 511 -885 132 -306 245 -719 294 -1071 37 -264
+48 -690 26 -939 -123 -1364 -861 -2559 -2003 -3243 -299 -179 -487 -266 -777
+-362 -836 -277 -1714 -292 -2579 -44 -119 35 -322 102 -330 110 -2 2 52 63
+120 135 519 553 1099 890 1714 996 73 12 159 17 320 18 300 0 359 -12 924
+-184 129 -39 263 -78 298 -86 187 -43 308 9 510 218 161 168 253 322 253 425
+0 76 -23 127 -156 349 -209 348 -358 662 -426 897 -15 54 -39 167 -53 250 -14
+83 -39 196 -57 250 -83 264 -268 406 -580 447 -54 7 -95 16 -92 20 9 16 120
+50 187 59 152 19 326 -17 779 -159 531 -166 733 -192 993 -126 178 45 317 127
+445 261 71 76 177 230 165 242 -2 3 -26 -9 -52 -26 -64 -41 -147 -77 -252
+-109 -78 -24 -102 -27 -256 -27 -139 -1 -191 3 -285 22 -203 41 -423 109 -725
+227 -654 254 -862 292 -1215 220 -188 -38 -298 -48 -371 -35 -35 6 -128 38
+-208 70 -266 106 -461 155 -716 181 -163 16 -480 6 -658 -21 -265 -40 -601
+-137 -916 -265 -86 -35 -244 -99 -351 -143 -205 -83 -335 -122 -435 -129 -71
+-5 -90 5 -81 40 8 33 99 147 209 262 48 50 87 95 87 100 0 20 -24 35 -58 35
+-49 0 -145 -54 -317 -180 -237 -173 -308 -199 -451 -166 -151 34 -520 172
+-614 228 -63 39 -88 70 -96 119 -10 59 13 113 101 236 171 240 249 360 299
+463 l51 105 0 210 c1 265 10 301 128 475 102 152 288 355 495 543 l74 66 -59
+58 c-68 67 -88 119 -81 208 6 68 40 115 118 162 89 54 172 77 280 76 52 0 120
+-5 152 -12 l56 -12 144 75 c268 140 477 214 835 296 304 69 480 127 700 230
+208 98 430 246 593 394 l95 87 155 -5 c85 -3 212 -13 282 -21z m1016 -5082
+c85 -41 130 -109 157 -240 8 -37 13 -68 12 -69 -1 -2 -48 19 -103 46 -121 59
+-139 79 -136 164 0 32 -5 76 -12 97 -14 39 -13 40 8 33 11 -3 45 -17 74 -31z"/>
+<path d="M2243 7035 c-92 -42 -196 -156 -205 -225 -4 -34 23 -37 94 -10 97 36
+180 131 202 233 6 23 3 27 -16 27 -13 0 -47 -11 -75 -25z"/>
+</g>
+</svg>
+<span>marketmaker.cc</span></div>
       <div class="ov" id="grain"></div>
-      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="20.1" data-track-index="10" data-volume="1"></audio>
+      <audio id="song" src="song_short.m4a" data-start="0" data-duration="31" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="lo">Aa Бб 0</span><span class="n6">Aa Бб 0</span><span class="n8">Aa Бб 0</span><span class="n9">Aa Бб 0</span><span class="m5">Aa σαβω 0</span><span class="m7">Aa σ 0</span><span class="sc">波动率建模</span><span class="tc">波動率建模</span></div>
     </div>
     <script>
@@ -449,10 +489,11 @@ var VK = window.VK || (window.VK = {});
     }
     return ctx.createPattern(patCache[key], "repeat");
   }
-  /* fill region pts with dots (density 0..1 sets dot radius) */
+  /* fill region pts with dots (density 0..1 sets dot radius); straight: polygon, not smoothed */
   K.halftone = function (ctx, pts, opt) {
-    const o = Object.assign({ color: K.P.inkSoft, cell: 9, density: 0.55, alpha: 0.5, closed: true }, opt || {});
-    ctx.save(); K.pathOf(ctx, pts, true);
+    const o = Object.assign({ color: K.P.inkSoft, cell: 9, density: 0.55, alpha: 0.5, closed: true, straight: false }, opt || {});
+    ctx.save();
+    if (o.straight) { ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]))); ctx.closePath(); } else K.pathOf(ctx, pts, true);
     ctx.globalAlpha *= o.alpha; ctx.fillStyle = dotPattern(ctx, o.color, o.cell, o.cell * 0.5 * clamp(o.density, 0.05, 1));
     ctx.fill(); ctx.restore();
   };
@@ -1209,7 +1250,12 @@ var VK = window.VK || (window.VK = {});
         for (let i = 0; i <= Math.floor(k); i++) pts.push([X(i), Yc(s.data[i])]);
         const fr = k - Math.floor(k), i0 = Math.floor(k);
         if (i0 < n - 1 && fr > 0) pts.push([lerp(X(i0), X(i0 + 1), fr), lerp(Yc(s.data[i0]), Yc(s.data[i0 + 1]), fr)]);
-        if (s.kind === "area" && pts.length > 1) K.shape(ctx, pts.concat([[pts[pts.length - 1][0], pb], [pts[0][0], pb]]), { fill: s.color, stroke: null, w: 0, boil: 0.6, seed: o.seed + 50 + si, alpha: 0.45, dots: { color: P.ink, cell: 8, density: 0.4, alpha: 0.25 } });
+        if (s.kind === "area" && pts.length > 1) { /* straight-edged fill (a smoothed polygon would bulge under the axis) */
+          ctx.save(); ctx.globalAlpha *= 0.45; ctx.beginPath(); ctx.moveTo(pts[0][0], pb);
+          pts.forEach((q) => ctx.lineTo(q[0], q[1])); ctx.lineTo(pts[pts.length - 1][0], pb); ctx.closePath();
+          ctx.fillStyle = s.color; ctx.fill(); ctx.restore();
+          K.halftone(ctx, pts.concat([[pts[pts.length - 1][0], pb], [pts[0][0], pb]]), { color: P.ink, cell: 8, density: 0.4, alpha: 0.25, straight: true });
+        }
         if (pts.length > 1) { K.line(ctx, pts, { stroke: P.ink, w: (s.w || 6) + 7, boil: 0.8, seed: o.seed + 30 + si, brush: { taper: 0.9, swell: 0.1 } }); K.line(ctx, pts, { stroke: s.color, w: s.w || 6, boil: 0.8, seed: o.seed + 30 + si, brush: { taper: 0.9, swell: 0.1 } }); }
         const head = pts[pts.length - 1]; if (head && o.draw < 1) K.dot(ctx, head[0], head[1], 9, s.color, P.ink, 3, o.seed + 40 + si);
       }
@@ -1429,50 +1475,60 @@ var VK = window.VK || (window.VK = {});
 
 /* ============================================================
    INTRO 10 SETUP: beat grid, story beats, variables, title DOM, data.
-   Song: song_20s.m4a, 60s surf rock at 161.5 BPM (beat 0.372 s, bar 1.486 s).
-   Cut = raw 0.45-18.50 (4 instrumental bars + the whole chorus) spliced on
-   the downbeat into raw 2.02-4.03 (instrumental tail, 0.85 s fade).
-   Sung lines (whisper word times, shifted to the cut):
-     6.41 "Ride the calm,"   7.89 "ride the storm,"
-     9.38 "Every regime has its form,"
-    12.40 "Measure the swell and read the sea,"
-    15.39 "Volatility Modeling and Regimes!"
+   Song: song_short.m4a = song_short_raw.mp4 trimmed to 31.0 s (silence cut,
+   0.8 s fade, loudnorm -14). 60s surf rock at 161.5 BPM (beat 0.372 s,
+   bar 1.486 s). Sung lines (whisper word times):
+     3.37 "Ride the calm,"   4.85 "ride the storm,"
+     6.34 "Every regime has its form,"
+     9.29 "Measure the swell and read the sea,"
+    12.24 "Volatility Modeling and Regimes!"
+   15.16 - 31.0 is instrumental: hidden states switch (HMM), the leverage
+   effect, a cluster of big sets, then the title card on the ending.
    Every story time below is K.at(bar, beat) on the measured downbeats.
    ============================================================ */
 const K = VK, P = K.P, at = K.at;
 K.G.BPM = 161.5;
-K.G.BARS = [0.35, 1.88, 3.39, 4.90, 6.41, 7.89, 9.38, 10.89, 12.40, 13.89, 15.39, 16.86, 18.35, 19.84];
-const DUR = 20.1;
+K.G.BARS = [0.44, 1.93, 3.37, 4.85, 6.34, 7.80, 9.29, 10.75, 12.24, 13.70, 15.16, 16.65, 18.09, 19.57, 21.06, 22.52, 23.99, 25.47, 26.94, 28.42, 29.90];
+const DUR = 31.0;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const BEAT = K.beatLen();
 
 /* ---------- story beats (on the song's downbeats) ---------- */
 const T = {
-  tiltDown: [0, at(1)],            /* 0 - 1.88 camera tilts down from the striped sun to the sea */
-  surfIn: [0.2, at(1)],            /* Siggy glides in on glassy little waves, lands on the downbeat */
-  shaka: at(1),                    /* 1.88 waves hello (shaka), shades glint on beat 2 */
-  gauge: at(2),                    /* 3.39 looks down at the tiny gauge on the board, taps it */
-  tap: at(2, 2),
-  horizon: at(3),                  /* 4.90 turns to the horizon: a storm bank rolls up */
-  surprise: at(3, 1.5),            /* shades slide down, eyes pop, "!" */
-  crouch: at(3, 3),                /* anticipation before the ride */
-  calm: at(4),                     /* 6.41 "Ride the calm": carving small waves, turquoise beam */
-  storm: at(5),                    /* 7.89 "ride the storm": REGIME FLIP, beam turns coral, the wave stands up */
-  cluster: at(5, 2),               /* big waves follow big waves (a second set rolls in) */
-  dial: [at(5, 3.4), at(6)],       /* 9.15 - 9.38 dive into the board's gauge (dial iris) */
-  chart: at(6),                    /* 9.38 "Every regime has its form": wave heights become a chart */
-  forms: at(7),                    /* 10.89 the two distributions (narrow calm, fat storm) */
-  point: at(7, 2),                 /* Siggy pops up and points at the storm band */
-  roll: [at(8, -1), at(8)],        /* 12.03 - 12.40 the poster rolls up onto the beach */
-  board: at(8),                    /* 12.40 "Measure the swell": the surf-report board, GARCH written in chalk */
-  forecast: at(9),                 /* 13.89 "read the sea": the forecast gauge swings to storm */
-  grab: at(9, 2),                  /* Siggy picks the storm gun board */
-  tilt: [at(10, -1.5), at(10)],    /* 14.83 - 15.39 camera tilts up into the clearing sky */
-  title: at(10),                   /* 15.39 "Volatility Modeling and Regimes!" title hit */
-  line2: at(10, 2),
-  medals: at(11),                  /* 16.86 five episode medals pop on eighth notes */
-  hang: at(12),                    /* 18.35 hop on the wave, spray */
-  tip: at(12, 2),                  /* shades up on the head, happy squint */
+  tiltDown: [0, at(1)],            /* 0 - 1.93 camera tilts down from the striped sun to the sea */
+  surfIn: [0.1, at(1)],            /* Siggy glides in on glassy little waves, lands on the downbeat */
+  shaka: at(1),                    /* 1.93 waves hello (shaka), shades glint on beat 2 */
+  gauge: at(1, 2),                 /* 2.67 looks down at the tiny gauge on the board, taps it */
+  tap: at(1, 3),
+  calm: at(2),                     /* 3.37 "Ride the calm": hop, carving small waves, turquoise beam */
+  horizon: at(2, 1),               /* a storm bank rolls up on the horizon */
+  surprise: at(2, 2),              /* shades slide down, eyes pop, "!" */
+  crouch: at(2, 3.3),              /* anticipation before the drop */
+  storm: at(3),                    /* 4.85 "ride the storm": REGIME FLIP, beam turns coral, the wave stands up */
+  cluster: at(3, 2),               /* big waves follow big waves (a second set rolls in) */
+  dial: [at(3, 3.4), at(4)],       /* dive into the board's gauge (dial iris) */
+  chart: at(4),                    /* 6.34 "Every regime has its form": wave heights become a chart */
+  forms: at(5),                    /* 7.80 "...has its form": the two distributions */
+  point: at(5, 2),                 /* Siggy pops up and points at the storm band */
+  roll: [at(6, -1), at(6)],        /* the poster rolls up onto the beach */
+  board: at(6),                    /* 9.29 "Measure the swell": the surf-report board, GARCH in chalk */
+  forecast: at(7),                 /* 10.75 "read the sea": the forecast dial swings to storm */
+  grab: at(7, 2),                  /* Siggy picks the storm gun board */
+  tilt: [at(8, -1.5), at(8)],      /* camera tilts up into the sky, cut on the downbeat */
+  hmm: at(8),                      /* 12.24 "Volatility Modeling and Regimes!": two hidden states (buoys) */
+  hmmSw: [at(9, 2), at(10, 2), at(11), at(11, 2)], /* instrumental: hidden states switch */
+  unroll: [at(12, -1), at(12)],    /* a poster unrolls down over the sea */
+  lev: at(12),                     /* 18.09 leverage effect: drops raise volatility more than rises */
+  levPoint: at(13),                /* 19.57 Siggy points at the drop's spike */
+  roll2: [at(14, -1), at(14)],     /* the poster rolls up onto the sea again */
+  ride: at(14),                    /* 21.06 a cluster of big sets, then calm comes back */
+  calmBack: at(16),                /* 23.99 the beam turns turquoise again */
+  tilt2: [at(17, -1.5), at(17)],   /* tilt up into the sunset */
+  title: at(17),                   /* 25.47 title card on the ending */
+  line2: at(17, 2),
+  medals: at(18),                  /* 26.94 five episode medals pop on eighth notes */
+  hang: at(19),                    /* 28.42 hop on the wave, spray */
+  tip: at(19, 2),                  /* shades up on the head, happy squint */
 };
 
 /* ---------- variables (title text, language) ---------- */
@@ -1537,12 +1593,10 @@ const BOARD_LEN = 400;
 
 const camSea = K.mkTrack([
   [0, { x: 960, y: 140, z: 1 }],
-  [T.tiltDown[1], { x: 960, y: 540, z: 1 }],
-  [T.gauge, { x: 960, y: 540, z: 1 }],
-  [T.gauge + 0.9, { x: 930, y: 700, z: 1.55 }],
-  [T.horizon, { x: 980, y: 640, z: 1.3 }],
-  [T.surprise + 0.5, { x: 1080, y: 610, z: 1.2 }],
-  [T.calm, { x: 960, y: 545, z: 1.0 }],
+  [T.tiltDown[1], { x: 960, y: 560, z: 1.05 }],
+  [T.gauge + 0.45, { x: 940, y: 700, z: 1.5 }],
+  [T.calm + 0.35, { x: 960, y: 560, z: 1.02 }],
+  [T.surprise + 0.3, { x: 1060, y: 600, z: 1.14 }],
   [T.storm, { x: 960, y: 540, z: 1.0 }],
   [T.storm + 0.6, { x: 900, y: 600, z: 1.07 }],
   [T.dial[1], { x: 900, y: 620, z: 1.16 }],
@@ -1572,33 +1626,31 @@ function seaPose(t) {
   if (t < T.shaka) { p.squash += 0.12; p.mouth = "smile"; }
   else if (t < T.gauge) {
     /* shaka: right flipper up and waving, grin to camera, a glint on the shades */
-    const u = K.inv(T.shaka, T.shaka + 0.25, t), wv = Math.sin((t - T.shaka) * K.TAU * 2.7) * 26 * K.inv(T.shaka + 0.2, T.shaka + 0.4, t);
+    const u = K.inv(T.shaka, T.shaka + 0.2, t), wv = Math.sin((t - T.shaka) * K.TAU * 2.7) * 26 * K.inv(T.shaka + 0.15, T.shaka + 0.3, t);
     p.flipR = { x: K.lerp(118, 110 + wv, u), y: K.lerp(-112, -250, K.E.back(u, 1.6)) };
     p.mouth = "grin"; p.turn = 0.25; p.headTilt = -6 + 4 * Math.sin(t * 5);
-  } else if (t < T.horizon) {
-    /* looks down at the gauge on the nose of the board, taps it on beat 2 */
+  } else if (t < T.calm) {
+    /* looks down at the gauge on the nose of the board, taps it */
     p.turn = 0.75; p.headTilt = 14; p.mouth = "o"; p.shades = 16; p.look = [0.8, 0.9]; p.brow = 0.3;
     const tap = Math.exp(-14 * Math.max(0, t - T.tap)) * (t > T.tap ? 1 : 0);
-    p.flipR = { x: 150, y: -60 + 50 * tap - 20 * K.inv(T.gauge, T.gauge + 0.3, t) };
+    p.flipR = { x: 150, y: -60 + 50 * tap - 20 * K.inv(T.gauge, T.gauge + 0.25, t) };
     p.squash = 0.05 + 0.1 * tap;
-    if (t > T.tap + 0.25) p.mouth = "smile";
-  } else if (t < T.calm) {
-    /* turns to the horizon; the storm bank: shades slide, eyes pop, "!" ; crouch */
-    p.turn = 0.9; p.headTilt = -4;
-    const sp = K.inv(T.surprise, T.surprise + 0.18, t);
-    p.shades = 22 * sp; p.eyeUp = 3 * sp; p.brow = 1.4 * sp; p.mouth = sp > 0 ? "wow" : "smile"; p.look = [1, -0.3];
-    p.exclaim = K.inv(T.surprise, T.surprise + 0.35, t) * (1 - K.inv(T.crouch + 0.2, T.calm, t));
-    p.neck = 0.8 * sp * (1 - K.inv(T.crouch, T.crouch + 0.2, t));
-    p.squash = -0.22 * sp * (1 - K.inv(T.crouch, T.crouch + 0.15, t)) + 0.32 * K.inv(T.crouch, T.crouch + 0.2, t);
-    if (t > T.crouch) { p.mouth = "flat"; p.brow = -0.5; p.shades = 22 * (1 - K.inv(T.crouch, T.crouch + 0.2, t)); }
-    p.blink = sp > 0 ? 0 : p.blink;
-    p.flipL = { x: -100, y: -100 + 30 * sp }; p.flipR = { x: 110, y: -150 - 40 * sp };
-  } else if (t < T.storm) {
+    if (t > T.tap + 0.15) p.mouth = "smile";
+  } else if (t < T.surprise) {
     /* "Ride the calm": hop up, carve lazily, one flipper on the hip */
     const hopU = K.inv(T.calm, T.calm + 0.36, t);
     p.hop = Math.sin(hopU * Math.PI) * 34; p.squash = hopU < 1 ? -0.15 * Math.sin(hopU * Math.PI) : 0.06 * K.pulse(t, 1, 6);
     p.mouth = "smile"; p.turn = -0.15; p.headTilt = 6 * Math.sin(t * 2.4);
     p.flipL = { x: -64, y: -60 }; p.flipR = { x: 140, y: -150 + 12 * Math.sin(t * 4) };
+  } else if (t < T.storm) {
+    /* the storm bank: shades slide, eyes pop, "!" ; then a crouch before the drop */
+    p.turn = 0.9; p.headTilt = -4;
+    const sp = K.inv(T.surprise, T.surprise + 0.15, t), cr = K.inv(T.crouch, T.crouch + 0.15, t);
+    p.shades = 22 * sp * (1 - cr); p.eyeUp = 3 * sp; p.brow = 1.4 * sp - 1.9 * cr; p.mouth = cr > 0 ? "flat" : "wow"; p.look = [1, -0.3];
+    p.exclaim = K.inv(T.surprise, T.surprise + 0.3, t) * (1 - cr);
+    p.neck = 0.8 * sp * (1 - cr);
+    p.squash = -0.22 * sp * (1 - cr) + 0.32 * cr; p.blink = 0;
+    p.flipL = { x: -100, y: -100 + 30 * sp }; p.flipR = { x: 110, y: -150 - 40 * sp };
   } else {
     /* "ride the storm": crouched, flippers out, big grin */
     const k = K.inv(T.storm, T.storm + 0.3, t);
@@ -1626,7 +1678,7 @@ function drawSea(t) {
   K.farIsle(ctx, 380, SEA_H, 420, storm, 61);
   for (let i = 0; i < 3; i++) K.gull(ctx, ((300 + i * 260 + t * 60) % 2200) - 100, 160 + i * 50 + 10 * Math.sin(t + i), 0.9, 50 + i);
   /* lighthouse: beam colour = regime; it blinks on downbeats while calm, flashes on the flip */
-  const flash = t > T.storm ? Math.exp(-4 * (t - T.storm)) : 0.5 * K.pulse(t, 4, 5) * K.inv(T.calm - 0.5, T.calm, t);
+  const flash = t > T.storm ? Math.exp(-4 * (t - T.storm)) : 0.5 * K.pulse(t, 4, 5) * K.inv(T.calm - 0.3, T.calm, t);
   K.lighthouse(ctx, 1730, SEA_H + 40, 0.72, { beam: K.mix(P.beamCalm, P.beamStorm, storm), ang: 0.22 + 0.16 * Math.sin(t * 1.1), flash, seed: 120 });
   K.ocean(ctx, SEA_H, { storm, vol: 0.12 + 0.88 * storm, bottom: 1240 });
   /* clustering: a second big set stands up behind */
@@ -1638,7 +1690,7 @@ function drawSea(t) {
   /* Siggy's path: glide in, drift, then lifted onto the wave face */
   const bob = 8 * Math.sin(t * 2.6);
   let x = K.tw(t, T.surfIn[0], T.surfIn[1], -300, 820, K.E.out3) + 26 * Math.sin(t * 0.9) * K.inv(T.shaka, T.shaka + 1, t), y = 890 + bob, ang = -3 + 3 * Math.sin(t * 2.6 + 1);
-  if (t > T.calm && t < T.storm + 0.5) { x += 60 * Math.sin((t - T.calm) * 2.2); ang += 6 * Math.sin((t - T.calm) * 2.2); }
+  if (t > T.calm && t < T.storm + 0.5) { x += 60 * Math.sin((t - T.calm) * 3); ang += 6 * Math.sin((t - T.calm) * 3); }
   const k = K.E.inOut(K.inv(T.storm, T.storm + 0.5, t));
   if (k > 0) {
     const v = 0.5, wx = cx + 60 + (600 - 60) * (1 - v), wy = 1080 - h * (0.2 + 0.72 * v);
@@ -1648,7 +1700,7 @@ function drawSea(t) {
   surfer(x, y, ang, 1.3, seaPose(t), gauge);
   if (t > T.storm) K.spray(ctx, x + 160, y - 10, t - T.storm - 0.1, 1.4, 501);
   /* glint on the shades */
-  const ga = Math.max(0, 1 - Math.abs(t - T.shaka - 2 * BEAT) / 0.15);
+  const ga = Math.max(0, 1 - Math.abs(t - T.shaka - BEAT) / 0.15);
   glint(x + 50, y - 345, 34, ga);
   K.rain(ctx, storm * K.inv(T.storm, T.storm + 0.3, t), { x: cam.x - 1100, y: cam.y - 700, w: 2400, h: 1500 });
 }
@@ -1724,7 +1776,7 @@ const FC = { horizon: 450, sand: 700, board: { x: 690, y: 330, w: 1120, h: 290 }
 const FORMULA = ["σ^2_t = ω + α·ε^2_{t-1} + β·σ^2_{t-1}", "ω = 0.02   α = 0.10   β = 0.88"];
 const RACK = { long: [1530, 905], gun: [1700, 905] };
 
-const camFc = (t) => ({ x: 960 + 14 * Math.sin(t * 0.7), y: K.tw(t, T.tilt[0], T.tilt[1], 540, -520, K.E.in3), z: K.tw(t, T.board - 0.4, T.forecast + 1, 1.04, 1.0, K.E.out3), rot: 0 });
+const camFc = (t) => ({ x: 960 + 14 * Math.sin(t * 0.7), y: K.tw(t, T.tilt[0], T.tilt[1], 540, -620, K.E.in3), z: K.tw(t, T.board - 0.4, T.forecast + 1, 1.04, 1.0, K.E.out3), rot: 0 });
 
 function fcPose(t) {
   const p = { seed: 700, blink: K.blinkAt(t, 5), squash: 0.07 * K.pulse(t, 1, 6), footL: { x: -44, y: 0 }, footR: { x: 44, y: 0 } };
@@ -1785,12 +1837,56 @@ function drawForecast(t) {
 }
 
 /* ============================================================
+   INTRO 45 HMM: "hidden states switch". Two buoys on the water are the two
+   hidden regimes (sun = calm, storm cloud = storm). Currents between them
+   carry the transition probabilities, self-loops the "stay" odds. The
+   active state glows and the whole world (sky, sea, beam) follows it;
+   Siggy surfs over to whichever buoy is live.
+   drawHmm(t, t0, switches): t0 = scene start, switches = times the state flips
+   ============================================================ */
+const HMM = { horizon: 520, calm: [600, 800], storm: [1330, 800] };
+
+function hmmState(t, switches) {
+  let s = 0, last = -1e9;
+  switches.forEach((ts) => { if (t >= ts) { s = 1 - s; last = ts; } });
+  return { s, last, u: K.E.inOut(K.inv(last, last + 0.45, t)) };
+}
+
+function drawHmm(t, t0, switches) {
+  const st = hmmState(t, switches), storm = st.s ? st.u : 1 - st.u;
+  K.begin(ctx, t, { x: 960, y: K.tw(t, t0, t0 + 0.6, -420, 540, K.E.out3), z: K.tw(t, t0, t0 + 2, 1.06, 1.0, K.E.out3), rot: 0 });
+  K.applyCam(ctx, 1);
+  K.sky(ctx, HMM.horizon, { storm, sunX: 1500, sunY: 280, sunR: 110, top: -1200, drift: 500 });
+  K.farIsle(ctx, 240, HMM.horizon, 340, storm, 67);
+  K.lighthouse(ctx, 1760, HMM.horizon + 40, 0.6, { beam: K.mix(P.beamCalm, P.beamStorm, storm), ang: 0.3 + 0.1 * Math.sin(t * 1.2), flash: Math.exp(-5 * Math.max(0, t - st.last)) * (st.last > t0 ? 1 : 0), seed: 160 });
+  K.ocean(ctx, HMM.horizon, { storm, vol: 0.15 + 0.7 * storm, bottom: 1240 });
+  const a = (k) => K.inv(t0 + 0.55 + k * BEAT / 2, t0 + 0.95 + k * BEAT / 2, t); /* pops start as the camera lands */
+  const C = HMM.calm, S = HMM.storm, up = [0, -150];
+  /* currents first (behind the buoys) */
+  K.current(ctx, [C[0] + up[0], C[1] - 130], [S[0], S[1] - 130], { p: a(2), bend: -120, label: "0.03", seed: 171, hot: st.s === 1 && t - st.last < 0.8, labelSize: 34 });
+  K.current(ctx, [S[0], S[1] - 40], [C[0], C[1] - 40], { p: a(3), bend: -70, label: "0.10", seed: 172, hot: st.s === 0 && st.last > t0 && t - st.last < 0.8, labelSize: 34 });
+  K.loopCurrent(ctx, [C[0], C[1] - 230], 90, { p: a(4), label: "0.97", seed: 173, labelSize: 34 });
+  K.loopCurrent(ctx, [S[0], S[1] - 230], 90, { p: a(5), label: "0.90", seed: 174, labelSize: 34 });
+  K.buoy(ctx, C[0], C[1], 1.25, { a: a(0), color: P.calm, icon: K.ICON.sun, seed: 181, hot: st.s === 0 ? 1 : 0 });
+  K.buoy(ctx, S[0], S[1], 1.25, { a: a(1), color: P.storm, icon: K.ICON.storm, seed: 182, hot: st.s === 1 ? 1 : 0 });
+  /* Siggy surfs to the live buoy */
+  const from = st.s ? C : S, to = st.s ? S : C, k = st.last > t0 ? st.u : 1;
+  const side = (q) => q[0] + (q === C ? -330 : 330); /* rides on the outer side of the live buoy */
+  const sx = K.lerp(side(from), side(to), k), sy = 985 - 40 * Math.sin(k * Math.PI) + 8 * Math.sin(t * 2.6);
+  surfer(sx, sy, 6 * Math.sin(t * 2.2) - 10 * Math.sin(k * Math.PI), 0.95, {
+    seed: 700, blink: K.blinkAt(t, 13), squash: 0.07 * K.pulse(t, 1, 6), mouth: storm > 0.5 ? "grin" : "smile", brow: storm > 0.5 ? 0.8 : 0,
+    turn: st.s ? -0.5 : 0.5, flipL: { x: -130, y: -150 + 10 * Math.sin(t * 5) }, flipR: { x: 130, y: -120 }, footL: { x: -66, y: 0 }, footR: { x: 58, y: 0 },
+  }, 0.15 + 0.75 * storm);
+  K.rain(ctx, storm, {});
+}
+
+/* ============================================================
    INTRO 50 TITLE: "Volatility Modeling and Regimes!". A sunset surf poster:
    striped sun on the horizon, DOM title letters drop in on the downbeat,
    five episode medals pop on eighth notes, Siggy rides a curl below while
    the lighthouse beam switches regime colour every bar.
    ============================================================ */
-const TT = { horizon: 700, medalY: 486, medalR: 64 };
+const TT = { horizon: 720, medalY: 548, medalR: 62 };
 const MEDALS = ["garch", "leverage", "cluster", "regimes", "realized"];
 const camTitle = K.mkTrack([[T.title - 0.01, { x: 960, y: -260, z: 1 }], [T.title + 0.7, { x: 960, y: 540, z: 1 }], [DUR, { x: 960, y: 548, z: 1.02 }]]);
 
@@ -1811,7 +1907,7 @@ function titlePose(t) {
 function drawTitle(t) {
   K.begin(ctx, t, camTitle(t));
   K.applyCam(ctx, 1);
-  K.sky(ctx, TT.horizon, { storm: 0, sunX: 960, sunY: TT.horizon - 100, sunR: 250, top: -1400, drift: 900 });
+  K.sky(ctx, TT.horizon, { storm: 0, sunX: 960, sunY: TT.horizon - 60, sunR: 250, top: -1400, drift: 900 });
   K.farIsle(ctx, 300, TT.horizon, 360, 0, 65);
   for (let i = 0; i < 3; i++) K.gull(ctx, ((200 + i * 300 + t * 70) % 2200) - 100, 590 + i * 30 + 10 * Math.sin(t + i), 1, 60 + i);
   /* the beam switches regime every bar: calm, storm, calm ... */
@@ -1838,7 +1934,7 @@ function layoutTitleDom(t) {
   titleEl.style.opacity = on ? "1" : "0";
   if (!on) return;
   const sizes = TITLE_LN.map((d) => +d.dataset.size || 120), gap = 28;
-  let y = (TITLE_LN.length > 1 ? 92 : 150) + 6 * Math.sin(t * 1.5);
+  let y = (TITLE_LN.length > 1 ? 168 : 220) + 6 * Math.sin(t * 1.5); /* below the logo sticker (48 - 150 px) */
   TITLE_LN.forEach((d, i) => { d.style.top = y.toFixed(1) + "px"; y += sizes[i] * 1.1 + gap; });
   TITLE_CH.forEach((c) => {
     const t0 = (c.line === 0 ? T.title : T.line2) + (c.line === 0 ? c.idx : c.idx - TITLE_LINES[0].length) * 0.03;
@@ -1851,16 +1947,110 @@ function layoutTitleDom(t) {
 }
 
 /* ============================================================
+   INTRO 55 LEVERAGE: the asymmetric (GJR) GARCH picture, on a surf poster.
+   Top card: the price; bottom card: sigma. The same-size drop and rise
+   (-12 % / +12 %) get very different swells: drops raise volatility far
+   more than rises (the leverage effect). Siggy points at the drop's spike.
+   ============================================================ */
+const LEV = { price: { x: 780, y: 360, w: 1360, h: 400 }, sig: { x: 780, y: 800, w: 1360, h: 400 } };
+const PRICE = [], LSIG = [];
+(function () {
+  const rnd = K.mulberry(1955), n = 60;
+  /* designed daily returns (%): drift, a sharp drop (days 18-21), a slow climb, a sharp rise (days 40-43) */
+  let p = 100, s2 = 0.4;
+  for (let i = 0; i < n; i++) {
+    let r = 0.15 + (rnd() - 0.5) * 0.9;
+    if (i >= 18 && i < 22) r = -3.2 + (rnd() - 0.5) * 0.6;
+    else if (i >= 22 && i < 38) r = 0.35 + (rnd() - 0.5) * 0.8;
+    else if (i >= 40 && i < 44) r = 3.0 + (rnd() - 0.5) * 0.6;
+    /* GJR-GARCH: sigma2 = omega + (alpha + gamma * [r < 0]) * r^2 + beta * sigma2 */
+    s2 = 0.08 + (0.03 + (r < 0 ? 0.28 : 0)) * r * r + 0.72 * s2;
+    p *= 1 + r / 100; PRICE.push(p); LSIG.push(Math.sqrt(s2));
+  }
+})();
+
+function drawLeverage(t) {
+  K.begin(ctx, t, { x: 960, y: 540, z: 1, rot: 0 });
+  drawPosterBack(t);
+  const draw = K.inv(T.lev + 0.1, T.lev + 1.5, t), A = LEV.price, B = LEV.sig;
+  const pc = K.posterChart(ctx, A.x, A.y, A.w, A.h, [{ kind: "line", data: PRICE, color: P.seaDeep, w: 7 }], { a: K.inv(T.unroll[0], T.lev, t), draw, seed: 43, yMin: 84, yMax: 106 });
+  const sc = K.posterChart(ctx, B.x, B.y, B.w, B.h, [{ kind: "area", data: LSIG, color: P.sigma, w: 7 }, { kind: "line", data: LSIG, color: P.sigma, w: 7 }], { a: K.inv(T.unroll[0] + 0.1, T.lev + 0.1, t), draw, seed: 45, yMin: 0, yMax: 2.8, header: false });
+  if (pc && sc) {
+    /* tags appear as the pen passes the move */
+    const tg = (day) => K.inv(T.lev + 0.1 + 1.4 * (day / 60), T.lev + 0.4 + 1.4 * (day / 60), t);
+    K.tag(ctx, pc.X(20), pc.Y(PRICE[21]) + 54, "-12 %", { a: tg(21), fill: P.storm, size: 34, seed: 191 });
+    K.tag(ctx, pc.X(42), pc.Y(PRICE[43]) - 50, "+12 %", { a: tg(43), fill: P.up, size: 34, seed: 192 });
+    /* the spikes: a big coral arrow for the drop, a small green one for the rise */
+    const pk = (d0, d1) => { let m = 0, k = d0; for (let i = d0; i < d1; i++) if (LSIG[i] > m) { m = LSIG[i]; k = i; } return k; };
+    const kd = pk(18, 30), ku = pk(40, 52);
+    K.tag(ctx, sc.X(kd) + 90, sc.Y(LSIG[kd]) + 10, "σ " + LSIG[kd].toFixed(1), { a: tg(kd + 1), fill: P.storm, size: 32, seed: 193 });
+    K.tag(ctx, sc.X(ku) + 90, sc.Y(LSIG[ku]) - 20, "σ " + LSIG[ku].toFixed(1), { a: tg(ku + 1), fill: P.up, size: 32, seed: 194 });
+  }
+  /* the leverage medal and Siggy on the right */
+  K.medal(ctx, 1690, 330, 120, { a: K.inv(T.lev + 0.2, T.lev + 0.55, t), color: P.storm, icon: K.ICON.leverage, seed: 670 });
+  const up = K.E.back(K.inv(T.lev + 0.3, T.lev + 0.7, t), 1.6), pt = K.inv(T.levPoint, T.levPoint + 0.3, t);
+  if (up > 0) K.turtle(ctx, 1700, 1250 - 220 * up, 1.2, {
+    seed: 700, blink: K.blinkAt(t, 17), mouth: pt > 0 ? "wow" : "smile", shades: 20 * pt, eyeUp: 2 * pt, look: [-1, -0.2], turn: -0.6, brow: 1.2 * pt,
+    squash: 0.08 * K.pulse(t, 1, 6) - 0.15 * Math.sin(pt * Math.PI), flipL: { x: K.lerp(-110, -230, K.E.back(pt, 1.6)), y: K.lerp(-90, -170, pt) }, flipR: { x: 100, y: -80 },
+  });
+}
+
+/* ============================================================
+   INTRO 60 RIDE: volatility clustering on the water. A set of big storm
+   waves rolls through one after another (big waves follow big waves) and
+   Siggy rides them on the storm gun, the gauge pinned high; then calm
+   returns on the downbeat, the beam turns turquoise and the camera tilts
+   up into the sunset for the title.
+   ============================================================ */
+const RIDE_H = 540;
+function drawRide(t) {
+  const storm = 1 - K.E.inOut(K.inv(T.calmBack, T.calmBack + 0.7, t));
+  const cam = { x: 960 + 20 * Math.sin(t * 0.8), y: K.tw(t, T.tilt2[0], T.tilt2[1], 560, -640, K.E.in3), z: K.tw(t, T.ride, T.ride + 1.5, 1.12, 1.02, K.E.out3), rot: 0 };
+  K.begin(ctx, t, cam);
+  K.applyCam(ctx, 1);
+  K.sky(ctx, RIDE_H, { storm, sunX: 1250, sunY: 330, sunR: 120, top: -1500, drift: 700 });
+  K.farIsle(ctx, 300, RIDE_H, 400, storm, 69);
+  K.lighthouse(ctx, 1740, RIDE_H + 40, 0.7, { beam: K.mix(P.beamCalm, P.beamStorm, storm), ang: 0.25 + 0.15 * Math.sin(t * 1.3), flash: Math.exp(-4 * Math.max(0, t - T.calmBack)) * (t > T.calmBack ? 1 : 0) + 0.4 * K.pulse(t, 4, 5) * storm, seed: 170 });
+  K.ocean(ctx, RIDE_H, { storm, vol: 0.15 + 0.85 * storm, bottom: 1300 });
+  /* the set: three big waves on consecutive half bars march in from the right */
+  for (let k = 2; k >= 0; k--) {
+    const t0 = T.ride + k * 2 * BEAT, u = (t - t0) / (4.5 * BEAT);
+    if (u < 0 || u > 1.4) continue;
+    const h = 300 * storm * Math.sin(Math.min(1, u) * Math.PI * 0.9 + 0.15);
+    if (h > 8) K.surfWave(ctx, 2100 - 1500 * u, 900, h, { storm, seed: 340 + k, width: 800 });
+  }
+  /* the hero wave under Siggy (shrinks when calm returns) */
+  const h = (380 + 40 * Math.sin((t - T.ride) * 4.2)) * (0.25 + 0.75 * storm), cx = 300 + 30 * Math.sin(t * 0.9);
+  K.surfWave(ctx, cx, 1110, h, { storm, seed: 300 });
+  const x = 820 + 40 * Math.sin(t * 1.7), y = 1110 - h * 0.58 + 10 * Math.sin(t * 3.3), ang = 14 * (0.4 + 0.6 * storm) + 5 * Math.sin(t * 2.6);
+  const relax = K.inv(T.calmBack, T.calmBack + 0.4, t);
+  surfer(x, y, ang, 1.2, {
+    seed: 700, blink: K.blinkAt(t, 19), squash: 0.16 * storm + 0.07 * K.pulse(t, 1, 6),
+    mouth: relax > 0 ? "smile" : "grin", brow: 0.9 * storm, turn: -0.2 + 0.4 * relax, headTilt: -8 * storm + 6 * relax * Math.sin(t * 3),
+    flipL: { x: -150, y: K.lerp(-170, -70, relax) + 10 * Math.sin(t * 6) }, flipR: { x: K.lerp(150, 120, relax), y: K.lerp(-80, -230, K.E.back(relax, 1.6)) + 8 * Math.sin(t * 5) },
+    footL: { x: -72, y: 0 }, footR: { x: 64, y: 0 },
+  }, 0.2 + 0.72 * storm + 0.05 * Math.sin(t * 17) * storm, "gun");
+  if (storm > 0.5) for (let k = 0; k < 3; k++) K.spray(ctx, x + 170, y, t - (T.ride + k * 2 * BEAT + 0.5), 1.2, 530 + k);
+  K.rain(ctx, storm, { x: cam.x - 1100, y: cam.y - 700, w: 2400, h: 1500 });
+}
+
+/* ============================================================
    INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
    drives a proxy whose setter calls render(t).
-   0.00 - 9.38  sea set: surf in, shaka, gauge, storm bank, "ride the calm",
-                "ride the storm" (regime flip, the wave stands up, a second set)
-   9.15 - 9.38  dial iris: through the board's gauge into the poster
-   9.38 - 12.4  "Every regime has its form": returns over regime bands, sigma, two humps
-   12.03- 12.4  the poster rolls up onto the beach
-   12.4 - 15.39 "Measure the swell and read the sea": GARCH on the surf-report board,
+   0.00 - 6.34  sea set: surf in, shaka, gauge; "Ride the calm" (3.37), storm bank "!",
+                "ride the storm" (4.85): regime flip, the wave stands up, a second set
+   6.1  - 6.34  dial iris: through the board's gauge into the poster
+   6.34 - 9.29  "Every regime has its form": returns over regime bands, sigma, two humps
+   8.92 - 9.29  the poster rolls up onto the beach
+   9.29 - 12.24 "Measure the swell and read the sea": GARCH on the surf-report board,
                 the dial swings to storm, Siggy picks the storm gun; tilt up to the sky
-   15.39- 20.1  "Volatility Modeling and Regimes!": title, medals, hop, shades up
+   12.24- 18.09 "Volatility Modeling and Regimes!" + instrumental: two hidden states
+                (buoys, transition currents), the state switches, the world follows
+   17.72- 18.09 a poster unrolls down over the sea
+   18.09- 21.06 the leverage effect: same-size drop and rise, very different sigma
+   20.69- 21.06 the poster rolls up onto the sea
+   21.06- 25.47 a cluster of big sets, then calm returns (23.99); tilt up
+   25.47- 31.0  title card, medals, hop, shades up
    ============================================================ */
 function dialRing(cx, cy, r) {
   K.screen(ctx); ctx.save(); ctx.lineCap = "butt";
@@ -1876,6 +2066,13 @@ function rollCylinder(y) {
   K.line(ctx, [[-20, y + 10], [K.W + 20, y + 10]], { stroke: P.sky1, w: 8, boil: 0.8, seed: 831 });
 }
 
+/* a poster blind at screen y: draw `under` full, then `over` clipped above y, then the roll */
+function blind(t, y, under, over) {
+  under(t);
+  K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(0, 0, K.W, y); ctx.clip(); over(t); ctx.restore();
+  rollCylinder(y);
+}
+
 function render(t) {
   try {
     titleEl.style.opacity = "0";
@@ -1888,13 +2085,19 @@ function render(t) {
         drawChart(t); ctx.restore(); dialRing(cx, cy, r);
       } else drawChart(t);
     }
-    if (t >= T.roll[0] && t < T.title) {
-      drawForecast(t);
-      if (t < T.roll[1]) { /* the poster rolls up like a blind */
-        const y = K.lerp(K.H + 40, -60, K.E.in3(K.inv(T.roll[0], T.roll[1], t)));
-        K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(0, 0, K.W, y); ctx.clip(); drawChart(t); ctx.restore();
-        rollCylinder(y);
-      }
+    const hmm = (tt) => drawHmm(tt, T.hmm, T.hmmSw);
+    if (t >= T.roll[0] && t < T.hmm) {
+      if (t < T.roll[1]) blind(t, K.lerp(K.H + 40, -60, K.E.in3(K.inv(T.roll[0], T.roll[1], t))), drawForecast, drawChart);
+      else drawForecast(t);
+    }
+    if (t >= T.hmm && t < T.lev) {
+      if (t >= T.unroll[0]) blind(t, K.lerp(-60, K.H + 40, K.E.out3(K.inv(T.unroll[0], T.unroll[1], t))), hmm, drawLeverage);
+      else hmm(t);
+    }
+    if (t >= T.lev && t < T.roll2[0]) drawLeverage(t);
+    if (t >= T.roll2[0] && t < T.title) {
+      if (t < T.roll2[1]) blind(t, K.lerp(K.H + 40, -60, K.E.in3(K.inv(T.roll2[0], T.roll2[1], t))), drawRide, drawLeverage);
+      else drawRide(t);
     }
     if (t >= T.title) drawTitle(t);
     layoutTitleDom(t);
@@ -1902,12 +2105,15 @@ function render(t) {
     /* never leave a black frame silently: draw the error so a snapshot shows it */
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 160), 20, 50);
   }
+  /* the marketmaker.cc sticker: one small hop on the first downbeat, then static */
+  const lb = K.inv(K.at(0), K.at(0) + 0.45, t);
+  logoEl.style.transform = lb > 0 && lb < 1 ? `translateY(${(-16 * Math.sin(lb * Math.PI)).toFixed(1)}px)` : "none";
   /* screen-print grain steps at the wobble rate */
   const f = K.boilFrame(t);
   grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px";
 }
 
-const grainEl = document.getElementById("grain");
+const grainEl = document.getElementById("grain"), logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .3  0 0 0 0 .25  0 0 0 1.6 -.35'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
 
 const TL = gsap.timeline({ paused: true });

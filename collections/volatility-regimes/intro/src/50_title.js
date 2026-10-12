@@ -4,7 +4,7 @@
    five episode medals pop on eighth notes, Siggy rides a curl below while
    the lighthouse beam switches regime colour every bar.
    ============================================================ */
-const TT = { horizon: 700, medalY: 486, medalR: 64 };
+const TT = { horizon: 720, medalY: 548, medalR: 62 };
 const MEDALS = ["garch", "leverage", "cluster", "regimes", "realized"];
 const camTitle = K.mkTrack([[T.title - 0.01, { x: 960, y: -260, z: 1 }], [T.title + 0.7, { x: 960, y: 540, z: 1 }], [DUR, { x: 960, y: 548, z: 1.02 }]]);
 
@@ -25,7 +25,7 @@ function titlePose(t) {
 function drawTitle(t) {
   K.begin(ctx, t, camTitle(t));
   K.applyCam(ctx, 1);
-  K.sky(ctx, TT.horizon, { storm: 0, sunX: 960, sunY: TT.horizon - 100, sunR: 250, top: -1400, drift: 900 });
+  K.sky(ctx, TT.horizon, { storm: 0, sunX: 960, sunY: TT.horizon - 60, sunR: 250, top: -1400, drift: 900 });
   K.farIsle(ctx, 300, TT.horizon, 360, 0, 65);
   for (let i = 0; i < 3; i++) K.gull(ctx, ((200 + i * 300 + t * 70) % 2200) - 100, 590 + i * 30 + 10 * Math.sin(t + i), 1, 60 + i);
   /* the beam switches regime every bar: calm, storm, calm ... */
@@ -52,7 +52,7 @@ function layoutTitleDom(t) {
   titleEl.style.opacity = on ? "1" : "0";
   if (!on) return;
   const sizes = TITLE_LN.map((d) => +d.dataset.size || 120), gap = 28;
-  let y = (TITLE_LN.length > 1 ? 92 : 150) + 6 * Math.sin(t * 1.5);
+  let y = (TITLE_LN.length > 1 ? 168 : 220) + 6 * Math.sin(t * 1.5); /* below the logo sticker (48 - 150 px) */
   TITLE_LN.forEach((d, i) => { d.style.top = y.toFixed(1) + "px"; y += sizes[i] * 1.1 + gap; });
   TITLE_CH.forEach((c) => {
     const t0 = (c.line === 0 ? T.title : T.line2) + (c.line === 0 ? c.idx : c.idx - TITLE_LINES[0].length) * 0.03;

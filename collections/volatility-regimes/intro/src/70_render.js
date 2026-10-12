@@ -1,14 +1,20 @@
 /* ============================================================
    INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
    drives a proxy whose setter calls render(t).
-   0.00 - 9.38  sea set: surf in, shaka, gauge, storm bank, "ride the calm",
-                "ride the storm" (regime flip, the wave stands up, a second set)
-   9.15 - 9.38  dial iris: through the board's gauge into the poster
-   9.38 - 12.4  "Every regime has its form": returns over regime bands, sigma, two humps
-   12.03- 12.4  the poster rolls up onto the beach
-   12.4 - 15.39 "Measure the swell and read the sea": GARCH on the surf-report board,
+   0.00 - 6.34  sea set: surf in, shaka, gauge; "Ride the calm" (3.37), storm bank "!",
+                "ride the storm" (4.85): regime flip, the wave stands up, a second set
+   6.1  - 6.34  dial iris: through the board's gauge into the poster
+   6.34 - 9.29  "Every regime has its form": returns over regime bands, sigma, two humps
+   8.92 - 9.29  the poster rolls up onto the beach
+   9.29 - 12.24 "Measure the swell and read the sea": GARCH on the surf-report board,
                 the dial swings to storm, Siggy picks the storm gun; tilt up to the sky
-   15.39- 20.1  "Volatility Modeling and Regimes!": title, medals, hop, shades up
+   12.24- 18.09 "Volatility Modeling and Regimes!" + instrumental: two hidden states
+                (buoys, transition currents), the state switches, the world follows
+   17.72- 18.09 a poster unrolls down over the sea
+   18.09- 21.06 the leverage effect: same-size drop and rise, very different sigma
+   20.69- 21.06 the poster rolls up onto the sea
+   21.06- 25.47 a cluster of big sets, then calm returns (23.99); tilt up
+   25.47- 31.0  title card, medals, hop, shades up
    ============================================================ */
 function dialRing(cx, cy, r) {
   K.screen(ctx); ctx.save(); ctx.lineCap = "butt";
@@ -24,6 +30,13 @@ function rollCylinder(y) {
   K.line(ctx, [[-20, y + 10], [K.W + 20, y + 10]], { stroke: P.sky1, w: 8, boil: 0.8, seed: 831 });
 }
 
+/* a poster blind at screen y: draw `under` full, then `over` clipped above y, then the roll */
+function blind(t, y, under, over) {
+  under(t);
+  K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(0, 0, K.W, y); ctx.clip(); over(t); ctx.restore();
+  rollCylinder(y);
+}
+
 function render(t) {
   try {
     titleEl.style.opacity = "0";
@@ -36,13 +49,19 @@ function render(t) {
         drawChart(t); ctx.restore(); dialRing(cx, cy, r);
       } else drawChart(t);
     }
-    if (t >= T.roll[0] && t < T.title) {
-      drawForecast(t);
-      if (t < T.roll[1]) { /* the poster rolls up like a blind */
-        const y = K.lerp(K.H + 40, -60, K.E.in3(K.inv(T.roll[0], T.roll[1], t)));
-        K.screen(ctx); ctx.save(); ctx.beginPath(); ctx.rect(0, 0, K.W, y); ctx.clip(); drawChart(t); ctx.restore();
-        rollCylinder(y);
-      }
+    const hmm = (tt) => drawHmm(tt, T.hmm, T.hmmSw);
+    if (t >= T.roll[0] && t < T.hmm) {
+      if (t < T.roll[1]) blind(t, K.lerp(K.H + 40, -60, K.E.in3(K.inv(T.roll[0], T.roll[1], t))), drawForecast, drawChart);
+      else drawForecast(t);
+    }
+    if (t >= T.hmm && t < T.lev) {
+      if (t >= T.unroll[0]) blind(t, K.lerp(-60, K.H + 40, K.E.out3(K.inv(T.unroll[0], T.unroll[1], t))), hmm, drawLeverage);
+      else hmm(t);
+    }
+    if (t >= T.lev && t < T.roll2[0]) drawLeverage(t);
+    if (t >= T.roll2[0] && t < T.title) {
+      if (t < T.roll2[1]) blind(t, K.lerp(K.H + 40, -60, K.E.in3(K.inv(T.roll2[0], T.roll2[1], t))), drawRide, drawLeverage);
+      else drawRide(t);
     }
     if (t >= T.title) drawTitle(t);
     layoutTitleDom(t);
@@ -50,12 +69,15 @@ function render(t) {
     /* never leave a black frame silently: draw the error so a snapshot shows it */
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 160), 20, 50);
   }
+  /* the marketmaker.cc sticker: one small hop on the first downbeat, then static */
+  const lb = K.inv(K.at(0), K.at(0) + 0.45, t);
+  logoEl.style.transform = lb > 0 && lb < 1 ? `translateY(${(-16 * Math.sin(lb * Math.PI)).toFixed(1)}px)` : "none";
   /* screen-print grain steps at the wobble rate */
   const f = K.boilFrame(t);
   grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px";
 }
 
-const grainEl = document.getElementById("grain");
+const grainEl = document.getElementById("grain"), logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .3  0 0 0 0 .25  0 0 0 1.6 -.35'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
 
 const TL = gsap.timeline({ paused: true });

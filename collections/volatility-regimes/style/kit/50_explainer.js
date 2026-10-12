@@ -189,7 +189,12 @@ var VK = window.VK || (window.VK = {});
         for (let i = 0; i <= Math.floor(k); i++) pts.push([X(i), Yc(s.data[i])]);
         const fr = k - Math.floor(k), i0 = Math.floor(k);
         if (i0 < n - 1 && fr > 0) pts.push([lerp(X(i0), X(i0 + 1), fr), lerp(Yc(s.data[i0]), Yc(s.data[i0 + 1]), fr)]);
-        if (s.kind === "area" && pts.length > 1) K.shape(ctx, pts.concat([[pts[pts.length - 1][0], pb], [pts[0][0], pb]]), { fill: s.color, stroke: null, w: 0, boil: 0.6, seed: o.seed + 50 + si, alpha: 0.45, dots: { color: P.ink, cell: 8, density: 0.4, alpha: 0.25 } });
+        if (s.kind === "area" && pts.length > 1) { /* straight-edged fill (a smoothed polygon would bulge under the axis) */
+          ctx.save(); ctx.globalAlpha *= 0.45; ctx.beginPath(); ctx.moveTo(pts[0][0], pb);
+          pts.forEach((q) => ctx.lineTo(q[0], q[1])); ctx.lineTo(pts[pts.length - 1][0], pb); ctx.closePath();
+          ctx.fillStyle = s.color; ctx.fill(); ctx.restore();
+          K.halftone(ctx, pts.concat([[pts[pts.length - 1][0], pb], [pts[0][0], pb]]), { color: P.ink, cell: 8, density: 0.4, alpha: 0.25, straight: true });
+        }
         if (pts.length > 1) { K.line(ctx, pts, { stroke: P.ink, w: (s.w || 6) + 7, boil: 0.8, seed: o.seed + 30 + si, brush: { taper: 0.9, swell: 0.1 } }); K.line(ctx, pts, { stroke: s.color, w: s.w || 6, boil: 0.8, seed: o.seed + 30 + si, brush: { taper: 0.9, swell: 0.1 } }); }
         const head = pts[pts.length - 1]; if (head && o.draw < 1) K.dot(ctx, head[0], head[1], 9, s.color, P.ink, 3, o.seed + 40 + si);
       }
