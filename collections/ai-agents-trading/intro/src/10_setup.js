@@ -1,49 +1,57 @@
 /* ============================================================
    INTRO 10 SETUP: variables, title DOM, world layout, timing (beat grid)
-   Song: song_20s.m4a, 80s synth-funk with vocoder, ~113 BPM (beat 0.531 s,
-   bar 2.12 s). Cut: one intro bar (raw 3.58-5.83) + the second chorus with
-   its natural ending (raw 40.08-58.3), crossfade 30 ms, loudnorm -14 LUFS.
-     0.08  instrumental bar: Beepo boots up
-     2.24  "Beep boop, the signals run"
-     6.46  "Agents trade till the day is done"
-    10.70  "Observe, decide, then act again"
-    14.95  "AI Agents for Trading, here they come!"  (title hit)
-    17.09  "AI Agents for Trading!" (tag), ring-out to 20.5
+   Song: song_full.m4a = the whole generated song (raw 0.10-58.6, 1.0 s fade,
+   loudnorm -14 LUFS), 80s synth-funk with vocoder, ~113 BPM (beat 0.531 s,
+   bar ~2.13 s; the verse drifts a little, so the grid is measured per bar).
+   Each sung line is two bars (verse words checked with whisper):
+     bar  0  1.21  intro: Beepo boots up       bar 10 22.62 "Robots on the floor where the neon glows"
+     bar  2  5.74  "Beep boop, the signals run" bar 12 26.84 "Reading every tick as the order flows"
+     bar  4  9.98  "Agents trade till the day is done"   bar 14 31.09 "One agent plans and another one checks"
+     bar  6 14.23  "Observe, decide, then act again"     bar 16 35.60 "Tools and memory to place the next bets!"
+     bar  8 18.48  "AI Agents for Trading, here they come!"
+     bar 18 39.98  chorus 2: "Beep boop" ... bar 24 52.73 "AI Agents for Trading, here they come!"
+     bar 25 54.85  tag "AI Agents for Trading!", bar 26 56.98 ring-out, fade to 58.5
    All story times are K.at(bar, beat) on the measured downbeats below.
    ============================================================ */
 const K = AK, P = K.P, at = K.at;
 K.G.BPM = 113;
-K.G.BARS = [0.08, 2.24, 4.34, 6.46, 8.59, 10.70, 12.84, 14.95, 17.09, 19.21];
-const DUR = 20.5;
+K.G.BARS = [1.21, 3.48, 5.74, 7.85, 9.98, 12.10, 14.23, 16.35, 18.48, 20.60, 22.62, 24.71, 26.84, 28.96, 31.09, 33.48, 35.60, 37.73, 39.98, 42.10, 44.23, 46.35, 48.48, 50.60, 52.73, 54.85, 56.98];
+const DUR = 58.5;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const BEAT = K.beatLen();
 
 /* ---------- story beats (on the song's downbeats) ---------- */
 const T = {
-  powerOn: [at(0), at(0) + 0.32],   /* CRT power-on line opens the film */
-  noise: [at(0) + 0.2, at(0, 2)],   /* face screen boots: static */
-  eyesOn: at(0, 2),                 /* 1.14 pixel eyes appear */
-  crouch: at(0, 3.2),               /* anticipation before the hop */
-  hop: at(1),                       /* 2.24 "Beep boop": hop + pull back */
-  pullBack: [at(1), at(1, 2.5)],
-  chart: at(1, 1),                  /* wall chart candles draw */
-  signals: at(2),                   /* 4.34 "the signals run": cables light, pulses run */
-  follow: [at(2, 2), at(3)],        /* camera follows the pulses to the team */
-  trade: at(3),                     /* 6.46 "Agents trade": ticket pipeline starts */
-  hopOver: [at(3) - 0.25, at(3) + 0.35],
-  dayEnd: [at(3), at(5) - 0.4],     /* "till the day is done": dusk, clock runs */
-  dive: [at(5) - 0.55, at(5)],      /* camera dives into Beepo's face screen */
-  observe: at(5),                   /* 10.70 */
-  decide: at(5, 2),                 /* 11.76 */
-  act: at(6),                       /* 12.84 */
-  again: at(6, 2),                  /* 13.90 loop returns to observe, counter 02 */
-  crtOff: [at(7) - 0.42, at(7) - 0.04],  /* power-off squeeze into a line */
-  title: at(7),                     /* 14.95 sign buzzes on */
-  letters: at(7) + 0.25,
-  jump: at(7, 2),
-  medals: at(8),                    /* 17.09 tag line: medallions + confetti */
-  final: at(9),
+  /* intro + chorus 1 */
+  powerOn: [0, 0.32],               /* CRT power-on line opens the film */
+  noise: [0.2, at(0, 2)],           /* face screen boots: static */
+  eyesOn: at(0, 2),                 /* pixel eyes appear */
+  wave: [at(1), at(1, 3)],          /* hello wave on the vocoder intro bar */
+  crouch: at(1, 3.2),               /* anticipation before the hop */
+  hop: at(2),                       /* "Beep boop": hop + pull back */
+  pullBack: [at(2), at(2, 2.5)],
+  chart: at(2, 1),                  /* wall chart candles draw */
+  signals: at(3),                   /* "the signals run": cables light, pulses run */
+  follow: [at(3, 2), at(4)],        /* camera follows the pulses to the team */
+  trade: at(4),                     /* "Agents trade": ticket pipeline starts */
+  hopOver: [at(4) - 0.25, at(4) + 0.35],
+  dayEnd: [at(4), at(6) - 0.4],     /* "till the day is done": dusk, clock runs */
+  dive: [at(6) - 0.55, at(6)],      /* camera dives into Beepo's face screen */
+  observe: at(6), decide: at(6, 2), act: at(7), again: at(7, 2),
+  crtOff: [at(8) - 0.42, at(8) - 0.04],  /* power-off squeeze into a line */
+  title: at(8),                     /* "AI Agents for Trading, here they come!" (first sign) */
+  /* verse: one continuous take along the night floor */
+  verse: at(10), tick: at(12), plan: at(14), tools: at(16),
+  /* chorus 2 */
+  net: at(18), eod: at(20), ring: at(22),
+  crtOff2: [at(24) - 0.42, at(24) - 0.04],
+  title2: at(24), medals: at(25), final: at(26),
 };
+/* the two title sets: first sign (chorus 1) and the final title card */
+const TITLE_A = { start: T.title, letters: T.title + 0.25, jump: at(9), medals: null, end: at(10) };
+const TITLE_B = { start: T.title2, letters: T.title2 + 0.25, jump: at(24, 2), medals: T.medals, final: T.final, end: DUR };
+/* glitch cuts (CRT signal tear) between sets */
+const CUTS = [at(10), at(18), at(20), at(22)];
 
 /* ---------- variables (title text, language) ---------- */
 const VARS = Object.assign({ title: "AI Agents|for Trading", lang: "en" },
@@ -79,7 +87,7 @@ const TITLE_LN = Array.from(titleEl.querySelectorAll(".ln"));
 /* ---------- world layout (world units; horizon = 700) ---------- */
 const HORIZON = 700;
 const WORLD = { x0: -600, x1: 4200 };
-const SCREEN_BIG = { x: 260, y: 150, w: 860, h: 420 };   /* wall chart */
+const SCREEN_BIG = { x: 260, y: 200, w: 860, h: 400 };   /* wall chart */
 const WINDOW = { x: 1560, y: 110, w: 980, h: 460 };      /* synthwave window behind the team */
 const CLOCK = { x: 2600, y: 170, w: 330, h: 120 };      /* 7-seg wall clock */
 const PNL = { x: 2600, y: 400, w: 330, h: 170 };        /* PnL scoreboard */
@@ -97,8 +105,8 @@ const CANDLES = [[40, 44, 38, 43], [43, 47, 42, 46], [46, 47, 41, 42], [42, 45, 
 const TAPE = [{ sym: "NVDA", chg: "+3.2%" }, { sym: "AAPL", chg: "-0.4%" }, { sym: "BTC", chg: "+1.8%" }, { sym: "TSLA", chg: "-2.1%" }, { sym: "SPY", chg: "+0.6%" }, { sym: "MSFT", chg: "+0.9%" }];
 /* tickets in the pipeline: one every two beats from the "Agents trade" downbeat */
 const TICKETS = [
-  { t: at(3), sym: "NVDA", dir: "up", qty: "100", pnl: "+0.4" },
-  { t: at(3, 2), sym: "AAPL", dir: "down", qty: "50", pnl: "+1.1" },
-  { t: at(4), sym: "BTC", dir: "up", qty: "2", pnl: "+1.9" },
-  { t: at(4, 2), sym: "SPY", dir: "up", qty: "300", pnl: "+2.6" },
+  { t: at(4), sym: "NVDA", dir: "up", qty: "100", pnl: "+0.4" },
+  { t: at(4, 2), sym: "AAPL", dir: "down", qty: "50", pnl: "+1.1" },
+  { t: at(5), sym: "BTC", dir: "up", qty: "2", pnl: "+1.9" },
+  { t: at(5, 2), sym: "SPY", dir: "up", qty: "300", pnl: "+2.6" },
 ];

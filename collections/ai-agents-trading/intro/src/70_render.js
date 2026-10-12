@@ -1,16 +1,20 @@
 /* ============================================================
-   INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
-   drives a proxy whose setter calls render(t).
-    0.00 -  2.24  CRT power-on; close-up: Beepo boots (static, eyes, look)
-    2.24 -  6.46  "Beep boop, the signals run": hop, pull back to the floor,
-                  candles draw, cables light, pulses run to the team
-    6.46 - 10.15  "Agents trade till the day is done": Beepo hops over and
-                  conducts; tickets go analyst -> risk (stamp) -> trader ->
-                  tube; dusk falls, the clock runs 09:30 -> 16:00
-   10.15 - 10.70  dive into Beepo's face screen (diegetic transition)
-   10.70 - 14.53  "Observe, decide, then act again": the agent loop ring
-   14.53 - 14.95  CRT power-off squeeze
-   14.95 - 20.50  "AI Agents for Trading, here they come!": neon sign title
+   INTRO 70 RENDER: render(t) is the whole film (the full song, 58.5 s).
+   One paused GSAP timeline drives a proxy whose setter calls render(t).
+    0.00 -  5.74  CRT power-on; close-up: Beepo boots, waves hello
+    5.74 -  9.98  "Beep boop, the signals run": hop, pull back, cables light
+    9.98 - 14.23  "Agents trade till the day is done": ticket line, dusk
+   13.68 - 14.23  dive into Beepo's face screen
+   14.23 - 18.06  "Observe, decide, then act again": the loop in his face
+   18.06 - 18.48  CRT power-off
+   18.48 - 22.62  "AI Agents for Trading, here they come!": sign, team hops in
+   22.62 - 39.98  verse, one continuous take (60_verse.js), glitch cut in
+   39.98 - 44.23  "Beep boop": the agent network
+   44.23 - 48.48  "Agents trade till the day is done": desks, the 16:00 bell
+   48.48 - 52.31  "Observe, decide, then act again": the ring on the floor
+   52.31 - 52.73  CRT power-off
+   52.73 - 58.50  final title card; tag at 54.85; CRT power-off at the end
+   Cuts between sets are diegetic: face dive, CRT off/on, CRT signal tear.
    ============================================================ */
 const FACE_SCALE = (2060 / 1920); /* loop scene scale when the face fills the frame */
 
@@ -54,29 +58,61 @@ function drawLoopFull(t) {
   drawLoopScene(ctx, t); ctx.restore();
 }
 
+/* CRT signal tear: shift horizontal bands of the finished frame (amount 0..1) */
+function glitch(amount, t) {
+  if (amount <= 0) return;
+  K.screen(ctx);
+  const f = K.boilFrame(t * 2);
+  for (let i = 0; i < 14; i++) {
+    const y = Math.floor(K.hash(i, f * 7 + 1) * 1080), h = 12 + Math.floor(K.hash(i, f * 7 + 2) * 90), dx = (K.hash(i, f * 7 + 3) - 0.5) * 260 * amount;
+    ctx.drawImage(cv, 0, y, 1920, h, dx, y, 1920, h);
+  }
+  ctx.save(); ctx.globalCompositeOperation = "lighter";
+  for (let i = 0; i < 5; i++) { ctx.fillStyle = K.rgba(i % 2 ? P.pink : P.cyan, 0.35 * amount); ctx.fillRect(0, Math.floor(K.hash(i, f * 3 + 9) * 1080), 1920, 3 + 6 * K.hash(i, f + 4)); }
+  ctx.restore();
+}
+function blackFrame(t, t0, t1) { K.screen(ctx); ctx.fillStyle = "#020208"; ctx.fillRect(0, 0, 1920, 1080); K.glow(ctx, 960, 540, 60 * (1 - K.inv(t0, t1, t)), "rgba(160,230,255,0.9)", 1); }
+
 function render(t) {
   try {
     K.begin(ctx, t, { x: 960, y: 540, z: 1 });
     titleEl.style.opacity = "0"; titleEl.style.transform = "";
+    let k = null;
     if (t < T.dive[1]) {
-      /* 1-3: the floor (opens through a CRT power-on) */
+      /* intro + chorus 1 on the floor (opens through a CRT power-on) */
       const floor = () => drawFloor(t, camFloor(t));
       if (t < T.powerOn[1]) crtMask(K.inv(T.powerOn[0], T.powerOn[1], t), floor);
       else floor();
-    } else if (t < T.crtOff[0]) {
-      drawLoopFull(t);
-    } else if (t < T.title) {
+    } else if (t < T.crtOff[0]) drawLoopFull(t);
+    else if (t < T.title) {
       if (t < T.crtOff[1]) crtOff(K.inv(T.crtOff[0], T.crtOff[1], t), () => drawLoopFull(t));
-      else { K.screen(ctx); ctx.fillStyle = "#020208"; ctx.fillRect(0, 0, 1920, 1080); K.glow(ctx, 960, 540, 60 * (1 - K.inv(T.crtOff[1], T.title, t)), "rgba(160,230,255,0.9)", 1); }
+      else blackFrame(t, T.crtOff[1], T.title);
+    } else if (t < TITLE_A.end) {
+      k = TITLE_A;
+      if (t < k.start + 0.3) crtMask(K.inv(k.start, k.start + 0.3, t), () => drawTitleSet(t, k)); else drawTitleSet(t, k);
+    } else if (t < T.net) drawVerse(t);
+    else if (t < T.eod) drawNet(t);
+    else if (t < T.ring) drawEOD(t);
+    else if (t < T.crtOff2[0]) drawRing(t);
+    else if (t < T.title2) {
+      if (t < T.crtOff2[1]) crtOff(K.inv(T.crtOff2[0], T.crtOff2[1], t), () => drawRing(t));
+      else blackFrame(t, T.crtOff2[1], T.title2);
     } else {
-      /* 5: title set, opens with a power-on; the whole frame powers off over the last 0.4 s */
+      /* final title card: power-on, and the whole frame powers off over the last 0.4 s */
+      k = TITLE_B;
       const endU = K.inv(DUR - 0.42, DUR - 0.02, t);
-      if (t < T.title + 0.3) crtMask(K.inv(T.title, T.title + 0.3, t), () => drawTitleSet(t));
+      if (t < k.start + 0.3) crtMask(K.inv(k.start, k.start + 0.3, t), () => drawTitleSet(t, k));
       else if (endU > 0) {
-        const s = crtOff(endU, () => drawTitleSet(t));
+        const s = crtOff(endU, () => drawTitleSet(t, k));
         titleEl.style.transformOrigin = "960px 540px"; titleEl.style.transform = `scale(${s.sx.toFixed(3)}, ${s.sy.toFixed(3)})`;
-      } else drawTitleSet(t);
-      layoutTitleDom(t);
+      } else drawTitleSet(t, k);
+    }
+    /* signal-tear cuts between sets */
+    let g = 0; CUTS.forEach((c) => { g = Math.max(g, 1 - Math.abs(t - c) / 0.2); });
+    glitch(g, t);
+    if (k) {
+      layoutTitleDom(t, k);
+      if (g > 0) titleEl.style.transform = `translateX(${((K.hash(K.boilFrame(t * 2), 5) - 0.5) * 120 * g).toFixed(1)}px)`;
     }
   } catch (err) {
     /* never leave a black frame silently: draw the error so a snapshot shows it */

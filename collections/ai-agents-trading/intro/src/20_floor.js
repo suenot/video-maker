@@ -6,11 +6,11 @@
    ============================================================ */
 const FACE_W = [BEEPO_B[0], BEEPO_B[1] - BEEPO_S * 221]; /* world centre of Beepo's screen at rest */
 const camKeys = K.mkTrack([
-  [0, { x: BEEPO_A[0] + 20, y: BEEPO_A[1] - 285, z: 2.15 }],
-  [T.hop, { x: BEEPO_A[0] + 30, y: BEEPO_A[1] - 300, z: 2.0 }],
+  [0, { x: BEEPO_A[0] + 10, y: BEEPO_A[1] - 270, z: 1.85 }],
+  [T.hop, { x: BEEPO_A[0] + 30, y: BEEPO_A[1] - 300, z: 2.1 }],
   [T.hop + 0.45, { x: BEEPO_A[0] + 60, y: BEEPO_A[1] - 380, z: 1.5 }],
-  [T.pullBack[1], { x: 1180, y: 600, z: 0.95 }],
-  [T.follow[0], { x: 1300, y: 605, z: 0.95 }],
+  [T.pullBack[1], { x: 1100, y: 650, z: 1.12 }],
+  [T.follow[0], { x: 1260, y: 640, z: 1.08 }],
   [T.trade + 0.3, { x: 2360, y: 620, z: 0.9 }],
   [T.dive[0], { x: 2340, y: 625, z: 0.92 }],
 ]);

@@ -31,6 +31,13 @@ function beepoPose(t) {
     st.eyes = k < 0.18 ? "wide" : "dot";
     st.look = [K.tw(t, T.eyesOn + 0.25, T.eyesOn + 0.45, 0, -0.9) + K.tw(t, T.eyesOn + 0.6, T.eyesOn + 0.8, 0, 1.6), -0.1];
     st.blink = k < 0.2 ? 0 : st.blink;
+    /* hello wave on the vocoder intro bar */
+    const w = K.ss(T.wave[0] - 0.2, T.wave[0], t) * (1 - K.ss(T.wave[1] - 0.2, T.wave[1], t));
+    if (w > 0) {
+      const sw = Math.sin((t - T.wave[0]) / BEAT * Math.PI);
+      st.armR = { x: K.lerp(104, 150 + 34 * sw, w), y: K.lerp(-150, -300, w), open: 0.7 }; st.eyes = "happy"; st.mouth = "open";
+      st.lean = -4 * w * sw; st.look = [0, -0.2]; st.bulb = b; st.headTilt = 6 * sw * w;
+    }
   }
   /* anticipation crouch, then the hop on the "Beep boop" downbeat */
   const crouch = K.ss(T.crouch, T.hop, t) * (1 - K.ss(T.hop, T.hop + 0.08, t));

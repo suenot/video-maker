@@ -1,6 +1,7 @@
 # Intro review log
 
-The intro is 20.5 s, 1920x1080, 30 fps, with the song muxed in (`song_20s.m4a`, about 113 BPM, -14 LUFS). There is also a silent copy of each render.
+**Current version: the full song.** The intro runs the whole generated song: 58.5 s, 1920x1080, 30 fps. The audio is `song_full.m4a` (raw 0.10-58.6 s, 1.0 s fade, -14 LUFS), and there is a silent copy of each render.
+The 20 s rounds below are kept as history; the full-song rounds follow them.
 Each round comes from snapshots I looked at (`tools/snap.sh`, 9 to 20 frames, plus full-resolution frames and crops).
 
 ## Song cut
@@ -30,8 +31,30 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, 9 to 20 frames, pl
 - ru / zh-CN / zh-TW titles were checked at 19.5 s. All fit inside the sign, and the CJK subsets render (Chinese is set on two lines: "交易中的 | AI 智能体").
 - 1 fps contact sheet (`snapshots/contact-sheet.jpg`): no empty frames, and every sung line has its own picture.
 
+## Full song: timing
+- The beat grid was measured over the whole song with librosa. Kick energy marks the downbeats, and each bar is measured, because the verse drifts: its bars run about 2.17 s, against 2.11 s in the chorus. Around 32-33 s the tracker skipped, and that bar is taken as measured (33.48).
+- Whisper hears the verse words but not the vocoder chorus. Verse lines start on bars 10, 12, 14 and 16 ("floor" at 23.8 s, "every" at 27.6 s, "memory" at 36.1 s). The chorus lines are two bars each, and chroma similarity places them (the two choruses are 16 bars apart).
+- Story beats: intro and boot with a hello wave; chorus 1 (signals, ticket line, face loop, first neon sign while the team hops in); verse as one continuous take (neon signs ignite, the analyst reads the tape and the order book, the trader plans while risk checks and crosses out TSLA, Beepo's tools and memory and the bet); chorus 2 (agent network, end of day at the 16:00 bell, the loop ring on the floor); final title card with the tag, medallions and confetti. Cuts are a face dive, CRT off/on, and a CRT signal tear (`glitch`).
+
+## Full song: round 1
+- Verse walk: the four bots were 260 px apart and overlapped mid-hop. The spacing is now 380 px.
+- Verse stations at z 1.1 left large empty walls, with the tape and order book small at the top. The stations are now at z 1.3, and the tape, order book, plan board and terminal moved down next to the bots.
+- Beepo's terminal overlapped his head, and the tube clipped the terminal. The terminal moved up (y 400) and left, and the tube is at x 7650.
+- Ring: the risk bot at the ring centre hid the analyst on the back pad. It now stands in front of the ring, between the front pads.
+
+## Full song: round 2 (fixes the known weaknesses of the 20 s cut)
+- Beepo was small in the wide pull-back. The pull-back now ends at z 1.12 instead of 0.95, and the wall chart sits lower.
+- The loop scene had quiet sides. The left side now has an `agent.log` terminal that types one call per step (observe / decide / act), and the right side a PnL board that ticks on "act".
+- The boot was static for 5.7 s. Beepo now waves hello on the vocoder intro bar, with a camera push-in.
+
+## Full song: round 3
+- The analyst's magnifier covered its own face while reading the tape. The lens is now raised up and to the left.
+- The ring's step icons were too small to read. Their scale is now 1.15 (1.5 when lit).
+- `check`: lint has 0 errors, runtime 0, layout 0 issues, motion 0, and contrast 18/18. The 1 fps sheet (`snapshots/contact-sheet.jpg`, 58 frames) shows a new picture every 2-4 s, and no empty frames except the two short CRT power-off blacks (18.1-18.5 s and 52.3-52.7 s).
+
 ## Known weaknesses
-- The wide pull-back (3-5 s) still leaves Beepo small in a big room. This is intentional, to reveal the floor.
-- The loop scene (10.7-14.5 s) has quiet sides. It holds one diagram on purpose, but a slow camera drift would help.
+- In the verse take, the bots that hop on to later stations cross the order-book shot (bar 12). This is lively, but it busies the frame for one beat.
+- The network shot (40-44 s) leaves the top-left of the wall empty, apart from Beepo singing.
+- The title sign appears twice (the chorus 1 hook and the final card). It is intentional, but the two are close in look.
 - Ticket text in the pipeline shot is about 24 px; it is context, not information.
 - One lint warning remains: the file is large, because it is built from the kit by design.

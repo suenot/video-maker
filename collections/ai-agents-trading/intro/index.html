@@ -84,13 +84,13 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="20.5" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="58.5" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div class="ov" id="scan"></div>
       <div class="ov" id="roll"></div>
       <div class="ov" id="vig"></div>
       <div id="title" data-layout-allow-overlap></div>
-      <audio id="song" src="song_20s.m4a" data-start="0" data-duration="20.5" data-track-index="10" data-volume="1"></audio>
+      <audio id="song" src="song_full.m4a" data-start="0" data-duration="58.5" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="ru">Aa Бб 0</span><span class="e5">Aa Бб 0</span><span class="e8">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span><span class="px">Aa Бб 0</span><span class="sc">交易中的智能体</span><span class="tc">交易中的智慧體</span></div>
     </div>
     <script>
@@ -1299,9 +1299,10 @@ var AK = window.AK || (window.AK = {});
   };
 
   /* ---------- task board (bullets): each bullet pops with a lit pixel icon ----------
-     items: strings or {t, icon, c}; shown: number visible (fractional = popping); done: items checked */
+     items: strings or {t, icon, c}; shown: number visible (fractional = popping); done: items checked;
+     marks: per-item verdict overriding done ("check" | "cross" | null); a cross also strikes the text */
   K.taskBoard = function (ctx, x, y, w, items, opt) {
-    const o = Object.assign({ a: 1, size: 38, seed: 51, shown: 99, title: "", lineH: null, done: 0 }, opt || {});
+    const o = Object.assign({ a: 1, size: 38, seed: 51, shown: 99, title: "", lineH: null, done: 0, marks: null }, opt || {});
     const a = popS(o.a); if (a <= 0) return;
     const lh = o.lineH || o.size * 1.7, h = items.length * lh + (o.title ? 116 : 56);
     ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
@@ -1311,12 +1312,13 @@ var AK = window.AK || (window.AK = {});
     if (o.title) { K.text(ctx, o.title, 0, -h / 2 + 62, { size: o.size * 1.05, font: K.FONT.display, fill: P.pink, glow: P.pink, glowR: 12 }); yy += 56; }
     items.forEach((it, i) => {
       const g = clamp(o.shown - i, 0, 1); if (g <= 0) return;
-      const s = K.E.back(g, 2), str = typeof it === "string" ? it : it.t, done = i < o.done;
-      const icon = done ? "check" : (typeof it === "string" ? null : it.icon) || "play", col = done ? P.green : (typeof it === "string" ? null : it.c) || P.cyan;
+      const s = K.E.back(g, 2), str = typeof it === "string" ? it : it.t, mark = o.marks ? o.marks[i] : i < o.done ? "check" : null;
+      const icon = mark || (typeof it === "string" ? null : it.icon) || "play", col = mark === "cross" ? P.loss : mark ? P.green : (typeof it === "string" ? null : it.c) || P.cyan;
       ctx.save(); ctx.translate(-w / 2 + 64, yy + i * lh); ctx.scale(s, s);
       K.shape(ctx, K.rrPts(-24, -24, 48, 48, 10, 2), { fill: P.screen, w: 4, boil: 0.4, seed: o.seed + 10 + i });
       K.pix(ctx, icon, 0, 0, 5, col, { glow: 1 });
       K.text(ctx, str, 46, 2, { size: o.size, weight: 500, font: K.FONT.text, fill: "#eef0ff", align: "left" });
+      if (mark === "cross") { const tw = K.textW(ctx, str, o.size, 500, K.FONT.text); K.line(ctx, [[40, 2], [52 + tw, 0]], { stroke: P.loss, w: 5, boil: 0.6, seed: o.seed + 30 + i }); }
       ctx.restore();
     });
     ctx.restore();
@@ -1396,50 +1398,58 @@ var AK = window.AK || (window.AK = {});
 
 /* ============================================================
    INTRO 10 SETUP: variables, title DOM, world layout, timing (beat grid)
-   Song: song_20s.m4a, 80s synth-funk with vocoder, ~113 BPM (beat 0.531 s,
-   bar 2.12 s). Cut: one intro bar (raw 3.58-5.83) + the second chorus with
-   its natural ending (raw 40.08-58.3), crossfade 30 ms, loudnorm -14 LUFS.
-     0.08  instrumental bar: Beepo boots up
-     2.24  "Beep boop, the signals run"
-     6.46  "Agents trade till the day is done"
-    10.70  "Observe, decide, then act again"
-    14.95  "AI Agents for Trading, here they come!"  (title hit)
-    17.09  "AI Agents for Trading!" (tag), ring-out to 20.5
+   Song: song_full.m4a = the whole generated song (raw 0.10-58.6, 1.0 s fade,
+   loudnorm -14 LUFS), 80s synth-funk with vocoder, ~113 BPM (beat 0.531 s,
+   bar ~2.13 s; the verse drifts a little, so the grid is measured per bar).
+   Each sung line is two bars (verse words checked with whisper):
+     bar  0  1.21  intro: Beepo boots up       bar 10 22.62 "Robots on the floor where the neon glows"
+     bar  2  5.74  "Beep boop, the signals run" bar 12 26.84 "Reading every tick as the order flows"
+     bar  4  9.98  "Agents trade till the day is done"   bar 14 31.09 "One agent plans and another one checks"
+     bar  6 14.23  "Observe, decide, then act again"     bar 16 35.60 "Tools and memory to place the next bets!"
+     bar  8 18.48  "AI Agents for Trading, here they come!"
+     bar 18 39.98  chorus 2: "Beep boop" ... bar 24 52.73 "AI Agents for Trading, here they come!"
+     bar 25 54.85  tag "AI Agents for Trading!", bar 26 56.98 ring-out, fade to 58.5
    All story times are K.at(bar, beat) on the measured downbeats below.
    ============================================================ */
 const K = AK, P = K.P, at = K.at;
 K.G.BPM = 113;
-K.G.BARS = [0.08, 2.24, 4.34, 6.46, 8.59, 10.70, 12.84, 14.95, 17.09, 19.21];
-const DUR = 20.5;
+K.G.BARS = [1.21, 3.48, 5.74, 7.85, 9.98, 12.10, 14.23, 16.35, 18.48, 20.60, 22.62, 24.71, 26.84, 28.96, 31.09, 33.48, 35.60, 37.73, 39.98, 42.10, 44.23, 46.35, 48.48, 50.60, 52.73, 54.85, 56.98];
+const DUR = 58.5;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 const BEAT = K.beatLen();
 
 /* ---------- story beats (on the song's downbeats) ---------- */
 const T = {
-  powerOn: [at(0), at(0) + 0.32],   /* CRT power-on line opens the film */
-  noise: [at(0) + 0.2, at(0, 2)],   /* face screen boots: static */
-  eyesOn: at(0, 2),                 /* 1.14 pixel eyes appear */
-  crouch: at(0, 3.2),               /* anticipation before the hop */
-  hop: at(1),                       /* 2.24 "Beep boop": hop + pull back */
-  pullBack: [at(1), at(1, 2.5)],
-  chart: at(1, 1),                  /* wall chart candles draw */
-  signals: at(2),                   /* 4.34 "the signals run": cables light, pulses run */
-  follow: [at(2, 2), at(3)],        /* camera follows the pulses to the team */
-  trade: at(3),                     /* 6.46 "Agents trade": ticket pipeline starts */
-  hopOver: [at(3) - 0.25, at(3) + 0.35],
-  dayEnd: [at(3), at(5) - 0.4],     /* "till the day is done": dusk, clock runs */
-  dive: [at(5) - 0.55, at(5)],      /* camera dives into Beepo's face screen */
-  observe: at(5),                   /* 10.70 */
-  decide: at(5, 2),                 /* 11.76 */
-  act: at(6),                       /* 12.84 */
-  again: at(6, 2),                  /* 13.90 loop returns to observe, counter 02 */
-  crtOff: [at(7) - 0.42, at(7) - 0.04],  /* power-off squeeze into a line */
-  title: at(7),                     /* 14.95 sign buzzes on */
-  letters: at(7) + 0.25,
-  jump: at(7, 2),
-  medals: at(8),                    /* 17.09 tag line: medallions + confetti */
-  final: at(9),
+  /* intro + chorus 1 */
+  powerOn: [0, 0.32],               /* CRT power-on line opens the film */
+  noise: [0.2, at(0, 2)],           /* face screen boots: static */
+  eyesOn: at(0, 2),                 /* pixel eyes appear */
+  wave: [at(1), at(1, 3)],          /* hello wave on the vocoder intro bar */
+  crouch: at(1, 3.2),               /* anticipation before the hop */
+  hop: at(2),                       /* "Beep boop": hop + pull back */
+  pullBack: [at(2), at(2, 2.5)],
+  chart: at(2, 1),                  /* wall chart candles draw */
+  signals: at(3),                   /* "the signals run": cables light, pulses run */
+  follow: [at(3, 2), at(4)],        /* camera follows the pulses to the team */
+  trade: at(4),                     /* "Agents trade": ticket pipeline starts */
+  hopOver: [at(4) - 0.25, at(4) + 0.35],
+  dayEnd: [at(4), at(6) - 0.4],     /* "till the day is done": dusk, clock runs */
+  dive: [at(6) - 0.55, at(6)],      /* camera dives into Beepo's face screen */
+  observe: at(6), decide: at(6, 2), act: at(7), again: at(7, 2),
+  crtOff: [at(8) - 0.42, at(8) - 0.04],  /* power-off squeeze into a line */
+  title: at(8),                     /* "AI Agents for Trading, here they come!" (first sign) */
+  /* verse: one continuous take along the night floor */
+  verse: at(10), tick: at(12), plan: at(14), tools: at(16),
+  /* chorus 2 */
+  net: at(18), eod: at(20), ring: at(22),
+  crtOff2: [at(24) - 0.42, at(24) - 0.04],
+  title2: at(24), medals: at(25), final: at(26),
 };
+/* the two title sets: first sign (chorus 1) and the final title card */
+const TITLE_A = { start: T.title, letters: T.title + 0.25, jump: at(9), medals: null, end: at(10) };
+const TITLE_B = { start: T.title2, letters: T.title2 + 0.25, jump: at(24, 2), medals: T.medals, final: T.final, end: DUR };
+/* glitch cuts (CRT signal tear) between sets */
+const CUTS = [at(10), at(18), at(20), at(22)];
 
 /* ---------- variables (title text, language) ---------- */
 const VARS = Object.assign({ title: "AI Agents|for Trading", lang: "en" },
@@ -1475,7 +1485,7 @@ const TITLE_LN = Array.from(titleEl.querySelectorAll(".ln"));
 /* ---------- world layout (world units; horizon = 700) ---------- */
 const HORIZON = 700;
 const WORLD = { x0: -600, x1: 4200 };
-const SCREEN_BIG = { x: 260, y: 150, w: 860, h: 420 };   /* wall chart */
+const SCREEN_BIG = { x: 260, y: 200, w: 860, h: 400 };   /* wall chart */
 const WINDOW = { x: 1560, y: 110, w: 980, h: 460 };      /* synthwave window behind the team */
 const CLOCK = { x: 2600, y: 170, w: 330, h: 120 };      /* 7-seg wall clock */
 const PNL = { x: 2600, y: 400, w: 330, h: 170 };        /* PnL scoreboard */
@@ -1493,10 +1503,10 @@ const CANDLES = [[40, 44, 38, 43], [43, 47, 42, 46], [46, 47, 41, 42], [42, 45, 
 const TAPE = [{ sym: "NVDA", chg: "+3.2%" }, { sym: "AAPL", chg: "-0.4%" }, { sym: "BTC", chg: "+1.8%" }, { sym: "TSLA", chg: "-2.1%" }, { sym: "SPY", chg: "+0.6%" }, { sym: "MSFT", chg: "+0.9%" }];
 /* tickets in the pipeline: one every two beats from the "Agents trade" downbeat */
 const TICKETS = [
-  { t: at(3), sym: "NVDA", dir: "up", qty: "100", pnl: "+0.4" },
-  { t: at(3, 2), sym: "AAPL", dir: "down", qty: "50", pnl: "+1.1" },
-  { t: at(4), sym: "BTC", dir: "up", qty: "2", pnl: "+1.9" },
-  { t: at(4, 2), sym: "SPY", dir: "up", qty: "300", pnl: "+2.6" },
+  { t: at(4), sym: "NVDA", dir: "up", qty: "100", pnl: "+0.4" },
+  { t: at(4, 2), sym: "AAPL", dir: "down", qty: "50", pnl: "+1.1" },
+  { t: at(5), sym: "BTC", dir: "up", qty: "2", pnl: "+1.9" },
+  { t: at(5, 2), sym: "SPY", dir: "up", qty: "300", pnl: "+2.6" },
 ];
 
 /* ============================================================
@@ -1507,11 +1517,11 @@ const TICKETS = [
    ============================================================ */
 const FACE_W = [BEEPO_B[0], BEEPO_B[1] - BEEPO_S * 221]; /* world centre of Beepo's screen at rest */
 const camKeys = K.mkTrack([
-  [0, { x: BEEPO_A[0] + 20, y: BEEPO_A[1] - 285, z: 2.15 }],
-  [T.hop, { x: BEEPO_A[0] + 30, y: BEEPO_A[1] - 300, z: 2.0 }],
+  [0, { x: BEEPO_A[0] + 10, y: BEEPO_A[1] - 270, z: 1.85 }],
+  [T.hop, { x: BEEPO_A[0] + 30, y: BEEPO_A[1] - 300, z: 2.1 }],
   [T.hop + 0.45, { x: BEEPO_A[0] + 60, y: BEEPO_A[1] - 380, z: 1.5 }],
-  [T.pullBack[1], { x: 1180, y: 600, z: 0.95 }],
-  [T.follow[0], { x: 1300, y: 605, z: 0.95 }],
+  [T.pullBack[1], { x: 1100, y: 650, z: 1.12 }],
+  [T.follow[0], { x: 1260, y: 640, z: 1.08 }],
   [T.trade + 0.3, { x: 2360, y: 620, z: 0.9 }],
   [T.dive[0], { x: 2340, y: 625, z: 0.92 }],
 ]);
@@ -1624,6 +1634,13 @@ function beepoPose(t) {
     st.eyes = k < 0.18 ? "wide" : "dot";
     st.look = [K.tw(t, T.eyesOn + 0.25, T.eyesOn + 0.45, 0, -0.9) + K.tw(t, T.eyesOn + 0.6, T.eyesOn + 0.8, 0, 1.6), -0.1];
     st.blink = k < 0.2 ? 0 : st.blink;
+    /* hello wave on the vocoder intro bar */
+    const w = K.ss(T.wave[0] - 0.2, T.wave[0], t) * (1 - K.ss(T.wave[1] - 0.2, T.wave[1], t));
+    if (w > 0) {
+      const sw = Math.sin((t - T.wave[0]) / BEAT * Math.PI);
+      st.armR = { x: K.lerp(104, 150 + 34 * sw, w), y: K.lerp(-150, -300, w), open: 0.7 }; st.eyes = "happy"; st.mouth = "open";
+      st.lean = -4 * w * sw; st.look = [0, -0.2]; st.bulb = b; st.headTilt = 6 * sw * w;
+    }
   }
   /* anticipation crouch, then the hop on the "Beep boop" downbeat */
   const crouch = K.ss(T.crouch, T.hop, t) * (1 - K.ss(T.hop, T.hop + 0.08, t));
@@ -1760,16 +1777,24 @@ function drawLoopScene(c, t) {
   if (aa > 0 && aa < 1) K.ticket(c, K.lerp(o2[0], o2[0] - 330, K.E.out3(aa)), K.lerp(o2[1], o2[1] + 110, K.E.out3(aa)) - 120 * Math.sin(aa * Math.PI), 1.3, { sym: "NVDA", dir: "up", qty: "100", rot: -0.3 * aa, a: Math.min(1, aa * 4) * (1 - K.inv(0.8, 1, aa)), seed: 85 });
   if (t >= T.act + 0.6 && t < T.again + 1.5) K.ticket(c, o2[0] - 330, o2[1] + 110, 1.3, { sym: "NVDA", dir: "up", qty: "100", rot: -0.3, stamp: K.inv(T.act + 0.6, T.act + 0.85, t), seed: 85 });
   [T.observe, T.decide, T.act, T.again].forEach((ta, i) => { const p = pod(i % 3); K.sparks(c, p[0], p[1], ta, { seed: 160 + i, r: 190, n: 12, color: LOOP_STEPS[i % 3].color, size: 16 }); });
+  /* left: the agent's log types one call per step; right: PnL ticks on "act" */
+  const LOG = ['observe("NVDA")', "decide()  # 0.82", 'act("BUY", 100)', 'observe("NVDA")'];
+  const tot = LOG.reduce((q, l) => q + l.length, 0); let typed = 0;
+  [T.observe, T.decide, T.act, T.again].forEach((ta, i) => { typed += LOG[i].length * K.clamp((t - ta) / 0.45, 0, 1); });
+  K.terminal(c, 310, 610, 430, LOG, { a: app, typed: typed / tot, title: "agent.log", size: 22, seed: 86 });
+  const paid = t >= T.act + 0.6;
+  K.scoreboard(c, 1630, 600, 320, 160, [{ v: paid ? "+0.4%" : "+0.0%", c: P.green }], { a: app, label: "PNL", bump: K.inv(T.act + 0.6, T.act + 0.95, t), seed: 87 });
   /* phosphor scanlines */
   c.fillStyle = "rgba(0,0,0,0.22)"; for (let y = -200; y < 1280; y += 6) c.fillRect(-200, y, 2320, 2);
 }
 
 /* ============================================================
-   INTRO 50 TITLE SET: the neon sign over the whole team.
-   "AI Agents for Trading, here they come!": the sign buzzes on, letters
-   flicker on one by one (DOM text, per language), the team bounces in.
-   Tag line "AI Agents for Trading!": everyone jumps, five episode
+   INTRO 50 TITLE SET: the neon sign over the whole team. Used twice:
+   k = TITLE_A (chorus 1): the sign buzzes on and the team hops in from the
+   sides ("here they come!"); k = TITLE_B (final card): the team is there,
+   the tag "AI Agents for Trading!" makes everyone jump, five episode
    medallions pop on eighth notes, pixel confetti falls.
+   Letters flicker on one by one (DOM text, per language).
    ============================================================ */
 const SIGN = { cx: 960, cy: 256, w: 1500, h: 360 };
 const MEDAL_Y = 514, MEDAL_R = 48;
@@ -1782,78 +1807,83 @@ const TITLE_BOTS = [
   { kind: "risk", x: 1310, y: 1055, s: 1.0, seed: 833, hold: { L: "shield" } },
 ];
 /* neon sign brightness: stuttering ignition, then a buzz pulse on every bar */
-function signOn(t) {
-  if (t < T.title) return 0;
-  const d = t - T.title, f = Math.floor(d * 24);
+function signOn(t, k) {
+  if (t < k.start) return 0;
+  const d = t - k.start, f = Math.floor(d * 24);
   if (d < 0.42) return [1, 0.2, 0.9, 0, 0, 1, 0.3, 1, 1, 0.1, 1][f % 11];
   return K.flick(t, 9, 0.35) * (1 + 0.25 * pulseA(t));
 }
-function titlePose(i, t) {
+function titlePose(i, t, k) {
   const m = TITLE_BOTS[i], b = K.pulse(t - i * 0.07, 1, 6);
   const st = { kind: m.kind, seed: m.seed, blink: K.blinkAt(t, 21 + i * 5), mouth: "smile", eyes: "happy", look: [i === 2 ? -0.6 : 0.6, -0.4], squash: 0.1 * b - 0.04, bulb: b, chest: b, hold: m.hold };
   st.armL = { x: -104, y: -150, open: 0.2 }; st.armR = { x: 104, y: -150 - 20 * b, open: 0.3 };
   if (m.kind === "analyst") st.armL = { x: -120, y: -230, open: 0.1, rot: 200 };
   /* staggered jump on the beat before the tag, and again on the tag */
-  [T.jump + i * BEAT / 2, T.medals + i * BEAT / 4].forEach((tj) => {
+  [k.jump + i * BEAT / 2].concat(k.medals ? [k.medals + i * BEAT / 4] : []).forEach((tj) => {
     st.squash += 0.3 * K.ss(tj - 0.22, tj, t) * (1 - K.ss(tj, tj + 0.05, t));
     const h = hopArc(t, tj, tj + 0.46, 90); if (h > 0) { st.hop = h; st.squash = -0.16; st.armR = { x: 120, y: -330, open: 0.9 }; st.mouth = "open"; }
     st.squash += land(t, tj + 0.46, 0.35);
   });
-  if (t > T.medals) st.eyes = i === 1 ? "dollar" : "heart";
+  if (k.medals && t > k.medals) st.eyes = i === 1 ? "dollar" : "heart";
+  /* set A: hop in from the sides, one hop per beat */
+  const inU = k.medals ? 1 : K.inv(k.start, k.start + 4 * BEAT, t);
+  if (inU < 1) { st.hop = Math.max(st.hop || 0, 46 * Math.abs(Math.sin((t - k.start) / BEAT * Math.PI))); st.look = [m.x < 960 ? 1 : -1, 0]; st.eyes = "wide"; st.mouth = "open"; }
   return st;
 }
-function titleBeepo(t) {
+function titleBeepo(t, k) {
   const b = pulseB(t);
   const st = { kind: "lead", seed: 700, blink: K.blinkAt(t, 3), eyes: "happy", mouth: "talk", talk: 0.4 + 0.6 * b, squash: 0.1 * b - 0.04, bulb: b, chest: b, look: [0, -0.5] };
   st.armL = { x: -150, y: -300 - 20 * b, open: 0.8 }; st.armR = { x: 150, y: -300 - 20 * b, open: 0.8 }; /* "here they come!" arms up */
   /* entrance: drops in from above on the title downbeat with a big squash */
-  const drop = K.inv(T.title, T.title + 0.36, t);
+  const drop = K.inv(k.start, k.start + 0.36, t);
   st.hop = drop < 1 ? 520 * (1 - K.E.in3(drop)) : 0;
-  st.squash += land(t, T.title + 0.36, 0.5);
+  st.squash += land(t, k.start + 0.36, 0.5);
   if (st.hop > 0) { st.squash = -0.25; st.eyes = "wide"; st.mouth = "o"; }
   /* tag: big jump, hearts */
-  const tj = T.medals;
+  const tj = k.medals || k.jump;
   st.squash += 0.34 * K.ss(tj - 0.25, tj, t) * (1 - K.ss(tj, tj + 0.05, t));
   const h = hopArc(t, tj, tj + 0.55, 130); if (h > 0) { st.hop = h; st.squash = -0.2; }
   st.squash += land(t, tj + 0.55, 0.45);
   if (t > tj) { st.eyes = "heart"; st.heartPop = ((t - tj) % 0.9) / 0.9; }
   /* final bar: wave goodbye with the right arm */
-  if (t > T.final) {
-    const r = K.ss(T.final, T.final + 0.3, t), w = Math.sin((t - T.final) * 9);
+  if (k.final && t > k.final) {
+    const r = K.ss(k.final, k.final + 0.3, t), w = Math.sin((t - k.final) * 9);
     st.armR = { x: 150 + 30 * w * r, y: K.lerp(-300, -320, r), open: 0.6 }; st.armL = { x: -110, y: -160, open: 0.3 };
     st.eyes = "happy"; st.mouth = "smile"; st.heartPop = 0;
   }
   return st;
 }
 
-function drawTitleSet(t) {
-  K.begin(ctx, t, { x: 960, y: 540, z: K.tw(t, T.title, DUR, 1.04, 1.0, K.E.out3), rot: 0 });
+function drawTitleSet(t, k) {
+  K.begin(ctx, t, { x: 960, y: 540, z: K.tw(t, k.start, k.end, 1.04, 1.0, K.E.out3), rot: 0 });
   K.applyCam(ctx, 1);
   const hz = 760;
   K.wall(ctx, -200, 2120, -200, hz, { seed: 5 });
   K.floorGrid(ctx, -200, 2120, hz, 600, { vx: 960, scroll: t * 0.8, rows: 12, cols: 30, spread: 220, color: P.violet });
-  K.neon(ctx, [[-200, 30], [2120, 30]], { color: P.pink, w: 7, on: signOn(t) * 0.7, seed: 6, boil: 0 });
+  K.neon(ctx, [[-200, 30], [2120, 30]], { color: P.pink, w: 7, on: signOn(t, k) * 0.7, seed: 6, boil: 0 });
   /* PnL board on a stand (right) */
   K.line(ctx, [[1640, 960], [1640, 760]], { w: 14, stroke: P.ink, boil: 0.4, seed: 7 });
   K.line(ctx, [[1640, 960], [1640, 760]], { w: 6, stroke: P.metal, boil: 0.4, seed: 7 });
-  K.scoreboard(ctx, 1640, 700, 330, 170, [{ v: t > T.medals ? "+12.4%" : "+2.6%", c: P.green }], { seed: 16, label: "PNL", bump: K.inv(T.medals, T.medals + 0.35, t), a: K.inv(T.title + 0.3, T.title + 0.6, t) });
+  K.scoreboard(ctx, 1640, 700, 330, 170, [{ v: !k.medals ? "+2.6%" : t > k.medals ? "+12.4%" : "+9.8%", c: P.green }], { seed: 16, label: "PNL", bump: k.medals ? K.inv(k.medals, k.medals + 0.35, t) : 0, a: K.inv(k.start + 0.3, k.start + 0.6, t) });
   /* bots */
   TITLE_BOTS.forEach((m, i) => {
-    const a = K.inv(T.title + 0.1 + i * 0.12, T.title + 0.4 + i * 0.12, t); if (a <= 0) return;
-    K.shape(ctx, K.ellipsePts(m.x, m.y + 6, 80, 16, 14), { fill: P.ink, stroke: null, w: 0, boil: 0.3, seed: 60 + i, alpha: 0.6 });
-    ctx.save(); ctx.translate(m.x, m.y); const s = K.E.back(a, 2.4); ctx.scale(s, s); ctx.translate(-m.x, -m.y);
-    K.robot(ctx, m.x, m.y, m.s, titlePose(i, t)); ctx.restore();
+    const a = k.medals ? K.inv(k.start + 0.1 + i * 0.12, k.start + 0.4 + i * 0.12, t) : 1; if (a <= 0) return;
+    /* set A: they hop in from off-screen */
+    const x = k.medals ? m.x : K.lerp(m.x < 960 ? m.x - 900 : m.x + 900, m.x, K.E.out3(K.inv(k.start, k.start + 4 * BEAT, t)));
+    K.shape(ctx, K.ellipsePts(x, m.y + 6, 80, 16, 14), { fill: P.ink, stroke: null, w: 0, boil: 0.3, seed: 60 + i, alpha: 0.6 });
+    ctx.save(); ctx.translate(x, m.y); const s = K.E.back(a, 2.4); ctx.scale(s, s); ctx.translate(-x, -m.y);
+    K.robot(ctx, x, m.y, m.s, titlePose(i, t, k)); ctx.restore();
   });
   K.shape(ctx, K.ellipsePts(960, 1056, 100, 20, 14), { fill: P.ink, stroke: null, w: 0, boil: 0.3, seed: 66, alpha: 0.6 });
-  K.beepo(ctx, 960, 1062, 1.24, titleBeepo(t));
-  K.sparks(ctx, 960, 1040, T.title + 0.36, { seed: 170, r: 220, n: 14, color: P.yellow });
+  K.beepo(ctx, 960, 1062, 1.24, titleBeepo(t, k));
+  K.sparks(ctx, 960, 1040, k.start + 0.36, { seed: 170, r: 220, n: 14, color: P.yellow });
   /* sign */
-  const on = signOn(t);
-  const box = K.neonSign(ctx, SIGN.cx, SIGN.cy, SIGN.w, SIGN.h, { on, a: K.inv(T.title - 0.05, T.title + 0.25, t), seed: 91 });
+  const on = signOn(t, k);
+  const box = K.neonSign(ctx, SIGN.cx, SIGN.cy, SIGN.w, SIGN.h, { on, a: K.inv(k.start - 0.05, k.start + 0.25, t), seed: 91 });
   if (on > 0.5) K.glow(ctx, SIGN.cx, SIGN.cy, 900, K.rgba(P.pink, 0.16), on);
   /* medallions: tiny CRT tiles, eighth notes after the tag */
-  MEDALS.forEach((md, i) => {
-    const t0 = T.medals + i * BEAT / 2, a = K.inv(t0, t0 + 0.35, t); if (a <= 0) return;
+  if (k.medals) MEDALS.forEach((md, i) => {
+    const t0 = k.medals + i * BEAT / 2, a = K.inv(t0, t0 + 0.35, t); if (a <= 0) return;
     const s = K.E.back(a, 2.6), x = 960 + (i - 2) * 150, y = MEDAL_Y + 5 * Math.sin(t * 2.6 + i) - 8 * K.pulse(t - i * 0.08, 1, 6);
     ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
     K.glow(ctx, 0, 0, 90, K.rgba(md[1], 0.5), 1);
@@ -1861,44 +1891,349 @@ function drawTitleSet(t) {
     K.pix(ctx, md[0], 0, 0, 8.6, md[1], { glow: 0.7 });
     ctx.restore();
   });
-  K.confetti(ctx, 0, 1920, -60, T.medals, { n: 70, fall: 480, seed: 81 });
+  K.confetti(ctx, 0, 1920, -60, k.medals || k.jump, { n: k.medals ? 70 : 30, fall: 480, seed: 81 });
   return box;
 }
 
-function layoutTitleDom(t) {
-  const on = signOn(t);
-  titleEl.style.opacity = t >= T.letters ? "1" : "0";
-  if (t < T.letters) return;
+function layoutTitleDom(t, k) {
+  const on = signOn(t, k);
+  titleEl.style.opacity = t >= k.letters ? "1" : "0";
+  if (t < k.letters) return;
   const n = TITLE_LN.length, sizes = TITLE_LN.map((d) => +d.dataset.size), gap = 14;
   const total = sizes.reduce((a, b) => a + b, 0) + gap * (n - 1);
   let y = SIGN.cy - total / 2 - 8;
   TITLE_LN.forEach((d, i) => { d.style.top = y.toFixed(1) + "px"; y += sizes[i] + gap; });
   TITLE_CH.forEach((c) => {
     /* each letter ignites with its own short stutter (neon), then follows the sign's buzz */
-    const t0 = T.letters + c.idx * 0.05, d = t - t0;
+    const t0 = k.letters + c.idx * 0.05, d = t - t0;
     let o = 0;
     if (d >= 0) { const f = Math.floor(d * 24); o = f < 6 ? [1, 0.15, 0.8, 0, 1, 0.6][f] : 1; }
     o *= Math.min(1, 0.55 + 0.45 * on);
     const pop = d >= 0 && d < 0.25 ? 1 + 0.12 * Math.sin((d / 0.25) * Math.PI) : 1;
-    const hopY = c.line === n - 1 && t > T.medals ? -8 * K.pulse(t, 2, 6) : 0; /* second line bounces on half notes after the tag */
+    const hopY = c.line === n - 1 && t > (k.medals || k.jump) ? -8 * K.pulse(t, 2, 6) : 0; /* second line bounces on half notes after the tag */
     c.el.style.opacity = o.toFixed(2);
     c.el.style.transform = `translateY(${hopY.toFixed(1)}px) scale(${pop.toFixed(3)})`;
   });
 }
 
 /* ============================================================
-   INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
-   drives a proxy whose setter calls render(t).
-    0.00 -  2.24  CRT power-on; close-up: Beepo boots (static, eyes, look)
-    2.24 -  6.46  "Beep boop, the signals run": hop, pull back to the floor,
-                  candles draw, cables light, pulses run to the team
-    6.46 - 10.15  "Agents trade till the day is done": Beepo hops over and
-                  conducts; tickets go analyst -> risk (stamp) -> trader ->
-                  tube; dusk falls, the clock runs 09:30 -> 16:00
-   10.15 - 10.70  dive into Beepo's face screen (diegetic transition)
-   10.70 - 14.53  "Observe, decide, then act again": the agent loop ring
-   14.53 - 14.95  CRT power-off squeeze
-   14.95 - 20.50  "AI Agents for Trading, here they come!": neon sign title
+   INTRO 60 VERSE: one continuous take along the night floor (bars 10-18).
+   The team hops right in a line; the camera trucks to a new station every
+   two bars, landing on the downbeat of each sung line:
+     bar 10 "Robots on the floor where the neon glows"  neon wall signs ignite one per beat
+     bar 12 "Reading every tick as the order flows"     analyst reads the tape + order book
+     bar 14 "One agent plans and another one checks"    trader writes the plan, risk stamps it
+     bar 16 "Tools and memory to place the next bets!"  Beepo's tools + memory, ticket to the tube
+   ============================================================ */
+const V = {
+  signs: [["up", P.green], ["dollar", P.yellow], ["bolt", P.cyan], ["heart", P.pink], ["chart", P.green], ["coin", P.yellow], ["rocket", P.orange], ["eye", P.cyan]],
+  tape: { x: 2900, y: 300, w: 1700, h: 96 },
+  book: { x: 4060, y: 580 },
+  board: { x: 5400, y: 520, w: 820 },
+  term: { x: 7130, y: 400, w: 760 },
+  tube: { x: 7650, y: 980, top: -260 },
+  pnl: { x: 6420, y: 420 },
+};
+const S_TICK = at(12), S_PLAN = at(14), S_TOOLS = at(16);
+/* bot tracks (x over time); while x changes the bot hop-walks one hop per beat */
+const VBOTS = [
+  { kind: "lead", s: 1.25, y: 1060, seed: 700, x: K.mkSpline([[at(10), 1200], [at(12), 3300], [at(12, 3), 6820]]) },
+  { kind: "risk", s: 1.05, y: 1050, seed: 833, hold: { L: "shield" }, x: K.mkSpline([[at(10), 820], [at(12), 2920], [at(12, 3), 5880]]) },
+  { kind: "trader", s: 1.05, y: 1050, seed: 857, x: K.mkSpline([[at(10), 440], [at(12), 2540], [at(12, 3), 4930]]) },
+  { kind: "analyst", s: 1.12, y: 1055, seed: 811, hold: { L: "lens" }, x: K.mkSpline([[at(10), 60], [at(12), 2160], [at(12, 2), 3440]]) },
+];
+const camVerse = K.mkTrack([
+  [at(10), { x: 640, y: 620, z: 1.0 }],
+  [S_TICK - 0.35, { x: 2700, y: 620, z: 1.0 }],
+  [S_TICK + 0.15, { x: 3720, y: 690, z: 1.3 }],
+  [S_PLAN - 0.35, { x: 3740, y: 690, z: 1.3 }],
+  [S_PLAN + 0.15, { x: 5400, y: 690, z: 1.3 }],
+  [S_TOOLS - 0.35, { x: 5420, y: 690, z: 1.3 }],
+  [S_TOOLS + 0.15, { x: 6960, y: 690, z: 1.3 }],
+  [at(18), { x: 6990, y: 695, z: 1.36 }],
+]);
+
+function vbotPose(i, t) {
+  const m = VBOTS[i], b = K.pulse(t - i * 0.05, 1, 6);
+  const st = { kind: m.kind, seed: m.seed, blink: K.blinkAt(t, 31 + i * 7), mouth: "smile", look: [0.8, 0], squash: 0.07 * b - 0.03, bulb: b, chest: 0.4 + 0.6 * b, hold: m.hold };
+  st.armL = { x: -104, y: -150, open: 0.2 }; st.armR = { x: 104, y: -150, open: 0.2 };
+  if (m.kind === "analyst") st.armL = { x: -120, y: -230, open: 0.1, rot: 200 };
+  /* hop-walk: one hop per beat while moving, squash on each landing */
+  const sp = Math.abs(m.x(t + 0.03) - m.x(t - 0.03)) / 0.06, mv = K.clamp(sp / 250, 0, 1);
+  if (mv > 0) {
+    const u = (((t - at(10)) / BEAT) % 1 + 1) % 1;
+    st.hop = mv * (40 + 0.05 * Math.min(sp, 1600)) * Math.sin(Math.PI * u);
+    st.squash += mv * (u < 0.15 ? 0.3 * (1 - u / 0.15) : -0.12 * Math.sin(Math.PI * u));
+    st.armL = { x: -120, y: -230 - 30 * Math.sin(Math.PI * u), open: 0.5 }; st.armR = { x: 120, y: -230 - 30 * Math.sin(Math.PI * u), open: 0.5 };
+    if (m.kind === "analyst") st.armL = { x: -120, y: -230, open: 0.1, rot: 200 };
+    st.eyes = "happy"; st.mouth = m.kind === "lead" ? "talk" : "open"; st.talk = b; st.look = [1, -0.2];
+  }
+  /* "Reading every tick": the analyst raises the lens to the tape and reads it */
+  if (m.kind === "analyst" && t > at(12, 2) - 0.2) {
+    const r = K.ss(at(12, 2) - 0.2, at(12, 2) + 0.1, t);
+    st.armL = { x: K.lerp(-120, -150, r), y: K.lerp(-230, -400, r), open: 0.1, rot: K.lerp(200, 250, r) };
+    st.look = [Math.sin((t - at(12)) * 3), -1]; st.eyes = b > 0.6 ? "wide" : "dot"; st.mouth = "o";
+    st.armR = { x: 110, y: -150 - 30 * b, open: 0.2 };
+  }
+  /* "One agent plans": the trader points at the board as each line appears */
+  if (m.kind === "trader" && t > S_PLAN - 0.3) {
+    const r = K.ss(S_PLAN - 0.3, S_PLAN, t);
+    st.armR = { x: K.lerp(104, 170, r), y: K.lerp(-150, -330 - 20 * b, r), open: 0.1 }; st.look = [1, -0.6];
+    st.mouth = t < at(15) ? "talk" : "smile"; st.talk = b;
+    if (t > at(15, 2) && t < at(15, 3.4)) { st.eyes = "wide"; st.mouth = "o"; st.squash -= 0.1; }
+  }
+  /* "another one checks": risk stamps each line on the beat (the third gets a cross) */
+  if (m.kind === "risk" && t > S_PLAN - 0.3) {
+    st.look = [-1, -0.5]; st.armR = { x: 60, y: -180, open: 0.2 };
+    [0, 1, 2].forEach((k) => {
+      const ts = at(15, k), r = K.ss(ts - 0.22, ts, t) * (1 - K.ss(ts + 0.05, ts + 0.3, t));
+      if (r > 0) { st.armR = { x: K.lerp(60, -170, r), y: K.lerp(-180, -330 + k * 40, r), open: 0.1 }; st.squash += 0.12 * r; }
+    });
+    if (t > at(15, 2)) { st.exclaim = K.inv(at(15, 2), at(15, 2) + 0.3, t) * (1 - K.inv(at(16) - 0.4, at(16), t)); st.eyes = "x"; }
+    else if (t > at(15)) st.eyes = "happy";
+  }
+  /* "Tools and memory to place the next bets": Beepo gathers, then throws */
+  if (m.kind === "lead" && t > S_TOOLS - 0.3) {
+    st.look = [0.3, -0.8]; st.mouth = "talk"; st.talk = 0.3 + 0.7 * b; st.eyes = "dot";
+    st.armL = { x: -150, y: -280 - 20 * b, open: 0.6 }; st.armR = { x: 150, y: -280 - 20 * b, open: 0.6 };
+    st.chest = K.clamp(K.inv(at(17) - 0.1, at(17) + 0.4, t) + 0.3 * b, 0, 1);
+    if (t > at(17) - 0.1 && t < at(17) + 0.5) { st.eyes = "wide"; st.squash += 0.15; }
+    const tt = at(17, 2), r = K.ss(tt - 0.4, tt - 0.05, t) * (1 - K.ss(tt + 0.1, tt + 0.5, t));
+    if (r > 0) { st.hold = { R: t < tt ? "ticket" : null }; st.holdSym = "NVDA"; st.armR = { x: K.lerp(80, 190, r), y: K.lerp(-150, -320, r), open: t > tt ? 0.9 : 0.1 }; st.armL = { x: -110, y: -160, open: 0.3 }; st.lean = 6 * r; st.look = [1, -0.6]; }
+    if (t > at(17, 3)) { st.eyes = "dollar"; st.mouth = "open"; }
+  }
+  return st;
+}
+
+function drawVerse(t) {
+  K.begin(ctx, t, Object.assign({ rot: 0 }, camVerse(t)));
+  K.applyCam(ctx, 1);
+  K.wall(ctx, -1200, 8800, -900, HORIZON, { seed: 13 });
+  K.floorGrid(ctx, -1200, 8800, HORIZON, 1400, { vx: camVerse(t).x, scroll: t * 0.6, rows: 16, cols: 60, spread: 300 });
+  K.neon(ctx, [[-1200, -60], [8800, -60]], { color: P.pink, w: 8, on: K.flick(t, 14, 0.25), seed: 14, boil: 0 });
+  /* bar 10: neon signs ignite along the wall, one per beat ("where the neon glows") */
+  V.signs.forEach((sg, k) => {
+    const x = 330 + k * 330, t0 = at(10, k), on = t < t0 ? 0.08 : (t - t0 < 0.3 ? [1, 0.2, 1, 0.1, 1, 1, 0.5, 1, 1][Math.floor((t - t0) * 30) % 9] : K.flick(t, 40 + k, 0.4));
+    K.neonSign(ctx, x, 360, 240, 200, { on, color: sg[1], color2: k % 2 ? P.violet : P.pink, seed: 300 + k });
+    K.pix(ctx, sg[0], x, 360, 10, sg[1], { glow: on, a: 0.15 + 0.85 * on });
+    if (on > 0.5) K.glow(ctx, x, 470, 260, K.rgba(sg[1], 0.25), on);
+  });
+  /* bar 12: the tape and the order book; orders flow in along a cable */
+  K.ledTape(ctx, V.tape.x, V.tape.y, V.tape.w, V.tape.h, TAPE, { speed: 260, size: 34 });
+  const bk = Math.max(0, Math.floor((t - S_TICK) / BEAT)), px = (i, s) => (912.4 + (i - 2) * 0.05 + 0.01 * Math.floor(K.hash(i + bk, s) * 5)).toFixed(2);
+  const rows = [["BID", "SIZE", "ASK", "SIZE"]].concat([0, 1, 2, 3].map((i) => [px(-i, 3), String(100 + Math.floor(K.hash(i + bk, 5) * 900)), px(i + 5, 4), String(100 + Math.floor(K.hash(i + bk, 6) * 900))]));
+  K.termTable(ctx, V.book.x, V.book.y, [130, 110, 130, 110], rows, { title: "NVDA", size: 26, rowH: 48, hi: 1 + (bk % 4), seed: 401, reveal: K.inv(S_TICK - 0.3, S_TICK + 0.6, t) });
+  K.cable(ctx, [[3000, 1100], [3300, 960], [3700, 900], [V.book.x - 180, V.book.y + 150]], { color: P.green, lit: 0.6, seed: 402, pulses: [0, 1, 2, 3].map((k) => ((t * 0.7 + k / 4) % 1)) });
+  /* bar 14: the plan board; lines appear on beats, risk stamps them on bar 15 */
+  const shown = t < S_PLAN ? 0 : K.clamp((t - S_PLAN) / BEAT + 1, 0, 3);
+  const marks = [at(15, 0), at(15, 1), at(15, 2)].map((ts, k) => (t >= ts ? (k === 2 ? "cross" : "check") : null));
+  K.taskBoard(ctx, V.board.x, V.board.y, V.board.w, [{ t: "NVDA  x100", icon: "up", c: P.green }, { t: "BTC  x2", icon: "up", c: P.green }, { t: "TSLA  x50", icon: "down", c: P.loss }], { shown, marks, size: 46, seed: 403, a: K.inv(S_PLAN - 0.5, S_PLAN - 0.1, t) });
+  [0, 1, 2].forEach((k) => K.sparks(ctx, V.board.x - V.board.w / 2 + 64, V.board.y - 75 + k * 78, at(15, k), { seed: 410 + k, r: 120, n: 10, color: k === 2 ? P.loss : P.green }));
+  /* bar 16: Beepo's terminal, tools orbit, memory cartridges, the tube and PnL */
+  K.terminal(ctx, V.term.x, V.term.y, V.term.w, ["tools = [chart, news, risk]", "mem = memory.recall('NVDA')", "bet = agent.plan(tools, mem)", "broker.send(bet)  # x100"], { typed: K.inv(S_TOOLS, at(17, 2), t), size: 26, seed: 404, a: K.inv(S_TOOLS - 0.5, S_TOOLS - 0.1, t), title: "agent.py" });
+  const tb = V.tube;
+  K.shape(ctx, K.rrPts(tb.x - 46, tb.top, 92, tb.y - tb.top - 220, 40, 3), { fill: K.rgba(P.cyan, 0.12), w: 7, boil: 0.6, seed: 421, rim: { color: P.cyan, dx: 6, dy: 0, a: 0.5 }, gloss: 0.4 });
+  K.shape(ctx, K.rrPts(tb.x - 80, tb.y - 260, 160, 120, 30, 3), { fill: P.metalDark, w: 6, boil: 0.6, seed: 422, rim: { color: P.violet, a: 0.8 }, dots: { gap: 11, r: 2.4, alpha: 0.3 } });
+  K.shape(ctx, K.ellipsePts(tb.x, tb.y - 200, 50, 26, 16), { fill: P.ink, w: 5, boil: 0.4, seed: 423 });
+  const paid = at(17, 3);
+  K.scoreboard(ctx, V.pnl.x, V.pnl.y, 300, 150, [{ v: t >= paid ? "+3.4%" : "+2.6%", c: P.green }], { label: "PNL", seed: 424, bump: K.inv(paid, paid + 0.35, t) });
+  /* bots (back to front: the line order) */
+  for (let i = VBOTS.length - 1; i >= 0; i--) {
+    const m = VBOTS[i], x = m.x(t);
+    K.shape(ctx, K.ellipsePts(x, m.y + 6, 90 * m.s, 18, 14), { fill: P.ink, stroke: null, w: 0, boil: 0.3, seed: 430 + i, alpha: 0.6 });
+    K.robot(ctx, x, m.y, m.s, vbotPose(i, t));
+  }
+  /* tools orbit Beepo's head (bar 16, one per beat), memory cartridges drop into his chest (bar 17) */
+  const bx = VBOTS[0].x(t), by = VBOTS[0].y - VBOTS[0].s * 290;
+  [["gear", P.cyan], ["lens", P.pink], ["chart", P.green]].forEach((ic, k) => {
+    const t0 = at(16, k), a = K.inv(t0, t0 + 0.3, t) * (1 - K.inv(at(18) - 0.3, at(18), t)); if (a <= 0) return;
+    const ang = (t - S_TOOLS) * 2.2 + (k * K.TAU) / 3, x = bx + Math.cos(ang) * 230, y = by + Math.sin(ang) * 70 - 40;
+    ctx.save(); ctx.translate(x, y); const s = K.E.back(Math.min(1, a), 2.4); ctx.scale(s, s);
+    K.shape(ctx, K.rrPts(-40, -40, 80, 80, 16, 2), { fill: P.screen, w: 5, boil: 0.5, seed: 440 + k, rim: { color: ic[1], dx: 3, dy: 3, a: 0.9 } });
+    K.pix(ctx, ic[0], 0, 0, 7, ic[1], { glow: 0.7 }); ctx.restore();
+  });
+  [0, 1, 2].forEach((k) => {
+    const t0 = at(16, 3) + k * 0.12, u = K.inv(t0, t0 + 0.45, t); if (u <= 0 || u >= 1) return;
+    const x = K.lerp(bx - 260 + k * 110, bx, K.E.in3(u)), y = K.lerp(by - 220, VBOTS[0].y - VBOTS[0].s * 150, K.E.in3(u));
+    K.shape(ctx, K.rrPts(x - 26, y - 34, 52, 68, 8, 2), { fill: P.violet, w: 4.5, boil: 0.4, seed: 450 + k, gloss: 0.5 });
+    K.pix(ctx, "clock", x, y - 6, 4, "#ffffff", { glow: 0.5 });
+  });
+  K.sparks(ctx, bx, VBOTS[0].y - VBOTS[0].s * 150, at(17), { seed: 460, r: 160, n: 12, color: P.violet });
+  /* the bet flies into the tube and whooshes up */
+  const tf = at(17, 2), uf = K.inv(tf, tf + 0.5, t);
+  if (uf > 0 && uf < 1) K.ticket(ctx, K.lerp(bx + 200, tb.x, uf), K.lerp(by + 40, tb.y - 230, uf) - 200 * Math.sin(Math.PI * uf), 1.1, { sym: "NVDA", dir: "up", qty: "100", rot: uf * 4, seed: 470 });
+  const uw = K.inv(tf + 0.5, tf + 0.95, t);
+  if (uw > 0 && uw < 1) { const y = K.lerp(tb.y - 260, tb.top - 40, K.E.in3(uw)); K.glow(ctx, tb.x, y, 60, K.rgba(P.yellow, 0.9), 1); K.dot(ctx, tb.x, y, 16, P.paper, P.ink, 4, 471); }
+  K.sparks(ctx, tb.x, tb.y - 210, tf + 0.5, { seed: 472, r: 140 });
+  /* landing dust while hopping */
+  VBOTS.forEach((m, i) => { const sp = Math.abs(m.x(t + 0.03) - m.x(t - 0.03)); if (sp > 1) K.sparks(ctx, m.x(t), m.y - 6, at(10) + Math.floor((t - at(10)) / BEAT) * BEAT, { seed: 480 + i, r: 70, n: 6, size: 8, dur: 0.3, color: P.cyan }); });
+}
+
+/* ============================================================
+   INTRO 65 CHORUS 2: the same four lines, new pictures.
+     bar 18 "Beep boop, the signals run"       the agent network: pods pop on beats, the hot path runs
+     bar 20 "Agents trade till the day is done" end of day: desks, equity curve, the 16:00 bell
+     bar 22 "Observe, decide, then act again"  the loop ring on the floor, a bot on each pad
+   (bar 24, "AI Agents for Trading", is the final title card in 50_title.js.)
+   ============================================================ */
+const NET = [
+  { p: [700, 300], icon: "eye", c: P.cyan, t: at(18, 0) },
+  { p: [1080, 160], icon: "chat", c: P.violet, t: at(18, 1) },
+  { p: [1280, 430], icon: "brain", c: P.pink, t: at(18, 2) },
+  { p: [1660, 250], icon: "shield", c: P.orange, t: at(18, 3) },
+  { p: [1640, 640], icon: "bolt", c: P.yellow, t: at(19, 0) },
+  { p: [1010, 660], icon: "coin", c: P.green, t: at(19, 1) },
+];
+const NET_E = [[0, 2], [1, 2], [2, 3], [3, 4], [2, 4], [4, 5], [0, 5]];
+const NET_HOT = [[0, 2], [2, 3], [3, 4], [4, 5]];
+const HOT_T = at(19, 2);
+
+function singer(t, x, y, s) {
+  const b = pulseB(t);
+  K.shape(ctx, K.ellipsePts(x, y + 6, 100 * s, 20, 14), { fill: P.ink, stroke: null, w: 0, boil: 0.3, seed: 66, alpha: 0.6 });
+  K.beepo(ctx, x, y, s, { blink: K.blinkAt(t, 9), mouth: "talk", talk: 0.3 + 0.7 * b, eyes: b > 0.7 ? "happy" : "dot", look: [1, -0.6], squash: 0.1 * b - 0.04, bulb: b, chest: b,
+    armL: { x: -120, y: -170 - 30 * b, open: 0.5 }, armR: { x: 180, y: -330 - 10 * b, open: 0.1 }, lean: -3 + 3 * Math.sin(t * 3) });
+}
+
+function drawNet(t) {
+  K.begin(ctx, t, { x: 960, y: 540, z: K.tw(t, at(18), at(20), 1.0, 1.06, K.E.inOut), rot: 0 });
+  K.applyCam(ctx, 1);
+  K.wall(ctx, -200, 2120, -200, 820, { seed: 23, panel: 200 });
+  K.floorGrid(ctx, -200, 2120, 820, 500, { vx: 960, scroll: t * 0.7, rows: 10, cols: 30, spread: 220, color: P.cyan });
+  /* the hologram field behind the graph */
+  ctx.save(); ctx.globalCompositeOperation = "lighter"; ctx.fillStyle = K.rgba(P.cyan, 0.05);
+  for (let y = 60; y < 800; y += 8) ctx.fillRect(560, y, 1260, 3); ctx.restore();
+  const hot = t >= HOT_T;
+  NET_E.forEach((e, i) => {
+    const A = NET[e[0]], B = NET[e[1]], t0 = Math.max(A.t, B.t) + 0.15, p = K.E.out3(K.inv(t0, t0 + 0.4, t));
+    const isHot = hot && NET_HOT.some((h) => h[0] === e[0] && h[1] === e[1]) && t > HOT_T + NET_HOT.findIndex((h) => h[0] === e[0] && h[1] === e[1]) * BEAT / 2;
+    K.edge(ctx, A.p, B.p, { p, state: isHot ? "hot" : hot ? "dim" : "plain", bend: 30 * (i % 2 ? 1 : -1), seed: 500 + i * 7, color: A.c, trim: 85 });
+  });
+  NET.forEach((n, i) => {
+    const lit = hot && NET_HOT.some((h, k) => (h[0] === i || h[1] === i) && t > HOT_T + k * BEAT / 2);
+    K.node(ctx, n.p[0], n.p[1], 1, { icon: n.icon, color: n.c, r: 72, a: K.inv(n.t, n.t + 0.35, t), hot: lit ? 0.7 + 0.3 * pulseB(t) : 0, seed: 520 + i * 5 });
+    K.sparks(ctx, n.p[0], n.p[1], n.t, { seed: 540 + i, r: 130, n: 8, color: n.c });
+  });
+  K.tag(ctx, NET[5].p[0] + 150, NET[5].p[1] + 90, "+1.2%", { a: K.inv(HOT_T + 4 * BEAT / 2, HOT_T + 4 * BEAT / 2 + 0.3, t), hot: true, size: 28, seed: 560 });
+  singer(t, 330, 1060, 1.45);
+}
+
+/* ---------- end of the trading day ---------- */
+const EQUITY = [100, 101.2, 100.7, 102.4, 103.1, 102.6, 104.8, 105.5, 105.1, 107.3, 108.9, 109.8];
+const EOD_BOTS = [
+  { kind: "analyst", x: 330, s: 0.95, seed: 811 },
+  { kind: "risk", x: 750, s: 0.95, seed: 833 },
+  { kind: "lead", x: 1170, s: 1.05, seed: 700 },
+  { kind: "trader", x: 1590, s: 0.95, seed: 857 },
+];
+const BELL = at(21, 2);
+function drawEOD(t) {
+  K.begin(ctx, t, { x: 960, y: 540, z: K.tw(t, at(20), at(22), 1.05, 1.0, K.E.out3), rot: 0 });
+  K.applyCam(ctx, 1);
+  K.wall(ctx, -200, 2120, -200, 780, { seed: 33 });
+  K.floorGrid(ctx, -200, 2120, 780, 500, { vx: 960, scroll: t * 0.5, rows: 10, cols: 30, spread: 220 });
+  K.skyWindow(ctx, -40, 60, 420, 420, { dusk: K.lerp(0.75, 1, K.inv(at(20), BELL, t)), seed: 37 });
+  K.monitorChart(ctx, 900, 300, 940, 400, [{ data: EQUITY, color: P.green }], { draw: K.inv(at(20), BELL, t), title: "EQUITY", seed: 610, yMin: 99, yMax: 111 });
+  const mins = Math.round(K.lerp(14 * 60, 16 * 60, K.inv(at(20), BELL, t))), clk = String(Math.floor(mins / 60)).padStart(2, "0") + ":" + String(mins % 60).padStart(2, "0");
+  const ring = t > BELL ? (Math.floor((t - BELL) * 6) % 2 ? 0.35 : 1) : 1;
+  K.scoreboard(ctx, 1660, 170, 330, 120, [{ v: clk, c: t > BELL ? P.yellow : P.cyan }], { seed: 611, bump: K.inv(BELL, BELL + 0.35, t) });
+  if (t > BELL) K.glow(ctx, 1660, 170, 260, K.rgba(P.yellow, 0.6), ring * (1 - K.inv(BELL + 1.2, BELL + 2, t)));
+  K.sparks(ctx, 1660, 170, BELL, { seed: 612, r: 240, n: 16, color: P.yellow, size: 16 });
+  K.scoreboard(ctx, 1660, 420, 330, 170, [{ v: t > BELL ? "+9.8%" : "+" + (3.4 + 6.4 * K.inv(at(20), BELL, t)).toFixed(1) + "%", c: P.green }], { label: "PNL", seed: 613, bump: K.inv(BELL, BELL + 0.35, t) });
+  /* bots behind their desks: typing on every beat, cheering on the bell */
+  EOD_BOTS.forEach((m, i) => {
+    const b = K.pulse(t - i * 0.07, 1, 6), cheer = K.ss(BELL - 0.15, BELL + 0.1, t);
+    const st = { kind: m.kind, seed: m.seed, blink: K.blinkAt(t, 41 + i * 5), look: [0, 0.6], eyes: "dot", mouth: m.kind === "lead" ? "talk" : "smile", talk: b, squash: 0.08 * b - 0.03, bulb: b, chest: b };
+    const tap = Math.sin((t / BEAT) * Math.PI * 2 + i);
+    st.armL = { x: -80, y: -110 + 18 * Math.max(0, tap), open: 0.2 }; st.armR = { x: 80, y: -110 + 18 * Math.max(0, -tap), open: 0.2 };
+    if (cheer > 0) {
+      st.armL = { x: -150, y: -320, open: 0.9 }; st.armR = { x: 150, y: -320, open: 0.9 }; st.eyes = i % 2 ? "dollar" : "happy"; st.mouth = "open"; st.look = [0, -0.6];
+      st.hop = hopArc(t, BELL + i * 0.08, BELL + 0.5 + i * 0.08, 90); st.squash += land(t, BELL + 0.5 + i * 0.08, 0.35);
+      if (st.hop > 0) st.squash = -0.15;
+    }
+    K.robot(ctx, m.x, 960, m.s, st);
+    K.desk(ctx, m.x, 930, 300, { crt: false, seed: 620 + i * 9, accent: [P.cyan, P.orange, P.pink, P.trader][i] });
+  });
+  K.confetti(ctx, 0, 1920, -60, BELL, { n: 40, fall: 520, seed: 630 });
+}
+
+/* ---------- the loop ring on the floor ---------- */
+const RING = { cx: 960, cy: 800, rx: 640, ry: 190 };
+const RSTEP = [at(22, 0), at(22, 2), at(23, 0), at(23, 2), at(23, 3)];
+const RPAD = (i) => { const a = ((-90 + 120 * i) * Math.PI) / 180; return [RING.cx + Math.cos(a) * RING.rx, RING.cy + Math.sin(a) * RING.ry]; };
+const RBOTS = [
+  { kind: "analyst", pad: 0, s: 0.82, seed: 811, icon: "eye", c: P.cyan, hold: { L: "lens" } },
+  { kind: "lead", pad: 1, s: 1.05, seed: 700, icon: "fork", c: P.pink },
+  { kind: "trader", pad: 2, s: 1.05, seed: 857, icon: "bolt", c: P.yellow },
+];
+function ringActive(t) { let v = 0; for (let i = 1; i < RSTEP.length; i++) v += K.E.inOut(K.inv(RSTEP[i] - 0.35, RSTEP[i], t)); return v; }
+function drawRing(t) {
+  K.begin(ctx, t, { x: 960, y: 540, z: K.tw(t, at(22), at(24), 1.0, 1.07, K.E.inOut), rot: 0 });
+  K.applyCam(ctx, 1);
+  K.wall(ctx, -200, 2120, -200, 560, { seed: 43 });
+  K.skyWindow(ctx, 560, 40, 800, 400, { dusk: 1, seed: 47 });
+  K.floorGrid(ctx, -200, 2120, 560, 700, { vx: 960, scroll: t * 0.5, rows: 12, cols: 30, spread: 230, color: P.violet });
+  const act = ringActive(t), on = K.inv(at(22) - 0.3, at(22), t);
+  /* the ring itself, lying on the floor */
+  const ell = K.ellipsePts(RING.cx, RING.cy, RING.rx, RING.ry, 64);
+  K.shape(ctx, ell, { fill: null, w: 26, boil: 0.4, seed: 701 });
+  K.neon(ctx, ell, { color: P.violet, w: 9, closed: true, on: 0.4 + 0.6 * on, seed: 702, boil: 0 });
+  /* running light */
+  const la = ((-90 + 120 * act) * Math.PI) / 180, lx = RING.cx + Math.cos(la) * RING.rx, ly = RING.cy + Math.sin(la) * RING.ry;
+  if (on > 0) { K.glow(ctx, lx, ly, 120, K.rgba(P.yellow, 0.95), on); K.dot(ctx, lx, ly, 14, "#ffffff", null, 0, 703); }
+  /* pads */
+  for (let i = 0; i < 3; i++) {
+    const p = RPAD(i), d = Math.abs(((act - i) % 3 + 3 + 1.5) % 3 - 1.5), hot = K.clamp(1 - d * 1.6, 0, 1), c = RBOTS[i].c;
+    K.shape(ctx, K.ellipsePts(p[0], p[1], 150, 44, 20), { fill: P.metalDark, w: 6, boil: 0.4, seed: 710 + i, rim: { color: c, dx: 0, dy: 5, a: 0.8 } });
+    K.neon(ctx, K.ellipsePts(p[0], p[1], 120, 34, 20), { color: c, w: 5, closed: true, on: 0.35 + 0.65 * hot, seed: 715 + i, boil: 0 });
+    if (hot > 0) K.glow(ctx, p[0], p[1] - 40, 220, K.rgba(c, 0.6), hot);
+  }
+  const lookX = K.clamp((lx - RING.cx) / RING.rx, -1, 1);
+  /* bots on their pads (back first), each hops when the light lands on it;
+     the risk bot supervises from the centre (drawn after the back pad) */
+  [0, 1, 2].forEach((i) => {
+    if (i === 1) K.robot(ctx, 960, 1050, 0.82, { kind: "risk", seed: 833, hold: { L: "shield" }, look: [lookX, -0.2], blink: K.blinkAt(t, 51), squash: 0.08 * pulseB(t) - 0.03, bulb: pulseB(t), eyes: "dot", armR: { x: 104, y: -160, open: 0.2 } });
+    const m = RBOTS[i], p = RPAD(m.pad), b = pulseB(t);
+    const st = { kind: m.kind, seed: m.seed, hold: m.hold, blink: K.blinkAt(t, 61 + i * 3), look: [lookX * 0.8, -0.3], eyes: "dot", mouth: "smile", squash: 0.07 * b - 0.03, bulb: b, chest: b };
+    st.armL = { x: -104, y: -150, open: 0.2 }; st.armR = { x: 104, y: -150, open: 0.2 };
+    if (m.kind === "analyst") st.armL = { x: -120, y: -230, open: 0.1, rot: 200 };
+    RSTEP.forEach((ts, k) => {
+      if (k % 3 !== i) return;
+      st.squash += 0.28 * K.ss(ts - 0.2, ts, t) * (1 - K.ss(ts, ts + 0.04, t));
+      const h = hopArc(t, ts, ts + 0.42, 80); if (h > 0) { st.hop = h; st.squash = -0.15; st.eyes = "happy"; st.mouth = "open"; st.armR = { x: 140, y: -320, open: 0.8 }; }
+      st.squash += land(t, ts + 0.42, 0.32);
+    });
+    K.robot(ctx, p[0], p[1] + 10, m.s, st);
+    /* the step's icon floats above its bot */
+    const d = Math.abs(((act - i) % 3 + 3 + 1.5) % 3 - 1.5), hot = K.clamp(1 - d * 1.6, 0, 1), hy = p[1] - m.s * 430 - 20 * hot;
+    ctx.save(); ctx.translate(p[0], hy); const s = 1.15 + 0.35 * hot; ctx.scale(s, s);
+    K.shape(ctx, K.rrPts(-46, -46, 92, 92, 18, 2), { fill: P.screen, w: 5, boil: 0.4, seed: 720 + i, rim: { color: m.c, dx: 3, dy: 3, a: 0.9 }, glow: hot > 0.3 ? m.c : null, glowR: 30 * hot });
+    K.pix(ctx, m.icon, 0, 0, 8, m.c, { glow: 0.5 + 0.5 * hot }); ctx.restore();
+  });
+  RSTEP.forEach((ts, k) => { const p = RPAD(k % 3); K.sparks(ctx, p[0], p[1] - 20, ts, { seed: 730 + k, r: 170, n: 12, color: RBOTS[k % 3].c }); });
+  /* loop counter on the wall continues from the face loop (02 -> 03 -> 04) */
+  const n = t >= RSTEP[3] ? 4 : 3;
+  K.scoreboard(ctx, 1640, 230, 280, 150, [{ v: "0" + n, c: P.phosphor }], { seed: 740, bump: K.inv(RSTEP[3], RSTEP[3] + 0.35, t) });
+  K.pix(ctx, "clock", 1640, 120, 5, P.violet, { glow: 0.6 });
+}
+
+/* ============================================================
+   INTRO 70 RENDER: render(t) is the whole film (the full song, 58.5 s).
+   One paused GSAP timeline drives a proxy whose setter calls render(t).
+    0.00 -  5.74  CRT power-on; close-up: Beepo boots, waves hello
+    5.74 -  9.98  "Beep boop, the signals run": hop, pull back, cables light
+    9.98 - 14.23  "Agents trade till the day is done": ticket line, dusk
+   13.68 - 14.23  dive into Beepo's face screen
+   14.23 - 18.06  "Observe, decide, then act again": the loop in his face
+   18.06 - 18.48  CRT power-off
+   18.48 - 22.62  "AI Agents for Trading, here they come!": sign, team hops in
+   22.62 - 39.98  verse, one continuous take (60_verse.js), glitch cut in
+   39.98 - 44.23  "Beep boop": the agent network
+   44.23 - 48.48  "Agents trade till the day is done": desks, the 16:00 bell
+   48.48 - 52.31  "Observe, decide, then act again": the ring on the floor
+   52.31 - 52.73  CRT power-off
+   52.73 - 58.50  final title card; tag at 54.85; CRT power-off at the end
+   Cuts between sets are diegetic: face dive, CRT off/on, CRT signal tear.
    ============================================================ */
 const FACE_SCALE = (2060 / 1920); /* loop scene scale when the face fills the frame */
 
@@ -1942,29 +2277,61 @@ function drawLoopFull(t) {
   drawLoopScene(ctx, t); ctx.restore();
 }
 
+/* CRT signal tear: shift horizontal bands of the finished frame (amount 0..1) */
+function glitch(amount, t) {
+  if (amount <= 0) return;
+  K.screen(ctx);
+  const f = K.boilFrame(t * 2);
+  for (let i = 0; i < 14; i++) {
+    const y = Math.floor(K.hash(i, f * 7 + 1) * 1080), h = 12 + Math.floor(K.hash(i, f * 7 + 2) * 90), dx = (K.hash(i, f * 7 + 3) - 0.5) * 260 * amount;
+    ctx.drawImage(cv, 0, y, 1920, h, dx, y, 1920, h);
+  }
+  ctx.save(); ctx.globalCompositeOperation = "lighter";
+  for (let i = 0; i < 5; i++) { ctx.fillStyle = K.rgba(i % 2 ? P.pink : P.cyan, 0.35 * amount); ctx.fillRect(0, Math.floor(K.hash(i, f * 3 + 9) * 1080), 1920, 3 + 6 * K.hash(i, f + 4)); }
+  ctx.restore();
+}
+function blackFrame(t, t0, t1) { K.screen(ctx); ctx.fillStyle = "#020208"; ctx.fillRect(0, 0, 1920, 1080); K.glow(ctx, 960, 540, 60 * (1 - K.inv(t0, t1, t)), "rgba(160,230,255,0.9)", 1); }
+
 function render(t) {
   try {
     K.begin(ctx, t, { x: 960, y: 540, z: 1 });
     titleEl.style.opacity = "0"; titleEl.style.transform = "";
+    let k = null;
     if (t < T.dive[1]) {
-      /* 1-3: the floor (opens through a CRT power-on) */
+      /* intro + chorus 1 on the floor (opens through a CRT power-on) */
       const floor = () => drawFloor(t, camFloor(t));
       if (t < T.powerOn[1]) crtMask(K.inv(T.powerOn[0], T.powerOn[1], t), floor);
       else floor();
-    } else if (t < T.crtOff[0]) {
-      drawLoopFull(t);
-    } else if (t < T.title) {
+    } else if (t < T.crtOff[0]) drawLoopFull(t);
+    else if (t < T.title) {
       if (t < T.crtOff[1]) crtOff(K.inv(T.crtOff[0], T.crtOff[1], t), () => drawLoopFull(t));
-      else { K.screen(ctx); ctx.fillStyle = "#020208"; ctx.fillRect(0, 0, 1920, 1080); K.glow(ctx, 960, 540, 60 * (1 - K.inv(T.crtOff[1], T.title, t)), "rgba(160,230,255,0.9)", 1); }
+      else blackFrame(t, T.crtOff[1], T.title);
+    } else if (t < TITLE_A.end) {
+      k = TITLE_A;
+      if (t < k.start + 0.3) crtMask(K.inv(k.start, k.start + 0.3, t), () => drawTitleSet(t, k)); else drawTitleSet(t, k);
+    } else if (t < T.net) drawVerse(t);
+    else if (t < T.eod) drawNet(t);
+    else if (t < T.ring) drawEOD(t);
+    else if (t < T.crtOff2[0]) drawRing(t);
+    else if (t < T.title2) {
+      if (t < T.crtOff2[1]) crtOff(K.inv(T.crtOff2[0], T.crtOff2[1], t), () => drawRing(t));
+      else blackFrame(t, T.crtOff2[1], T.title2);
     } else {
-      /* 5: title set, opens with a power-on; the whole frame powers off over the last 0.4 s */
+      /* final title card: power-on, and the whole frame powers off over the last 0.4 s */
+      k = TITLE_B;
       const endU = K.inv(DUR - 0.42, DUR - 0.02, t);
-      if (t < T.title + 0.3) crtMask(K.inv(T.title, T.title + 0.3, t), () => drawTitleSet(t));
+      if (t < k.start + 0.3) crtMask(K.inv(k.start, k.start + 0.3, t), () => drawTitleSet(t, k));
       else if (endU > 0) {
-        const s = crtOff(endU, () => drawTitleSet(t));
+        const s = crtOff(endU, () => drawTitleSet(t, k));
         titleEl.style.transformOrigin = "960px 540px"; titleEl.style.transform = `scale(${s.sx.toFixed(3)}, ${s.sy.toFixed(3)})`;
-      } else drawTitleSet(t);
-      layoutTitleDom(t);
+      } else drawTitleSet(t, k);
+    }
+    /* signal-tear cuts between sets */
+    let g = 0; CUTS.forEach((c) => { g = Math.max(g, 1 - Math.abs(t - c) / 0.2); });
+    glitch(g, t);
+    if (k) {
+      layoutTitleDom(t, k);
+      if (g > 0) titleEl.style.transform = `translateX(${((K.hash(K.boilFrame(t * 2), 5) - 0.5) * 120 * g).toFixed(1)}px)`;
     }
   } catch (err) {
     /* never leave a black frame silently: draw the error so a snapshot shows it */

@@ -206,9 +206,10 @@ var AK = window.AK || (window.AK = {});
   };
 
   /* ---------- task board (bullets): each bullet pops with a lit pixel icon ----------
-     items: strings or {t, icon, c}; shown: number visible (fractional = popping); done: items checked */
+     items: strings or {t, icon, c}; shown: number visible (fractional = popping); done: items checked;
+     marks: per-item verdict overriding done ("check" | "cross" | null); a cross also strikes the text */
   K.taskBoard = function (ctx, x, y, w, items, opt) {
-    const o = Object.assign({ a: 1, size: 38, seed: 51, shown: 99, title: "", lineH: null, done: 0 }, opt || {});
+    const o = Object.assign({ a: 1, size: 38, seed: 51, shown: 99, title: "", lineH: null, done: 0, marks: null }, opt || {});
     const a = popS(o.a); if (a <= 0) return;
     const lh = o.lineH || o.size * 1.7, h = items.length * lh + (o.title ? 116 : 56);
     ctx.save(); ctx.translate(x, y); ctx.scale(a, a);
@@ -218,12 +219,13 @@ var AK = window.AK || (window.AK = {});
     if (o.title) { K.text(ctx, o.title, 0, -h / 2 + 62, { size: o.size * 1.05, font: K.FONT.display, fill: P.pink, glow: P.pink, glowR: 12 }); yy += 56; }
     items.forEach((it, i) => {
       const g = clamp(o.shown - i, 0, 1); if (g <= 0) return;
-      const s = K.E.back(g, 2), str = typeof it === "string" ? it : it.t, done = i < o.done;
-      const icon = done ? "check" : (typeof it === "string" ? null : it.icon) || "play", col = done ? P.green : (typeof it === "string" ? null : it.c) || P.cyan;
+      const s = K.E.back(g, 2), str = typeof it === "string" ? it : it.t, mark = o.marks ? o.marks[i] : i < o.done ? "check" : null;
+      const icon = mark || (typeof it === "string" ? null : it.icon) || "play", col = mark === "cross" ? P.loss : mark ? P.green : (typeof it === "string" ? null : it.c) || P.cyan;
       ctx.save(); ctx.translate(-w / 2 + 64, yy + i * lh); ctx.scale(s, s);
       K.shape(ctx, K.rrPts(-24, -24, 48, 48, 10, 2), { fill: P.screen, w: 4, boil: 0.4, seed: o.seed + 10 + i });
       K.pix(ctx, icon, 0, 0, 5, col, { glow: 1 });
       K.text(ctx, str, 46, 2, { size: o.size, weight: 500, font: K.FONT.text, fill: "#eef0ff", align: "left" });
+      if (mark === "cross") { const tw = K.textW(ctx, str, o.size, 500, K.FONT.text); K.line(ctx, [[40, 2], [52 + tw, 0]], { stroke: P.loss, w: 5, boil: 0.6, seed: o.seed + 30 + i }); }
       ctx.restore();
     });
     ctx.restore();

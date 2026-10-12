@@ -48,6 +48,13 @@ function drawLoopScene(c, t) {
   if (aa > 0 && aa < 1) K.ticket(c, K.lerp(o2[0], o2[0] - 330, K.E.out3(aa)), K.lerp(o2[1], o2[1] + 110, K.E.out3(aa)) - 120 * Math.sin(aa * Math.PI), 1.3, { sym: "NVDA", dir: "up", qty: "100", rot: -0.3 * aa, a: Math.min(1, aa * 4) * (1 - K.inv(0.8, 1, aa)), seed: 85 });
   if (t >= T.act + 0.6 && t < T.again + 1.5) K.ticket(c, o2[0] - 330, o2[1] + 110, 1.3, { sym: "NVDA", dir: "up", qty: "100", rot: -0.3, stamp: K.inv(T.act + 0.6, T.act + 0.85, t), seed: 85 });
   [T.observe, T.decide, T.act, T.again].forEach((ta, i) => { const p = pod(i % 3); K.sparks(c, p[0], p[1], ta, { seed: 160 + i, r: 190, n: 12, color: LOOP_STEPS[i % 3].color, size: 16 }); });
+  /* left: the agent's log types one call per step; right: PnL ticks on "act" */
+  const LOG = ['observe("NVDA")', "decide()  # 0.82", 'act("BUY", 100)', 'observe("NVDA")'];
+  const tot = LOG.reduce((q, l) => q + l.length, 0); let typed = 0;
+  [T.observe, T.decide, T.act, T.again].forEach((ta, i) => { typed += LOG[i].length * K.clamp((t - ta) / 0.45, 0, 1); });
+  K.terminal(c, 310, 610, 430, LOG, { a: app, typed: typed / tot, title: "agent.log", size: 22, seed: 86 });
+  const paid = t >= T.act + 0.6;
+  K.scoreboard(c, 1630, 600, 320, 160, [{ v: paid ? "+0.4%" : "+0.0%", c: P.green }], { a: app, label: "PNL", bump: K.inv(T.act + 0.6, T.act + 0.95, t), seed: 87 });
   /* phosphor scanlines */
   c.fillStyle = "rgba(0,0,0,0.22)"; for (let y = -200; y < 1280; y += 6) c.fillRect(-200, y, 2320, 2);
 }
