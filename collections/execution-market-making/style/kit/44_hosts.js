@@ -22,7 +22,8 @@
                pointUp rad minimum arm elevation (K.duo sets 0.6 for Dash so he
                points over Mr. Tick's head)
      carry     { draw(ctx, x, y, ang), amt } a prop carried in the outer hand
-               (drawn in rig space at the hand; amt raises the hand to the chest)
+               (drawn in rig space at the hand; amt raises the hand to the chest;
+               side +1 right hand / -1 left hand, default the outer hand)
      seed      blink / viseme seed
    Layout for K.duo (all optional):
      layout    "left" (default: hosts bottom-left, room on the right; Dash on the
@@ -95,7 +96,7 @@ var SK = window.SK || (window.SK = {});
     }
     /* carry a prop in the outer hand, raised to the chest */
     if (o.carry) {
-      const amt = o.carry.amt == null ? 1 : o.carry.amt, sd = -tw;
+      const amt = o.carry.amt == null ? 1 : o.carry.amt, sd = o.carry.side || -tw;
       const c = { x: sd * 58, y: -118, open: 0, draw: o.carry.draw, rot: o.carry.rot };
       if (sd > 0) R = mix(R, c, amt); else L = mix(L, c, amt);
     }
@@ -155,7 +156,7 @@ var SK = window.SK || (window.SK = {});
       st.look = [lerp(st.look[0], sd, amt), lerp(st.look[1], clamp((o.point[1] - (o.y - 204 * o.s)) / 300, -1, 1), amt)];
     }
     if (o.carry) {
-      const amt = o.carry.amt == null ? 1 : o.carry.amt, sd = -f;
+      const amt = o.carry.amt == null ? 1 : o.carry.amt, sd = o.carry.side || -f;
       const c = { x: sd * 52, y: -110, open: 0.1, draw: o.carry.draw, rot: o.carry.rot };
       if (sd > 0) R = mix(R, c, amt); else L = mix(L, c, amt);
     }

@@ -70,7 +70,7 @@ const H = K.duo(ctx, t, {
 - **Listening** is automatic in `K.duo`: when one host talks, the other turns to look at them, leans in and nods on the talker's `nodAt` times (a slow nod when there are none). Set `speaker` to override who talks.
 - **Gestures** (`gest: [{ at, kind, dur }]`): both hosts do `point`, `nod`, `surprise`, `think`, `shrug`, `wave`, `grin` and `worry`. Mr. Tick also does `thumbs`, `watch` and `whistle`. Dash also does `flap`, `tape` (unrolls telegraph tape) and `ticket` (shows a ticket, `label`).
 - **Pointing at content.** `point: [x, y]` is a screen point. The nearer hand aims at it and the eyes follow. Dash raises his wing over Mr. Tick's head (`pointUp`).
-- **Carrying a prop.** Pass `carry: { draw(ctx, x, y, ang) }`. It is drawn at the outer hand in rig space (scale 1), for example `(c, x, y) => K.ticket(c, x, y - 20, 0, 1.4, { label: "VWAP" }, 5)`.
+- **Carrying a prop.** Pass `carry: { draw(ctx, x, y, ang), side }` (`side` +1 right hand, -1 left hand; the default is the outer hand). It is drawn at the outer hand in rig space (scale 1), for example `(c, x, y) => K.ticket(c, x, y - 20, 0, 1.4, { label: "VWAP" }, 5)`.
 - **Layouts.** In `left` Mr. Tick stands at x 470 with Dash on the outer side at about x 180, which leaves x 700-1880 for the explainer. `right` mirrors this. `flank` puts the hosts at both edges, with the prop between them. The feet are at y 1000. Never shrink the hosts below s 0.9 in explainer scenes.
 - **Without `K.duo`.** Call `K.mouse(ctx, x, y, s, K.mousePose(t, { x, y, s, talk, listen, toward }))` and `K.pigeon(ctx, x, y, s, K.pigeonPose(t, { x, y, s, talk, listen, face }))` yourself.
 
