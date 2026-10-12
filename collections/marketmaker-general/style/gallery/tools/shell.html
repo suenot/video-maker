@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Coral Exchange kit gallery</title>
+    <script src="assets/gsap.min.js"></script>
+    <style>
+/*__FONTS__*/
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #1460a8; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #1460a8; }
+      #cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+      .ov { position: absolute; inset: 0; pointer-events: none; }
+      #preload { position: absolute; left: -9999px; top: 0; opacity: 0; }
+      #preload .u7 { font-family: "Unbounded"; font-weight: 700; }
+      #preload .u9 { font-family: "Unbounded"; font-weight: 900; }
+      #preload .r6 { font-family: "Manrope"; font-weight: 600; }
+      #preload .r8 { font-family: "Manrope"; font-weight: 800; }
+      #preload .m5 { font-family: "Roboto Mono"; font-weight: 500; }
+      #preload .m7 { font-family: "Roboto Mono"; font-weight: 700; }
+      #preload .sc { font-family: "CJK SC"; font-weight: 900; }
+      #preload .tc { font-family: "CJK TC"; font-weight: 900; }
+      #vig { background: radial-gradient(100% 90% at 50% 45%, rgba(0, 0, 0, 0) 66%, rgba(6, 18, 52, 0.38) 100%); }
+      #grain { opacity: 0.10; mix-blend-mode: soft-light; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
+      <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
+      <div class="ov" id="vig"></div>
+      <div class="ov" id="grain"></div>
+      <div id="preload"><span class="u7">Aa Бб 0</span><span class="u9">Aa Бб 0</span><span class="r6">Aa Бб 0</span><span class="r8">Aa Бб 0</span><span class="m5">Aa 0</span><span class="m7">Aa 0</span><span class="sc">算法交易讲解</span><span class="tc">演算法交易講解</span></div>
+    </div>
+    <script>
+(function () {
+/*__SCRIPT__*/
+})();
+    </script>
+  </body>
+</html>
