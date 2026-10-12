@@ -1,0 +1,44 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "GNN, Transformers, and RL for Arbitrage: When Neural Networks Learn to Trade\nPart 5: Complex Arbitrage Chains Between Futures and Spot\n\nCLASSICAL PARADIGM\n\n| Imagine a chess grandmaster who,\n| instead of a board, sees ten exchanges |\nwith hundreds of trading pairs... |\n\n_—————— _——— ss\n\nmsoT CE\n\nMODERN PARADIGM\n\nam = WS\n\n1+12:08:06.001\n\norsiua O\n\ne\ne&\nxs\n>\n\nne\n\nad\n[A\n= au\n..and instead of 32 pieces, sees\nthousands of orders updated\nevery millisecond.\na KO\n\non ep ><A\nfay Gs\n\nEXCHANGE 07 { }—\n\nZL |\ntp\n\n1+12°68:00.68)\n\nArbitrage must be learned, not just calculated."
+    },
+    {
+      "page": 2,
+      "text": "H2 — 1. Graph Neural Networks: When the Market is a Graph\n\nClassical Traversal Learned Intuition\n\nALGORITHM: Bellman-Ford\nfor i from 1 to V-1:\nfor each edge (u, v) in E:\nif dist[u] + weight(u, v) < dist[v]:\ndist[v] = dist[u] + weight(u, v)\n\nCOMPLEXITY: O(V x E)\n\nClassical algorithms honestly traverse the graph. By the Neural networks Learn to recognize patterns preceding\ntime a cycle is found, the window closes. arbitrage opportunities—Like a driver anticipating traffic."
+    },
+    {
+      "page": 3,
+      "text": "ne) = dbo dl i with SEE Fusion\n\n_EdgeFusionModule Isolated Model Benchmark\n78 ms CPU\nuse burn: :preLude: :*; Inference\n\nuse burn::nn::{Linear, LinearConfig, Relu};\nuse burn::nn.:{Linear, LinearConfig;\n\nFast enough for many\narbitrage windows.\n\n#[derive(Module, Debug) ]\npub struct EdgeFusionModule<B: Backend> {\n\nfcl: Linear<B>, Source Literature Claim:\nica. Linear<B>, , >; 0.99 — 9 out of 10 predicted\nfc_out: Linear<B>, apncrtunieies are real.\nrelu: Relu,\n5 Editorial Review: F1 is a harmonic mean of\n\nprecision and recall. Treating this as\nabsolute precision requires primary-source\nvalidation, dataset review, and backtest\nleakage controls."
+    },
+    {
+      "page": 4,
+      "text": "H2 — 2. Transformers: Attention is All You Need\n\nZ\n\nMulti-Head Self-Attention Layer\n\n= NARKET DATA S PRECE .j] VOLUME [&) OROER BOOK (©) TIRE STANPS\n\nExchange 1 Data\n\n==] on = J-—]\n| aoywivl | =<\n|__| [——__-]\n\n= NARKET DATA\n\nS PREEE ,j] VOLURE [[) ORCER BOOK (©) TENE STANPS\n\nExchange 2 Data\n\nfS NARKET DATA (® TERE STANPS\n\nExchange 3 Data\n\n© NABKET ORTA S$ PRECE ,9] VOLUME [5 DROER BOOK (©) TEHE STANPS\n\nExchange 4 Data\n\nIf GNNs map the market's structure, Transformers master its data streams. Multi-head self-attention captures\n\ncross-asset and cross-exchange dependencies without explicit pre-definitions of who influences whom."
+    },
+    {
+      "page": 5,
+      "text": "H3 — 2.1 Multi-Head Attention for Multi-Exchange Fusion\n\nAttention Heatmap\n\nAttention weights reveal which\nexchanges are most informative\nfor price prediction.\n\nExchange A\n\nA surge in attention between\ntwo exchanges acts as a\nLeading indicator of an\nimpending arbitrage window.\n\nExchange B f \\\\ Signal Indicator:\nSurge in Attention\nWeight\n\nExchange C Theoretical Source Claim:\n\nAttention weight surges between\ninformative exchanges are\npresented as predictive signals\nfor target exchange price\nmovements, pending empirical\nLive-market validation.\n\nTarget\nExchange\n\nExchange Exchange Exchange Target\nA B E3 Exchange\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 6,
+      "text": "State\n(Order books,\n\npositions, balances)\n\nReward Agent\n\n(Multi-agent coordinator\n(Profit or loss mappingistatesnte\n\ngenerated) actions)\n\nAction\n(What to trade, where,\nand in what volume)\n\nReinforcement Learning naturally fits the execution constraints of arbitrage,\nshifting logic from rigid if/then rules to continuous profit/loss optimization.\n\nH2 — 3. Reinforcement Learning: The Agent that Learns to Trade\n\n(® Gemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "H3 - 3.1 142% Annual Returns\n\nCoordinates specialized bots\n(CEX-DEX, Cross-Chain,\nTriangular) for competitive\narbitrage.\n\nRule-Based Bots Multi-Agent RL\n\n/\\ Unverified Literature Claim / Backtest Data: These figures lack live-production validation. Subject to primary-source review\nfor execution costs, statistical uncertainty, and leakage controls. Not an endorsement of performance or investment advice."
+    },
+    {
+      "page": 8,
+      "text": "H2 — 4. Bayesian Methods: Uncertainty as an Advantage\n\nRegime Change Detected:\nPause & Recalibrate\n\nBayesian Online Changepoint\nDetection (BOCPD) detects\nshifting market rules in\nreal-time.\n\n>\n—\n=)\n©\noO\n>\nound\n®\nS.\nu\nis)\n=\n\n/// Regime change detector based on BOCPD\n\npub struct BocpdDetector ?\nlambda: £64, // P(changepoint) = 1/lambda\nrun_length_probs: Vec<f64>, // run length distribution"
+    },
+    {
+      "page": 9,
+      "text": "H2 — 5. Integrated Architecture: Putting It All Together\n\nOrder book GNNs & Transformers RL agents Bayesian sizing\nfeatures, Autoencoders merging cross- determining and Gaussian\nspreads, finding exchange/spot- optimal Process\n\nCUSUM/EWMA anomalies futures data size/timing boundaries\n\nTotal Latency Budget: < 7.5 ms (Powered by Rust and ONNX Runtime)\n\nTrue power comes from synthesis. An integrated Rust pipeline merges detection, fusion, execution, and risk.\n\nNote: The < 7.5 ms total pipeline target is an engineered latency budget, distinct from the isolated 78 ms CPU\nGNN inference benchmark."
+    },
+    {
+      "page": 10,
+      "text": "H2 -— 6. Conclusion\n\nStructure\nGNNs see the graph.\n\nExecution\nRL agents act.\n\nC6\n\nML in arbitrage is not a\nSilver bullet, but an\narsenal of tools.\n\nData\nTransformers merge the streams.\n\nUncertainty\n\nBayesian methods manage risk.\n\nNext Steps & Reference\n\n- Next Steps: Explore Rust implementation details,\nnanosecond precision, and atomic multi-leg\nexecution (claims pending verification) .\n\n- Source Reference: Check the Rust ML Trading\nFramework on GitHub: burn-trade-core\n(marketmaker-cc).\n\n® Gemini Notebook"
+    }
+  ]
+}
