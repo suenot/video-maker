@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "text": "Inside the slice: child-order tactics\nbetween your scheduler and the exchange |.\n\nEscalation timers, maker-taker break-even math, amend vs cancel- ww ‘ea\nreplace semantics, and the per-slice state machine. oe\n\ntags: [\"execution\", \"child orders\", \"microstructure\", \"python\"] | date: \"2026-07-24\" | authors: [\"“suenot\"]\n\ni Gemini Notebook"
+    },
+    {
+      "page": 2,
+      "text": "H2 — Two layers, one narrow interface\n\nRuns on a minutes clock,\nconsuming vol/volume forecasts.\n\nDownward Bridge (Inputs)\n\nUpward Bridge (Outputs)\n\nL Budget gq, (quantity to execute this interval)\n\nT Timestamped fills, fees, remainder, and\nslice shortfall versus interval arrival mid.\n\n| Window 7. (slice length)\n4; Urgency K = \\/A\\o?/n (compresses risk/vol/\n\nliquidity into one rate; VWAP uses band-distance)\n\nRy La\n\noN\n\nVy, | | | | i\n! Hy Ml — Runs on a ms/s clock,\n\nconsuming L2 deltas.\n\nTactical Layer (Microtrader)\n\nvuypiny\nRY l Vi\n\n%\nAny jw\n_—\n\ni! yn\n\nCore Rule: The tactics layer must realize fills better than the Remainder Policy: Force-complete vs. re-amortize over\n\nn-implied cost without leaking intent. Do not assign urgency twice. remaining slices (which compounds into a massive final slice).\n\nA Gemini Notebook"
+    },
+    {
+      "page": 3,
+      "text": "H2 — The escalation ladder: passive\nfirst, aggressive by deadline\n\nSlice Window 7;\n\nThe Harris (1998) Model Queue Dynamics\n\nFor a liquidity trader with a strict deadline, Limit-order sizing is driven by the\noptimal execution is dynamic. Stand in the distribution of queue outflow. Post\n\nbook with limit orders while time is cheap, aggressively when the queue ahead is small\nreprice toward the market as the deadline relative to expected outflow; cover tail risk\napproaches, and cross at the end. risk with market orders (Cont & Kukanov).\n\nGemini Notebook"
+    },
+    {
+      "page": 4,
+      "text": "H3 — The break-even for crossing\n\nCrossing Cost:\nPosting Cost:\nThe Break-Even:\n\nThe Prize:\n\ns\nCtake = 5 oe ih\n\nCpost = P(—5 + fm) + (1 - ) (5 + frt6)\n\n6\nPost beat ff\nosting beats crossing iff p> p* = W165\nIl=s+ft—fm (The full round-trip captured by\nmaking instead of taking).\n\nProduction-code review flag: Preserve the maker-fee sign convention\n(negative = rebate) with consistent per-unit dollars and basis points. On\ntight crypto majors, \\PI is purely the fee differential.\n\n& Gemini Notet"
+    },
+    {
+      "page": 5,
+      "text": "H3 — The break-even for crossing\n\n1.0\nBTCUSDT Perp Examples\n\nmid $100k, $0.10 spread, maker\n2bps/taker 5bps, daily vol o = $3000\n\nT=\" 108590 SaGl19,. p*\nt = 60s: 6 = $47, px\n\n1bp Maker Rebate (f,, = -$10): t=10s\nthreshold drops to p* = 0.24\n\n1 Estimated p(t)\n\n~\n~\n~\n~\n\nProbability (p)\n\nUrgency & Queue Dependencies\n\nHigh-k skips straight to crossing;\nlow-k stretches the passive phase.\nFill probability depends heavily on\nqueue-ahead/drain rate.\n\n‘Physical age-out timer\n\nTime (tT)\n\nAll numerical claims, daily volatility scaling, and px examples are illustrative\n\narticle claims pending calibration and primary-source review."
+    },
+    {
+      "page": 6,
+      "text": "H2 — Repricing without burning your queue position\n\nTouch Drift /\nPrice Improvement\n\nQueue Value: Queue position is an asset with measurable dollar value (Moallemi & Yuan, 2016).\n\nEvery reprice is a trade: sell current queue position, buy back-of-queue.\n\nReprice Hysteresis Asymmetric Chase\n\nReprice only when touch drifts more than band b ticks Repricing toward the market (aggressive/escalation):\nfrom resting price. resets queue at a worse price.\n\nMarginal reprice EV-neutral target: View — Veur = Cmsg Repricing away (the market came to you): a gift.\nPegging every tick consumes message budgets. Use passive band, as current level is about to fill.\n\n& Gemini Notebook"
+    },
+    {
+      "page": 7,
+      "text": "H2 — Repricing without burning your queue position\n\nCME Globex Quantity-down priority kept. (The reference model).\n\ncancelReplace: STOP_ON_FAILURE or ALLOW_FAILURE\n(accidental double exposure). Always starts a fresh queue.\n2025 amend/keepPriority: Reduces quantity in place, keeps\ntime priority.\n\nBinance Spot\n\nmodify = queue reset.\n\nGTX crossing cancellation: Modifying a GTX post-only order to\na crossing price results in cancellation, not a rejected\namend.\n\namendResult confirms asynchronously. Undocumented queue\npriority (assume worst-case: requeue everywhere).\n\nBinance USDT-M\nFutures\n\nAPI behaviors are dated article claims pending current exchange-primary-document\n\nchecks, never universal API guarantees.\n\n& Gemini Notebook"
+    },
+    {
+      "page": 8,
+      "text": "H2 — Icebergs, display size,\nand what leaks your intent\n\nLatent Liquidity Search\n\nFront of\npeak refills\n\nThe Mechanism\n\nNative icebergs (Binance ‘icebergQty’, OKX ‘iceberg algos*)\nare a sequence of small orders. Each visible ‘peak refill’ enters\nthe back of the queue.\n\nDeep queues punish small peaks twice (slower fills, adverse selection).\n\nThe Tradeoff\nExposure buys fills but pays in impact (Bessembinder et al.).\n\nPAB ELLE EEL EEL EE EEE EEE EEL EE EEL EEE EEE EEL EEE EEE FEE EEE EE PE EEE\n/ The 4 Leak Vectors (Adversarial Detection Engine inputs)\n\nV\n\n4\n\n- 1. Constant or round display sizes. lL\n\n2. Identical refill timestamps (instant, deterministic after L\n\n- full-peak execution). }\n- 3. Deterministic escalation timers (the ‘metronome’ cross).\n\n. 4. Fixed reprice latency and bands (‘digital fingerprint*).\n\n& Gemini Notebook"
+    },
+    {
+      "page": 9,
+      "text": "H2 — Icebergs, display size, and what leaks your intent\n\nL\nThe Metronome The Jitter\n\nsUeUoUoUoUeoUoU |) oliato LI} pbcool,\n\nReadable lazy tactics. Constant sizes and fixed Randomize display size (e.g., uniform 30-70%\ntimers allow adversaries to reconstruct hidden of a vol-scaled base). Jitter timers by +20-30%.\n\nSe a SUSU ATE SBI Never share size, timer phase, or latency profile\n\nbetween child orders.\n\nEmpirical Reality\n\nFrey/Sandas (Xetra): Hidden size attracts flow when detected.\nVan Kervel/Menkveld: HFTs initially lean against metaorders, then flip to back-running once persistence reveals information.\n\nUniversal iceberg refill queue-priority claims, cited empirical percentages, timer randomization examples, and statements |\nof no measurable fill-quality cost are unverified article claims pending review. Do not promise stealth or savings.\n\nA Gemini Notebook"
+    },
+    {
+      "page": 10,
+      "text": "H2—A minimal tactics engine\n\nTouch drift > reprice_band\ncancel_replace\n\nElapsed time >\n\nPri > Pp” escalate frac lice d\n= POSTED CROSSING He\n\nPin <p\"\n\nEngine Context\n\nSide-effect-free, event-driven engine intended for a rung-4 queue-aware\nsimulator processing on_tick, on_fill, on_budget_cut.\n\n& Gemini Notebook"
+    },
+    {
+      "page": 11,
+      "text": "H2 — A minimal tactics engine\n\nclass SliceTactic:\ndef p_star(self, spread: float, tau: float) -> float:\ndelta = self.cfg.adverse_frac * self.cfg.sigma_1s * math.sqrt(tau)\nprize = spread + self.fees.taker - self.fees.maker\nreturn delta / (prize + delta)\n\ndef on_tick(self, t, bid, ask, queue_ahead, drain):\n# ... logic omitted ...\nif self.state == State. IDLE:\n\nif self.p_fill(queue_ahead, drain, remain) >=\nself.p_star(ask - bid, remain) >=\nself.p_star(ask - bid, remain):\nself.state, self.px = State.POSTED, touch\nelse:\nreturn [((\"post\", touch, left)]\n\nself.state = State. CROSSING\nreturn [(\"cross\", left) ]\n\nCalibration Cliffs\n\np_fill is a placeholder ratio;\nadverse_frac requires bucketed\nvol-regime calibration.\n\nPlot slice shortfall against\n\\n-implied cost to find two\nparameter cliffs: escalating too\nlate vs repricing too eagerly.\n\nProduction-code review flag:\nThe Python state machine is\nillustrative and unvalidated.\nCrossing/cancellation\nacknowledgements, outstanding\norder reconciliation, repeated\ncross emission, in-flight\ncancellation/double exposure,\nbudget cuts below already filled\nquantity, and negative residual\nhandling are omitted.\n\nNot deployment-ready.\n\n& Gemini Notebook"
+    },
+    {
+      "page": 12,
+      "text": "H2 — What to take away\nSB\n\nTwo layers, one contract.\n\nBudget, window, urgency\n\ndown; fills and shortfall up.\nAttribute shortfall to tune.\n\niiilp\n\nQueue position is an asset.\n\nKnow API semantics: CME\n(qty-down keeps priority),\nBinance (cancelReplace\nrequeues), OKX (undocumented).\n\n6\n|=\n\nPost/cross is arithmetic.\nPost iff p > 6/(II + 4).\n\nFee tier sets tactics;\nretune after re-tier.\n\n7\n\nIcebergs are back-of-queue\nsequences.\n\nLazy ones are readable.\nRandomize sizes/timers\nor get back-run.\n\ni\n\nAge-out timers are curve\nintersections.\n\nSaturating fill probability\nvs. ./T -growing adverse\nselection.\n\nShip into the simulator\n\nfirst.\n\nThe tactics layer\ndiverges hardest between\nbacktest and production.\n\nf Gemini Notebook"
+    },
+    {
+      "page": 13,
+      "text": "oO ON DO OH BP WD FF\n\naa\nLF ©\n\n=\nNO\n\nH2 — Useful links\n\nHarris, L. (1998)\n\nCont, R., Kukanov, A. (2017)\n\nFrey, S., Sandas, P. (2009)\n\nBessembinder, H. et al. (2009)\n\nvan Kervel, V., Menkveld, A. (2019)\n\nMoallemi, C., Yuan, K. (2016)\n\nLehalle, C.-A. (2011)\n\nBinance Spot API — Order Amend Keep Priority\nBinance Spot API — Trading endpoints (cancelReplace)\n\n. Binance USDT-M Futures API — Modify Order\n. OKX API v5 — Amend order\n. CME Group — Order Functionalities\n\nGemini Notebook"
+    },
+    {
+      "page": 14,
+      "text": "H2 — Citation\n\n@article{soloviov2026childordertactics,\n\nauthor = {Soloviov, Eugen},\n\ntitle = {Inside the slice: child-order tactics between your scheduler and the exchange},\n\nyear = {2026},\n\nurl = {https://marketmaker.cc/blog/child-order-execution-tactics},\n\ndescription = {The tactics layer between execution schedulers and the exchange:\npassive-then-aggressive escalation with maker-taker break-even math, amend vs\n\ncancel-replace queue semantics across venues, iceberg anti-signaling, and a\n\nper-slice Python state machine for fill simulators. }\n\nHistorical, numerical, research, financial, company-specific, and mutable assertions are\ndated article claims pending human editorial and primary-source review. Formula, software/\n\nAPI behavior, and risk review is pending. Do not add outside facts, guaranteed returns,\ninvestment advice, or claims of pr validation. Chinese regional terminology and Mandarin\npronunciation await human review. External artifacts/duplicates are not checked for clearance.\n\nf Gemini Notebook"
+    }
+  ]
+}
