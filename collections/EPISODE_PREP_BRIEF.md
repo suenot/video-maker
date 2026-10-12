@@ -18,3 +18,8 @@ Steps
 3. Look at every slide PNG (Read tool). Write SCENES.md: per slide: time range, FULL content (titles, bullets, exact numbers, formulas, code, tables, diagram layout/labels — exact enough to redraw), narration beats with timestamps for animation triggers. Split slides longer than ~90 s into sub-scenes by topic. Cross-check facts against the article; flag NotebookLM errors/hallucinations and state the corrected version to use.
 4. Commit SCENES.md, slide_starts.json, timeline.json, slides_text.json, audio_info.txt, subtitles.json (if <2 MB) — not PNG/PDF/audio. `git pull --rebase --autostash && git push`. Never touch channels/marketmaker.json, scripts/run_pipeline.sh, or other agents' files.
 Whisper is CPU-heavy and several agents run in parallel; it's fine to be slow. Do not stop to wait on a monitor without checking back; poll the process.
+
+## Machine load rule (12 CPUs, shared by ~20 agents)
+Run every Whisper call through the global slot limiter (max 2 at once, 4 threads each):
+`collections/tools/heavy_slot.sh whisper .venv/bin/python3 scripts/extract_subtitles.py ...`
+Run sequentially within your own batch — never start several Whisper jobs yourself.

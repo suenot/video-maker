@@ -22,3 +22,6 @@ Rules
 - Renders are CPU heavy and other agents render in parallel: if a render fails from load/timeouts, wait and retry, don't give up.
 
 Report (<250 words): mascot/world summary, second-by-second outline, paths, known weaknesses.
+
+## Machine load rule (12 CPUs, shared by ~20 agents)
+Wrap every `npx hyperframes render` (and whisper/transcribe) in the global slot limiter: `collections/tools/heavy_slot.sh render npx hyperframes render ...` (max 3 renders machine-wide). Render languages one after another, not in parallel.
