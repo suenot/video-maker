@@ -45,3 +45,8 @@
 - Commit path-scoped: `git commit -m ... -- <paths>`; push with `git pull --rebase --autostash && git push`.
 
 - Subagent model rule (user): spawn all subagents with model sonnet (Sonnet 5.5), effort medium.
+
+## Episode layers (status)
+- Done and pushed: ai-agents-trading, modern-ml-trading (94534ee), order-book-microstructure (08b8347, --host-a low), statistical-arbitrage-pairs (62d839d), volatility-regimes (c570737), causality-lead-lag (c3b1405), marketmaker-general (d0281e5, --host-a high).
+- onchain-defi-quant: done b82bc48 (style/episode/: 65_host, 66_signs, 67_diner, 68_transitions, template, README). Use --host-a low (Nibbs 101 Hz, Bizzy 171 Hz). Nibbs reach is short: use magnifier:true or Bizzy ppoint for far points. s is kit scale (default 0.9).
+- execution-market-making: layer-exec still running.
