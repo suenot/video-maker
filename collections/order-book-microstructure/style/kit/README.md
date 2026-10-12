@@ -14,6 +14,7 @@ The architecture is the same as the crab kit (`complex-arbitrage-rust/style/kit`
 | `50_explainer.js` | slide content as bazaar objects: `tag`, `shout`, `arrow`, `depthHills`, `signboard`, `rugTable`, `tileBoard`, `scrollChart` (line, bar, candle), `priceList`, `codeScroll`, `kilimBanner` |
 | `fonts/` | local woff2 (Yeseva One, Fira Sans Condensed, PT Mono, Noto Serif SC/TC subsets) plus `fonts.css`; refresh with `tools/fetch_fonts.py` |
 | `vendor/gsap.min.js` | GSAP 3.14.2 (local, no CDN) |
+| `logo/marketmaker-logo.svg` | the marketmaker.cc mark; `build.py` inlines it wherever the shell has `<!--__LOGO__-->` (it inherits `color`) |
 
 ## Using the kit in an episode
 

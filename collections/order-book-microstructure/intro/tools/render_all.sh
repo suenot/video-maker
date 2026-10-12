@@ -5,7 +5,7 @@ python3 ../style/kit/tools/build.py . >/dev/null || exit 1
 mkdir -p renders
 render() { # lang title
   for try in 1 2 3; do
-    npx hyperframes render --quality high --variables "{\"lang\":\"$1\",\"title\":\"$2\"}" --output "renders/intro_$1.mp4" && break
+    ../../tools/heavy_slot.sh render npx hyperframes render --quality high --variables "{\"lang\":\"$1\",\"title\":\"$2\"}" --output "renders/intro_$1.mp4" && break
     echo "render $1 failed (try $try), retrying in 60 s"; sleep 60
   done
   ffmpeg -v error -y -i "renders/intro_$1.mp4" -an -c:v copy "renders/intro_$1_silent.mp4"

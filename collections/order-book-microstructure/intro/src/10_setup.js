@@ -1,28 +1,26 @@
 /* ============================================================
    INTRO 10 SETUP: variables, title DOM, the book data, timing (beat grid)
-   Song: song_full.m4a = the whole song_raw.mp4 (raw 0.70 - 72.0, leading
-   silence trimmed, 0.7 s fade, loudnorm), 71.3 s, Balkan brass at 152 BPM
-   (beat 0.395 s, bar 1.60 s). Film time = raw time - 0.70.
-   Sections (bars on the measured downbeats below):
-     bars 0-3    instrumental intro
-     bars 4-11   chorus 1: "Hey! The spread is tight / Depth and flow from left
-                 to right / Every tick and every queue / Order Book and Market
-                 Microstructure!" (6.47, 9.66, 12.86, 16.04)
-     bars 12-19  verse: "Bids on the left and the asks up high / Stacked like a
-                 tower reaching to the sky / Limit orders wait in a price-time
-                 queue / Market orders come and they cross right through!"
-                 (19.25, 22.43, 25.63, 28.84)
-     bars 20-27  chorus 2 (32.04 ... 41.63)
-     bars 28-35  instrumental break (44.83 - 57.63)
-     bars 36-43  final chorus (57.63 ... "Order Book" 67.22), song ends 70.7
-   Word timings: parakeet + whisper (lyrics.srt windows are coarse).
+   Song: song_short.m4a, 26.4 s, Balkan brass at 152 BPM (beat 0.395 s,
+   bar 1.60 s), cut from song_raw.mp4 on downbeats (30 ms crossfades):
+     raw  0.74 - 19.95  4 instrumental bars + the whole first chorus  -> 0.00
+     raw 45.53 - 48.72  2 bars of the instrumental break              -> 19.18
+     raw 67.92 - 72.0   the last line "Order Book and Market
+                        Microstructure!" and the song's ending        -> 22.34
+   0.8 s fade, loudnorm -14.1 LUFS.
+   Sung lines (cut time; parakeet + whisper word timings):
+     6.43  "Hey! The spread is tight"           (spread 7.58, tight 8.30)
+     9.62  "Depth and flow from left to right"
+     13.0  "Every tick and every queue"         (queue 14.70)
+     16.0  "Order Book and Market Microstructure!"   (chorus 1)
+     22.34 "Order Book and Market Microstructure!"   (the ending: title card)
+   All story times are K.at(bar, beat) on the measured downbeats below.
+   Story moments set to NEVER belong to the full-song version (kept in the
+   code for reuse in episodes; they never trigger here).
    ============================================================ */
 const K = BK, P = K.P, at = K.at;
 K.G.BPM = 152;
-K.G.BARS = [0.04, 1.67, 3.27, 4.87, 6.47, 8.05, 9.66, 11.26, 12.86, 14.44, 16.04, 17.64, 19.25, 20.85, 22.43, 24.05,
-  25.63, 27.23, 28.84, 30.44, 32.04, 33.64, 35.24, 36.85, 38.43, 40.03, 41.63, 43.23, 44.83, 46.44, 48.02, 49.64,
-  51.22, 52.82, 54.42, 56.03, 57.63, 59.23, 60.81, 62.41, 64.01, 65.62, 67.22, 68.82];
-const DUR = 71.3, BEAT = K.beatLen();
+K.G.BARS = [0.00, 1.63, 3.23, 4.83, 6.43, 8.01, 9.62, 11.22, 12.82, 14.40, 16.00, 17.60, 19.18, 20.79, 22.34, 23.94];
+const DUR = 26.4, BEAT = K.beatLen(), NEVER = 999;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 
 /* ---------- story beats (on the song's downbeats) ---------- */
@@ -36,7 +34,7 @@ const T = {
   fez: at(3, 1),                    /* tips the fez */
   beads: at(3, 2),                  /* flicks abacus beads on the beat */
   inhale: at(3, 3),                 /* a big breath */
-  /* chorus 1 */
+  /* chorus */
   hey: at(4, 0),                    /* "Hey!" */
   clap: at(4, 2),                   /* clap: the two halves of the book slide together */
   slam: at(4, 3),                   /* "spread": the alley slams narrow, ask prices flip */
@@ -49,39 +47,21 @@ const T = {
   ticks: at(8, 0.3),                /* "Every tick": plaques flash bottom to top */
   queueCam: at(8, 2),               /* close on the best bid queue */
   fills: [at(8, 3), at(9, 0), at(9, 1)], /* "every queue": our crate #4 -> #1 */
-  tease: [at(9, 3), at(10, 0), at(11, 3), at(12, 0)], /* title banner drops, stamps "Order Book...", rolls back up */
-  /* verse */
-  hills: [at(12, 0), at(13, 0)],    /* "Bids on the left" / "and the asks up high": terraced depth hills */
-  sky: [at(14, 1), at(14, 3), at(15, 0)], /* "Stacked like a tower reaching to the sky": two levels drop in, flag */
-  prio: at(16, 0),                  /* "Limit orders wait in a price-time queue": arrival numbers */
-  newbie: at(17, 0),                /* a newcomer joins the back */
-  cart2: [at(18, 0), at(19, 3)],    /* "Market orders ... cross right through!": a sell cart, right to left */
-  take2: [at(18, 2.5), at(18, 3)],  /* it fills our crate and the next one */
-  coin: at(19, 0),                  /* our fill: a gold coin flies to Tikki */
-  /* chorus 2 (dusk) */
-  dusk: [at(19, 2), at(20, 2)],
-  hey2: at(20, 0),                  /* "Hey!" */
-  rope: at(21, 0),                  /* "tight": Tikki pulls the lantern rope tight */
-  flow2: at(22, 0),                 /* second flow wave, the hills rise */
-  tickChart: [at(24, 0), at(25, 2)],/* "Every tick": a tick chart scroll drops, draws tick by tick */
-  fireworks: at(26, 0),             /* "Order Book and Market Microstructure!": every plaque pings, coins */
-  /* break (night) */
-  dance: [at(28, 0), at(30, 0)],
-  ofi: [at(30, 0), at(32, 0)],      /* tile board: OFI */
-  candles: [at(32, 0), at(34, 0)],  /* scroll: volume bars as candles */
-  code: [at(34, 0), at(36, 0)],     /* code scroll: watch_order_book */
-  dawn: [at(35, 0), at(36, 2)],
-  /* final chorus */
-  hey3: at(36, 0),
-  flow3: at(38, 0),
-  ticks3: at(40, 0.3),
-  drop: [at(41, 2), at(41, 3)],     /* the kilim curtain drops over everything */
-  rise: [at(41, 3), at(42, 0)],     /* it rolls up into the title banner */
-  title: at(42, 0),                 /* "Order Book and Market Microstructure!" */
-  line2: at(42, 2),
-  medals: at(43, 0),
-  jump: at(43, 2),
-  bow: at(44, 0),
+  fireworks: at(10, 0),             /* "Order Book and Market Microstructure!": every plaque pings, coins */
+  dance: [at(12, 0), at(13, 3)],    /* the break bars: Tikki dances */
+  /* ending: title card */
+  drop: [at(13, 2), at(13, 3)],     /* the kilim curtain drops over everything */
+  rise: [at(13, 3), at(14, 0)],     /* it rolls up into the title banner */
+  title: at(14, 0),                 /* "Order Book and Market Microstructure!" */
+  line2: at(14, 2),
+  medals: at(15, 0),
+  jump: at(15, 2),
+  bow: at(16, 0),                   /* 25.54 */
+  /* full-song moments (not in this cut) */
+  tease: [NEVER, NEVER + 1, NEVER + 2, NEVER + 3], hills: [NEVER, NEVER], sky: [NEVER, NEVER, NEVER], prio: NEVER, newbie: NEVER,
+  cart2: [NEVER, NEVER + 1], take2: [NEVER, NEVER], coin: NEVER, dusk: [NEVER, NEVER + 1], hey2: NEVER, rope: NEVER, flow2: NEVER,
+  tickChart: [NEVER, NEVER], ofi: [NEVER, NEVER], candles: [NEVER, NEVER], code: [NEVER, NEVER], dawn: [NEVER + 2, NEVER + 3],
+  hey3: NEVER, flow3: NEVER, ticks3: NEVER,
 };
 
 /* ---------- variables (title text, language) ---------- */
@@ -98,7 +78,7 @@ if (LANG === "zh-TW") titleEl.classList.add("cjk-tc");
 /* Yeseva One is wide: the longest line must fit 1640 px (STYLE.md, type table) */
 const longest = Math.max(...TITLE_LINES.map((s) => s.length));
 const WIDE = /[Ѐ-ӿ]/.test(VARS.title) ? 2580 : 2760; /* Cyrillic glyphs run wider */
-const TITLE_SIZE = IS_CJK ? 124 : Math.min(106, Math.floor(WIDE / Math.max(12, longest)));
+const TITLE_SIZE = IS_CJK ? 116 : Math.min(106, Math.floor(WIDE / Math.max(12, longest)));
 const TITLE_CH = [];
 TITLE_LINES.forEach((ln, li) => {
   const d = document.createElement("div");

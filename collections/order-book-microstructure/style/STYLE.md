@@ -112,7 +112,7 @@ Animation rules:
 ## 8. Timing (beat grid)
 
 - The theme song is a Balkan brass band at 152 BPM: a beat is 0.395 s and a bar is 1.58 s. Write times as `K.at(bar, beat)`.
-- The intro runs the whole song (71.3 s) on 44 measured downbeats in `intro/src/10_setup.js` (`BARS[0] = 0.04`, chorus 1 at 6.47, verse 19.25, chorus 2 32.04, break 44.83, final chorus 57.63) (beat tracking + the sung "Hey", "Order", "Bids" onsets; librosa's tracker locks onto the off-beat brass, so trust the vocal accents for phase).
+- The intro runs a 26.4 s short song (intro + chorus 1 + 2 break bars + the real ending) on 16 measured downbeats in `intro/src/10_setup.js` (chorus at 6.43, break 19.18, title line 22.34) (beat tracking + the sung "Hey", "Order", "Bids" onsets; librosa's tracker locks onto the off-beat brass, so trust the vocal accents for phase).
 - Pops (stalls, crates, tags, medallions) land on beats with a back-ease overshoot of 0.3 - 0.4 s. Staggers are 1/2 or 1/4 beat.
 - Determinism: no `Math.random`, `Date.now` or `performance.now`, no infinite repeats. Seeded `mulberry` / `hash` only.
 
@@ -142,7 +142,11 @@ Layout rules for explainer shots:
 - Leave a 64 px safe margin; boards stay fully inside the frame while they are read.
 - The numbers on screen must be the numbers from the script. The drawing never invents data.
 
-## 10. Do / don't
+## 10. Logo
+
+The marketmaker.cc mark (`kit/logo/marketmaker-logo.svg`, `currentColor`) sits top-right on every intro: a paper plate (`paper` fill, 4 px `ink` border, 20 px radius, 6 px block shadow), 100 px tall with the wordmark, 48 px margins, DOM above the grain. It may hop once on the first downbeat after the opening curtain, otherwise it is static. Keep the sun, shouts and tags out of that corner.
+
+## 11. Do / don't
 
 Do: build the book as a place and move through it; let Tikki react to every reveal; keep red = sellers and green = buyers everywhere; put pops on beats and smooth camera moves between them.
 Don't: draw flat slide cards; boil text or let the camera judder at 12 fps; use red/green decoratively; put language-specific words in the drawn world (prices, numbers, `#n`, arrows and icons only), so one render path serves en, ru, zh-CN and zh-TW. Localised text lives in DOM variables.

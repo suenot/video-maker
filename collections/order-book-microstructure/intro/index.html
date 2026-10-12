@@ -64,15 +64,55 @@
       #preload .tc { font-family: "CJK TC"; font-weight: 900; }
       #vig { background: radial-gradient(95% 85% at 50% 48%, rgba(0, 0, 0, 0) 60%, rgba(31, 23, 32, 0.4) 100%); }
       #grain { opacity: 0.16; mix-blend-mode: multiply; }
+      /* marketmaker.cc logo: top-right, on a printed paper plate with a woodcut block shadow */
+      #logo { position: absolute; top: 48px; right: 48px; height: 100px; display: flex; align-items: center; gap: 14px; padding: 0 26px 0 14px; background: #f3e3c3; color: #1f1720; border: 4px solid #1f1720; border-radius: 20px; box-shadow: 6px 6px 0 #1f1720; pointer-events: none; }
+      #logo .mark { width: 70px; height: 70px; display: block; }
+      #logo .word { font-family: "Fira Sans Condensed", sans-serif; font-weight: 800; font-size: 42px; line-height: 1; letter-spacing: 0.01em; white-space: nowrap; }
+      #logo .word b { font-weight: 800; color: #c4583a; }
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="71.3" data-width="1920" data-height="1080">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="26.4" data-width="1920" data-height="1080">
       <canvas id="cv" width="1920" height="1080" data-layout-allow-overflow></canvas>
       <div id="title" data-layout-allow-overlap></div>
       <div class="ov" id="vig"></div>
       <div class="ov" id="grain"></div>
-      <audio id="song" src="song_full.m4a" data-start="0" data-duration="71.3" data-track-index="10" data-volume="1"></audio>
+      <div id="logo"><svg version="1.0" xmlns="http://www.w3.org/2000/svg" class="mark" aria-hidden="true" viewBox="0 0 1024 1024" preserveAspectRatio="xMidYMid meet">
+<g transform="translate(0, 1024) scale(0.1, -0.1)" fill="currentColor" stroke="none">
+<path d="M4815 9964 c-22 -2 -92 -9 -155 -14 -1263 -113 -2506 -762 -3284
+-1714 -595 -729 -940 -1541 -1053 -2481 -22 -188 -26 -815 -5 -990 74 -626
+245 -1198 509 -1705 501 -960 1276 -1694 2272 -2154 645 -298 1302 -439 2046
+-438 757 0 1402 147 2070 471 491 238 899 521 1264 876 813 789 1298 1766
+1438 2896 22 181 25 761 5 964 -58 577 -200 1087 -439 1585 -113 236 -184 361
+-334 585 -180 270 -349 476 -574 701 -368 369 -746 646 -1200 880 -563 290
+-1104 452 -1745 520 -146 15 -715 28 -815 18z m837 -559 c1134 -135 2191 -733
+2857 -1615 188 -249 385 -590 511 -885 132 -306 245 -719 294 -1071 37 -264
+48 -690 26 -939 -123 -1364 -861 -2559 -2003 -3243 -299 -179 -487 -266 -777
+-362 -836 -277 -1714 -292 -2579 -44 -119 35 -322 102 -330 110 -2 2 52 63
+120 135 519 553 1099 890 1714 996 73 12 159 17 320 18 300 0 359 -12 924
+-184 129 -39 263 -78 298 -86 187 -43 308 9 510 218 161 168 253 322 253 425
+0 76 -23 127 -156 349 -209 348 -358 662 -426 897 -15 54 -39 167 -53 250 -14
+83 -39 196 -57 250 -83 264 -268 406 -580 447 -54 7 -95 16 -92 20 9 16 120
+50 187 59 152 19 326 -17 779 -159 531 -166 733 -192 993 -126 178 45 317 127
+445 261 71 76 177 230 165 242 -2 3 -26 -9 -52 -26 -64 -41 -147 -77 -252
+-109 -78 -24 -102 -27 -256 -27 -139 -1 -191 3 -285 22 -203 41 -423 109 -725
+227 -654 254 -862 292 -1215 220 -188 -38 -298 -48 -371 -35 -35 6 -128 38
+-208 70 -266 106 -461 155 -716 181 -163 16 -480 6 -658 -21 -265 -40 -601
+-137 -916 -265 -86 -35 -244 -99 -351 -143 -205 -83 -335 -122 -435 -129 -71
+-5 -90 5 -81 40 8 33 99 147 209 262 48 50 87 95 87 100 0 20 -24 35 -58 35
+-49 0 -145 -54 -317 -180 -237 -173 -308 -199 -451 -166 -151 34 -520 172
+-614 228 -63 39 -88 70 -96 119 -10 59 13 113 101 236 171 240 249 360 299
+463 l51 105 0 210 c1 265 10 301 128 475 102 152 288 355 495 543 l74 66 -59
+58 c-68 67 -88 119 -81 208 6 68 40 115 118 162 89 54 172 77 280 76 52 0 120
+-5 152 -12 l56 -12 144 75 c268 140 477 214 835 296 304 69 480 127 700 230
+208 98 430 246 593 394 l95 87 155 -5 c85 -3 212 -13 282 -21z m1016 -5082
+c85 -41 130 -109 157 -240 8 -37 13 -68 12 -69 -1 -2 -48 19 -103 46 -121 59
+-139 79 -136 164 0 32 -5 76 -12 97 -14 39 -13 40 8 33 11 -3 45 -17 74 -31z"/>
+<path d="M2243 7035 c-92 -42 -196 -156 -205 -225 -4 -34 23 -37 94 -10 97 36
+180 131 202 233 6 23 3 27 -16 27 -13 0 -47 -11 -75 -25z"/>
+</g>
+</svg><span class="word">marketmaker<b>.cc</b></span></div>
+      <audio id="song" src="song_short.m4a" data-start="0" data-duration="26.4" data-track-index="10" data-volume="1"></audio>
       <div id="preload"><span class="y4">Aa Бб 0</span><span class="f6">Aa Бб 0</span><span class="f8">Aa Бб 0</span><span class="m4">Aa 0</span><span class="sc">订单簿</span><span class="tc">訂單簿</span></div>
     </div>
     <script>
@@ -1290,29 +1330,27 @@ var BK = window.BK || (window.BK = {});
 
 /* ============================================================
    INTRO 10 SETUP: variables, title DOM, the book data, timing (beat grid)
-   Song: song_full.m4a = the whole song_raw.mp4 (raw 0.70 - 72.0, leading
-   silence trimmed, 0.7 s fade, loudnorm), 71.3 s, Balkan brass at 152 BPM
-   (beat 0.395 s, bar 1.60 s). Film time = raw time - 0.70.
-   Sections (bars on the measured downbeats below):
-     bars 0-3    instrumental intro
-     bars 4-11   chorus 1: "Hey! The spread is tight / Depth and flow from left
-                 to right / Every tick and every queue / Order Book and Market
-                 Microstructure!" (6.47, 9.66, 12.86, 16.04)
-     bars 12-19  verse: "Bids on the left and the asks up high / Stacked like a
-                 tower reaching to the sky / Limit orders wait in a price-time
-                 queue / Market orders come and they cross right through!"
-                 (19.25, 22.43, 25.63, 28.84)
-     bars 20-27  chorus 2 (32.04 ... 41.63)
-     bars 28-35  instrumental break (44.83 - 57.63)
-     bars 36-43  final chorus (57.63 ... "Order Book" 67.22), song ends 70.7
-   Word timings: parakeet + whisper (lyrics.srt windows are coarse).
+   Song: song_short.m4a, 26.4 s, Balkan brass at 152 BPM (beat 0.395 s,
+   bar 1.60 s), cut from song_raw.mp4 on downbeats (30 ms crossfades):
+     raw  0.74 - 19.95  4 instrumental bars + the whole first chorus  -> 0.00
+     raw 45.53 - 48.72  2 bars of the instrumental break              -> 19.18
+     raw 67.92 - 72.0   the last line "Order Book and Market
+                        Microstructure!" and the song's ending        -> 22.34
+   0.8 s fade, loudnorm -14.1 LUFS.
+   Sung lines (cut time; parakeet + whisper word timings):
+     6.43  "Hey! The spread is tight"           (spread 7.58, tight 8.30)
+     9.62  "Depth and flow from left to right"
+     13.0  "Every tick and every queue"         (queue 14.70)
+     16.0  "Order Book and Market Microstructure!"   (chorus 1)
+     22.34 "Order Book and Market Microstructure!"   (the ending: title card)
+   All story times are K.at(bar, beat) on the measured downbeats below.
+   Story moments set to NEVER belong to the full-song version (kept in the
+   code for reuse in episodes; they never trigger here).
    ============================================================ */
 const K = BK, P = K.P, at = K.at;
 K.G.BPM = 152;
-K.G.BARS = [0.04, 1.67, 3.27, 4.87, 6.47, 8.05, 9.66, 11.26, 12.86, 14.44, 16.04, 17.64, 19.25, 20.85, 22.43, 24.05,
-  25.63, 27.23, 28.84, 30.44, 32.04, 33.64, 35.24, 36.85, 38.43, 40.03, 41.63, 43.23, 44.83, 46.44, 48.02, 49.64,
-  51.22, 52.82, 54.42, 56.03, 57.63, 59.23, 60.81, 62.41, 64.01, 65.62, 67.22, 68.82];
-const DUR = 71.3, BEAT = K.beatLen();
+K.G.BARS = [0.00, 1.63, 3.23, 4.83, 6.43, 8.01, 9.62, 11.22, 12.82, 14.40, 16.00, 17.60, 19.18, 20.79, 22.34, 23.94];
+const DUR = 26.4, BEAT = K.beatLen(), NEVER = 999;
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
 
 /* ---------- story beats (on the song's downbeats) ---------- */
@@ -1326,7 +1364,7 @@ const T = {
   fez: at(3, 1),                    /* tips the fez */
   beads: at(3, 2),                  /* flicks abacus beads on the beat */
   inhale: at(3, 3),                 /* a big breath */
-  /* chorus 1 */
+  /* chorus */
   hey: at(4, 0),                    /* "Hey!" */
   clap: at(4, 2),                   /* clap: the two halves of the book slide together */
   slam: at(4, 3),                   /* "spread": the alley slams narrow, ask prices flip */
@@ -1339,39 +1377,21 @@ const T = {
   ticks: at(8, 0.3),                /* "Every tick": plaques flash bottom to top */
   queueCam: at(8, 2),               /* close on the best bid queue */
   fills: [at(8, 3), at(9, 0), at(9, 1)], /* "every queue": our crate #4 -> #1 */
-  tease: [at(9, 3), at(10, 0), at(11, 3), at(12, 0)], /* title banner drops, stamps "Order Book...", rolls back up */
-  /* verse */
-  hills: [at(12, 0), at(13, 0)],    /* "Bids on the left" / "and the asks up high": terraced depth hills */
-  sky: [at(14, 1), at(14, 3), at(15, 0)], /* "Stacked like a tower reaching to the sky": two levels drop in, flag */
-  prio: at(16, 0),                  /* "Limit orders wait in a price-time queue": arrival numbers */
-  newbie: at(17, 0),                /* a newcomer joins the back */
-  cart2: [at(18, 0), at(19, 3)],    /* "Market orders ... cross right through!": a sell cart, right to left */
-  take2: [at(18, 2.5), at(18, 3)],  /* it fills our crate and the next one */
-  coin: at(19, 0),                  /* our fill: a gold coin flies to Tikki */
-  /* chorus 2 (dusk) */
-  dusk: [at(19, 2), at(20, 2)],
-  hey2: at(20, 0),                  /* "Hey!" */
-  rope: at(21, 0),                  /* "tight": Tikki pulls the lantern rope tight */
-  flow2: at(22, 0),                 /* second flow wave, the hills rise */
-  tickChart: [at(24, 0), at(25, 2)],/* "Every tick": a tick chart scroll drops, draws tick by tick */
-  fireworks: at(26, 0),             /* "Order Book and Market Microstructure!": every plaque pings, coins */
-  /* break (night) */
-  dance: [at(28, 0), at(30, 0)],
-  ofi: [at(30, 0), at(32, 0)],      /* tile board: OFI */
-  candles: [at(32, 0), at(34, 0)],  /* scroll: volume bars as candles */
-  code: [at(34, 0), at(36, 0)],     /* code scroll: watch_order_book */
-  dawn: [at(35, 0), at(36, 2)],
-  /* final chorus */
-  hey3: at(36, 0),
-  flow3: at(38, 0),
-  ticks3: at(40, 0.3),
-  drop: [at(41, 2), at(41, 3)],     /* the kilim curtain drops over everything */
-  rise: [at(41, 3), at(42, 0)],     /* it rolls up into the title banner */
-  title: at(42, 0),                 /* "Order Book and Market Microstructure!" */
-  line2: at(42, 2),
-  medals: at(43, 0),
-  jump: at(43, 2),
-  bow: at(44, 0),
+  fireworks: at(10, 0),             /* "Order Book and Market Microstructure!": every plaque pings, coins */
+  dance: [at(12, 0), at(13, 3)],    /* the break bars: Tikki dances */
+  /* ending: title card */
+  drop: [at(13, 2), at(13, 3)],     /* the kilim curtain drops over everything */
+  rise: [at(13, 3), at(14, 0)],     /* it rolls up into the title banner */
+  title: at(14, 0),                 /* "Order Book and Market Microstructure!" */
+  line2: at(14, 2),
+  medals: at(15, 0),
+  jump: at(15, 2),
+  bow: at(16, 0),                   /* 25.54 */
+  /* full-song moments (not in this cut) */
+  tease: [NEVER, NEVER + 1, NEVER + 2, NEVER + 3], hills: [NEVER, NEVER], sky: [NEVER, NEVER, NEVER], prio: NEVER, newbie: NEVER,
+  cart2: [NEVER, NEVER + 1], take2: [NEVER, NEVER], coin: NEVER, dusk: [NEVER, NEVER + 1], hey2: NEVER, rope: NEVER, flow2: NEVER,
+  tickChart: [NEVER, NEVER], ofi: [NEVER, NEVER], candles: [NEVER, NEVER], code: [NEVER, NEVER], dawn: [NEVER + 2, NEVER + 3],
+  hey3: NEVER, flow3: NEVER, ticks3: NEVER,
 };
 
 /* ---------- variables (title text, language) ---------- */
@@ -1388,7 +1408,7 @@ if (LANG === "zh-TW") titleEl.classList.add("cjk-tc");
 /* Yeseva One is wide: the longest line must fit 1640 px (STYLE.md, type table) */
 const longest = Math.max(...TITLE_LINES.map((s) => s.length));
 const WIDE = /[Ѐ-ӿ]/.test(VARS.title) ? 2580 : 2760; /* Cyrillic glyphs run wider */
-const TITLE_SIZE = IS_CJK ? 124 : Math.min(106, Math.floor(WIDE / Math.max(12, longest)));
+const TITLE_SIZE = IS_CJK ? 116 : Math.min(106, Math.floor(WIDE / Math.max(12, longest)));
 const TITLE_CH = [];
 TITLE_LINES.forEach((ln, li) => {
   const d = document.createElement("div");
@@ -1530,7 +1550,7 @@ function withNight(t, fn) {
 function drawBackground(t) { withNight(t, () => drawBackgroundDay(t)); }
 function drawBackgroundDay(t) {
   K.screen(ctx);
-  K.sky(ctx, -20, -20, 1940, 1100, { sunX: 1520 - (K.cam.x + 360) * 0.06, sunY: 200 - (K.cam.y) * 0.05 + 260 * duskAt(t), sunR: 78 });
+  K.sky(ctx, -20, -20, 1940, 1100, { sunX: 1220 - (K.cam.x + 360) * 0.06, sunY: 250 - (K.cam.y) * 0.05 + 260 * duskAt(t), sunR: 78 });
   K.applyCam(ctx, 0.3);
   K.city(ctx, -2600, 2600, 520, { layer: 0, seed: 4, h: 260 });
   K.applyCam(ctx, 0.5);
@@ -1668,12 +1688,12 @@ function drawCarts(t) {
 
 /* tags over crates: queue position of ours (#4 -> #1), then price-time arrival numbers */
 function drawQueueTags(t) {
-  if (t > T.queueCam - 0.3 && t < T.tease[1]) {
+  if (t > T.queueCam - 0.3 && t < Math.min(T.tease[1], T.fireworks + 0.3)) {
     const arr = CRATES.bid[0], c = arr[STAR.k], left = arr.filter((q) => q.kind === "fill" && t >= q.remove + 0.3).length;
     const x = K.slotX(towerX0, slotOf(arr, c.k, t), 0.95), y = bidFloor(0) - 16 - 104;
     const bump = T.fills.reduce((m, tf) => Math.max(m, t > tf + 0.3 ? Math.exp(-8 * (t - tf - 0.3)) : 0), 0);
     ctx.save(); ctx.translate(x, y); ctx.scale(1 + 0.18 * bump, 1 + 0.18 * bump);
-    K.tag(ctx, 0, 0, "#" + (STAR.k + 1 - left), { a: K.inv(T.queueCam - 0.3, T.queueCam, t) * (1 - K.inv(T.tease[1] - 0.25, T.tease[1], t)), size: 30, seed: 6, fill: left >= 3 ? P.goldGlow : P.paper, string: 30 });
+    K.tag(ctx, 0, 0, "#" + (STAR.k + 1 - left), { a: K.inv(T.queueCam - 0.3, T.queueCam, t) * (1 - K.inv(Math.min(T.tease[1], T.fireworks + 0.3) - 0.25, Math.min(T.tease[1], T.fireworks + 0.3), t)), size: 30, seed: 6, fill: left >= 3 ? P.goldGlow : P.paper, string: 30 });
     ctx.restore();
   }
   if (t > T.prio - 0.1 && t < T.cart2[0]) {
@@ -1712,12 +1732,12 @@ function drawShouts(t) {
 /* coin fountain from the alley ("Order Book and Market Microstructure!" in chorus 2) */
 function drawFireworks(t) {
   const d = t - T.fireworks; if (d < 0 || d > 3.2) return;
-  for (let i = 0; i < 26; i++) {
-    const t0 = (i % 13) * BEAT / 4 + (i < 13 ? 0 : 1.6), u = (d - t0) / 1.3; if (u < 0 || u > 1) continue;
+  for (let i = 0; i < 36; i++) {
+    const t0 = (i % 18) * BEAT / 6 + (i < 18 ? 0 : 1.6), u = (d - t0) / 1.3; if (u < 0 || u > 1) continue;
     const ang = -Math.PI / 2 + (K.hash(i, 3) - 0.5) * 2.2, v = 1400 + 500 * K.hash(i, 5);
     const x = 330 * (K.hash(i, 9) - 0.5) + Math.cos(ang) * v * u, y = YB0 - 40 + Math.sin(ang) * v * u + 1500 * u * u;
-    K.coin(ctx, x, y, 30, { spin: t * 10 + i, seed: 930 + i });
-    if (u < 0.3) K.sparkle(ctx, x, y, 40 * (1 - u / 0.3), 1 - u / 0.3, i);
+    K.coin(ctx, x, y, 52, { spin: t * 10 + i, seed: 930 + i });
+    if (u < 0.3) K.sparkle(ctx, x, y, 70 * (1 - u / 0.3), 1 - u / 0.3, i);
   }
 }
 
@@ -2021,10 +2041,10 @@ function tikkiTitle(t) {
   if (t > j0 && t < j1 + 0.4) {
     const crouch = K.ss(j0, T.jump, t) * (1 - K.ss(T.jump, T.jump + 0.05, t));
     const air = K.inv(T.jump, j1, t), h = Math.sin(air * Math.PI);
-    st.squash += 0.35 * crouch - 0.35 * h * (air < 1 ? 1 : 0); st.hop = 100 * h;
+    st.squash += 0.35 * crouch - 0.35 * h * (air < 1 ? 1 : 0); st.hop = 30 * h; /* stays below the banner roll */
     const land = K.inv(j1, j1 + 0.35, t); if (land > 0 && land < 1) st.squash += 0.4 * Math.sin(land * Math.PI) * (1 - land);
     st.handL = { x: -120, y: -240 - 40 * h, pose: "fist" }; st.handR = { x: 130, y: -260 - 40 * h, pose: "open" };
-    st.mouth = "open"; st.fezLift = 30 * h; st.tassel = 60 * h; st.look = [0, -1]; st.tail = 1.2 * h;
+    st.mouth = "open"; st.fezLift = 14 * h; st.tassel = 60 * h; st.look = [0, -1]; st.tail = 1.2 * h;
   }
   /* bow: tips the fez on the last downbeat */
   const bw = K.ss(T.bow - 0.2, T.bow + 0.1, t);
@@ -2046,7 +2066,7 @@ function drawTitleCanvas(t) {
     ICONS[i](ctx, MEDAL_R);
     ctx.restore();
   }
-  K.raccoon(ctx, 470, 1050, 1.5, tikkiTitle(t));
+  K.raccoon(ctx, 470, 1072, 1.5, tikkiTitle(t));
 }
 
 /* the title is stamped twice: on chorus 1 (tease) and on the final chorus */
@@ -2057,7 +2077,7 @@ function layoutTitleDom(t) {
   if (!fin && !tease) return;
   const bh = BAN.h * d, n = TITLE_LN.length, sizes = TITLE_LN.map((x) => +x.dataset.size), gap = 14;
   const total = sizes.reduce((a, b) => a + b, 0) + gap * (n - 1);
-  let y = Math.max(90, (bh + 30) / 2 - total / 2); /* below the triangle band, above the roll */
+  let y = n > 1 ? Math.max(90, (bh + 30) / 2 - total / 2) : Math.max(186, (bh + 30) / 2 - total / 2 + 24); /* below the band (and the logo), above the roll */
   TITLE_LN.forEach((x, i) => { x.style.top = y.toFixed(1) + "px"; y += sizes[i] + gap; });
   /* block-stamp: each letter drops from 1.7x, slams down with a squash, staggered */
   TITLE_CH.forEach((c) => {
@@ -2074,15 +2094,12 @@ function layoutTitleDom(t) {
 /* ============================================================
    INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
    drives a proxy whose setter calls render(t).
-   intro      0 - 6.5   curtain rolls up, shutters open, Tikki swings in, lands, fez, abacus
-   chorus 1   6.5 - 19  "Hey!" shout, clap slams the book (0.05 -> 0.01), depth flow, buy cart
-              + imbalance shout, ticks, our queue #4 -> #1, title tease banner
-   verse      19 - 32   depth hills, two levels drop from the sky + flag, price-time
-              numbers, a sell cart fills our crate and pays Tikki a coin
-   chorus 2   32 - 45   dusk: shout, lantern rope pulled tight, second flow wave,
-              tick chart scroll, plaque ripple + coin fountain
-   break      45 - 58   night: dance, OFI tile board, candle scroll, CCXT code scroll
-   final      58 - 71.3 dawn: shout + clap + pinch, flow, ticks, curtain -> title card,
+   intro      0 - 6.4   curtain rolls up, shutters open, Tikki swings in, lands, fez, abacus
+   chorus     6.4 - 16  "Hey!" shout, clap slams the book (0.05 -> 0.01), depth flow, buy cart
+              + imbalance shout, ticks, our queue #4 -> #1
+              16 - 19.2 "Order Book and Market Microstructure!": plaque ripple + coin fountain
+   break      19.2 - 21.6 Tikki dances
+   ending     21.6 - 26.4 curtain drops and rolls up into the title card ("Order Book..." 22.34),
               medallions, jump, fez tip
    ============================================================ */
 const CAM = K.mkTrack([
@@ -2098,43 +2115,11 @@ const CAM = K.mkTrack([
   [T.ticks, { x: -240, y: -30, z: 0.84 }],
   [T.queueCam, { x: -230, y: -10, z: 0.88 }],
   [T.queueCam + 0.4, { x: -170, y: 150, z: 1.22 }],
-  [T.tease[0], { x: -170, y: 150, z: 1.24 }],
-  [T.tease[1], { x: -330, y: 40, z: 0.8 }],
-  [T.tease[3], { x: -320, y: 20, z: 0.78 }],
-  /* verse */
-  [T.hills[0] + 0.8, { x: 0, y: -200, z: 0.36 }],
-  [T.hills[1] + 0.9, { x: 0, y: -260, z: 0.37 }],
-  [T.sky[0] - 0.4, { x: 0, y: -560, z: 0.46 }],
-  [T.sky[2] + 0.3, { x: -60, y: -700, z: 0.5 }],
-  [T.prio - 0.25, { x: -80, y: -620, z: 0.5 }],
-  [T.prio + 0.35, { x: -300, y: -180, z: 1.1 }],
-  [T.cart2[0] - 0.1, { x: -280, y: -170, z: 1.1 }],
-  [T.cart2[0] + 0.5, { x: -300, y: -20, z: 0.86 }],
-  [T.coin, { x: -330, y: -40, z: 0.88 }],
-  [T.coin + 1.2, { x: -460, y: -90, z: 1.02 }],
-  /* chorus 2 */
-  [T.hey2, { x: -380, y: -80, z: 0.98 }],
-  [T.rope, { x: -330, y: -60, z: 1.0 }],
-  [T.flow2, { x: -320, y: -50, z: 0.98 }],
-  [T.flow2 + 0.8, { x: -100, y: 40, z: 0.55 }],
-  [T.tickChart[0] - 0.1, { x: -60, y: 20, z: 0.57 }],
-  [T.tickChart[0] + 0.5, { x: 150, y: -200, z: 0.72 }],
-  [T.fireworks - 0.1, { x: 150, y: -200, z: 0.74 }],
-  [T.fireworks + 0.6, { x: 0, y: -260, z: 0.45 }],
-  [T.dance[0] - 0.1, { x: 0, y: -260, z: 0.46 }],
-  /* break */
+  [T.fireworks - 0.1, { x: -170, y: 150, z: 1.25 }],
+  [T.fireworks + 0.6, { x: -60, y: -150, z: 0.5 }],
+  [T.dance[0] - 0.1, { x: -60, y: -150, z: 0.52 }],
   [T.dance[0] + 0.5, { x: -700, y: -100, z: 1.3 }],
-  [T.ofi[0] - 0.1, { x: -690, y: -100, z: 1.32 }],
-  [T.ofi[0] + 0.5, { x: -430, y: -170, z: 0.95 }],
-  [T.candles[0] + 0.4, { x: -420, y: -150, z: 0.95 }],
-  [T.code[0] + 0.4, { x: -360, y: -170, z: 0.98 }],
-  [T.hey3 - 0.4, { x: -390, y: -100, z: 0.95 }],
-  /* final chorus */
-  [T.hey3, { x: -380, y: -80, z: 0.98 }],
-  [T.flow3, { x: -330, y: -50, z: 0.98 }],
-  [T.flow3 + 0.8, { x: -150, y: 90, z: 0.6 }],
-  [T.ticks3, { x: -200, y: -120, z: 0.68 }],
-  [T.drop[1], { x: -220, y: -140, z: 0.72 }],
+  [T.drop[1], { x: -690, y: -100, z: 1.34 }],
 ]);
 /* accents: punch-in on each "Hey!", a shake on the slam and on each level landing from the sky */
 function camAt(t) {
@@ -2200,11 +2185,15 @@ function render(t) {
   } catch (err) {
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);
   }
+  /* logo: one small hop on the first bar after the curtain lifts, otherwise static */
+  const lh = K.inv(T.curtain[1], T.curtain[1] + 0.4, t);
+  logoEl.style.transform = lh > 0 && lh < 1 ? `translateY(${(-16 * Math.sin(lh * Math.PI)).toFixed(1)}px)` : "none";
   const f = K.boilFrame(t);
   grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px";
 }
 
 const grainEl = document.getElementById("grain");
+const logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .32  0 0 0 0 .25  0 0 0 1.5 -.25'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
 
 const TL = gsap.timeline({ paused: true });

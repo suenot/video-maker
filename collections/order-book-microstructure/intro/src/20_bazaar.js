@@ -60,7 +60,7 @@ function withNight(t, fn) {
 function drawBackground(t) { withNight(t, () => drawBackgroundDay(t)); }
 function drawBackgroundDay(t) {
   K.screen(ctx);
-  K.sky(ctx, -20, -20, 1940, 1100, { sunX: 1520 - (K.cam.x + 360) * 0.06, sunY: 200 - (K.cam.y) * 0.05 + 260 * duskAt(t), sunR: 78 });
+  K.sky(ctx, -20, -20, 1940, 1100, { sunX: 1220 - (K.cam.x + 360) * 0.06, sunY: 250 - (K.cam.y) * 0.05 + 260 * duskAt(t), sunR: 78 });
   K.applyCam(ctx, 0.3);
   K.city(ctx, -2600, 2600, 520, { layer: 0, seed: 4, h: 260 });
   K.applyCam(ctx, 0.5);
@@ -198,12 +198,12 @@ function drawCarts(t) {
 
 /* tags over crates: queue position of ours (#4 -> #1), then price-time arrival numbers */
 function drawQueueTags(t) {
-  if (t > T.queueCam - 0.3 && t < T.tease[1]) {
+  if (t > T.queueCam - 0.3 && t < Math.min(T.tease[1], T.fireworks + 0.3)) {
     const arr = CRATES.bid[0], c = arr[STAR.k], left = arr.filter((q) => q.kind === "fill" && t >= q.remove + 0.3).length;
     const x = K.slotX(towerX0, slotOf(arr, c.k, t), 0.95), y = bidFloor(0) - 16 - 104;
     const bump = T.fills.reduce((m, tf) => Math.max(m, t > tf + 0.3 ? Math.exp(-8 * (t - tf - 0.3)) : 0), 0);
     ctx.save(); ctx.translate(x, y); ctx.scale(1 + 0.18 * bump, 1 + 0.18 * bump);
-    K.tag(ctx, 0, 0, "#" + (STAR.k + 1 - left), { a: K.inv(T.queueCam - 0.3, T.queueCam, t) * (1 - K.inv(T.tease[1] - 0.25, T.tease[1], t)), size: 30, seed: 6, fill: left >= 3 ? P.goldGlow : P.paper, string: 30 });
+    K.tag(ctx, 0, 0, "#" + (STAR.k + 1 - left), { a: K.inv(T.queueCam - 0.3, T.queueCam, t) * (1 - K.inv(Math.min(T.tease[1], T.fireworks + 0.3) - 0.25, Math.min(T.tease[1], T.fireworks + 0.3), t)), size: 30, seed: 6, fill: left >= 3 ? P.goldGlow : P.paper, string: 30 });
     ctx.restore();
   }
   if (t > T.prio - 0.1 && t < T.cart2[0]) {
@@ -242,12 +242,12 @@ function drawShouts(t) {
 /* coin fountain from the alley ("Order Book and Market Microstructure!" in chorus 2) */
 function drawFireworks(t) {
   const d = t - T.fireworks; if (d < 0 || d > 3.2) return;
-  for (let i = 0; i < 26; i++) {
-    const t0 = (i % 13) * BEAT / 4 + (i < 13 ? 0 : 1.6), u = (d - t0) / 1.3; if (u < 0 || u > 1) continue;
+  for (let i = 0; i < 36; i++) {
+    const t0 = (i % 18) * BEAT / 6 + (i < 18 ? 0 : 1.6), u = (d - t0) / 1.3; if (u < 0 || u > 1) continue;
     const ang = -Math.PI / 2 + (K.hash(i, 3) - 0.5) * 2.2, v = 1400 + 500 * K.hash(i, 5);
     const x = 330 * (K.hash(i, 9) - 0.5) + Math.cos(ang) * v * u, y = YB0 - 40 + Math.sin(ang) * v * u + 1500 * u * u;
-    K.coin(ctx, x, y, 30, { spin: t * 10 + i, seed: 930 + i });
-    if (u < 0.3) K.sparkle(ctx, x, y, 40 * (1 - u / 0.3), 1 - u / 0.3, i);
+    K.coin(ctx, x, y, 52, { spin: t * 10 + i, seed: 930 + i });
+    if (u < 0.3) K.sparkle(ctx, x, y, 70 * (1 - u / 0.3), 1 - u / 0.3, i);
   }
 }
 

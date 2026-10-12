@@ -42,10 +42,10 @@ function tikkiTitle(t) {
   if (t > j0 && t < j1 + 0.4) {
     const crouch = K.ss(j0, T.jump, t) * (1 - K.ss(T.jump, T.jump + 0.05, t));
     const air = K.inv(T.jump, j1, t), h = Math.sin(air * Math.PI);
-    st.squash += 0.35 * crouch - 0.35 * h * (air < 1 ? 1 : 0); st.hop = 100 * h;
+    st.squash += 0.35 * crouch - 0.35 * h * (air < 1 ? 1 : 0); st.hop = 30 * h; /* stays below the banner roll */
     const land = K.inv(j1, j1 + 0.35, t); if (land > 0 && land < 1) st.squash += 0.4 * Math.sin(land * Math.PI) * (1 - land);
     st.handL = { x: -120, y: -240 - 40 * h, pose: "fist" }; st.handR = { x: 130, y: -260 - 40 * h, pose: "open" };
-    st.mouth = "open"; st.fezLift = 30 * h; st.tassel = 60 * h; st.look = [0, -1]; st.tail = 1.2 * h;
+    st.mouth = "open"; st.fezLift = 14 * h; st.tassel = 60 * h; st.look = [0, -1]; st.tail = 1.2 * h;
   }
   /* bow: tips the fez on the last downbeat */
   const bw = K.ss(T.bow - 0.2, T.bow + 0.1, t);
@@ -67,7 +67,7 @@ function drawTitleCanvas(t) {
     ICONS[i](ctx, MEDAL_R);
     ctx.restore();
   }
-  K.raccoon(ctx, 470, 1050, 1.5, tikkiTitle(t));
+  K.raccoon(ctx, 470, 1072, 1.5, tikkiTitle(t));
 }
 
 /* the title is stamped twice: on chorus 1 (tease) and on the final chorus */
@@ -78,7 +78,7 @@ function layoutTitleDom(t) {
   if (!fin && !tease) return;
   const bh = BAN.h * d, n = TITLE_LN.length, sizes = TITLE_LN.map((x) => +x.dataset.size), gap = 14;
   const total = sizes.reduce((a, b) => a + b, 0) + gap * (n - 1);
-  let y = Math.max(90, (bh + 30) / 2 - total / 2); /* below the triangle band, above the roll */
+  let y = n > 1 ? Math.max(90, (bh + 30) / 2 - total / 2) : Math.max(186, (bh + 30) / 2 - total / 2 + 24); /* below the band (and the logo), above the roll */
   TITLE_LN.forEach((x, i) => { x.style.top = y.toFixed(1) + "px"; y += sizes[i] + gap; });
   /* block-stamp: each letter drops from 1.7x, slams down with a squash, staggered */
   TITLE_CH.forEach((c) => {

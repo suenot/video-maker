@@ -1,15 +1,12 @@
 /* ============================================================
    INTRO 70 RENDER: render(t) is the whole film. One paused GSAP timeline
    drives a proxy whose setter calls render(t).
-   intro      0 - 6.5   curtain rolls up, shutters open, Tikki swings in, lands, fez, abacus
-   chorus 1   6.5 - 19  "Hey!" shout, clap slams the book (0.05 -> 0.01), depth flow, buy cart
-              + imbalance shout, ticks, our queue #4 -> #1, title tease banner
-   verse      19 - 32   depth hills, two levels drop from the sky + flag, price-time
-              numbers, a sell cart fills our crate and pays Tikki a coin
-   chorus 2   32 - 45   dusk: shout, lantern rope pulled tight, second flow wave,
-              tick chart scroll, plaque ripple + coin fountain
-   break      45 - 58   night: dance, OFI tile board, candle scroll, CCXT code scroll
-   final      58 - 71.3 dawn: shout + clap + pinch, flow, ticks, curtain -> title card,
+   intro      0 - 6.4   curtain rolls up, shutters open, Tikki swings in, lands, fez, abacus
+   chorus     6.4 - 16  "Hey!" shout, clap slams the book (0.05 -> 0.01), depth flow, buy cart
+              + imbalance shout, ticks, our queue #4 -> #1
+              16 - 19.2 "Order Book and Market Microstructure!": plaque ripple + coin fountain
+   break      19.2 - 21.6 Tikki dances
+   ending     21.6 - 26.4 curtain drops and rolls up into the title card ("Order Book..." 22.34),
               medallions, jump, fez tip
    ============================================================ */
 const CAM = K.mkTrack([
@@ -25,43 +22,11 @@ const CAM = K.mkTrack([
   [T.ticks, { x: -240, y: -30, z: 0.84 }],
   [T.queueCam, { x: -230, y: -10, z: 0.88 }],
   [T.queueCam + 0.4, { x: -170, y: 150, z: 1.22 }],
-  [T.tease[0], { x: -170, y: 150, z: 1.24 }],
-  [T.tease[1], { x: -330, y: 40, z: 0.8 }],
-  [T.tease[3], { x: -320, y: 20, z: 0.78 }],
-  /* verse */
-  [T.hills[0] + 0.8, { x: 0, y: -200, z: 0.36 }],
-  [T.hills[1] + 0.9, { x: 0, y: -260, z: 0.37 }],
-  [T.sky[0] - 0.4, { x: 0, y: -560, z: 0.46 }],
-  [T.sky[2] + 0.3, { x: -60, y: -700, z: 0.5 }],
-  [T.prio - 0.25, { x: -80, y: -620, z: 0.5 }],
-  [T.prio + 0.35, { x: -300, y: -180, z: 1.1 }],
-  [T.cart2[0] - 0.1, { x: -280, y: -170, z: 1.1 }],
-  [T.cart2[0] + 0.5, { x: -300, y: -20, z: 0.86 }],
-  [T.coin, { x: -330, y: -40, z: 0.88 }],
-  [T.coin + 1.2, { x: -460, y: -90, z: 1.02 }],
-  /* chorus 2 */
-  [T.hey2, { x: -380, y: -80, z: 0.98 }],
-  [T.rope, { x: -330, y: -60, z: 1.0 }],
-  [T.flow2, { x: -320, y: -50, z: 0.98 }],
-  [T.flow2 + 0.8, { x: -100, y: 40, z: 0.55 }],
-  [T.tickChart[0] - 0.1, { x: -60, y: 20, z: 0.57 }],
-  [T.tickChart[0] + 0.5, { x: 150, y: -200, z: 0.72 }],
-  [T.fireworks - 0.1, { x: 150, y: -200, z: 0.74 }],
-  [T.fireworks + 0.6, { x: 0, y: -260, z: 0.45 }],
-  [T.dance[0] - 0.1, { x: 0, y: -260, z: 0.46 }],
-  /* break */
+  [T.fireworks - 0.1, { x: -170, y: 150, z: 1.25 }],
+  [T.fireworks + 0.6, { x: -60, y: -150, z: 0.5 }],
+  [T.dance[0] - 0.1, { x: -60, y: -150, z: 0.52 }],
   [T.dance[0] + 0.5, { x: -700, y: -100, z: 1.3 }],
-  [T.ofi[0] - 0.1, { x: -690, y: -100, z: 1.32 }],
-  [T.ofi[0] + 0.5, { x: -430, y: -170, z: 0.95 }],
-  [T.candles[0] + 0.4, { x: -420, y: -150, z: 0.95 }],
-  [T.code[0] + 0.4, { x: -360, y: -170, z: 0.98 }],
-  [T.hey3 - 0.4, { x: -390, y: -100, z: 0.95 }],
-  /* final chorus */
-  [T.hey3, { x: -380, y: -80, z: 0.98 }],
-  [T.flow3, { x: -330, y: -50, z: 0.98 }],
-  [T.flow3 + 0.8, { x: -150, y: 90, z: 0.6 }],
-  [T.ticks3, { x: -200, y: -120, z: 0.68 }],
-  [T.drop[1], { x: -220, y: -140, z: 0.72 }],
+  [T.drop[1], { x: -690, y: -100, z: 1.34 }],
 ]);
 /* accents: punch-in on each "Hey!", a shake on the slam and on each level landing from the sky */
 function camAt(t) {
@@ -127,11 +92,15 @@ function render(t) {
   } catch (err) {
     K.screen(ctx); ctx.fillStyle = "#300"; ctx.fillRect(0, 0, 1920, 80); ctx.fillStyle = "#fff"; ctx.font = "28px monospace"; ctx.fillText(String(err && err.stack || err).slice(0, 140), 20, 50);
   }
+  /* logo: one small hop on the first bar after the curtain lifts, otherwise static */
+  const lh = K.inv(T.curtain[1], T.curtain[1] + 0.4, t);
+  logoEl.style.transform = lh > 0 && lh < 1 ? `translateY(${(-16 * Math.sin(lh * Math.PI)).toFixed(1)}px)` : "none";
   const f = K.boilFrame(t);
   grainEl.style.backgroundPosition = ((f % 7) * 37) + "px " + ((f % 5) * 53) + "px";
 }
 
 const grainEl = document.getElementById("grain");
+const logoEl = document.getElementById("logo");
 grainEl.style.backgroundImage = "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .32  0 0 0 0 .25  0 0 0 1.5 -.25'/></filter><rect width='320' height='320' filter='url(%23n)'/></svg>\")";
 
 const TL = gsap.timeline({ paused: true });

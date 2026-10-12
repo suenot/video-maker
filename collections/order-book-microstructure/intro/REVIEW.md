@@ -1,7 +1,7 @@
 # Intro review log
 
-The intro runs the full song: 71.3 s, 1920x1080, 30 fps, with `song_full.m4a` muxed in (152 BPM, -14.1 LUFS, true peak -1.5 dBTP). There is also a silent copy of each render.
-Rounds 0-3 built the first 20 s cut; round 4 onward extends it to the whole song (user decision 2026-10-12, see INTRO_BRIEF.md).
+The intro runs the full length of a short song: 26.4 s, 1920x1080, 30 fps, with `song_short.m4a` muxed in (152 BPM, -14.1 LUFS, true peak -1.6 dBTP), and the marketmaker.cc logo in the top-right corner. There is also a silent copy of each render.
+History: rounds 0-3 built a 20 s cut; rounds 4-5 extended it to the whole 71 s song; round 6 (user decision, INTRO_BRIEF UPDATE 3) cut it back to a ~26 s short song that ends on the song's real ending. The full-song story code is kept for episodes (its moments are set to `NEVER`).
 Each round comes from snapshots I looked at (`tools/snap.sh`, 9 to 20 frames, `tools/snap_lang.sh` for the other languages).
 
 ## Song (20 s cut, superseded by the full song below)
@@ -50,7 +50,25 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, 9 to 20 frames, `t
 - The OFI board, tick chart and code finished writing after their windows closed. Writing now ends a beat before each board leaves.
 - 1 fps contact sheet (71 frames) checked: no empty frames, a new picture every 2 - 4 s.
 
-## Story (full song)
+## Round 6 (short song + logo)
+- No `song_short_raw.mp4` arrived, so I cut `song_raw.mp4` myself on downbeats with 30 ms crossfades: raw 0.74 - 19.95 (4 intro bars + the whole first chorus, one take), raw 45.53 - 48.72 (2 bars of the instrumental break), raw 67.92 - 72.0 (the last line "Order Book and Market Microstructure!" and the song's real ending), 0.8 s fade, loudnorm (-14.1 LUFS). Beat tracking across the cut shows no hiccup at either splice. Downbeats: `0.00, 1.63, ... 19.18, 20.79, 22.34, 23.94`.
+- Chorus 1's "Order Book..." line (16.0) now gets the plaque ripple + coin fountain instead of a title tease, so the title is stamped once, on the ending (22.34).
+- The two break bars (19.2 - 21.6) are Tikki dancing in close-up; the curtain drops at 21.6 and rolls up into the title card on the last sung line.
+- Logo (UPDATE 2): `style/kit/logo/marketmaker-logo.svg` is inlined by `build.py` (`<!--__LOGO__-->`), on a paper plate with an ink border and a woodcut block shadow, 100 px tall, 48 px from the top and right edges, wordmark in Fira Sans Condensed 800 with a terracotta ".cc". It hops once when the opening curtain lifts. The sun moved left so it never sits behind the logo.
+- The coin fountain was 15 px coins in the wide shot: coins 30 -> 52 world px, 26 -> 36 coins.
+- Title card: on the jump Tikki's head went under the banner roll (hop 100 -> 48). CJK titles 124 -> 116 px and one-line titles sit lower, clear of the logo plate.
+
+## Story (short song, final)
+- 0 - 6.4 intro: curtain rolls up (logo hops), shutters open on eighth notes, Tikki swings in on a rope (3.2), lands on the balcony (4.8), fez tip, abacus, a big breath.
+- 6.43 "Hey!": shout + "!" burst, punch-in; 7.22 clap, 7.61 "spread": the book slams shut, ask plaques flip 101.30.. -> 101.26.., spread tag 0.05 -> 0.01 on "tight", pinch.
+- 9.62 "Depth and flow from left to right": wide, crates slide into every queue from the left, flow arrow.
+- 11.22 a buy cart races through the alley (Tikki hops over it) and takes 2 of 4 best-ask crates; "+0.43" imbalance shout.
+- 12.9 "Every tick": plaques flash bottom to top; 13.6 "every queue": close-up, our gold crate #4 -> #1 on the beats.
+- 16.0 "Order Book and Market Microstructure!": every plaque pings, coin fountain from the alley, Tikki dances.
+- 19.2 - 21.6 break: Tikki dances in close-up.
+- 21.6 curtain drops; 22.34 title stamped on the last line; 23.94 medallions; 24.7 jump; 25.54 fez tip; 26.4 end.
+
+## Story (full-song version, superseded)
 - 0 - 6.5 intro: curtain rolls up, shutters open on eighth notes, Tikki swings in on a rope (3.3), lands on the balcony on the downbeat (4.9), fez tip, abacus, a big breath.
 - 6.5 - 19.2 chorus 1: "Hey!" shout, clap slams the book (0.05 -> 0.01), crates flow in, a buy cart takes 2 crates, "+0.43" imbalance shout, plaques tick, our crate #4 -> #1, title tease banner.
 - 19.2 - 32 verse: depth hills, levels drop from the sky, price-time queue 1..7, a sell cart fills our crate, coin to Tikki.
@@ -69,7 +87,7 @@ Each round comes from snapshots I looked at (`tools/snap.sh`, 9 to 20 frames, `t
 
 ## Checks
 - `npx hyperframes lint`: 0 errors, 1 warning (the file is large because it is built from the kit by design).
-- `npx hyperframes check` (full song): passed. The remaining `content_overlap` notes are letters mid-stamp (they grow 1.7x while landing); `#title` is marked `data-layout-allow-overlap`.
+- `npx hyperframes check` (short song): passed. The remaining `content_overlap` notes are letters mid-stamp (they grow 1.7x while landing); `#title` is marked `data-layout-allow-overlap`.
 
 ## Known weaknesses
 - The cart is still small in the medium shot (about 100 px); it reads by motion and the arrow flag.
