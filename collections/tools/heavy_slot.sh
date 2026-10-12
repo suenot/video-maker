@@ -6,7 +6,8 @@ kind="$1"; shift
 case "$kind" in
   whisper) n=2; export OMP_NUM_THREADS=4 MKL_NUM_THREADS=4 TORCH_NUM_THREADS=4 ;;
   render)  n=3 ;;
-  *) echo "kind must be whisper|render" >&2; exit 2 ;;
+  snap)    n=4 ;;
+  *) echo "kind must be whisper|render|snap" >&2; exit 2 ;;
 esac
 dir=/tmp/mm_heavy_slots; mkdir -p "$dir"
 while true; do

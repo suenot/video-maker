@@ -22,7 +22,7 @@ print(','.join(map(str,out)))")
 fi
 OUT="$PWD/$DIR/snapshots"; mkdir -p "$OUT"; rm -f "$OUT"/frame-*.png "$OUT"/sheet.jpg
 for i in 1 2 3; do
-  if npx hyperframes snapshot "$DIR/preview" --no-end --timeout 30000 --at "$AT" -o "$OUT" > "$OUT/snap.log" 2>&1; then break; fi
+  if "$T/../../tools/heavy_slot.sh" snap npx hyperframes snapshot "$DIR/preview" --no-end --timeout 30000 --at "$AT" -o "$OUT" > "$OUT/snap.log" 2>&1; then break; fi
   echo "snapshot failed (try $i), retrying in 30 s"; sleep 30
 done
 grep -E "✗|rror" "$OUT/snap.log" | head -5 || true
