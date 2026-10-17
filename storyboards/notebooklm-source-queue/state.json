@@ -11239,8 +11239,8 @@
           "source_id": "3f686d41-4927-4455-b3b8-f5fb66ce674c",
           "submission_mode": "now",
           "artifact_id": "2dbc979d-8f42-4142-8b1d-c58b9046dc9b",
-          "card_text": "audio_spark\nUnread\n算法交易低延迟通信架构\n16:42 · Deep Dive · 1 source · 53m ago\nplay_arrow\nmore_vert",
-          "observed_at": "2026-10-17T07:44:20.974168+00:00"
+          "card_text": "audio_spark\nUnread\n算法交易低延迟通信架构\n16:42 · Deep Dive · 1 source · 1h ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-17T08:12:11.677975+00:00"
         }
       },
       "admission_state": "admitted",
@@ -11275,21 +11275,41 @@
       "last_error": {
         "type": "TimeoutError",
         "message": "TimeoutError",
-        "at": "2026-10-17T07:54:32.384060+00:00",
+        "at": "2026-10-17T08:15:21.999766+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T075432402260Z-error.png",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T081522016699Z-error.png",
             "sha256": "8c207f4491fd6f26b2c1a5244c50f8b6e5dd968f9144fccaf65bbdec00e9cc4c"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T075432402260Z-controls.json",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T081522016699Z-controls.json",
             "sha256": "f644c7fbb86106a514d6b59dc52bb87b48eae30a1844bed24461c468b90940bb"
           }
         },
-        "retry_not_before": "2026-10-17T08:09:32.571803+00:00",
+        "retry_not_before": "2026-10-17T08:30:22.332029+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
-      }
+      },
+      "error_history": [
+        {
+          "type": "TimeoutError",
+          "message": "TimeoutError",
+          "at": "2026-10-17T07:54:32.384060+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T075432402260Z-error.png",
+              "sha256": "8c207f4491fd6f26b2c1a5244c50f8b6e5dd968f9144fccaf65bbdec00e9cc4c"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T075432402260Z-controls.json",
+              "sha256": "f644c7fbb86106a514d6b59dc52bb87b48eae30a1844bed24461c468b90940bb"
+            }
+          },
+          "retry_not_before": "2026-10-17T08:09:32.571803+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        }
+      ]
     },
     "data-communication-algotrading:zh-TW": {
       "slug": "data-communication-algotrading",
@@ -11347,19 +11367,19 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-17T07:54:39.572298+00:00",
+        "at": "2026-10-17T08:15:29.304811+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T075439582881Z-error.png",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T081529315590Z-error.png",
             "sha256": "2c5d9b4f63bf5cc0c8458afc60cc45936d17d88ec7669772a31661c60b8d3681"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T075439582881Z-controls.json",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T081529315590Z-controls.json",
             "sha256": "71fdf7d1391801976dba05da4a7cca861195e94b25344dc6bdade20721213611"
           }
         },
-        "retry_not_before": "2026-10-17T08:09:39.734194+00:00",
+        "retry_not_before": "2026-10-17T08:30:29.480180+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "error_history": [
@@ -11380,11 +11400,178 @@
           },
           "retry_not_before": "2026-10-17T07:15:09.899893+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-17T07:54:39.572298+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T075439582881Z-error.png",
+              "sha256": "2c5d9b4f63bf5cc0c8458afc60cc45936d17d88ec7669772a31661c60b8d3681"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T075439582881Z-controls.json",
+              "sha256": "71fdf7d1391801976dba05da4a7cca861195e94b25344dc6bdade20721213611"
+            }
+          },
+          "retry_not_before": "2026-10-17T08:09:39.734194+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
+      ]
+    },
+    "dcc-garch-dynamic-correlation-crypto:en": {
+      "slug": "dcc-garch-dynamic-correlation-crypto",
+      "language": "en",
+      "article_sha256": "ae21578cf9bf1e6b5380337dbbf1a4aa9ee533e8ed78cf61fa2f14edefae0916",
+      "input_hashes": {
+        "article": "ae21578cf9bf1e6b5380337dbbf1a4aa9ee533e8ed78cf61fa2f14edefae0916",
+        "source_text": "3b84be99b004c3671b67f663194545c478f24a2c116c68631e50beb49014be5c",
+        "slides_prompt": "25d37210232d64536199cd3f7089dd8f8e3db269786abf3e8748bb51aa3b88c7",
+        "audio_prompt": "2cc559834689f013c00cc1f0c26f811db124b480e5c82de6bd889b040c6cdb69"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "25d37210232d64536199cd3f7089dd8f8e3db269786abf3e8748bb51aa3b88c7",
+          "requested_at": "2026-10-17T08:15:48.524132+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "55e1fa79-2c2d-4f87-8948-4d4c856c45b7",
+          "submission_mode": "now",
+          "artifact_id": "5ddea8c9-8e7c-425b-a4c4-15bb9e973b97",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
+          "observed_at": "2026-10-17T08:15:53.087670+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "5ddea8c9-8e7c-425b-a4c4-15bb9e973b97"
+          ],
+          "prompt_sha256": "2cc559834689f013c00cc1f0c26f811db124b480e5c82de6bd889b040c6cdb69",
+          "requested_at": "2026-10-17T08:15:58.207175+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "55e1fa79-2c2d-4f87-8948-4d4c856c45b7",
+          "submission_mode": "now",
+          "artifact_id": "4487ca13-d113-483e-910f-80bf3508b82c",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-17T08:16:02.766543+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-17T08:15:29.673217+00:00",
+      "notebook_intent": {
+        "at": "2026-10-17T08:15:34.462787+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/dcc-garch-dynamic-correlation-crypto-en-20261017T081534461070Z-notebook-baseline.json",
+        "baseline_sha256": "d79ee19aad3acbc85054ff10c2a1c5526b8a9e5633eee570a816699ec5a7f072",
+        "baseline_count": 372,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-17T08:15:35.568339+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/bc22e82d-d222-42f9-b243-12a027349279",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-17T08:15:39.634147+00:00",
+        "sha256": "3b84be99b004c3671b67f663194545c478f24a2c116c68631e50beb49014be5c",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-17T08:15:45.993665+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "55e1fa79-2c2d-4f87-8948-4d4c856c45b7",
+      "source_title": "MM article dcc-garch-dynamic-correlation-crypto EN ae21578cf9bf",
+      "source_sha256": "3b84be99b004c3671b67f663194545c478f24a2c116c68631e50beb49014be5c",
+      "state": "source_ready",
+      "source_display_name": "MM article dcc-garch-dynamic-correlation-crypto E…",
+      "selected_source_ids": [
+        "55e1fa79-2c2d-4f87-8948-4d4c856c45b7"
+      ]
+    },
+    "dcc-garch-dynamic-correlation-crypto:ru": {
+      "slug": "dcc-garch-dynamic-correlation-crypto",
+      "language": "ru",
+      "article_sha256": "7c9ef60f1e0605e7c80e9d7a81c4ef0ca8ebb73166ad040eba1d7b4db06500ec",
+      "input_hashes": {
+        "article": "7c9ef60f1e0605e7c80e9d7a81c4ef0ca8ebb73166ad040eba1d7b4db06500ec",
+        "source_text": "75e8e794a357dec6de9812c1db4bf164c70dd89daa02e921d678c7b83d414f54",
+        "slides_prompt": "3c2e3a78ba7df065ac7ddc57ec8451d05ce51c1a39e32aaca26ec168858fe52a",
+        "audio_prompt": "1b5f755c1ac4fecabf03e78eaf7deedf20115763b25888d7c29837def34343d9"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "3c2e3a78ba7df065ac7ddc57ec8451d05ce51c1a39e32aaca26ec168858fe52a",
+          "requested_at": "2026-10-17T08:16:23.211665+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "3c0e5f5a-155b-40bb-b2bb-c1412fdbc2f2",
+          "submission_mode": "now",
+          "artifact_id": "49606c37-5efd-4f70-8fc7-702067cf7d14",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
+          "observed_at": "2026-10-17T08:16:27.776948+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\nрусский\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Strategy Essentials\n+ Math Simplified\n+ Portfolio Impact\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 13:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "49606c37-5efd-4f70-8fc7-702067cf7d14"
+          ],
+          "prompt_sha256": "1b5f755c1ac4fecabf03e78eaf7deedf20115763b25888d7c29837def34343d9",
+          "requested_at": "2026-10-17T08:16:35.248210+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "3c0e5f5a-155b-40bb-b2bb-c1412fdbc2f2",
+          "submission_mode": "later",
+          "artifact_id": "72822fbe-bb64-4009-a4c0-12b1caf30f0c",
+          "card_text": "audio_spark\nDCC-GARCH Dynamic Correlations in Crypto Trading\nScheduled for after 1pm\nmore_vert",
+          "observed_at": "2026-10-17T08:16:39.790013+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-17T08:16:02.799422+00:00",
+      "notebook_intent": {
+        "at": "2026-10-17T08:16:07.692261+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/dcc-garch-dynamic-correlation-crypto-ru-20261017T081607690306Z-notebook-baseline.json",
+        "baseline_sha256": "af87201bad9ce3bbd7e35ef6b99c0911301a70ce041fcde2469bdb11f5a55866",
+        "baseline_count": 373,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-17T08:16:08.789505+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/2ae8c91e-da85-4e81-933a-eecf08f5aa26",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-17T08:16:12.814733+00:00",
+        "sha256": "75e8e794a357dec6de9812c1db4bf164c70dd89daa02e921d678c7b83d414f54",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-17T08:16:18.834227+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "3c0e5f5a-155b-40bb-b2bb-c1412fdbc2f2",
+      "source_title": "MM article dcc-garch-dynamic-correlation-crypto RU 7c9ef60f1e06",
+      "source_sha256": "75e8e794a357dec6de9812c1db4bf164c70dd89daa02e921d678c7b83d414f54",
+      "state": "source_ready",
+      "source_display_name": "MM article dcc-garch-dynamic-correlation-crypto R…",
+      "selected_source_ids": [
+        "3c0e5f5a-155b-40bb-b2bb-c1412fdbc2f2"
       ]
     }
   },
-  "checked_at": "2026-10-17T07:57:13.870953+00:00",
+  "checked_at": "2026-10-17T08:16:39.818206+00:00",
   "browser_geometry_requested": {
     "width": 1994,
     "height": 1290,
@@ -11401,10 +11588,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 00:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 13:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-08T17:58:31.781263+00:00",
-    "not_before": "2026-10-08T20:51:00+00:00"
+    "observed_at": "2026-10-17T08:16:39.818194+00:00",
+    "not_before": "2026-10-17T09:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
