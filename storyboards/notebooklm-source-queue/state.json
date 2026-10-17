@@ -11328,7 +11328,7 @@
           "submission_mode": "now",
           "artifact_id": "2dbc979d-8f42-4142-8b1d-c58b9046dc9b",
           "card_text": "audio_spark\nUnread\n算法交易低延迟通信架构\n16:42 · Deep Dive · 1 source · 3h ago\nplay_arrow\nmore_vert",
-          "observed_at": "2026-10-17T10:01:57.042326+00:00"
+          "observed_at": "2026-10-17T10:31:43.448793+00:00"
         }
       },
       "admission_state": "admitted",
@@ -11363,19 +11363,19 @@
       "last_error": {
         "type": "TimeoutError",
         "message": "TimeoutError",
-        "at": "2026-10-17T10:05:02.982776+00:00",
+        "at": "2026-10-17T10:34:47.982809+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T100503015849Z-error.png",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T103448006890Z-error.png",
             "sha256": "2384e1402e7b532144ec0004cea7086d1378521efcbaf3e0853661b65d696a2f"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T100503015849Z-controls.json",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T103448006890Z-controls.json",
             "sha256": "f644c7fbb86106a514d6b59dc52bb87b48eae30a1844bed24461c468b90940bb"
           }
         },
-        "retry_not_before": "2026-10-17T10:20:03.204993+00:00",
+        "retry_not_before": "2026-10-17T10:49:48.231317+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "error_history": [
@@ -11413,6 +11413,24 @@
             }
           },
           "retry_not_before": "2026-10-17T08:30:22.332029+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "TimeoutError",
+          "message": "TimeoutError",
+          "at": "2026-10-17T10:05:02.982776+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T100503015849Z-error.png",
+              "sha256": "2384e1402e7b532144ec0004cea7086d1378521efcbaf3e0853661b65d696a2f"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T100503015849Z-controls.json",
+              "sha256": "f644c7fbb86106a514d6b59dc52bb87b48eae30a1844bed24461c468b90940bb"
+            }
+          },
+          "retry_not_before": "2026-10-17T10:20:03.204993+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
@@ -11473,19 +11491,19 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-17T10:05:10.286047+00:00",
+        "at": "2026-10-17T10:34:55.319741+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T100510297196Z-error.png",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T103455331216Z-error.png",
             "sha256": "acf733e436259ff818c9a5b3536308f0c80b8abd9d8f9ef7c8eec9405e3add90"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T100510297196Z-controls.json",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T103455331216Z-controls.json",
             "sha256": "71fdf7d1391801976dba05da4a7cca861195e94b25344dc6bdade20721213611"
           }
         },
-        "retry_not_before": "2026-10-17T10:20:10.468165+00:00",
+        "retry_not_before": "2026-10-17T10:49:55.506940+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "error_history": [
@@ -11542,6 +11560,24 @@
           },
           "retry_not_before": "2026-10-17T08:30:29.480180+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-17T10:05:10.286047+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T100510297196Z-error.png",
+              "sha256": "acf733e436259ff818c9a5b3536308f0c80b8abd9d8f9ef7c8eec9405e3add90"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T100510297196Z-controls.json",
+              "sha256": "71fdf7d1391801976dba05da4a7cca861195e94b25344dc6bdade20721213611"
+            }
+          },
+          "retry_not_before": "2026-10-17T10:20:10.468165+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
     },
@@ -11567,8 +11603,8 @@
           "source_id": "55e1fa79-2c2d-4f87-8948-4d4c856c45b7",
           "submission_mode": "now",
           "artifact_id": "5ddea8c9-8e7c-425b-a4c4-15bb9e973b97",
-          "card_text": "tablet\nUnread\nDynamic Crypto Correlations with DCC-GARCH\n1 source · 1h ago\nmore_vert",
-          "observed_at": "2026-10-17T10:05:17.413853+00:00"
+          "card_text": "tablet\nUnread\nDynamic Crypto Correlations with DCC-GARCH\n1 source · 2h ago\nmore_vert",
+          "observed_at": "2026-10-17T10:35:02.520282+00:00"
         },
         "audio": {
           "state": "generating",
@@ -11619,21 +11655,41 @@
       "last_error": {
         "type": "TimeoutError",
         "message": "TimeoutError",
-        "at": "2026-10-17T10:08:18.486464+00:00",
+        "at": "2026-10-17T10:38:04.048930+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/dcc-garch-dynamic-correlation-crypto-en-20261017T100818505573Z-error.png",
-            "sha256": "190aa9c5c611f4e9dd9e66ace18bae965ce2641ae4bbec87b3975ba93400bf07"
+            "path": "temp/notebooklm-source-queue/dcc-garch-dynamic-correlation-crypto-en-20261017T103804068443Z-error.png",
+            "sha256": "b878155774cc9d76a3c8783b44f0a1eff39d812044839667cd023e5bbce774d2"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/dcc-garch-dynamic-correlation-crypto-en-20261017T100818505573Z-controls.json",
+            "path": "temp/notebooklm-source-queue/dcc-garch-dynamic-correlation-crypto-en-20261017T103804068443Z-controls.json",
             "sha256": "f5827ddbb392946d1e6f695b744cb7dc546b5884ecee282788cabeb4e676cc70"
           }
         },
-        "retry_not_before": "2026-10-17T10:23:18.690772+00:00",
+        "retry_not_before": "2026-10-17T10:53:04.263275+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
-      }
+      },
+      "error_history": [
+        {
+          "type": "TimeoutError",
+          "message": "TimeoutError",
+          "at": "2026-10-17T10:08:18.486464+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/dcc-garch-dynamic-correlation-crypto-en-20261017T100818505573Z-error.png",
+              "sha256": "190aa9c5c611f4e9dd9e66ace18bae965ce2641ae4bbec87b3975ba93400bf07"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/dcc-garch-dynamic-correlation-crypto-en-20261017T100818505573Z-controls.json",
+              "sha256": "f5827ddbb392946d1e6f695b744cb7dc546b5884ecee282788cabeb4e676cc70"
+            }
+          },
+          "retry_not_before": "2026-10-17T10:23:18.690772+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        }
+      ]
     },
     "dcc-garch-dynamic-correlation-crypto:ru": {
       "slug": "dcc-garch-dynamic-correlation-crypto",
@@ -11738,7 +11794,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "ready",
           "baseline_ids": [],
           "prompt_sha256": "a99f2f6d014df8a4725d17defe29148e2b53e2ed8baf96296db7eed9acf610f4",
           "requested_at": "2026-10-17T10:10:24.613285+00:00",
@@ -11748,8 +11804,8 @@
           "source_id": "7dbaa2b3-a91e-47ef-9c78-3fa1cf583aba",
           "submission_mode": "now",
           "artifact_id": "6eb6fd49-065b-4e6d-a149-6d3a96f73726",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nBringing it to life...",
-          "observed_at": "2026-10-17T10:17:04.347255+00:00"
+          "card_text": "tablet\nUnread\nDCC-GARCH for Dynamic Crypto Correlation\n1 source · 18m ago\nmore_vert",
+          "observed_at": "2026-10-17T10:38:11.475249+00:00"
         },
         "audio": {
           "state": "generating",
@@ -11796,7 +11852,25 @@
       "source_display_name": "MM article dcc-garch-dynamic-correlation-crypto Z…",
       "selected_source_ids": [
         "7dbaa2b3-a91e-47ef-9c78-3fa1cf583aba"
-      ]
+      ],
+      "last_error": {
+        "type": "TimeoutError",
+        "message": "TimeoutError",
+        "at": "2026-10-17T10:41:16.188421+00:00",
+        "stage": "artifacts",
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/dcc-garch-dynamic-correlation-crypto-zh-CN-20261017T104116220422Z-error.png",
+            "sha256": "6642f40930d9489cb89f6e5e0ebcf04d9a0ea7947ba8275e07d7809b043edec6"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/dcc-garch-dynamic-correlation-crypto-zh-CN-20261017T104116220422Z-controls.json",
+            "sha256": "aa380e6adf72311b459d1f42a00eca8beb002c679e2922910a0fadf37a34d75d"
+          }
+        },
+        "retry_not_before": "2026-10-17T10:56:16.402060+00:00",
+        "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+      }
     },
     "dcc-garch-dynamic-correlation-crypto:zh-TW": {
       "slug": "dcc-garch-dynamic-correlation-crypto",
@@ -11810,7 +11884,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "ready",
           "baseline_ids": [],
           "prompt_sha256": "5a79b195d2fff0cce36f214509dc7a0d72fffe1a0cb8a8133e7264050e323d58",
           "requested_at": "2026-10-17T10:11:10.506533+00:00",
@@ -11820,8 +11894,8 @@
           "source_id": "464e6546-2b1e-46d3-8ff7-5e88d7c6a67a",
           "submission_mode": "now",
           "artifact_id": "b1b277f0-394f-4fc4-aa6f-2f233a916480",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nBringing it to life...",
-          "observed_at": "2026-10-17T10:17:12.027874+00:00"
+          "card_text": "tablet\nUnread\nDCC-GARCH 動態相關性與風險管理\n1 source · 20m ago\nmore_vert",
+          "observed_at": "2026-10-17T10:41:23.576212+00:00"
         },
         "audio": {
           "state": "generating",
@@ -11868,7 +11942,25 @@
       "source_display_name": "MM article dcc-garch-dynamic-correlation-crypto Z…",
       "selected_source_ids": [
         "464e6546-2b1e-46d3-8ff7-5e88d7c6a67a"
-      ]
+      ],
+      "last_error": {
+        "type": "TimeoutError",
+        "message": "TimeoutError",
+        "at": "2026-10-17T10:44:32.260340+00:00",
+        "stage": "artifacts",
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/dcc-garch-dynamic-correlation-crypto-zh-TW-20261017T104432279325Z-error.png",
+            "sha256": "dab90f7990ae739b58455e77f4023dceed0d5e6e5013282f758a234b0d2656bc"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/dcc-garch-dynamic-correlation-crypto-zh-TW-20261017T104432279325Z-controls.json",
+            "sha256": "14f78b14246ae79b65b8e361d65bcfc51e474b4f910344657ab1a8a420683537"
+          }
+        },
+        "retry_not_before": "2026-10-17T10:59:32.460087+00:00",
+        "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+      }
     },
     "deeplob-deep-learning-order-book:en": {
       "slug": "deeplob-deep-learning-order-book",
@@ -11882,7 +11974,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "ready",
           "baseline_ids": [],
           "prompt_sha256": "a7740aaaadf0046f75bbd4b707704c810f45d41be99de89c9ab6cd585dc6bcc5",
           "requested_at": "2026-10-17T10:17:32.646962+00:00",
@@ -11892,8 +11984,8 @@
           "source_id": "ff498d6d-961e-4ece-8c5c-7ff651336cfd",
           "submission_mode": "now",
           "artifact_id": "a4e6176d-5b9a-47db-b402-1c7362559ed5",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
-          "observed_at": "2026-10-17T10:17:37.221070+00:00"
+          "card_text": "tablet\nUnread\nDeepLOB Overview\n1 source · 17m ago\nmore_vert",
+          "observed_at": "2026-10-17T10:44:39.538471+00:00"
         },
         "audio": {
           "state": "not_submitted"
@@ -11927,10 +12019,164 @@
       "source_display_name": "MM article deeplob-deep-learning-order-book EN f5…",
       "selected_source_ids": [
         "ff498d6d-961e-4ece-8c5c-7ff651336cfd"
+      ],
+      "last_error": {
+        "type": "TimeoutError",
+        "message": "TimeoutError",
+        "at": "2026-10-17T10:47:48.128177+00:00",
+        "stage": "artifacts",
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/deeplob-deep-learning-order-book-en-20261017T104748144131Z-error.png",
+            "sha256": "5c980e8bc232c1e2b2526d70c865682c52cf1d4ba4e6b3efe454de906e900fdd"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/deeplob-deep-learning-order-book-en-20261017T104748144131Z-controls.json",
+            "sha256": "ad5feb2b67f8b92718b31b9456c153bd0d7e769b590300ba6d699c7efcbbf926"
+          }
+        },
+        "retry_not_before": "2026-10-17T11:02:48.320820+00:00",
+        "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+      }
+    },
+    "deeplob-deep-learning-order-book:ru": {
+      "slug": "deeplob-deep-learning-order-book",
+      "language": "ru",
+      "article_sha256": "af3301224185f78724934e4bf70b08088eb4d0e51d41e3642aab8efee6c8d492",
+      "input_hashes": {
+        "article": "af3301224185f78724934e4bf70b08088eb4d0e51d41e3642aab8efee6c8d492",
+        "source_text": "97c77bd57e9776deaffac009cc9188a1a43720a2e8d599ce90ad964c7ab56abb",
+        "slides_prompt": "b84bc0dc23f36280109b020198e7a31919e9fc7573643e5a85ff39301406f111",
+        "audio_prompt": "c44f87d30144566ec8e9c4046aa2358e1d1eb4ecd4771f16b571096ea5d8a4d1"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "b84bc0dc23f36280109b020198e7a31919e9fc7573643e5a85ff39301406f111",
+          "requested_at": "2026-10-17T10:48:10.504846+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "f56d0c54-ee40-4fb5-9845-f8876dde13d6",
+          "submission_mode": "now",
+          "artifact_id": "dc2644aa-da50-406a-936b-18cb21e783be",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
+          "observed_at": "2026-10-17T10:48:15.088705+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "dc2644aa-da50-406a-936b-18cb21e783be"
+          ],
+          "prompt_sha256": "c44f87d30144566ec8e9c4046aa2358e1d1eb4ecd4771f16b571096ea5d8a4d1",
+          "requested_at": "2026-10-17T10:48:22.623995+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "f56d0c54-ee40-4fb5-9845-f8876dde13d6",
+          "submission_mode": "now",
+          "artifact_id": "00e39648-3135-4246-b735-50e25d062394",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-17T10:48:27.195877+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-17T10:47:48.603450+00:00",
+      "notebook_intent": {
+        "at": "2026-10-17T10:47:53.827550+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/deeplob-deep-learning-order-book-ru-20261017T104753825656Z-notebook-baseline.json",
+        "baseline_sha256": "73be508be59f300d437482f292f4f389dea2de0bb034c700b18259d3a9368cfb",
+        "baseline_count": 377,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-17T10:47:54.950665+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/13407f14-ea69-4e58-bca5-e6865808e563",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-17T10:47:59.082479+00:00",
+        "sha256": "97c77bd57e9776deaffac009cc9188a1a43720a2e8d599ce90ad964c7ab56abb",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-17T10:48:05.647193+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "f56d0c54-ee40-4fb5-9845-f8876dde13d6",
+      "source_title": "MM article deeplob-deep-learning-order-book RU af3301224185",
+      "source_sha256": "97c77bd57e9776deaffac009cc9188a1a43720a2e8d599ce90ad964c7ab56abb",
+      "state": "source_ready",
+      "source_display_name": "MM article deeplob-deep-learning-order-book RU af…",
+      "selected_source_ids": [
+        "f56d0c54-ee40-4fb5-9845-f8876dde13d6"
+      ]
+    },
+    "deeplob-deep-learning-order-book:zh-CN": {
+      "slug": "deeplob-deep-learning-order-book",
+      "language": "zh-CN",
+      "article_sha256": "304cfd85f7648aac480b6243970167abb240018b21d47462984fbcc2beef4631",
+      "input_hashes": {
+        "article": "304cfd85f7648aac480b6243970167abb240018b21d47462984fbcc2beef4631",
+        "source_text": "6d3c1ea582edaa9f288d9ae37a60f2dd24bb7742c8df9bef5a423310fc9e5caa",
+        "slides_prompt": "e7ee18f9ede3f1ce1f21ff94e4f7e88dbc5d76cc35d1f70b0317be55e03dc06b",
+        "audio_prompt": "d416847ad8049c1d7a9eb7102ba5dea1ab9bbc304cc62e7a64e19f94a76e4176"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 18:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "e7ee18f9ede3f1ce1f21ff94e4f7e88dbc5d76cc35d1f70b0317be55e03dc06b",
+          "requested_at": "2026-10-17T10:48:48.642402+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "cdd25d37-bf59-4522-9eef-73ccb8e98eca",
+          "submission_mode": "later",
+          "artifact_id": "90c38928-f7b3-4425-b637-b308975d2edf",
+          "card_text": "tablet\nDeepLOB: Deep Learning for Limit Order Books\nScheduled for after 8pm\nmore_vert",
+          "observed_at": "2026-10-17T10:48:53.200590+00:00"
+        },
+        "audio": {
+          "state": "not_submitted"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-17T10:48:27.225563+00:00",
+      "notebook_intent": {
+        "at": "2026-10-17T10:48:32.163504+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/deeplob-deep-learning-order-book-zh-CN-20261017T104832161836Z-notebook-baseline.json",
+        "baseline_sha256": "92835ea0235d986029d5e9f8ad6572a6d6ff79e6fb28ea76c7b5cf2bca4bc598",
+        "baseline_count": 378,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-17T10:48:33.335293+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/dba0ccec-f4fb-47f9-86fd-c277d1860640",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-17T10:48:37.537301+00:00",
+        "sha256": "6d3c1ea582edaa9f288d9ae37a60f2dd24bb7742c8df9bef5a423310fc9e5caa",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-17T10:48:43.678875+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "cdd25d37-bf59-4522-9eef-73ccb8e98eca",
+      "source_title": "MM article deeplob-deep-learning-order-book ZH-CN 304cfd85f764",
+      "source_sha256": "6d3c1ea582edaa9f288d9ae37a60f2dd24bb7742c8df9bef5a423310fc9e5caa",
+      "state": "source_ready",
+      "source_display_name": "MM article deeplob-deep-learning-order-book ZH-CN…",
+      "selected_source_ids": [
+        "cdd25d37-bf59-4522-9eef-73ccb8e98eca"
       ]
     }
   },
-  "checked_at": "2026-10-17T10:17:37.233383+00:00",
+  "checked_at": "2026-10-17T10:48:53.235114+00:00",
   "browser_geometry_requested": {
     "width": 1994,
     "height": 1290,
@@ -11947,10 +12193,10 @@
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 13:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 18:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-17T08:16:39.818194+00:00",
-    "not_before": "2026-10-17T09:51:00+00:00"
+    "observed_at": "2026-10-17T10:48:53.235103+00:00",
+    "not_before": "2026-10-17T14:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
