@@ -10957,22 +10957,30 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Interrupted notebook creation requires binding its saved candidate; no duplicate creation",
-        "at": "2026-10-17T10:01:42.641247+00:00",
+        "at": "2026-10-17T10:16:49.747511+00:00",
         "stage": "notebook",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T100142649271Z-error.png",
-            "sha256": "37950d33988adcdb7cc95294a455aff8ce0b080dec706c96d938e51248deadcd"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T101649755903Z-error.png",
+            "sha256": "5e2f1e92511f2810299ba0f39c4b328b2d4569cbef4281d5dc1009dd9faeeb02"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T100142649271Z-controls.json",
-            "sha256": "935ec7ae6ca60e3427ebb39cfaf36182726536061e7db4f5c3eb2558a3832e46"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T101649755903Z-controls.json",
+            "sha256": "bc17b7f296d5a2073cb2357ca0c0d362c743713d1776a5d148bcd8e14318a5c4"
           }
         },
-        "retry_not_before": "2026-10-17T10:16:42.926602+00:00",
+        "retry_not_before": "2026-10-17T10:31:50.044825+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "unbound_notebook_candidates": [
+        {
+          "title": "DCC-GARCH Dynamic Crypto Correlation",
+          "href": "/notebook/2657ceb3-aa2e-4eca-8aaa-a1c7b8d8b84f"
+        },
+        {
+          "title": "DCC-GARCH Dynamic Correlation in Crypto Trading",
+          "href": "/notebook/75b2de13-f39c-455e-92ca-e180ed793644"
+        },
         {
           "title": "DCC-GARCH Dynamic Correlations in Crypto Trading",
           "href": "/notebook/2ae8c91e-da85-4e81-933a-eecf08f5aa26"
@@ -11066,6 +11074,24 @@
           },
           "retry_not_before": "2026-10-17T08:12:06.798815+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Interrupted notebook creation requires binding its saved candidate; no duplicate creation",
+          "at": "2026-10-17T10:01:42.641247+00:00",
+          "stage": "notebook",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T100142649271Z-error.png",
+              "sha256": "37950d33988adcdb7cc95294a455aff8ce0b080dec706c96d938e51248deadcd"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T100142649271Z-controls.json",
+              "sha256": "935ec7ae6ca60e3427ebb39cfaf36182726536061e7db4f5c3eb2558a3832e46"
+            }
+          },
+          "retry_not_before": "2026-10-17T10:16:42.926602+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
     },
@@ -11148,19 +11174,19 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-17T10:01:49.881446+00:00",
+        "at": "2026-10-17T10:16:57.072033+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T100149892721Z-error.png",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T101657082365Z-error.png",
             "sha256": "7a247d33db3546bedfadf1a0af946438c7a34ff48d2ec73cf9bed7ac9f193be4"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T100149892721Z-controls.json",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T101657082365Z-controls.json",
             "sha256": "f008f2aaae26e99277ecfa4feef93ccc9cc76f17dedcd3146312f128c3139c47"
           }
         },
-        "retry_not_before": "2026-10-17T10:16:50.081167+00:00",
+        "retry_not_before": "2026-10-17T10:31:57.251912+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "error_history": [
@@ -11234,6 +11260,24 @@
             }
           },
           "retry_not_before": "2026-10-17T08:12:13.870944+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-17T10:01:49.881446+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T100149892721Z-error.png",
+              "sha256": "7a247d33db3546bedfadf1a0af946438c7a34ff48d2ec73cf9bed7ac9f193be4"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T100149892721Z-controls.json",
+              "sha256": "f008f2aaae26e99277ecfa4feef93ccc9cc76f17dedcd3146312f128c3139c47"
+            }
+          },
+          "retry_not_before": "2026-10-17T10:16:50.081167+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
@@ -11704,8 +11748,8 @@
           "source_id": "7dbaa2b3-a91e-47ef-9c78-3fa1cf583aba",
           "submission_mode": "now",
           "artifact_id": "6eb6fd49-065b-4e6d-a149-6d3a96f73726",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
-          "observed_at": "2026-10-17T10:10:29.184049+00:00"
+          "card_text": "progress_activity\nGenerating Slide Deck...\nBringing it to life...",
+          "observed_at": "2026-10-17T10:17:04.347255+00:00"
         },
         "audio": {
           "state": "generating",
@@ -11721,7 +11765,7 @@
           "submission_mode": "now",
           "artifact_id": "64198e12-eccd-4658-b497-75ecad66cac5",
           "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-17T10:10:41.543588+00:00"
+          "observed_at": "2026-10-17T10:17:05.386260+00:00"
         }
       },
       "admission_state": "admitted",
@@ -11776,8 +11820,8 @@
           "source_id": "464e6546-2b1e-46d3-8ff7-5e88d7c6a67a",
           "submission_mode": "now",
           "artifact_id": "b1b277f0-394f-4fc4-aa6f-2f233a916480",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
-          "observed_at": "2026-10-17T10:11:15.074448+00:00"
+          "card_text": "progress_activity\nGenerating Slide Deck...\nBringing it to life...",
+          "observed_at": "2026-10-17T10:17:12.027874+00:00"
         },
         "audio": {
           "state": "generating",
@@ -11793,7 +11837,7 @@
           "submission_mode": "now",
           "artifact_id": "778b486a-daf0-4a3e-befc-22bff4393a82",
           "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-17T10:11:27.669309+00:00"
+          "observed_at": "2026-10-17T10:17:13.063868+00:00"
         }
       },
       "admission_state": "admitted",
@@ -11825,9 +11869,68 @@
       "selected_source_ids": [
         "464e6546-2b1e-46d3-8ff7-5e88d7c6a67a"
       ]
+    },
+    "deeplob-deep-learning-order-book:en": {
+      "slug": "deeplob-deep-learning-order-book",
+      "language": "en",
+      "article_sha256": "f5f1f4f64357f3042d6fd3cceb5d98541aad4cfb576a9ac9031c8d0e4122cbee",
+      "input_hashes": {
+        "article": "f5f1f4f64357f3042d6fd3cceb5d98541aad4cfb576a9ac9031c8d0e4122cbee",
+        "source_text": "cfa167d9ed741f8713307a3e9b7fa6de0162cf66493c65dcd885697fe2b43c53",
+        "slides_prompt": "a7740aaaadf0046f75bbd4b707704c810f45d41be99de89c9ab6cd585dc6bcc5",
+        "audio_prompt": "61641e9473a1b37a1c8f9e24d7d0a7ad854e767a11a44a295788edb71877fbd1"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "a7740aaaadf0046f75bbd4b707704c810f45d41be99de89c9ab6cd585dc6bcc5",
+          "requested_at": "2026-10-17T10:17:32.646962+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "ff498d6d-961e-4ece-8c5c-7ff651336cfd",
+          "submission_mode": "now",
+          "artifact_id": "a4e6176d-5b9a-47db-b402-1c7362559ed5",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nbased on 1 source",
+          "observed_at": "2026-10-17T10:17:37.221070+00:00"
+        },
+        "audio": {
+          "state": "not_submitted"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-17T10:17:13.101980+00:00",
+      "notebook_intent": {
+        "at": "2026-10-17T10:17:18.020336+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/deeplob-deep-learning-order-book-en-20261017T101718018852Z-notebook-baseline.json",
+        "baseline_sha256": "1ae3e8b4b6ca571af1c4c05e26780715273e5d3d3815cf7af6fe371219c03d02",
+        "baseline_count": 376,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-17T10:17:19.147616+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/af1a57d6-335f-4bcc-ab09-bd259f72c644",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-17T10:17:23.331803+00:00",
+        "sha256": "cfa167d9ed741f8713307a3e9b7fa6de0162cf66493c65dcd885697fe2b43c53",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-17T10:17:30.077670+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "ff498d6d-961e-4ece-8c5c-7ff651336cfd",
+      "source_title": "MM article deeplob-deep-learning-order-book EN f5f1f4f64357",
+      "source_sha256": "cfa167d9ed741f8713307a3e9b7fa6de0162cf66493c65dcd885697fe2b43c53",
+      "state": "source_ready",
+      "source_display_name": "MM article deeplob-deep-learning-order-book EN f5…",
+      "selected_source_ids": [
+        "ff498d6d-961e-4ece-8c5c-7ff651336cfd"
+      ]
     }
   },
-  "checked_at": "2026-10-17T10:11:27.681701+00:00",
+  "checked_at": "2026-10-17T10:17:37.233383+00:00",
   "browser_geometry_requested": {
     "width": 1994,
     "height": 1290,
