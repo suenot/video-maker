@@ -1,0 +1,22 @@
+Create a separate NotebookLM Deep Dive audio overview in the default spoken format, entirely in English. Use only the attached complete published EN article snapshot; do not merge editions or outside facts. Follow all source H1-H3 sections in order. Explain the concept, the difference between observed order-book/position data and inferred participant intent, gradient construction and aggregation, the DEX use case, traditional order-book comparison, the three-level ML framing, technical challenges and visualization. Preserve the article's terms, examples, equations, figures, citations and qualifications accurately. Say clearly that predictive validity, data access, probability calibration and DEX transfer are claims from the article pending independent review. Do not present hidden intent as observable truth or promise an edge. End with the article conclusion and citation section.
+
+Exact source heading sequence (follow in this order):
+1. # The "Desire Orderbook" Concept: An Innovative Approach to Market Behavior Prediction
+2. ## Theoretical Foundation of the Concept
+3. ### Gradient Approach to Order Modeling
+4. ## Methodology for Building a Desire Orderbook
+5. ### 1. Trader Profiling
+6. ### 2. Analysis of Open Positions
+7. ### 3. Building Probability Gradients
+8. ### 4. Aggregation of Gradients into a Single Desire Orderbook
+9. ## Application in the DEX Context
+10. ### Practical Example of Use
+11. ## Advantages Over Traditional Orderbook
+12. ## Machine Learning Model for Building Gradients
+13. ### Level 1: Trader Type Classification
+14. ### Level 2: Realization Probability Prediction
+15. ### Level 3: Temporal Analysis
+16. ## Technical Challenges and Solutions
+17. ## Visualization of the Desire Orderbook
+18. ## Conclusion
+19. ## Citation

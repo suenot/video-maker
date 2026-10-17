@@ -1,0 +1,22 @@
+Create a complete NotebookLM slide deck in English. Use only the attached complete published EN article snapshot. Do not merge another language edition or outside facts. Preserve every source H1-H3 heading exactly and in order. Cover the proposal's theoretical framing, gradient approach to modeling orders, trader profiling, open-position analysis, probability-gradient construction and aggregation, DEX application and the article's practical example, comparison with a traditional order book, all machine-learning levels for trader-type classification, realization-probability prediction and temporal analysis, technical challenges, visualization, conclusion and citation. Explain carefully which inputs are observable (such as recorded positions, if stated) and which quantities are inferred; do not imply that latent intent is directly observed or that a probability gradient is calibrated unless the source establishes it. Preserve definitions, symbols, equations, examples, caveats, figures, citations and links exactly. Treat novelty, predictive validity, data availability, DEX applicability and numerical or causal statements as article claims awaiting editorial and primary-source review. Add no outside performance data, measured results or guarantees. Use readable slides and source-grounded diagrams; end with the article conclusion and citation section.
+
+Exact source heading sequence (preserve each heading verbatim):
+1. # The "Desire Orderbook" Concept: An Innovative Approach to Market Behavior Prediction
+2. ## Theoretical Foundation of the Concept
+3. ### Gradient Approach to Order Modeling
+4. ## Methodology for Building a Desire Orderbook
+5. ### 1. Trader Profiling
+6. ### 2. Analysis of Open Positions
+7. ### 3. Building Probability Gradients
+8. ### 4. Aggregation of Gradients into a Single Desire Orderbook
+9. ## Application in the DEX Context
+10. ### Practical Example of Use
+11. ## Advantages Over Traditional Orderbook
+12. ## Machine Learning Model for Building Gradients
+13. ### Level 1: Trader Type Classification
+14. ### Level 2: Realization Probability Prediction
+15. ### Level 3: Temporal Analysis
+16. ## Technical Challenges and Solutions
+17. ## Visualization of the Desire Orderbook
+18. ## Conclusion
+19. ## Citation
