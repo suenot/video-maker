@@ -10957,19 +10957,19 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Interrupted notebook creation requires binding its saved candidate; no duplicate creation",
-        "at": "2026-10-17T15:36:12.278092+00:00",
+        "at": "2026-10-17T16:06:14.606483+00:00",
         "stage": "notebook",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T153612285515Z-error.png",
-            "sha256": "e0c64f1818797e2c5b15070cded2ca21c836ca4ba1acc4290c60727de25fa6aa"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T160614615351Z-error.png",
+            "sha256": "d5502b53d722c85792373235232ab3f44d910b96083efb4f53cc4ff6b4b4be67"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T153612285515Z-controls.json",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T160614615351Z-controls.json",
             "sha256": "3ee03bb8795e196fcc47e5fa4207d2316cd52d915d2df6eee973cd5223c5cfaf"
           }
         },
-        "retry_not_before": "2026-10-17T15:51:12.518309+00:00",
+        "retry_not_before": "2026-10-17T16:21:14.966866+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "unbound_notebook_candidates": [
@@ -10980,6 +10980,14 @@
         {
           "title": "DeepLOB: Deep Learning for Limit Order Books",
           "href": "/notebook/dba0ccec-f4fb-47f9-86fd-c277d1860640"
+        },
+        {
+          "title": "Algorithmic Trading Data Communication Architecture",
+          "href": "/notebook/b18ac299-e87c-44a4-9883-ac5f08222062"
+        },
+        {
+          "title": "Data Communication in Algorithmic Trading Systems",
+          "href": "/notebook/96b538c3-5b24-4cb1-8059-7f25b58b630a"
         },
         {
           "title": "DeepLOB: Neural Networks for Limit Order Books",
@@ -11002,16 +11010,8 @@
           "href": "/notebook/bc22e82d-d222-42f9-b243-12a027349279"
         },
         {
-          "title": "Algorithmic Trading Data Communication Architecture",
-          "href": "/notebook/b18ac299-e87c-44a4-9883-ac5f08222062"
-        },
-        {
           "title": "Data Communication in Algorithmic Trading Systems",
           "href": "/notebook/1b043b20-2463-4847-ab23-c764cc7792f8"
-        },
-        {
-          "title": "Data Communication in Algorithmic Trading Systems",
-          "href": "/notebook/96b538c3-5b24-4cb1-8059-7f25b58b630a"
         },
         {
           "title": "DCC-GARCH Dynamic Correlations in Crypto Trading",
@@ -11144,6 +11144,24 @@
           },
           "retry_not_before": "2026-10-17T15:21:08.654487+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Interrupted notebook creation requires binding its saved candidate; no duplicate creation",
+          "at": "2026-10-17T15:36:12.278092+00:00",
+          "stage": "notebook",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T153612285515Z-error.png",
+              "sha256": "e0c64f1818797e2c5b15070cded2ca21c836ca4ba1acc4290c60727de25fa6aa"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T153612285515Z-controls.json",
+              "sha256": "3ee03bb8795e196fcc47e5fa4207d2316cd52d915d2df6eee973cd5223c5cfaf"
+            }
+          },
+          "retry_not_before": "2026-10-17T15:51:12.518309+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
     },
@@ -11226,19 +11244,19 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-17T15:36:19.631000+00:00",
+        "at": "2026-10-17T16:06:21.949979+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T153619643298Z-error.png",
-            "sha256": "059729c6f3eba712779a2ac624b2ade8e8980a16a1f575fde4cd6931a89cc45c"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T160621961882Z-error.png",
+            "sha256": "607f8bb7c139d6139abe6d7cc0a69c16e6a6bd9955631aea9330409f78eeb396"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T153619643298Z-controls.json",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T160621961882Z-controls.json",
             "sha256": "f008f2aaae26e99277ecfa4feef93ccc9cc76f17dedcd3146312f128c3139c47"
           }
         },
-        "retry_not_before": "2026-10-17T15:51:19.801918+00:00",
+        "retry_not_before": "2026-10-17T16:21:22.146779+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "error_history": [
@@ -11366,6 +11384,24 @@
             }
           },
           "retry_not_before": "2026-10-17T15:21:15.863539+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-17T15:36:19.631000+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T153619643298Z-error.png",
+              "sha256": "059729c6f3eba712779a2ac624b2ade8e8980a16a1f575fde4cd6931a89cc45c"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T153619643298Z-controls.json",
+              "sha256": "f008f2aaae26e99277ecfa4feef93ccc9cc76f17dedcd3146312f128c3139c47"
+            }
+          },
+          "retry_not_before": "2026-10-17T15:51:19.801918+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
@@ -11586,19 +11622,19 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-17T15:36:26.826831+00:00",
+        "at": "2026-10-17T16:06:29.182458+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T153626838882Z-error.png",
-            "sha256": "759679fdf2f486d7b71004b402197651a3b3e8fe2a62835ac510ea3b3a2da364"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T160629194159Z-error.png",
+            "sha256": "4d4d262f131082f7b7d7d3bd3c58e9dc9e5773d17695eda1cd3dedb6b622026f"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T153626838882Z-controls.json",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T160629194159Z-controls.json",
             "sha256": "71fdf7d1391801976dba05da4a7cca861195e94b25344dc6bdade20721213611"
           }
         },
-        "retry_not_before": "2026-10-17T15:51:26.999066+00:00",
+        "retry_not_before": "2026-10-17T16:21:29.374463+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "error_history": [
@@ -11708,6 +11744,24 @@
             }
           },
           "retry_not_before": "2026-10-17T15:21:58.386340+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-17T15:36:26.826831+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T153626838882Z-error.png",
+              "sha256": "759679fdf2f486d7b71004b402197651a3b3e8fe2a62835ac510ea3b3a2da364"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T153626838882Z-controls.json",
+              "sha256": "71fdf7d1391801976dba05da4a7cca861195e94b25344dc6bdade20721213611"
+            }
+          },
+          "retry_not_before": "2026-10-17T15:51:26.999066+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
@@ -12359,7 +12413,7 @@
           "submission_mode": "later",
           "artifact_id": "90c38928-f7b3-4425-b637-b308975d2edf",
           "card_text": "tablet\nDeepLOB: Deep Learning for Limit Order Books\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-17T15:51:10.863949+00:00"
+          "observed_at": "2026-10-17T16:06:36.536933+00:00"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -12522,7 +12576,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-17T15:52:33.365409+00:00",
+  "checked_at": "2026-10-17T16:06:36.547426+00:00",
   "browser_geometry_requested": {
     "width": 1994,
     "height": 1290,
