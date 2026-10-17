@@ -12982,7 +12982,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "073b6d2131b866e3885d6fe8c25db20da157e79d8f8991443e16c2ec7b2c229d",
           "requested_at": "2026-10-17T20:08:36.079103+00:00",
@@ -12992,11 +12992,18 @@
           "source_id": "4eccfd70-629d-4a1e-a392-068d331d2cb4",
           "submission_mode": "now",
           "artifact_id": "011199d5-b99d-4ec0-b2ee-50c17e6b6879",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
-          "observed_at": "2026-10-17T20:08:40.648404+00:00"
+          "card_text": "tablet\nUnread\nDesire Orderbook Framework\n1 source · 4m ago\nmore_vert",
+          "observed_at": "2026-10-17T20:21:12.175859+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/desire-orderbook/zh-TW/slides.pdf",
+          "sha256": "abb82f71cdb88ff9c7e9cf0c67b35bef9e331802f42b9a6c03c87f787cd0754e",
+          "bytes": 16859457,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-17T20:21:23.874928+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "011199d5-b99d-4ec0-b2ee-50c17e6b6879"
           ],
@@ -13008,8 +13015,15 @@
           "source_id": "4eccfd70-629d-4a1e-a392-068d331d2cb4",
           "submission_mode": "now",
           "artifact_id": "aa653bfe-1012-463c-aa33-e27cfcc4bb0f",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-17T20:08:52.464583+00:00"
+          "card_text": "audio_spark\nUnread\n意願訂單簿看穿未掛單\n19:31 · Deep Dive · 1 source · 5m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-17T20:21:24.907368+00:00",
+          "duration_seconds": 1172.003991,
+          "path": "input/notebooklm-sources/desire-orderbook/zh-TW/audio.m4a",
+          "sha256": "2f6947dfca9df9b167c25cbbf1ab744abcdd2a55fb1cfc522b29acd63205325f",
+          "bytes": 37720482,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-17T20:21:59.521117+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -13043,7 +13057,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-17T20:08:52.475839+00:00",
+  "checked_at": "2026-10-17T20:21:59.530599+00:00",
   "browser_geometry_requested": {
     "width": 1995,
     "height": 1290,
