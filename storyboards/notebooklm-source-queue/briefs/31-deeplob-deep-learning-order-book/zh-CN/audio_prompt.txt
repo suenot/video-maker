@@ -1,0 +1,37 @@
+另行制作 NotebookLM Deep Dive 音频概览，采用默认口语形式。只使用附件来源“MM article deeplob-deep-learning-order-book ZH-CN 304cfd85f764”，它是完整发表的简体中文（中国大陆）文章。不得合并其他语言版本或外部事实。输出语言：全程使用简体中文（中国大陆，zh-CN）；不得改用繁体或含糊的“Chinese”。技术标识符、数字、日期、引用、链接、代码和公式须准确保留。
+Follow every H1-H3 heading in this exact sequence and preserve each exact source heading:
+1. # DeepLOB：在限价订单簿上做深度学习
+2. ## 作为数据结构的限价订单簿
+3. ### 中间价及其走向
+4. ## 传统的 LOB 特征
+5. ### 订单簿失衡（OBI）
+6. ### 成交量加权中间价
+7. ### 深度失衡
+8. ### 价差与相对价差
+9. ## DeepLOB 架构
+10. ### 模块 1：卷积特征提取
+11. ### 模块 2：Inception 模块
+12. ### 模块 3：LSTM 序列建模
+13. ### 损失函数
+14. ## PyTorch 复现实现
+15. ### 数据预处理
+16. ### 训练循环
+17. ## DeepLOB 旨在捕捉什么
+18. ## 在 FI-2010 上的表现
+19. ## LOBFrame 与复现危机
+20. ## 超越 DeepLOB：当前的格局
+21. ## 投入生产的实务考量
+22. ### 延迟
+23. ### 数据管线
+24. ### 特征稳定性
+25. ### 对微观结构的过拟合
+26. ## 结论
+27. ## 参考文献
+
+Article-specific coverage: 完整覆盖全文：限价订单簿数据结构与中间价变动；OBI、成交量加权中间价、深度失衡及价差；DeepLOB 的卷积、Inception、LSTM 模块和损失函数；PyTorch 复现、预处理与训练循环；模型旨在捕捉的模式；FI-2010 上报告的表现；LOBFrame 与复现问题；后续方法；以及生产环境中的延迟、数据管线、特征稳定性和微观结构过拟合。
+
+FI-2010 表现、模型行为、复现结果、库/API 细节和生产建议均为待人工编辑及一手来源核验的文章主张。准确保留定义、标签、公式、数值、限定条件和引用。不得补充当前规格、外部性能数据、实测结果或保证。
+
+External NotebookLM notebook/source/artifact duplicates are not_checked and must be reconciled before submission; target-channel duplicates are not_checked and must be reconciled before final production. Do not imply either is cleared.
+Before any Generate action, the NotebookLM UI must explicitly show Chinese (Simplified); generic Chinese/中文 is insufficient. No generation action is requested by this brief.
+用自然的中国大陆普通话讲解订单簿表示、特征定义、模型架构、复现流程、报告的评估、复现性注意事项和生产问题。口头区分文章主张与独立核实的事实。以文章结论和参考文献结束。

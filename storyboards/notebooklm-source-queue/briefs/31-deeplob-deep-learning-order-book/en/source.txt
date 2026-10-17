@@ -1,0 +1,534 @@
+MM article deeplob-deep-learning-order-book EN f5f1f4f64357
+
+---
+title: "DeepLOB: Deep Learning on Limit Order Books"
+description: "How DeepLOB combines a CNN, an inception module, and an LSTM to predict mid-price moves from raw order book data — the architecture, the real FI-2010 numbers, and a working PyTorch reimplementation."
+tags: ["deep-learning", "order-book", "LOB", "microstructure", "HFT", "market-making"]
+date: "2026-05-26"
+lang: "en"
+image: "/images/blog/deeplob-deep-learning-order-book.webp"
+slug: "deeplob-deep-learning-order-book"
+authors: ["suenot"]
+---
+
+# DeepLOB: Deep Learning on Limit Order Books
+
+The limit order book is the central data structure of modern electronic markets. Every bid, every ask, every cancellation — it all lives in the LOB. For decades, quantitative researchers have hand-crafted features from this data: order imbalance ratios, weighted mid-prices, queue position signals. DeepLOB took a different route — it learns these features directly from raw order book snapshots using a hybrid CNN-LSTM architecture.
+
+Published by Zhang, Zohren, and Roberts at the Oxford-Man Institute in 2019, DeepLOB showed that a single deep network, trained end-to-end on raw book data, is competitive with or better than strong classical baselines on mid-price movement prediction. We should be precise about the evidence, though. The benchmark FI-2010 dataset is the one most papers quote, but the authors themselves call it insufficient — "far too short, downsampled and taken from a less liquid market" — and present a second, much larger evaluation on London Stock Exchange (LSE) data as their stronger result. That LSE study spans roughly one year of five training stocks and five test stocks, on the order of 100M+ samples, and demonstrates transfer learning: a model trained on one set of stocks still predicts on unseen stocks. That transfer result, not the FI-2010 leaderboard, is the paper's real headline. This post dissects the architecture, the math, the real numbers, and a working PyTorch reimplementation.
+
+## The Limit Order Book as a Data Structure
+
+![Isometric view of a limit order book: stacked bid and ask volume levels forming a depth tensor around the mid-price](/images/blog/deeplob-deep-learning-order-book-lob-structure.webp)
+
+A limit order book maintains two sorted lists — bids (buy orders) and asks (sell orders) — each organized by price level. At each level, the book records the price and the aggregate volume of resting orders.
+
+For an order book with $L$ levels, a single snapshot at time $t$ is a vector of $4L$ values:
+
+$$
+\mathbf{x}_t = [p_1^{a}, v_1^{a}, p_1^{b}, v_1^{b}, p_2^{a}, v_2^{a}, p_2^{b}, v_2^{b}, \ldots, p_L^{a}, v_L^{a}, p_L^{b}, v_L^{b}]
+$$
+
+where $p_i^{a}$ and $v_i^{a}$ are the ask price and volume at level $i$, and $p_i^{b}$, $v_i^{b}$ are the corresponding bid-side values. Level 1 holds the best bid and best ask (the BBO); their difference is the bid-ask spread.
+
+In the FI-2010 benchmark dataset, $L = 10$, giving 40 features per snapshot. FI-2010 is built from roughly 4 million raw limit-order messages from five Finnish equities on NASDAQ Nordic (Kesko, Outokumpu, Sampo, Rautaruukki, Wartsila) over ten consecutive trading days, 1-14 June 2010. Crucially, DeepLOB does not train on 4M snapshots: the benchmark downsamples those messages (every 10 events) into a normalized representation of 394,337 samples. That downsampled, normalized form is what the model actually sees — one of the reasons the authors warn against treating FI-2010 as the final word.
+
+### Mid-Price and Its Movements
+
+The mid-price at time $t$ is the average of the best bid and ask:
+
+$$
+p_t^{mid} = \frac{p_1^{a}(t) + p_1^{b}(t)}{2}
+$$
+
+DeepLOB predicts the direction of mid-price movement over a future horizon of $k$ events. The label is a smoothed return, but be aware there are two smoothing conventions in the literature, and they are not interchangeable:
+
+- **Future-mean vs current price** (Tsantekidis et al.): compare the average mid-price over the next $k$ events to the raw current mid-price.
+- **Future-mean vs previous-mean** (Ntakaris et al., the canonical FI-2010 label, also the one DeepLOB used for its LSE data): both the reference and the target are smoothed.
+
+$$
+l_t(k) = \frac{m_+(t) - m_-(t)}{m_-(t)}, \qquad
+m_-(t) = \frac{1}{k}\sum_{i=0}^{k-1} p_{t-i}^{mid}, \quad
+m_+(t) = \frac{1}{k}\sum_{i=1}^{k} p_{t+i}^{mid}
+$$
+
+Smoothing the reference (not just the future) materially reduces label noise from single-tick fluctuations, which is why the previous/next-mean form is preferred. Whichever you use, the continuous return is discretized into three classes — **up**, **down**, **stationary** — using fixed thresholds $\pm\alpha$:
+
+$$
+y_t = \begin{cases} 1 & \text{if } l_t(k) > \alpha \\ 0 & \text{if } |l_t(k)| \leq \alpha \\ -1 & \text{if } l_t(k) < -\alpha \end{cases}
+$$
+
+The FI-2010 dataset provides labels for five prediction horizons: $k \in \{10, 20, 30, 50, 100\}$ events.
+
+## Traditional LOB Features
+
+Before deep learning, researchers relied on hand-crafted features. Understanding these is essential, because DeepLOB is deliberately structured to resemble many of them — its architecture is motivated by these quantities even where it does not reproduce them exactly.
+
+### Order Book Imbalance (OBI)
+
+The most widely used microstructure signal. At the top of the book:
+
+$$
+\text{OBI}_1 = \frac{v_1^{b} - v_1^{a}}{v_1^{b} + v_1^{a}}
+$$
+
+More bid volume relative to ask volume suggests upward pressure. Multi-level imbalance aggregates across $L$ levels:
+
+$$
+\text{OBI}_L = \frac{\sum_{i=1}^{L} v_i^{b} - \sum_{i=1}^{L} v_i^{a}}{\sum_{i=1}^{L} v_i^{b} + \sum_{i=1}^{L} v_i^{a}}
+$$
+
+### Volume-Weighted Mid-Price
+
+The standard mid-price weights both sides equally. The volume-weighted mid-price (also called the weighted mid, or VAMP) tilts toward the heavier side of the book. Writing the top-of-book imbalance as $I = v_1^{b}/(v_1^{b}+v_1^{a})$, it is the imbalance-weighted average of the two prices:
+
+$$
+p^{wmid} = I\, p_1^{a} + (1 - I)\, p_1^{b} = \frac{v_1^{b}\, p_1^{a} + v_1^{a}\, p_1^{b}}{v_1^{b} + v_1^{a}}
+$$
+
+Note the cross-weighting: the ask price is weighted by bid volume and vice versa. When bid volume dominates ($I \to 1$), the weighted mid shifts toward the ask — reflecting the expectation that an imbalanced book will resolve by moving toward the heavier side.
+
+A word of caution on naming. This static, volume-weighted mid is *not* Stoikov's microprice. Stoikov's micro-price (2018) is a martingale-adjusted estimator $M_t + g(I, S)$ obtained from a recursive correction for how spread and imbalance evolve — his whole point is that the naive weighted mid is biased and is not a martingale. They are two distinct objects; we use the weighted mid here for its simplicity, not as a stand-in for the microprice.
+
+### Depth Imbalance
+
+Measures the shape of the book beyond the BBO:
+
+$$
+\text{DI}_i = \frac{v_i^{b} - v_i^{a}}{v_i^{b} + v_i^{a}}, \quad i = 1, \ldots, L
+$$
+
+### Spread and Relative Spread
+
+$$
+s_t = p_1^{a}(t) - p_1^{b}(t), \qquad s_t^{rel} = \frac{s_t}{p_t^{mid}}
+$$
+
+These features are powerful but limited. They require domain expertise to design, don't capture complex nonlinear interactions, and ignore temporal dynamics across consecutive snapshots. DeepLOB addresses all three limitations.
+
+## DeepLOB Architecture
+
+![DeepLOB architecture: a raw order-book tensor flowing through convolutional layers, an inception module, and an LSTM](/images/blog/deeplob-deep-learning-order-book-architecture.webp)
+
+The architecture has three blocks, each with a distinct role:
+
+1. **Convolutional block** — extracts spatial features from the order book snapshot
+2. **Inception module** — captures multi-scale temporal patterns
+3. **LSTM block** — models sequential dependencies across time
+
+The input to the network is a tensor of shape $(T, L \times 4)$, where $T$ is the lookback window (100 timesteps in the paper) and $L \times 4 = 40$ for 10 levels of price and volume on both sides.
+
+### Block 1: Convolutional Feature Extraction
+
+The first convolutional layers operate along the feature dimension to learn interactions between price and volume at each level.
+
+**Layer 1:** A convolution with filter size $1 \times 2$ and stride $(1, 2)$ applied to each price-volume pair. This summarizes each $(p_i, v_i)$ pair into a single feature — analogous to computing a "price-volume interaction" at each level. The width shrinks from 40 to 20.
+
+**Layer 2:** A $1 \times 2$, stride $(1, 2)$ convolution that operates across matched bid-ask pairs at the same level. This captures per-level spread and imbalance information. The width shrinks from 20 to 10.
+
+**Layer 3:** A $1 \times 10$ convolution that integrates across all 10 levels, collapsing the depth dimension to width 1. This produces a single aggregated feature per timestep that encodes the full depth profile.
+
+Each $1 \times 2$ / $1 \times 10$ step is followed by two $(4, 1)$ convolutions along the time axis, each with LeakyReLU activation and batch normalization. Note that these $(4, 1)$ convolutions with `padding=(1, 0)` do **not** preserve the time dimension: each one shortens it by one step ($T_{\text{out}} = T_{\text{in}} - 1$). Across the six such layers in blocks 1-3, the time axis shrinks from 100 to 94 before the inception module — something the shape comments in the code below make explicit.
+
+The design deliberately avoids large spatial filters. The $1 \times 2$ filters respect the natural pairing structure of LOB data — price with volume, bid with ask. This inductive bias is crucial: a $3 \times 3$ filter would mix adjacent levels and sides in a way that has no financial meaning.
+
+### Block 2: Inception Module
+
+After the convolutional block reduces the 40 features to a compact spatial representation (width 1), the inception module operates along the time dimension to capture patterns at multiple temporal scales simultaneously.
+
+The DeepLOB inception module has **four** parallel paths, each producing 32 channels, all concatenated:
+
+- **$1 \times 1$ bottleneck $\to$ $3 \times 1$ temporal conv**: short-term temporal patterns (3 timesteps)
+- **$1 \times 1$ bottleneck $\to$ $5 \times 1$ temporal conv**: medium-term temporal patterns (5 timesteps)
+- **$3 \times 1$ max-pool $\to$ $1 \times 1$ conv**: a pooling path that keeps a smoothed, downsampled view
+- (the $1 \times 1$ reductions act as point-in-time bottlenecks before the temporal convolutions)
+
+Each temporal path uses symmetric padding so the time dimension is maintained inside the inception block (unlike the conv blocks above). The outputs are concatenated along the channel dimension, giving the network access to multi-scale temporal features at once.
+
+This is inspired by the GoogLeNet inception architecture, but adapted for 1D temporal data rather than 2D images. The key insight is that LOB dynamics operate at multiple time scales: tick-by-tick noise, short-term momentum, and longer-horizon mean reversion all coexist.
+
+The PyTorch reimplementation below presents a **simplified three-path variant** (the two temporal convs plus a $1\times1$ path) so the code stays readable; it omits the max-pool path. We call this out explicitly because it is a deviation from the paper, not the original module.
+
+### Block 3: LSTM Sequence Modeling
+
+The output of the inception module is fed into an LSTM layer that processes the entire $T$-length sequence. The LSTM captures long-range temporal dependencies that convolutions alone would miss — regime changes, time-of-day effects, and evolving market conditions.
+
+The final hidden state of the LSTM is passed through a fully connected layer with softmax activation to produce a probability distribution over the three classes (up, down, stationary).
+
+### Loss Function
+
+The model is trained with categorical cross-entropy:
+
+$$
+\mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \sum_{c=1}^{3} y_{i,c} \log(\hat{y}_{i,c})
+$$
+
+where $y_{i,c}$ is the one-hot encoded true label and $\hat{y}_{i,c}$ is the predicted probability for class $c$.
+
+## PyTorch Reimplementation
+
+The original DeepLOB was built in Keras on the TensorFlow backend; the authors' repository (`zcakhaa`) later added a PyTorch port. The code below is our own illustrative PyTorch reimplementation, not the official one. It deviates from the paper in two ways we flag inline: it omits the inception max-pool path (three paths instead of four), and it scales up the channel counts. The paper uses **16 filters** throughout the conv blocks and **32 filters per inception path** (LSTM input $3 \times 32 = 96$), giving a compact model of roughly 60k parameters. The snippet below uses 32 conv / 64 inception filters (LSTM input 192) — internally consistent and runnable, but heavier than the original. To match the paper, set the conv channels to 16, the inception channels to 32, and `input_size=96`.
+
+```python
+import torch
+import torch.nn as nn
+
+
+class DeepLOB(nn.Module):
+    """
+    DeepLOB-style CNN-Inception-LSTM for limit order books.
+    Reimplementation inspired by Zhang, Zohren, Roberts (2019),
+    IEEE Transactions on Signal Processing, arXiv:1808.03668.
+
+    NOTE: this is an illustrative reimplementation, NOT the official model.
+    Differences from the paper:
+      - inception has 3 paths here vs 4 in the paper (max-pool path omitted);
+      - channel counts are scaled up (paper: 16 conv / 32 inception, input 96).
+
+    Input shape: (batch_size, 1, T, 40)
+        T = lookback window (e.g. 100)
+        40 = 10 levels x 4 features (ask_price, ask_vol, bid_price, bid_vol)
+    """
+
+    def __init__(self, num_classes: int = 3, T: int = 100):
+        super().__init__()
+        self.num_classes = num_classes
+
+        # --- Block 1: Convolutional feature extraction ---
+        # Layer 1: 1x2 stride-2 conv summarizes price-volume pairs (width 40 -> 20)
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(1, 32, kernel_size=(1, 2), stride=(1, 2)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+            nn.Conv2d(32, 32, kernel_size=(4, 1), padding=(1, 0)),  # time -1
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+            nn.Conv2d(32, 32, kernel_size=(4, 1), padding=(1, 0)),  # time -1
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+        )
+
+        # Layer 2: 1x2 stride-2 conv across bid-ask pairs (width 20 -> 10)
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 2)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+            nn.Conv2d(32, 32, kernel_size=(4, 1), padding=(1, 0)),  # time -1
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+            nn.Conv2d(32, 32, kernel_size=(4, 1), padding=(1, 0)),  # time -1
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+        )
+
+        # Layer 3: 1x10 conv aggregates across all levels (width 10 -> 1)
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(32, 32, kernel_size=(1, 10)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+            nn.Conv2d(32, 32, kernel_size=(4, 1), padding=(1, 0)),  # time -1
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+            nn.Conv2d(32, 32, kernel_size=(4, 1), padding=(1, 0)),  # time -1
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+        )
+
+        # --- Block 2: Inception module (simplified: 3 paths, no max-pool) ---
+        # 1x1 bottleneck (point-in-time)
+        self.inp1 = nn.Sequential(
+            nn.Conv2d(32, 64, kernel_size=(1, 1), padding=(0, 0)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(64),
+        )
+        # 1x1 bottleneck -> 3x1 temporal conv (symmetric padding keeps time)
+        self.inp2 = nn.Sequential(
+            nn.Conv2d(32, 64, kernel_size=(1, 1), padding=(0, 0)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(64),
+            nn.Conv2d(64, 64, kernel_size=(3, 1), padding=(1, 0)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(64),
+        )
+        # 1x1 bottleneck -> 5x1 temporal conv (symmetric padding keeps time)
+        self.inp3 = nn.Sequential(
+            nn.Conv2d(32, 64, kernel_size=(1, 1), padding=(0, 0)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(64),
+            nn.Conv2d(64, 64, kernel_size=(5, 1), padding=(2, 0)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(64),
+        )
+        # The paper adds a 4th path: 3x1 max-pool -> 1x1 conv. Omitted here.
+
+        # --- Block 3: LSTM ---
+        self.lstm = nn.LSTM(
+            input_size=192,  # 64 * 3 paths from the simplified inception
+            hidden_size=64,
+            num_layers=1,
+            batch_first=True,
+        )
+
+        # --- Output layer ---
+        self.fc = nn.Linear(64, num_classes)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            x: Tensor of shape (batch, 1, T, 40)
+        Returns:
+            Tensor of shape (batch, num_classes)
+        """
+        # Block 1: spatial convolutions. Each (4,1) conv shortens time by 1.
+        h = self.conv1(x)   # (batch, 32, T-2, 20)
+        h = self.conv2(h)   # (batch, 32, T-4, 10)
+        h = self.conv3(h)   # (batch, 32, T-6, 1)   e.g. T=100 -> 94
+
+        # Block 2: inception --- parallel temporal convs keep the time axis
+        h_inp1 = self.inp1(h)  # (batch, 64, T-6, 1)
+        h_inp2 = self.inp2(h)  # (batch, 64, T-6, 1)
+        h_inp3 = self.inp3(h)  # (batch, 64, T-6, 1)
+        h = torch.cat([h_inp1, h_inp2, h_inp3], dim=1)  # (batch, 192, T-6, 1)
+
+        # Reshape for LSTM: (batch, seq_len, features)
+        h = h.squeeze(-1)          # (batch, 192, T-6)
+        h = h.permute(0, 2, 1)     # (batch, T-6, 192)
+
+        # Block 3: LSTM
+        h, _ = self.lstm(h)
+        h = h[:, -1, :]  # take last hidden state
+
+        # Classification
+        out = self.fc(h)
+        return out
+```
+
+### Data Preprocessing
+
+The FI-2010 dataset ships z-score normalized. For live order book data, you need to normalize similarly:
+
+```python
+import numpy as np
+from torch.utils.data import Dataset
+
+
+class LOBDataset(Dataset):
+    """Dataset for limit order book snapshots."""
+
+    def __init__(
+        self,
+        data: np.ndarray,
+        labels: np.ndarray,
+        T: int = 100,
+    ):
+        """
+        Args:
+            data: shape (num_snapshots, 40), raw LOB features
+            labels: shape (num_snapshots,), class labels {0, 1, 2}
+            T: lookback window length
+        """
+        self.data = data
+        self.labels = labels
+        self.T = T
+
+        # Z-score normalization per feature, fitted on the first half only
+        self.mean = data[:len(data) // 2].mean(axis=0)
+        self.std = data[:len(data) // 2].std(axis=0)
+        self.std[self.std == 0] = 1.0
+        self.data = (self.data - self.mean) / self.std
+
+    def __len__(self) -> int:
+        return len(self.data) - self.T
+
+    def __getitem__(self, idx: int):
+        # Shape: (1, T, 40) --- single channel for Conv2d
+        x = self.data[idx : idx + self.T].reshape(1, self.T, 40)
+        y = self.labels[idx + self.T - 1]
+        return torch.tensor(x, dtype=torch.float32), torch.tensor(
+            y, dtype=torch.long
+        )
+```
+
+### Training Loop
+
+```python
+def train_deeplob(
+    model: DeepLOB,
+    train_loader,
+    val_loader,
+    epochs: int = 50,
+    lr: float = 0.01,
+    device: str = "cuda",
+):
+    model = model.to(device)
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr, eps=1)
+
+    best_val_f1 = 0.0
+    for epoch in range(epochs):
+        model.train()
+        train_loss = 0.0
+        for x_batch, y_batch in train_loader:
+            x_batch = x_batch.to(device)
+            y_batch = y_batch.to(device)
+
+            optimizer.zero_grad()
+            logits = model(x_batch)
+            loss = criterion(logits, y_batch)
+            loss.backward()
+            optimizer.step()
+            train_loss += loss.item()
+
+        # Validation
+        model.eval()
+        all_preds, all_labels = [], []
+        with torch.no_grad():
+            for x_val, y_val in val_loader:
+                x_val = x_val.to(device)
+                preds = model(x_val).argmax(dim=1).cpu()
+                all_preds.extend(preds.numpy())
+                all_labels.extend(y_val.numpy())
+
+        from sklearn.metrics import f1_score
+        val_f1 = f1_score(all_labels, all_preds, average="weighted")
+
+        print(
+            f"Epoch {epoch+1}/{epochs} | "
+            f"Train Loss: {train_loss/len(train_loader):.4f} | "
+            f"Val F1: {val_f1:.4f}"
+        )
+
+        if val_f1 > best_val_f1:
+            best_val_f1 = val_f1
+            torch.save(model.state_dict(), "deeplob_best.pt")
+```
+
+Key training hyperparameters from the original paper:
+- **Optimizer**: Adam with $\epsilon = 1$ (unusually large — helps stabilize updates on noisy financial data)
+- **Learning rate**: 0.01
+- **Batch size**: 32
+- **Lookback window**: $T = 100$ timesteps
+
+We track weighted F1 rather than accuracy in validation, because the three classes are imbalanced — and, as the next section shows, F1 is the metric the original paper emphasizes for exactly that reason.
+
+## What DeepLOB Is Built to Capture
+
+![Microstructure signals DeepLOB learns: order-flow imbalance, queue dynamics, and volume-weighted mid-price pressure](/images/blog/deeplob-deep-learning-order-book-features.webp)
+
+One appealing aspect of DeepLOB is how closely its blocks are *motivated by* the hand-crafted features above. We want to be careful here: the paper presents these as design intuitions, not as proven properties of the trained network. It does not publish filter visualizations, activation-imbalance correlations, or an analysis of what the LSTM attends to. So read the following as architectural intent, not measured findings.
+
+**First convolutional block.** The $1 \times 2$ filters pair price with volume at each level. Structurally, this is the same operation that forms a volume-weighted price — the paper motivates the first layer by noting its feature maps form a micro-price-like quantity. The network is *built to* recover something in that family; we do not claim it provably rediscovers any specific estimator.
+
+**Second convolutional block.** By operating across bid-ask pairs, these filters are positioned to learn imbalance-like features at multiple levels — again, by construction rather than by demonstrated correlation.
+
+**Inception module.** The multi-scale temporal convolutions are meant to capture momentum at different frequencies: the $1\times1$ path responds to point-in-time structure, the $3\times1$ path to short-term trends, the $5\times1$ path to slightly longer ones, and (in the full module) the max-pool path to a smoothed view.
+
+**LSTM layer.** The recurrent component adds memory of long-range dependencies that the convolutions cannot represent — regime shifts and time-of-day effects. We avoid stronger claims (such as the LSTM implementing an "adaptive attention" that reweights recent data in volatile regimes); the paper does not show this.
+
+## Performance on FI-2010
+
+The original paper evaluates two protocols. Setup 1 uses the dataset's earlier normalization split; Setup 2 is the deep-learning setup most subsequent work compares against. Because FI-2010 is class-imbalanced, the paper emphasizes **F1**, not accuracy, and reports precision/recall-based figures for the non-neural baselines (SVM, MLP). Here are the real Setup 2 numbers (F1, %):
+
+| Horizon (k) | SVM   | MLP   | CNN-I | LSTM  | DeepLOB   |
+|-------------|-------|-------|-------|-------|-----------|
+| 10          | 35.88 | 48.27 | 55.21 | 66.33 | **83.40** |
+| 20          | —     | —     | —     | —     | **72.82** |
+| 50          | —     | —     | —     | —     | **80.35** |
+
+At $k = 10$, DeepLOB also reports 84.47% accuracy alongside its 83.40 F1. Setup 2 reports only $k \in \{10, 20, 50\}$ — there is no $k = 100$ row here. (Setup 1 does report $k \in \{10, 50, 100\}$, with DeepLOB F1 of 77.66 / 74.96 / 76.58 respectively.) The dashes above mark baseline cells the paper does not tabulate at those horizons in this protocol.
+
+Several observations stand out:
+
+1. **DeepLOB beats the baselines by a wide margin at the short horizon.** At $k = 10$ its F1 (83.40) is well above LSTM (66.33), CNN-I (55.21), MLP (48.27), and SVM (35.88). The qualitative ordering — deep recurrent-convolutional models over plain CNNs, MLPs, and SVMs — is the robust takeaway.
+2. **The horizon trend is non-monotonic, not "longer is easier."** Across Setup 2, DeepLOB's F1 goes $83.40 \to 72.82 \to 80.35$ as $k$ goes $10 \to 20 \to 50$ — a U-shaped pattern, with $k=20$ the hardest, not a clean upward march. Whether a horizon is "easier" depends heavily on the setup, the threshold $\alpha$, and the label-smoothing scheme; we should not read a universal law into these numbers.
+3. **DeepLOB does not dominate every classical method on every cell.** Against strong baselines such as C(TABL) the margins narrow at some horizons, so "outperforms all classical approaches everywhere" overstates the case. The defensible claim is that it is competitive-to-best, and clearly best at the short horizon.
+
+And again: the paper's own view is that FI-2010 is too small and too downsampled to settle the question. Its stronger evidence is the LSE study, where DeepLOB trains on one set of stocks and still predicts on held-out stocks — a transfer-learning result FI-2010 cannot show.
+
+## LOBFrame and the Replication Crisis
+
+![Diverging in-sample and out-of-sample curves illustrating the order-book deep-learning replication crisis](/images/blog/deeplob-deep-learning-order-book-replication.webp)
+
+The LOBFrame benchmark framework (Briola, Bartolucci, Aste, 2024) provides a sobering complement to these results. While DeepLOB's architecture is sound, the framework highlights several important caveats:
+
+**Microstructure dependence.** Model performance varies significantly across stocks with different microstructural characteristics. Liquid, large-tick stocks are easier to predict than illiquid, small-tick instruments. A model that looks strong on one stock can degrade substantially on another.
+
+**Prediction vs. profit.** High classification accuracy does not automatically translate to trading profit. LOBFrame stresses metrics tied to whether a predicted move is large enough to clear the bid-ask spread. A model needs to be right often enough, and on big-enough moves, to overcome the spread — and for tight-spread stocks that bar is high.
+
+**Label sensitivity.** The choice of threshold $\alpha$ and horizon $k$ dramatically affects both reported accuracy and the practical value of predictions. Labels that are too tight produce noisy targets; labels that are too wide produce trivially "accurate" but useless predictions.
+
+## Beyond DeepLOB: The Current Landscape
+
+![Constellation of modern order-book forecasting approaches orbiting the original DeepLOB model](/images/blog/deeplob-deep-learning-order-book-landscape.webp)
+
+Since DeepLOB's publication, several extensions have appeared:
+
+**Transformers for limit order books** (Wallbridge, 2020). Often loosely referred to as "TransLOB" in later literature, the model itself is a causal/dilated convolutional feature extractor followed by masked multi-head self-attention — not simply DeepLOB with the LSTM swapped for a Transformer; it does not reuse the inception+conv stack. It reported a new FI-2010 state of the art for its time.
+
+**Crypto-domain variants.** Several groups apply DeepLOB-style architectures to cryptocurrency markets, where order book dynamics differ substantially from equities — wider spreads, 24/7 trading, and a different participant mix that all demand retraining.
+
+**Attention-augmented variants.** A line of work inserts multi-head attention between the inception and LSTM blocks, letting the network focus on the levels or time steps most informative for the current prediction.
+
+**LOB-Bench** (Nagy, Frey, Li, Sarkar, Vyetrenko, Zohren, Calinescu, Foerster, 2025). This benchmark turns attention from prediction to *generation*, scoring how realistic generative models of order book data are — relevant for backtesting and agent training rather than directional forecasting.
+
+## Practical Considerations for Production
+
+If you are considering deploying a DeepLOB-style model in a live trading system, several engineering concerns arise:
+
+### Latency
+
+The model must produce predictions within the latency budget of your trading system. For HFT systems operating at sub-millisecond latencies, even an optimized PyTorch inference can be too slow. Options include:
+- ONNX export with TensorRT optimization
+- Quantization to INT8
+- FPGA deployment for the most latency-sensitive applications
+
+### Data Pipeline
+
+The model expects normalized, aligned order book snapshots at a fixed frequency. In practice, LOB updates arrive asynchronously. You need:
+- A snapshot reconstruction engine that maintains the current book state
+- A fixed-frequency sampler that produces the $(T, 40)$ input tensor
+- Online normalization using rolling statistics
+
+### Feature Stability
+
+Z-score normalization parameters computed on training data drift over time. Prices change, volatility regimes shift, market structure evolves. A production system needs:
+- Rolling normalization windows (e.g., recalculate statistics daily)
+- Regime detection to trigger model retraining
+- Monitoring for input distribution shift
+
+### Overfitting to Microstructure
+
+LOB patterns are venue-specific and instrument-specific. A model trained on NASDAQ equities will not work on Binance BTC/USDT without retraining. Even within the same venue, models can overfit to:
+- Tick size regime (large-tick vs. small-tick stocks)
+- Time-of-day patterns (opening auction, lunch lull, closing cross)
+- Market maker behavior that changes over time
+
+## Conclusion
+
+DeepLOB represents a clean, well-motivated application of deep learning to market microstructure. Its three-block architecture — CNN for spatial features, inception for multi-scale temporal patterns, LSTM for sequential dependencies — maps naturally onto the structure of limit order book data.
+
+The key insight is not just that a deep model can match or beat hand-crafted features, but that the inductive biases of the architecture — the $1 \times 2$ filters, the inception parallelism, the recurrent memory — encode genuine domain knowledge about how order books work. This is not a generic deep network thrown at financial data; it is an architecture designed around the specific geometry of the limit order book. And its most convincing evidence is not the FI-2010 leaderboard the authors themselves distrust, but the transfer-learning result on a year of LSE data.
+
+For practitioners, DeepLOB is a strong baseline and a useful building block. For researchers, it demonstrates that thoughtful architecture design — not just model scale — drives performance on structured financial data. Just remember to quote the real numbers, watch the label scheme, and treat classification accuracy as a long way short of trading profit.
+
+---
+
+## References
+
+1. Zhang, Z., Zohren, S., & Roberts, S. (2019). *DeepLOB: Deep Convolutional Neural Networks for Limit Order Books*. IEEE Transactions on Signal Processing, 67(11), 3001-3012. [arXiv:1808.03668](https://arxiv.org/abs/1808.03668)
+
+2. Ntakaris, A., Magris, M., Kanniainen, J., Gabbouj, M., & Iosifidis, A. (2018). *Benchmark Dataset for Mid-Price Forecasting of Limit Order Book Data with Machine Learning Methods*. Journal of Forecasting, 37(8), 852-866. [arXiv:1705.03233](https://arxiv.org/abs/1705.03233)
+
+3. Briola, A., Bartolucci, S., & Aste, T. (2024). *Deep Limit Order Book Forecasting* (LOBFrame). [arXiv:2403.09267](https://arxiv.org/abs/2403.09267)
+
+4. Wallbridge, J. (2020). *Transformers for Limit Order Books*. [arXiv:2003.00130](https://arxiv.org/abs/2003.00130)
+
+5. Cont, R., Kukanov, A., & Stoikov, S. (2014). *The Price Impact of Order Book Events*. Journal of Financial Econometrics, 12(1), 47-88.
+
+6. Stoikov, S. (2018). *The Micro-Price: A High-Frequency Estimator of Future Prices*. Quantitative Finance, 18(12), 1959-1966.
+
+7. Nagy, P., Frey, S., Li, K., Sarkar, B., Vyetrenko, S., Zohren, S., Calinescu, A., & Foerster, J. (2025). *LOB-Bench: Benchmarking Generative AI for Finance — an Application to Limit Order Book Data*. ICML 2025. [arXiv:2502.09172](https://arxiv.org/abs/2502.09172)
+
+8. DeepLOB code (original in Keras/TensorFlow; the repository also provides a PyTorch port): [github.com/zcakhaa/DeepLOB-Deep-Convolutional-Neural-Networks-for-Limit-Order-Books](https://github.com/zcakhaa/DeepLOB-Deep-Convolutional-Neural-Networks-for-Limit-Order-Books)
+</content>
+</invoke>

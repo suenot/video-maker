@@ -1,0 +1,37 @@
+另行製作 NotebookLM Deep Dive 音訊概覽，採用預設口語形式。只使用附件來源「MM article deeplob-deep-learning-order-book ZH-TW 620773d95c4e」，它是完整發表的繁體中文（台灣）文章。不得合併其他語言版本或外部事實。輸出語言：全程使用繁體中文（台灣，zh-TW）；不得改用簡體或籠統的「Chinese」。技術識別碼、數字、日期、引用、連結、程式碼和公式均須準確保留。
+Follow every H1-H3 heading in this exact sequence and preserve each exact source heading:
+1. # DeepLOB：在限價訂單簿上做深度學習
+2. ## 作為資料結構的限價訂單簿
+3. ### 中間價及其走向
+4. ## 傳統的 LOB 特徵
+5. ### 訂單簿失衡（OBI）
+6. ### 成交量加權中間價
+7. ### 深度失衡
+8. ### 價差與相對價差
+9. ## DeepLOB 架構
+10. ### 模組 1：卷積特徵提取
+11. ### 模組 2：Inception 模組
+12. ### 模組 3：LSTM 序列建模
+13. ### 損失函數
+14. ## PyTorch 復現實現
+15. ### 資料預處理
+16. ### 訓練迴圈
+17. ## DeepLOB 旨在捕捉什麼
+18. ## 在 FI-2010 上的表現
+19. ## LOBFrame 與復現危機
+20. ## 超越 DeepLOB：當前的格局
+21. ## 投入生產的實務考量
+22. ### 延遲
+23. ### 資料管線
+24. ### 特徵穩定性
+25. ### 對微觀結構的過擬合
+26. ## 結論
+27. ## 參考文獻
+
+Article-specific coverage: 完整涵蓋全文：限價訂單簿資料結構與中間價變動；OBI、成交量加權中間價、深度失衡及價差；DeepLOB 的卷積、Inception、LSTM 模組和損失函數；PyTorch 復現、預處理與訓練迴圈；模型旨在捕捉的模式；FI-2010 上報告的表現；LOBFrame 與復現問題；後續方法；以及生產環境中的延遲、資料管線、特徵穩定性和微觀結構過度擬合。
+
+FI-2010 表現、模型行為、復現結果、函式庫/API 細節和生產建議均為待人工編輯及一手來源查證的文章主張。準確保留定義、標籤、公式、數值、限定條件和引用。不得補充當前規格、外部效能數據、實測結果或保證。
+
+External NotebookLM notebook/source/artifact duplicates are not_checked and must be reconciled before submission; target-channel duplicates are not_checked and must be reconciled before final production. Do not imply either is cleared.
+Before any Generate action, the NotebookLM UI must explicitly show Chinese (Traditional); generic Chinese/中文 is insufficient. No generation action is requested by this brief.
+以自然的台灣華語口語講解訂單簿表示、特徵定義、模型架構、復現流程、報告的評估、復現性注意事項和生產問題。口頭區分文章主張與獨立查證的事實。以文章結論和參考文獻收尾。

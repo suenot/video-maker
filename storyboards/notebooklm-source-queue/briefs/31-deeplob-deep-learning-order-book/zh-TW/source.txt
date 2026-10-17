@@ -1,0 +1,532 @@
+MM article deeplob-deep-learning-order-book ZH-TW 620773d95c4e
+
+---
+title: "DeepLOB：在限價訂單簿上做深度學習"
+description: "DeepLOB 如何將 CNN、inception 模組和 LSTM 結合起來，從原始訂單簿資料預測中間價的走向——其架構、真實的 FI-2010 資料，以及一份可執行的 PyTorch 復現實現。"
+tags: ["deep-learning", "order-book", "LOB", "microstructure", "HFT", "market-making"]
+date: "2026-05-26"
+lang: "zh-Hant"
+image: "/images/blog/deeplob-deep-learning-order-book.webp"
+slug: "deeplob-deep-learning-order-book"
+authors: ["suenot"]
+---
+
+# DeepLOB：在限價訂單簿上做深度學習
+
+限價訂單簿是現代電子市場的核心資料結構。每一筆買價、每一筆賣價、每一次撤單——這一切都存在於 LOB（限價訂單簿）之中。幾十年來，量化研究者一直在從這些資料中手工構造特徵：訂單失衡比率、加權中間價、排隊位置訊號。DeepLOB 走了一條不同的路——它使用一個混合的 CNN-LSTM 架構，直接從原始訂單簿快照中學習這些特徵。
+
+DeepLOB 由 Zhang、Zohren 和 Roberts 於 2019 年在牛津-曼研究所（Oxford-Man Institute）發表，它表明一個在原始訂單簿資料上端到端訓練的單一深度網路，在中間價走向預測上能夠與強大的經典基線相媲美甚至更優。不過，我們應當對證據保持精確。多數論文引用的是基準資料集 FI-2010，但作者自己卻稱其不夠充分——“太短、經過降取樣，而且取自一個流動性較差的市場”——並把另一項規模大得多、基於倫敦證券交易所（LSE）資料的評估作為其更有力的結果加以呈現。那項 LSE 研究跨越了大約一年時間，包含五隻訓練股票和五隻測試股票，樣本量在 1 億以上，並展示了遷移學習：在一組股票上訓練的模型仍能在未見過的股票上做出預測。這個遷移結果，而非 FI-2010 排行榜，才是這篇論文真正的核心看點。本文將剖析其架構、數學原理、真實資料，以及一份可執行的 PyTorch 復現實現。
+
+## 作為資料結構的限價訂單簿
+
+![限價訂單簿的等距檢視：堆疊的買、賣成交量檔位在中間價周圍形成一個深度張量](/images/blog/deeplob-deep-learning-order-book-lob-structure.webp)
+
+限價訂單簿維護兩個有序列表——買單（buy orders）和賣單（sell orders）——每個列表都按價格檔位組織。在每一檔上，訂單簿記錄該價格以及掛單的總成交量。
+
+對於一個有 $L$ 檔的訂單簿，時刻 $t$ 的單個快照是一個包含 $4L$ 個值的向量：
+
+$$
+\mathbf{x}_t = [p_1^{a}, v_1^{a}, p_1^{b}, v_1^{b}, p_2^{a}, v_2^{a}, p_2^{b}, v_2^{b}, \ldots, p_L^{a}, v_L^{a}, p_L^{b}, v_L^{b}]
+$$
+
+其中 $p_i^{a}$ 和 $v_i^{a}$ 是第 $i$ 檔的賣價和成交量，$p_i^{b}$、$v_i^{b}$ 是對應的買方數值。第 1 檔持有最優買價和最優賣價（即 BBO）；二者之差就是買賣價差。
+
+在 FI-2010 基準資料集中，$L = 10$，因此每個快照有 40 個特徵。FI-2010 由約 400 萬條原始限價訂單訊息構建而成，這些訊息來自 NASDAQ Nordic 上的五隻芬蘭股票（Kesko、Outokumpu、Sampo、Rautaruukki、Wartsila），覆蓋 2010 年 6 月 1 日至 14 日連續十個交易日。關鍵在於，DeepLOB 並非在 400 萬個快照上訓練：該基準把這些訊息降取樣（每 10 個事件取一次），得到一份包含 394,337 個樣本的歸一化表示。模型實際看到的正是這種經過降取樣、歸一化的形式——這也是作者警告不要把 FI-2010 當作定論的原因之一。
+
+### 中間價及其走向
+
+時刻 $t$ 的中間價是最優買價和最優賣價的平均值：
+
+$$
+p_t^{mid} = \frac{p_1^{a}(t) + p_1^{b}(t)}{2}
+$$
+
+DeepLOB 預測中間價在未來 $k$ 個事件的時間跨度內的走向。標籤是一個平滑後的收益率，但要注意文獻中存在兩種平滑約定，二者並不可互換：
+
+- **未來均值對比當前價格**（Tsantekidis 等人）：將未來 $k$ 個事件上的平均中間價與原始的當前中間價進行比較。
+- **未來均值對比過去均值**（Ntakaris 等人，FI-2010 的標準標籤，也是 DeepLOB 在其 LSE 資料上所採用的標籤）：參考值和目標值都經過平滑。
+
+$$
+l_t(k) = \frac{m_+(t) - m_-(t)}{m_-(t)}, \qquad
+m_-(t) = \frac{1}{k}\sum_{i=0}^{k-1} p_{t-i}^{mid}, \quad
+m_+(t) = \frac{1}{k}\sum_{i=1}^{k} p_{t+i}^{mid}
+$$
+
+對參考值（而不僅僅是未來值）進行平滑，能顯著降低單個 tick 波動帶來的標籤噪聲，這正是更偏好“過去/未來均值”形式的原因。無論採用哪一種，連續收益率都會用固定閾值 $\pm\alpha$ 離散為三類——**上漲**、**下跌**、**持平**：
+
+$$
+y_t = \begin{cases} 1 & \text{if } l_t(k) > \alpha \\ 0 & \text{if } |l_t(k)| \leq \alpha \\ -1 & \text{if } l_t(k) < -\alpha \end{cases}
+$$
+
+FI-2010 資料集為五個預測時間跨度提供標籤：$k \in \{10, 20, 30, 50, 100\}$ 個事件。
+
+## 傳統的 LOB 特徵
+
+在深度學習之前，研究者依賴手工構造的特徵。理解這些特徵至關重要，因為 DeepLOB 在結構上有意地模仿了它們中的許多——其架構正是受這些量的啟發而設計的，即便它並未精確地復現它們。
+
+### 訂單簿失衡（OBI）
+
+最廣泛使用的微觀結構訊號。在訂單簿頂部：
+
+$$
+\text{OBI}_1 = \frac{v_1^{b} - v_1^{a}}{v_1^{b} + v_1^{a}}
+$$
+
+相對於賣方成交量而言，買方成交量更多，暗示著上行壓力。多檔失衡在 $L$ 檔上做聚合：
+
+$$
+\text{OBI}_L = \frac{\sum_{i=1}^{L} v_i^{b} - \sum_{i=1}^{L} v_i^{a}}{\sum_{i=1}^{L} v_i^{b} + \sum_{i=1}^{L} v_i^{a}}
+$$
+
+### 成交量加權中間價
+
+標準的中間價對買賣兩邊等權處理。成交量加權中間價（也稱加權中間價，或 VAMP）則向訂單簿較重的一側傾斜。把訂單簿頂部的失衡寫作 $I = v_1^{b}/(v_1^{b}+v_1^{a})$，它就是這兩個價格的失衡加權平均：
+
+$$
+p^{wmid} = I\, p_1^{a} + (1 - I)\, p_1^{b} = \frac{v_1^{b}\, p_1^{a} + v_1^{a}\, p_1^{b}}{v_1^{b} + v_1^{a}}
+$$
+
+注意這種交叉加權：賣價由買方成交量加權，反之亦然。當買方成交量佔主導（$I \to 1$）時，加權中間價向賣價一側移動——這反映了一個預期：一個失衡的訂單簿會通過朝較重的一側移動來消解失衡。
+
+關於命名要提醒一句。這個靜態的、成交量加權的中間價*並不是* Stoikov 的微觀價格（microprice）。Stoikov 的微觀價格（2018）是一個經過鞅調整的估計量 $M_t + g(I, S)$，它由一個遞迴修正得到，用於刻畫價差和失衡如何演變——他的核心觀點正是：樸素的加權中間價是有偏的，而且不是鞅。它們是兩個截然不同的物件；我們在這裡使用加權中間價是出於它的簡潔性，並非把它當作微觀價格的替身。
+
+### 深度失衡
+
+刻畫訂單簿在 BBO 之外的形狀：
+
+$$
+\text{DI}_i = \frac{v_i^{b} - v_i^{a}}{v_i^{b} + v_i^{a}}, \quad i = 1, \ldots, L
+$$
+
+### 價差與相對價差
+
+$$
+s_t = p_1^{a}(t) - p_1^{b}(t), \qquad s_t^{rel} = \frac{s_t}{p_t^{mid}}
+$$
+
+這些特徵很強大，但也有侷限。它們需要領域專業知識來設計，無法捕捉複雜的非線性互動，而且忽視了連續快照之間的時間動態。DeepLOB 解決了全部這三個侷限。
+
+## DeepLOB 架構
+
+![DeepLOB 架構：一個原始訂單簿張量流經卷積層、一個 inception 模組和一個 LSTM](/images/blog/deeplob-deep-learning-order-book-architecture.webp)
+
+該架構有三個模組，每個都有各自不同的角色：
+
+1. **卷積模組**——從訂單簿快照中提取空間特徵
+2. **Inception 模組**——捕捉多尺度的時間模式
+3. **LSTM 模組**——對跨時間的序列依賴建模
+
+網路的輸入是一個形狀為 $(T, L \times 4)$ 的張量，其中 $T$ 是回看視窗（論文中為 100 個時間步），而 $L \times 4 = 40$ 對應買賣兩邊 10 檔的價格和成交量。
+
+### 模組 1：卷積特徵提取
+
+第一批卷積層沿特徵維度操作，以學習每一檔上價格與成交量之間的互動。
+
+**第 1 層：** 一個濾波器大小為 $1 \times 2$、步幅為 $(1, 2)$ 的卷積，應用於每一對價格-成交量。它把每一對 $(p_i, v_i)$ 概括為單個特徵——類似於在每一檔上計算一個“價格-成交量互動”。寬度從 40 縮減到 20。
+
+**第 2 層：** 一個 $1 \times 2$、步幅 $(1, 2)$ 的卷積，跨同一檔上配對的買賣對進行操作。它捕捉每一檔的價差和失衡資訊。寬度從 20 縮減到 10。
+
+**第 3 層：** 一個 $1 \times 10$ 的卷積，跨全部 10 檔進行整合，把深度維度坍縮為寬度 1。它為每個時間步生成單個聚合特徵，編碼了完整的深度剖面。
+
+每個 $1 \times 2$ / $1 \times 10$ 步驟之後，都跟著兩個沿時間軸的 $(4, 1)$ 卷積，每個都帶有 LeakyReLU 啟用和批歸一化。注意這些帶 `padding=(1, 0)` 的 $(4, 1)$ 卷積**並不**保持時間維度：每一個都會讓時間維度縮短一步（$T_{\text{out}} = T_{\text{in}} - 1$）。在模組 1 至 3 的六個這類層中，時間軸從 100 縮減到 inception 模組之前的 94——下面程式碼中的形狀註釋會把這一點寫明。
+
+該設計有意避免使用大的空間濾波器。$1 \times 2$ 濾波器尊重 LOB 資料天然的配對結構——價格與成交量、買價與賣價。這個歸納偏置至關重要：一個 $3 \times 3$ 濾波器會以一種毫無金融意義的方式把相鄰的檔位和買賣兩邊混在一起。
+
+### 模組 2：Inception 模組
+
+在卷積模組把 40 個特徵壓縮為一個緊湊的空間表示（寬度為 1）之後，inception 模組沿時間維度操作，以同時捕捉多個時間尺度上的模式。
+
+DeepLOB 的 inception 模組有**四條**並行路徑，每條產生 32 個通道，最後全部拼接：
+
+- **$1 \times 1$ 瓶頸層 $\to$ $3 \times 1$ 時間卷積**：短期時間模式（3 個時間步）
+- **$1 \times 1$ 瓶頸層 $\to$ $5 \times 1$ 時間卷積**：中期時間模式（5 個時間步）
+- **$3 \times 1$ 最大池化 $\to$ $1 \times 1$ 卷積**：一條池化路徑，保留一個經過平滑、降取樣的檢視
+- （$1 \times 1$ 降維操作在時間卷積之前充當逐時點的瓶頸層）
+
+每條時間路徑都使用對稱填充，因此 inception 模組內部的時間維度得以保持（與上面的卷積模組不同）。各路徑的輸出沿通道維度拼接，讓網路一次性獲得多尺度的時間特徵。
+
+這受到了 GoogLeNet 的 inception 架構的啟發，但針對一維時間資料（而非二維影像）做了適配。其關鍵洞見在於：LOB 的動態執行在多個時間尺度上——逐 tick 的噪聲、短期動量，以及更長時間跨度上的均值迴歸，三者並存。
+
+下面的 PyTorch 復現實現給出了一個**簡化的三路徑變體**（兩條時間卷積加上一條 $1\times1$ 路徑），以便程式碼保持可讀；它省略了最大池化路徑。我們明確指出這一點，因為這是對原論文的一處偏離，並非原始模組。
+
+### 模組 3：LSTM 序列建模
+
+inception 模組的輸出被送入一個 LSTM 層，處理整段長度為 $T$ 的序列。LSTM 捕捉單靠卷積會錯過的長程時間依賴——市場狀態切換（regime changes）、一天中不同時段的效應，以及不斷演變的市場狀況。
+
+LSTM 的最終隱藏狀態經過一個帶 softmax 啟用的全連線層，生成關於三類（上漲、下跌、持平）的機率分佈。
+
+### 損失函數
+
+模型用分類交叉熵進行訓練：
+
+$$
+\mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \sum_{c=1}^{3} y_{i,c} \log(\hat{y}_{i,c})
+$$
+
+其中 $y_{i,c}$ 是獨熱編碼的真實標籤，$\hat{y}_{i,c}$ 是類別 $c$ 的預測機率。
+
+## PyTorch 復現實現
+
+原始的 DeepLOB 是用 Keras 基於 TensorFlow 後端構建的；作者的程式碼倉庫（`zcakhaa`）後來增加了一個 PyTorch 移植版本。下面的程式碼是我們自己用於示意的 PyTorch 復現實現，並非官方版本。它在兩處偏離了原論文，我們已在程式碼中行內標註：它省略了 inception 的最大池化路徑（三條路徑而非四條），並放大了通道數。論文在整個卷積模組中使用 **16 個濾波器**，每條 inception 路徑使用 **32 個濾波器**（LSTM 輸入為 $3 \times 32 = 96$），構成一個約 6 萬參數的緊湊模型。下面的片段使用 32 個卷積濾波器 / 64 個 inception 濾波器（LSTM 輸入為 192）——內部自洽且可執行，但比原版更重。要與論文保持一致，請把卷積通道設為 16，inception 通道設為 32，並設 `input_size=96`。
+
+```python
+import torch
+import torch.nn as nn
+
+
+class DeepLOB(nn.Module):
+    """
+    DeepLOB-style CNN-Inception-LSTM for limit order books.
+    Reimplementation inspired by Zhang, Zohren, Roberts (2019),
+    IEEE Transactions on Signal Processing, arXiv:1808.03668.
+
+    NOTE: this is an illustrative reimplementation, NOT the official model.
+    Differences from the paper:
+      - inception has 3 paths here vs 4 in the paper (max-pool path omitted);
+      - channel counts are scaled up (paper: 16 conv / 32 inception, input 96).
+
+    Input shape: (batch_size, 1, T, 40)
+        T = lookback window (e.g. 100)
+        40 = 10 levels x 4 features (ask_price, ask_vol, bid_price, bid_vol)
+    """
+
+    def __init__(self, num_classes: int = 3, T: int = 100):
+        super().__init__()
+        self.num_classes = num_classes
+
+        # --- Block 1: Convolutional feature extraction ---
+        # Layer 1: 1x2 stride-2 conv summarizes price-volume pairs (width 40 -> 20)
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(1, 32, kernel_size=(1, 2), stride=(1, 2)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+            nn.Conv2d(32, 32, kernel_size=(4, 1), padding=(1, 0)),  # time -1
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+            nn.Conv2d(32, 32, kernel_size=(4, 1), padding=(1, 0)),  # time -1
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+        )
+
+        # Layer 2: 1x2 stride-2 conv across bid-ask pairs (width 20 -> 10)
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(32, 32, kernel_size=(1, 2), stride=(1, 2)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+            nn.Conv2d(32, 32, kernel_size=(4, 1), padding=(1, 0)),  # time -1
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+            nn.Conv2d(32, 32, kernel_size=(4, 1), padding=(1, 0)),  # time -1
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+        )
+
+        # Layer 3: 1x10 conv aggregates across all levels (width 10 -> 1)
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(32, 32, kernel_size=(1, 10)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+            nn.Conv2d(32, 32, kernel_size=(4, 1), padding=(1, 0)),  # time -1
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+            nn.Conv2d(32, 32, kernel_size=(4, 1), padding=(1, 0)),  # time -1
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(32),
+        )
+
+        # --- Block 2: Inception module (simplified: 3 paths, no max-pool) ---
+        # 1x1 bottleneck (point-in-time)
+        self.inp1 = nn.Sequential(
+            nn.Conv2d(32, 64, kernel_size=(1, 1), padding=(0, 0)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(64),
+        )
+        # 1x1 bottleneck -> 3x1 temporal conv (symmetric padding keeps time)
+        self.inp2 = nn.Sequential(
+            nn.Conv2d(32, 64, kernel_size=(1, 1), padding=(0, 0)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(64),
+            nn.Conv2d(64, 64, kernel_size=(3, 1), padding=(1, 0)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(64),
+        )
+        # 1x1 bottleneck -> 5x1 temporal conv (symmetric padding keeps time)
+        self.inp3 = nn.Sequential(
+            nn.Conv2d(32, 64, kernel_size=(1, 1), padding=(0, 0)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(64),
+            nn.Conv2d(64, 64, kernel_size=(5, 1), padding=(2, 0)),
+            nn.LeakyReLU(negative_slope=0.01),
+            nn.BatchNorm2d(64),
+        )
+        # The paper adds a 4th path: 3x1 max-pool -> 1x1 conv. Omitted here.
+
+        # --- Block 3: LSTM ---
+        self.lstm = nn.LSTM(
+            input_size=192,  # 64 * 3 paths from the simplified inception
+            hidden_size=64,
+            num_layers=1,
+            batch_first=True,
+        )
+
+        # --- Output layer ---
+        self.fc = nn.Linear(64, num_classes)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            x: Tensor of shape (batch, 1, T, 40)
+        Returns:
+            Tensor of shape (batch, num_classes)
+        """
+        # Block 1: spatial convolutions. Each (4,1) conv shortens time by 1.
+        h = self.conv1(x)   # (batch, 32, T-2, 20)
+        h = self.conv2(h)   # (batch, 32, T-4, 10)
+        h = self.conv3(h)   # (batch, 32, T-6, 1)   e.g. T=100 -> 94
+
+        # Block 2: inception --- parallel temporal convs keep the time axis
+        h_inp1 = self.inp1(h)  # (batch, 64, T-6, 1)
+        h_inp2 = self.inp2(h)  # (batch, 64, T-6, 1)
+        h_inp3 = self.inp3(h)  # (batch, 64, T-6, 1)
+        h = torch.cat([h_inp1, h_inp2, h_inp3], dim=1)  # (batch, 192, T-6, 1)
+
+        # Reshape for LSTM: (batch, seq_len, features)
+        h = h.squeeze(-1)          # (batch, 192, T-6)
+        h = h.permute(0, 2, 1)     # (batch, T-6, 192)
+
+        # Block 3: LSTM
+        h, _ = self.lstm(h)
+        h = h[:, -1, :]  # take last hidden state
+
+        # Classification
+        out = self.fc(h)
+        return out
+```
+
+### 資料預處理
+
+FI-2010 資料集釋出時已做了 z-score 歸一化。對於即時訂單簿資料，你需要做類似的歸一化：
+
+```python
+import numpy as np
+from torch.utils.data import Dataset
+
+
+class LOBDataset(Dataset):
+    """Dataset for limit order book snapshots."""
+
+    def __init__(
+        self,
+        data: np.ndarray,
+        labels: np.ndarray,
+        T: int = 100,
+    ):
+        """
+        Args:
+            data: shape (num_snapshots, 40), raw LOB features
+            labels: shape (num_snapshots,), class labels {0, 1, 2}
+            T: lookback window length
+        """
+        self.data = data
+        self.labels = labels
+        self.T = T
+
+        # Z-score normalization per feature, fitted on the first half only
+        self.mean = data[:len(data) // 2].mean(axis=0)
+        self.std = data[:len(data) // 2].std(axis=0)
+        self.std[self.std == 0] = 1.0
+        self.data = (self.data - self.mean) / self.std
+
+    def __len__(self) -> int:
+        return len(self.data) - self.T
+
+    def __getitem__(self, idx: int):
+        # Shape: (1, T, 40) --- single channel for Conv2d
+        x = self.data[idx : idx + self.T].reshape(1, self.T, 40)
+        y = self.labels[idx + self.T - 1]
+        return torch.tensor(x, dtype=torch.float32), torch.tensor(
+            y, dtype=torch.long
+        )
+```
+
+### 訓練迴圈
+
+```python
+def train_deeplob(
+    model: DeepLOB,
+    train_loader,
+    val_loader,
+    epochs: int = 50,
+    lr: float = 0.01,
+    device: str = "cuda",
+):
+    model = model.to(device)
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr, eps=1)
+
+    best_val_f1 = 0.0
+    for epoch in range(epochs):
+        model.train()
+        train_loss = 0.0
+        for x_batch, y_batch in train_loader:
+            x_batch = x_batch.to(device)
+            y_batch = y_batch.to(device)
+
+            optimizer.zero_grad()
+            logits = model(x_batch)
+            loss = criterion(logits, y_batch)
+            loss.backward()
+            optimizer.step()
+            train_loss += loss.item()
+
+        # Validation
+        model.eval()
+        all_preds, all_labels = [], []
+        with torch.no_grad():
+            for x_val, y_val in val_loader:
+                x_val = x_val.to(device)
+                preds = model(x_val).argmax(dim=1).cpu()
+                all_preds.extend(preds.numpy())
+                all_labels.extend(y_val.numpy())
+
+        from sklearn.metrics import f1_score
+        val_f1 = f1_score(all_labels, all_preds, average="weighted")
+
+        print(
+            f"Epoch {epoch+1}/{epochs} | "
+            f"Train Loss: {train_loss/len(train_loader):.4f} | "
+            f"Val F1: {val_f1:.4f}"
+        )
+
+        if val_f1 > best_val_f1:
+            best_val_f1 = val_f1
+            torch.save(model.state_dict(), "deeplob_best.pt")
+```
+
+原論文中的關鍵訓練超參數：
+- **最佳化器**：Adam，$\epsilon = 1$（異常地大——有助於在噪聲很大的金融資料上穩定更新）
+- **學習率**：0.01
+- **批大小**：32
+- **回看視窗**：$T = 100$ 個時間步
+
+我們在驗證中追蹤加權 F1 而非準確率，因為三個類別是不平衡的——而且，正如下一節所示，F1 正是原論文出於完全相同的原因所強調的指標。
+
+## DeepLOB 旨在捕捉什麼
+
+![DeepLOB 學習的微觀結構訊號：訂單流失衡、排隊動態，以及成交量加權中間價壓力](/images/blog/deeplob-deep-learning-order-book-features.webp)
+
+DeepLOB 的一個吸引人之處在於，它的各個模組與上面那些手工構造的特徵*受同一動機驅動*的程度。我們在這裡要謹慎：論文把這些呈現為設計直覺，而非訓練後網路已被證明的性質。它並未發表濾波器視覺化、啟用與失衡之間的相關性，或對 LSTM 關注什麼的分析。所以請把下面的內容當作架構意圖，而非已測得的發現。
+
+**第一個卷積模組。** $1 \times 2$ 濾波器在每一檔上把價格與成交量配對。從結構上看，這與形成成交量加權價格的操作是同一個——論文為第一層給出的動機，正是指出它的特徵圖構成了一個類似微觀價格的量。這個網路是*被設計來*恢復該類量中的某種東西的；我們並不聲稱它可證明地重新發現了任何特定的估計量。
+
+**第二個卷積模組。** 通過跨買賣對進行操作，這些濾波器被放在了一個可以在多個檔位上學習類失衡特徵的位置——同樣地，這是出於構造，而非已被論證的相關性。
+
+**Inception 模組。** 多尺度的時間卷積意在捕捉不同頻率上的動量：$1\times1$ 路徑響應逐時點的結構，$3\times1$ 路徑響應短期趨勢，$5\times1$ 路徑響應略長一些的趨勢，而（在完整模組中）最大池化路徑響應一個平滑後的檢視。
+
+**LSTM 層。** 這個迴圈元件增加了對卷積無法表示的長程依賴的記憶——市場狀態切換和一天中不同時段的效應。我們避免做出更強的論斷（比如聲稱 LSTM 實現了某種“自適應注意力”，會在高波動狀態下對近期資料重新加權）；論文並未展示這一點。
+
+## 在 FI-2010 上的表現
+
+原論文評估了兩套協議。設定 1 使用資料集較早的歸一化劃分；設定 2 是後續大多數工作用來對比的深度學習設定。由於 FI-2010 存在類別不平衡，論文強調的是 **F1** 而非準確率，併為非神經網路基線（SVM、MLP）報告基於精確率/召回率的數字。以下是真實的設定 2 資料（F1，%）：
+
+| 時間跨度 (k) | SVM   | MLP   | CNN-I | LSTM  | DeepLOB   |
+|-------------|-------|-------|-------|-------|-----------|
+| 10          | 35.88 | 48.27 | 55.21 | 66.33 | **83.40** |
+| 20          | —     | —     | —     | —     | **72.82** |
+| 50          | —     | —     | —     | —     | **80.35** |
+
+在 $k = 10$ 時，DeepLOB 除了 83.40 的 F1，還報告了 84.47% 的準確率。設定 2 僅報告 $k \in \{10, 20, 50\}$——這裡沒有 $k = 100$ 這一行。（設定 1 確實報告了 $k \in \{10, 50, 100\}$，DeepLOB 的 F1 分別為 77.66 / 74.96 / 76.58。）上表中的破折號標記的是論文在該協議下、那些時間跨度上沒有列出的基線單元格。
+
+有幾點觀察值得注意：
+
+1. **在短時間跨度上，DeepLOB 以很大優勢擊敗了基線。** 在 $k = 10$ 時，它的 F1（83.40）遠高於 LSTM（66.33）、CNN-I（55.21）、MLP（48.27）和 SVM（35.88）。這種定性排序——深度的迴圈-卷積模型優於純 CNN、MLP 和 SVM——是穩健的結論。
+2. **時間跨度上的趨勢是非單調的，並非“越長越容易”。** 在整個設定 2 中，當 $k$ 從 $10 \to 20 \to 50$ 時，DeepLOB 的 F1 走的是 $83.40 \to 72.82 \to 80.35$——一個 U 形模式，其中 $k=20$ 最難，而不是一路乾淨上升。某個時間跨度是否“更容易”，在很大程度上取決於設定、閾值 $\alpha$ 以及標籤平滑方案；我們不應從這些數字裡讀出某種普適規律。
+3. **DeepLOB 並非在每個單元格上都壓倒所有經典方法。** 面對像 C(TABL) 這樣強大的基線時，在某些時間跨度上差距會縮小，因此“在任何地方都勝過所有經典方法”是誇大其詞。站得住腳的論斷是：它具有競爭力乃至最優，並且在短時間跨度上明顯最佳。
+
+再次強調：論文自己的看法是，FI-2010 太小、降取樣太多，不足以為這個問題蓋棺定論。它更有力的證據是 LSE 研究，在那裡 DeepLOB 在一組股票上訓練，仍能在留出的股票上做出預測——這是 FI-2010 無法展示的遷移學習結果。
+
+## LOBFrame 與復現危機
+
+![發散的樣本內與樣本外曲線，刻畫訂單簿深度學習的復現危機](/images/blog/deeplob-deep-learning-order-book-replication.webp)
+
+LOBFrame 基準框架（Briola、Bartolucci、Aste，2024）為這些結果提供了一個令人清醒的補充。儘管 DeepLOB 的架構是合理的，這個框架還是凸顯了若干重要的注意事項：
+
+**對微觀結構的依賴。** 模型表現在微觀結構特徵不同的股票之間差異顯著。流動性強、tick 較大的股票比流動性差、tick 較小的工具更容易預測。一個在某隻股票上看起來很強的模型，在另一隻股票上可能會大幅退化。
+
+**預測對比利潤。** 高分類準確率並不會自動轉化為交易利潤。LOBFrame 強調那些與“預測到的價格變動是否大到足以跨越買賣價差”相掛鉤的指標。一個模型需要足夠頻繁地預測正確，並且在足夠大的變動上預測正確，才能克服價差——而對於價差很窄的股票來說，這道門檻很高。
+
+**對標籤的敏感性。** 閾值 $\alpha$ 和時間跨度 $k$ 的選擇，會極大地影響報告的準確率以及預測的實際價值。標籤定得太緊會產生噪聲很大的目標；標籤定得太寬則會產生平凡“準確”但毫無用處的預測。
+
+## 超越 DeepLOB：當前的格局
+
+![現代訂單簿預測方法圍繞著原始 DeepLOB 模型構成的星座](/images/blog/deeplob-deep-learning-order-book-landscape.webp)
+
+自 DeepLOB 發表以來，出現了若干擴充工作：
+
+**面向限價訂單簿的 Transformer**（Wallbridge，2020）。在後來的文獻中常被籠統地稱為“TransLOB”，但這個模型本身是一個因果/空洞卷積的特徵提取器，後接帶掩碼的多頭自注意力——並不是簡單地把 DeepLOB 的 LSTM 換成 Transformer；它沒有複用 inception+卷積的堆疊。它在當時報告了一個新的 FI-2010 最新水平（state of the art）。
+
+**加密貨幣領域的變體。** 若干團隊把 DeepLOB 風格的架構應用到加密貨幣市場，那裡的訂單簿動態與股票市場有顯著差異——價差更寬、7×24 小時交易，以及不同的參與者構成，這些都要求重新訓練。
+
+**注意力增強的變體。** 有一條研究線把多頭注意力插入到 inception 模組和 LSTM 模組之間，讓網路聚焦於對當前預測最有資訊量的檔位或時間步。
+
+**LOB-Bench**（Nagy、Frey、Li、Sarkar、Vyetrenko、Zohren、Calinescu、Foerster，2025）。這個基準把注意力從預測轉向*生成*，評估訂單簿資料的生成式模型有多逼真——這與回測和智慧體訓練相關，而非方向性預測。
+
+## 投入生產的實務考量
+
+如果你正在考慮把一個 DeepLOB 風格的模型部署到即時交易系統中，會出現若干工程上的關切：
+
+### 延遲
+
+模型必須在你交易系統的延遲預算之內產出預測。對於執行在亞毫秒級延遲下的 HFT 系統，即便是經過最佳化的 PyTorch 推理也可能太慢。可選方案包括：
+- 匯出為 ONNX 並用 TensorRT 最佳化
+- 量化為 INT8
+- 對延遲最敏感的應用採用 FPGA 部署
+
+### 資料管線
+
+模型期望以固定頻率得到歸一化、對齊的訂單簿快照。而在實踐中，LOB 更新是非同步到達的。你需要：
+- 一個快照重建引擎，用於維護當前的訂單簿狀態
+- 一個固定頻率的取樣器，用於產出 $(T, 40)$ 的輸入張量
+- 使用滾動統計量做線上歸一化
+
+### 特徵穩定性
+
+在訓練資料上計算出的 z-score 歸一化參數會隨時間漂移。價格在變、波動率狀態在切換、市場結構在演變。一個生產系統需要：
+- 滾動的歸一化視窗（例如每天重新計算統計量）
+- 狀態檢測，用於觸發模型重新訓練
+- 對輸入分佈漂移的監控
+
+### 對微觀結構的過擬合
+
+LOB 模式是場所特定且工具特定的。一個在 NASDAQ 股票上訓練的模型，不經過重新訓練就無法用於 Binance 的 BTC/USDT。即便在同一個場所內，模型也可能過擬合於：
+- tick 大小所處的狀態（大 tick 對比小 tick 股票）
+- 一天中不同時段的模式（開盤集合競價、午間清淡、收盤撮合）
+- 隨時間變化的做市商行為
+
+## 結論
+
+DeepLOB 代表了將深度學習應用於市場微觀結構的一個乾淨、動機充分的範例。它的三模組架構——用 CNN 提取空間特徵、用 inception 捕捉多尺度時間模式、用 LSTM 處理序列依賴——自然地對映到限價訂單簿資料的結構之上。
+
+關鍵的洞見不僅在於一個深度模型能夠媲美甚至擊敗手工構造的特徵，更在於這個架構的歸納偏置——$1 \times 2$ 濾波器、inception 的並行性、迴圈記憶——編碼了關於訂單簿如何運作的真正領域知識。這不是一個被丟到金融資料上的通用深度網路；它是一個圍繞限價訂單簿特有幾何結構而設計的架構。而它最令人信服的證據，並非作者自己也不信任的 FI-2010 排行榜，而是基於一年 LSE 資料的遷移學習結果。
+
+對從業者而言，DeepLOB 是一個強大的基線，也是一塊有用的構件。對研究者而言，它表明深思熟慮的架構設計——而不僅僅是模型規模——才是結構化金融資料上效能的驅動力。只需記住：引用真實的資料、留意標籤方案，並把分類準確率視為離交易利潤還差得很遠。
+
+---
+
+## 參考文獻
+
+1. Zhang, Z., Zohren, S., & Roberts, S. (2019). *DeepLOB: Deep Convolutional Neural Networks for Limit Order Books*. IEEE Transactions on Signal Processing, 67(11), 3001-3012. [arXiv:1808.03668](https://arxiv.org/abs/1808.03668)
+
+2. Ntakaris, A., Magris, M., Kanniainen, J., Gabbouj, M., & Iosifidis, A. (2018). *Benchmark Dataset for Mid-Price Forecasting of Limit Order Book Data with Machine Learning Methods*. Journal of Forecasting, 37(8), 852-866. [arXiv:1705.03233](https://arxiv.org/abs/1705.03233)
+
+3. Briola, A., Bartolucci, S., & Aste, T. (2024). *Deep Limit Order Book Forecasting* (LOBFrame). [arXiv:2403.09267](https://arxiv.org/abs/2403.09267)
+
+4. Wallbridge, J. (2020). *Transformers for Limit Order Books*. [arXiv:2003.00130](https://arxiv.org/abs/2003.00130)
+
+5. Cont, R., Kukanov, A., & Stoikov, S. (2014). *The Price Impact of Order Book Events*. Journal of Financial Econometrics, 12(1), 47-88.
+
+6. Stoikov, S. (2018). *The Micro-Price: A High-Frequency Estimator of Future Prices*. Quantitative Finance, 18(12), 1959-1966.
+
+7. Nagy, P., Frey, S., Li, K., Sarkar, B., Vyetrenko, S., Zohren, S., Calinescu, A., & Foerster, J. (2025). *LOB-Bench: Benchmarking Generative AI for Finance — an Application to Limit Order Book Data*. ICML 2025. [arXiv:2502.09172](https://arxiv.org/abs/2502.09172)
+
+8. DeepLOB code (original in Keras/TensorFlow; the repository also provides a PyTorch port): [github.com/zcakhaa/DeepLOB-Deep-Convolutional-Neural-Networks-for-Limit-Order-Books](https://github.com/zcakhaa/DeepLOB-Deep-Convolutional-Neural-Networks-for-Limit-Order-Books)

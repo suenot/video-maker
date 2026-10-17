@@ -1,0 +1,36 @@
+Create a separate NotebookLM Deep Dive audio overview in the default spoken format. Use only the attached source named "MM article deeplob-deep-learning-order-book EN f5f1f4f64357". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English throughout. Keep technical identifiers, figures, dates, citations, links, code, table values and equations exact.
+Follow every H1-H3 heading in this exact sequence and preserve each exact source heading:
+1. # DeepLOB: Deep Learning on Limit Order Books
+2. ## The Limit Order Book as a Data Structure
+3. ### Mid-Price and Its Movements
+4. ## Traditional LOB Features
+5. ### Order Book Imbalance (OBI)
+6. ### Volume-Weighted Mid-Price
+7. ### Depth Imbalance
+8. ### Spread and Relative Spread
+9. ## DeepLOB Architecture
+10. ### Block 1: Convolutional Feature Extraction
+11. ### Block 2: Inception Module
+12. ### Block 3: LSTM Sequence Modeling
+13. ### Loss Function
+14. ## PyTorch Reimplementation
+15. ### Data Preprocessing
+16. ### Training Loop
+17. ## What DeepLOB Is Built to Capture
+18. ## Performance on FI-2010
+19. ## LOBFrame and the Replication Crisis
+20. ## Beyond DeepLOB: The Current Landscape
+21. ## Practical Considerations for Production
+22. ### Latency
+23. ### Data Pipeline
+24. ### Feature Stability
+25. ### Overfitting to Microstructure
+26. ## Conclusion
+27. ## References
+
+Article-specific coverage: Cover the entire article: the limit order book data structure and mid-price movement; OBI, volume-weighted mid-price, depth imbalance and spreads; every DeepLOB architecture block (convolution, Inception, LSTM and loss); the PyTorch reproduction, preprocessing and training loop; what the model is designed to capture; reported FI-2010 performance; LOBFrame and reproducibility concerns; later approaches; and production latency, data pipeline, feature stability and microstructure overfitting.
+
+Treat the FI-2010 performance, model behavior, replication results, library/API details and production guidance as claims from this article pending human editorial and primary-source review. Preserve its definitions, labels, equations, numerical values, caveats and citations exactly. Do not add current specifications, outside performance data, measured results or guarantees.
+
+External NotebookLM notebook/source/artifact duplicates are not_checked and must be reconciled before submission; target-channel duplicates are not_checked and must be reconciled before final production. Do not imply either is cleared.
+Use natural spoken narration in English to explain the order-book representation, feature definitions, model architecture, reproduction workflow, reported evaluation, reproducibility caveats and production concerns. Distinguish article claims from independently verified facts aloud. End with the article conclusion and references.
