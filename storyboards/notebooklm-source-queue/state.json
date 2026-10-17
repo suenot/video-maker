@@ -12397,7 +12397,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "scheduled",
+          "state": "generating",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 18:51."
@@ -12412,8 +12412,8 @@
           "source_id": "cdd25d37-bf59-4522-9eef-73ccb8e98eca",
           "submission_mode": "later",
           "artifact_id": "90c38928-f7b3-4425-b637-b308975d2edf",
-          "card_text": "tablet\nDeepLOB: Deep Learning for Limit Order Books\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-17T16:06:36.536933+00:00"
+          "card_text": "progress_activity\nGenerating Slide Deck...\nMapping out the flow...",
+          "observed_at": "2026-10-17T16:21:16.043236+00:00"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -12574,9 +12574,153 @@
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
+    },
+    "desire-orderbook:en": {
+      "slug": "desire-orderbook",
+      "language": "en",
+      "article_sha256": "c195df01d6204b2f03fe6ca5d3704375f093c6b09eeb1f015331be7c5148fe44",
+      "input_hashes": {
+        "article": "c195df01d6204b2f03fe6ca5d3704375f093c6b09eeb1f015331be7c5148fe44",
+        "source_text": "2346c8215dc9421a85a6a8c17898cdeede8a834d75c1c37436222c1bf773bdf4",
+        "slides_prompt": "b421831db39da9bfc3d4e936657027619da2d8ff9a2747cc6084b7d95dd61477",
+        "audio_prompt": "6ba440983e37d3ff70dc9f018328d8c03bd528ad2433b17c43a154dfa2e54506"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "b421831db39da9bfc3d4e936657027619da2d8ff9a2747cc6084b7d95dd61477",
+          "requested_at": "2026-10-17T16:21:35.423841+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "9d0182fc-9cf8-486c-89ac-be516f3c9ae0",
+          "submission_mode": "now",
+          "artifact_id": "5879f0fb-351a-4a02-9c9b-0909846d7a32",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
+          "observed_at": "2026-10-17T16:21:39.998941+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "5879f0fb-351a-4a02-9c9b-0909846d7a32"
+          ],
+          "prompt_sha256": "6ba440983e37d3ff70dc9f018328d8c03bd528ad2433b17c43a154dfa2e54506",
+          "requested_at": "2026-10-17T16:21:45.430666+00:00",
+          "language_selection": [
+            "English"
+          ],
+          "source_id": "9d0182fc-9cf8-486c-89ac-be516f3c9ae0",
+          "submission_mode": "now",
+          "artifact_id": "1544ec3d-efdd-43e8-8820-45d7bdaf6af7",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-17T16:21:49.993533+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-17T16:21:16.115922+00:00",
+      "notebook_intent": {
+        "at": "2026-10-17T16:21:21.166052+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/desire-orderbook-en-20261017T162121164409Z-notebook-baseline.json",
+        "baseline_sha256": "7d8cb3332f89e0001ec09af92f2d9a12ad0d44b7cf5ea75f8777a4c3c3c0b193",
+        "baseline_count": 380,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-17T16:21:22.294956+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/610e56b9-aafa-41ec-97d9-824d06bd0cc7",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-17T16:21:26.394521+00:00",
+        "sha256": "2346c8215dc9421a85a6a8c17898cdeede8a834d75c1c37436222c1bf773bdf4",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-17T16:21:32.911452+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "9d0182fc-9cf8-486c-89ac-be516f3c9ae0",
+      "source_title": "MM article desire-orderbook EN c195df01d620",
+      "source_sha256": "2346c8215dc9421a85a6a8c17898cdeede8a834d75c1c37436222c1bf773bdf4",
+      "state": "source_ready",
+      "source_display_name": "MM article desire-orderbook EN c195df01d620",
+      "selected_source_ids": [
+        "9d0182fc-9cf8-486c-89ac-be516f3c9ae0"
+      ]
+    },
+    "desire-orderbook:ru": {
+      "slug": "desire-orderbook",
+      "language": "ru",
+      "article_sha256": "21c5492c9ebe89ef001e9f86f87ecfc35646f0ee84575124aa13c8eea6b298c9",
+      "input_hashes": {
+        "article": "21c5492c9ebe89ef001e9f86f87ecfc35646f0ee84575124aa13c8eea6b298c9",
+        "source_text": "12b3783791fcccc64034e0f4724f42ebd1d76db006ee04b8280bb81ab57428bd",
+        "slides_prompt": "f0b66a659189fe1f8d0becb5d6a876b164293751a8a418528c2229857877993a",
+        "audio_prompt": "de48d52421d36342f9ca0de5df9405fbf3a2b884b5a4cc0a4b687bf6855b7a8a"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "f0b66a659189fe1f8d0becb5d6a876b164293751a8a418528c2229857877993a",
+          "requested_at": "2026-10-17T16:22:11.241808+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "98f82026-c3f0-477b-9c79-19aeeea0c4bc",
+          "submission_mode": "now",
+          "artifact_id": "1b47169b-27ca-43b7-8112-55308515db59",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
+          "observed_at": "2026-10-17T16:22:15.820462+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "1b47169b-27ca-43b7-8112-55308515db59"
+          ],
+          "prompt_sha256": "de48d52421d36342f9ca0de5df9405fbf3a2b884b5a4cc0a4b687bf6855b7a8a",
+          "requested_at": "2026-10-17T16:22:22.962177+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "98f82026-c3f0-477b-9c79-19aeeea0c4bc",
+          "submission_mode": "now",
+          "artifact_id": "a89f4dbb-c9cf-4b71-a4cd-7c70763a9664",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-17T16:22:27.529470+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-17T16:21:50.028684+00:00",
+      "notebook_intent": {
+        "at": "2026-10-17T16:21:54.977679+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/desire-orderbook-ru-20261017T162154976176Z-notebook-baseline.json",
+        "baseline_sha256": "e34f3cee31ed900c0a36803bd4238d878a46723ed4f8701e03f92b0679b1e711",
+        "baseline_count": 381,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-17T16:21:56.100938+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/7a2f8571-b154-4558-924f-98c624eaaa2b",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-17T16:22:00.192677+00:00",
+        "sha256": "12b3783791fcccc64034e0f4724f42ebd1d76db006ee04b8280bb81ab57428bd",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-17T16:22:06.452359+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "98f82026-c3f0-477b-9c79-19aeeea0c4bc",
+      "source_title": "MM article desire-orderbook RU 21c5492c9ebe",
+      "source_sha256": "12b3783791fcccc64034e0f4724f42ebd1d76db006ee04b8280bb81ab57428bd",
+      "state": "source_ready",
+      "source_display_name": "MM article desire-orderbook RU 21c5492c9ebe",
+      "selected_source_ids": [
+        "98f82026-c3f0-477b-9c79-19aeeea0c4bc"
+      ]
     }
   },
-  "checked_at": "2026-10-17T16:06:36.547426+00:00",
+  "checked_at": "2026-10-17T16:22:27.548500+00:00",
   "browser_geometry_requested": {
     "width": 1994,
     "height": 1290,
