@@ -10955,23 +10955,49 @@
         "dispatch_state": "dispatch_unknown"
       },
       "last_error": {
-        "type": "TimeoutError",
-        "message": "Locator.evaluate: Timeout 30000ms exceeded.",
-        "at": "2026-10-17T04:51:31.141563+00:00",
+        "type": "RuntimeError",
+        "message": "Interrupted notebook creation requires binding its saved candidate; no duplicate creation",
+        "at": "2026-10-17T05:58:39.224622+00:00",
         "stage": "notebook",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T045131243541Z-error.png",
-            "sha256": "401df304237eeb8ce02818a66140e06faf8724463b7dbb06304e383e5e1aa00c"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T055839230709Z-error.png",
+            "sha256": "b4b8be6b9eddf0de9c1cd4d1b127cbbfb4c469ddd0375c752862eedf890b214b"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T045131243541Z-controls.json",
-            "sha256": "dff503f19386b0c250c743bb43f5d276670fe681e8e4a7bacd862c9b1f3cb112"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T055839230709Z-controls.json",
+            "sha256": "4a7e5552299f553aa6e49f3e45b735bf8a28428e52b24ef19020ff2ad1efe6de"
           }
         },
-        "retry_not_before": "2026-10-17T05:06:31.494766+00:00",
+        "retry_not_before": "2026-10-17T06:13:39.484418+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
-      }
+      },
+      "unbound_notebook_candidates": [
+        {
+          "title": "Data Communication in Algorithmic Trading Systems",
+          "href": "/notebook/96b538c3-5b24-4cb1-8059-7f25b58b630a"
+        }
+      ],
+      "error_history": [
+        {
+          "type": "TimeoutError",
+          "message": "Locator.evaluate: Timeout 30000ms exceeded.",
+          "at": "2026-10-17T04:51:31.141563+00:00",
+          "stage": "notebook",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T045131243541Z-error.png",
+              "sha256": "401df304237eeb8ce02818a66140e06faf8724463b7dbb06304e383e5e1aa00c"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T045131243541Z-controls.json",
+              "sha256": "dff503f19386b0c250c743bb43f5d276670fe681e8e4a7bacd862c9b1f3cb112"
+            }
+          },
+          "retry_not_before": "2026-10-17T05:06:31.494766+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        }
+      ]
     },
     "data-communication-algotrading:ru": {
       "slug": "data-communication-algotrading",
@@ -10985,7 +11011,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "77c51c79260b28cf8ac2d16ee4c2342f04bb87b3364ffc590585de5e3db61f16",
           "requested_at": "2026-10-17T04:51:54.221557+00:00",
@@ -10995,11 +11021,18 @@
           "source_id": "a68869ea-72b8-49fc-822a-58876078a19d",
           "submission_mode": "now",
           "artifact_id": "24461e80-f7a6-4eb4-8675-236cffe9e7e4",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
-          "observed_at": "2026-10-17T04:51:58.808814+00:00"
+          "card_text": "tablet\nUnread\nAlgorithmic Trading Data Architecture\n1 source · 57m ago\nmore_vert",
+          "observed_at": "2026-10-17T06:14:05.163446+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/data-communication-algotrading/ru/slides.pdf",
+          "sha256": "7d022cb8353ec4618aff782257af98ef5701bcedaae192b03f5964e1cc26a2a1",
+          "bytes": 16974790,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-17T06:27:04.620045+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "submission_unknown",
+          "state": "requires_manual_binding",
           "baseline_ids": [
             "24461e80-f7a6-4eb4-8675-236cffe9e7e4"
           ],
@@ -11009,7 +11042,8 @@
             "русский"
           ],
           "source_id": "a68869ea-72b8-49fc-822a-58876078a19d",
-          "submission_mode": "now"
+          "submission_mode": "now",
+          "recovery_reason": "Interrupted submission has no saved artifact ID; inspect request evidence before binding."
         }
       },
       "admission_state": "admitted",
@@ -11044,24 +11078,187 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-17T05:25:45.345754+00:00",
+        "at": "2026-10-17T06:27:05.658853+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T052545357775Z-error.png",
-            "sha256": "98a50a8bedcd1b9ec47cfd9197385b104109a2e742e20ec8d4a403895c42d1ae"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T062705668042Z-error.png",
+            "sha256": "74b6c4471540e99ad9c39b138883093f5b48809a9e1d23fc1fa70991a3171155"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T052545357775Z-controls.json",
-            "sha256": "fc17a100661d301a16442e31a65ce78d45ffb511ad1cd747fbf7c48ca5aadc35"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T062705668042Z-controls.json",
+            "sha256": "f008f2aaae26e99277ecfa4feef93ccc9cc76f17dedcd3146312f128c3139c47"
           }
         },
-        "retry_not_before": "2026-10-17T05:40:45.495498+00:00",
+        "retry_not_before": "2026-10-17T06:42:05.812520+00:00",
+        "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+      },
+      "error_history": [
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-17T05:25:45.345754+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T052545357775Z-error.png",
+              "sha256": "98a50a8bedcd1b9ec47cfd9197385b104109a2e742e20ec8d4a403895c42d1ae"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T052545357775Z-controls.json",
+              "sha256": "fc17a100661d301a16442e31a65ce78d45ffb511ad1cd747fbf7c48ca5aadc35"
+            }
+          },
+          "retry_not_before": "2026-10-17T05:40:45.495498+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        }
+      ]
+    },
+    "data-communication-algotrading:zh-CN": {
+      "slug": "data-communication-algotrading",
+      "language": "zh-CN",
+      "article_sha256": "f912d2ac7ed22eb02935bc93d5e8f88a756527a9bbfe97f2b39158cfa92d564b",
+      "input_hashes": {
+        "article": "f912d2ac7ed22eb02935bc93d5e8f88a756527a9bbfe97f2b39158cfa92d564b",
+        "source_text": "76a5c8a17c019ec076c08915a634c887bc3010f6c5637f9ef366663c48c47196",
+        "slides_prompt": "3abefb9de7c24afde43d4390ed485287a5bb5e26a329a4b5dbea29502b04df54",
+        "audio_prompt": "b5ee08c0b1fad3768a3ce549b2e9058bedfcdf4f182e2d04468c71e3a94bc8ca"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "3abefb9de7c24afde43d4390ed485287a5bb5e26a329a4b5dbea29502b04df54",
+          "requested_at": "2026-10-17T06:27:28.181536+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "3f686d41-4927-4455-b3b8-f5fb66ce674c",
+          "submission_mode": "now",
+          "artifact_id": "ea993b78-51fb-4a21-ae0e-03b0beb31d3a",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
+          "observed_at": "2026-10-17T06:27:32.769181+00:00"
+        },
+        "audio": {
+          "state": "generating",
+          "baseline_ids": [
+            "ea993b78-51fb-4a21-ae0e-03b0beb31d3a"
+          ],
+          "prompt_sha256": "b5ee08c0b1fad3768a3ce549b2e9058bedfcdf4f182e2d04468c71e3a94bc8ca",
+          "requested_at": "2026-10-17T06:27:40.238835+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "3f686d41-4927-4455-b3b8-f5fb66ce674c",
+          "submission_mode": "now",
+          "artifact_id": "2dbc979d-8f42-4142-8b1d-c58b9046dc9b",
+          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
+          "observed_at": "2026-10-17T06:27:44.824379+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-17T06:27:05.999077+00:00",
+      "notebook_intent": {
+        "at": "2026-10-17T06:27:10.855728+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-CN-20261017T062710855143Z-notebook-baseline.json",
+        "baseline_sha256": "824397e7ec364dd1a846c95d5f8d567ed3b625ec7da378829d3dfa763e2066c4",
+        "baseline_count": 370,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-17T06:27:11.941333+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/1b043b20-2463-4847-ab23-c764cc7792f8",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-17T06:27:16.004542+00:00",
+        "sha256": "76a5c8a17c019ec076c08915a634c887bc3010f6c5637f9ef366663c48c47196",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-17T06:27:23.248830+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "3f686d41-4927-4455-b3b8-f5fb66ce674c",
+      "source_title": "MM article data-communication-algotrading ZH-CN f912d2ac7ed2",
+      "source_sha256": "76a5c8a17c019ec076c08915a634c887bc3010f6c5637f9ef366663c48c47196",
+      "state": "source_ready",
+      "source_display_name": "MM article data-communication-algotrading ZH-CN f…",
+      "selected_source_ids": [
+        "3f686d41-4927-4455-b3b8-f5fb66ce674c"
+      ]
+    },
+    "data-communication-algotrading:zh-TW": {
+      "slug": "data-communication-algotrading",
+      "language": "zh-TW",
+      "article_sha256": "c801d468a187c4757b38b7439a68fed425f828cd817427a586e14c379f2f3d64",
+      "input_hashes": {
+        "article": "c801d468a187c4757b38b7439a68fed425f828cd817427a586e14c379f2f3d64",
+        "source_text": "30265a41d500791e810cada390913d9869dbcea644d0653f3d76c6679d7d63e4",
+        "slides_prompt": "268a1347dcb1bd53c00da1669de5aab0140c2f96b22913f6c7f52e75b0a97c83",
+        "audio_prompt": "e3f798f6853482139ad12f526454443ae1537d4d14a756e7d0cfd8666204c451"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "submission_unknown",
+          "baseline_ids": [],
+          "prompt_sha256": "268a1347dcb1bd53c00da1669de5aab0140c2f96b22913f6c7f52e75b0a97c83",
+          "requested_at": "2026-10-17T06:28:05.636855+00:00",
+          "language_selection": [
+            "中文（繁體）"
+          ],
+          "source_id": "3cf03bc4-3f81-49b6-9f71-64917c359ba2",
+          "submission_mode": "now"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-17T06:27:44.859951+00:00",
+      "notebook_intent": {
+        "at": "2026-10-17T06:27:49.600571+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T062749600034Z-notebook-baseline.json",
+        "baseline_sha256": "79f14918719903e13c7036fb9006f3a5ccf79ac0dd0ec299274603dcc54187a5",
+        "baseline_count": 371,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-17T06:27:50.728495+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/b18ac299-e87c-44a4-9883-ac5f08222062",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-17T06:27:54.795224+00:00",
+        "sha256": "30265a41d500791e810cada390913d9869dbcea644d0653f3d76c6679d7d63e4",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-17T06:28:00.829546+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "3cf03bc4-3f81-49b6-9f71-64917c359ba2",
+      "source_title": "MM article data-communication-algotrading ZH-TW c801d468a187",
+      "source_sha256": "30265a41d500791e810cada390913d9869dbcea644d0653f3d76c6679d7d63e4",
+      "state": "source_ready",
+      "source_display_name": "MM article data-communication-algotrading ZH-TW c…",
+      "selected_source_ids": [
+        "3cf03bc4-3f81-49b6-9f71-64917c359ba2"
+      ],
+      "last_error": {
+        "type": "RuntimeError",
+        "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+        "at": "2026-10-17T07:00:09.741547+00:00",
+        "stage": "artifacts",
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T070009754407Z-error.png",
+            "sha256": "c1deb75d6ff64ad65eec409a324d24f61692a9f416849ea21d17bcffc3d6dab0"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T070009754407Z-controls.json",
+            "sha256": "7d4f173e487bbcd842729ac7001eb0b24d8018676cb616d1f94671df38bdd7be"
+          }
+        },
+        "retry_not_before": "2026-10-17T07:15:09.899893+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       }
     }
   },
-  "checked_at": "2026-10-17T05:25:45.495507+00:00",
+  "checked_at": "2026-10-17T07:00:09.899903+00:00",
   "browser_geometry_requested": {
     "width": 1994,
     "height": 1290,
