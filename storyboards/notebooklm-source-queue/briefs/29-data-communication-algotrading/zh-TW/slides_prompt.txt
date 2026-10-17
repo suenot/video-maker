@@ -1,0 +1,37 @@
+製作一份完整的 NotebookLM 投影片。 Use only the attached source named "MM article data-communication-algotrading ZH-TW c801d468a187". It is the complete published zh-Hant article snapshot. Do not merge another language edition or outside facts. Output language: 全程使用繁體中文（台灣，zh-TW；Hant）。不得改用簡體或籠統的「Chinese」。 Keep technical identifiers, figures, dates, source names, citations, links, code, table values and headings exact. Use Traditional Chinese and Taiwan financial/software terminology (資料、通訊、訊息代理、共享記憶體、延遲、吞吐量、基準測試). Keep all English protocol, library, product and code identifiers exact.
+Follow every H2 and H3 section in this exact sequence and preserve each exact source heading:
+1. # 演算法交易系統中的資料通訊：技術綜述
+2. ## 1. 交易所互動：REST, WebSocket, FIX
+3. ### 1.1 REST API
+4. ### 1.2 WebSocket
+5. ### 1.3 FIX 協議 (Financial Information eXchange)
+6. ### 1.4 SBE (Simple Binary Encoding) — 進化的 FIX
+7. ### 1.5 交易所通訊協議對比表
+8. ## 2. 內部微服務通訊
+9. ### 2.1 gRPC 雙向流 (TCP)
+10. ### 2.2 Unix 域套接字上的 gRPC (UDS)
+11. ### 2.3 共享記憶體 IPC
+12. ## 3. 傳輸系統：訊息代理與庫
+13. ### 3.1 Aeron — 交易系統的行業標準
+14. ### 3.2 Apache Kafka
+15. ### 3.3 Redis Pub/Sub 與 Redis Streams
+16. ### 3.4 NATS
+17. ### 3.5 ZeroMQ 與 nanomsg
+18. ## 4. 客戶端即時推送：Centrifugo
+19. ## 5. 即時訪問資料儲存
+20. ### 5.1 QuestDB — 專為交易設計的時序資料庫
+21. ### 5.2 Redis 作為即時資料層
+22. ### 5.3 細分方案：RayforceDB, AXL DB
+23. ## 6. 序列化對比：Protobuf vs SBE vs JSON
+24. ## 7. 參考架構
+25. ### 7.1 加密貨幣套利 (中頻)
+26. ### 7.2 HFT 做市 (託管機房同機架)
+27. ## 8. 實踐建議
+28. ## 基準測試倉庫
+29. ## 結論
+
+Article-specific coverage: 涵蓋本繁體中文版的全部內容：交易所 REST、WebSocket、FIX、SBE 協定及原文對照表；內部通訊（gRPC/TCP、UDS、共享記憶體 IPC）；Aeron、Kafka、Redis Pub/Sub/Streams、NATS、ZeroMQ、nanomsg 及原文中的比較；Centrifugo 即時推送；QuestDB、Redis 和原文列出的其他即時資料儲存；Protobuf/SBE/JSON 序列化比較；全部參考架構、實務建議、基準測試儲存庫、連結與結語。原樣保留本文所有延遲/吞吐量數值、單位、限定條件、表格、程式碼範例、連結和限制，並明確指出這些是文章中的報告值，不是普遍保證或獨立驗證結果。
+
+Frame this article as a technology overview and set of design tradeoffs, not as an independently validated performance guide or a universal architecture prescription. All latency, throughput, benchmark, protocol capability, library/database feature, adoption and comparative claims are article claims pending human editorial and primary-source review. Do not silently alter source claims or add current specifications, external facts, measured results or guarantees. Preserve the exact source edition’s examples and caveats. Treat benchmark numbers as reported examples tied to the article and its cited benchmark repository; do not present them as portable guarantees. External NotebookLM notebook/source/artifact duplicates are not_checked and must be reconciled before submission; target-channel duplicates are not_checked and must be reconciled before final production. Do not imply either is cleared.
+Before any Generate action, the NotebookLM UI must explicitly show Chinese (Traditional); generic Chinese or 中文 is insufficient. No generation action is requested by this brief.
+Use readable slides for every section. Show architecture boundaries and tradeoffs visually, and keep all on-slide prose in the requested locale apart from exact technical identifiers. Preserve tables or faithfully represent all rows and qualifiers. Do not invent performance charts. 以文章結語收尾。

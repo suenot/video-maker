@@ -1,0 +1,297 @@
+MM article data-communication-algotrading ZH-TW c801d468a187
+
+---
+title: "演算法交易系統中的資料通訊：技術綜述"
+description: "解析演算法交易平臺各個層級的資料通訊技術：從交易所連線協議（REST, WebSocket, FIX）到內部 IPC、訊息代理和資料儲存。"
+tags: ["演算法交易", "架構", "WebSocket", "FIX", "gRPC", "Kafka", "Aeron", "Redis", "QuestDB", "HFT"]
+date: "2026-03-03"
+lang: "zh-Hant"
+image: "/images/blog/data-communication-algotrading.webp"
+slug: "data-communication-algotrading"
+authors: ["suenot"]
+---
+
+# 演算法交易系統中的資料通訊：技術綜述
+
+在演算法交易中，盈利與虧損之間的差距往往以微秒計。資料傳輸架構是決定交易系統效率的關鍵因素之一。在本文中，我們將解析各個層級的通訊技術：從與交易所的互動到內部微服務通訊、儲存和資料分發。
+
+![演算法交易系統架構](/images/blog/algotrading-architecture-diagram.webp)
+
+本文按層級組織——從“外部”（交易所通訊協議）到“內部”（IPC、訊息代理、儲存），真實反映了演算法交易平臺的架構設計。
+
+---
+
+![協議棧對比：REST、WebSocket、FIX](/images/blog/data-comm-protocol-stacks.webp)
+
+## 1. 交易所互動：REST, WebSocket, FIX
+
+### 1.1 REST API
+
+REST 是與交易所 API 互動最簡單、最常見的方式。每個請求都是一個獨立的 HTTP 連線：TCP 握手 → TLS 握手 → 傳送請求 → 接收響應 → 關閉連線。
+
+**交易中的 REST 問題：**
+
+每個請求都會帶來連線建立的開銷。即使使用 HTTP keep-alive，“請求-響應”模型也意味著你接收資料的速度不可能快於傳送請求的速度。這導致了輪詢（polling）——即無限迴圈地詢問“有新資料嗎？”，這佔用了交易所伺服器高達 80% 的負載（據加密交易所開發人員估計）。交易所通常會引入頻率限制（通常每分鐘 10–1200 個請求），這使得 REST 不適用於高頻策略。
+
+**適用場景：** 獲取歷史資料（K線, OHLCV）、賬戶管理（餘額, 倉位）、非即時操作（DCA 機器人、每小時調倉）。
+
+### 1.2 WebSocket
+
+WebSocket 建立一個持久的 TCP 連線，資料可以雙向流動。它以帶有 `Upgrade` 頭的普通 HTTP 請求開始，然後切換到雙向幀協議（payload 可以是文本 JSON 或二進位制格式）。
+
+**交易優勢：**
+
+最大的優勢是無請求開銷。連線一旦建立，伺服器即可即時推送資料。通過 WebSocket 傳輸的行情資料延遲通常小於 50 毫秒（從交易所閘道器到客戶端）。你可以在一個連線上同時訂閱 50 多個交易對。
+
+**關鍵點：通過 WebSocket 下單。** 許多交易者不知道某些交易所（如 [Binance](https://binance.com), [HitBTC](https://hitbtc.com), [Deribit](https://deribit.com), [Bybit](https://bybit.com) 等）允許通過 WebSocket 傳送訂單，而不僅僅是接收資料。這比 REST 根本上更快，因為：
+- 每個訂單無需 TCP/TLS 握手（連線已“預熱”）
+- 無 HTTP 開銷（頭資訊、cookie 等）
+- 非同步模型：傳送訂單後通過同一個 WebSocket 接收確認，無需阻塞執行緒。
+
+根據 Deribit 的資料，WebSocket 和 FIX 的執行速度多數情況下相當。REST 由於連線層的預處理而略慢。WebSocket 訂單進入撮合引擎佇列的方式與 FIX 訂單相同。
+
+**混合上下文問題：** 如果你通過 REST 傳送訂單，但通過 WebSocket 接收成交通知，會產生競爭條件（race condition）：WebSocket 通知可能在 REST 請求完成之前到達。這會導致狀態不一致。解決方案是完全轉向非同步模型，通過同一個 WebSocket 傳送訂單。
+
+### 1.3 FIX 協議 (Financial Information eXchange)
+
+FIX 是電子交易的行業標準，自 1992 年起（由 [Fidelity Investments](https://en.wikipedia.org/wiki/Fidelity_Investments) 和 [Salomon Brothers](https://en.wikipedia.org/wiki/Salomon_Brothers) 建立）一直存在。它是一種構建在 TCP 之上的二進位制協議，專為交易操作設計。
+
+**FIX 架構：**
+- **會話層 (Session layer)** — 管理連線、心跳、序列號、差錯恢復。保證訊息的交付和順序。
+- **應用層 (Application layer)** — 業務邏輯：訂單型別、執行報告、行情請求。
+
+FIX 訊息由“標籤=值 (tag=value)”對組成，由 SOH 字元分隔。例如，以 150 美元買入 100 股 AAPL 的訂單如下：
+```
+8=FIX.4.2|35=D|49=BUYER|56=SELLER|11=ORD1001|38=100|40=2|54=1|55=AAPL|44=150.00
+```
+
+**為什麼 FIX 比 WebSocket 快：** FIX 是原生 TCP 協議，沒有 HTTP 層。AWS 在其針對加密交易所的 tick-to-trade 最佳化指南中，明確建議優先使用 FIX 而非 REST 和 WebSocket，以最小化協議引起的延遲。FIX 在微秒級別執行，而 WebSocket 通常在毫秒級別。
+
+**FIX 的主導領域：** 直接市場準入 (DMA) 連線撮合引擎、機構領域的高頻交易 (HFT)、流動性聚合（主經紀商通過 FIX 連線數十家銀行）。
+
+**FIX 的侷限性：** 整合複雜、訊息格式陳舊（文本形式的標籤值不如二進位制格式高效）、准入門檻高。在加密行業中，支援 FIX 的交易所數量有限。
+
+### 1.4 SBE (Simple Binary Encoding) — 進化的 FIX
+
+SBE 是由 [FIX Trading Community](https://www.fixtrading.org) 內的高效能工作組建立的二進位制序列化格式。其目標是用緊湊的二進位制表示取代文本格式的 FIX，以實現超低延遲交易。
+
+**SBE 的核心原則：**
+- **零複製輕量級模式 (Zero-copy flyweight pattern)** — 編碼器和解碼器像“模板”一樣作用於緩衝區。值直接寫入緩衝區，無需中間複製（不像 Protobuf 需要多次複製）。
+- **傳輸格式 = 記憶體格式 (Wire format = memory format)** — 線路上的資料與記憶體中的資料一致，最大限度減少轉換開銷。
+- **固定欄位在前，變數欄位在後** — 雖然是設計限制，但與 Protocol Buffers 相比平衡了效能。
+
+SBE + [Aeron](https://github.com/real-logic/aeron) 是高效能交易系統的標準組合。Aeron 是來自 [Real Logic](https://github.com/real-logic) 的開源訊息系統（由原 [LMAX Exchange](https://en.wikipedia.org/wiki/LMAX_Exchange) CTO [Martin Thompson](https://mechanical-sympathy.blogspot.com) 和原 29West CTO Todd Montgomery 建立）。它實際上是專為金融系統設計的傳輸層，執行在 UDP 和共享記憶體之上，延遲僅為幾微秒。SBE 負責序列化，Aeron 負責傳輸。詳見第 3.1 節。
+
+### 1.5 交易所通訊協議對比表
+
+![REST, WebSocket, FIX 及 Aeron 延遲對比](/images/blog/protocol-comparison-visualization.webp)
+
+| 參數 | REST | WebSocket | FIX | FIX+SBE |
+|---|---|---|---|---|
+| 延遲 | 10–100+ ms | 1–50 ms | 10–500 μs | 1–100 μs |
+| 模型 | 請求-響應 | 雙向推送 | 雙向會話 | 雙向會話 |
+| 訂單 | 是 (同步) | 是 (非同步, 部分) | 是 (原生) | 是 (原生) |
+| 連線預熱 | 每次請求 | 一次性 | 一次性 | 一次性 |
+| 格式 | JSON/文本 | JSON/二進位制 | 標籤值文本 | 二進位制 |
+| 整合難度 | 低 | 中 | 高 | 極高 |
+
+---
+
+![交易系統微服務架構](/images/blog/data-comm-microservice-architecture.webp)
+
+## 2. 內部微服務通訊
+
+行情資料從交易所進入系統後，開始內部處理：解析行情 → 策略計算 → 做出決策 → 傳送訂單。每個步驟都涉及服務間通訊。
+
+### 2.1 gRPC 雙向流 (TCP)
+
+[gRPC](https://grpc.io) 是 Google 開發的基於 HTTP/2 的框架，使用 [Protocol Buffers](https://protobuf.dev) 進行序列化。對於算交，雙向流（bidirectional streaming）尤為重要——客戶端和伺服器通過一個連線同時傳送訊息流。
+
+**為什麼 gRPC 適合交易系統：**
+- Protobuf 格式緊湊（比 JSON 小 3–10 倍）
+- HTTP/2 多路複用 — 一個 TCP 連線支援多個流
+- 強型別 .proto 定義 — 編譯階段捕捉錯誤
+- 支援 Python, Rust, Go, C++, Java 等多語言
+- 雙向流可以實現“行情下發，訂單上傳”的統一通道模式。
+
+根據 SmartDev 的資料，70% 部署 AI HFT 的金融機構使用 gRPC 或原生 TCP 來實現微秒級響應。
+
+**架構示例：** 行情收集器 (Rust) → gRPC 流 → 策略引擎 (Python/Rust) → gRPC 呼叫 → 訂單路由 (Rust) → WebSocket/FIX → 交易所。
+
+### 2.2 Unix 域套接字上的 gRPC (UDS)
+
+如果服務執行在同一臺機器上（託管機房的典型場景），TCP 是多餘的開銷。Unix 域套接字 (UDS) 移除整個網路棧：無 TCP 握手、無路由、無校驗。
+
+**基準測試顯示顯著差異：**
+- gRPC via UDS: ~102 μs/請求 (10萬次請求)
+- gRPC via TCP: ~127 μs/請求 (10萬次請求)
+- UDS 提升：小訊息提升 ~20%，大訊息 (100KB+) 提升高達 50%。
+
+根據 F. Werner (MPI Heidelberg) 的測量，gRPC UDS 比原生 UDS I/O 增加了約 10 倍開銷（~130 μs 對比 ~13 μs）。這是為了抽象方便（HTTP/2 幀、protobuf 序列化）付出的代價。
+
+**何時使用 gRPC+UDS：** 同一伺服器上的程序間通訊，且開發便利性（Schema, 程式碼生成）比極致延遲更重要時。UDS 還具有安全性優勢——Unix 檔案許可權可控制訪問。
+
+**何時不使用：** 如果需要延遲 <10 μs，建議使用共享記憶體或不帶 gRPC 的原生 UDS。具體數值：原生 UDS 中位延遲 ~13 μs，gRPC UDS ~130 μs。共享記憶體 (Aeron IPC) 小於 1 μs，[LMAX Disruptor](https://github.com/LMAX-Exchange/disruptor) 環形緩衝區約為 50–100 納秒。也就是說 gRPC+UDS 比原生 UDS 慢 10 倍，比共享記憶體慢 100–1000 倍。但延遲每降低一個臺階，程式碼複雜度就會上升一個臺階。
+
+> **自行驗證：** 本節中的延遲資料可通過開源基準測試 **[suenot/trading-ipc-bench](https://github.com/suenot/trading-ipc-bench)** 在您自己的硬體上復現——涵蓋 TCP、UDS、ZeroMQ IPC/TCP、WebSocket、Redis Pub/Sub、共享記憶體和命名管道的 Python 實現，測量 p50/p95/p99/p99.9 延遲和吞吐量。
+
+**不帶 gRPC 的原生 UDS** — 如果 gRPC 開銷過大，可以去掉它，只保留套接字。按效能從高到低的選項：
+- **AF_UNIX 套接字 + 自定義序列化** ([SBE](https://github.com/real-logic/simple-binary-encoding), [FlatBuffers](https://flatbuffers.dev), [MessagePack](https://msgpack.org)) — 中位延遲 ~13 μs，最高控制權，最高複雜度
+- **[ZeroMQ](https://zeromq.org) IPC (`ipc://`)** — ~50–100 μs，提供現成模式（PUB/SUB, REQ/REP），底層使用 UDS
+- **[nanomsg](https://nanomsg.org)/[NNG](https://github.com/nanomsg/nng) IPC** — 類似 ZeroMQ，小訊息 (<64 KB) 延遲略優
+- **[Cap'n Proto](https://capnproto.org) RPC over UDS** — 零複製序列化 + RPC 抽象，比 gRPC 快，有 schema
+
+### 2.3 共享記憶體 IPC
+
+對於同主機的超低延遲，使用共享記憶體。兩個程序對映同一塊 RAM 區域，資料傳遞無需系統呼叫（初始設定除外）。
+
+LMAX Disruptor 模式（共享記憶體中的環形緩衝區）可在單執行緒上每秒處理約 600 萬個事件。這種方法是 LMAX 交易所及許多 HFT 系統的核心。
+
+**實現：** Aeron IPC (Java/C++), [Chronicle Queue](https://github.com/OpenHFT/Chronicle-Queue) (Java), 自定義 mmap 方案 (Rust/C++)。IronSBE (Rust 實現) 支援延遲約為 20 納秒的共享記憶體 IPC。
+
+---
+
+## 3. 傳輸系統：訊息代理與庫
+
+### 3.1 Aeron — 交易系統的行業標準
+
+Aeron 是由 Real Logic 開發的開源高效能訊息傳輸系統。建立者是 Martin Thompson（原 LMAX CTO）和 Todd Montgomery（原 29West CTO）。它誕生於 2014 年，最初由一家美國主要交易所委託開發。
+
+**實踐中的 Aeron：** 它不是像 Kafka 那樣的代理（Broker），也不是像 ZeroMQ 那樣的套接字型檔。Aeron 是專為可預測低延遲設計的傳輸層。它執行在 UDP（網路）和共享記憶體（IPC）之上，同時提供可靠交付、定序和流量控制——這些是原生 UDP 所不具備的。你可以將 Aeron 視為“具有 UDP 延遲的 TCP”。
+
+**Aeron 特性：**
+- 延遲：雲端 <100 μs，物理硬體 <18 μs。
+- 吞吐：微秒延遲下超過 100 萬訊息/秒。
+- 峰值超過 2000 萬訊息/秒。
+- 無代理模式 (Brokerless) — 無單點故障。
+- 內建流量控制、擁塞控制和丟包檢測。
+
+**Aeron Cluster** — 用於容錯狀態機複製的擴充（Raft 共識），為交易系統提供一致性複製。
+
+**Aeron Archive** — 以全速將訊息持久化到磁碟，支援回放（Replay）。
+
+**Aeron Sequencer** — 生態系統的最新元件，旨在協調大型組織內多個專案。基於 Aeron Transport 和 Aeron Cluster 構建。核心特性：
+- **分散式日誌 (Distributed log)** — 將訊息序列複製到多臺機器以實現容錯
+- **多讀取方 (Multiple readers)** — 多個應用程式可同時從同一日誌讀取，用於不同任務
+- **團隊解耦 (Decoupled teams)** — 各團隊保持獨立，同時在統一協調的系統中運作
+- 目標場景：行情資料處理、經紀商平臺、交易所撮合引擎
+
+**與 Kafka 對比：** 兩者都使用分散式日誌，但 Aeron 最佳化延遲（微秒級），而 Kafka 最佳化耐久性和吞吐量（毫秒級）。Aeron 用於即時交易邏輯，Kafka 用於資料管道和分析。
+
+### 3.2 Apache Kafka
+
+[Apache Kafka](https://kafka.apache.org) 是大規模事件流的事實標準。不適合交易決策的熱路徑（毫秒級延遲），但對於以下場景不可或缺：
+- **行情聚合：** 將 100 多個交易所的流彙集到統一管道。
+- **事件溯源 (Event Sourcing)：** 記錄系統的每個動作。
+- **CDC (變動資料捕捉)：** 將交易資料庫的變化同步到分析系統。
+- **QuestDB 整合：** Kafka → QuestDB 進行即時逐筆分析。
+
+在合理配置下，Kafka 端到端延遲約為 2–15 毫秒。對於 HFT 不可接受，但對於決策週期 >1 秒的策略足夠。
+
+### 3.3 Redis Pub/Sub 與 Redis Streams
+
+[Redis](https://redis.io) 是記憶體資料庫，也可作為輕量級訊息代理。
+
+**Redis Pub/Sub** — 閱後即焚，亞毫秒級延遲。非常適合即時通知：價格更新、策略訊號、告警。
+
+**Redis Streams** — 增加了持久化和消費者組（類似小型 Kafka）。可以讀取歷史資料並確認處理 (ACK)。
+
+### 3.4 NATS
+
+[NATS](https://nats.io) 是 Go 編寫的極輕量訊息系統。亞微秒延遲。**NATS JetStream** 擴充支援持久化和”僅一次交付 (exactly-once delivery)”。
+
+### 3.5 ZeroMQ 與 nanomsg
+
+提供套接字抽象的無代理庫，用於點對點通訊。[ZeroMQ](https://zeromq.org) 吞吐量可達 500 萬+訊息/秒，歷史悠久。[nanomsg](https://nanomsg.org) (及 [NNG](https://github.com/nanomsg/nng)) 是其繼承者，在小訊息 (<64KB) 上延遲更佳。
+
+---
+
+## 4. 客戶端即時推送：Centrifugo
+
+[Centrifugo](https://centrifugo.dev) 是 Go 編寫的自託管釋出/訂閱伺服器，優化了廣播場景：一條訊息 → 數萬/百萬客戶端。支援 WebSocket, SSE, gRPC 等。
+
+**為何算交使用 Centrifugo：**
+- 單機測試支援 100 萬個 WebSocket 連線，每分鐘投遞 3000 萬條訊息。
+- 支援 60Hz 頻率的資料流。
+- 採用增量壓縮 (Delta compression) 演算法最小化流量。
+- 常用於向 Web 面板或移動端分發即時資料。
+
+---
+
+## 5. 即時訪問資料儲存
+
+### 5.1 QuestDB — 專為交易設計的時序資料庫
+
+[QuestDB](https://questdb.io) 是開源時序資料庫，由 Java (Zero-GC), C++ 和 Rust 編寫。
+- **查詢：** 通過 SIMD 指令實現亞毫秒級向量執行。
+- **ASOF JOIN：** 時序資料對齊的關鍵功能（行情對齊）。
+- **WAL：** 超低延遲的追加寫入。
+- 巴西 [B3](https://www.b3.com.br) 證券交易所已在其交易業務中使用 QuestDB。
+
+### 5.2 Redis 作為即時資料層
+
+通常作為中間層：
+- **熱快取 (Hot cache)：** O(1) 訪問最新價格。
+- **有序集合 (Sorted sets)：** 用於訂單簿盤口。
+- **Lua 指令碼：** 用於保證原子操作。
+
+### 5.3 細分方案：RayforceDB, AXL DB
+
+極簡主義的 C 語言向量資料庫（二進位制檔案 <1MB），零依賴，SIMD 加速。專注於負載下的確定性延遲，這在高頻交易中至關重要。
+
+---
+
+## 6. 序列化對比：Protobuf vs SBE vs JSON
+
+| 格式 | 編解碼速度 | 體積 | 零複製 | 適用場景 |
+|---|---|---|---|---|
+| JSON | 慢 | 大 | 否 | REST API, 除錯, 日誌 |
+| Protobuf | 快 | 緊湊 | 否 | gRPC, 微服務通訊 |
+| [SBE](https://github.com/real-logic/simple-binary-encoding) | 極快 | 極小 | 是 | HFT, 撮合引擎 |
+| [FlatBuffers](https://flatbuffers.dev) | 非常快 | 緊湊 | 是 | 遊戲開發, 中等延遲 |
+
+SBE 通過固定欄位位置實現了極速效能。對於交易訊息（訂單、成交報告）非常合適。
+
+---
+
+## 7. 參考架構
+
+### 7.1 加密貨幣套利 (中頻)
+`交易所 → Collector (Rust) → Redis (热缓存) → 策略引擎 (Python) → gRPC (UDS) → 订单路由 (Rust) → 交易所`。
+
+### 7.2 HFT 做市 (託管機房同機架)
+`交易所 Feed → 网卡 (内核旁路) → Aeron IPC (共享内存) → 策略 (C++, 单线程) → SBE 编码 → Aeron → FIX → 交易所`。
+
+---
+
+## 8. 實踐建議
+
+- **<10 μs (HFT):** FPGA, 核心旁路, 共享記憶體, SBE, Aeron IPC。
+- **10–100 μs (超低延遲):** Aeron (UDP), gRPC+UDS, ZeroMQ。
+- **100 μs – 1 ms (低延遲):** gRPC (TCP), WebSocket, Protobuf。
+- **1–10 ms (中頻):** WebSocket 到交易所, 內部 Kafka, Redis。
+- **>10 ms (低頻 / 波段):** REST API 即可滿足需求。DCA、再平衡、投資組合管理。
+
+**不要過度最佳化非瓶頸。** 如果你的策略決策需要 50 毫秒，那麼為了節省 100 微秒而將 gRPC 換成 Aeron 是沒有意義的。混合架構是常態：REST 用於配置，gRPC 用於核心通訊，WS 用於行情下發。
+
+---
+
+## 基準測試倉庫
+
+本文中引用的所有延遲資料均可通過 **[suenot/trading-ipc-bench](https://github.com/suenot/trading-ipc-bench)** 復現——這是一個開源 Python 基準測試套件，涵蓋本文討論的所有主要 IPC 傳輸方式：TCP、UDS、命名管道、ZeroMQ IPC/TCP、WebSocket、Redis Pub/Sub 和共享記憶體。
+
+```bash
+git clone https://github.com/suenot/trading-ipc-bench
+cd trading-ipc-bench
+pip install -r requirements.txt
+python run_all.py   # 运行全部 8 种传输，结果保存至 results/
+python report.py    # 输出汇总表格和 ASCII 延迟图表
+```
+
+在您自己的硬體上執行——結果會因 CPU、作業系統和核心版本而異。這正是它的意義所在。
+
+---
+
+## 結論
+
+不存在完美的通用通訊技術。系統每個層級都有其需求：外部（相容性）、內部熱路徑（極低延遲）、資料管道（可靠性）、客戶端（靈活性）。有效架構的關鍵是理解每個元件的要求，併為特定任務選擇合適的工具。

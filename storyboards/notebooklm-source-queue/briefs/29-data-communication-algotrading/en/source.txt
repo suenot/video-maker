@@ -1,0 +1,298 @@
+MM article data-communication-algotrading EN d3d0c463fc3f
+
+---
+title: "Data Communication in Algo Trading Systems: A Technology Overview"
+description: "We analyze communication technologies at all levels of an algorithmic trading platform: from exchange connectivity protocols (REST, WebSocket, FIX) to internal IPC, message brokers, and data stores."
+tags: ["algotrading", "architecture", "WebSocket", "FIX", "gRPC", "Kafka", "Aeron", "Redis", "QuestDB", "HFT"]
+date: "2026-03-03"
+lang: "en"
+image: "/images/blog/data-communication-algotrading.webp"
+slug: "data-communication-algotrading"
+authors: ["suenot"]
+---
+
+# Data Communication in Algo Trading Systems: A Technology Overview
+
+In algorithmic trading, the difference between profit and loss can be measured in microseconds. Data transmission architecture is one of the key factors determining the efficiency of a trading system. In this article, we'll break down communication technologies at all levels: from interacting with the exchange to internal inter-service communication, storage, and data distribution.
+
+![Algo Trading System Architecture](/images/blog/algotrading-architecture-diagram.webp)
+
+The article is organized by levels—from "external" (exchange protocols) to "internal" (IPC, message brokers, storage)—reflecting the real architecture of an algorithmic trading platform.
+
+---
+
+![Protocol stack comparison: REST, WebSocket, FIX](/images/blog/data-comm-protocol-stacks.webp)
+
+## 1. Exchange Interaction: REST, WebSocket, FIX
+
+### 1.1 REST API
+
+REST is the easiest and most common way to interact with an exchange API. Each request is a separate HTTP connection: TCP handshake → TLS handshake → send request → receive response → close connection.
+
+**REST Problems for Trading:**
+
+Each request carries connection setup overhead. Even with HTTP keep-alive, the "request-response" model means you cannot receive data faster than you send requests. This leads to polling—an endless cycle of "any new data?" queries that create up to 80% of the load on exchange servers (according to crypto exchange developers). Exchanges introduce rate limits (typically 10–1200 requests per minute), making REST unsuitable for high-frequency strategies.
+
+**When REST is appropriate:** fetching historical data (candles, OHLCV), account management (balance, positions), non-real-time operations (DCA bots, hourly rebalancing).
+
+### 1.2 WebSocket
+
+WebSocket establishes one persistent TCP connection through which data flows bidirectionally. It starts as a regular HTTP request with an `Upgrade` header, then switches to a bidirectional framing protocol (payload can be either text JSON or binary).
+
+**Advantages for Trading:**
+
+The main advantage is no overhead per request. Once established, data is pushed instantly by the server. Market data delivery latency via WebSocket is typically less than 50 ms from the exchange gateway to the client. You can subscribe to 50+ symbols simultaneously over a single connection.
+
+**A critical point: orders via WebSocket.** Many traders don't know that some exchanges ([Binance](https://binance.com), [HitBTC](https://hitbtc.com), [Deribit](https://deribit.com), [Bybit](https://bybit.com), etc.) allow sending orders via WebSocket, not just receiving data. This is fundamentally faster than REST because:
+- No TCP/TLS handshake for each order (connection is already "warm")
+- No HTTP overhead (headers, cookies, etc.)
+- Asynchronous model: you send an order and receive confirmation through the same WebSocket without blocking the thread.
+
+According to Deribit, WebSocket and FIX often have the same execution speed. REST is slightly slower due to connection-level preprocessing. WebSocket orders hit the matching engine queue just like FIX orders.
+
+**Mixing Context Problem.** If you send orders via REST but receive execution notifications via WebSocket, a race condition occurs: the WebSocket notification might arrive before the REST request completes. This leads to state inconsistency. The solution is to send orders through the same WebSocket, moving fully to an asynchronous model.
+
+### 1.3 FIX Protocol (Financial Information eXchange)
+
+FIX is the industrial standard for electronic trading, existing since 1992 (created by [Fidelity Investments](https://en.wikipedia.org/wiki/Fidelity_Investments) and [Salomon Brothers](https://en.wikipedia.org/wiki/Salomon_Brothers)). It's a binary-over-TCP protocol specifically designed for trading.
+
+**FIX Architecture:**
+- **Session layer** — manages connection, heartbeats, sequence numbering, gap recovery. Guarantees delivery and message order.
+- **Application layer** — business logic: order types, execution reports, market data requests.
+
+FIX messages consist of "tag=value" pairs separated by an SOH character. For example, a buy order for 100 shares of AAPL at $150 looks like this:
+```
+8=FIX.4.2|35=D|49=BUYER|56=SELLER|11=ORD1001|38=100|40=2|54=1|55=AAPL|44=150.00
+```
+
+**Why FIX is faster than WebSocket:** FIX is a native TCP protocol without HTTP layers. AWS, in its tick-to-trade optimization guide for crypto exchanges, explicitly recommends FIX over REST and WebSocket to minimize protocol-induced latency. FIX operates on the level of microseconds, whereas WebSocket is typically in milliseconds.
+
+**Where FIX dominates:** DMA (Direct Market Access) to the exchange matching engine, algorithmic and HFT trading in institutional spaces, liquidity aggregation (prime brokers connecting to dozens of banks via FIX).
+
+**FIX Limitations:** complexity of integration, outdated message format (textual tag-values are less efficient than binary formats), high barrier to entry. In the crypto industry, FIX is supported by a limited number of exchanges.
+
+### 1.4 SBE (Simple Binary Encoding) — Evolutionary FIX
+
+SBE is a binary serialization format created by the High Performance Working Group within the [FIX Trading Community](https://www.fixtrading.org). Its mission is to replace the text FIX format with a compact binary representation for ultra-low-latency trading.
+
+**Key Principles of SBE:**
+- **Zero-copy flyweight pattern** — encoders and decoders act as "templates" over a buffer. Values are written directly without intermediate copies (unlike Protobuf, which requires several).
+- **Wire format = memory format** — data on the wire looks just like it does in memory, minimizing transformation overhead.
+- **Fixed fields first, variable fields last** — a design constraint that delivers an order of magnitude more performance compared to Protocol Buffers.
+
+SBE + [Aeron](https://github.com/real-logic/aeron) is the standard combination for high-performance trading systems. Aeron is an open-source messaging system from [Real Logic](https://github.com/real-logic) (created by [Martin Thompson](https://mechanical-sympathy.blogspot.com), former [LMAX Exchange](https://en.wikipedia.org/wiki/LMAX_Exchange) CTO, and Todd Montgomery, former 29West/Ultra Messaging CTO). It's effectively a specialized transport layer for financial systems working over UDP and shared memory with latencies in single-digit microseconds. SBE handles serialization, while Aeron manages delivery with microsecond delays. More on Aeron in section 3.1.
+
+### 1.5 Comparison Table of Exchange Protocols
+
+![REST vs WebSocket vs FIX vs Aeron Comparison](/images/blog/protocol-comparison-visualization.webp)
+
+| Parameter | REST | WebSocket | FIX | FIX+SBE |
+|---|---|---|---|---|
+| Latency | 10–100+ ms | 1–50 ms | 10–500 μs | 1–100 μs |
+| Model | Request-response | Bidirectional push | Bidirectional sessions | Bidirectional sessions |
+| Orders | Yes (sync) | Yes (async, partial) | Yes (native) | Yes (native) |
+| Connection Warmup | Every request | Once | Once | Once |
+| Format | JSON/Text | JSON/Binary | Tag-value text | Binary |
+| Integration | Easy | Medium | High | Very High |
+
+---
+
+![Trading system microservice architecture](/images/blog/data-comm-microservice-architecture.webp)
+
+## 2. Internal Microservice Communication
+
+Once data enters your system from the exchange, internal processing begins: parsing → strategy → decision → order sending. At each step, there is inter-service communication.
+
+### 2.1 gRPC Bidirectional Streaming (TCP)
+
+[gRPC](https://grpc.io) is a Google framework based on HTTP/2 using [Protocol Buffers](https://protobuf.dev) for serialization. For algorithmic trading, bidirectional streaming is particularly important—when client and server simultaneously send message streams over one connection.
+
+**Why gRPC fits trading systems:**
+- Protobuf is compact (3–10 times smaller than JSON)
+- HTTP/2 multiplexing — several streams over one TCP connection
+- Strict typing via .proto schemas catching errors at compile time
+- Code generation for Python, Rust, Go, C++, Java, etc.
+- Bidirectional streaming enables the "market data down, orders up" pattern via one channel.
+
+According to SmartDev, 70% of financial institutions deploying AI-driven HFT use gRPC or raw TCP for microsecond response times.
+
+**Architecture example:** Market Data Collector (Rust) → gRPC stream → Strategy Engine (Python/Rust) → gRPC call → Order Router (Rust) → WebSocket/FIX → Exchange.
+
+### 2.2 gRPC via Unix Domain Socket (UDS)
+
+If services run on the same machine (typical for co-location), TCP is unnecessary overhead. Unix Domain Socket (UDS) bypasses the entire network stack: no TCP handshake, no routing, no checksumming.
+
+**Benchmarks show a significant difference:**
+- gRPC via UDS: ~102 μs/request (100K requests)
+- gRPC via TCP: ~127 μs/request (100K requests)
+- UDS Gain: ~20% on small messages, up to 50% on large ones (100KB+).
+
+According to F. Werner (MPI Heidelberg), comparing gRPC UDS with raw blocking I/O via UDS, gRPC adds about 10x overhead—median ~130 μs vs. ~13 μs for raw UDS. This is the cost of abstraction (HTTP/2 framing, protobuf serialization).
+
+**When to use gRPC+UDS:** Inter-process communication on a single server when developer convenience (schema, codegen) is valued over absolute minimum latency. UDS also provides security advantages via Unix file permissions.
+
+**When NOT to use:** If you need latency <10 μs, shared memory or raw UDS without gRPC is better. For reference: raw UDS median ~13 μs, gRPC UDS median ~130 μs. Shared memory (Aeron IPC) is under 1 μs, [LMAX Disruptor](https://github.com/LMAX-Exchange/disruptor) ring buffer is around 50–100 ns. Thus gRPC+UDS is ~10x slower than raw UDS and 100–1000x slower than shared memory. But each step down in latency is a step up in code complexity.
+
+> **Reproduce it yourself:** All IPC latency numbers in this section are reproducible with the open-source companion benchmark **[suenot/trading-ipc-bench](https://github.com/suenot/trading-ipc-bench)** — Python implementations of TCP, UDS, ZeroMQ IPC/TCP, WebSocket, Redis Pub/Sub, Shared Memory, and Named Pipe round-trips, measuring p50/p95/p99/p99.9 latency and throughput on your own hardware.
+
+**Raw UDS without gRPC** — if gRPC overhead is excessive, remove it and keep just the socket. Options by descending performance:
+- **AF_UNIX sockets + custom serialization** ([SBE](https://github.com/real-logic/simple-binary-encoding), [FlatBuffers](https://flatbuffers.dev), [MessagePack](https://msgpack.org)) — ~13 μs median, maximum control, maximum complexity
+- **[ZeroMQ](https://zeromq.org) IPC (`ipc://`)** — ~50–100 μs, ready-made patterns (PUB/SUB, REQ/REP) without boilerplate, uses UDS under the hood
+- **[nanomsg](https://nanomsg.org)/[NNG](https://github.com/nanomsg/nng) IPC** — similar to ZeroMQ, slightly better latency on small messages (<64 KB)
+- **[Cap'n Proto](https://capnproto.org) RPC over UDS** — zero-copy serialization + RPC abstraction, faster than gRPC, has schema
+
+### 2.3 Shared Memory IPC
+
+For ultra-low-latency on the same host, use shared memory. Two processes map the same RAM segment, and data passes without syscalls (except for initial setup).
+
+The LMAX Disruptor pattern (ring buffer in shared memory) handles ~6 million events per second on a single thread. This approach is the heart of LMAX Exchange and many HFT systems.
+
+**Implementations:** Aeron IPC (Java/C++), [Chronicle Queue](https://github.com/OpenHFT/Chronicle-Queue) (Java), custom mmap-based solutions (Rust/C++). IronSBE (Rust SBE implementation) supports shared memory IPC with ~20 ns latency at the SPSC channel level.
+
+---
+
+## 3. Transport Systems: Message Brokers and Libraries
+
+### 3.1 Aeron — The Gold Standard
+
+Aeron is an open-source high-performance message transport system developed by Real Logic. Its creators are Martin Thompson (former LMAX CTO) and Todd Montgomery (former 29West CTO). It began in 2014 for a major US exchange and now has 70+ contributors and 5000+ GitHub subscribers.
+
+**In practice:** Aeron is not a broker (like Kafka) nor a socket library (like ZeroMQ). It's a transport layer designed for predictable low latency. It works over UDP (network) and shared memory (IPC), providing reliable delivery, ordering, and flow control—things raw UDP lacks. Think of Aeron as "TCP with UDP latency."
+
+**Aeron Characteristics:**
+- Latency: <100 μs in the cloud, <18 μs on bare metal.
+- Throughput: >1M messages/s at microsecond latency.
+- 20M+ messages/s peak.
+- Brokerless — no single point of failure.
+- Supports unicast, multicast, and IPC.
+- Built-in flow control and loss detection.
+
+**Aeron Cluster** — fault-tolerant state machine replication (Raft consensus) for consistent trading logic with minimal added latency.
+
+**Aeron Archive** — message persistence at full stream speed with replay capability.
+
+**Aeron Sequencer** — the newest component of the ecosystem, designed to coordinate multiple projects across large organizations. Built on top of Aeron Transport and Aeron Cluster. Key characteristics:
+- **Distributed log** — a long sequence of messages replicated across multiple machines for fault tolerance
+- **Multiple readers** — multiple applications simultaneously read from the same log for different purposes
+- **Decoupled teams** — teams remain independent while operating within a single coordinated system
+- Target use cases: market data processing, broker platforms, exchange engines
+
+**Comparison with Kafka:** Both use a distributed log, but Aeron is for microsecond latency, while Kafka is for millisecond durability and throughput. Aeron exists for real-time logic; Kafka for data pipelines and analytics.
+
+### 3.2 Apache Kafka
+
+[Apache Kafka](https://kafka.apache.org) is the factual standard for event streaming at scale. It's not for the trade hot path (millisecond delays) but indispensable for:
+- **Market data aggregation:** collecting streams from 100+ exchanges into one pipeline.
+- **Event sourcing:** recording every system action as an event topic.
+- **CDC (Change Data Capture):** streaming trading DB changes to analytics.
+- **QuestDB Integration:** Kafka → QuestDB for real-time tick analytics.
+
+Latency is 2–15 ms end-to-end. Unacceptable for HFT, but fine for strategies with a >1s horizon.
+
+### 3.3 Redis Pub/Sub and Streams
+
+[Redis](https://redis.io) is an in-memory store that also works as a lightweight broker.
+
+**Redis Pub/Sub** — fire-and-forget; sub-millisecond latency. Ideal for real-time notifications: price updates, strategy signals, alerts.
+
+**Redis Streams** — adds persistence and consumer groups (mini-Kafka). Supports reading history and ACKs.
+
+Redis is faster than Kafka for small messages (sub-ms), but lacks Kafka's heavy-duty replication and durability.
+
+### 3.4 NATS
+
+[NATS](https://nats.io) is an ultra-lightweight system in Go. Sub-ms latency, built-in pub/sub, request/reply. **NATS JetStream** adds persistence and exactly-once delivery.
+
+### 3.5 ZeroMQ and nanomsg
+
+Brokerless libraries providing socket abstractions for peer-to-peer communication. [ZeroMQ](https://zeromq.org) handles 5M+ messages/s and has been battle-tested since 2007. [nanomsg](https://nanomsg.org) (and [NNG](https://github.com/nanomsg/nng)) is its "successor" with better latency on small messages (<64KB).
+
+---
+
+## 4. Real-time PUB/SUB for Clients: Centrifugo
+
+[Centrifugo](https://centrifugo.dev) is a self-hosted PUB/SUB server in Go, optimized for broadcasting to thousands/millions of clients via WebSocket, SSE, or gRPC.
+
+**Why Centrifugo for Algo Trading:**
+- Handles 1M WebSocket connections and 30M messages/min on one server.
+- Supports 60Hz streaming.
+- Delta compression (Fossil algorithm) to minimize traffic.
+- Perfect for the "last mile" to web dashboards or mobile apps.
+
+---
+
+## 5. Real-time Access Data Stores
+
+### 5.1 QuestDB — Time-Series for Trading
+
+[QuestDB](https://questdb.io) is an open-source time-series database written in Java (zero-GC), C++, and Rust.
+- **Queries:** Sub-ms vectorized execution via SIMD.
+- **SAMPLE BY/ASOF JOIN:** Native trader-friendly SQL extensions.
+- **WAL:** Ultra-low-latency append.
+- Used by [B3](https://www.b3.com.br) (Brazil's stock exchange).
+
+### 5.2 Redis as Data Layer
+
+Typically a middle layer:
+- **Hot cache** for O(1) price access.
+- **Sorted sets** for orderbooks.
+- **Lua scripts** for atomic operations.
+
+### 5.3 Specialized Solutions: RayforceDB, AXL DB
+
+Minimalist C-based vector databases (binary <1MB) with zero dependencies and SIMD acceleration. Focus on deterministic latency for HFT.
+
+---
+
+## 6. Serialization: Protobuf vs SBE vs JSON
+
+| Format | Encode/Decode | Size | Zero-copy | When to use |
+|---|---|---|---|---|
+| JSON | Slow | Large | No | REST API, debug, logs |
+| Protobuf | Fast | Compact | No | gRPC, inter-service |
+| [SBE](https://github.com/real-logic/simple-binary-encoding) | Ultra-fast | Minimal | Yes | HFT, matching engines |
+| [FlatBuffers](https://flatbuffers.dev) | Very fast | Compact | Yes | Gamedev, medium latency |
+
+---
+
+## 7. Reference Architectures
+
+### 7.1 Crypto Arbitrage (Medium Frequency)
+`Exchanges → Collector (Rust) → Redis (Hot) → Strategy (Python) → gRPC → Router (Rust) → Exchange`.
+
+### 7.2 HFT Market Making (Co-location)
+`Exchange Feed → Kernel Bypass NIC → Aeron IPC → Strategy (C++) → SBE → Aeron → Exchange`.
+
+---
+
+## 8. Practical Advice
+
+- **<10 μs (HFT):** FPGA, shared memory, SBE, Aeron IPC.
+- **10–100 μs:** Aeron (UDP), gRPC+UDS, ZeroMQ.
+- **100 μs – 1 ms:** gRPC (TCP), WebSocket, Protobuf.
+- **1–10 ms (Medium Frequency):** WebSocket, Kafka, Redis.
+- **>10 ms (Low Frequency / Swing):** REST API is sufficient. DCA, rebalancing, portfolio management.
+
+**Don't optimize what isn't a bottleneck.** If your strategy takes 50 ms to decide, Aeron's 100 μs savings won't matter. Hybrid architectures are normal: use REST for setup, gRPC for heart, and WS for delivery.
+
+---
+
+## Benchmark Repository
+
+The latency numbers cited throughout this article can be reproduced with **[suenot/trading-ipc-bench](https://github.com/suenot/trading-ipc-bench)** — an open-source Python benchmark suite covering all major IPC transports discussed here: TCP, UDS, Named Pipe, ZeroMQ IPC/TCP, WebSocket, Redis Pub/Sub, and Shared Memory.
+
+```bash
+git clone https://github.com/suenot/trading-ipc-bench
+cd trading-ipc-bench
+pip install -r requirements.txt
+python run_all.py   # runs all 8 transports, saves results to results/
+python report.py    # prints a summary table + ASCII latency chart
+```
+
+Run it on your hardware — results will differ from the numbers in this article depending on your CPU, OS, kernel version, and tuning. That's the point.
+
+---
+
+## Conclusion
+
+There is no "perfect" communication tech. Each level has unique requirements: external (compatibility), internal (latency), pipeline (reliability), and client (flexibility). Architecture is about choosing the right tool for the specific job.

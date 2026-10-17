@@ -1,0 +1,37 @@
+Create a comprehensive NotebookLM slide deck. Use only the attached source named "MM article data-communication-algotrading EN d3d0c463fc3f". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English throughout. Keep technical identifiers, figures, dates, source names, citations, links, code, table values and headings exact. Use the article’s English technical terminology. Keep protocol, library, product and code identifiers exactly as published.
+Follow every H2 and H3 section in this exact sequence and preserve each exact source heading:
+1. # Data Communication in Algo Trading Systems: A Technology Overview
+2. ## 1. Exchange Interaction: REST, WebSocket, FIX
+3. ### 1.1 REST API
+4. ### 1.2 WebSocket
+5. ### 1.3 FIX Protocol (Financial Information eXchange)
+6. ### 1.4 SBE (Simple Binary Encoding) — Evolutionary FIX
+7. ### 1.5 Comparison Table of Exchange Protocols
+8. ## 2. Internal Microservice Communication
+9. ### 2.1 gRPC Bidirectional Streaming (TCP)
+10. ### 2.2 gRPC via Unix Domain Socket (UDS)
+11. ### 2.3 Shared Memory IPC
+12. ## 3. Transport Systems: Message Brokers and Libraries
+13. ### 3.1 Aeron — The Gold Standard
+14. ### 3.2 Apache Kafka
+15. ### 3.3 Redis Pub/Sub and Streams
+16. ### 3.4 NATS
+17. ### 3.5 ZeroMQ and nanomsg
+18. ## 4. Real-time PUB/SUB for Clients: Centrifugo
+19. ## 5. Real-time Access Data Stores
+20. ### 5.1 QuestDB — Time-Series for Trading
+21. ### 5.2 Redis as Data Layer
+22. ### 5.3 Specialized Solutions: RayforceDB, AXL DB
+23. ## 6. Serialization: Protobuf vs SBE vs JSON
+24. ## 7. Reference Architectures
+25. ### 7.1 Crypto Arbitrage (Medium Frequency)
+26. ### 7.2 HFT Market Making (Co-location)
+27. ## 8. Practical Advice
+28. ## Benchmark Repository
+29. ## Conclusion
+
+Article-specific coverage: Cover the complete edition’s exchange connectivity and protocol tradeoffs (REST, WebSocket, FIX, SBE and the comparison table); internal microservice communication (gRPC over TCP and UDS, shared-memory IPC); transport systems/libraries (Aeron, Kafka, Redis Pub/Sub/Streams, NATS, ZeroMQ and nanomsg, including any edition-specific comparisons); real-time client PUB/SUB with Centrifugo; real-time stores and other data solutions named in the source; serialization comparisons; each reference architecture; practical advice; benchmark-repository details and links; and the conclusion. Preserve every source-listed latency/throughput figure, unit, qualifier, table, code/configuration example, link, limitation and recommendation exactly as an attributed article claim. Do not turn reported benchmark figures into universal guarantees or independently verified results.
+
+Frame this article as a technology overview and set of design tradeoffs, not as an independently validated performance guide or a universal architecture prescription. All latency, throughput, benchmark, protocol capability, library/database feature, adoption and comparative claims are article claims pending human editorial and primary-source review. Do not silently alter source claims or add current specifications, external facts, measured results or guarantees. Preserve the exact source edition’s examples and caveats. Treat benchmark numbers as reported examples tied to the article and its cited benchmark repository; do not present them as portable guarantees. External NotebookLM notebook/source/artifact duplicates are not_checked and must be reconciled before submission; target-channel duplicates are not_checked and must be reconciled before final production. Do not imply either is cleared.
+
+Use readable slides for every section. Show architecture boundaries and tradeoffs visually, and keep all on-slide prose in the requested locale apart from exact technical identifiers. Preserve tables or faithfully represent all rows and qualifiers. Do not invent performance charts. End with the article conclusion.

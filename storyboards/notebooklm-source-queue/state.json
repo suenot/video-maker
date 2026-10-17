@@ -10933,22 +10933,148 @@
       "selected_source_ids": [
         "d91a3f05-0a60-4a5f-a1df-8a8e28d96cf1"
       ]
+    },
+    "data-communication-algotrading:en": {
+      "slug": "data-communication-algotrading",
+      "language": "en",
+      "article_sha256": "d3d0c463fc3f22cc499a50bdbf8f92553b7825df8e5b3ef41ad962d0001a6457",
+      "input_hashes": {
+        "article": "d3d0c463fc3f22cc499a50bdbf8f92553b7825df8e5b3ef41ad962d0001a6457",
+        "source_text": "6b29e513fced58915b73a06f74c0d2c7f2e8c4a053457bc7f8578bc4725ca749",
+        "slides_prompt": "89ccc236306aebe0f6581f15bcc188f5b47c3f4b12bd9f7f605d294c97c6fe53",
+        "audio_prompt": "e99ddd0e35bead713cc84f45e2152f30152b4a3fff7525949252199ebc9b2fbd"
+      },
+      "artifacts": {},
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-17T04:36:11.002222+00:00",
+      "notebook_intent": {
+        "at": "2026-10-17T04:36:16.584311+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T043616583736Z-notebook-baseline.json",
+        "baseline_sha256": "e80d393b3b925607c5b8f0809bf70133e46c590a81e1c4621819b36ccaa9397d",
+        "baseline_count": 369,
+        "dispatch_state": "dispatch_unknown"
+      },
+      "last_error": {
+        "type": "TimeoutError",
+        "message": "Locator.evaluate: Timeout 30000ms exceeded.",
+        "at": "2026-10-17T04:51:31.141563+00:00",
+        "stage": "notebook",
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T045131243541Z-error.png",
+            "sha256": "401df304237eeb8ce02818a66140e06faf8724463b7dbb06304e383e5e1aa00c"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T045131243541Z-controls.json",
+            "sha256": "dff503f19386b0c250c743bb43f5d276670fe681e8e4a7bacd862c9b1f3cb112"
+          }
+        },
+        "retry_not_before": "2026-10-17T05:06:31.494766+00:00",
+        "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+      }
+    },
+    "data-communication-algotrading:ru": {
+      "slug": "data-communication-algotrading",
+      "language": "ru",
+      "article_sha256": "88833f0debdaa58e6be26aeebee86142f5d75c4bc5ac759f573dafdb66ddda18",
+      "input_hashes": {
+        "article": "88833f0debdaa58e6be26aeebee86142f5d75c4bc5ac759f573dafdb66ddda18",
+        "source_text": "327bb49bb4111ac44b1e99a579a9497be1ed0ef77f5e5fb92195eb65db67189c",
+        "slides_prompt": "77c51c79260b28cf8ac2d16ee4c2342f04bb87b3364ffc590585de5e3db61f16",
+        "audio_prompt": "cde20ba90fc611fad2656080cb10ad6c2574fc48dfdd588d6d3783ccde1ff2c8"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "generating",
+          "baseline_ids": [],
+          "prompt_sha256": "77c51c79260b28cf8ac2d16ee4c2342f04bb87b3364ffc590585de5e3db61f16",
+          "requested_at": "2026-10-17T04:51:54.221557+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "a68869ea-72b8-49fc-822a-58876078a19d",
+          "submission_mode": "now",
+          "artifact_id": "24461e80-f7a6-4eb4-8675-236cffe9e7e4",
+          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
+          "observed_at": "2026-10-17T04:51:58.808814+00:00"
+        },
+        "audio": {
+          "state": "submission_unknown",
+          "baseline_ids": [
+            "24461e80-f7a6-4eb4-8675-236cffe9e7e4"
+          ],
+          "prompt_sha256": "cde20ba90fc611fad2656080cb10ad6c2574fc48dfdd588d6d3783ccde1ff2c8",
+          "requested_at": "2026-10-17T05:09:40.261241+00:00",
+          "language_selection": [
+            "русский"
+          ],
+          "source_id": "a68869ea-72b8-49fc-822a-58876078a19d",
+          "submission_mode": "now"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-17T04:51:31.721118+00:00",
+      "notebook_intent": {
+        "at": "2026-10-17T04:51:37.149554+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T045137148969Z-notebook-baseline.json",
+        "baseline_sha256": "e80d393b3b925607c5b8f0809bf70133e46c590a81e1c4621819b36ccaa9397d",
+        "baseline_count": 369,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-17T04:51:38.234947+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/96b538c3-5b24-4cb1-8059-7f25b58b630a",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-17T04:51:42.506255+00:00",
+        "sha256": "327bb49bb4111ac44b1e99a579a9497be1ed0ef77f5e5fb92195eb65db67189c",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-17T04:51:49.189153+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "a68869ea-72b8-49fc-822a-58876078a19d",
+      "source_title": "MM article data-communication-algotrading RU 88833f0debda",
+      "source_sha256": "327bb49bb4111ac44b1e99a579a9497be1ed0ef77f5e5fb92195eb65db67189c",
+      "state": "source_ready",
+      "source_display_name": "MM article data-communication-algotrading RU 8883…",
+      "selected_source_ids": [
+        "a68869ea-72b8-49fc-822a-58876078a19d"
+      ],
+      "last_error": {
+        "type": "RuntimeError",
+        "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+        "at": "2026-10-17T05:25:45.345754+00:00",
+        "stage": "artifacts",
+        "evidence": {
+          "screenshot": {
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T052545357775Z-error.png",
+            "sha256": "98a50a8bedcd1b9ec47cfd9197385b104109a2e742e20ec8d4a403895c42d1ae"
+          },
+          "controls": {
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T052545357775Z-controls.json",
+            "sha256": "fc17a100661d301a16442e31a65ce78d45ffb511ad1cd747fbf7c48ca5aadc35"
+          }
+        },
+        "retry_not_before": "2026-10-17T05:40:45.495498+00:00",
+        "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+      }
     }
   },
-  "checked_at": "2026-10-08T21:25:06.469407+00:00",
+  "checked_at": "2026-10-17T05:25:45.495507+00:00",
   "browser_geometry_requested": {
-    "width": 1997,
+    "width": 1994,
     "height": 1290,
     "screen_width": 2056,
     "screen_height": 1329,
-    "x": 59,
+    "x": 62,
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1997,
+    "outer_width": 1994,
     "outer_height": 1290,
-    "inner_width": 1957,
-    "inner_height": 1200,
+    "inner_width": 1994,
+    "inner_height": 1206,
     "device_pixel_ratio": 2
   },
   "quota": {

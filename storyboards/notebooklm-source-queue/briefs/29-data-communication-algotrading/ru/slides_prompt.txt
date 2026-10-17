@@ -1,0 +1,41 @@
+Создай подробную презентацию NotebookLM. Use only the attached source named "MM article data-communication-algotrading RU 88833f0debda". It is the complete published ru article snapshot. Do not merge another language edition or outside facts. Output language: На русском языке на протяжении всей презентации/аудио. Keep technical identifiers, figures, dates, source names, citations, links, code, table values and headings exact. Use natural Russian technical terminology while preserving exact protocol, library, product and code identifiers. Retain the source edition’s mixed English terms where they are part of its wording.
+Follow every H2 and H3 section in this exact sequence and preserve each exact source heading:
+1. # Коммуникация данных в алготрейдинговых системах: обзор технологий
+2. ## 1. Взаимодействие с биржей: REST, WebSocket, FIX
+3. ### 1.1 REST API
+4. ### 1.2 WebSocket
+5. ### 1.3 FIX Protocol (Financial Information eXchange)
+6. ### 1.4 SBE (Simple Binary Encoding) — эволюция FIX
+7. ### 1.5 Сравнительная таблица протоколов связи с биржей
+8. ## 2. Внутренняя межсервисная коммуникация
+9. ### 2.1 gRPC Bidirectional Streaming (TCP)
+10. ### 2.2 gRPC через Unix Domain Socket (UDS)
+11. ### 2.3 Shared Memory IPC
+12. ## 3. Транспортные системы: Message Brokers и Messaging Libraries
+13. ### 3.1 Aeron — стандарт для торговых систем
+14. ### 3.2 Apache Kafka
+15. ### 3.3 Redis Pub/Sub и Redis Streams
+16. ### 3.4 NATS
+17. ### 3.5 ZeroMQ и nanomsg — brokerless messaging
+18. ### 3.6 Сравнительная таблица messaging-систем
+19. ## 4. Real-time PUB/SUB для клиентов: Centrifugo
+20. ## 5. Хранилища данных с real-time access
+21. ### 5.1 QuestDB — time-series для трейдинга
+22. ### 5.2 Redis как real-time data layer
+23. ### 5.3 Parquet для исторических данных
+24. ### 5.4 Нишевые решения: RayforceDB, AXL DB, ThePlatform
+25. ### 5.5 Что используют крупные квантовые фонды
+26. ## 6. Сериализация: Protobuf vs SBE vs FlatBuffers vs JSON
+27. ## 7. Эталонные архитектуры
+28. ### 7.1 Криптоарбитраж (средняя частота)
+29. ### 7.2 HFT Market Making (co-location)
+30. ### 7.3 Data Platform (StockAPIs-подобная)
+31. ## 8. Практические рекомендации
+32. ## Репозиторий с бенчмарками
+33. ## Заключение
+
+Article-specific coverage: Cover все разделы конкретной русской редакции: биржевые протоколы REST, WebSocket, FIX и SBE и сравнительную таблицу; внутреннюю коммуникацию (gRPC/TCP, UDS, shared-memory IPC); Aeron, Kafka, Redis Pub/Sub/Streams, NATS, ZeroMQ/nanomsg и все дополнительные системы/таблицы этой редакции; Centrifugo; QuestDB, Redis, Parquet и прочие названные хранилища; сериализацию Protobuf/SBE/FlatBuffers/JSON и другие форматы, присутствующие в источнике; все эталонные архитектуры; практические рекомендации; репозиторий бенчмарков, ссылки и заключение. Сохрани все числовые значения, единицы, оговорки, таблицы, код, ссылки и ограничения как утверждения статьи. Приведенные latency/throughput и результаты бенчмарков не являются универсальными гарантиями или независимо подтвержденными результатами.
+
+Frame this article as a technology overview and set of design tradeoffs, not as an independently validated performance guide or a universal architecture prescription. All latency, throughput, benchmark, protocol capability, library/database feature, adoption and comparative claims are article claims pending human editorial and primary-source review. Do not silently alter source claims or add current specifications, external facts, measured results or guarantees. Preserve the exact source edition’s examples and caveats. Treat benchmark numbers as reported examples tied to the article and its cited benchmark repository; do not present them as portable guarantees. External NotebookLM notebook/source/artifact duplicates are not_checked and must be reconciled before submission; target-channel duplicates are not_checked and must be reconciled before final production. Do not imply either is cleared.
+
+Use readable slides for every section. Show architecture boundaries and tradeoffs visually, and keep all on-slide prose in the requested locale apart from exact technical identifiers. Preserve tables or faithfully represent all rows and qualifiers. Do not invent performance charts. Заверши материал заключением статьи.
