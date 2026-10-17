@@ -10957,25 +10957,29 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Interrupted notebook creation requires binding its saved candidate; no duplicate creation",
-        "at": "2026-10-17T16:06:14.606483+00:00",
+        "at": "2026-10-17T16:36:10.749398+00:00",
         "stage": "notebook",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T160614615351Z-error.png",
-            "sha256": "d5502b53d722c85792373235232ab3f44d910b96083efb4f53cc4ff6b4b4be67"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T163610758999Z-error.png",
+            "sha256": "4210a95ebafb3c385eb9a4aac2d357acd16523cb14e683d5abd2d1855b198189"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T160614615351Z-controls.json",
-            "sha256": "3ee03bb8795e196fcc47e5fa4207d2316cd52d915d2df6eee973cd5223c5cfaf"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T163610758999Z-controls.json",
+            "sha256": "532b2d6e7380f794c7d07e86c5a9024ca1fb8951c81455fddafb8999ae3a6e1c"
           }
         },
-        "retry_not_before": "2026-10-17T16:21:14.966866+00:00",
+        "retry_not_before": "2026-10-17T16:51:11.093025+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "unbound_notebook_candidates": [
         {
-          "title": "DeepLOB: Deep Learning for Limit Order Books",
-          "href": "/notebook/ca952931-e315-4fc7-a91f-c6dc846396eb"
+          "title": "Концепция Desire Orderbook",
+          "href": "/notebook/7a2f8571-b154-4558-924f-98c624eaaa2b"
+        },
+        {
+          "title": "The Desire Orderbook Concept",
+          "href": "/notebook/610e56b9-aafa-41ec-97d9-824d06bd0cc7"
         },
         {
           "title": "DeepLOB: Deep Learning for Limit Order Books",
@@ -10988,6 +10992,10 @@
         {
           "title": "Data Communication in Algorithmic Trading Systems",
           "href": "/notebook/96b538c3-5b24-4cb1-8059-7f25b58b630a"
+        },
+        {
+          "title": "DeepLOB: Deep Learning for Limit Order Books",
+          "href": "/notebook/ca952931-e315-4fc7-a91f-c6dc846396eb"
         },
         {
           "title": "DeepLOB: Neural Networks for Limit Order Books",
@@ -11162,6 +11170,24 @@
           },
           "retry_not_before": "2026-10-17T15:51:12.518309+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Interrupted notebook creation requires binding its saved candidate; no duplicate creation",
+          "at": "2026-10-17T16:06:14.606483+00:00",
+          "stage": "notebook",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T160614615351Z-error.png",
+              "sha256": "d5502b53d722c85792373235232ab3f44d910b96083efb4f53cc4ff6b4b4be67"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T160614615351Z-controls.json",
+              "sha256": "3ee03bb8795e196fcc47e5fa4207d2316cd52d915d2df6eee973cd5223c5cfaf"
+            }
+          },
+          "retry_not_before": "2026-10-17T16:21:14.966866+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
     },
@@ -11244,19 +11270,19 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-17T16:06:21.949979+00:00",
+        "at": "2026-10-17T16:36:18.160602+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T160621961882Z-error.png",
-            "sha256": "607f8bb7c139d6139abe6d7cc0a69c16e6a6bd9955631aea9330409f78eeb396"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T163618171906Z-error.png",
+            "sha256": "26448dc25a249f303301fe0d12fa875d602cc4ccfddbe64edd09d2c30763ba19"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T160621961882Z-controls.json",
-            "sha256": "f008f2aaae26e99277ecfa4feef93ccc9cc76f17dedcd3146312f128c3139c47"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T163618171906Z-controls.json",
+            "sha256": "889bfbf171904291c27c85542558dc9d66f96985e644bd34a071add1938d5b2f"
           }
         },
-        "retry_not_before": "2026-10-17T16:21:22.146779+00:00",
+        "retry_not_before": "2026-10-17T16:51:18.350818+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "error_history": [
@@ -11402,6 +11428,24 @@
             }
           },
           "retry_not_before": "2026-10-17T15:51:19.801918+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-17T16:06:21.949979+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T160621961882Z-error.png",
+              "sha256": "607f8bb7c139d6139abe6d7cc0a69c16e6a6bd9955631aea9330409f78eeb396"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T160621961882Z-controls.json",
+              "sha256": "f008f2aaae26e99277ecfa4feef93ccc9cc76f17dedcd3146312f128c3139c47"
+            }
+          },
+          "retry_not_before": "2026-10-17T16:21:22.146779+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
@@ -11622,19 +11666,19 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-17T16:06:29.182458+00:00",
+        "at": "2026-10-17T16:36:25.345660+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T160629194159Z-error.png",
-            "sha256": "4d4d262f131082f7b7d7d3bd3c58e9dc9e5773d17695eda1cd3dedb6b622026f"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T163625356703Z-error.png",
+            "sha256": "953e2c8b46bdef4cb9cffccd62b0762f6f6ab75143134ae7b07f667efe30cf8e"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T160629194159Z-controls.json",
-            "sha256": "71fdf7d1391801976dba05da4a7cca861195e94b25344dc6bdade20721213611"
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T163625356703Z-controls.json",
+            "sha256": "55e6d302f15593a515badac7f000647c80e1227b3ddc15c37ebd417f563d4b93"
           }
         },
-        "retry_not_before": "2026-10-17T16:21:29.374463+00:00",
+        "retry_not_before": "2026-10-17T16:51:25.560045+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "error_history": [
@@ -11762,6 +11806,24 @@
             }
           },
           "retry_not_before": "2026-10-17T15:51:26.999066+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-17T16:06:29.182458+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T160629194159Z-error.png",
+              "sha256": "4d4d262f131082f7b7d7d3bd3c58e9dc9e5773d17695eda1cd3dedb6b622026f"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-zh-TW-20261017T160629194159Z-controls.json",
+              "sha256": "71fdf7d1391801976dba05da4a7cca861195e94b25344dc6bdade20721213611"
+            }
+          },
+          "retry_not_before": "2026-10-17T16:21:29.374463+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
@@ -12397,7 +12459,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
           "quota_reset_display": [
             "You're almost at your AI usage limit. Limit resets at 18:51."
@@ -12412,8 +12474,15 @@
           "source_id": "cdd25d37-bf59-4522-9eef-73ccb8e98eca",
           "submission_mode": "later",
           "artifact_id": "90c38928-f7b3-4425-b637-b308975d2edf",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nMapping out the flow...",
-          "observed_at": "2026-10-17T16:21:16.043236+00:00"
+          "card_text": "tablet\nUnread\nDeepLOB 深度学习限价订单簿\n1 source · 8m ago\nmore_vert",
+          "observed_at": "2026-10-17T16:36:32.967483+00:00",
+          "pages": 15,
+          "path": "input/notebooklm-sources/deeplob-deep-learning-order-book/zh-CN/slides.pdf",
+          "sha256": "84b01df8a34b4c3924fcbae48002675947d1d236cc6cef8fbced7d672bc24ba8",
+          "bytes": 13572374,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-17T16:36:54.414866+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -12587,7 +12656,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "b421831db39da9bfc3d4e936657027619da2d8ff9a2747cc6084b7d95dd61477",
           "requested_at": "2026-10-17T16:21:35.423841+00:00",
@@ -12597,11 +12666,18 @@
           "source_id": "9d0182fc-9cf8-486c-89ac-be516f3c9ae0",
           "submission_mode": "now",
           "artifact_id": "5879f0fb-351a-4a02-9c9b-0909846d7a32",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
-          "observed_at": "2026-10-17T16:21:39.998941+00:00"
+          "card_text": "tablet\nUnread\nThe Desire Orderbook\n1 source · 7m ago\nmore_vert",
+          "observed_at": "2026-10-17T16:37:01.191746+00:00",
+          "pages": 14,
+          "path": "input/notebooklm-sources/desire-orderbook/en/slides.pdf",
+          "sha256": "0ed06d842128ff9dddfe62751655a37b8145497cef11f1e6234003c8c40924d6",
+          "bytes": 14462416,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-17T16:38:31.684633+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "5879f0fb-351a-4a02-9c9b-0909846d7a32"
           ],
@@ -12613,8 +12689,15 @@
           "source_id": "9d0182fc-9cf8-486c-89ac-be516f3c9ae0",
           "submission_mode": "now",
           "artifact_id": "1544ec3d-efdd-43e8-8820-45d7bdaf6af7",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-17T16:21:49.993533+00:00"
+          "card_text": "audio_spark\nUnread\nPredicting Trader Intent with Desire Orderbooks\n23:08 · Deep Dive · 1 source · 7m ago\nwaving_hand\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-17T16:38:32.719600+00:00",
+          "duration_seconds": 1388.739048,
+          "path": "input/notebooklm-sources/desire-orderbook/en/audio.m4a",
+          "sha256": "0a0c1c9182a1d754348f06c5a23d5d5e366d620b1d6642ae8eb544ebcb3e6dfa",
+          "bytes": 44695892,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-17T16:41:27.472143+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -12659,7 +12742,7 @@
       },
       "artifacts": {
         "slides": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [],
           "prompt_sha256": "f0b66a659189fe1f8d0becb5d6a876b164293751a8a418528c2229857877993a",
           "requested_at": "2026-10-17T16:22:11.241808+00:00",
@@ -12669,11 +12752,18 @@
           "source_id": "98f82026-c3f0-477b-9c79-19aeeea0c4bc",
           "submission_mode": "now",
           "artifact_id": "1b47169b-27ca-43b7-8112-55308515db59",
-          "card_text": "progress_activity\nGenerating Slide Deck...\nLooking through sources..",
-          "observed_at": "2026-10-17T16:22:15.820462+00:00"
+          "card_text": "tablet\nUnread\nDesire Orderbook\n1 source · 11m ago\nmore_vert",
+          "observed_at": "2026-10-17T16:41:34.271871+00:00",
+          "pages": 12,
+          "path": "input/notebooklm-sources/desire-orderbook/ru/slides.pdf",
+          "sha256": "4f71ae052f0114cde74ce5cc1a4ebebd91101c7e030f7912dacc4e4f7ca2f458",
+          "bytes": 12322912,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-17T16:42:35.093939+00:00",
+          "editorial_review": "pending"
         },
         "audio": {
-          "state": "generating",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "1b47169b-27ca-43b7-8112-55308515db59"
           ],
@@ -12685,8 +12775,15 @@
           "source_id": "98f82026-c3f0-477b-9c79-19aeeea0c4bc",
           "submission_mode": "now",
           "artifact_id": "a89f4dbb-c9cf-4b71-a4cd-7c70763a9664",
-          "card_text": "progress_activity\nGenerating Audio Overview...\nCome back in a few minutes",
-          "observed_at": "2026-10-17T16:22:27.529470+00:00"
+          "card_text": "audio_spark\nUnread\nПрогнозирование намерений трейдеров в Desire Orderbook\n18:42 · Deep Dive · 1 source · 11m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-17T16:42:36.127648+00:00",
+          "duration_seconds": 1122.777687,
+          "path": "input/notebooklm-sources/desire-orderbook/ru/audio.m4a",
+          "sha256": "31b8cc909882faa62964f08e9364264624ff89b2ee7fdadc63db679ac0278e6d",
+          "bytes": 36136180,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-17T16:44:40.047187+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -12718,9 +12815,91 @@
       "selected_source_ids": [
         "98f82026-c3f0-477b-9c79-19aeeea0c4bc"
       ]
+    },
+    "desire-orderbook:zh-CN": {
+      "slug": "desire-orderbook",
+      "language": "zh-CN",
+      "article_sha256": "1ff47495a73349f7b0cf70361f6acfbf0e18d28e30d6221938044036a6e4a096",
+      "input_hashes": {
+        "article": "1ff47495a73349f7b0cf70361f6acfbf0e18d28e30d6221938044036a6e4a096",
+        "source_text": "1cb16c2f96be063a3a49c2efa39038e4f030745e87ecc24f943caa83be999f34",
+        "slides_prompt": "ae70c6171206bcd858c0b59cf57ddb7307868f06d940e71c92c4584870890b40",
+        "audio_prompt": "1faf25f57b4ef13ffef536a23fc8374f40099a6e21345bd41f63caa61384c74c"
+      },
+      "artifacts": {
+        "slides": {
+          "state": "scheduled",
+          "quota_notice": "tablet\nCustomize Slide Deck\nclose\nFormat\nDetailed Deck\ncheck\n\nA comprehensive deck with full text and details, perfect for emailing or reading on its own.\n\nPresenter Slides\ncheck\n\nClean, visual slides with key talking points to support you while you speak.\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nDescribe the slide deck you want to create\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 23:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [],
+          "prompt_sha256": "ae70c6171206bcd858c0b59cf57ddb7307868f06d940e71c92c4584870890b40",
+          "requested_at": "2026-10-17T16:45:02.432433+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "34d5a7c3-9d6d-42ed-8fd1-b6006b4ed2c1",
+          "submission_mode": "later",
+          "artifact_id": "f2b6d7e8-696f-4ff6-815b-bc3d1174d948",
+          "card_text": "tablet\n意愿订单簿：市场行为预测方法\nScheduled for after 11pm\nmore_vert",
+          "observed_at": "2026-10-17T16:45:06.994061+00:00"
+        },
+        "audio": {
+          "state": "scheduled",
+          "quota_notice": "audio_magic_eraser\nCustomize Audio Overview\nclose\nFormat\nDeep Dive\ncheck\n\nA lively conversation between two hosts, unpacking and connecting topics in your sources\n\nBrief\ncheck\n\nA bite-sized overview to help you grasp the core ideas from your sources quickly\n\nCritique\ncheck\n\nAn expert review of your sources, offering constructive feedback to help you improve your material\n\nDebate\ncheck\n\nA thoughtful debate between two hosts, illuminating different perspectives on your sources\n\nChoose language\n中文（简体）\nLength\nShort\nDefault\nSources\n1 source\nkeyboard_arrow_down\nWhat should the AI hosts focus on in this episode?\n+ Core Concept\n+ Trading Strategy\n+ Beginner Guide\nThis content will generate in a few hours. Or, upgrade to get it sooner.\nGenerate later",
+          "quota_reset_display": [
+            "You're almost at your AI usage limit. Limit resets at 23:51."
+          ],
+          "browser_timezone": "Asia/Tbilisi",
+          "baseline_ids": [
+            "f2b6d7e8-696f-4ff6-815b-bc3d1174d948"
+          ],
+          "prompt_sha256": "1faf25f57b4ef13ffef536a23fc8374f40099a6e21345bd41f63caa61384c74c",
+          "requested_at": "2026-10-17T16:45:14.059695+00:00",
+          "language_selection": [
+            "中文（简体）"
+          ],
+          "source_id": "34d5a7c3-9d6d-42ed-8fd1-b6006b4ed2c1",
+          "submission_mode": "later",
+          "artifact_id": "882b7f5a-824a-4b04-b93b-dd63448a5069",
+          "card_text": "audio_spark\n意愿订单簿：市场行为预测方法\nScheduled for after 11pm\nmore_vert",
+          "observed_at": "2026-10-17T16:45:18.620779+00:00"
+        }
+      },
+      "admission_state": "admitted",
+      "admitted_at": "2026-10-17T16:44:40.077258+00:00",
+      "notebook_intent": {
+        "at": "2026-10-17T16:44:45.127702+00:00",
+        "baseline_path": "temp/notebooklm-source-queue/desire-orderbook-zh-CN-20261017T164445125649Z-notebook-baseline.json",
+        "baseline_sha256": "ba8c5bed4c7aeb71d42d7e2a917be8d6d494d0c0172f5fe4d4de878e66ae21cc",
+        "baseline_count": 382,
+        "dispatch_state": "dispatched",
+        "resolved_at": "2026-10-17T16:44:46.257735+00:00"
+      },
+      "notebook": "https://notebook.google.com/notebook/ecefb1a0-4961-4796-a3c0-811e561fb4b4",
+      "account_guard": "passed",
+      "browser": "saved_camoufox",
+      "source_intent": {
+        "at": "2026-10-17T16:44:50.461833+00:00",
+        "sha256": "1cb16c2f96be063a3a49c2efa39038e4f030745e87ecc24f943caa83be999f34",
+        "baseline_ids": [],
+        "dispatch_state": "dispatch_unknown",
+        "resolved_at": "2026-10-17T16:44:57.302050+00:00"
+      },
+      "temporary_source_ids": [],
+      "source_id": "34d5a7c3-9d6d-42ed-8fd1-b6006b4ed2c1",
+      "source_title": "MM article desire-orderbook ZH-CN 1ff47495a733",
+      "source_sha256": "1cb16c2f96be063a3a49c2efa39038e4f030745e87ecc24f943caa83be999f34",
+      "state": "source_ready",
+      "source_display_name": "MM article desire-orderbook ZH-CN 1ff47495a733",
+      "selected_source_ids": [
+        "34d5a7c3-9d6d-42ed-8fd1-b6006b4ed2c1"
+      ]
     }
   },
-  "checked_at": "2026-10-17T16:22:27.548500+00:00",
+  "checked_at": "2026-10-17T16:45:18.656289+00:00",
   "browser_geometry_requested": {
     "width": 1994,
     "height": 1290,
@@ -12730,17 +12909,17 @@
     "y": 39
   },
   "browser_geometry_verified": {
-    "outer_width": 1994,
+    "outer_width": 1979,
     "outer_height": 1290,
-    "inner_width": 1994,
-    "inner_height": 1206,
+    "inner_width": 1939,
+    "inner_height": 1200,
     "device_pixel_ratio": 2
   },
   "quota": {
-    "notice": "You're almost at your AI usage limit. Limit resets at 18:51.",
+    "notice": "You're almost at your AI usage limit. Limit resets at 23:51.",
     "browser_timezone": "Asia/Tbilisi",
-    "observed_at": "2026-10-17T10:48:53.235103+00:00",
-    "not_before": "2026-10-17T14:51:00+00:00"
+    "observed_at": "2026-10-17T16:45:18.656279+00:00",
+    "not_before": "2026-10-17T19:51:00+00:00"
   },
   "recovery_policy": {
     "retry_empty_source_uploads": true,
