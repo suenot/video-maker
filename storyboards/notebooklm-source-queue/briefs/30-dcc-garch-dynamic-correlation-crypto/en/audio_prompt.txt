@@ -1,0 +1,49 @@
+Create a separate NotebookLM Deep Dive audio overview in the default spoken format. Use only the attached source named "MM article dcc-garch-dynamic-correlation-crypto EN ae21578cf9bf". It is the complete published en article snapshot. Do not merge another language edition or outside facts. Output language: English throughout. Keep all English technical terminology, identifiers, figures, equations, dates, citations, links, code, table values and headings exact.
+Follow every H1-H3 heading in this exact sequence and preserve each exact source heading:
+1. # DCC-GARCH: Dynamic Correlations for Pairs and Portfolio Risk
+2. ## Why Static Correlation Breaks in Crypto
+3. ## The Multivariate Problem: The Conditional Covariance Matrix
+4. ### VECH
+5. ### BEKK
+6. ## Engle's DCC (2002): The Two-Step Decomposition
+7. ### Step 1: Univariate GARCH per asset
+8. ### Step 2: The DCC correlation recursion
+9. ### The scalar restriction and its cost
+10. ## The DCC Quasi-Log-Likelihood
+11. ## Python Implementation
+12. ### Step 1: Fit univariate GARCH margins with `arch`
+13. # Fit each asset independently (this is embarrassingly parallel).
+14. # Standardized residuals z_{i,t} = eps_{i,t} / sigma_{i,t}
+15. # arch exposes these directly as .std_resid
+16. # Conditional volatilities sigma_{i,t} (in the SAME scaled units).
+17. # .conditional_volatility is sigma, not sigma^2.
+18. # Each column should have mean ~0, std ~1. If std is far from 1,
+19. # the margin is misspecified — revisit the univariate model (Part 2).
+20. ### Step 2: The DCC recursion and quasi-log-likelihood
+21. ### Step 3: Reconstruct the correlation and covariance paths
+22. # The dynamic BTC-ETH correlation as a time series:
+23. ### One-step-ahead forecast
+24. ## Application 1: A Dynamic Hedge Ratio for Pairs Trading
+25. # The spread the pair actually trades, hedged dynamically:
+26. #   spread_t = r_ETH,t - beta_{t-1} * r_BTC,t
+27. # Use beta_{t-1} (lagged) so the hedge uses only past information.
+28. ## Application 2: Time-Varying Portfolio Variance
+29. # Annualize (crypto trades every day: 365, not 252):
+30. ## Application 3: Correlation as a Regime Signal
+31. # Simple risk-off flag: correlation in the top quintile of its
+32. # trailing year. Use a trailing quantile to avoid look-ahead.
+33. ## Practical Considerations
+34. ### Estimation stability and number of assets
+35. ### Correlation targeting is a shortcut with a cost
+36. ### Refit cadence and look-ahead discipline
+37. ### Asymmetric DCC (aDCC)
+38. ## Comparison: DCC Against the Alternatives
+39. ## Limitations
+40. ## Summary
+
+Article-specific coverage: Cover the full article: why static correlation fails, the multivariate conditional covariance problem and VECH/BEKK alternatives, Engle’s DCC two-step decomposition and scalar restriction, the quasi-log-likelihood, all Python implementation steps and `arch` usage, correlation/covariance reconstruction and one-step forecast, dynamic hedge ratios, time-varying portfolio variance, regime signals, practical estimation and refit guidance, aDCC, alternatives, limitations and summary.
+
+Treat every mathematical, statistical, implementation, software/API and empirical crypto-market statement as an article claim pending human editorial and primary-source review. Preserve source equations, parameter definitions, assumptions, code, citations, numerical values and caveats exactly. Do not add current specifications, outside research, new calculations or guarantees.
+
+External NotebookLM notebook/source/artifact duplicates are not_checked and must be reconciled before submission; target-channel duplicates are not_checked and must be reconciled before final production. Do not imply either is cleared.
+Use natural spoken narration in English. Explain the model intuition, estimation steps, applications and limitations in words while preserving equations, identifiers, figures, dates and links exactly. Clearly distinguish article claims from independently verified facts aloud. End with the article summary.

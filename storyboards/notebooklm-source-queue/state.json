@@ -10957,19 +10957,19 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Interrupted notebook creation requires binding its saved candidate; no duplicate creation",
-        "at": "2026-10-17T07:28:34.217081+00:00",
+        "at": "2026-10-17T07:57:06.558763+00:00",
         "stage": "notebook",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T072834222941Z-error.png",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T075706564961Z-error.png",
             "sha256": "203ecda5859acec53d330d0f01e7455474dfaf79d520e483e5663dae0db5ede9"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T072834222941Z-controls.json",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T075706564961Z-controls.json",
             "sha256": "ab929c50d14899de9756cbcec987924116f40f4b6c68e4b4e363d57e146db42b"
           }
         },
-        "retry_not_before": "2026-10-17T07:43:34.485263+00:00",
+        "retry_not_before": "2026-10-17T08:12:06.798815+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "unbound_notebook_candidates": [
@@ -11021,6 +11021,24 @@
             }
           },
           "retry_not_before": "2026-10-17T06:13:39.484418+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Interrupted notebook creation requires binding its saved candidate; no duplicate creation",
+          "at": "2026-10-17T07:28:34.217081+00:00",
+          "stage": "notebook",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T072834222941Z-error.png",
+              "sha256": "203ecda5859acec53d330d0f01e7455474dfaf79d520e483e5663dae0db5ede9"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-en-20261017T072834222941Z-controls.json",
+              "sha256": "ab929c50d14899de9756cbcec987924116f40f4b6c68e4b4e363d57e146db42b"
+            }
+          },
+          "retry_not_before": "2026-10-17T07:43:34.485263+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
@@ -11104,19 +11122,19 @@
       "last_error": {
         "type": "RuntimeError",
         "message": "Artifact submission unresolved; inspect saved evidence before more generation",
-        "at": "2026-10-17T07:28:41.368372+00:00",
+        "at": "2026-10-17T07:57:13.704285+00:00",
         "stage": "artifacts",
         "evidence": {
           "screenshot": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T072841379096Z-error.png",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T075713714738Z-error.png",
             "sha256": "267abc7e1905e99b6ba26878ad15514fbd285778b212827da007266d6c87a2ae"
           },
           "controls": {
-            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T072841379096Z-controls.json",
+            "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T075713714738Z-controls.json",
             "sha256": "f008f2aaae26e99277ecfa4feef93ccc9cc76f17dedcd3146312f128c3139c47"
           }
         },
-        "retry_not_before": "2026-10-17T07:43:41.523442+00:00",
+        "retry_not_before": "2026-10-17T08:12:13.870944+00:00",
         "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
       },
       "error_history": [
@@ -11154,6 +11172,24 @@
             }
           },
           "retry_not_before": "2026-10-17T06:42:05.812520+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        },
+        {
+          "type": "RuntimeError",
+          "message": "Artifact submission unresolved; inspect saved evidence before more generation",
+          "at": "2026-10-17T07:28:41.368372+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T072841379096Z-error.png",
+              "sha256": "267abc7e1905e99b6ba26878ad15514fbd285778b212827da007266d6c87a2ae"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/data-communication-algotrading-ru-20261017T072841379096Z-controls.json",
+              "sha256": "f008f2aaae26e99277ecfa4feef93ccc9cc76f17dedcd3146312f128c3139c47"
+            }
+          },
+          "retry_not_before": "2026-10-17T07:43:41.523442+00:00",
           "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
         }
       ]
@@ -11348,7 +11384,7 @@
       ]
     }
   },
-  "checked_at": "2026-10-17T07:54:39.734204+00:00",
+  "checked_at": "2026-10-17T07:57:13.870953+00:00",
   "browser_geometry_requested": {
     "width": 1994,
     "height": 1290,

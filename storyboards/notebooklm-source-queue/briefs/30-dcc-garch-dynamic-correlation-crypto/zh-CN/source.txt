@@ -1,0 +1,561 @@
+MM article dcc-garch-dynamic-correlation-crypto ZH-CN 79d3c11353c3
+
+---
+title: "DCC-GARCH：配对交易与组合风险的动态相关性"
+description: "加密货币的相关性并非恒定——每次下跌都会飙升至接近1。DCC-GARCH对时变相关性矩阵建模，为配对交易提供动态对冲比率，并给出诚实的时变组合风险。"
+tags: ["volatility", "GARCH", "DCC", "correlation", "portfolio", "pairs-trading", "crypto"]
+date: "2026-07-12"
+slug: "dcc-garch-dynamic-correlation-crypto"
+lang: "zh"
+
+image: "/images/blog/dcc-garch-dynamic-correlation-crypto.webp"
+---
+
+# DCC-GARCH：配对交易与组合风险的动态相关性
+
+问大多数加密货币交易台BTC和ETH之间的相关性,你会得到一个数字——0.8,也许0.75——是在某个没人记得当初为何选择的窗口上计算出来的。这个数字是个谎言,或者至少是一种危险的简化。样本相关性是对某段时期的平均值,而在这段时期内真实的依赖结构一直在持续变动。在平静的市场中,BTC和ETH的走势会分化到足以让市场中性配对看起来很有吸引力的程度。而在连环爆仓中,它们会与彼此以及所有其他资产锁定在一起,你为分散化付出的代价恰恰在你最需要它的那一刻蒸发殆尽。
+
+这不是一个微妙的效应。翻看2022年任何一次下跌行情——5月的LUNA崩盘、6月的三箭资本(3AC)平仓、11月的FTX崩溃——你会看到前20大代币之间的平均两两相关性在几天内从0.4-0.6区间飙升到0.9以上。相关性不是一个偶尔被估计错误的常数;它是一个具有自身动态、自身聚类特征和自身状态的时间序列。把它当作标量处理,是多元版本的"假设波动率恒定"这一错误——我们已经在[本系列第一篇](/en/blog/post/garch-volatility-forecasting-crypto)中针对单一资产拆解过这个错误。
+
+本文是四篇系列文章的第三篇,主题为波动率建模。[第一篇](/en/blog/post/garch-volatility-forecasting-crypto)用`arch`库构建了单变量GARCH(1,1),展示了波动率如何聚类和均值回归。[第二篇](/en/blog/post/asymmetric-garch-crypto-leverage)加入了非对称性(GJR-GARCH、EGARCH)和Student-t创新项,以捕捉杠杆效应和肥尾特征。这篇文章我们进入多元领域:我们对*整个条件协方差矩阵*$H_t$的演化进行建模,使用Engle的动态条件相关性(DCC)模型。这为我们带来两样标量相关性永远无法提供的东西——用于配对交易的动态对冲比率,以及用于风险基础配置的诚实、时变的组合方差。[第四篇](/en/blog/post/volatility-targeting-garch-strategy)将以波动率目标回测收尾整个系列,把单变量和多变量预测串联成一个仓位规模规则。
+
+我们假设你已经读过第一篇和第二篇,因此不会重新推导单变量GARCH。如果你想要的是联合*尾部*行为——两个资产同时突破各自1%分位数的概率——那是Copula要解决的问题,我们在[联合风险的Copula模型](/en/blog/post/copula-models-joint-risk-crypto)中有专门讨论。DCC与Copula是互补的:Copula给你一个静态但灵活的尾部依赖结构,而DCC给你的是整个相关性矩阵*可处理的时间序列*。本文讲的是后者。
+
+## 为什么静态相关性在加密货币中会失效
+
+![Correlation breakdown: co-movements converge to one during a crash](/images/blog/dcc-garch-dynamic-correlation-crypto-correlation-breakdown.webp)
+
+在深入机制之前,先精确说明哪里出了问题。一个在窗口$[t-w, t]$上计算的单一样本相关性$\hat{\rho}$估计的是
+
+$$\hat{\rho}_{ij} = \frac{\sum_{s} (r_{i,s} - \bar{r}_i)(r_{j,s} - \bar{r}_j)}{\sqrt{\sum_s (r_{i,s}-\bar{r}_i)^2}\sqrt{\sum_s (r_{j,s}-\bar{r}_j)^2}}$$
+
+这背后隐含三个假设,对加密货币而言全部都是错的:
+
+1. **依赖关系的平稳性。** 该窗口只有一个真实的$\rho$。但现实中依赖关系存在多种状态——平静市场状态下接近0.5,压力状态下接近0.95——而$\hat{\rho}$会把它们混合成一个毫无意义的中间值。
+2. **边际波动率恒定。** 皮尔逊相关系数是标准化后的协方差。如果$\sigma_{i,t}$和$\sigma_{j,t}$本身在变动(它们确实在变——这正是第一篇和第二篇的全部前提),那么即便协方差是*恒定*的,也会产生*时变*的相关性,反之亦然。没有一个底层的波动率模型,你无法把两者分开。
+3. **市场方向上的不对称性。** 相关性在下跌行情中的上升幅度大于在上涨行情中。这是杠杆效应的多元表亲。滚动窗口若不缩短到纯噪声的程度,就无法表达这一点。
+
+滚动窗口的修补方案——在过去30天或60天上重新计算$\hat{\rho}$——是拿一个问题换另一个问题。短窗口反应灵敏但噪声大且滞后于实际的断点;长窗口稳定但陈旧。更糟的是,一旦你开始收缩或修补它,基于$d$个资产的滚动相关性矩阵并不保证始终保持半正定,这会破坏下游的每一个优化器。我们需要的模型是:(a) 由每个资产合适的波动率过程驱动,(b) 在构造上每一步都产生有效的相关性矩阵,(c) 参数可以通过极大似然估计,而不是随手挑一个窗口长度。这个模型就是DCC-GARCH。
+
+## 多元问题:条件协方差矩阵
+
+设$r_t \in \mathbb{R}^d$为$d$个资产在时刻$t$的收益率向量,条件均值为$\mu_t$(通常只是一个常数或一个小的AR项),残差为$\epsilon_t = r_t - \mu_t$。我们假设
+
+$$\epsilon_t \mid \mathcal{F}_{t-1} \sim \mathcal{D}(0, H_t)$$
+
+其中$H_t$是给定信息集$\mathcal{F}_{t-1}$下的$d \times d$**条件协方差矩阵**,$\mathcal{D}$是某个条件分布(高斯分布,或者对加密货币更好的选择——多元Student-t分布)。多元波动率建模的一切都是对同一个问题的不同回答:*如何参数化$H_t$的动态过程,使其在每一步都保持对称正定,同时又不会导致参数数量爆炸?*
+
+两个经典答案说明了这个问题有多难。
+
+### VECH
+
+VECH模型(Bollerslev, Engle, Wooldridge 1988)将$H_t$的半向量化写成过去平方残差与过去协方差的线性函数:
+
+$$\mathrm{vech}(H_t) = c + A\,\mathrm{vech}(\epsilon_{t-1}\epsilon_{t-1}') + B\,\mathrm{vech}(H_{t-1})$$
+
+其中$\mathrm{vech}(\cdot)$将一个对称矩阵的下三角部分堆叠成长度为$d(d+1)/2$的向量。这是最一般化的形式——每个方差和协方差都依赖于所有过去的方差和协方差——但在$d=3$之后就变得完全不实用了。对于$d$个资产,$A$和$B$各是$\frac{d(d+1)}{2} \times \frac{d(d+1)}{2}$的矩阵。在$d=5$时,这就是两个$15\times 15$的矩阵,约450个参数,还要加上表达起来都很痛苦的正定性约束。似然曲面是一片沼泽。
+
+### BEKK
+
+BEKK模型(Engle & Kroner 1995)通过二次型构造来保证正定性:
+
+$$H_t = C'C + A'\,\epsilon_{t-1}\epsilon_{t-1}'\,A + B'\,H_{t-1}\,B$$
+
+其中$C$为上三角矩阵。由于每一项都是二次型,只要$C'C \succ 0$,$H_t \succ 0$就自动成立。BEKK比VECH更简约,但仍以$O(d^2)$参数规模增长——$A$和$B$矩阵各为$d \times d$。在$d=10$时,你需要通过极大似然联合估计200多个参数,而且是在噪声较大的加密货币日度数据上,没有任何保证优化器能收敛到有意义的结果。实践中完整的BEKK被限制在$d \le 4$以内,即便如此人们也会使用"对角"或"标量"限制,舍弃大部分交叉动态。
+
+这就是多元GARCH的**维度诅咒**:参数数量以二次方增长,而数据中的信息量却不会。你会在关心的资产数量耗尽之前,先耗尽自由度。任何拥有10-30个代币的加密货币交易组合,对VECH或BEKK来说都完全遥不可及。
+
+出路来自Engle,他没有试图直接建模$H_t$,而是将其**分解**成我们已经知道如何低成本估计的组成部分。
+
+## Engle的DCC(2002):两步分解
+
+![DCC two-step decomposition: univariate volatilities, then dynamic correlation](/images/blog/dcc-garch-dynamic-correlation-crypto-two-step.webp)
+
+Bollerslev的常数条件相关性(CCC)模型(1990)是第一个简约的分解方案。它写作
+
+$$H_t = D_t\, R\, D_t$$
+
+其中$D_t = \mathrm{diag}(\sigma_{1,t}, \ldots, \sigma_{d,t})$是条件标准差组成的对角矩阵——每个资产一个单变量GARCH——而$R$是一个**恒定**的相关性矩阵。这是一个巨大的简化:你拟合$d$个独立的单变量GARCH模型,然后对标准化残差估计一个单一的样本相关性矩阵。只要$R$是有效的相关性矩阵且所有$\sigma_{i,t} > 0$,正定性就是自动满足的。
+
+CCC的问题就摆在名字里——相关性是*恒定的*,这正是我们在本文开篇就否定的那个假设。Engle的**动态条件相关性**(2002)保留了CCC优美的分解结构,但让相关性矩阵能够"呼吸":
+
+$$H_t = D_t\, R_t\, D_t$$
+
+现在$R_t$是时变的。精妙之处在于波动率和相关性是在两个独立的步骤中分别估计的,因此我们永远不需要面对完整的$O(d^2)$联合优化。
+
+### 第一步:每个资产的单变量GARCH
+
+对每个资产$i$,像第一篇和第二篇那样拟合一个单变量GARCH模型——GARCH(1,1)、GJR-GARCH或EGARCH配合Student-t创新项,取决于对该序列拟合最好的模型。这会给出条件方差$\sigma_{i,t}^2$,从而得到$D_t = \mathrm{diag}(\sigma_{1,t}, \ldots, \sigma_{d,t})$。
+
+从拟合好的模型中,我们提取**标准化残差**:
+
+$$z_{i,t} = \frac{\epsilon_{i,t}}{\sigma_{i,t}}$$
+
+按构造,每个$z_{i,t}$都(近似)具有单位条件方差。将它们堆叠成向量$z_t = (z_{1,t}, \ldots, z_{d,t})'$。这些标准化残差是相关性步骤的原材料——它们已经被剥离了各自的波动率动态,因此剩下的任何共同变动都是纯粹的依赖关系,而不是波动率的假象。(这与Copula文章在拟合边际分布前使用的PIT式逻辑相同;这里我们只做到标准化这一步,而不是一路走到均匀分布。)
+
+### 第二步:DCC相关性递推
+
+我们对一个辅助过程$Q_t$建模,它是一个$d \times d$的对称正定矩阵,由标准化残差的外积驱动,遵循类似GARCH的递推关系:
+
+$$Q_t = (1 - a - b)\,\bar{Q} + a\, z_{t-1} z_{t-1}' + b\, Q_{t-1}$$
+
+其中:
+
+- $\bar{Q} = \frac{1}{T}\sum_{t=1}^{T} z_t z_t'$是标准化残差的无条件相关性矩阵(这就是**相关性目标锚定**——下文详述),
+- $a \ge 0$控制今天的冲击$z_{t-1}z_{t-1}'$对相关性的拉动强度,
+- $b \ge 0$控制持续性——昨天的$Q_{t-1}$有多少会延续到今天,
+- 均值回归约束是$a + b < 1$(且$a, b > 0$),与单变量GARCH中的$\alpha + \beta < 1$直接类比。
+
+注意这个结构与标量GARCH(1,1)递推完全相同,只是作用在矩阵上:一个长期锚点$\bar{Q}$、一个冲击项和一个持续项。因为它是正半定矩阵($\bar{Q}$、秩为1的外积、以及前一个$Q_{t-1}$)的凸组合,只要$\bar{Q} \succ 0$且权重非负,$Q_t$就会保持正定。这正是我们免费获得有效协方差矩阵保证的原因。
+
+$Q_t$*几乎*是一个相关性矩阵,但还不完全是——它的对角线并不精确等于1。所以我们对它做归一化:
+
+$$R_t = \left(\mathrm{diag}(Q_t)\right)^{-1/2}\, Q_t\, \left(\mathrm{diag}(Q_t)\right)^{-1/2}$$
+
+逐元素地,资产$i$和$j$之间的条件相关性为
+
+$$\rho_{ij,t} = \frac{q_{ij,t}}{\sqrt{q_{ii,t}\, q_{jj,t}}}$$
+
+这个$R_t$在构造上的每一个时间步都是一个真正的相关性矩阵——对角线为1,非对角元素在$[-1,1]$之间,正定。重新组装出完整的条件协方差:
+
+$$H_t = D_t\, R_t\, D_t, \qquad h_{ij,t} = \rho_{ij,t}\,\sigma_{i,t}\,\sigma_{j,t}$$
+
+最后这个逐元素形式是你会经常用到的:两个资产的条件协方差等于它们的动态相关性乘以各自的动态波动率。等式右边的每一项都是时变的,并且都来自可以估计的模型。
+
+无论$d = 2$还是$d = 50$,整个模型只有**两个**相关性参数,$a$和$b$。波动率部分呈线性扩展(每个资产一个单变量GARCH,各约4-5个参数,全部独立拟合,极易并行)。这就是为什么DCC能做到BEKK和VECH做不到的规模化:维度诅咒被限制在了$\bar{Q}$上,而$\bar{Q}$是被*目标锚定*(作为样本估计值代入)而不是被*优化*的。
+
+### 标量限制及其代价
+
+$a, b$标量意味着*每一对*资产共享相同的相关性动态——相同的调整速度和相同的持续性。尽管BTC-ETH的相关性与DOGE-SHIB的相关性经济逻辑不同,它们却以相同的节奏变动。这是可处理性的代价,而且通常是可以接受的代价。一些推广形式(带矩阵$A, B$的广义DCC;Cappiello-Engle-Sheppard非对称DCC)以参数数量和估计稳定性为代价放松了这一限制。我们在下文会提到aDCC。
+
+## DCC准对数似然
+
+要估计$a$和$b$,我们需要似然函数。Engle的关键结果是高斯对数似然会**分离**成波动率部分和相关性部分,这正是两步估计法成立的依据。假设$\epsilon_t \mid \mathcal{F}_{t-1} \sim \mathcal{N}(0, H_t)$,时刻$t$的对数似然贡献是
+
+$$\ell_t = -\frac{1}{2}\left( d\log(2\pi) + \log|H_t| + \epsilon_t' H_t^{-1} \epsilon_t \right)$$
+
+代入$H_t = D_t R_t D_t$。则$|H_t| = |D_t|^2 |R_t|$,$H_t^{-1} = D_t^{-1} R_t^{-1} D_t^{-1}$,再利用$z_t = D_t^{-1}\epsilon_t$:
+
+$$\ell_t = -\frac{1}{2}\left( d\log(2\pi) + 2\log|D_t| + \log|R_t| + z_t' R_t^{-1} z_t \right)$$
+
+现在通过加减$z_t'z_t$来拆分它:
+
+$$\ell_t = \underbrace{-\frac{1}{2}\left( d\log(2\pi) + 2\log|D_t| + \epsilon_t' D_t^{-2}\epsilon_t \right)}_{\text{波动率部分 }\;\ell_t^{V}} \;\underbrace{-\frac{1}{2}\left( \log|R_t| + z_t' R_t^{-1} z_t - z_t' z_t \right)}_{\text{相关性部分 }\;\ell_t^{C}}$$
+
+波动率部分$\ell_t^V$只依赖于单变量GARCH参数(通过$D_t$)——最大化它恰好就是拟合$d$个独立的单变量GARCH模型,这正是我们在第一步做的事。相关性部分$\ell_t^C$在*给定*第一步的标准化残差的条件下,依赖于$a$和$b$(通过$R_t$)。所以在第二步中我们只需最大化
+
+$$\mathcal{L}^C(a, b) = -\frac{1}{2}\sum_{t=1}^{T}\left( \log|R_t| + z_t' R_t^{-1} z_t \right)$$
+
+($z_t'z_t$项不依赖于$a, b$,所以我们把它丢掉)。无论有多少个资产,这都是一个**两参数**优化问题——这正是关键所在。之所以称为*准*似然,是因为两步估计量是一致的但不是完全有效的;标准误需要修正(Engle & Sheppard 2001),但对于信号生成而言,重要的是点估计。
+
+对加密货币而言,高斯创新项会低估尾部风险。将多元Student-t似然替换进去,对$\ell_t$来说是一个直接替换(用多元t分布密度替换高斯核,并加入一个自由度参数$\nu$)。为清晰起见,我们在下面的估计器中保留高斯准似然,并注明$\nu$应加入的位置——第一、二篇中在边际上已经使用了t创新项进行标准化,这已经捕获了大部分尾部收益。
+
+## Python实现
+
+一个直白但重要的事实:**`arch`库不支持多元GARCH或DCC。** `arch`是一个出色的单变量引擎(我们正是为此依赖它),但其中没有`dcc_model`。你的实际可选方案有:
+
+1. **在`arch`之上自己实现DCC**——用`arch`拟合单变量模型,提取标准化残差,用NumPy/SciPy实现$Q$递推和相关性准似然,并优化这两个标量。这是我们下面要做的。大约60行代码,完全透明。
+2. **`mgarch` PyPI包**——一个轻量级的纯Python DCC-GARCH实现。适合快速拟合,但如果想精确接入GJR边际模型或t创新项,灵活性较低。
+3. **R的`rmgarch`**(Alexios Galanos)——参考实现。`dccspec` / `dccfit`支持DCC、aDCC、GARCH-copula、Student-t以及正确的标准误。如果你在做严肃的多元波动率研究,`rmgarch`(如有必要可通过`rpy2`从Python调用)是黄金标准。
+
+我们采用方案1,因为它让每一个环节都清晰可见,并且复用了第一、二篇中的单变量技能。
+
+### 第一步:用`arch`拟合单变量GARCH边际模型
+
+```python
+import numpy as np
+import pandas as pd
+from arch import arch_model
+from scipy.optimize import minimize
+
+def fetch_returns(symbols, start="2022-01-01", end="2025-12-31"):
+    """
+    Daily log returns for a list of crypto symbols.
+    Replace with your data source (ccxt for 24/7 exchange data,
+    yfinance for a quick sketch).
+    """
+    import yfinance as yf
+    px = yf.download([f"{s}-USD" for s in symbols],
+                     start=start, end=end)["Close"]
+    px.columns = symbols
+    rets = np.log(px / px.shift(1)).dropna()
+    return rets
+
+symbols = ["BTC", "ETH", "SOL", "BNB"]
+returns = fetch_returns(symbols)
+
+def fit_univariate(series, dist="t"):
+    """
+    Fit GJR-GARCH(1,1) with Student-t innovations (Part 2 model).
+    Returns the fitted result and the *scaled* series it was fit on.
+    We scale returns by 100 for the optimizer's numerical health,
+    exactly as in Parts 1 and 2.
+    """
+    scaled = series * 100.0
+    model = arch_model(scaled, mean="Constant",
+                       vol="GARCH", p=1, o=1, q=1, dist=dist)
+    res = model.fit(disp="off")
+    return res
+
+# Fit each asset independently (this is embarrassingly parallel).
+fits = {s: fit_univariate(returns[s]) for s in symbols}
+
+# Standardized residuals z_{i,t} = eps_{i,t} / sigma_{i,t}
+# arch exposes these directly as .std_resid
+Z = pd.DataFrame({s: fits[s].std_resid for s in symbols}).dropna()
+
+# Conditional volatilities sigma_{i,t} (in the SAME scaled units).
+# .conditional_volatility is sigma, not sigma^2.
+Sigma = pd.DataFrame({s: fits[s].conditional_volatility
+                      for s in symbols}).loc[Z.index]
+
+print(Z.describe())
+# Each column should have mean ~0, std ~1. If std is far from 1,
+# the margin is misspecified — revisit the univariate model (Part 2).
+```
+
+对标准化残差做一次快速合理性检查很重要。如果任何一列的标准差远离1,或者其平方项存在明显残留的自相关(对$z_{i,t}^2$做Ljung-Box检验),说明该单变量边际模型设定有误,DCC步骤会继承这个错误。先修正边际模型——这正是第二篇要解决的问题。
+
+### 第二步:DCC递推与准对数似然
+
+```python
+def dcc_negloglik(params, Z):
+    """
+    Negative DCC quasi-log-likelihood (Gaussian) in (a, b).
+    Z : (T, d) array of standardized residuals from Step 1.
+
+    Implements:
+        Q_t = (1-a-b) Qbar + a z_{t-1} z_{t-1}' + b Q_{t-1}
+        R_t = diag(Q_t)^{-1/2} Q_t diag(Q_t)^{-1/2}
+        LL  = -1/2 sum_t ( log|R_t| + z_t' R_t^{-1} z_t )
+    with correlation targeting: Qbar = sample corr of Z.
+    """
+    a, b = params
+    # Feasibility guard: a,b > 0 and a+b < 1 keep Q_t PD and mean-reverting.
+    if a <= 0 or b <= 0 or a + b >= 1.0:
+        return 1e10
+
+    Z = np.asarray(Z)
+    T, d = Z.shape
+    Qbar = np.cov(Z, rowvar=False, bias=True)   # unconditional (targeted)
+    # Normalize Qbar to a correlation matrix so the target is a true corr.
+    dinv = np.diag(1.0 / np.sqrt(np.diag(Qbar)))
+    Qbar = dinv @ Qbar @ dinv
+
+    Q = Qbar.copy()          # initialize Q_1 at the target
+    ll = 0.0
+    for t in range(T):
+        # Normalize Q_t -> R_t
+        q_diag = np.sqrt(np.diag(Q))
+        R = Q / np.outer(q_diag, q_diag)
+        # Numerical guard against a non-PD R from roundoff
+        sign, logdet = np.linalg.slogdet(R)
+        if sign <= 0:
+            return 1e10
+        z = Z[t]
+        Rinv_z = np.linalg.solve(R, z)
+        ll += -0.5 * (logdet + z @ Rinv_z)
+        # Update Q for t+1 using today's shock z_t z_t'
+        Q = (1 - a - b) * Qbar + a * np.outer(z, z) + b * Q
+    return -ll
+
+def fit_dcc(Z):
+    """Estimate (a, b) by maximizing the DCC quasi-log-likelihood."""
+    res = minimize(
+        dcc_negloglik, x0=[0.03, 0.94], args=(np.asarray(Z),),
+        method="L-BFGS-B",
+        bounds=[(1e-6, 0.5), (1e-6, 0.999)],
+    )
+    a, b = res.x
+    print(f"DCC estimates: a = {a:.4f}, b = {b:.4f}, a+b = {a+b:.4f}")
+    print(f"log-likelihood: {-res.fun:.2f}")
+    return a, b
+
+a_hat, b_hat = fit_dcc(Z)
+```
+
+在BTC/ETH/SOL/BNB组合上使用几年的日度数据运行这段代码,会产生如下形状的输出(以下数字是**示意性的**,并非来自某次具体日期的实验——请在你自己的数据上运行):
+
+```
+DCC estimates: a = 0.0287, b = 0.9401, a+b = 0.9688
+log-likelihood: -3812.44
+```
+
+如何解读:
+
+- **$a = 0.029$**很小——相关性矩阵不会因为单日的冲击而剧烈跳动。每天只会把$R_t$朝外积$z_{t-1}z_{t-1}'$的方向推动约3%。
+- **$b = 0.940$**很大——相关性具有很强的持续性。一旦交易组合在压力事件中耦合起来,它会保持耦合一段时间,缓慢衰减回$\bar{Q}$。这与加密货币下跌行情的实际体验相符:相关性不会在价格企稳的瞬间立刻回弹。
+- **$a + b = 0.969 < 1$**证实了均值回归。相关性过程有一个平稳的长期水平($\bar{Q}$)会回归到,半衰期约为$\log(0.5)/\log(a+b) \approx 22$天。如果你估计出的$a + b$基本等于1,说明相关性过程是单位根过程——没有长期锚点,这通常是样本内部存在结构性断点、被模型吸收成无限持续性的症状。
+
+近乎单位根的持续性和微小的冲击载荷,是各类资产中DCC的典型特征,加密货币也不例外。这也是为什么30天滚动相关性是如此差劲的替代品:滚动窗口隐含假设的$a$和$b$与这种衰减结构完全不匹配。
+
+几个能省下实际调试时间的实现要点:
+
+- **初始化。** 从`[0.03, 0.94]`起步反映了加密货币的典型估计值:较小的$a$(相关性对冲击有反应但不剧烈),较大的$b$(相关性具有持续性)。如果优化器漂移到$a+b \to 1$,说明相关性过程是单位根的——通常是样本中存在结构性断点的迹象(模型在勉强将某个状态变化拟合成持续性)。
+- **时序约定。** 在循环内部,我们先用$z_t$对$R_t$打分,*然后*再用$z_t z_t'$更新$Q$以供下一步使用。这确保$R_t$只是截至$t-1$的信息的函数——没有前视偏差。这个差一位的错误是DCC最常见的单一bug,它会在样本内静悄悄地夸大拟合效果。
+- **相关性目标锚定。** 我们把$\bar{Q}$作为样本相关性代入,而不是去估计它。这正是让优化问题变成二维的原因。代价是$\bar{Q}$使用了全样本,因此在严格的滚动前向评估中,你必须只在训练窗口上重新估计它(见下文)。
+
+### 第三步:重建相关性和协方差路径
+
+一旦$a, b$确定下来,再运行一次递推,这次*存储*完整的$R_t$(和$H_t$)路径,以供下游策略使用。
+
+```python
+def dcc_filter(Z, Sigma, a, b):
+    """
+    Run the DCC recursion with fixed (a,b) and return the full paths:
+      R_path : (T, d, d) conditional correlation matrices
+      H_path : (T, d, d) conditional covariance matrices (scaled units)
+    Sigma : (T, d) conditional volatilities aligned with Z.
+    """
+    Z = np.asarray(Z); Sig = np.asarray(Sigma)
+    T, d = Z.shape
+    Qbar = np.cov(Z, rowvar=False, bias=True)
+    dinv = np.diag(1.0 / np.sqrt(np.diag(Qbar)))
+    Qbar = dinv @ Qbar @ dinv
+
+    Q = Qbar.copy()
+    R_path = np.empty((T, d, d))
+    H_path = np.empty((T, d, d))
+    for t in range(T):
+        q_diag = np.sqrt(np.diag(Q))
+        R = Q / np.outer(q_diag, q_diag)
+        R_path[t] = R
+        Dt = np.diag(Sig[t])          # D_t = diag(sigma_i,t)
+        H_path[t] = Dt @ R @ Dt       # H_t = D_t R_t D_t
+        z = Z[t]
+        Q = (1 - a - b) * Qbar + a * np.outer(z, z) + b * Q
+    return R_path, H_path
+
+R_path, H_path = dcc_filter(Z, Sigma, a_hat, b_hat)
+
+# The dynamic BTC-ETH correlation as a time series:
+i, j = symbols.index("BTC"), symbols.index("ETH")
+rho_btc_eth = pd.Series(R_path[:, i, j], index=Z.index, name="rho_BTC_ETH")
+print(rho_btc_eth.describe())
+print("min/max correlation:", rho_btc_eth.min().round(3),
+      rho_btc_eth.max().round(3))
+```
+
+`rho_btc_eth`序列是整个练习的成果:与其得到一个数字,现在你有了每日相关性,可以绘图、设阈值,或输入策略中。在真实的加密货币数据上,你通常会看到它在平静时期约为0.5,压力时期则升至0.9以上——这正是单一样本相关性所抹平的那个差距。
+
+### 单步前瞻预测
+
+对于实盘交易,你需要基于当前可获得信息预测下一期的$H_{t+1}$。波动率一侧来自每个`arch`模型的单步预测;相关性一侧则是递推再多走一步:
+
+```python
+def dcc_forecast_next(Z, a, b, fits, symbols):
+    """One-step-ahead H_{t+1} using info through the last observation."""
+    Z = np.asarray(Z); T, d = Z.shape
+    Qbar = np.cov(Z, rowvar=False, bias=True)
+    dinv = np.diag(1.0 / np.sqrt(np.diag(Qbar)))
+    Qbar = dinv @ Qbar @ dinv
+
+    # Re-run recursion to get Q_T, then push one step with last z.
+    Q = Qbar.copy()
+    for t in range(T):
+        z = Z[t]
+        Q = (1 - a - b) * Qbar + a * np.outer(z, z) + b * Q
+    q_diag = np.sqrt(np.diag(Q))
+    R_next = Q / np.outer(q_diag, q_diag)
+
+    # One-step vol forecast per asset (arch), in the SAME scaled units.
+    sig_next = np.array([
+        np.sqrt(fits[s].forecast(horizon=1, reindex=False)
+                .variance.iloc[-1, 0])
+        for s in symbols
+    ])
+    Dt = np.diag(sig_next)
+    H_next = Dt @ R_next @ Dt
+    return R_next, H_next, sig_next
+
+R_next, H_next, sig_next = dcc_forecast_next(Z, a_hat, b_hat, fits, symbols)
+```
+
+请记住一切都处于缩放(×100)单位下,因为我们是在`series * 100`上拟合`arch`的。在将结果输入策略之前,要把波动率除以100(协方差除以$100^2 = 10{,}000$)以还原为原始收益率单位。保持缩放的一致性很繁琐,但却是常见的隐蔽bug来源。
+
+## 应用一:配对交易的动态对冲比率
+
+![Time-varying hedge ratio driven by dynamic conditional correlation](/images/blog/dcc-garch-dynamic-correlation-crypto-hedge-ratio.webp)
+
+经典的市场中性配对——做多一个资产、按贝塔加权做空另一个资产——生死取决于对冲比率$\beta$。如果通过在训练窗口上做静态OLS来估计它,你就继承了本文通篇讨论的那个陈旧相关性问题:上个季度中和了市场敞口的对冲比率,这个季度就错了。
+
+DCC把对冲比率作为一个时间序列提供给你。用BTC对ETH敞口做最小方差对冲的系数,就是条件回归系数
+
+$$\beta_t = \frac{\mathrm{Cov}_t(r_{\text{ETH}}, r_{\text{BTC}})}{\mathrm{Var}_t(r_{\text{BTC}})} = \frac{h_{\text{ETH,BTC},t}}{\sigma_{\text{BTC},t}^2} = \rho_{\text{ETH,BTC},t}\,\frac{\sigma_{\text{ETH},t}}{\sigma_{\text{BTC},t}}$$
+
+等式右边的每一项都是DCC的输出。对冲比率因两个截然不同的原因而变动,DCC能清晰地将它们分离开:相关性$\rho_t$发生变化(资产耦合或解耦),以及波动率之比$\sigma_{\text{ETH},t}/\sigma_{\text{BTC},t}$发生变化(某个资产的波动率相对变大)。滚动OLS贝塔会把这两种效应带着滞后一起抹平;DCC则能把它们分别归因。
+
+```python
+def dynamic_hedge_ratio(R_path, Sigma, base="BTC", target="ETH",
+                        symbols=symbols, index=Z.index):
+    """
+    beta_t to hedge `target` exposure with `base`:
+        beta_t = rho_t * sigma_target,t / sigma_base,t
+    (Scaling cancels in the ratio, so scaled units are fine here.)
+    """
+    i = symbols.index(target)
+    j = symbols.index(base)
+    rho = R_path[:, i, j]
+    sig = np.asarray(Sigma)
+    beta = rho * sig[:, i] / sig[:, j]
+    return pd.Series(beta, index=index, name=f"beta_{target}_{base}")
+
+beta_t = dynamic_hedge_ratio(R_path, Sigma)
+print(beta_t.describe())
+
+# The spread the pair actually trades, hedged dynamically:
+#   spread_t = r_ETH,t - beta_{t-1} * r_BTC,t
+# Use beta_{t-1} (lagged) so the hedge uses only past information.
+spread = (returns["ETH"] - beta_t.shift(1) * returns["BTC"]).dropna()
+```
+
+把`spread`输入你所使用的任何配对交易引擎。动态对冲本身不会创造优势——它让你实际交易的*价差*在时间上真正保持市场中性,这样你的均值回归信号就不会被漂移的方向性敞口所污染。如果你在构建配对策略,这可以直接嵌入[加密货币统计套利与配对交易](/en/blog/post/statistical-arbitrage-pairs-trading-crypto)和[配对交易的距离法](/en/blog/post/distance-approach-pairs-trading)的框架中,替换其中固定的对冲比率。相关性序列本身也是[基于相关性的配对信号](/en/blog/post/signal-correlation-pairs)的一个比任何滚动窗口都更干净的输入——你得到的是一个平滑的、与模型一致的$\rho_t$,而不是一个有噪声的窗口估计值。
+
+关于实盘使用$\beta_t$有两点需要注意。第一,**要滞后使用**——用$\beta_{t-1}$交易,永远不要用同期的$\beta_t$,否则就是在窥视未来。第二,每天剧烈波动的对冲比率会产生换手率和手续费;在加密货币24/7的市场中,空头一侧还有资金费率成本,过度反应的对冲可能比它所纠正的漂移带来更大的损耗。要平滑$\beta_t$(用EWMA,或只在其超出某个区间时才调整对冲),并且合理地控制整体仓位规模——根据有噪声的信号来确定仓位规模本身就是一门独立的学问,详见[凯利准则仓位管理](/en/blog/post/kelly-criterion-strategy-sizing)。
+
+## 应用二:时变组合方差
+
+对于权重向量为$w$的组合,条件方差为
+
+$$\sigma_{p,t}^2 = w'\, H_t\, w = \sum_{i}\sum_{j} w_i w_j\, \rho_{ij,t}\,\sigma_{i,t}\,\sigma_{j,t}$$
+
+对于静态协方差矩阵——马科维茨的默认做法——这个数字是你计算一次然后假装它仍然成立的常数。但它并不成立。组合风险随市场"呼吸",而且它*最剧烈的呼吸*恰恰发生在相关性飙升的时候,因为在下跌行情中$\sigma_{i,t}$项和$\rho_{ij,t}$项会同时上升并相乘。一个在平静市场中看起来年化波动率40%的组合,在压力周内可能运行在80%以上,而静态协方差矩阵会告诉你什么都没变。
+
+```python
+def portfolio_vol_path(H_path, weights, index=Z.index, unscale=1e4):
+    """
+    Conditional portfolio volatility sigma_{p,t} = sqrt(w' H_t w).
+    H_path is in scaled (x100) units, so covariances carry a 100^2
+    factor: divide by unscale=1e4 to return to raw-return variance.
+    """
+    w = np.asarray(weights)
+    var_t = np.einsum("i,tij,j->t", w, H_path, w) / unscale
+    return pd.Series(np.sqrt(var_t), index=index, name="port_vol")
+
+w = np.array([0.4, 0.3, 0.2, 0.1])   # BTC, ETH, SOL, BNB
+pv = portfolio_vol_path(H_path, w)
+# Annualize (crypto trades every day: 365, not 252):
+pv_annual = pv * np.sqrt(365)
+print(pv_annual.describe())
+```
+
+这个时变的$\sigma_{p,t}$正是风险基础配置所需要的诚实输入。使用*静态*样本协方差进行均值方差优化([加密货币的马科维茨理论](/en/blog/post/markowitz-portfolio-theory-crypto))是在针对一个虚构对象进行优化;而把$H_t$(或其短期预测)输入进去,会让有效前沿本身变得时变,并迫使优化器在相关性上升的状态*进入之时*就去杠杆,而不是事后才反应。风险平价和层次化方法——[HRP + CVaR管道](/en/blog/post/portfolio-pipeline-hrp-cvar)——对协方差输入更加敏感,因为整个配置方案本身就是风险矩阵的函数。而如果你在正面比较各种配置方法,如[组合优化算法对比](/en/blog/post/portfolio-optimization-algorithms-compared)一文所做的,它们所消耗的是静态还是动态协方差,往往比算法本身的选择对实际风险的影响更大。
+
+直接的应用是对整个组合进行**波动率目标管理**:选定一个目标年化波动率$\sigma^{*}$,每期按$\sigma^{*} / \sigma_{p,t}$调整总敞口规模,使实际风险大致保持恒定,而不是在危机中膨胀。这与[第四篇](/en/blog/post/volatility-targeting-garch-strategy)首尾呼应,那篇文章正是构建并回测了这条规则。
+
+## 应用三:相关性作为状态信号
+
+![Correlation level as a market regime signal](/images/blog/dcc-garch-dynamic-correlation-crypto-regime-signal.webp)
+
+除了对冲和仓位管理,相关性矩阵还携带着宏观信号。你能提取出的最有用的单一标量是**平均两两相关性**:
+
+$$\bar{\rho}_t = \frac{2}{d(d-1)}\sum_{i < j} \rho_{ij,t}$$
+
+当$\bar{\rho}_t$在整个组合中上升时,市场正在进入**风险规避(risk-off)**状态——个股故事不再重要,一切都作为一个宏观贝塔来交易。这就是"危机中相关性趋近于1"这句话的量化指纹。它往往会*领先于*或与下跌行情同时出现,这使它成为一个可用的状态指标,而不是一个滞后的事后诊断。
+
+```python
+def avg_pairwise_corr(R_path, index=Z.index):
+    T, d, _ = R_path.shape
+    iu = np.triu_indices(d, k=1)          # upper-triangle off-diagonals
+    avg = R_path[:, iu[0], iu[1]].mean(axis=1)
+    return pd.Series(avg, index=index, name="avg_corr")
+
+avg_corr = avg_pairwise_corr(R_path)
+
+# Simple risk-off flag: correlation in the top quintile of its
+# trailing year. Use a trailing quantile to avoid look-ahead.
+roll_q = avg_corr.rolling(365, min_periods=90).quantile(0.80)
+risk_off = (avg_corr > roll_q)
+```
+
+你可以把`risk_off`用作一个独立的节流开关(削减总敞口、放宽止损、在所有资产同向而行时让容易被碾压的均值回归策略停摆),也可以把它作为一个更正式的状态模型中的特征。它与[基于HMM的状态检测](/en/blog/post/regime-detection-hmm-adaptive-trading)中的隐马尔可夫方法很自然地配合:平均DCC相关性是你能提供给HMM的信息量较大的观测变量之一,因为它对系统性压力具有滞后收益所不具备的前瞻性。诚实的提醒是:上升的相关性告诉你的是分散化正在失效,而不是市场会走向哪个方向。它是一个风险信号,不是一个阿尔法信号,应该按此原则来控制仓位规模——参见[亏损与盈利的不对称性](/en/blog/post/loss-profit-asymmetry),了解为什么把风险状态当作方向性押注最终会以糟糕结局收场。
+
+## 实践考量
+
+### 估计稳定性与资产数量
+
+DCC的可扩展性远优于BEKK,但"可扩展"不等于"免费"。相关性目标锚定矩阵$\bar{Q}$是一个$d \times d$的样本相关性矩阵,而随着$d$接近观测数量,样本相关性矩阵会变得病态。4个资产、1000个交易日,你没问题。60个资产、400个交易日,$\bar{Q}$几乎奇异,它在似然函数中的逆矩阵会爆炸,$R_t$可能因数值噪声而漂移到非正定状态。以下是缓解方法,大致按你需要用到的频率排序:
+
+- **对$\bar{Q}$进行收缩**,朝一个结构化目标收缩(Ledoit-Wolf方法,或朝单位矩阵/常数相关性矩阵收缩),然后再运行递推。这是应对大型交易组合杠杆效应最高的单一修复方案。
+- **将资产分组**为几个板块(主流币、L1公链、DeFi、meme币),在板块内和板块间分别建模,或者对主成分因子而非原始资产运行DCC。
+- **优先选择更多数据而非更多资产。** DCC对长期、干净、同期的历史数据有着无止境的胃口——而这恰恰是年轻代币所不具备的。
+
+现实中,直接使用DCC的资产数量最多保持在几十个以内。对于更大的资产池,对因子收益加特异性残差运行DCC是标准的变通方案。
+
+### 相关性目标锚定是一条有代价的捷径
+
+对$\bar{Q}$进行目标锚定使估计变得可处理,但它把*全样本*的无条件相关性烘焙进了每一个$R_t$中。在严格的回测中,这是一个前视偏差泄漏:你第$t$天的相关性矩阵"知道"整个样本(包括未来)的平均相关性。要做诚实的评估,你必须只在训练窗口上重新估计$\bar{Q}$,并在样本外保持固定,或者向前滚动更新它。这与整个[滚动前向优化](/en/blog/post/walk-forward-optimization)框架所强制执行的纪律是一致的,而用一个方便的`np.cov(Z)`作用在完整数组上——正如我们上面的教学代码所做的那样——很容易在不知不觉中违反这条纪律。在你相信任何一个损益数字之前,先修正它。
+
+### 重新拟合的节奏与前视纪律
+
+你不需要每天都重新优化$a, b$——它们是稳定的参数。一个合理的生产环境节奏:
+
+- **每周或每月重新估计$a, b$以及单变量GARCH参数。**
+- **每期都用冻结的参数运行滤波(更新$Q_t$、$\sigma_{i,t}$)**,以得到最新的$R_t$和$H_t$。滤波成本低;拟合成本不低。
+- **永远只做预测,不做平滑。** 使用截至$t-1$信息构建的$R_t$在$t$时刻进行交易。这种两阶段结构(在窗口上拟合,然后向前滤波)正是保持诚实的关键。
+
+DCC回测与实盘表现之间的差距几乎总是前视偏差泄漏——全样本的$\bar{Q}$、同期的$\beta_t$,或是在包含了你正在评估的那笔交易的数据上重新拟合。让回测与实盘条件保持匹配的这种纪律,本身就是[回测与实盘一致性](/en/blog/post/backtest-live-parity)这篇文章的主题,而DCC是一个在这方面比大多数模型更严厉惩罚马虎行为的模型。如果经过干净的滚动前向评估后,动态相关性相对于*你的*策略的简单滚动估计没有带来任何提升,那也是一个真实且值得发表的负面结果——[诚实的负面结果](/en/blog/post/honest-negative-no-robust-edge)中的思路在这里直接适用。
+
+### 非对称DCC(aDCC)
+
+正如单变量杠杆效应(第二篇)意味着坏消息比好消息更能推高波动率一样,相关性在联合*负向*冲击之后的上升幅度也大于联合正向冲击之后。Cappiello、Engle和Sheppard(2006)用**非对称DCC**捕捉这一点,加入一项由*负部分*标准化残差$z_t^- = \min(z_t, 0)$的外积驱动的项:
+
+$$Q_t = (\bar{Q} - a\bar{Q} - b\bar{Q} - g\bar{N}) + a\, z_{t-1} z_{t-1}' + g\, z_{t-1}^- z_{t-1}^{-\prime} + b\, Q_{t-1}$$
+
+其中$\bar{N} = \frac{1}{T}\sum_t z_t^- z_t^{-\prime}$,$g \ge 0$衡量联合下行波动带来的额外相关性冲击。对于加密货币而言,由于崩盘相关性是主导性风险,这个非对称项通常是显著的,值得多花一个参数。`rmgarch`开箱即用地支持拟合aDCC(`model="aDCC"`);在我们的NumPy估计器中加入$z_t^-$项也是一个直截了当的练习。
+
+## 对比:DCC与其他方案
+
+在获取加密货币交易组合协方差矩阵的各种方式中,DCC处于什么位置?诚实的总结如下:
+
+| 方法 | 参数数量 | 可扩展到 | 时变$\rho$? | 保证正定? | 尾部依赖? |
+| --- | --- | --- | --- | --- | --- |
+| 样本/滚动协方差 | 0(窗口长度) | 任意$d$ | 粗略(滞后、有噪声) | 否(需要修补) | 否 |
+| EWMA(RiskMetrics) | 1($\lambda$) | 任意$d$ | 是(单一衰减) | 是 | 否 |
+| CCC-GARCH | $d$个边际模型 + $\bar{Q}$ | 数十个 | **否**(恒定$R$) | 是 | 否 |
+| **DCC-GARCH** | $d$个边际模型 + **2** | 数十个 | **是** | **是** | 否 |
+| aDCC-GARCH | $d$个边际模型 + 3 | 数十个 | 是,非对称 | 是 | 部分 |
+| BEKK | $O(d^2)$ | $\le 4$ | 是(丰富) | 是 | 否 |
+| VECH | $O(d^4)$ | $\le 3$ | 是(最丰富) | 困难 | 否 |
+| GARCH-copula | $d$个边际模型 + copula | 数十个(藤copula) | 静态copula | 是 | **是** |
+
+对这张表的几点解读:
+
+- **EWMA**是每个人在声称DCC有帮助之前都应该先超越的廉价基准。从精神上讲它是一个单参数的特例——一个直接作用于协方差的单一指数衰减——对许多交易组合来说,在样本外要超越它出奇地难。如果DCC在干净的滚动前向测试中没有超越EWMA,那就用EWMA。
+- **CCC与DCC**的对比正是本文的核心要点:相同的分解结构,但CCC冻结了$R$,而DCC让它变动。那两个额外参数($a, b$)就是全部区别所在,而在加密货币中它们物有所值。
+- **BEKK/VECH**买来了更丰富的动态——每个协方差都能对每一个过去的冲击做出反应——但参数成本把它们限制在极小的交易组合中。对于超过4个资产的情况,它们都不是真正可行的选项。
+- **GARCH-copula**是唯一一行在尾部依赖上写着"是"的。这再次体现了互补性:DCC对联合分布的动态*中心*建模,copula对其静态*尾部*建模。如果你的风险问题是"当一切同时崩溃时会发生什么",去用[copula管道](/en/blog/post/copula-models-joint-risk-crypto);如果是"我现在的对冲比率/组合方差是多少",去用DCC。
+
+对系统化加密货币交易台的实践默认方案是:主体部分用DCC(或aDCC)来做对冲比率和动态协方差,叠加一个copula层来处理尾部风险和CVaR,并用EWMA作为合理性检查基准,来确保额外的机器是否真的物有所值。
+
+## 局限性
+
+- **标量动态。** 所有资产对共用一个$a$和一个$b$,是一个很强的限制。BTC-ETH与两个不知名的山寨币共享相同的调整速度。广义DCC放松了这一点,但又重新引入了DCC本想避免的参数爆炸问题。
+- **两步法的效率损失。** 准似然估计量是一致的但不是完全有效的,朴素的标准误是错误的。如果你关心统计推断,请使用Engle-Sheppard修正;对于信号生成而言,点估计已经足够。
+- **默认为高斯尾部。** 普通的高斯准似然会低估联合尾部风险。Student-t创新项有所帮助;但对于真正的尾部*依赖*(同时发生极端波动的概率),DCC是错误的工具,[copula模型](/en/blog/post/copula-models-joint-risk-crypto)才是正确的工具。DCC给你相关性的动态*主体*;copula给你静态*尾部*。严肃的交易台两者都会用。
+- **相关性不是因果关系,也不是方向。** 上升的$\bar{\rho}_t$警告你分散化正在失效;它并不说明市场方向。不要给一个风险信号强加方向性预期。
+- **对数据的渴求。** 以上一切都假设有长期、干净、同步的历史数据。加密货币中最新、最有趣的代币恰恰违反了这三点。
+
+## 总结
+
+- **静态相关性在加密货币中是一个谎言。** 相关性会聚类、持续,并在下跌行情中飙升至接近1——恰恰是在分散化本应发挥作用的时候。单一的样本$\hat{\rho}$会把一个状态切换过程平均成一个毫无意义的中间值。
+- **完整的多元GARCH(VECH、BEKK)无法扩展。** 参数数量以$O(d^2)$增长;两者在实践中都被限制在少数几个资产以内。
+- **DCC(Engle 2002)分解了这个问题:** $H_t = D_t R_t D_t$,$D_t$来自独立的单变量GARCH拟合(复用第一、二篇),$R_t$来自一个两参数递推。它能扩展到数十个资产,因为只需优化$a, b$。
+- **递推关系**$Q_t = (1-a-b)\bar{Q} + a\,z_{t-1}z_{t-1}' + b\,Q_{t-1}$归一化为$R_t$后,在每一步都产生一个有效的正定相关性矩阵,满足$a,b>0$,$a+b<1$。
+- **`arch`不支持DCC。** 用`arch`拟合边际模型,然后实现本文这里约60行的NumPy/SciPy估计器,或者使用`mgarch`(Python)或`rmgarch`(R,参考实现)。
+- **三个具体收益:** 用于配对交易的动态对冲比率$\beta_t = \rho_t\,\sigma_{\text{ETH},t}/\sigma_{\text{BTC},t}$;用于风险基础配置的诚实时变组合方差$w'H_t w$;以及作为风险规避状态信号的平均两两相关性。
+- **纪律就是一切。** 相关性目标锚定会泄漏全样本平均值,因此要只在训练数据上重新估计$\bar{Q}$;每个对冲比率都要滞后使用;向前滤波,不做平滑。滚动前向评估是不可协商的。
+- **aDCC**加入了下行非对称项,在崩盘相关性占主导的加密货币中通常是值得的。
+- **第四篇**将利用这些预测来构建并回测一个波动率目标策略。
+
+---
+
+**参考文献:**
+
+- Engle, R. (2002). Dynamic Conditional Correlation: A Simple Class of Multivariate Generalized Autoregressive Conditional Heteroskedasticity Models. *Journal of Business & Economic Statistics*, 20(3), 339-350. [DOI](https://doi.org/10.1198/073500102288618487)
+- Engle, R. & Sheppard, K. (2001). Theoretical and Empirical Properties of Dynamic Conditional Correlation Multivariate GARCH. *NBER Working Paper 8554*. [DOI](https://doi.org/10.3386/w8554)
+- Bollerslev, T. (1990). Modelling the Coherence in Short-Run Nominal Exchange Rates: A Multivariate Generalized ARCH Model. *Review of Economics and Statistics*, 72(3), 498-505. [DOI](https://doi.org/10.2307/2109358)
+- Cappiello, L., Engle, R., & Sheppard, K. (2006). Asymmetric Dynamics in the Correlations of Global Equity and Bond Returns. *Journal of Financial Econometrics*, 4(4), 537-572. [DOI](https://doi.org/10.1093/jjfinec/nbl005)
+- Engle, R. & Kroner, K. (1995). Multivariate Simultaneous Generalized ARCH. *Econometric Theory*, 11(1), 122-150. [DOI](https://doi.org/10.1017/S0266466600009063)
+- Bollerslev, T., Engle, R., & Wooldridge, J. (1988). A Capital Asset Pricing Model with Time-Varying Covariances. *Journal of Political Economy*, 96(1), 116-131. [DOI](https://doi.org/10.1086/261527)
+- Galanos, A. (2022). *rmgarch: Multivariate GARCH Models*. R package. [CRAN](https://cran.r-project.org/package=rmgarch).

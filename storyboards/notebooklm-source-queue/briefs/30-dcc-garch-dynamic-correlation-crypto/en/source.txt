@@ -1,0 +1,561 @@
+MM article dcc-garch-dynamic-correlation-crypto EN ae21578cf9bf
+
+---
+title: "DCC-GARCH: Dynamic Correlations for Pairs and Portfolio Risk"
+description: "Crypto correlations are not constant — they spike toward 1 in every drawdown. DCC-GARCH models a time-varying correlation matrix, giving you dynamic hedge ratios for pairs trading and honest time-varying portfolio risk."
+tags: ["volatility", "GARCH", "DCC", "correlation", "portfolio", "pairs-trading", "crypto"]
+date: "2026-07-12"
+slug: "dcc-garch-dynamic-correlation-crypto"
+lang: "en"
+
+image: "/images/blog/dcc-garch-dynamic-correlation-crypto.webp"
+---
+
+# DCC-GARCH: Dynamic Correlations for Pairs and Portfolio Risk
+
+Ask most crypto desks for the correlation between BTC and ETH and you get a single number — 0.8, maybe 0.75 — computed over some window nobody remembers choosing. That number is a lie, or at least a dangerous simplification. Sample correlation is an average over a period during which the true dependence structure was moving constantly. In calm markets BTC and ETH drift apart enough to make a market-neutral pair look attractive. In a liquidation cascade they lock to each other and to everything else, and the diversification you paid for evaporates at the exact moment you need it.
+
+This is not a subtle effect. Pull any 2022 drawdown — the LUNA collapse in May, the 3AC unwind in June, the FTX implosion in November — and you will see average pairwise correlation across the top 20 tokens march from the 0.4-0.6 range toward 0.9+ within days. Correlation is not a constant that occasionally gets estimated badly; it is a time series with its own dynamics, its own clustering, and its own regimes. Treating it as a scalar is the multivariate equivalent of assuming constant volatility — a mistake we already spent [Part 1 of this series](/en/blog/post/garch-volatility-forecasting-crypto) dismantling for a single asset.
+
+This article is Part 3 of a four-part volatility series. [Part 1](/en/blog/post/garch-volatility-forecasting-crypto) built univariate GARCH(1,1) with the `arch` library and showed how volatility clusters and mean-reverts. [Part 2](/en/blog/post/asymmetric-garch-crypto-leverage) added asymmetry (GJR-GARCH, EGARCH) and Student-t innovations to capture the leverage effect and fat tails. Here we go multivariate: we model the *whole conditional covariance matrix* $H_t$ as it evolves, using Engle's Dynamic Conditional Correlation (DCC) model. That gives us two things a scalar correlation never can — a dynamic hedge ratio for pairs trading, and an honest, time-varying portfolio variance for risk-based allocation. [Part 4](/en/blog/post/volatility-targeting-garch-strategy) closes the series with a volatility-targeted backtest that ties the univariate and multivariate forecasts into a position-sizing rule.
+
+We assume you have read Parts 1 and 2, so we will not re-derive univariate GARCH. If you want the joint *tail* behavior — the probability that two assets breach their 1% quantile together — that is a copula question, and we cover it in [Copula Models for Joint Risk](/en/blog/post/copula-models-joint-risk-crypto). DCC and copulas are complementary: the copula gives you a static-but-flexible tail-dependence structure, while DCC gives you a *tractable time series* of the entire correlation matrix. This article is about the latter.
+
+## Why Static Correlation Breaks in Crypto
+
+![Correlation breakdown: co-movements converge to one during a crash](/images/blog/dcc-garch-dynamic-correlation-crypto-correlation-breakdown.webp)
+
+Before the machinery, be precise about what fails. A single sample correlation $\hat{\rho}$ over a window $[t-w, t]$ estimates
+
+$$\hat{\rho}_{ij} = \frac{\sum_{s} (r_{i,s} - \bar{r}_i)(r_{j,s} - \bar{r}_j)}{\sqrt{\sum_s (r_{i,s}-\bar{r}_i)^2}\sqrt{\sum_s (r_{j,s}-\bar{r}_j)^2}}$$
+
+This carries three implicit assumptions, all false for crypto:
+
+1. **Stationarity of dependence.** The window has one true $\rho$. In reality dependence has regimes — a quiet-market regime near 0.5 and a stress regime near 0.95 — and $\hat{\rho}$ blends them into a meaningless middle.
+2. **Constant marginal volatility.** Pearson correlation is a normalized covariance. If $\sigma_{i,t}$ and $\sigma_{j,t}$ are themselves moving (they are — that is the entire premise of Parts 1 and 2), then even a *constant* covariance produces a *time-varying* correlation, and vice versa. You cannot separate the two without a volatility model underneath.
+3. **Symmetry across market direction.** Correlation rises in drawdowns more than in rallies. This is the multivariate cousin of the leverage effect. A rolling window cannot express it without becoming so short it is pure noise.
+
+The rolling-window fix — recompute $\hat{\rho}$ over the last 30 or 60 days — trades one problem for another. Short windows are responsive but noisy and lag the actual break; long windows are stable but stale. Worse, a rolling correlation matrix over $d$ assets is not guaranteed to stay positive semi-definite once you start shrinking or patching it, which breaks every downstream optimizer. We want a model that (a) is driven by a proper volatility process per asset, (b) produces a valid correlation matrix at every step by construction, and (c) has parameters we can estimate by maximum likelihood rather than by picking a window length out of a hat. That model is DCC-GARCH.
+
+## The Multivariate Problem: The Conditional Covariance Matrix
+
+Let $r_t \in \mathbb{R}^d$ be the vector of returns for $d$ assets at time $t$, with conditional mean $\mu_t$ (often just a constant or a small AR term) and residual $\epsilon_t = r_t - \mu_t$. We assume
+
+$$\epsilon_t \mid \mathcal{F}_{t-1} \sim \mathcal{D}(0, H_t)$$
+
+where $H_t$ is the $d \times d$ **conditional covariance matrix** given the information set $\mathcal{F}_{t-1}$, and $\mathcal{D}$ is some conditional distribution (Gaussian or, better for crypto, multivariate Student-t). Everything in multivariate volatility modeling is a different answer to one question: *how do you parameterize the dynamics of $H_t$ so that it stays symmetric positive definite at every step without an explosion of parameters?*
+
+Two classical answers show why the problem is hard.
+
+### VECH
+
+The VECH model (Bollerslev, Engle, Wooldridge 1988) writes the half-vectorization of $H_t$ as a linear function of past squared residuals and past covariances:
+
+$$\mathrm{vech}(H_t) = c + A\,\mathrm{vech}(\epsilon_{t-1}\epsilon_{t-1}') + B\,\mathrm{vech}(H_{t-1})$$
+
+where $\mathrm{vech}(\cdot)$ stacks the lower triangle of a symmetric matrix into a vector of length $d(d+1)/2$. This is maximally general — every variance and covariance depends on every past variance and covariance — and maximally useless past $d=3$. For $d$ assets, $A$ and $B$ are each $\frac{d(d+1)}{2} \times \frac{d(d+1)}{2}$. At $d=5$ that is two $15\times 15$ matrices, roughly 450 parameters, plus positive-definiteness constraints that are painful to even express. The likelihood surface is a swamp.
+
+### BEKK
+
+The BEKK model (Engle & Kroner 1995) guarantees positive definiteness by construction using a quadratic form:
+
+$$H_t = C'C + A'\,\epsilon_{t-1}\epsilon_{t-1}'\,A + B'\,H_{t-1}\,B$$
+
+with $C$ upper triangular. Because every term is a quadratic form, $H_t \succ 0$ automatically as long as $C'C \succ 0$. BEKK is more parsimonious than VECH but still scales as $O(d^2)$ parameters — the $A$ and $B$ matrices are $d \times d$ each. For $d=10$ you are estimating on the order of 200+ parameters jointly by MLE, on noisy daily crypto data, with no guarantee the optimizer converges to anything meaningful. In practice full BEKK is confined to $d \le 4$, and even then people use the "diagonal" or "scalar" restrictions that throw away most of the cross dynamics.
+
+This is the **curse of dimensionality** for multivariate GARCH: the number of parameters grows quadratically, but the amount of information in the data does not. You run out of degrees of freedom long before you run out of assets you care about. Any crypto book with 10-30 tokens is completely out of reach for VECH or BEKK.
+
+The way out, due to Engle, is to stop trying to model $H_t$ directly and instead **factor it** into pieces we already know how to estimate cheaply.
+
+## Engle's DCC (2002): The Two-Step Decomposition
+
+![DCC two-step decomposition: univariate volatilities, then dynamic correlation](/images/blog/dcc-garch-dynamic-correlation-crypto-two-step.webp)
+
+Bollerslev's Constant Conditional Correlation (CCC) model (1990) was the first parsimonious factorization. It writes
+
+$$H_t = D_t\, R\, D_t$$
+
+where $D_t = \mathrm{diag}(\sigma_{1,t}, \ldots, \sigma_{d,t})$ is the diagonal matrix of conditional standard deviations — one univariate GARCH per asset — and $R$ is a **constant** correlation matrix. This is a huge simplification: you fit $d$ independent univariate GARCH models, then estimate a single sample correlation matrix of the standardized residuals. Positive definiteness is automatic as long as $R$ is a valid correlation matrix and all $\sigma_{i,t} > 0$.
+
+CCC's problem is right there in the name — the correlation is *constant*, which is exactly the assumption we opened this article by rejecting. Engle's **Dynamic Conditional Correlation** (2002) keeps CCC's beautiful factorization but lets the correlation matrix breathe:
+
+$$H_t = D_t\, R_t\, D_t$$
+
+Now $R_t$ is time-varying. The genius is that the volatilities and the correlations are estimated in two separate steps, so we never face the full $O(d^2)$ joint optimization.
+
+### Step 1: Univariate GARCH per asset
+
+For each asset $i$, fit a univariate GARCH model exactly as in Parts 1 and 2 — GARCH(1,1), GJR-GARCH, or EGARCH with Student-t innovations, whatever fit best for that series. This gives conditional variances $\sigma_{i,t}^2$ and hence $D_t = \mathrm{diag}(\sigma_{1,t}, \ldots, \sigma_{d,t})$.
+
+From the fitted models we extract the **standardized residuals**:
+
+$$z_{i,t} = \frac{\epsilon_{i,t}}{\sigma_{i,t}}$$
+
+By construction each $z_{i,t}$ has (approximately) unit conditional variance. Stack them into a vector $z_t = (z_{1,t}, \ldots, z_{d,t})'$. These standardized residuals are the raw material for the correlation step — they have had their individual volatility dynamics stripped out, so whatever co-movement remains is pure dependence, not a volatility artifact. (This is the same PIT-style logic the copula article uses before fitting margins; here we stop at standardization rather than going all the way to uniforms.)
+
+### Step 2: The DCC correlation recursion
+
+We model an auxiliary process $Q_t$, a $d \times d$ symmetric positive-definite matrix, with a GARCH-like recursion driven by the outer products of standardized residuals:
+
+$$Q_t = (1 - a - b)\,\bar{Q} + a\, z_{t-1} z_{t-1}' + b\, Q_{t-1}$$
+
+where:
+
+- $\bar{Q} = \frac{1}{T}\sum_{t=1}^{T} z_t z_t'$ is the unconditional correlation matrix of the standardized residuals (this is **correlation targeting** — more on it below),
+- $a \ge 0$ governs how strongly today's shock $z_{t-1}z_{t-1}'$ pulls the correlation,
+- $b \ge 0$ governs persistence — how much of yesterday's $Q_{t-1}$ carries forward,
+- and the mean-reversion constraint is $a + b < 1$ (with $a, b > 0$), directly analogous to $\alpha + \beta < 1$ in univariate GARCH.
+
+Note the structure is identical to a scalar GARCH(1,1) recursion, but on matrices: a long-run anchor $\bar{Q}$, a shock term, and a persistence term. Because it is a convex combination of positive-semi-definite matrices ($\bar{Q}$, the rank-1 outer product, and the previous $Q_{t-1}$), $Q_t$ stays positive definite as long as $\bar{Q} \succ 0$ and the weights are non-negative. This is what buys us guaranteed valid covariance matrices for free.
+
+$Q_t$ is *almost* a correlation matrix but not quite — its diagonal is not exactly 1. So we normalize it:
+
+$$R_t = \left(\mathrm{diag}(Q_t)\right)^{-1/2}\, Q_t\, \left(\mathrm{diag}(Q_t)\right)^{-1/2}$$
+
+Elementwise, the conditional correlation between assets $i$ and $j$ is
+
+$$\rho_{ij,t} = \frac{q_{ij,t}}{\sqrt{q_{ii,t}\, q_{jj,t}}}$$
+
+This $R_t$ is a proper correlation matrix — unit diagonal, off-diagonals in $[-1,1]$, positive definite — at every single time step, by construction. Reassemble the full conditional covariance:
+
+$$H_t = D_t\, R_t\, D_t, \qquad h_{ij,t} = \rho_{ij,t}\,\sigma_{i,t}\,\sigma_{j,t}$$
+
+That last elementwise form is the one you will use constantly: the conditional covariance of two assets is their dynamic correlation times each of their dynamic volatilities. Every ingredient on the right-hand side is time-varying and comes from a model you can estimate.
+
+The whole model has only **two** correlation parameters, $a$ and $b$, regardless of whether $d = 2$ or $d = 50$. The volatility side scales linearly (one univariate GARCH per asset, each with ~4-5 parameters, all fit independently and embarrassingly parallel). This is why DCC scales where BEKK and VECH cannot: the dimensionality curse is confined to $\bar{Q}$, which is *targeted* (plugged in as a sample estimate) rather than *optimized*.
+
+### The scalar restriction and its cost
+
+The $a, b$ scalars mean *every* pair of assets shares the same correlation dynamics — the same speed of adjustment and the same persistence. BTC-ETH correlation and DOGE-SHIB correlation move at the same rhythm even though their economics differ. This is the price of tractability, and it is usually an acceptable price. Generalizations (Generalized DCC with matrix $A, B$; the Cappiello-Engle-Sheppard asymmetric DCC) relax it at the cost of parameters and estimation stability. We mention aDCC below.
+
+## The DCC Quasi-Log-Likelihood
+
+To estimate $a$ and $b$ we need the likelihood. Engle's key result is that the Gaussian log-likelihood **separates** into a volatility part and a correlation part, which is what justifies the two-step estimator. Assuming $\epsilon_t \mid \mathcal{F}_{t-1} \sim \mathcal{N}(0, H_t)$, the log-likelihood contribution at time $t$ is
+
+$$\ell_t = -\frac{1}{2}\left( d\log(2\pi) + \log|H_t| + \epsilon_t' H_t^{-1} \epsilon_t \right)$$
+
+Substitute $H_t = D_t R_t D_t$. Then $|H_t| = |D_t|^2 |R_t|$ and $H_t^{-1} = D_t^{-1} R_t^{-1} D_t^{-1}$, and using $z_t = D_t^{-1}\epsilon_t$:
+
+$$\ell_t = -\frac{1}{2}\left( d\log(2\pi) + 2\log|D_t| + \log|R_t| + z_t' R_t^{-1} z_t \right)$$
+
+Now split it by adding and subtracting $z_t'z_t$:
+
+$$\ell_t = \underbrace{-\frac{1}{2}\left( d\log(2\pi) + 2\log|D_t| + \epsilon_t' D_t^{-2}\epsilon_t \right)}_{\text{volatility part }\;\ell_t^{V}} \;\underbrace{-\frac{1}{2}\left( \log|R_t| + z_t' R_t^{-1} z_t - z_t' z_t \right)}_{\text{correlation part }\;\ell_t^{C}}$$
+
+The volatility part $\ell_t^V$ depends only on the univariate GARCH parameters (through $D_t$) — maximizing it is exactly fitting $d$ independent univariate GARCH models, which we did in Step 1. The correlation part $\ell_t^C$ depends on $a$ and $b$ (through $R_t$), *given* the standardized residuals from Step 1. So in Step 2 we maximize only
+
+$$\mathcal{L}^C(a, b) = -\frac{1}{2}\sum_{t=1}^{T}\left( \log|R_t| + z_t' R_t^{-1} z_t \right)$$
+
+(the $z_t'z_t$ term does not depend on $a, b$, so we drop it). This is a **two-parameter** optimization no matter how many assets — that is the whole point. It is called a *quasi*-likelihood because the two-step estimator is consistent but not fully efficient; the standard errors need a correction (Engle & Sheppard 2001), but for signal generation the point estimates are what matter.
+
+For crypto, Gaussian innovations understate tail risk. Swapping in the multivariate Student-t likelihood is a drop-in change to $\ell_t$ (replace the Gaussian kernel with the multivariate-$t$ density and add a degrees-of-freedom parameter $\nu$). We keep the Gaussian quasi-likelihood in the estimator below for clarity and note where $\nu$ enters — the standardization from Parts 1-2 already used t-innovations on the margins, which captures most of the tail benefit.
+
+## Python Implementation
+
+A blunt but important fact: **the `arch` library does not do multivariate GARCH or DCC.** `arch` is a superb univariate engine (we lean on it for exactly that), but there is no `dcc_model` in it. Your practical options are:
+
+1. **Roll your own DCC on top of `arch`** — fit univariate models with `arch`, extract standardized residuals, implement the $Q$-recursion and the correlation quasi-likelihood in NumPy/SciPy, and optimize the two scalars. This is what we do below. It is about 60 lines and completely transparent.
+2. **The `mgarch` PyPI package** — a lightweight pure-Python DCC-GARCH implementation. Convenient for a quick fit, less flexible if you want GJR margins or t-innovations wired precisely.
+3. **R's `rmgarch`** (Alexios Galanos) — the reference implementation. `dccspec` / `dccfit` support DCC, aDCC, GARCH-copula, Student-t, and proper standard errors. If you are doing serious multivariate volatility research, `rmgarch` (called from Python via `rpy2` if you must) is the gold standard.
+
+We build option 1 because it makes every moving part explicit and reuses the univariate skills from Parts 1-2.
+
+### Step 1: Fit univariate GARCH margins with `arch`
+
+```python
+import numpy as np
+import pandas as pd
+from arch import arch_model
+from scipy.optimize import minimize
+
+def fetch_returns(symbols, start="2022-01-01", end="2025-12-31"):
+    """
+    Daily log returns for a list of crypto symbols.
+    Replace with your data source (ccxt for 24/7 exchange data,
+    yfinance for a quick sketch).
+    """
+    import yfinance as yf
+    px = yf.download([f"{s}-USD" for s in symbols],
+                     start=start, end=end)["Close"]
+    px.columns = symbols
+    rets = np.log(px / px.shift(1)).dropna()
+    return rets
+
+symbols = ["BTC", "ETH", "SOL", "BNB"]
+returns = fetch_returns(symbols)
+
+def fit_univariate(series, dist="t"):
+    """
+    Fit GJR-GARCH(1,1) with Student-t innovations (Part 2 model).
+    Returns the fitted result and the *scaled* series it was fit on.
+    We scale returns by 100 for the optimizer's numerical health,
+    exactly as in Parts 1 and 2.
+    """
+    scaled = series * 100.0
+    model = arch_model(scaled, mean="Constant",
+                       vol="GARCH", p=1, o=1, q=1, dist=dist)
+    res = model.fit(disp="off")
+    return res
+
+# Fit each asset independently (this is embarrassingly parallel).
+fits = {s: fit_univariate(returns[s]) for s in symbols}
+
+# Standardized residuals z_{i,t} = eps_{i,t} / sigma_{i,t}
+# arch exposes these directly as .std_resid
+Z = pd.DataFrame({s: fits[s].std_resid for s in symbols}).dropna()
+
+# Conditional volatilities sigma_{i,t} (in the SAME scaled units).
+# .conditional_volatility is sigma, not sigma^2.
+Sigma = pd.DataFrame({s: fits[s].conditional_volatility
+                      for s in symbols}).loc[Z.index]
+
+print(Z.describe())
+# Each column should have mean ~0, std ~1. If std is far from 1,
+# the margin is misspecified — revisit the univariate model (Part 2).
+```
+
+A quick sanity check on the standardized residuals matters. If any column has a standard deviation far from 1, or heavy remaining autocorrelation in its square (Ljung-Box on $z_{i,t}^2$), the univariate margin is misspecified and the DCC step will inherit that error. Fix the margin first — that is what Part 2 was for.
+
+### Step 2: The DCC recursion and quasi-log-likelihood
+
+```python
+def dcc_negloglik(params, Z):
+    """
+    Negative DCC quasi-log-likelihood (Gaussian) in (a, b).
+    Z : (T, d) array of standardized residuals from Step 1.
+
+    Implements:
+        Q_t = (1-a-b) Qbar + a z_{t-1} z_{t-1}' + b Q_{t-1}
+        R_t = diag(Q_t)^{-1/2} Q_t diag(Q_t)^{-1/2}
+        LL  = -1/2 sum_t ( log|R_t| + z_t' R_t^{-1} z_t )
+    with correlation targeting: Qbar = sample corr of Z.
+    """
+    a, b = params
+    # Feasibility guard: a,b > 0 and a+b < 1 keep Q_t PD and mean-reverting.
+    if a <= 0 or b <= 0 or a + b >= 1.0:
+        return 1e10
+
+    Z = np.asarray(Z)
+    T, d = Z.shape
+    Qbar = np.cov(Z, rowvar=False, bias=True)   # unconditional (targeted)
+    # Normalize Qbar to a correlation matrix so the target is a true corr.
+    dinv = np.diag(1.0 / np.sqrt(np.diag(Qbar)))
+    Qbar = dinv @ Qbar @ dinv
+
+    Q = Qbar.copy()          # initialize Q_1 at the target
+    ll = 0.0
+    for t in range(T):
+        # Normalize Q_t -> R_t
+        q_diag = np.sqrt(np.diag(Q))
+        R = Q / np.outer(q_diag, q_diag)
+        # Numerical guard against a non-PD R from roundoff
+        sign, logdet = np.linalg.slogdet(R)
+        if sign <= 0:
+            return 1e10
+        z = Z[t]
+        Rinv_z = np.linalg.solve(R, z)
+        ll += -0.5 * (logdet + z @ Rinv_z)
+        # Update Q for t+1 using today's shock z_t z_t'
+        Q = (1 - a - b) * Qbar + a * np.outer(z, z) + b * Q
+    return -ll
+
+def fit_dcc(Z):
+    """Estimate (a, b) by maximizing the DCC quasi-log-likelihood."""
+    res = minimize(
+        dcc_negloglik, x0=[0.03, 0.94], args=(np.asarray(Z),),
+        method="L-BFGS-B",
+        bounds=[(1e-6, 0.5), (1e-6, 0.999)],
+    )
+    a, b = res.x
+    print(f"DCC estimates: a = {a:.4f}, b = {b:.4f}, a+b = {a+b:.4f}")
+    print(f"log-likelihood: {-res.fun:.2f}")
+    return a, b
+
+a_hat, b_hat = fit_dcc(Z)
+```
+
+Running this on a BTC/ETH/SOL/BNB book over a few years of daily data produces output in the following shape (numbers below are **illustrative**, not from a specific dated experiment — run it on your own data):
+
+```
+DCC estimates: a = 0.0287, b = 0.9401, a+b = 0.9688
+log-likelihood: -3812.44
+```
+
+How to read it:
+
+- **$a = 0.029$** is small — the correlation matrix does not lurch on a single day's shock. Each day nudges $R_t$ toward the outer product $z_{t-1}z_{t-1}'$ by only ~3%.
+- **$b = 0.940$** is large — correlations are highly persistent. Once the book couples up in a stress event, it stays coupled for a while, decaying back toward $\bar{Q}$ slowly. This matches the lived experience of crypto drawdowns: correlations do not snap back the moment price stabilizes.
+- **$a + b = 0.969 < 1$** confirms mean reversion. The correlation process has a stationary long-run level ($\bar{Q}$) it returns to, with a half-life of roughly $\log(0.5)/\log(a+b) \approx 22$ days. If you ever estimate $a + b$ essentially equal to 1, the correlation process is integrated — it has no long-run anchor, usually a symptom of a structural break inside your sample that the model is absorbing as infinite persistence.
+
+The near-unit persistence and tiny shock loading is the canonical DCC fingerprint across asset classes, and crypto is no exception. It is also why a 30-day rolling correlation is such a poor substitute: a rolling window implicitly assumes $a$ and $b$ that do not match this decay structure at all.
+
+A few implementation notes that save real debugging time:
+
+- **Initialization.** Starting at `[0.03, 0.94]` reflects the typical crypto estimate: small $a$ (correlations react to shocks but not violently), large $b$ (correlations are persistent). If your optimizer wanders to $a+b \to 1$ the correlation process is integrated — usually a sign of a structural break in the sample (a regime change the model is straining to fit as persistence).
+- **Timing convention.** Inside the loop we score $R_t$ against $z_t$ and *then* update $Q$ with $z_t z_t'$ for the next step. This keeps $R_t$ a function of information through $t-1$ only — no look-ahead. Getting this off-by-one wrong is the single most common DCC bug, and it silently inflates in-sample fit.
+- **Correlation targeting.** We plug $\bar{Q}$ in as the sample correlation rather than estimating it. This is what makes the optimization two-dimensional. The cost is that $\bar{Q}$ uses the full sample, so in a strict walk-forward you must re-estimate it on the training window only (see below).
+
+### Step 3: Reconstruct the correlation and covariance paths
+
+Once $a, b$ are fixed, run the recursion once more, this time *storing* the full $R_t$ (and $H_t$) path so downstream strategies can use it.
+
+```python
+def dcc_filter(Z, Sigma, a, b):
+    """
+    Run the DCC recursion with fixed (a,b) and return the full paths:
+      R_path : (T, d, d) conditional correlation matrices
+      H_path : (T, d, d) conditional covariance matrices (scaled units)
+    Sigma : (T, d) conditional volatilities aligned with Z.
+    """
+    Z = np.asarray(Z); Sig = np.asarray(Sigma)
+    T, d = Z.shape
+    Qbar = np.cov(Z, rowvar=False, bias=True)
+    dinv = np.diag(1.0 / np.sqrt(np.diag(Qbar)))
+    Qbar = dinv @ Qbar @ dinv
+
+    Q = Qbar.copy()
+    R_path = np.empty((T, d, d))
+    H_path = np.empty((T, d, d))
+    for t in range(T):
+        q_diag = np.sqrt(np.diag(Q))
+        R = Q / np.outer(q_diag, q_diag)
+        R_path[t] = R
+        Dt = np.diag(Sig[t])          # D_t = diag(sigma_i,t)
+        H_path[t] = Dt @ R @ Dt       # H_t = D_t R_t D_t
+        z = Z[t]
+        Q = (1 - a - b) * Qbar + a * np.outer(z, z) + b * Q
+    return R_path, H_path
+
+R_path, H_path = dcc_filter(Z, Sigma, a_hat, b_hat)
+
+# The dynamic BTC-ETH correlation as a time series:
+i, j = symbols.index("BTC"), symbols.index("ETH")
+rho_btc_eth = pd.Series(R_path[:, i, j], index=Z.index, name="rho_BTC_ETH")
+print(rho_btc_eth.describe())
+print("min/max correlation:", rho_btc_eth.min().round(3),
+      rho_btc_eth.max().round(3))
+```
+
+The `rho_btc_eth` series is the payoff of the whole exercise: instead of one number, you now have a daily correlation that you can plot, threshold, or feed into a strategy. On real crypto data you will typically see it range from roughly 0.5 in quiet stretches to above 0.9 during stress — the exact spread a single sample correlation averages away.
+
+### One-step-ahead forecast
+
+For live trading you need next-period $H_{t+1}$ from information available now. The volatility side comes from each `arch` model's one-step forecast; the correlation side is one more turn of the recursion:
+
+```python
+def dcc_forecast_next(Z, a, b, fits, symbols):
+    """One-step-ahead H_{t+1} using info through the last observation."""
+    Z = np.asarray(Z); T, d = Z.shape
+    Qbar = np.cov(Z, rowvar=False, bias=True)
+    dinv = np.diag(1.0 / np.sqrt(np.diag(Qbar)))
+    Qbar = dinv @ Qbar @ dinv
+
+    # Re-run recursion to get Q_T, then push one step with last z.
+    Q = Qbar.copy()
+    for t in range(T):
+        z = Z[t]
+        Q = (1 - a - b) * Qbar + a * np.outer(z, z) + b * Q
+    q_diag = np.sqrt(np.diag(Q))
+    R_next = Q / np.outer(q_diag, q_diag)
+
+    # One-step vol forecast per asset (arch), in the SAME scaled units.
+    sig_next = np.array([
+        np.sqrt(fits[s].forecast(horizon=1, reindex=False)
+                .variance.iloc[-1, 0])
+        for s in symbols
+    ])
+    Dt = np.diag(sig_next)
+    H_next = Dt @ R_next @ Dt
+    return R_next, H_next, sig_next
+
+R_next, H_next, sig_next = dcc_forecast_next(Z, a_hat, b_hat, fits, symbols)
+```
+
+Remember everything is in scaled (×100) units because we fit `arch` on `series * 100`. Divide volatilities by 100 (and covariances by $100^2 = 10{,}000$) to get back to raw-return units before feeding a strategy. Keeping the scaling straight is tedious but a frequent source of silent bugs.
+
+## Application 1: A Dynamic Hedge Ratio for Pairs Trading
+
+![Time-varying hedge ratio driven by dynamic conditional correlation](/images/blog/dcc-garch-dynamic-correlation-crypto-hedge-ratio.webp)
+
+The classic market-neutral pair — long one asset, short a beta-weighted amount of another — lives or dies on the hedge ratio $\beta$. Estimate it by static OLS over a training window and you inherit exactly the stale-correlation problem this whole article is about: the hedge that neutralized market exposure last quarter is wrong this quarter.
+
+DCC gives you the hedge ratio as a time series. The minimum-variance hedge of ETH exposure using BTC is the conditional regression coefficient
+
+$$\beta_t = \frac{\mathrm{Cov}_t(r_{\text{ETH}}, r_{\text{BTC}})}{\mathrm{Var}_t(r_{\text{BTC}})} = \frac{h_{\text{ETH,BTC},t}}{\sigma_{\text{BTC},t}^2} = \rho_{\text{ETH,BTC},t}\,\frac{\sigma_{\text{ETH},t}}{\sigma_{\text{BTC},t}}$$
+
+Every term on the right is a DCC output. The hedge ratio moves for two distinct reasons, and DCC separates them cleanly: the correlation $\rho_t$ changes (the assets couple or decouple), and the volatility ratio $\sigma_{\text{ETH},t}/\sigma_{\text{BTC},t}$ changes (one asset gets relatively more volatile). A rolling-OLS beta smears both effects together with a lag; DCC attributes them.
+
+```python
+def dynamic_hedge_ratio(R_path, Sigma, base="BTC", target="ETH",
+                        symbols=symbols, index=Z.index):
+    """
+    beta_t to hedge `target` exposure with `base`:
+        beta_t = rho_t * sigma_target,t / sigma_base,t
+    (Scaling cancels in the ratio, so scaled units are fine here.)
+    """
+    i = symbols.index(target)
+    j = symbols.index(base)
+    rho = R_path[:, i, j]
+    sig = np.asarray(Sigma)
+    beta = rho * sig[:, i] / sig[:, j]
+    return pd.Series(beta, index=index, name=f"beta_{target}_{base}")
+
+beta_t = dynamic_hedge_ratio(R_path, Sigma)
+print(beta_t.describe())
+
+# The spread the pair actually trades, hedged dynamically:
+#   spread_t = r_ETH,t - beta_{t-1} * r_BTC,t
+# Use beta_{t-1} (lagged) so the hedge uses only past information.
+spread = (returns["ETH"] - beta_t.shift(1) * returns["BTC"]).dropna()
+```
+
+Feed `spread` into whatever pairs engine you run. The dynamic hedge does not by itself create an edge — it makes the *spread you trade* genuinely market-neutral through time, so your mean-reversion signal is not contaminated by drifting directional exposure. If you build pairs strategies, this slots directly into the frameworks in [Statistical Arbitrage & Pairs Trading in Crypto](/en/blog/post/statistical-arbitrage-pairs-trading-crypto) and the [distance approach to pairs](/en/blog/post/distance-approach-pairs-trading), replacing their fixed hedge ratio. The correlation series itself is also a cleaner input to a [correlation-based pair signal](/en/blog/post/signal-correlation-pairs) than any rolling window — you get a smoothed, model-consistent $\rho_t$ instead of a noisy windowed estimate.
+
+Two cautions specific to using $\beta_t$ live. First, **lag it** — trade on $\beta_{t-1}$, never the contemporaneous $\beta_t$, or you are peeking. Second, a hedge ratio that whips around every day generates turnover and fees; in crypto's 24/7 market with funding costs on the short leg, an over-reactive hedge can bleed more than the drift it corrects. Smooth $\beta_t$ (an EWMA, or rebalance the hedge only when it moves past a band) and size the whole thing sanely — position sizing off a noisy signal is its own discipline, covered in [Kelly criterion sizing](/en/blog/post/kelly-criterion-strategy-sizing).
+
+## Application 2: Time-Varying Portfolio Variance
+
+For a portfolio with weight vector $w$, the conditional variance is
+
+$$\sigma_{p,t}^2 = w'\, H_t\, w = \sum_{i}\sum_{j} w_i w_j\, \rho_{ij,t}\,\sigma_{i,t}\,\sigma_{j,t}$$
+
+With a static covariance matrix — the Markowitz default — this number is a constant you computed once and pretend is still true. It is not. Portfolio risk breathes with the market, and it breathes *hardest* exactly when correlations spike, because in a drawdown both the $\sigma_{i,t}$ terms and the $\rho_{ij,t}$ terms rise together and multiply. A portfolio that looked like 40% annualized vol in calm markets can be running 80%+ in a stress week, and a static covariance matrix will tell you nothing changed.
+
+```python
+def portfolio_vol_path(H_path, weights, index=Z.index, unscale=1e4):
+    """
+    Conditional portfolio volatility sigma_{p,t} = sqrt(w' H_t w).
+    H_path is in scaled (x100) units, so covariances carry a 100^2
+    factor: divide by unscale=1e4 to return to raw-return variance.
+    """
+    w = np.asarray(weights)
+    var_t = np.einsum("i,tij,j->t", w, H_path, w) / unscale
+    return pd.Series(np.sqrt(var_t), index=index, name="port_vol")
+
+w = np.array([0.4, 0.3, 0.2, 0.1])   # BTC, ETH, SOL, BNB
+pv = portfolio_vol_path(H_path, w)
+# Annualize (crypto trades every day: 365, not 252):
+pv_annual = pv * np.sqrt(365)
+print(pv_annual.describe())
+```
+
+This time-varying $\sigma_{p,t}$ is the honest input that risk-based allocation needs. Mean-variance optimization ([Markowitz for crypto](/en/blog/post/markowitz-portfolio-theory-crypto)) with a *static* sample covariance is optimizing against a fiction; feeding it $H_t$ (or its short-horizon forecast) makes the efficient frontier itself time-varying and forces the optimizer to de-risk into rising-correlation regimes rather than after them. Risk-parity and hierarchical approaches — the [HRP + CVaR pipeline](/en/blog/post/portfolio-pipeline-hrp-cvar) — are even more sensitive to the covariance input, since the entire allocation *is* a function of the risk matrix. And if you are comparing allocators head to head, as in [portfolio optimization algorithms compared](/en/blog/post/portfolio-optimization-algorithms-compared), whether they consume static or dynamic covariance is often a bigger driver of realized risk than the choice of algorithm.
+
+The direct application is **volatility targeting** the whole portfolio: pick a target annualized vol $\sigma^{*}$, and scale gross exposure by $\sigma^{*} / \sigma_{p,t}$ each period so realized risk stays roughly constant instead of ballooning in crises. That closes the loop with [Part 4](/en/blog/post/volatility-targeting-garch-strategy), which builds and backtests exactly this rule.
+
+## Application 3: Correlation as a Regime Signal
+
+![Correlation level as a market regime signal](/images/blog/dcc-garch-dynamic-correlation-crypto-regime-signal.webp)
+
+Beyond hedging and sizing, the correlation matrix carries a macro signal. The single most useful scalar you can extract is the **average pairwise correlation**:
+
+$$\bar{\rho}_t = \frac{2}{d(d-1)}\sum_{i < j} \rho_{ij,t}$$
+
+When $\bar{\rho}_t$ rises across the book, the market is entering a **risk-off** regime — idiosyncratic stories stop mattering and everything trades as one macro beta. This is the quantitative fingerprint of "correlations go to 1 in a crisis." It tends to *lead* or coincide with drawdowns, which makes it a usable regime indicator rather than a lagging postmortem.
+
+```python
+def avg_pairwise_corr(R_path, index=Z.index):
+    T, d, _ = R_path.shape
+    iu = np.triu_indices(d, k=1)          # upper-triangle off-diagonals
+    avg = R_path[:, iu[0], iu[1]].mean(axis=1)
+    return pd.Series(avg, index=index, name="avg_corr")
+
+avg_corr = avg_pairwise_corr(R_path)
+
+# Simple risk-off flag: correlation in the top quintile of its
+# trailing year. Use a trailing quantile to avoid look-ahead.
+roll_q = avg_corr.rolling(365, min_periods=90).quantile(0.80)
+risk_off = (avg_corr > roll_q)
+```
+
+You can use `risk_off` as a standalone throttle (cut gross exposure, widen stops, stand down mean-reversion strategies that get run over when everything trends together) or as a feature in a more formal regime model. It pairs naturally with the hidden-Markov approach in [regime detection with HMMs](/en/blog/post/regime-detection-hmm-adaptive-trading): average DCC correlation is one of the more informative observation variables you can hand an HMM, because it is forward-looking about systemic stress in a way that trailing returns are not. The honest caveat: rising correlation tells you diversification is failing, not which direction the market goes. It is a risk signal, not an alpha signal, and should be sized as such — see [the asymmetry of losses and profits](/en/blog/post/loss-profit-asymmetry) for why treating a risk regime as a directional bet ends badly.
+
+## Practical Considerations
+
+### Estimation stability and number of assets
+
+DCC scales far better than BEKK, but "scales" is not "free." The correlation-targeting matrix $\bar{Q}$ is a $d \times d$ sample correlation, and sample correlation matrices become ill-conditioned as $d$ approaches the number of observations. With 4 assets and 1000 days you are fine. With 60 assets and 400 days, $\bar{Q}$ is nearly singular, its inverse in the likelihood explodes, and $R_t$ can wander non-PD from numerical noise. Mitigations, roughly in order of how often you will need them:
+
+- **Shrink $\bar{Q}$** toward a structured target (Ledoit-Wolf, or toward the identity / a constant-correlation matrix) before running the recursion. This is the single highest-leverage fix for large books.
+- **Group assets** into a handful of sectors (majors, L1s, DeFi, memes), model within and across at the sector level, or run DCC on principal-component factors rather than raw assets.
+- **Prefer more data over more assets.** DCC has an insatiable appetite for a long, clean, contemporaneous history — which is exactly what young tokens do not have.
+
+Realistically, keep direct DCC to a few dozen assets at most. For a large universe, DCC on factor returns plus idiosyncratic residuals is the standard workaround.
+
+### Correlation targeting is a shortcut with a cost
+
+Targeting $\bar{Q}$ makes estimation tractable but bakes the *full-sample* unconditional correlation into every $R_t$. In a strict backtest this is a look-ahead leak: your day-$t$ correlation matrix "knows" the average correlation of the entire sample, including the future. For honest evaluation you must re-estimate $\bar{Q}$ on the training window only and hold it fixed out-of-sample, or roll it forward. This is the same discipline the whole [walk-forward optimization](/en/blog/post/walk-forward-optimization) framework enforces, and it is easy to violate accidentally with a convenient `np.cov(Z)` over the full array — as our teaching code above does. Fix it before you trust a single P&L number.
+
+### Refit cadence and look-ahead discipline
+
+You do not need to re-optimize $a, b$ every day — they are stable parameters. A sensible production cadence:
+
+- **Re-estimate $a, b$ and the univariate GARCH parameters** weekly or monthly.
+- **Run the filter (update $Q_t$, $\sigma_{i,t}$) every period** with the frozen parameters to get fresh $R_t$ and $H_t$. Filtering is cheap; fitting is not.
+- **Always forecast, never smooth.** Use $R_t$ built from information through $t-1$ to trade at $t$. The two-pass structure (fit on a window, then filter forward) is what keeps you honest.
+
+The gap between a DCC backtest and live performance is almost always a look-ahead leak — full-sample $\bar{Q}$, contemporaneous $\beta_t$, or refitting on data that includes the trade you are evaluating. The discipline of matching backtest to live conditions is its own topic in [backtest-live parity](/en/blog/post/backtest-live-parity), and DCC is a model that punishes sloppiness here more than most. If, after clean walk-forward evaluation, the dynamic correlation adds nothing over a simple rolling estimate for *your* strategy, that is a real and publishable negative result — the mindset in [honest negative results](/en/blog/post/honest-negative-no-robust-edge) applies directly.
+
+### Asymmetric DCC (aDCC)
+
+Just as the univariate leverage effect (Part 2) means bad news raises volatility more than good news, correlations rise more after joint *negative* shocks than after joint positive ones. Cappiello, Engle & Sheppard (2006) capture this with **asymmetric DCC**, adding a term driven by the outer product of the *negative-part* standardized residuals $z_t^- = \min(z_t, 0)$:
+
+$$Q_t = (\bar{Q} - a\bar{Q} - b\bar{Q} - g\bar{N}) + a\, z_{t-1} z_{t-1}' + g\, z_{t-1}^- z_{t-1}^{-\prime} + b\, Q_{t-1}$$
+
+where $\bar{N} = \frac{1}{T}\sum_t z_t^- z_t^{-\prime}$ and $g \ge 0$ measures the extra correlation kick from joint downside moves. For crypto, where crash-correlation is the dominant risk, the asymmetry term is usually significant and worth the one extra parameter. `rmgarch` fits aDCC out of the box (`model="aDCC"`); adding the $z_t^-$ term to our NumPy estimator is a straightforward exercise.
+
+## Comparison: DCC Against the Alternatives
+
+Where does DCC sit among the ways you might get a covariance matrix for a crypto book? The honest summary:
+
+| Approach | Params | Scales to | Time-varying $\rho$? | PD guaranteed? | Tail dependence? |
+| --- | --- | --- | --- | --- | --- |
+| Sample / rolling covariance | 0 (window length) | any $d$ | crudely (lagged, noisy) | no (needs patching) | no |
+| EWMA (RiskMetrics) | 1 ($\lambda$) | any $d$ | yes (single decay) | yes | no |
+| CCC-GARCH | $d$ margins + $\bar{Q}$ | dozens | **no** (constant $R$) | yes | no |
+| **DCC-GARCH** | $d$ margins + **2** | dozens | **yes** | **yes** | no |
+| aDCC-GARCH | $d$ margins + 3 | dozens | yes, asymmetric | yes | partial |
+| BEKK | $O(d^2)$ | $\le 4$ | yes (rich) | yes | no |
+| VECH | $O(d^4)$ | $\le 3$ | yes (richest) | painful | no |
+| GARCH-copula | $d$ margins + copula | dozens (vines) | static copula | yes | **yes** |
+
+A few readings of this table:
+
+- **EWMA** is the cheap baseline everyone should beat before claiming DCC helps. It is a one-parameter special case in spirit — a single exponential decay applied to the covariance directly — and for many books it is startlingly hard to improve on out-of-sample. If DCC does not beat EWMA in clean walk-forward, use EWMA.
+- **CCC vs DCC** is the whole point of this article: same factorization, but CCC freezes $R$ and DCC lets it move. The two extra parameters ($a, b$) are the entire difference, and in crypto they earn their keep.
+- **BEKK/VECH** buy richer dynamics — every covariance can respond to every past shock — but the parameter cost confines them to tiny books. For anything past 4 assets they are not a real option.
+- **GARCH-copula** is the only row with a "yes" under tail dependence. That is the complementarity again: DCC models the dynamic *center* of the joint distribution, copulas model its static *tails*. If your risk question is "what happens when everything breaks at once," reach for the [copula pipeline](/en/blog/post/copula-models-joint-risk-crypto); if it is "what is my hedge ratio / portfolio variance right now," reach for DCC.
+
+The practical default for a systematic crypto desk: DCC (or aDCC) for hedge ratios and dynamic covariance in the body, a copula overlay for tail-risk and CVaR, and EWMA as the sanity-check baseline that keeps you honest about whether the extra machinery is paying for itself.
+
+## Limitations
+
+- **Scalar dynamics.** One $a$ and one $b$ for all pairs is a strong restriction. BTC-ETH and two obscure alts share the same adjustment speed. Generalized DCC relaxes this but reintroduces the parameter explosion DCC was designed to avoid.
+- **Two-step efficiency loss.** The quasi-likelihood estimator is consistent but not fully efficient, and naive standard errors are wrong. Use the Engle-Sheppard correction if you care about inference; for signal generation the point estimates suffice.
+- **Gaussian tails by default.** The plain Gaussian quasi-likelihood understates joint tail risk. Student-t innovations help; for genuine tail *dependence* (the probability of simultaneous extreme moves), DCC is the wrong tool and a [copula model](/en/blog/post/copula-models-joint-risk-crypto) is the right one. DCC gives you the dynamic *body* of the correlation; copulas give you the static *tail*. Serious desks use both.
+- **Correlation is not causation, and not direction.** Rising $\bar{\rho}_t$ warns that diversification is failing; it says nothing about market direction. Do not overload a risk signal with directional expectations.
+- **Data hunger.** Everything above assumes long, clean, synchronized histories. Crypto's newest and most interesting tokens violate all three.
+
+## Summary
+
+- **Static correlation is a lie in crypto.** Correlations cluster, persist, and spike toward 1 in drawdowns — exactly when diversification is supposed to help. A single sample $\hat{\rho}$ averages a regime-switching process into a meaningless middle.
+- **Full multivariate GARCH (VECH, BEKK) does not scale.** Parameter count grows as $O(d^2)$; both are confined to a handful of assets in practice.
+- **DCC (Engle 2002) factors the problem:** $H_t = D_t R_t D_t$, with $D_t$ from independent univariate GARCH fits (reuse Parts 1-2) and $R_t$ from a two-parameter recursion. It scales to dozens of assets because only $a, b$ are optimized.
+- **The recursion** $Q_t = (1-a-b)\bar{Q} + a\,z_{t-1}z_{t-1}' + b\,Q_{t-1}$, normalized to $R_t$, produces a valid positive-definite correlation matrix at every step, with $a,b>0$, $a+b<1$.
+- **`arch` does not do DCC.** Fit margins with `arch`, then implement the ~60-line NumPy/SciPy estimator here, or use `mgarch` (Python) or `rmgarch` (R, the reference).
+- **Three concrete payoffs:** a dynamic hedge ratio $\beta_t = \rho_t\,\sigma_{\text{ETH},t}/\sigma_{\text{BTC},t}$ for pairs trading; an honest time-varying portfolio variance $w'H_t w$ for risk-based allocation; and average pairwise correlation as a risk-off regime signal.
+- **Discipline is everything.** Correlation targeting leaks the full-sample average, so re-estimate $\bar{Q}$ on training data only; lag every hedge ratio; filter forward, never smooth. Walk-forward evaluation is non-negotiable.
+- **aDCC** adds a downside-asymmetry term and is usually worth it in crypto, where crash-correlation dominates.
+- **Part 4** uses these forecasts to build and backtest a volatility-targeted strategy.
+
+---
+
+**References:**
+
+- Engle, R. (2002). Dynamic Conditional Correlation: A Simple Class of Multivariate Generalized Autoregressive Conditional Heteroskedasticity Models. *Journal of Business & Economic Statistics*, 20(3), 339-350. [DOI](https://doi.org/10.1198/073500102288618487)
+- Engle, R. & Sheppard, K. (2001). Theoretical and Empirical Properties of Dynamic Conditional Correlation Multivariate GARCH. *NBER Working Paper 8554*. [DOI](https://doi.org/10.3386/w8554)
+- Bollerslev, T. (1990). Modelling the Coherence in Short-Run Nominal Exchange Rates: A Multivariate Generalized ARCH Model. *Review of Economics and Statistics*, 72(3), 498-505. [DOI](https://doi.org/10.2307/2109358)
+- Cappiello, L., Engle, R., & Sheppard, K. (2006). Asymmetric Dynamics in the Correlations of Global Equity and Bond Returns. *Journal of Financial Econometrics*, 4(4), 537-572. [DOI](https://doi.org/10.1093/jjfinec/nbl005)
+- Engle, R. & Kroner, K. (1995). Multivariate Simultaneous Generalized ARCH. *Econometric Theory*, 11(1), 122-150. [DOI](https://doi.org/10.1017/S0266466600009063)
+- Bollerslev, T., Engle, R., & Wooldridge, J. (1988). A Capital Asset Pricing Model with Time-Varying Covariances. *Journal of Political Economy*, 96(1), 116-131. [DOI](https://doi.org/10.1086/261527)
+- Galanos, A. (2022). *rmgarch: Multivariate GARCH Models*. R package. [CRAN](https://cran.r-project.org/package=rmgarch).

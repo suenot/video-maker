@@ -1,0 +1,50 @@
+製作完整的 NotebookLM 投影片。只使用附件來源「MM article dcc-garch-dynamic-correlation-crypto ZH-TW 631200e76084」，它是完整發表的繁體中文（台灣）文章。不得合併其他語言版本或外部事實。輸出語言：全程使用繁體中文（台灣，zh-TW）；不得改用簡體或籠統的「Chinese」。技術識別碼、數字、公式、日期、引用、連結、程式碼、表格數值和標題均須準確保留；英文方法、函式庫和程式碼識別碼原樣保留。
+Follow every H1-H3 heading in this exact sequence and preserve each exact source heading:
+1. # DCC-GARCH：配對交易與組合風險的動態相關性
+2. ## 為什麼靜態相關性在加密貨幣中會失效
+3. ## 多元問題:條件協方差矩陣
+4. ### VECH
+5. ### BEKK
+6. ## Engle的DCC(2002):兩步分解
+7. ### 第一步:每個資產的單變數GARCH
+8. ### 第二步:DCC相關性遞推
+9. ### 標量限制及其代價
+10. ## DCC準對數似然
+11. ## Python實現
+12. ### 第一步:用`arch`擬合單變數GARCH邊際模型
+13. # Fit each asset independently (this is embarrassingly parallel).
+14. # Standardized residuals z_{i,t} = eps_{i,t} / sigma_{i,t}
+15. # arch exposes these directly as .std_resid
+16. # Conditional volatilities sigma_{i,t} (in the SAME scaled units).
+17. # .conditional_volatility is sigma, not sigma^2.
+18. # Each column should have mean ~0, std ~1. If std is far from 1,
+19. # the margin is misspecified — revisit the univariate model (Part 2).
+20. ### 第二步:DCC遞推與準對數似然
+21. ### 第三步:重建相關性和協方差路徑
+22. # The dynamic BTC-ETH correlation as a time series:
+23. ### 單步前瞻預測
+24. ## 應用一:配對交易的動態對沖比率
+25. # The spread the pair actually trades, hedged dynamically:
+26. #   spread_t = r_ETH,t - beta_{t-1} * r_BTC,t
+27. # Use beta_{t-1} (lagged) so the hedge uses only past information.
+28. ## 應用二:時變組合方差
+29. # Annualize (crypto trades every day: 365, not 252):
+30. ## 應用三:相關性作為狀態訊號
+31. # Simple risk-off flag: correlation in the top quintile of its
+32. # trailing year. Use a trailing quantile to avoid look-ahead.
+33. ## 實踐考量
+34. ### 估計穩定性與資產數量
+35. ### 相關性目標錨定是一條有代價的捷徑
+36. ### 重新擬合的節奏與前視紀律
+37. ### 非對稱DCC(aDCC)
+38. ## 對比:DCC與其他方案
+39. ## 侷限性
+40. ## 總結
+
+Article-specific coverage: 完整涵蓋全文：靜態相關性失效原因、條件共變異數矩陣與 VECH/BEKK 方案、Engle 的 DCC 兩步分解及純量限制的代價、準對數概似、全部 Python 實作步驟與 `arch` 用法、相關性/共變異數路徑重建與單步預測、動態避險比率、時變投資組合變異數、相關性狀態訊號、估計穩定性與重新估計節奏、aDCC、替代方案比較、限制與總結。
+
+所有數學、統計、實作、軟體/API 與加密市場經驗陳述，均為待人工編輯及一手來源查證的文章主張。準確保留公式、參數定義、假設、程式碼、引用、數值和限定條件。不得補充當前規格、外部研究、新計算或保證性結論。
+
+External NotebookLM notebook/source/artifact duplicates are not_checked and must be reconciled before submission; target-channel duplicates are not_checked and must be reconciled before final production. Do not imply either is cleared.
+Before any Generate action, the NotebookLM UI must explicitly show Chinese (Traditional); a generic Chinese/中文 label is insufficient. No generation action is requested by this brief.
+每個章節都製作清楚易讀的投影片。可用圖示解釋公式及模型結構，但不得更動公式，也不得虛構實證表現圖表。以文章「總結」收尾。

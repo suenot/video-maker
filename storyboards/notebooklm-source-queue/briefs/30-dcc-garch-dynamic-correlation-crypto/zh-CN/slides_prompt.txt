@@ -1,0 +1,50 @@
+制作完整的 NotebookLM 幻灯片。只使用附件来源“MM article dcc-garch-dynamic-correlation-crypto ZH-CN 79d3c11353c3”，它是完整发表的简体中文（中国大陆）文章。不得合并其他语言版本或外部事实。输出语言：全程使用简体中文（中国大陆，zh-CN）；不得改用繁体或含糊的“Chinese”。技术标识符、数字、公式、日期、引用、链接、代码、表格数据和标题须保持准确；英文方法、库和代码标识符原样保留。
+Follow every H1-H3 heading in this exact sequence and preserve each exact source heading:
+1. # DCC-GARCH：配对交易与组合风险的动态相关性
+2. ## 为什么静态相关性在加密货币中会失效
+3. ## 多元问题:条件协方差矩阵
+4. ### VECH
+5. ### BEKK
+6. ## Engle的DCC(2002):两步分解
+7. ### 第一步:每个资产的单变量GARCH
+8. ### 第二步:DCC相关性递推
+9. ### 标量限制及其代价
+10. ## DCC准对数似然
+11. ## Python实现
+12. ### 第一步:用`arch`拟合单变量GARCH边际模型
+13. # Fit each asset independently (this is embarrassingly parallel).
+14. # Standardized residuals z_{i,t} = eps_{i,t} / sigma_{i,t}
+15. # arch exposes these directly as .std_resid
+16. # Conditional volatilities sigma_{i,t} (in the SAME scaled units).
+17. # .conditional_volatility is sigma, not sigma^2.
+18. # Each column should have mean ~0, std ~1. If std is far from 1,
+19. # the margin is misspecified — revisit the univariate model (Part 2).
+20. ### 第二步:DCC递推与准对数似然
+21. ### 第三步:重建相关性和协方差路径
+22. # The dynamic BTC-ETH correlation as a time series:
+23. ### 单步前瞻预测
+24. ## 应用一:配对交易的动态对冲比率
+25. # The spread the pair actually trades, hedged dynamically:
+26. #   spread_t = r_ETH,t - beta_{t-1} * r_BTC,t
+27. # Use beta_{t-1} (lagged) so the hedge uses only past information.
+28. ## 应用二:时变组合方差
+29. # Annualize (crypto trades every day: 365, not 252):
+30. ## 应用三:相关性作为状态信号
+31. # Simple risk-off flag: correlation in the top quintile of its
+32. # trailing year. Use a trailing quantile to avoid look-ahead.
+33. ## 实践考量
+34. ### 估计稳定性与资产数量
+35. ### 相关性目标锚定是一条有代价的捷径
+36. ### 重新拟合的节奏与前视纪律
+37. ### 非对称DCC(aDCC)
+38. ## 对比:DCC与其他方案
+39. ## 局限性
+40. ## 总结
+
+Article-specific coverage: 完整覆盖全文：静态相关性失效的原因、条件协方差矩阵以及 VECH/BEKK 方案、Engle 的 DCC 两步分解和标量约束的代价、准对数似然、全部 Python 实现步骤与 `arch` 用法、相关性/协方差路径重建与单步预测、动态对冲比率、时变组合方差、相关性状态信号、估计稳定性和重估节奏、aDCC、替代方案比较、局限性和总结。
+
+所有数学、统计、实现、软件/API 与加密市场经验陈述均为待人工编辑及一手来源核验的文章主张。准确保留公式、参数定义、假设、代码、引用、数值和限定条件。不得补充当前规格、外部研究、新计算或保证性结论。
+
+External NotebookLM notebook/source/artifact duplicates are not_checked and must be reconciled before submission; target-channel duplicates are not_checked and must be reconciled before final production. Do not imply either is cleared.
+Before any Generate action, the NotebookLM UI must explicitly show Chinese (Simplified); a generic Chinese/中文 label is insufficient. No generation action is requested by this brief.
+每个章节都制作清晰易读的幻灯片。可以用图示解释公式和模型结构，但不得改动公式，也不得虚构实证表现图表。以文章“总结”结束。
