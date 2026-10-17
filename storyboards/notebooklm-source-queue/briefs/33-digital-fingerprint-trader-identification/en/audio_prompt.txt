@@ -1,0 +1,35 @@
+Create a separate NotebookLM Deep Dive audio overview in the default spoken format, entirely in English. Use only the attached complete published EN article snapshot; do not merge editions or outside facts. Follow all source H1-H3 sections in order. Explain the five behavioral dimensions, feature extraction, classification versus identification, wallet clustering, the four manipulation-detection examples, the described product architecture and alerts, then ethics and limitations. Treat wallet/address clustering and behavioral similarity as probabilistic evidence, never proof of common ownership or identity. Separate observed public order-book events from inferred operator identity or intent. Present manipulation sections as detection concepts, not operational instructions. Product capabilities, model accuracy, participant attribution, data coverage, effectiveness and citations are unverified article claims requiring editorial and primary-source review; add no outside allegations, performance results, personal data or guarantees. Preserve the source terminology, definitions, symbols, equations, examples, caveats, citations and links. End with the article conclusion and references.
+
+Exact source heading sequence (follow in this order):
+1. # Digital Fingerprint of a Trader: How to Identify a Market Maker by Their Order Book Behavior
+2. ## Introduction: The Order Book as a Crime Scene
+3. ## Part 1: What Is a Behavioral Fingerprint
+4. ### Every Algorithm Is a Set of Rules
+5. ### Five Dimensions of the Fingerprint
+6. ## Part 2: Feature Extraction
+7. ### Timing: When and How Often
+8. ### Sizing: How Much and How
+9. ### Placement: Where in the Book
+10. ### Reaction: How It Responds to Events
+11. ### Lifecycle: The Order's Life Cycle
+12. ## Part 3: Participant Classification
+13. ### Taxonomy of Market Participants
+14. ### Classification Methods
+15. ## Part 4: Identifying Specific Market Makers
+16. ### From Classification to Identification
+17. ### Building the Fingerprint Vector
+18. ### Address Clustering: "One Operator — N Wallets"
+19. ## Part 5: Manipulation Scenarios and Their Fingerprints
+20. ### Spoofing: The Fingerprint of a Fake Wall
+21. ### Squeeze: The Liquidity Trap
+22. ### Iceberg / Hidden Accumulation: The Silent Build-Up
+23. ### Wash Trading: Self-Dealing
+24. ## Part 6: Implementation in Marketmaker.cc
+25. ### Behavioral Fingerprint System Architecture
+26. ### What the Trader Sees in the Terminal
+27. ### Alerts
+28. ## Part 7: Ethics and Limitations
+29. ### What Is and Isn't Acceptable
+30. ### Limitations
+31. ## Conclusion: From Reading the Book to Reading the Participants
+32. ### References and Further Reading

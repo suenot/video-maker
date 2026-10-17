@@ -1,0 +1,384 @@
+MM article digital-fingerprint-trader-identification ZH-TW b5590d460cd0
+
+---
+title: "交易者的數字指紋：如何通過訂單簿行為識別做市商"
+description: "每個演算法都會留下獨特的指紋。學會解讀它——你就能知道交易對手方是誰。"
+tags: ["fingerprint", "做市商", "訂單簿", "Hawkes過程", "聚類", "幌騙", "Hyperliquid", "市場微觀結構"]
+date: "2026-03-19"
+lang: "zh-Hant"
+image: "/images/blog/digital-fingerprint-trader-identification.webp"
+slug: "digital-fingerprint-trader-identification"
+authors: ["suenot"]
+---
+
+# 交易者的數字指紋：如何通過訂單簿行為識別做市商
+
+![交易者的數字指紋](/images/blog/digital-fingerprint-trader-identification.webp)
+*交易演算法的行為指紋：獨特的timing、sizing和placement模式*
+
+*每個演算法都會留下獨特的指紋。學會解讀它——你就能知道交易對手方是誰。*
+
+---
+
+## 引言：訂單簿即犯罪現場
+
+當法醫鑑識人員到達現場時，他們會尋找指紋、鞋印、DNA——一切能將事件與特定個人關聯起來的線索。訂單簿就是這樣一個場所，每秒鐘數百名參與者在此留下自己的"指紋"：特定大小、特定頻率、距價格特定距離、特定存活時間的訂單。
+
+在中心化交易所（CEX）上，這些指紋是匿名的——你只能看到每個價格層級的彙總委託量。但即使從彙總資料中也能瞭解很多。而在擁有鏈上訂單簿的DEX交易所——如[Hyperliquid](https://hyperliquid.xyz/)——每筆訂單都繫結到特定的錢包地址，"指紋"變成了個人專屬的。
+
+在本文中，我們將探討如何構建"數字指紋"（behavioral fingerprints）系統，用於識別參與者型別和具體的做市商演算法。
+
+---
+
+## 第一部分：什麼是行為指紋
+
+![數字指紋的五個維度](/images/blog/fingerprint-five-dimensions.webp)
+*雷達圖：交易者行為指紋的五個關鍵維度*
+
+### 每個演算法都是一套規則
+
+做市商機器人是一個按照嚴格（或可學習的）規則做出決策的程式：
+
+- **距mid-price多遠掛單？** 每個MM都有自己的"價差配置"。
+- **掛多大的量？** 整數手（100、500、1000）？隨機數？帶±5%噪聲的固定大小？
+- **多久更新一次報價？** 每50毫秒？僅在mid-price變化時？按定時器？
+- **如何響應成交？** 即時重新掛單？暫停？調整對側？
+- **如何響應波動率？** 擴大價差？撤回報價？縮小掛單量？
+- **如何管理庫存？** 倉位累積時的報價偏斜（skew）？
+
+每一組答案都構成了演算法的獨特"簽名"。
+
+### "指紋"的五個維度
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│              交易者数字指纹                                       │
+│                                                                 │
+│  1. TIMING       │  订单间隔、对事件的反应、                      │
+│                  │  日内活动模式                                  │
+│──────────────────┼─────────────────────────────────────────────  │
+│  2. SIZING       │  订单大小分布、                                │
+│                  │  整数倍特征、离散程度                           │
+│──────────────────┼─────────────────────────────────────────────  │
+│  3. PLACEMENT    │  距mid-price的距离、                           │
+│                  │  bid/ask对称性、价格水平锚定                    │
+│──────────────────┼─────────────────────────────────────────────  │
+│  4. REACTION     │  对成交、撤单、价格跳跃、                      │
+│                  │  波动率变化的响应                               │
+│──────────────────┼─────────────────────────────────────────────  │
+│  5. LIFECYCLE    │  订单平均存活时间、                             │
+│                  │  撤单条件、modify vs cancel+new                │
+│──────────────────┴─────────────────────────────────────────────  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 第二部分：特徵提取
+
+![Hawkes過程與timing模式](/images/blog/fingerprint-hawkes-timing.webp)
+*帶自激勵的Hawkes過程：具有指數衰減的事件簇*
+
+### Timing：何時以及多頻繁
+
+Timing模式是指紋中最難偽造的元素。它由演算法架構、網路延遲、硬體甚至開發者的時區所決定。
+
+**關鍵指標：**
+
+- **訂單間隔（IOI）** — 同一參與者連續訂單之間的時間間隔。HFT機器人的IOI為50-500微秒，手動交易者為數秒至數分鐘。
+
+- **成交反應時間** — 訂單被執行到下一次操作之間的延遲。反映了機器人的內部架構。
+
+- **日內週期模式** — 日內活動分佈。機構做市商在交易時段活躍，加密貨幣機器人則全天候執行。
+
+- **自激勵（Hawkes強度）** — 當前訂單"激發"下一個訂單的程度。做市商表現出強烈的自激勵特徵。
+
+**Hawkes過程**非常適合建模timing模式——這是一種具有自激勵特性的點過程。Hawkes過程的參數（基礎強度μ、激勵係數α、衰減速率β）構成了參與者緊湊的"時序指紋"。
+
+### Sizing：多少和如何
+
+- **大小分佈** — 訂單大小的分佈。專業做市商經常使用帶噪聲的整數手：100 ± 5、500 ± 10。
+- **大小-深度相關性** — 訂單大小是否取決於當前盤口深度？
+- **買賣盤大小不對稱性** — bid和ask的大小比例。偏斜模式是庫存管理的"筆跡"。
+- **大小自相關** — 大小在時間序列上的重複性。
+
+### Placement：在盤口的位置
+
+- **價差偏移** — 距mid-price的距離（以tick或基點計）
+- **價位偏好** — 是否錨定於特定價位（整數關口？）
+- **報價對稱性** — bid和ask訂單的對稱程度
+- **多層級足跡** — 同時報價的層級數量
+
+### Reaction：如何響應事件
+
+- **成交後行為** — 訂單被執行後發生了什麼
+- **波動率響應** — 波動率上升時行為如何變化
+- **報價成交比（QTR）** — 訂單更新次數與執行次數的比率
+- **逆向選擇響應** — 價格向不利方向移動時的反應
+
+### Lifecycle：訂單生命週期
+
+- **訂單存活時間分佈** — 訂單的平均存活時間
+- **Modify vs Cancel+New** — 通過modify還是cancel+new更新？
+- **批次撤單** — 逐個撤單還是批次撤單？
+
+---
+
+## 第三部分：參與者分類
+
+![市場參與者分類](/images/blog/fingerprint-participant-classification.webp)
+*市場參與者分類體系：做市商、高頻交易者、機會主義者、基本面交易者和噪聲交易者*
+
+### 市場參與者分類體系
+
+基於行為特徵，可以將參與者劃分為穩定的類別。[CFTC](https://www.cftc.gov/)研究（Kirilenko等，2011）：
+
+**1. Market Makers（做市商）**
+- 超過80%時間維持雙邊報價（bid + ask）
+- 日終淨持倉為零或接近零
+- 高QTR（>100:1）
+- 通過擴大價差響應波動率
+
+**2. High-Frequency Traders（高頻交易者）**
+- 超高訊息頻率（>1000事件/分鐘）
+- 極短持倉時間（秒級）
+- 亞毫秒級反應時間
+
+**3. Opportunistic Traders（機會主義者）**
+- 中等頻率
+- 對特定市場條件做出反應
+- 不規則timing，圍繞事件聚集
+
+**4. Fundamental Traders（基本面交易者）**
+- 建立長期倉位
+- 低頻率、大訂單量
+- 使用TWAP/VWAP演算法執行
+
+**5. Noise Traders（噪聲/散戶交易者）**
+- 小訂單量、不規則timing
+- 反應式：在行情啟動後交易，而非提前
+- 在波動率峰值時下市價單
+
+### 分類方法
+
+**有監督學習：** 對於DEX資料（[Hyperliquid](https://hyperliquid.xyz/)），可以從已知做市商地址構建訓練集。RNN模型準確率可達>85%。
+
+**無監督學習：**
+- **譜聚類**（Cont等，2023）— 基於訂單流模式相似矩陣的聚類
+- **FIDR-SCAN**（2024）— 特徵插值 + 降維 + 基於密度的聚類
+- **逆強化學習**（CFTC，2014）— 恢復每個交易者的獎勵函數
+
+---
+
+## 第四部分：識別具體的做市商
+
+### 從分類到識別
+
+分類回答的是"這是做市商嗎？"的問題。識別回答的是"這是**那個特定的**做市商嗎？"的問題。
+
+### 構建指紋向量
+
+從五個維度中，我們提取一個數值向量——參與者的**embedding**：
+
+```
+Fingerprint Vector（示例）:
+┌──────────────────────────────────────────────────────────┐
+│  Timing:                                                 │
+│    hawkes_mu:           0.3       (基础强度)              │
+│    hawkes_alpha:        0.7       (自激励)                │
+│    hawkes_beta:         1.2       (衰减速率)              │
+│    median_IOI_ms:       240       (订单间隔毫秒)          │
+│    circadian_peak_utc:  14.5      (活跃高峰)              │
+│                                                          │
+│  Sizing:                                                 │
+│    median_size:         500                              │
+│    size_cv:             0.08      (变异系数)              │
+│    round_lot_ratio:     0.92      (整数手比例)            │
+│    bid_ask_size_ratio:  0.97                             │
+│                                                          │
+│  Placement:                                              │
+│    median_offset_bps:   3.2       (距mid-price)          │
+│    quoting_symmetry:    0.94      (0=不对称,1=对称)       │
+│    num_levels:          5         (报价层级数)            │
+│                                                          │
+│  Reaction:                                               │
+│    post_fill_delay_ms:  12                               │
+│    vol_spread_elasticity: 2.1     (价差/σ)               │
+│    qtr:                 850       (报价成交比)            │
+│                                                          │
+│  Lifecycle:                                              │
+│    median_lifetime_ms:  1200                             │
+│    modify_ratio:        0.85      (modify vs cancel+new) │
+│    batch_cancel_rate:   0.60      (批量撤单比例)          │
+└──────────────────────────────────────────────────────────┘
+```
+
+### 地址聚類："一個操作者——N個錢包"
+
+![錢包地址聚類](/images/blog/fingerprint-address-clustering.webp)
+*地址聚類圖：一個操作者——多個錢包，通過行為相似性聚合*
+
+在[Hyperliquid](https://hyperliquid.xyz/)上，一個做市商可以通過數十甚至數百個地址進行操作。
+
+聚合演算法：
+
+1. **為每個活躍地址** — 在N小時視窗內構建fingerprint向量
+2. **層次聚類** — 合併距離 < 閾值的地址
+3. **時間驗證** — 驗證聚類在時間維度上的穩定性
+4. **跨交易對驗證** — 如果兩個地址交易不同的交易對但fingerprint匹配——這是強訊號
+
+```
+聚类 #7（推测为：Wintermute）
+├── 0x3a1f...2e8c  — BTC/USDT, 45%活跃度
+├── 0x7b2d...9f1a  — ETH/USDT, 30%活跃度
+├── 0xc4e8...5d3b  — SOL/USDT, 15%活跃度
+└── 0x91fa...0c7e  — ARB/USDT, 10%活跃度
+
+共同模式: symmetric quoting, 5 levels, median_IOI=240ms,
+median_size=500±8%, batch cancel 60%, presence 95%
+```
+
+---
+
+## 第五部分：操縱場景及其指紋
+
+### Spoofing：虛假掛單的指紋
+
+```
+幌骗者指纹：
+  cancel_rate:         > 95%
+  lifetime:            < 2 秒
+  placement:           距mid-price 1-3个tick
+  size:                异常大（>10倍median depth）
+  reaction_to_approach: 价格靠近时撤单
+  cyclicity:           每分钟重复>3次
+```
+
+### Squeeze：流動性陷阱
+
+四個階段：靜默建倉 → 撤走流動性 → 止損單級聯觸發 → 獲利了結。通過監測從第1階段到第2階段的轉變，可以實現即時檢測。
+
+### Iceberg / Hidden accumulation：靜默吸籌
+
+```
+静默吸筹指纹：
+  visible_size:        小量（10-50手）
+  refill_speed:        即时（成交后< 100ms）
+  refill_count:        单一价位每个交易时段> 20次
+  price_reaction:      尽管有成交量但价格不动
+```
+
+### Wash Trading：自成交
+
+來自同一聚類的兩個或多個地址同時在bid和ask掛單並互相成交。目的：刷交易量。
+
+---
+
+## 第六部分：在Marketmaker.cc中的實現
+
+### 行為指紋系統架構
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  DATA LAYER                                                 │
+│  ├── Hyperliquid Node  → L3 order-by-order + wallet IDs    │
+│  ├── CEX WebSocket     → L2 depth + trades                 │
+│  └── Historical Store  → QuestDB / Parquet                 │
+├─────────────────────────────────────────────────────────────┤
+│  FEATURE EXTRACTION                                         │
+│  ├── Timing Engine     → Hawkes fit, IOI distribution       │
+│  ├── Sizing Engine     → Size stats, round-lot detection    │
+│  ├── Placement Engine  → Offset calc, symmetry analysis     │
+│  ├── Reaction Engine   → Post-fill tracker, vol response    │
+│  └── Lifecycle Engine  → Lifetime stats, cancel patterns    │
+├─────────────────────────────────────────────────────────────┤
+│  CLASSIFICATION / IDENTIFICATION                            │
+│  ├── Online Classifier → Real-time participant tagging      │
+│  ├── Cluster Engine    → Address clustering (DEX)           │
+│  ├── Similarity Search → Fingerprint matching               │
+│  └── Anomaly Detector  → Spoof / squeeze / wash detection   │
+├─────────────────────────────────────────────────────────────┤
+│  VISUALIZATION                                              │
+│  ├── Queue Position + Participant Labels                    │
+│  ├── Cluster Graph (known MM clusters)                      │
+│  ├── Alert System (manipulation detected)                   │
+│  └── Historical Fingerprint Browser                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 交易者在終端中看到的內容
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║  10000 USDT  │  总量: 3,200                                             ║
+║──────────────┼───────────────────────────────────────────────────────── ║
+║  明细:       │  🤖 MM (cluster#7, ~Wintermute): 800 手 [5 levels]      ║
+║              │  🤖 MM (cluster#12, 未知):       400 手 [3 levels]      ║
+║              │  ⚠️ 可疑 (spoof score 87):       500 手 [lifetime<2s]   ║
+║              │  🟡 @pro_scalper:                100 手                  ║
+║              │  🔴 我的:                        10 手                   ║
+║              │  👤 散户 / 未分类:                1,390 手               ║
+║──────────────┼───────────────────────────────────────────────────────── ║
+║  前方排队    │  真实: ~1,200 (排除spoof)   名义: 1,800                  ║
+║  "净"ETA     │  6.7s (vs 名义 10s)                                     ║
+║  挂单类型:   │  MM支撑 (65% MM成交量) — 大概率不会撤走                  ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### 警報
+
+- **🔴 在你的價位檢測到幌騙** — 在你的訂單前方發現可疑大單
+- **🟡 做市商撤退** — 做市商撤走報價，流動性下降
+- **🟡 檢測到Squeeze佈局** — 一組地址正在建倉並撤走流動性
+- **🟢 掛單牆加固** — 在你的價位有已知做市商增加了委託量
+
+---
+
+## 第七部分：倫理與侷限性
+
+### 可以做什麼，不可以做什麼
+
+**可以且應該做的：**
+- 按型別對匿名參與者進行分類，以輔助自身交易決策
+- 檢測操縱行為，防範逆向選擇
+- 在DEX上對地址進行聚類，以理解市場結構
+
+**不可以做的：**
+- 通過錢包地址去匿名化自然人
+- 未經同意出售已識別的行為模式
+- 用於市場操縱
+
+### 侷限性
+
+1. **自適應演算法** — 高階做市商會新增隨機化處理
+2. **模式切換** — 同一個機器人可能根據市場狀態改變行為
+3. **假陽性** — 兩個參與者可能恰好具有相似參數
+4. **CEX不透明性** — 在CEX上無法獲取L3資料
+
+---
+
+## 結語：從解讀盤口到解讀參與者
+
+傳統交易者看到的是：10000價位有2,400手委託。進階交易者看到的是："我的訂單排在第1,800位，預計等待時間15秒"。而擁有行為指紋分析的交易者看到的是：
+
+*"這2,400手中有800手是做市商（可能是Wintermute），掛單牆可靠。500手疑似幌騙，在我前面的真實排隊是1,300而不是1,800。調整後的預計等待時間為10秒。做市商沒有撤走報價——這意味著目前不預期有大幅波動。"*
+
+每一層新增的資訊都是一種優勢。與速度不同，**訂單簿解讀的質量**是散戶交易者可以參與競爭的領域。
+
+在Marketmaker.cc，我們正在構建這一系統——從排隊位置到行為指紋分析——作為一個完整的產品。
+
+---
+
+*上一篇文章：[《掛單牆中的排隊：訂單簿密度中的訂單位置分析》](/blog/queue-position-order-book-wall-analysis)*
+
+---
+
+### 參考文獻與延伸閱讀
+
+- Kirilenko A., Kyle A., Samadi M., Tuzun T. — [«The Flash Crash: High-Frequency Trading in an Electronic Market»](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1686004) (CFTC, 2011)
+- Paddrik M., Hayes R., Scherer W., Beling P. — [«Gaussian Process-Based Algorithmic Trading Strategy Identification»](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2051138) (CFTC / OFR, 2014)
+- Cont R. et al. — «Unsupervised spectral clustering of trader order flow» (2023)
+- FIDR-SCAN — «Explainable Machine Learning for HFT Dynamics Discovery» (2024)
+- Do B.L., Putniņš T.J. — [«Detecting Layering and Spoofing in Markets»](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4525036) (SSRN, 2023)
+- Hawkes A.G. — [«Spectra of Some Self-Exciting and Mutually Exciting Point Processes»](https://academic.oup.com/biomet/article-abstract/58/1/83/224809) (Biometrika, 1971)
+- Avellaneda M., Stoikov S. — [«High-Frequency Trading in a Limit Order Book»](https://www.tandfonline.com/doi/abs/10.1080/14697680701381228) (Quantitative Finance, 2008)
