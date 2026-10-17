@@ -12359,7 +12359,7 @@
           "submission_mode": "later",
           "artifact_id": "90c38928-f7b3-4425-b637-b308975d2edf",
           "card_text": "tablet\nDeepLOB: Deep Learning for Limit Order Books\nScheduled for after 8pm\nmore_vert",
-          "observed_at": "2026-10-17T15:36:34.027839+00:00"
+          "observed_at": "2026-10-17T15:51:10.863949+00:00"
         },
         "audio": {
           "state": "downloaded_pending_editorial_review",
@@ -12448,7 +12448,7 @@
           "editorial_review": "pending"
         },
         "audio": {
-          "state": "ready",
+          "state": "downloaded_pending_editorial_review",
           "baseline_ids": [
             "ca421160-b0b4-4917-9358-d0b0493d9b93"
           ],
@@ -12460,8 +12460,15 @@
           "source_id": "fd782900-6fae-4b09-8858-c14bc58a9708",
           "submission_mode": "now",
           "artifact_id": "c3783ed8-8102-4469-b1f8-87877f1f8441",
-          "card_text": "audio_spark\nUnread\nAI勝率83%卻倒賠\n17:35 · Deep Dive · 1 source · 1m ago\nplay_arrow\nmore_vert",
-          "observed_at": "2026-10-17T15:26:27.724512+00:00"
+          "card_text": "audio_spark\nUnread\nAI勝率83%卻倒賠\n17:35 · Deep Dive · 1 source · 29m ago\nplay_arrow\nmore_vert",
+          "observed_at": "2026-10-17T15:51:17.548333+00:00",
+          "duration_seconds": 1055.602358,
+          "path": "input/notebooklm-sources/deeplob-deep-learning-order-book/zh-TW/audio.m4a",
+          "sha256": "a132db124d6d95790942e433aa9e17177f89338d4ac7d100736e45bb10e78fdc",
+          "bytes": 33974186,
+          "integrity": "passed",
+          "downloaded_at": "2026-10-17T15:52:33.354495+00:00",
+          "editorial_review": "pending"
         }
       },
       "admission_state": "admitted",
@@ -12493,27 +12500,29 @@
       "selected_source_ids": [
         "fd782900-6fae-4b09-8858-c14bc58a9708"
       ],
-      "last_error": {
-        "type": "TimeoutError",
-        "message": "TimeoutError",
-        "at": "2026-10-17T15:29:30.678567+00:00",
-        "stage": "artifacts",
-        "evidence": {
-          "screenshot": {
-            "path": "temp/notebooklm-source-queue/deeplob-deep-learning-order-book-zh-TW-20261017T152930698523Z-error.png",
-            "sha256": "8b877f31867c11e5f987cbad055ba36e129c5b65ea87c41cb55d5627041d0534"
+      "error_history": [
+        {
+          "type": "TimeoutError",
+          "message": "TimeoutError",
+          "at": "2026-10-17T15:29:30.678567+00:00",
+          "stage": "artifacts",
+          "evidence": {
+            "screenshot": {
+              "path": "temp/notebooklm-source-queue/deeplob-deep-learning-order-book-zh-TW-20261017T152930698523Z-error.png",
+              "sha256": "8b877f31867c11e5f987cbad055ba36e129c5b65ea87c41cb55d5627041d0534"
+            },
+            "controls": {
+              "path": "temp/notebooklm-source-queue/deeplob-deep-learning-order-book-zh-TW-20261017T152930698523Z-controls.json",
+              "sha256": "e12f719295f43b0dfb79cbd0000339050c52bcd6c7cbe92ce83bbcaa55c6d0d8"
+            }
           },
-          "controls": {
-            "path": "temp/notebooklm-source-queue/deeplob-deep-learning-order-book-zh-TW-20261017T152930698523Z-controls.json",
-            "sha256": "e12f719295f43b0dfb79cbd0000339050c52bcd6c7cbe92ce83bbcaa55c6d0d8"
-          }
-        },
-        "retry_not_before": "2026-10-17T15:44:30.901234+00:00",
-        "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
-      }
+          "retry_not_before": "2026-10-17T15:44:30.901234+00:00",
+          "next_safe_step": "Reconcile this job's exact notebook/source/artifact IDs and retained intents after backoff; recover only a verified empty source upload under the saved policy. Never repeat an uncertain Generate action."
+        }
+      ]
     }
   },
-  "checked_at": "2026-10-17T15:36:34.036895+00:00",
+  "checked_at": "2026-10-17T15:52:33.365409+00:00",
   "browser_geometry_requested": {
     "width": 1994,
     "height": 1290,
